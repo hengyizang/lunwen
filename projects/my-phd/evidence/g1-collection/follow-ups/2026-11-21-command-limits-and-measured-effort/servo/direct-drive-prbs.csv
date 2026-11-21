@@ -1,0 +1,2 @@
+samples,dt_ms,train_fit_rows,test_rows,request_low_N,request_high_N,actual_min_N,actual_max_N,rows_actual_abs_above_request_envelope,selected_input_lag_samples,output_ar1,input_gain,intercept_N,train_one_step_rmse_N,test_one_step_rmse_N,persistence_test_one_step_rmse_N
+2047,0.0625,1007,1024,-19.999996,19.999996,-20.397829,21.063169,11,3,0.816792632376412,0.15421632963892307,0.0029553710084083283,1.9836019458667866,1.9636551778958806,3.623828145377505

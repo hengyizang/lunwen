@@ -1,0 +1,668 @@
+{
+  "title": "comma body indoor navigation — two-wheel controller output, sent and echoed bus commands, wheel speed and motor phase signals",
+  "landing": "https://huggingface.co/datasets/commaai/commabody",
+  "authors": [
+    "commaai (dataset publisher)"
+  ],
+  "retrieved_utc": "2026-11-21",
+  "version": "16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0",
+  "fixed_release": "https://huggingface.co/datasets/commaai/commabody/tree/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0",
+  "evidence": "All 69 compressed numeric event logs decoded from all six verified release archives; per-segment control, bus and sensor evidence. The public train split contains all 69 segments.",
+  "rights": "Hugging Face dataset card at the pinned release declares MIT. Link the public dataset and code/schema files. Repository includes original offline scripts and numeric aggregate results. No footage, route/device identifiers, GPS or raw time series included.",
+  "queries": [
+    {
+      "service": "Hugging Face datasets API",
+      "query": "author=commaai&limit=100",
+      "url": "https://huggingface.co/api/datasets?author=commaai&limit=100"
+    },
+    {
+      "service": "Hugging Face pinned dataset tree",
+      "query": "Six shard archive names and LFS digests; _info.json confirms split sizes.",
+      "url": "https://huggingface.co/api/datasets/commaai/commabody/tree/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0?limit=200&expand=false"
+    },
+    {
+      "service": "GitHub openpilot source tree",
+      "query": "Resolve cereal and opendbc submodule commit from initData.gitCommit source tree.",
+      "url": "https://api.github.com/repos/commaai/openpilot/git/trees/bc6c6421a99da5a5d7b5ece0da17174646b6a78d"
+    }
+  ],
+  "history": {
+    "keys": [
+      "commaai/commabody",
+      "comma body",
+      "16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0",
+      "A dataset of indoor navigation with the comma body"
+    ],
+    "scope": {
+      "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+      "paths": 1141,
+      "tar_members": 301
+    },
+    "early_baseline": true,
+    "match_paths": {
+      "commaai/commabody": [],
+      "comma body": [],
+      "16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0": [],
+      "A dataset of indoor navigation with the comma body": []
+    },
+    "method": "Unicode NFKD/casefold/alphanumeric keys against all decompressed historical evidence text and early baseline."
+  },
+  "recorded_openpilot_versions": {
+    "bc6c6421a99da5a5d7b5ece0da17174646b6a78d": 62,
+    "469c225442455b1a90048337ac1ffa2bab5f36c4": 7
+  },
+  "alternate_revision_code_and_schema": {
+    "selfdrive/car/body/carcontroller.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/469c225442455b1a90048337ac1ffa2bab5f36c4/selfdrive/car/body/carcontroller.py",
+      "sha256": "69993649e9c1bd26e2ee2cee696e0fb4cae51c809bbce42da8cda64d16218a85",
+      "same_as_primary": true
+    },
+    "selfdrive/car/body/carstate.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/469c225442455b1a90048337ac1ffa2bab5f36c4/selfdrive/car/body/carstate.py",
+      "sha256": "f09358c5212dd98ff62b2e0502be7dcdd57e3caeca28c1ba25b98b0ddf17348d",
+      "same_as_primary": true
+    },
+    "selfdrive/car/body/values.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/469c225442455b1a90048337ac1ffa2bab5f36c4/selfdrive/car/body/values.py",
+      "sha256": "913ae1c92b8bc688684ec647428826fc56e82bdf959e9e9fe0a3b30496cb3d48",
+      "same_as_primary": true
+    },
+    "selfdrive/car/body/bodycan.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/469c225442455b1a90048337ac1ffa2bab5f36c4/selfdrive/car/body/bodycan.py",
+      "sha256": "69f5d349fe27541df7f8c089984849f65ed842a5ae777ad22c604ca87876ac50",
+      "same_as_primary": true
+    },
+    "selfdrive/car/body/interface.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/469c225442455b1a90048337ac1ffa2bab5f36c4/selfdrive/car/body/interface.py",
+      "sha256": "b8f725979ba0728717863a817ffb2b258b1c7500d8073240a74950cef3d5ab45",
+      "same_as_primary": true
+    },
+    "recorded-schema/car.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/car.capnp",
+      "sha256": "1697ed57c29e7959231ccd6713a25ca953093585423fd354e09a6f0e7aa0648a",
+      "same_as_primary": true
+    },
+    "recorded-schema/custom.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/custom.capnp",
+      "sha256": "07aef2024e92fd13f2bb38c89e8b27885fedc28c8f7dd9ec7e5cbbd6f29a72d9",
+      "same_as_primary": true
+    },
+    "recorded-schema/include/c++.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/include/c++.capnp",
+      "sha256": "fb306076cd38c27af1aed20fac6395e9a46fbe5b5df6a248b5f1b6845a079c44",
+      "same_as_primary": true
+    },
+    "recorded-schema/legacy.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/legacy.capnp",
+      "sha256": "4ab15bad593a3433dab2d3c8f9951fa4fbadea2074ca0ebb082139ed38f25131",
+      "same_as_primary": true
+    },
+    "recorded-schema/log.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/log.capnp",
+      "sha256": "b9242672116f9750abd4cf2c5b6d21d5ea30d2e6611108ee0b665c1149e075c3",
+      "same_as_primary": false
+    },
+    "recorded-schema/maptile.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/a44f6c5499753f4c0a2e35dd63947f4937b4b8dc/maptile.capnp",
+      "sha256": "f979c4d96901f210d1f5b2b1a68073e525ae736e3937897b5c803d054806fabd",
+      "same_as_primary": true
+    },
+    "body.dbc": {
+      "url": "https://raw.githubusercontent.com/commaai/opendbc/4ab347baefb7473771ada0723c969c50d0c28d01/comma_body.dbc",
+      "sha256": "9040592f1138f0110224c2acd781edbfb32d032cecb86ca8ec6356ec961b35ce",
+      "same_as_primary": true
+    }
+  },
+  "revision_comparison": "62 segments report openpilot bc6c6421, 7 report 469c2254. Both pin the same controller, five body-specific source files and opendbc file by byte content. The two cereal log.capnp files differ only in three unanalysed reserved fields (Event union tags 124–126). Final computation groups files by their pinned revision and uses the matching exact schema; initData checks each assignment.",
+  "dataset_card": {
+    "url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/README.md",
+    "sha256": "0365dca21c098c5d3c6d2c7425cfd6cd9ea8f39675e2c437204faa2b65414c12"
+  },
+  "split_metadata": {
+    "url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/_info.json",
+    "sha256": "fe645543b54a8bc6ef44d8298803470a0179470e5353db393253bf3209fbbb6d"
+  },
+  "archives": [
+    {
+      "name": "data-00000.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00000.tar.gz",
+      "archive_bytes": 1062282618,
+      "validated_sha256": "0e5a55b12f9cf8a76710e9cdc3eee3967bf8cf38d13044cf7f6988cdf5c542b7",
+      "logs": 12
+    },
+    {
+      "name": "data-00001.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00001.tar.gz",
+      "archive_bytes": 1060559570,
+      "validated_sha256": "3218cec6127100d5931f58f573a9ede2743abed540f4ce58ddd1f688759af91f",
+      "logs": 12
+    },
+    {
+      "name": "data-00002.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00002.tar.gz",
+      "archive_bytes": 1059572998,
+      "validated_sha256": "c978fe01852c4eb638736aaccaf55a7a66323305dd1d55722794988bbc3cc8b9",
+      "logs": 12
+    },
+    {
+      "name": "data-00003.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00003.tar.gz",
+      "archive_bytes": 984907230,
+      "validated_sha256": "772f702c6fa5971ef4b5ac4daf6f561ba4385ee67e0e8979d2fdfd2b851d4149",
+      "logs": 11
+    },
+    {
+      "name": "data-00004.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00004.tar.gz",
+      "archive_bytes": 987053704,
+      "validated_sha256": "3b1d957904b19f09230a73986041cd67327659116e2f82383eca86d4a5b7cce7",
+      "logs": 11
+    },
+    {
+      "name": "data-00005.tar.gz",
+      "download_url": "https://huggingface.co/datasets/commaai/commabody/resolve/16123f8d2cf28e39cf52e0e1bfb5c0e6975287d0/data-00005.tar.gz",
+      "archive_bytes": 976413038,
+      "validated_sha256": "9731bd0cdb1613a6cbd9dfcac91d6e2458ff923e4cf9a5c98b1b93bbffbbab59",
+      "logs": 11
+    }
+  ],
+  "raw_compressed_log_receipts": "body-segments.csv (anonymous release-shard/member ordinal; SHA-256 and bytes per segment)",
+  "unused_vehicle_fields": "The body-specific carstate.py populates only the front wheel slots from left/right MOTORS_DATA. Audit the rear wheel slots and generic steeringTorque / steeringTorqueEps across carState for default all-zero placeholders, separately from the nonzero motor current frames.",
+  "code_and_schema": {
+    "selfdrive/car/body/carcontroller.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/bc6c6421a99da5a5d7b5ece0da17174646b6a78d/selfdrive/car/body/carcontroller.py",
+      "sha256": "69993649e9c1bd26e2ee2cee696e0fb4cae51c809bbce42da8cda64d16218a85"
+    },
+    "selfdrive/car/body/carstate.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/bc6c6421a99da5a5d7b5ece0da17174646b6a78d/selfdrive/car/body/carstate.py",
+      "sha256": "f09358c5212dd98ff62b2e0502be7dcdd57e3caeca28c1ba25b98b0ddf17348d"
+    },
+    "selfdrive/car/body/values.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/bc6c6421a99da5a5d7b5ece0da17174646b6a78d/selfdrive/car/body/values.py",
+      "sha256": "913ae1c92b8bc688684ec647428826fc56e82bdf959e9e9fe0a3b30496cb3d48"
+    },
+    "selfdrive/car/body/bodycan.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/bc6c6421a99da5a5d7b5ece0da17174646b6a78d/selfdrive/car/body/bodycan.py",
+      "sha256": "69f5d349fe27541df7f8c089984849f65ed842a5ae777ad22c604ca87876ac50"
+    },
+    "selfdrive/car/body/interface.py": {
+      "url": "https://raw.githubusercontent.com/commaai/openpilot/bc6c6421a99da5a5d7b5ece0da17174646b6a78d/selfdrive/car/body/interface.py",
+      "sha256": "b8f725979ba0728717863a817ffb2b258b1c7500d8073240a74950cef3d5ab45"
+    },
+    "recorded-schema/car.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/car.capnp",
+      "sha256": "1697ed57c29e7959231ccd6713a25ca953093585423fd354e09a6f0e7aa0648a"
+    },
+    "recorded-schema/custom.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/custom.capnp",
+      "sha256": "07aef2024e92fd13f2bb38c89e8b27885fedc28c8f7dd9ec7e5cbbd6f29a72d9"
+    },
+    "recorded-schema/include/c++.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/include/c++.capnp",
+      "sha256": "fb306076cd38c27af1aed20fac6395e9a46fbe5b5df6a248b5f1b6845a079c44"
+    },
+    "recorded-schema/legacy.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/legacy.capnp",
+      "sha256": "4ab15bad593a3433dab2d3c8f9951fa4fbadea2074ca0ebb082139ed38f25131"
+    },
+    "recorded-schema/log.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/log.capnp",
+      "sha256": "9553c2878593297827d18d5c7d9cc68501b555ca376c3189bcfbd434bdd0edf2"
+    },
+    "recorded-schema/maptile.capnp": {
+      "url": "https://raw.githubusercontent.com/commaai/cereal/b1a1afebb8533a96ff0e8efbba7c10eb47df2af0/maptile.capnp",
+      "sha256": "f979c4d96901f210d1f5b2b1a68073e525ae736e3937897b5c803d054806fabd"
+    },
+    "body.dbc": {
+      "url": "https://raw.githubusercontent.com/commaai/opendbc/4ab347baefb7473771ada0723c969c50d0c28d01/comma_body.dbc",
+      "sha256": "9040592f1138f0110224c2acd781edbfb32d032cecb86ca8ec6356ec961b35ce"
+    }
+  },
+  "method": [
+    "Use the exact cereal Cap’n Proto schema of each of two logged openpilot revisions; read and check initData gitCommit and WheeledBody config for every segment. Count carParams with COMMA BODY where present.",
+    "The pinned carcontroller maps incoming actuators.accel/5 and -steer/2 to desired speed and speed difference, combines PID outputs, applies a deadband offset, limits internal per-update change to ±50 and clips each final wheel command to ±500. This branch requires CC.enabled and valid orientation and angular velocity; otherwise it emits zero. It writes final left/right integers to actuatorsOutput.accel/.steer and duplicates right in steerOutputCan. Upstream desired speed/turn fields do not provide pre-limit torque.",
+    "Parse 0x250 (592) in sendcan src=0 versus can src=128; 16-bit big-endian signed left and right values followed by two payload bytes including rolling counter and checksum. Use received 0x201 (513) src=0 signed left/right wheel speed and 0x204 (516) src=0 four signed raw phase channels. DBC specifies no unit for torque or phase fields. Wheel speed is treated as native wheel-rate counts, used as RPM in the controller conversion with SPEED_FROM_RPM=0.008587.",
+    "For each sent frame, find the nearest report or echo by logMonoTime, at most 10 ms in either direction. Prefer earlier candidates at equal distances. Count nearest identical left/right pair and, for CAN echo, byte-identical full six-byte payload. Separately search all candidates within ±10 ms and [0,20] ms using the wheel pair for reports or entire payload for echoes. Count ambiguous and unique matches, and, among queries with exactly one candidate, count those not sharing it with another singly matched query. Counts use sent frames as denominator.",
+    "For each wheel separately, label sent-command slots at |value|=500 or inside that bound. Use nearest host-event wheel-speed or phase-current frame within ±10 ms. Report distinct selected frames and matched sample counts, sums, sum of squares and extrema. Zero observations have blank extrema and median timing distance. The table has 69 segments × 2 wheels × 2 regimes × 3 channels.",
+    "Check consecutive command differences only within each segment; count exact jumps of absolute size 50 and over 50. Different segment boundaries, recording gaps, enable-state changes and absent pre-limit values limit interpretation. In the separate command-step table, restrict pairs to host stamps 5–15 ms apart and relate exact absolute increments (0, 1–49, 50, >50) to independently logged speed/phase channels within ±10 ms of the second send. The side-specific 50-count groups are observable comparisons even when no 500-count amplitude rails occur."
+  ],
+  "counts": {
+    "init_records": 69,
+    "init_expected_revision": 69,
+    "init_wheeled_body_1": 69,
+    "carparams_records": 85,
+    "carparams_comma_body": 85,
+    "sent_592": 413541,
+    "echo_592": 413522,
+    "wheel_513": 419097,
+    "current_516": 419098,
+    "published_carcontrol": 413648,
+    "enabled_reports": 412646,
+    "enabled_pose_valid_reports": 412646,
+    "right_steerOutputCan_equal": 413648,
+    "disabled_nonzero_report": 0,
+    "outside_bound_wheel_slots": 0,
+    "both_wheels_zero_send": 900,
+    "either_wheel_at_rail_send": 0,
+    "consecutive_equal_wheel_pair": 180919,
+    "carstate_count": 413648,
+    "nonzero_state_forward_left": 305359,
+    "nonzero_state_forward_right": 307935,
+    "nonzero_state_rear_left": 0,
+    "nonzero_state_rear_right": 0,
+    "nonzero_state_steering_torque": 0,
+    "nonzero_state_steering_torque_eps": 0
+  },
+  "command_extremes": {
+    "left": {
+      "max_abs_final_command": 459,
+      "positive_rail": 0,
+      "negative_rail": 0,
+      "transitions_abs_50": 6288,
+      "transitions_abs_above_50": 0
+    },
+    "right": {
+      "max_abs_final_command": 429,
+      "positive_rail": 0,
+      "negative_rail": 0,
+      "transitions_abs_50": 4830,
+      "transitions_abs_above_50": 0
+    }
+  },
+  "message_matching": {
+    "sent_to_bus_echo": {
+      "query_events": 413541,
+      "candidate_events": 413522,
+      "nearest_in_window": 413525,
+      "nearest_identical_wheel_pair": 187158,
+      "any_same_key_in_window": 411975,
+      "unique_same_key_in_window": 411975,
+      "multiple_same_key_in_window": 0,
+      "future_any_same_key": 413473,
+      "future_unique_same_key": 413473,
+      "future_multiple_same_key": 0,
+      "future_unique_used_by_one_query": 413473,
+      "nearest_identical_full_payload": 9908,
+      "range_of_segment_median_future_unique_echo_ms": [
+        6.900172,
+        7.0923305
+      ]
+    },
+    "sent_to_published_report": {
+      "query_events": 413541,
+      "candidate_events": 413648,
+      "nearest_in_window": 413540,
+      "nearest_identical_wheel_pair": 413538,
+      "any_same_key_in_window": 413539,
+      "unique_same_key_in_window": 234653,
+      "multiple_same_key_in_window": 178886,
+      "future_any_same_key": 413539,
+      "future_unique_same_key": 231680,
+      "future_multiple_same_key": 181859,
+      "future_unique_used_by_one_query": 231680
+    }
+  },
+  "nonzero_inputs_in_516_frames": {
+    "left_AB": 407162,
+    "left_BC": 414207,
+    "right_AB": 409138,
+    "right_BC": 402397
+  },
+  "pooled_nearest_sensor_summary": [
+    {
+      "side": "left",
+      "regime": "at_abs_500",
+      "channel": "phase_AB",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "left",
+      "regime": "at_abs_500",
+      "channel": "phase_BC",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "left",
+      "regime": "at_abs_500",
+      "channel": "wheel_speed",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "left",
+      "regime": "inside_abs_500",
+      "channel": "phase_AB",
+      "commands": 413541,
+      "within_10ms": 413512,
+      "nonzero_samples": 401774,
+      "mean_abs_raw": 20.708567103252143,
+      "root_mean_square_raw": 28.599504643058406
+    },
+    {
+      "side": "left",
+      "regime": "inside_abs_500",
+      "channel": "phase_BC",
+      "commands": 413541,
+      "within_10ms": 413512,
+      "nonzero_samples": 408698,
+      "mean_abs_raw": 19.50205314476968,
+      "root_mean_square_raw": 26.943372192320826
+    },
+    {
+      "side": "left",
+      "regime": "inside_abs_500",
+      "channel": "wheel_speed",
+      "commands": 413541,
+      "within_10ms": 413516,
+      "nonzero_samples": 305340,
+      "mean_abs_raw": 45.01504657619052,
+      "root_mean_square_raw": 66.70579255453382
+    },
+    {
+      "side": "right",
+      "regime": "at_abs_500",
+      "channel": "phase_AB",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "at_abs_500",
+      "channel": "phase_BC",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "at_abs_500",
+      "channel": "wheel_speed",
+      "commands": 0,
+      "within_10ms": 0,
+      "nonzero_samples": 0,
+      "mean_abs_raw": null,
+      "root_mean_square_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "inside_abs_500",
+      "channel": "phase_AB",
+      "commands": 413541,
+      "within_10ms": 413512,
+      "nonzero_samples": 403729,
+      "mean_abs_raw": 18.70995037628896,
+      "root_mean_square_raw": 25.250662296850905
+    },
+    {
+      "side": "right",
+      "regime": "inside_abs_500",
+      "channel": "phase_BC",
+      "commands": 413541,
+      "within_10ms": 413512,
+      "nonzero_samples": 397160,
+      "mean_abs_raw": 19.438746638549787,
+      "root_mean_square_raw": 26.388846740124723
+    },
+    {
+      "side": "right",
+      "regime": "inside_abs_500",
+      "channel": "wheel_speed",
+      "commands": 413541,
+      "within_10ms": 413516,
+      "nonzero_samples": 307910,
+      "mean_abs_raw": 43.71923940065197,
+      "root_mean_square_raw": 58.22645546302419
+    }
+  ],
+  "pooled_regular_step_response": [
+    {
+      "side": "left",
+      "regime": "abs_step_0",
+      "channel": "phase_AB",
+      "eligible_commands": 207089,
+      "within_10ms": 207070,
+      "mean_abs_raw": 18.3208431931231
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_0",
+      "channel": "phase_BC",
+      "eligible_commands": 207089,
+      "within_10ms": 207070,
+      "mean_abs_raw": 16.991930265127735
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_0",
+      "channel": "wheel_speed",
+      "eligible_commands": 207089,
+      "within_10ms": 207069,
+      "mean_abs_raw": 21.924353717842845
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_1_to_49",
+      "channel": "phase_AB",
+      "eligible_commands": 199458,
+      "within_10ms": 199450,
+      "mean_abs_raw": 22.938831787415392
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_1_to_49",
+      "channel": "phase_BC",
+      "eligible_commands": 199458,
+      "within_10ms": 199450,
+      "mean_abs_raw": 21.861198295312107
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_1_to_49",
+      "channel": "wheel_speed",
+      "eligible_commands": 199458,
+      "within_10ms": 199455,
+      "mean_abs_raw": 67.59665087363064
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_50",
+      "channel": "phase_AB",
+      "eligible_commands": 6277,
+      "within_10ms": 6276,
+      "mean_abs_raw": 28.48597833014659
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_50",
+      "channel": "phase_BC",
+      "eligible_commands": 6277,
+      "within_10ms": 6276,
+      "mean_abs_raw": 27.161886551943912
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_50",
+      "channel": "wheel_speed",
+      "eligible_commands": 6277,
+      "within_10ms": 6275,
+      "mean_abs_raw": 88.46039840637451
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_above_50",
+      "channel": "phase_AB",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_above_50",
+      "channel": "phase_BC",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    },
+    {
+      "side": "left",
+      "regime": "abs_step_above_50",
+      "channel": "wheel_speed",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_0",
+      "channel": "phase_AB",
+      "eligible_commands": 208198,
+      "within_10ms": 208180,
+      "mean_abs_raw": 17.069420693630512
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_0",
+      "channel": "phase_BC",
+      "eligible_commands": 208198,
+      "within_10ms": 208180,
+      "mean_abs_raw": 17.076525122490153
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_0",
+      "channel": "wheel_speed",
+      "eligible_commands": 208198,
+      "within_10ms": 208175,
+      "mean_abs_raw": 22.02028101357031
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_1_to_49",
+      "channel": "phase_AB",
+      "eligible_commands": 199805,
+      "within_10ms": 199795,
+      "mean_abs_raw": 20.303601191221002
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_1_to_49",
+      "channel": "phase_BC",
+      "eligible_commands": 199805,
+      "within_10ms": 199795,
+      "mean_abs_raw": 21.761605645786933
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_1_to_49",
+      "channel": "wheel_speed",
+      "eligible_commands": 199805,
+      "within_10ms": 199805,
+      "mean_abs_raw": 66.09474737869422
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_50",
+      "channel": "phase_AB",
+      "eligible_commands": 4821,
+      "within_10ms": 4821,
+      "mean_abs_raw": 23.51897946484132
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_50",
+      "channel": "phase_BC",
+      "eligible_commands": 4821,
+      "within_10ms": 4821,
+      "mean_abs_raw": 25.01887575191869
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_50",
+      "channel": "wheel_speed",
+      "eligible_commands": 4821,
+      "within_10ms": 4819,
+      "mean_abs_raw": 52.10334094210417
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_above_50",
+      "channel": "phase_AB",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_above_50",
+      "channel": "phase_BC",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    },
+    {
+      "side": "right",
+      "regime": "abs_step_above_50",
+      "channel": "wheel_speed",
+      "eligible_commands": 0,
+      "within_10ms": 0,
+      "mean_abs_raw": null
+    }
+  ],
+  "bounds": [
+    "An echoed command is software/bus evidence. Wheel speed and phase channels are separate physical-response telemetry. The release supplies no calibrated independent shaft torque sensor or specified conversion of those current counts to A or Nm.",
+    "The pre-limit per-wheel request, actual motor PWM, drive-voltage limit, high-rate encoder clocks, dedicated experimental calibration or excitation signal are unavailable in this audit. Reaching a slew increment by itself does not prove the hidden desired value exceeded it.",
+    "Timestamp differences compare host event times of send, decode and reporting. Multiple frames can share one packet timestamp, repeated commands can produce many report matches, and feedback frames can serve multiple neighboring sends. Matching is descriptive, not a physical delay measurement or proof of controller causation.",
+    "Split consists of contiguous or potentially related segments of the same indoor collection. A training or held-out split is not supplied beyond the single public train split. No inference of independent experiments or model generalization."
+  ],
+  "derived_files": [
+    {
+      "file": "body-command-steps.csv",
+      "rows": 1656,
+      "sha256": "324775538127eff93431191966cfebe107260622d01a19e14ffad663528cb43c"
+    },
+    {
+      "file": "body-feedback.csv",
+      "rows": 828,
+      "sha256": "58b54959aa68348c96cc8a493d42e92f77b8aff5b34e467460a83b66332aa8db"
+    },
+    {
+      "file": "body-message-match.csv",
+      "rows": 138,
+      "sha256": "0af06883ffc83e67e37a20741287587c4de4871c82fc6d2da9d913425bce7b71"
+    },
+    {
+      "file": "body-segments.csv",
+      "rows": 69,
+      "sha256": "2a9a3eeb0bd47e78268c08a124e82626cf9da42d0c7fd3cd497e9db2a5c8fdab"
+    }
+  ],
+  "replication": {
+    "requirements": "Python 3.12; numpy 2.3.5; pycapnp 2.2.4; standard-library bz2 and tarfile.",
+    "commands": [
+      "mkdir -p raw out",
+      "python fetch_body.py raw --workers 3",
+      "python derive_body.py raw out --workers 3"
+    ],
+    "notes": "fetch_body.py downloads pinned archive tree if absent, validates compressed archive lengths/LFS SHA-256, and locally extracts only .rlog.bz2 entries. derive_body.py fetches missing schemas at the pinned cereal revision and SHA-256 verifies each before decode. GitHub CLI is an optional transport fallback if both GitHub HTTP endpoints fail. Each needed schema can also be placed at its recorded-schema path and is checked by digest. Compare output hashes; neither a robot nor an openpilot installation is required.",
+    "scripts": {
+      "fetch_body.py": "985b8e9ec4a39cc713c7eda27e59e5c669a735bb11e98a1eb61c8f40758bbc5b",
+      "derive_body.py": "3e84ce4b770a30230b565dcec49dfe784e7864edd7230e39fc08f577eb3794da"
+    }
+  }
+}

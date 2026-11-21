@@ -1,0 +1,147 @@
+{
+  "title": "Roboy neural-tendon-control — paired MyoBrick tendon displacement, PWM requests and separate validation replay",
+  "authors": [
+    "Roboy (repository owner)",
+    "Public GitHub contributor accounts nils-ingelhag and thobotics"
+  ],
+  "landing": "https://github.com/Roboy/neural-tendon-control",
+  "release": "https://github.com/Roboy/neural-tendon-control/tree/15954028b13a6f4426702334783c54de2d9c92a0",
+  "version": "15954028b13a6f4426702334783c54de2d9c92a0",
+  "commit_date": "2023-04-13",
+  "retrieved_utc": "2026-11-21",
+  "g1_scope": "R2 actuator input, closed-loop response and identification",
+  "evidence": "Public files downloaded, schema and generating or consuming code inspected, numeric outputs recomputed.",
+  "queries": [
+    {
+      "service": "GitHub repository search",
+      "query": "\"actuator\" \"test bench\" torque robot in:readme",
+      "api": "https://api.github.com/search/repositories?q=%22actuator%22+%22test+bench%22+torque+robot+in%3Areadme&per_page=40",
+      "result_position_in_snapshot": 25
+    },
+    {
+      "service": "GitHub recursive tree",
+      "api": "https://api.github.com/repos/Roboy/neural-tendon-control/git/trees/15954028b13a6f4426702334783c54de2d9c92a0?recursive=1",
+      "retention": "Inspect experimental data, canonical producer and reader; avoid software-only, synthetic-only and video-only entries."
+    }
+  ],
+  "neighboring_searches": [
+    "GitHub README queries: \"series elastic actuator\" data; \"actuator\" \"dynamometer\" robot; exoskeleton actuator test data; \"torque tracking\" actuator.",
+    "DataCite datasets, up to 100/query: \"series elastic actuators\"; \"torque tracking\"; \"torque control\" AND exoskeleton; \"quasi-direct drive\"; \"actuator characterization\"; titles.title:(actuator AND torque)."
+  ],
+  "aliases": [
+    "Roboy/neural-tendon-control",
+    "motor_babbling_dataset_large_dirty",
+    "validation_run, 2023-02-02 17:06:54"
+  ],
+  "rights": "Publicly downloadable at the pinned Git commit. No license, COPYING or equivalent tracked grant identified. Reference original data in place and retain computed counts, error summaries, checksums and new analysis script only.",
+  "history": {
+    "keys": [
+      "Roboy/neural-tendon-control",
+      "neural-tendon-control",
+      "15954028b13a6f4426702334783c54de2d9c92a0",
+      "motor_babbling_dataset_large_dirty.csv"
+    ],
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "tracked_evidence_files": 1141,
+    "archive_members": 301,
+    "early_baseline": "g1-staging/baseline-index.json",
+    "matches": [],
+    "normalization": "NFKD, Unicode alphanumeric casefold across text, decompressed gzip and tar member contents; matched all literal normalized aliases."
+  },
+  "method": [
+    "Test rig uses paired flexor/extensor MyoBricks. The motor callback maps msg.displacement to torque_encoder; the field retains sensor-displacement units. The supplied joint-angle sensor Arduino reads a 12-bit SPI register and prints a raw integer. Use original angle sensor units for error.",
+    "Tick loop first captures current signals and running flags, then calls set_pwm and publishes requested PWM in BenchState; the low-level sender ignores new requests when stopped. Compute counts of stopped-with-request, and unchanged motor position/displacement over consecutive active sample pairs conditional on nonzero PWM. No temporal interpolation of training data.",
+    "In the validation files, only time and angle are sent to the controller. Verify every non-time field of the 499 exported waypoints matches the input path. The observer timestamps actual BenchState on callback by time.time(). Compare reference angles to measured values on their shared observed host-time interval using linear interpolation and preceding-waypoint alignment separately."
+  ],
+  "findings": [
+    "271,717 + 11,563 original ticks = 283,280 distinct training ticks, contiguous in each file. In the large record, 84,428 of 173,822 eligible flexor pairs and 86,017 of 173,802 extensor pairs have unchanged next displacement and motor position with a nonzero requested PWM.",
+    "499 target waypoints, 582 measured states, 497 overlapping timestamps (24.957 s); 85 measurements excluded outside target support. All 12 non-time waypoint fields match the released input. In original angular sensor units, RMSE is 84.2151 under interpolation and 82.0023 with preceding-waypoint alignment."
+  ],
+  "bounds": [
+    "All training ticks have running state true and no safety-triggered nonzero requests. The release consequently does not measure controller behavior during forced shutdown. An unchanged encoder value may arise from sampling, quantization, contact, compliance or operating point; cannot establish mechanical stall or lost packets.",
+    "No measured motor PWM/electrical voltage paired after the gate, shaft-torque calibration, alignment to sensor sample time, learned-controller checkpoint identity for this run or documented train/test partition. Validation is separately saved replay, not evidence it was held out of all controller tuning.",
+    "The sent waypoint file carries historical motor values copied from the reference file; only the bench_states file represents observed motor/angle behavior during this replay."
+  ],
+  "provenance": {
+    "README.md": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/README.md",
+      "bytes": 8816,
+      "sha256": "24d91c59023469a52ac861541277422aed89f46996794a66cc3af19314ad2f99"
+    },
+    "bench/myobrick.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/bench/myobrick.py",
+      "bytes": 2815,
+      "sha256": "0f4e1473d84a3ea729839e0f589b59156bd429a753bf44520af95333ef01dd69"
+    },
+    "bench/tick_loop.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/bench/tick_loop.py",
+      "bytes": 3706,
+      "sha256": "593306d4fbf0187bade6d7032790a19e98c08f218f2a6fe64ec6065e31ccd6f7"
+    },
+    "bench/angle_sensor.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/bench/angle_sensor.py",
+      "bytes": 939,
+      "sha256": "3517168e0b0de54aab4bc9ab7a71266e124095a3ed20b73c47da0b3eb023d01d"
+    },
+    "misc/angle_sensor_arduino_code/a1339/a1339.ino": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/misc/angle_sensor_arduino_code/a1339/a1339.ino",
+      "bytes": 914,
+      "sha256": "1b216ab5985c970e5addedb743ff26a43c580aeafe948680ed4d9decba48e3b2"
+    },
+    "evaluator/main.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/evaluator/main.py",
+      "bytes": 3944,
+      "sha256": "80c7e6412f7ff401142cfd572ac25797b85faf95fe9a39faa3a443618f17f816"
+    },
+    "evaluator/bench_observer.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/evaluator/bench_observer.py",
+      "bytes": 2001,
+      "sha256": "bde443a075c0c7c0b69efbfbb9403eee17767fb78793dfcfff685197f6590cfd"
+    },
+    "evaluator/waypoints_sender.py": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/evaluator/waypoints_sender.py",
+      "bytes": 2329,
+      "sha256": "4454b5e845ff9f2fd3a01ecf23075dd27436e71e0e6a0f5359c1db95060b44dc"
+    },
+    "evaluator/outputs/validation_run/validation_run.json": {
+      "url": "https://github.com/Roboy/neural-tendon-control/blob/15954028b13a6f4426702334783c54de2d9c92a0/evaluator/outputs/validation_run/validation_run.json",
+      "bytes": 236,
+      "sha256": "3e5455e5ff830e0509cd5735c23b05ff2633cf431b40bd442cc71ee3c3b1b0ba"
+    }
+  },
+  "raw_inputs": [
+    "Both *_dirty.csv in controllers/g2p-closed-loop/datasets and all three validation_run CSVs in evaluator/eval_paths and evaluator/outputs. No plot HTML copied."
+  ],
+  "raw_file_receipts": [
+    "tendon-files.csv"
+  ],
+  "derived_files": [
+    {
+      "file": "tendon-files.csv",
+      "body_rows": 5,
+      "sha256": "0d5769d82aad3cbd862093dcd38b4bde44d293c66b6bf4fff549cfdbc5b5d3b1"
+    },
+    {
+      "file": "tendon-input-audit.csv",
+      "body_rows": 4,
+      "sha256": "a53b829d741d8531af4f574d94189f662baaf6ec948ea584ceed79912b4bffea"
+    },
+    {
+      "file": "tendon-validation.csv",
+      "body_rows": 2,
+      "sha256": "21f3207ab6387b1d8e8ab0b7d00023d2e2d2d01d717609f283ec71813b8191bd"
+    }
+  ],
+  "replication": {
+    "software": "Python 3.12.14, numpy 2.3.5, pandas 2.2.3",
+    "script": "derive_tendon.py",
+    "script_sha256": "646a8156e8b557239c35aa5ac54570d8c314733128dae78e7751265208ff3764",
+    "steps": [
+      "Create a temporary checkout: git clone --no-checkout https://github.com/Roboy/neural-tendon-control.git checkout",
+      "git -C checkout checkout --detach 15954028b13a6f4426702334783c54de2d9c92a0",
+      "mkdir -p output",
+      "OPENBLAS_NUM_THREADS=1 python derive_tendon.py checkout output",
+      "Compare CSV SHA-256 to derived_files. No robot hardware, ROS or source training environment required."
+    ]
+  }
+}

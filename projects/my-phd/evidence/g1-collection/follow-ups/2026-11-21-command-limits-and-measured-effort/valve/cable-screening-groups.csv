@@ -1,0 +1,5 @@
+depositor_role,records,records_with_any_mismatch,sample_rows,low_rail_rows,high_rail_rows,both_flag_and_rail_rows,flagged_intermediate_voltage_rows,unflagged_near_rail_rows,neither_flag_nor_rail_rows,jitter_flag_rows,fault_flag_rows
+basic_acceptance_failure,5,5,82111,0,0,0,1320,0,80791,12,0
+main_statistics,33,30,420126,6642,950,0,4145,7592,408389,0,0
+separate_boundary_evidence,1,1,12601,0,0,0,95,0,12506,0,0
+separate_failure_evidence,4,4,48547,0,0,0,835,0,47712,0,0

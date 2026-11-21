@@ -1,0 +1,4 @@
+file,csv_peak_abs_servo_readback_Nm,table_IV_paper_peak_abs_Nm,csv_minus_paper_Nm
+BF_pd_5x.csv,3.50560641,3.506,-0.000393587112
+BF_rl_5x.csv,3.55543423,3.55,0.00543422699
+BF_tvlqr_5x.csv,3.23054194,3.231,-0.000458055496

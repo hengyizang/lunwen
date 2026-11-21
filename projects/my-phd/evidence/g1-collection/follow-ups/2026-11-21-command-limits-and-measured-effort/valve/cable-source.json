@@ -1,0 +1,67 @@
+{
+  "title": "Experimental data and control code for composite ADRC of a cable-coupled single-rod hydraulic cylinder",
+  "landing": "https://www.scidb.cn/en/detail?dataSetId=301797cba5c149e5986a91b341dca952",
+  "doi": "10.57760/sciencedb.014ms",
+  "cstr": "31253.11.sciencedb.014ms",
+  "authors": [
+    "Yunming Liu (Northeastern University)"
+  ],
+  "publisher": "Science Data Bank",
+  "version": "V3, package dated 2026-11-12, repository updated 2026-11-18; DOI record spans versions",
+  "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/, per DataCite and V3 internal metadata. New summaries acknowledge the dataset creator.",
+  "evidence_level": "Complete V3 archive downloaded independently from two public endpoints, including all 43 original 14-column records, indexed inclusion/exclusion, C# implementation and supplementary material. All 43 file SHA-256 values verified against source_index_normalized.csv.",
+  "search_log": {
+    "queries": [
+      "https://api.datacite.org/dois?query=%28titles.title%3A%22hydraulic+cylinder%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=55",
+      "https://api.datacite.org/dois?query=%28titles.title%3A%22hydraulic+actuator%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=55"
+    ],
+    "metadata": "https://api.datacite.org/dois/10.57760/sciencedb.014ms",
+    "filelist_request": {
+      "endpoint": "https://www.scidb.cn/api/gin-sdb-filetree/public/file/childrenFileListByPath",
+      "method": "POST",
+      "json": {
+        "dataSetId": "301797cba5c149e5986a91b341dca952",
+        "version": "V3",
+        "path": "/V3",
+        "lastIndex": 0,
+        "pageSize": 200
+      }
+    },
+    "screening": "File tree checked across V1, V2 and V3; pinned the latest single V3 archive. Older extracted file listings or converted spreadsheet previews are not used for results."
+  },
+  "input_files": [
+    {
+      "file": "CEP_ADRC_evidence_v3_2026-11-12.zip",
+      "url": "https://china.scidb.cn/download?fileId=f14b18fd69193b1fbfb4511cfa642bdd",
+      "bytes": 31956763,
+      "sha256": "2ecc1164f3d0f87381d9dde13a16359c1c907ae964e6c02552cf9fc4c4a0b81c",
+      "public_mirror": "https://download.scidb.cn/download?fileId=f14b18fd69193b1fbfb4511cfa642bdd",
+      "md5": "4568bb3ad79e447ef9859a3def87c277",
+      "file_id": "f14b18fd69193b1fbfb4511cfa642bdd"
+    }
+  ],
+  "observations": [
+    "43 raw physical 20-kg cable-coupled cylinder logs, 563,385 rows, median logging interval 0.002 s. 33 primary runs, 5 screening failures, 4 separate failure runs and 1 separate boundary run.",
+    "Threshold |u_V| >= 6.49 V compared row by row with stored sat. 40 of 43 records disagree at least once. Counts: 0 both true, 7,592 near-rail without flag and 6,395 flagged with intermediate voltage. C# ADRCWireController.cs lines 979–989 flags either inner amplitude or per-step rate constraint. MergedWireController.cs lines 249–275 propagates the flag, applies optional dead-zone compensation and outer limits."
+  ],
+  "limits": [
+    "Voltage is a logged software output; no row-wise unsaturated demand, physical coil or spool measurement. The four-cell table compares distinct observables and does not classify one as hardware ground truth or infer a cause for each discrepancy.",
+    "Positions are measured, but tension is an internal estimate. The 2 ms logged grid (t_s constructed from cycle count in archived C#) does not establish PID runtime period, wall-clock jitter or timing of each physical update. Some retained files wrap or repeat cycles. Different reference shaping and a single rig preclude generic controller rankings.",
+    "The deposit metadata describes an associated manuscript as submitted; this release is cited as data."
+  ],
+  "reproduce": "Save the V3 ZIP and run python derive_cable.py CEP_ADRC_evidence_v3_2026-11-12.zip OUT (NumPy/pandas). Outputs: cable-voltage-flags-by-run.csv and cable-screening-groups.csv, including the ten separately retained cases.",
+  "retrieved_utc": "2026-11-21",
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.57760/sciencedb.014ms",
+      "301797cba5c149e5986a91b341dca952",
+      "Experimental data and control code for composite ADRC of a cable-coupled single-rod hydraulic cylinder",
+      "绳索耦合单缸液压缸复合自抗扰控制的实验数据与控制代码"
+    ],
+    "matched_paths_by_key": {},
+    "evidence_paths": 1141,
+    "additional_tar_members": 301,
+    "early_index_also_screened": true
+  }
+}

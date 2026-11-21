@@ -1,0 +1,5 @@
+file,side,tick_first,tick_last,rows,nonconsecutive_steps,running_samples,stopped_samples,nonzero_requested_pwm,stopped_with_nonzero_requested_pwm,safety_pressed_with_nonzero_requested_pwm,requested_pwm_min,requested_pwm_max,displacement_min_raw,displacement_max_raw,running_nonzero_pwm_pairs,unchanged_next_displacement,unchanged_next_displacement_and_motor_position
+motor_babbling_dataset_large_dirty.csv,flex,6146685,6418401,271717,0,271717,0,173822,0,0,-4.99803352,19.2040291,-4111,1058,173822,85326,84428
+motor_babbling_dataset_large_dirty.csv,extend,6146685,6418401,271717,0,271717,0,173802,0,0,-4.99734163,14.7217388,-4460,487,173802,86950,86017
+motor_babbling_dataset_small_dirty.csv,flex,867789,879351,11563,0,11563,0,9986,0,0,-4.97852755,9.97918606,-2564,1351,9986,4473,4415
+motor_babbling_dataset_small_dirty.csv,extend,867789,879351,11563,0,11563,0,9995,0,0,-4.97682619,9.9603548,-3009,1251,9995,4556,4489

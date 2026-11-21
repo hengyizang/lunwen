@@ -1,0 +1,8 @@
+fit_trial,eval_trial,same_file_as_fit,evaluated_rows,model_absolute_mean_error_Nm,model_rmse_Nm,model_mae_Nm,controller_vs_negated_adc_rmse_Nm,command_vs_negated_adc_rmse_Nm,abs_cmd_above_training_max_count,abs_logged_current_above_training_max_count
+trial8.csv,trial1.csv,False,1206,36.1191797,43.1842881,36.1526781,53.1484519,11.4632871,606,784
+trial8.csv,trial2.csv,False,1060,53.4331783,175.139559,86.0894613,152.461742,7.79438594,460,633
+trial8.csv,trial3.csv,False,6510,35.7796073,38.2193106,36.2280754,128.999286,23.0847384,5910,6083
+trial8.csv,trial5.csv,False,2699,0.243522191,0.818957248,0.319127005,0.85501682,0.942256611,0,0
+trial8.csv,trial6.csv,False,1199,0.383207189,1.00107246,0.453668451,1.06092649,1.57177981,0,0
+trial8.csv,trial8.csv,True,3299,0,1.73097486,0.680433488,1.88154827,1.80064259,0,0
+trial8.csv,trial9-compensation.csv,False,3299,0.0849711159,1.26372598,0.584011648,1.39835935,1.71803993,0,0

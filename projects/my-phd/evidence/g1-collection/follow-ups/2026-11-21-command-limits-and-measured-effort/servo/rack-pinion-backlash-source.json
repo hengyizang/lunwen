@@ -1,0 +1,120 @@
+{
+  "title": "Replication Data for: Compensating for Backlash in Rack-and-Pinion Drives Using Gain-Scheduled Cascade Control",
+  "authors": [
+    "Lehner, Jannik"
+  ],
+  "doi": "10.18419/darus-6333",
+  "landing": "https://doi.org/10.18419/darus-6333",
+  "repository": "DaRUS, University of Stuttgart",
+  "version": "1.0",
+  "released_utc": "2026-08-05T06:32:56Z",
+  "accessed_utc": "2026-11-21",
+  "release_manifest": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/darus-6333",
+  "release_manifest_sha256": "e5efc77787d5ac4ea469a98135198a193ea02646618b1692e7767849aae57cfe",
+  "rights": "CC BY 4.0 (DaRUS release-wide). All listed files are public. The repository stores attributed aggregate tables and independent processing code.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence_level": "usable files; complete release downloaded and checked",
+  "queries": [
+    {
+      "provider": "DataCite REST",
+      "query": "(\"tracking error\" OR \"contouring error\") AND (\"machine\" OR \"feed\" OR \"servo\" OR \"axis\") AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%22tracking+error%22+OR+%22contouring+error%22%29+AND+%28%22machine%22+OR+%22feed%22+OR+%22servo%22+OR+%22axis%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "page_rows": 53,
+      "total_reported": 53,
+      "position_in_returned_page": 10,
+      "response_sha256": "88ba2a1a3a8162ed90a37079b86d16846c827f9e51982ad50ebc04f035f38ce8"
+    }
+  ],
+  "related_sources": [
+    "The version lists IsCitedBy: Jannik Lehner, Lukas Steinle, Valentin Leipe, Armin Lechler and Alexander Verl, Compensating for Backlash in Rack-and-Pinion Drives Using Gain-Scheduled Cascade Control, WGP 2026, Hannover (no DOI listed)."
+  ],
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.18419/darus-6333",
+      "Compensating for Backlash in Rack-and-Pinion Drives Using Gain-Scheduled Cascade Control"
+    ],
+    "matched_files": [],
+    "scope": "1141 Git-tracked evidence paths, 301 members inside tar.gz, gzip contents and early baseline-index. Case/punctuation/accents normalized. Paper titles used for replication releases."
+  },
+  "methods": [
+    "Parsed the three figure CSVs and inspected all three author MATLAB scripts. Built a 0–2 m transmission envelope from TE_plus and TE_minus; linearly interpolated the full spatial grid onto measured slide positions. Compared measured x_M−x_S with both raw and plotted ±10 µm inward-shifted curves.",
+    "Used the figure 5 legend to pair indices (1,2), (3,4), (5,6), (7,8) by compensation on/off. Aligned identical timestamps on each common prefix and restricted paired moving RMS to samples whose commanded speed magnitude exceeded 1 mm/s in both runs. Entire common-prefix errors and reference mismatches are also tabulated."
+  ],
+  "results": [
+    "200,001 spatial points sampled 0–2 m give raw envelope width 20.071–73.414 µm, median 46.205 µm. Eleven time series have 136,801 total samples at 2 kHz.",
+    "All four matching moving-window RMS slide errors are lower with gain scheduling, in pair order 31.660/33.443, 31.337/33.407, 35.359/39.431, and 36.637/39.415 µm. Moving peak errors likewise decrease in all four. Two pairs have identical references; the other two differ by at most 0.097657 µm on their common time grid."
+  ],
+  "limitations": [
+    "The map measures mechanical motor-to-slide transmission error. Plot boundaries and time spent outside them are neither drive-current limits nor proof of saturation. The release supplies position and K_v rather than raw torque/current or an interlock. Four pairwise comparisons on one rig are not a generalized effect estimate."
+  ],
+  "files_checked": 6,
+  "total_original_bytes": 18122746,
+  "files": [
+    {
+      "path": "figure2_data.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639694?format=original",
+      "bytes": 10433831,
+      "dataverse_md5": "eeb730a4688f46666078e02bcd7b5ee9",
+      "sha256": "9f23ef4789a8145ad78a687b28c94caed37d4d7484df532f230db750b6d6bf7d"
+    },
+    {
+      "path": "figure2.m",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639692",
+      "bytes": 944,
+      "dataverse_md5": "910d4be174fd2b27eb1596f2bfa71bd1",
+      "sha256": "bfea2dbe708c994621a919d8557b235d8b90188084672889a3111470e8553a3e"
+    },
+    {
+      "path": "figure3_data.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639696?format=original",
+      "bytes": 1750914,
+      "dataverse_md5": "be66ecf6f6a0874245db036383596276",
+      "sha256": "36e6959bc32f4a8b518aa780592d3035923e2fef923b445480e5e28c439247d6"
+    },
+    {
+      "path": "figure3.m",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639693",
+      "bytes": 3613,
+      "dataverse_md5": "0677ff7db1f0330e846d1de17c17f512",
+      "sha256": "4b0fc4dcf58c9fd3698a750f9d92b41efaa11c29350baab2314fe9f9c8991ae0"
+    },
+    {
+      "path": "figure5_data.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639695?format=original",
+      "bytes": 5929064,
+      "dataverse_md5": "d819acb69ec106a0aa77942183ee7143",
+      "sha256": "9966597761cbe4f17bfe15f143b6e8a8f36330c70fa39ecd039250f05d405522"
+    },
+    {
+      "path": "figure5.m",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/639697",
+      "bytes": 4380,
+      "dataverse_md5": "566408c8a0308a17fa3c40935b85c3c9",
+      "sha256": "f00f8bb86191b3985e7ecd578e982295871f8c1eba19f50b5d24cac37ace0f3b"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "rack-transmission-map.csv",
+      "rows": 1,
+      "sha256": "5e023c88de173a83ba4f5d725de2dd261e0271d9a036f648b229f67a2618b326"
+    },
+    {
+      "name": "rack-tracking-runs.csv",
+      "rows": 11,
+      "sha256": "6433ad87e9478e6220bf0bd2cac01353203ca4a98eac0e34fd135111dd340fb1"
+    },
+    {
+      "name": "rack-gain-pairs.csv",
+      "rows": 4,
+      "sha256": "99714b7f36da918475618dd0d70f8b71dbcb34880572686880d7c8ae5cea9eab"
+    }
+  ],
+  "reproduction": {
+    "requirements": "Python 3.11+, NumPy, pandas 2+, h5py for MATLAB HDF5. From this directory:",
+    "download": "python fetch_servo_release.py 6333 RAW",
+    "derive": "python derive_rack.py RAW OUT",
+    "layout": "RAW/meta6333.json contains a data.latestVersion object; RAW/6333/<Dataverse file id> contains the original versioned bytes. The downloader uses the numeric version route. The analysis verifies original size and MD5 again."
+  }
+}

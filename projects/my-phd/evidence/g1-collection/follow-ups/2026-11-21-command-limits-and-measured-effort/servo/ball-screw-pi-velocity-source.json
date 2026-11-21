@@ -1,0 +1,417 @@
+{
+  "title": "PI velocity controllers comparison",
+  "authors": [
+    "Hinze, Christoph",
+    "Zeh, Lukas"
+  ],
+  "doi": "10.18419/darus-3109",
+  "landing": "https://doi.org/10.18419/darus-3109",
+  "repository": "DaRUS, University of Stuttgart",
+  "version": "1.0",
+  "released_utc": "2022-11-03T10:02:29Z",
+  "accessed_utc": "2026-11-21",
+  "release_manifest": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/darus-3109",
+  "release_manifest_sha256": "5b8b9c0e886d2c7f79507b4af66bc8008dc0b1012c36bd13bdd6540d55932345",
+  "rights": "CC BY 4.0 (DaRUS release-wide). All listed files are public. The repository stores attributed aggregate tables and independent processing code.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence_level": "usable files; complete release downloaded and checked",
+  "queries": [
+    {
+      "provider": "DataCite REST",
+      "query": "(\"feed drive\" OR \"ball screw\" OR \"ballscrew\") AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%22feed+drive%22+OR+%22ball+screw%22+OR+%22ballscrew%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "page_rows": 61,
+      "total_reported": 61,
+      "position_in_returned_page": 32,
+      "response_sha256": "3a39dcb134fc48667c37b965624e68fe1f11c9a1b3da77391bbd87a090177f00"
+    }
+  ],
+  "related_sources": [
+    "Author README explicitly links the compensation calibration on this same physical bench. https://doi.org/10.18419/darus-2563"
+  ],
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.18419/darus-3109",
+      "PI velocity controllers comparison"
+    ],
+    "matched_files": [],
+    "scope": "1141 Git-tracked evidence paths, 301 members inside tar.gz, gzip contents and early baseline-index. Case/punctuation/accents normalized. Paper titles used for replication releases."
+  },
+  "methods": [
+    "Joined 42 MATLAB v7.3 signals through their own dSPACE Y/XIndex on the ~1 kHz command clock, including the corresponding ~4 kHz inverter and independent table traces. The largest nearest-neighbor discrepancy is zero in the released files. RMS and ranges refer to the joined grid, not 4 kHz peaks. The README identifies a 400 kg table, 0.72 m travel and deactivated position controller. Seven tuning methods are named across the release.",
+    "Computed velocity error from v_ref minus measured motor/table velocity, and request-versus-inverter torque RMS from u_motor [rot] and M_KGT_act. Counted each 1→0 sigEnable edge, same-row lastError and subsequent disabled interval, and measured resulting displacement. Force minima/maxima counts cover the full file."
+  ],
+  "results": [
+    "All 42 runs give 584,060 synchronized command/inverter/table records; 12 ForceSweep, 14 VelSweep, 6 VelocityRamp, 10 extra H-infinity sweeps. Thirty-two release F_nut_sum; the ten extra H-infinity sweeps omit this channel.",
+    "At 0.247996682 s in VelocityRamp/SymmetricOpt.mat (row 248, zero based), sigEnable falls and lastError changes from 0 to 2. Across the remaining 1,001 samples, requested torque is exactly −94.78474 Nm while inverter torque changes from −55.04761 to −0.01831 Nm; table position spans 38.2267 mm. This is the only disable event and the only experiment with nonzero error.",
+    "The same full file hits F_nut_sum extrema −3999.999997 N (16 samples) and +3999.877927 N (7). Its 152.00 mm/s full-run table speed error includes disabled control; the five other recorded ramp traces range from 2.297 to 4.757 mm/s."
+  ],
+  "limitations": [
+    "The source defines code 2 only as an error code and gives no cause in this release. A frozen request after disabling cannot establish actuator clipping. Repeated force-channel extrema suggest measurement range effects, with no certified saturation bit.",
+    "Whole-run errors include rest periods and shutdown transients. The six ramp captures have different sample counts and capture starts. The missing DisturbanceOpt ramp and missing nut-force channels in ten sweeps limit balanced comparisons. Motor torque is an inverter-side signal; the independent sensors are the table readout and nut-force measurement."
+  ],
+  "files_checked": 47,
+  "total_original_bytes": 104431630,
+  "files": [
+    {
+      "path": "VelocityRamp/DampingOpt.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145621",
+      "bytes": 503655,
+      "dataverse_md5": "33bd0d1dd45b8e39d93993ca84a22228",
+      "sha256": "1b19958ab3f696d8bc8f6986badfd78eebdf7c41afb489a7c2a0dec089655fc8"
+    },
+    {
+      "path": "ForceSweep/DampingOpt_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144173",
+      "bytes": 3059744,
+      "dataverse_md5": "ce068d8c17fd55f82d2e5f749d64c6bf",
+      "sha256": "6dc12e0dc98a283ab0fb17c969ca64e3372a219982bd71cb03458c2bfe772e86"
+    },
+    {
+      "path": "VelSweep/DampingOpt_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144160",
+      "bytes": 3070983,
+      "dataverse_md5": "e2cf412efea9987e1cf4b304635835a4",
+      "sha256": "b43fc3a51ac1f99870041cf47ec6bd851f58595ebd6b2805cd1f0e21f310e680"
+    },
+    {
+      "path": "VelSweep/DampingOpt_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144159",
+      "bytes": 3048230,
+      "dataverse_md5": "f411c59318cd97913cb6b79bce270d09",
+      "sha256": "d0a5dcdbec00e90c871d9fff26a1ba8584a88b1e63a7cbd783bf9a3cb4eb76dc"
+    },
+    {
+      "path": "ForceSweep/DampingOpt_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144152",
+      "bytes": 3041259,
+      "dataverse_md5": "ec1206026d69c811d4217063b2fe9d0c",
+      "sha256": "85dde4463cb6a30395b4dd9b0e3038f2bbdd972a4632821e1b53c8183634a08b"
+    },
+    {
+      "path": "ForceSweep/DisturbanceOpt_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144158",
+      "bytes": 3087882,
+      "dataverse_md5": "78d801df8dfeae282133dcf7e3c671c9",
+      "sha256": "987d1113f5f7d0a1b5e243526739c815c7f0c6ec0ebcbe0a9b952c633560d1c9"
+    },
+    {
+      "path": "VelSweep/DisturbanceOpt_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144162",
+      "bytes": 3047067,
+      "dataverse_md5": "d6f2604f982de75a09e0d347341e6558",
+      "sha256": "c915f56df7aca66709834cb24af8e670cb6f54892770efcc29795bf11b4e866d"
+    },
+    {
+      "path": "ForceSweep/DisturbanceOpt_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144155",
+      "bytes": 3061771,
+      "dataverse_md5": "b37f4995c4da7e85acae55923a9bd20f",
+      "sha256": "3bb8305f67bc363334286ff501e3706093ccfa2c17d890caa8e6317da88707b9"
+    },
+    {
+      "path": "VelSweep/DisturbanceOpt_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144168",
+      "bytes": 3044786,
+      "dataverse_md5": "7b539dc204cdf53915f9e393ffb13684",
+      "sha256": "04b48bdb05f67f39ff0263f270800581820045e1c6a62ef058894fc6c4265f25"
+    },
+    {
+      "path": "VelocityRamp/DOZirn.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145625",
+      "bytes": 508342,
+      "dataverse_md5": "99221a75c743c439c5a136061b4098fc",
+      "sha256": "02ccc8f42fdcdc5344c63d26e19b858c146bc31a37fa3e18d1d37762cd500f3c"
+    },
+    {
+      "path": "ForceSweep/DOZirn_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145617",
+      "bytes": 2732154,
+      "dataverse_md5": "ab6a18d5aa142ff0d66cbf0166dea46f",
+      "sha256": "4cd3dee442f3d19fa1c4636513fdef77d78777a1c69ab9236c2b7d7625d26ffb"
+    },
+    {
+      "path": "VelSweep/DOZirn_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145611",
+      "bytes": 3084210,
+      "dataverse_md5": "6bacf77b4d9a92191b83a0d033a17f42",
+      "sha256": "ce040c35662913541bcaa0fa29820ce5c03e86f6a5745333e231ce35c706bb7c"
+    },
+    {
+      "path": "VelSweep/DOZirn_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145614",
+      "bytes": 3079059,
+      "dataverse_md5": "bbc2253a6af81d6f9734749a11c18e95",
+      "sha256": "dc0c11f8fc9756bd92dcbf88b89134d20661cf3f7c51553b8bd36076dda4fe4e"
+    },
+    {
+      "path": "ForceSweep/DOZirn_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145619",
+      "bytes": 2708364,
+      "dataverse_md5": "34b4dfd5c6272f6a79c49a3faf44f366",
+      "sha256": "f5a933112cfb9087b328dfb02b56e2f3347a7f8ef32692fc97f7353790a64623"
+    },
+    {
+      "path": "VelocityRamp/ESO.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145624",
+      "bytes": 509148,
+      "dataverse_md5": "a71ab1ad5bf343145ad81bf33656595f",
+      "sha256": "6c11d4c5740bd90f057fbc74fcadac68ff1fa9331a9a80afd2c67b0aad74bd93"
+    },
+    {
+      "path": "ForceSweep/ESO_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145615",
+      "bytes": 2738252,
+      "dataverse_md5": "9ba70a1dcd0c0597246c4e810983ca1c",
+      "sha256": "67bdc414716c68466ffeb47d5c612c518ffe3ddb723dfece569aecdc91b1570d"
+    },
+    {
+      "path": "VelSweep/ESO_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145613",
+      "bytes": 3084321,
+      "dataverse_md5": "1ae92ed2c1bd3e33a381862abcbca027",
+      "sha256": "c20a7e93c54fd1e26c82cf86a4f0a39bd574a170b210e7bb057b635a5e3641a8"
+    },
+    {
+      "path": "ForceSweep/ESO_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145618",
+      "bytes": 2753940,
+      "dataverse_md5": "c5ae1cc36d97a739f561dfe006d9feac",
+      "sha256": "d0539b69355c76a5794cc8fda19c89ff9af0fd5041f9cfdd91c0bf8c88f79dd9"
+    },
+    {
+      "path": "VelSweep/ESO_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145616",
+      "bytes": 3060372,
+      "dataverse_md5": "7befa42e6ec07bcc09747dbdbf7ac28c",
+      "sha256": "09b5ba8dd60334cf251474f6f47a4048acb2d00e2aaa555ce92d8b8bd3680c35"
+    },
+    {
+      "path": "VelocityRamp/HInf.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145623",
+      "bytes": 502141,
+      "dataverse_md5": "5e1271bba4dfc49803b82b768529710a",
+      "sha256": "a0bc91e48896da06960f99760bd5bada8aa1e251a49c19575a7f2f7beeead919"
+    },
+    {
+      "path": "ForceSweep/HInf_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144171",
+      "bytes": 3057361,
+      "dataverse_md5": "de7fbee8bd44e725ddf76ed221f36c81",
+      "sha256": "1f5202593a2e65be8699547924dc73c25447541ea471ff0361cf99a4fddf4b4f"
+    },
+    {
+      "path": "VelSweep/HInf_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144167",
+      "bytes": 3071125,
+      "dataverse_md5": "f379d6c325391aa58f9b4c2b098de4f7",
+      "sha256": "fa0d4d26bc32d5dc1160c0a8e5d29c85ed8b1d391fe9703a086fd112d854377e"
+    },
+    {
+      "path": "ForceSweep/HInf_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144154",
+      "bytes": 3020855,
+      "dataverse_md5": "01b56e70b833e9224f0fcd530a535ead",
+      "sha256": "040897790d40eaf82b6095fced593711607cf4941be76af147ed5a8ea2f1e703"
+    },
+    {
+      "path": "VelSweep/HInf_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144172",
+      "bytes": 3064177,
+      "dataverse_md5": "4e57d1869b23f71fb086f686a17db474",
+      "sha256": "01fbd1e193829c5d073d112ad2ffb208a74747a5f860e1a4f54606de13921c56"
+    },
+    {
+      "path": "VelocityRamp/LoopShaping.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145622",
+      "bytes": 509548,
+      "dataverse_md5": "343779719c44e70ec8af03e27f7cc0ca",
+      "sha256": "0fb3315a4c4305c2ba5e26d4daaf2ecc3f67d3e45315be9cbe3578cee6e68af6"
+    },
+    {
+      "path": "ForceSweep/LoopShaping_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144165",
+      "bytes": 3069963,
+      "dataverse_md5": "de5b1d135ef1205bcbc83ce14de12de4",
+      "sha256": "e1014b148a3a864886dbf1545f3d0ce4814c91fe517e1b6b30d3317ebe55ccf1"
+    },
+    {
+      "path": "VelSweep/LoopShaping_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144150",
+      "bytes": 3078473,
+      "dataverse_md5": "d8b228d7645d20df2d4a10314ae1e528",
+      "sha256": "db4c57815409b9fcf5415bb3bb572fb56c8e3eaadd8b49c5738e56a73dd35932"
+    },
+    {
+      "path": "VelSweep/LoopShaping_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144164",
+      "bytes": 3069248,
+      "dataverse_md5": "4930fda38ed58ef50a5f20def8b62a4a",
+      "sha256": "5b44f921afa412f3b25c05a78c1a71b961a8aaad71b33e6717f59943cfa8f792"
+    },
+    {
+      "path": "ForceSweep/LoopShaping_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144161",
+      "bytes": 3034101,
+      "dataverse_md5": "1e51a18afd97dcdac3693ac798511a6b",
+      "sha256": "9a43c3fb74a22cd9ae70bc86017d8de335ab416dc138d0e14bb0b2bbd6db961d"
+    },
+    {
+      "path": "VelSweep/parameters.txt",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/165993",
+      "bytes": 139,
+      "dataverse_md5": "86946f3b2d973dc6b94610e0c63dcc93",
+      "sha256": "c833514fbcff755c1a69dde439f2db0f91f6d0382077bb8711508b141c968734"
+    },
+    {
+      "path": "sweeps_H_inf/parameters.txt",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/165994",
+      "bytes": 337,
+      "dataverse_md5": "6db21c7f0a1f0acd3e21eb83b5eae086",
+      "sha256": "9e90fb25c845ec923a61714e0d076894b7d7375324c8e4644c94184385980c14"
+    },
+    {
+      "path": "VelocityRamp/parameters.txt",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/165991",
+      "bytes": 112,
+      "dataverse_md5": "f79fed636e3c33e163178b847e4bc634",
+      "sha256": "fe24afcaff96cca0091b4f36ad120370c16706cda458a6334096569f2e0aeb6d"
+    },
+    {
+      "path": "ForceSweep/parameters.txt",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/165992",
+      "bytes": 370,
+      "dataverse_md5": "db207e44d60ba0b6d869e900ee65eb02",
+      "sha256": "850b2f94ceb446a4ebbee8b1a056dc7c1581065d633dfbd3c3fb8e6890e6e359"
+    },
+    {
+      "path": "Readme.md",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/168723",
+      "bytes": 4636,
+      "dataverse_md5": "646cb7e1063b9a4ce3b3c7c7ef78c101",
+      "sha256": "c1b570fefdf5f6705ba071390200e67d89fe3334286b7aa960b4ed328922c7a7"
+    },
+    {
+      "path": "VelocityRamp/SymmetricOpt.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144169",
+      "bytes": 553461,
+      "dataverse_md5": "3649a0abb4f80cbb7a80b92eb80b0a34",
+      "sha256": "bea3d17a85862055ae00fbcba75118a3d08eacc2b27146ed9968d62fd4b64ad8"
+    },
+    {
+      "path": "VelSweep/SymmetricOpt_x_10.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144170",
+      "bytes": 3083370,
+      "dataverse_md5": "f62f70c0d633457442358593ec3d7512",
+      "sha256": "5e4e5a7a3f1f1bbd9335ba14b543362e76153d02759f48be8a79abf48c9560c0"
+    },
+    {
+      "path": "VelSweep/SymmetricOpt_x_550.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144149",
+      "bytes": 3074358,
+      "dataverse_md5": "e2ce4c2acb611a9d0491cbfac49c1bf1",
+      "sha256": "00b6dbec73af474c4e1b548332a06ab7a923a8a9f842d55cbcee12575a2ef3ab"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_20_mm_s_x_150_neg.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145699",
+      "bytes": 2331732,
+      "dataverse_md5": "109f1ff923fb72ac9d0fc7b201fa26ec",
+      "sha256": "ebc3c8169ffefec5a8fe5f8575083ff086d3032f761d6cc1e9e3e488c46f5d78"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_20_mm_s_x_150_pos.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145701",
+      "bytes": 2343620,
+      "dataverse_md5": "3ad9b0e8f5174d65d6cccb532b30cb0e",
+      "sha256": "d244e9de794c941ddcf53f08207446cc64f9a1b398e2f50dfe554f8375d7bd96"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_20_mm_s_x_600_neg.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145706",
+      "bytes": 2311919,
+      "dataverse_md5": "a28f52999f8f294405a942e2906c02d9",
+      "sha256": "ce0517f63b799cc1330612c623cd97b2aad9bbf6b8578b3bb014cffa3901126d"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_20_mm_s_x_600_pos.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145705",
+      "bytes": 2312590,
+      "dataverse_md5": "357cba9280d08930c8c086823f5bedfa",
+      "sha256": "cc5fd7771fad2161c3a238240e77abe387c56d1fd0581112a0958151ff895ffc"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_150_neg.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145697",
+      "bytes": 2266316,
+      "dataverse_md5": "d7a5ace660c2fe2a7d4ebb66dda9e553",
+      "sha256": "8988bb76e5b42a8f93bd4f5f800f75f754a9809edccf0573306a6321707eb84d"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_150_pos.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145696",
+      "bytes": 2271694,
+      "dataverse_md5": "47357cf7ac2c2a547fdb0db774d93aba",
+      "sha256": "90bd8ec57cf07df74fb58137408eb1d98f0487054492458cf0fe106287c4cede"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_350_neg.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145700",
+      "bytes": 2287182,
+      "dataverse_md5": "c93818bd2681c3a1aa4667fb51770721",
+      "sha256": "b8d3871f83f0603bb3d18b58efdc996becb308733cf30baac3ae7331d36c694b"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_350_pos.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145698",
+      "bytes": 2285361,
+      "dataverse_md5": "0e2b7387d677665c6b2181f393f52896",
+      "sha256": "88b1f219ead961be0cf8082d64cdfe9c7e3ed43775f1d6643de18687247ee99e"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_650_neg.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145704",
+      "bytes": 2298926,
+      "dataverse_md5": "fcf5fbd4f7b5c9aaca5b5a94f3987d2e",
+      "sha256": "43169a27df93ca7dbc8b14a6a733d821a29051a6ab6375b115a3937c68806501"
+    },
+    {
+      "path": "sweeps_H_inf/vSweep_8_mm_s_x_650_pos.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145702",
+      "bytes": 2304976,
+      "dataverse_md5": "1a4d26911491c9a7f8df7996c5c9bcf1",
+      "sha256": "3122d56217a74abca382a91e85b2f0deb6c91f37cad91034ce2678f3cbd55b79"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "ball-screw-pi-velocity-runs.csv",
+      "rows": 42,
+      "sha256": "80b25948ec947503cb2bc7611c49b192b637eac6d6d24bf38ae2f1172a31212e"
+    },
+    {
+      "name": "ball-screw-disable-events.csv",
+      "rows": 1,
+      "sha256": "9dbe1a39308dda8f1ae626c50a7ecf7c3afa2b4aac18e9524a397c284c10abda"
+    }
+  ],
+  "reproduction": {
+    "requirements": "Python 3.11+, NumPy, pandas 2+, h5py for MATLAB HDF5. From this directory:",
+    "download": "python fetch_servo_release.py 3109 RAW",
+    "derive": "python derive_ball_screw.py RAW OUT 3109",
+    "layout": "RAW/meta3109.json contains a data.latestVersion object; RAW/3109/<Dataverse file id> contains the original versioned bytes. The downloader uses the numeric version route. The analysis verifies original size and MD5 again."
+  },
+  "companion_full_text": {
+    "citation": "Christoph Hinze (2023). Dynamiksteigerung von Kugelgewindetrieben durch modellbasierte Lageregelung der nachgiebigen Mechanik. Universität Stuttgart, dissertation.",
+    "doi": "10.18419/opus-13932",
+    "landing": "https://doi.org/10.18419/opus-13932",
+    "repository_item": "https://elib.uni-stuttgart.de/server/api/core/items/96f8169d-7b95-4ecc-889c-a9db49742268",
+    "pdf": "https://elib.uni-stuttgart.de/server/api/core/bitstreams/84dc5048-d940-4152-91e9-1fe8e3380c69/content",
+    "pdf_sha256": "08e06841686c79304c36336f58382c9bcb4759ee261b06f12815fc0f0e323b38",
+    "pdf_bytes": 13546481,
+    "pages_in_pdf": 201,
+    "evidence": "Full text reviewed. Appendix A.3, printed pp. 180–181, specifies Heidenhain LS187C linear readout, separate AM2048S/R motor encoder, and four Kistler 9323A force sensors with 5017B1800 amplifier. The author gives 3 µm specified linear measurement accuracy and 4.88 nm readout resolution. Bibliography item [132] explicitly cites this dataset DOI. Section 6.3, printed pp. 79–82, compares speed-controller settings with the position loop deactivated.",
+    "access_rights": "DataCite metadata identifies open access. Only bibliographic facts and location pointers retained; the full text is not mirrored."
+  }
+}

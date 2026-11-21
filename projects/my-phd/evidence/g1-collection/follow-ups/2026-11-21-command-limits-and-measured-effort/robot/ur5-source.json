@@ -1,0 +1,111 @@
+{
+  "title": "UR5 collaborative robot static anti-gravity torque versus joint angle data",
+  "landing": "https://rdmc.nottingham.ac.uk/handle/internal/10457",
+  "doi": "10.17639/nott.7287",
+  "authors": [
+    "Mojtaba Ahmadiehkhanesar"
+  ],
+  "version": "University of Nottingham DSpace item 9c394db3-fd32-40da-a264-50a1487be707; acquisition 2022-01-20; issued 2023-03-13. Three UUID-pinned bitstreams; no semantic version stated.",
+  "tier": "New usable physical measurement files, static subset of collaborative robot.",
+  "rights": "University of Nottingham source item specifies CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . This collection computed pose blocks and cross-validation summaries from the three credited CSVs.",
+  "queries": [
+    {
+      "search": "https://api.datacite.org/dois?query=%28titles.title%3A%28%22robot%22+OR+%22robotic%22+OR+%22manipulator%22%29+AND+%28descriptions.description%3A%22motor+currents%22+OR+descriptions.description%3A%22joint+currents%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "hits": 4,
+      "rows_read": 4,
+      "response_sha256": "b98701f4a5bdcc766401500981a8f25bf8f21d1fab704376be4ed9e5a5709cea"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://repository.nottingham.ac.uk/server/api/core/items/9c394db3-fd32-40da-a264-50a1487be707",
+      "bytes": 8985,
+      "sha256": "4e6548c61bf43919e8e8422264710d6ea954ddd68ea0070513b5e46e02fbb34d"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.17639/nott.7287",
+      "bytes": 8789,
+      "sha256": "1732a51ada3231199316b082fb062580ff157f761cc6ca6e5337b82f1fbd04cc"
+    },
+    {
+      "url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/6d309a94-ee3f-4403-bdc8-d70042d27f27/content",
+      "bytes": 1019357,
+      "sha256": "93500838e56cd38e03447528cd8d73feac769f6954ff0554f66565eb0995f94b",
+      "file": "Efforts_reduced.csv",
+      "verified_publisher_md5": "b099afbfa9304f2924d8feb9c7f85cc2",
+      "bitstream_metadata_url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/6d309a94-ee3f-4403-bdc8-d70042d27f27"
+    },
+    {
+      "url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/268ea332-97f6-4f9d-95d0-71a717af6348/content",
+      "bytes": 1016106,
+      "sha256": "e71608a6d7f6249ff3950ad1ffcfe70fcaef0562db447c31e219ba9e5dadc0c4",
+      "file": "Positions_reduced.csv",
+      "verified_publisher_md5": "a98ac0ede82935d12455bd6a391214c0",
+      "bitstream_metadata_url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/268ea332-97f6-4f9d-95d0-71a717af6348"
+    },
+    {
+      "url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/b97fe9d2-7481-4615-af46-09418beb3b03/content",
+      "bytes": 999247,
+      "sha256": "13b5fd1dc87ceb8c47b796e41174bcac029a72f94868db15bee0a7b981eb1118",
+      "file": "Velocities_reduced.csv",
+      "verified_publisher_md5": "b6cdf4901bfaa84907fa380b698386dd",
+      "bitstream_metadata_url": "https://repository.nottingham.ac.uk/server/api/core/bitstreams/b97fe9d2-7481-4615-af46-09418beb3b03"
+    }
+  ],
+  "coverage": {
+    "matrices": "Three aligned headerless 6574 × 6 matrices. Repository metadata explicitly calls Efforts_reduced.csv motor currents, Positions_reduced.csv joint angles, and Velocities_reduced.csv joint angular velocities. ROS-Melodic ~125 Hz before zero-velocity filtering.",
+    "finite": true,
+    "all_velocity_values_zero": true,
+    "stored_distinct_pose_tuples": 4435,
+    "distinct_joint_position_plus_current_tuples": 6574,
+    "distinct_pose_tuples_with_varying_current": 1098,
+    "cleaning": "Removed one simultaneous all-zero position and all-zero current row for prediction only. Retained 6573 rows; repeat poses with different current are observations and were kept."
+  },
+  "evidence": [
+    "Six-dimensional Euclidean distance in the recorded angular coordinates from each retained row to the preceding retained row; a distance strictly greater than 0.005, 0.01 or 0.02 starts a new contiguous pseudo-block. Each threshold yields 656 blocks. These are inferred pose groups, not release-labeled experiments.",
+    "Deterministic five-fold holdout with fold = retained row index mod 5 versus pose block ID mod 5. Prediction is one nearest training pose in original angle coordinates, with training currents averaged across exact duplicates. Primary reporting uses all test rows combined. Fold-specific training medians give the baseline in each joint.",
+    "3081 of 6573 interleaved test rows had an exact training pose. Zero had an exact training pose with block holdout. Median nearest-training pose distance moves from 0.000010 to 0.292278 in stored angular units; joint 2 nearest-pose RMSE moves from 0.01478 to 0.58025 in recorded motor-current units. Under block holdout the per-joint training median beats nearest-pose prediction on joints 1, 3 and 6."
+  ],
+  "bounds": [
+    "No timestamp, source-session ID, requested current, limiter flag or external force channel accompanies the tables. Static filtering makes original 125 Hz unsuitable for reconstructing elapsed trial time. Block-level validation estimates transfer between poses on this release, not between recording sessions or robots.",
+    "Treating motor current as calibrated joint torque would require an additional drivetrain conversion. Pose-block thresholds and nearest-neighbor geometry are in original stored coordinates; angular wraparound is not corrected."
+  ],
+  "artifacts": [
+    {
+      "file": "ur5-static-blocks.csv",
+      "bytes": 86701,
+      "sha256": "68763f3d482e8d450b33bfde408ea6569bf05a3526558141d151e4ef438c4589",
+      "rows": 1968
+    },
+    {
+      "file": "ur5-static-holdouts.csv",
+      "bytes": 2837,
+      "sha256": "4c376f0bb8d034499d72234c3105961288cb8fce08a9b8867cc53d22ab018c71",
+      "rows": 24
+    },
+    {
+      "file": "derive_static_ur5.py",
+      "bytes": 3019,
+      "sha256": "e9b25cbdcf57d531eb052eab623c606ace4dea722b13e8059da34279502b2abd"
+    }
+  ],
+  "reproduction": [
+    "Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0. Run scripts with their directory on the Python path. CSVs are deterministic summaries of the credited source files.",
+    "Download the three named /content URLs to their source filenames in INPUT. Verify the listed publisher MD5 checksums, then run python derive_static_ur5.py INPUT OUTPUT."
+  ],
+  "checked_utc": "2026-11-21",
+  "history": {
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.17639/nott.7287",
+      "rdmc.nottingham.ac.uk/handle/internal/10457",
+      "UR5 collaborative robot static anti-gravity torque versus joint angle data",
+      "Ahmadiehkhanesar UR5 collaborative robot static anti-gravity"
+    ],
+    "matches": [],
+    "tracked_evidence_files": 1141,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  }
+}

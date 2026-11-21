@@ -1,0 +1,47 @@
+{
+  "accessed_utc": "2026-11-21",
+  "database": "DataCite public REST API",
+  "queries": [
+    {
+      "query": "((titles.title:\"predictive current control\" OR titles.title:\"current controller\" OR titles.title:\"current tracking\" OR titles.title:\"current control\")) AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22predictive+current+control%22+OR+titles.title%3A%22current+controller%22+OR+titles.title%3A%22current+tracking%22+OR+titles.title%3A%22current+control%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "registry_total_at_lookup": 32,
+      "first_page_records": 32,
+      "first_page_sha256": "f239198597a702c8cd75541f3522102c509a25db914fa907577db40e6957adaa"
+    },
+    {
+      "query": "((titles.title:\"permanent magnet synchronous\" OR titles.title:\"permanent magnet motor\" OR titles.title:\"PMSM\")) AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22permanent+magnet+synchronous%22+OR+titles.title%3A%22permanent+magnet+motor%22+OR+titles.title%3A%22PMSM%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "registry_total_at_lookup": 126,
+      "first_page_records": 100,
+      "first_page_sha256": "7bba7a7584d8216e2f0c5fc04e6b318a464515d94b16bd6b807b73716acd9754"
+    },
+    {
+      "query": "((titles.title:\"electric drive\" OR titles.title:\"motor control\" OR titles.title:\"BLDC\")) AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22electric+drive%22+OR+titles.title%3A%22motor+control%22+OR+titles.title%3A%22BLDC%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "registry_total_at_lookup": 414,
+      "first_page_records": 100,
+      "first_page_sha256": "e2118479fcec59b8535caea4590f46b1224739cd88b84d3af25ec412a43f0e7c"
+    },
+    {
+      "query": "((titles.title:\"anti-windup\" OR titles.title:\"actuator saturation\" OR titles.title:\"antiwindup\")) AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22anti-windup%22+OR+titles.title%3A%22actuator+saturation%22+OR+titles.title%3A%22antiwindup%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "registry_total_at_lookup": 11,
+      "first_page_records": 11,
+      "first_page_sha256": "6ea8873518dc21aebc4c0944125e9536b33644ada66c079a0dfc578a04275102"
+    }
+  ],
+  "screen": "Screen DOI/title lists and follow records offering supplementary measured target and actual channels or a stated limit plus downloadable map. Collapse concept and version DOIs. Each selected release and its provenance, variable units, methodology, and limits appear in its own source record. First page only for each broad query; targeted sample, no recall estimate.",
+  "negative_control": {
+    "title": "Experimental Data for Dynamic Reference Correction in High-Speed PMSM Flux-Weakening Control",
+    "doi": "10.21227/602f-zt93",
+    "source": {
+      "name": "dynamic.html.meta",
+      "download": "https://ieee-dataport.org/documents/experimental-data-dynamic-reference-correction-high-speed-pmsm-flux-weakening-control",
+      "bytes": 59211,
+      "sha256": "5fcb0698c2450ba1ca5e432636cb990948581a9b32509c55cb1b355d4b4140ef",
+      "md5": "8d26035b159f00f006cdc9d2f97fec45"
+    },
+    "decision": "Strong title match, IEEE DataPort public landing labels the download Subscription Required. Screened as a lead only; no file used or counted."
+  }
+}

@@ -1,0 +1,7 @@
+release_a,release_b,files_a,files_b,distinct_original_files_a,distinct_original_files_b,shared_original_sha256,distinct_full_table_encoder_series_a,distinct_full_table_encoder_series_b,shared_full_native_table_encoder_array_sha256
+2563,3109,12,47,12,47,0,10,42,0
+2563,3003,12,100,12,100,0,10,99,0
+2563,3152,12,114,12,114,0,10,110,0
+3109,3003,47,100,47,100,0,42,99,0
+3109,3152,47,114,47,114,0,42,110,0
+3003,3152,100,114,100,114,0,99,110,0

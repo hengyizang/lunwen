@@ -1,0 +1,94 @@
+{
+  "retrieved_utc": "2026-11-21",
+  "queries": [
+    {
+      "path": "dc",
+      "url": "https://api.datacite.org/dois?query=%28titles.title%3A%22steer-by-wire%22+OR+titles.title%3A%22steering+actuator%22+OR+titles.title%3A%22brake-by-wire%22+OR+titles.title%3A%22electric+power+steering%22+OR+titles.title%3A%22steering+torque%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=75",
+      "bytes": 34999,
+      "sha256": "de24801f15fb8c465d3077231c103f6864e58e85d1a68cd6cfd7438b657586b6",
+      "returned": 13,
+      "registry_total": 13
+    },
+    {
+      "path": "mendeley",
+      "url": "https://api.datacite.org/dois?query=%28titles.title%3A%22actuator+saturation%22+OR+titles.title%3A%22hydraulic+brake%22+OR+titles.title%3A%22steering+system%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=75",
+      "bytes": 43504,
+      "sha256": "264e1448fbd158ee785b2587d2c3bb9dfeab6713b7936748302d65f2dc9e9ef7",
+      "returned": 14,
+      "registry_total": 14
+    },
+    {
+      "path": "hf-comma",
+      "url": "https://huggingface.co/api/datasets?author=commaai&limit=100",
+      "bytes": 6241,
+      "sha256": "98803f5b2e0b17a8174c1d761370d92d167a9bf4f3b99d8d319eab786eff3d64",
+      "returned": 6,
+      "registry_total": null
+    },
+    {
+      "path": "hf-other",
+      "url": "https://huggingface.co/api/datasets?search=comma2k19&limit=40",
+      "bytes": 2181,
+      "sha256": "b810518eef747d0eae1e1db647e81b302585ea7842fde47400caead940bc943d",
+      "returned": 2,
+      "registry_total": null
+    }
+  ],
+  "screened_examples": [
+    {
+      "record": {
+        "path": "19851735.json",
+        "url": "https://zenodo.org/api/records/19851735",
+        "bytes": 5458,
+        "sha256": "f97249b8fb23f12dd21cf6078610d536c3ea66673d7497c0019f730358717655"
+      },
+      "title": "CANalyzer logs of measurements performed in Master's Thesis \"Automotive Ethernet-Based Brake-by-Wire Architecture for Commercial Vehicle Combinations\"",
+      "file_names": [
+        "link_up.asc",
+        "tunnelling_time_delay.asc",
+        "stream_reservation.asc",
+        "switching_delay.asc",
+        "CAN_Ethernet_wrapping_delay.asc",
+        "converter-converter_delay.asc",
+        "field_test_unmodified.asc",
+        "field_test_with_buffer_correction.asc"
+      ],
+      "decision": "CANalyzer brake-by-wire Ethernet transport/timing tests; file descriptions do not establish physical brake pressure or measured actuator effort."
+    },
+    {
+      "record": {
+        "path": "24157396.json",
+        "url": "https://zenodo.org/api/records/24157396",
+        "bytes": 3634,
+        "sha256": "9442e348f997d20bc20bff82418ee79028a1a45af10384a78de87f09cc0f01b4"
+      },
+      "title": "Contact-Patch Tyre Modelling with Calibrated Ensemble Learning for Steer-by-Wire Feedback",
+      "file_names": [
+        "hybrid-tyre-estimator.zip"
+      ],
+      "decision": "Tyre model archive covers target feedback modeling and synthetic lookup products; omitted from the physical effort count."
+    },
+    {
+      "record": {
+        "path": "28077095.json",
+        "url": "https://api.figshare.com/v2/articles/28077095",
+        "bytes": 2700,
+        "sha256": "05f7b7729cad9e3e36ca0cebe4cc8e46619e9d1a5d53f679298aabd30630594a"
+      },
+      "title": "Fault-Tolerant Control of Steer-by-Wire System Based on Gaussian Process Regression",
+      "file_names": [
+        "data.csv"
+      ],
+      "decision": "Fault-tolerant steer-by-wire study uses CarSim/Simulink; metadata screened for simulation-only evidence."
+    }
+  ],
+  "included_neighbors": [
+    "commaSteeringControl",
+    "commabody",
+    "Volvo ESR2",
+    "Volvo ESR3"
+  ],
+  "other_catalog_leads": [
+    "comma2k19 and commaCarSegments were screened at catalog/README level and were not counted as inspected actuator datasets."
+  ]
+}

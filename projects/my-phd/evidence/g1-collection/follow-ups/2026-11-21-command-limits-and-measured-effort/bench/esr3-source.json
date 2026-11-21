@@ -1,0 +1,98 @@
+{
+  "title": "Steering system measurement ESR 3",
+  "authors": [
+    "Weitao Chen"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.3263798",
+  "doi": "10.5281/zenodo.3263798",
+  "concept_doi": "10.5281/zenodo.3263797",
+  "version": "Version-specific DOI; first public version, Zenodo version index 0.",
+  "published": "2019-06-30",
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+  "registry": {
+    "url": "https://zenodo.org/api/records/3263798",
+    "bytes": 4174,
+    "sha256": "f4ed4d8cc2548ab1bceb0cc4675991c2909aec741cfd28d31af31456469428ef"
+  },
+  "files": [
+    {
+      "name": "ESR3_EPAS_measurement&validation.zip",
+      "md5": "74d631b6e7b13d95e2bced89a13f2600",
+      "url": "https://zenodo.org/api/records/3263798/files/ESR3_EPAS_measurement&validation.zip/content",
+      "bytes": 84859420,
+      "sha256": "b0446b933551f74dd706edd70bf633e9adf1e6db38f9008db4fa86cd4449630a"
+    },
+    {
+      "name": "ESR3_HIL&DILtests.zip",
+      "md5": "9614ffa5f7377f9260c71d3a3bddfe12",
+      "url": "https://zenodo.org/api/records/3263798/files/ESR3_HIL&DILtests.zip/content",
+      "bytes": 17151935,
+      "sha256": "9fa192fb7523b584d1335a05d12a1e9d1605ef3d3a1748bd1f412c99e975ad91"
+    }
+  ],
+  "rights": "Zenodo release metadata designates CC BY 4.0; credit Weitao Chen and the fixed release DOI. Only newly computed statistics, provenance and reader code are deposited here. https://creativecommons.org/licenses/by/4.0/",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.3263798",
+      "10.5281/zenodo.3263797",
+      "Steering system measurement ESR 3",
+      "ESR3_EPAS_measurement&validation.zip",
+      "ESR3_HIL&DILtests.zip",
+      "10.3384/ecp19157717",
+      "Integration and Analysis of EPAS and Chassis System in FMI-based co-simulation"
+    ]
+  },
+  "reproduce": "Fetch both original archives into RAW with the exact filenames listed in files[].name. Run python volvo_bench.py RAW OUT 3. Python 3.12, NumPy 2.3.5, SciPy 1.17.0, h5py 3.16.0.",
+  "search": {
+    "database": "DataCite",
+    "query": "(titles.title:\"actuator saturation\" OR titles.title:\"hydraulic brake\" OR titles.title:\"steering system\") AND types.resourceTypeGeneral:Dataset",
+    "registry_total": 14,
+    "returned": 14,
+    "url": "https://api.datacite.org/dois?query=%28titles.title%3A%22actuator+saturation%22+OR+titles.title%3A%22hydraulic+brake%22+OR+titles.title%3A%22steering+system%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=75",
+    "bytes": 43504,
+    "sha256": "264e1448fbd158ee785b2587d2c3bb9dfeab6713b7936748302d65f2dc9e9ef7"
+  },
+  "evidence_level": "Unpacked both original archives. Parsed all 29 campaign-2 HDF5 MATs and all three HIL/DIL MATs, the steering campaign DOCX, MATLAB channel mapping, and cited conference full text. Campaign 1 not exhaustively reduced.",
+  "documents": [
+    {
+      "url": "ESR3_EPAS_measurement&validation/Steereing_system_measurement.docx",
+      "bytes": 1301837,
+      "sha256": "6b719a4ea19c342a18cf0d00cb06618671c8efa1fbd504cdfc54d52e1f02cdc3"
+    },
+    {
+      "url": "ESR3_EPAS_measurement&validation/steering_hil_measurement_2/data_processing_2.m",
+      "bytes": 2025,
+      "sha256": "8596ef6390db17f40073e9fc1a6487a557cc1e3a9a2ceca00050a2f354c2251d"
+    },
+    {
+      "url": "ESR3_EPAS_measurement&validation/steering_hil_measurement_1/data_processing.m",
+      "bytes": 5011,
+      "sha256": "702ddce2491be5cb4d68ef0f4559e573df7e6287f0bd190dfc954f9f4a9be8ef"
+    }
+  ],
+  "citation": {
+    "title": "Integration and Analysis of EPAS and Chassis System in FMI-based co-simulation",
+    "authors": [
+      "Weitao Chen",
+      "Shenhai Ran",
+      "Bengt Jacobson"
+    ],
+    "year": 2019,
+    "doi": "10.3384/ecp19157717",
+    "version": "13th International Modelica Conference, published proceedings, 8 PDF pages",
+    "source": {
+      "url": "https://ep.liu.se/ecp/157/074/ecp19157074.pdf",
+      "bytes": 1977190,
+      "sha256": "28e1c49a323129196c71271c9661c50f96123a41b9de4ced25b0d03002149d7a"
+    },
+    "locator": "Section 2, pp. 718–719, Figs. 3–4. Steering wheel robot and independent rack actuators allowed pull-by-torque and pull-by-rack tests; authors describe deactivating EPAS for those parameter-identification tests. The archive has additional filenames explicitly marked PowerOn."
+  },
+  "methods": [
+    "29 campaign-2 files represent 28 numbered tests (two different files numbered 25). Join MATLAB HDF5 object references using drive path suffixes. Full-run max-minus-min, RMSE of actual minus demanded angle and right position, actual steering torque range. Units on actual channels follow depositor data_processing_2.m (deg, mm, Nm). The demanded fields are compared on corresponding native angle/position scales. A number of position/angle demands are endpoint steps during constant-velocity movement; full-run RMSE includes intended ramps.",
+    "For the four standard Robot_*degps_LinActDisconn files, keep interior strokes |angle|≤400° and | |angular velocity|−nominal speed |≤10% of nominal. Fit unweighted least squares on all eligible samples of 13 and 23 deg/s files, whole 37 and 45 deg/s files held out. Model steering torque as offset plus a signed Coulomb term, optionally adding a linear velocity term. The differently named second test 25 is excluded from this comparison; retained in the full run table.",
+    "Three OC_*_02g MATs have a 1 ms MyData simulation/test clock with wheel angle (rad) and torque (Nm), and a distinct approximately 5 ms Measurement clock with reference steering and EPAS variables. Test exact contiguous subset identity for time, angle and torque before counting records. VehicleTest appears in the 80 and 120 files: time, angle, torque, iepas and uepas are checked against the vehicle-reference arrays. Preserve raw scale of vehicle reference; no cross-clock resampling."
+  ],
+  "results": "3,143,221 campaign-2 points at 1 kHz. Viscous term modestly lowered held-out measured steering-torque RMSE from 0.556 to 0.516 Nm at 37 deg/s and 0.640 to 0.570 Nm at 45 deg/s. The three HIL/DIL top-level angle/torque/time triplets are exact copies of all or a contiguous subset of MyData; both named VehicleTest objects are exact subsets of the selected vehicle-side fields. In all three files, iepas and uepas each have only one distinct finite value on the Measurement clock.",
+  "limits": "No controller anti-windup state, commanded motor current or independent motor torque is established. Electrical comparison fields on vehicle side are constant. The archive name and object names alone do not designate every run as real-vehicle or every MyData channel as measured hardware. A rig friction-fit residual includes mechanical loads and signal processing; the simple models are descriptive. The published paper is context, not a source of these holdout results. The 1 kHz and 5 ms windows come from separate origins; no paired pointwise HIL-versus-vehicle error is claimed."
+}

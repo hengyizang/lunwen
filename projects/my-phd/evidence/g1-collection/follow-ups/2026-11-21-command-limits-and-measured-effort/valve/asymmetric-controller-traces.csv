@@ -1,0 +1,10 @@
+experiment,controller,rows,sample_period_s,min_position_mm,max_position_mm,rmse_mm,peak_abs_error_mm,over_105mm_observations,over_104_4mm_observations,published_error_disagreement_max_mm,published_margin_disagreement_max_mm,voltage_outside_documented_limits,low_limit_rows,low_episodes,high_limit_rows,high_episodes,compute_times_zero,compute_times_over_20ms,compute_time_peak_ms
+1,PSO-PID,644,0.02,30.028,79.332,8.77226252,17.933,0,0,1.03028697e-13,,,,,,,,,
+1,MPC-DOB,644,0.02,30,80.746,5.91282342,13.421,0,0,1.03028697e-13,,,,,,,,,
+1,MPC-RBF,644,0.02,29.956,80.046,5.74711246,13.137,0,0,1.03028697e-13,,,,,,,,,
+2,PSO-PID,301,0.02,29.965,109.097,20.709779,79.003,191,192,,2.95319325e-14,0,0,0,51,1,,,
+2,MPC-RBF,301,0.02,29.971,109.023,20.8742796,79,193,194,,1.687539e-14,0,0,0,44,1,,,
+2,RBF-MPC-CBF,301,0.02,29.652,104.863,21.6581129,79.055,0,152,,9.9475983e-14,0,0,0,19,2,,,
+3,PSO-PID,1862,0.02,1.957,107.685,7.10349673,15.602,253,267,,,0,421,9,0,0,1862,0,0
+3,MPC-RBF,1862,0.02,2.045,108.268,4.76978077,12.108,255,278,,,0,474,5,0,0,0,290,46.2638
+3,RBF-MPC-CBF,1862,0.02,2.014,105.042,2.91658509,7.339,4,168,,,0,349,5,0,0,0,109,44.4269

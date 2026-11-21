@@ -1,0 +1,10 @@
+file,sha256,rows,named_columns,has_command_and_clipped,has_phase,nonincreasing_meas_time_steps
+results/real_system/csvs/BF_pd_5x.csv,fd12b5c23be7d226d0ae32cffc08a9c47bf647437002dfc7603c38775081a059,3578,20,True,True,0
+results/real_system/csvs/BF_rl_5x.csv,30e0412f016c87a5f89be72ccff46bb8c2f783c2577d541b13d8afcf53c98166,2827,19,True,False,0
+results/real_system/csvs/BF_tvlqr_1x.csv,792a0c1193f7b4dd7edf0096404b35182e60eb3fa32462340ce5ffac30ad21bf,496,19,True,False,0
+results/real_system/csvs/BF_tvlqr_5x.csv,8f5ae4f81a0108e0af6932ce161a83dc418de1c2cc064332686dc6753efc9bed,3380,20,True,True,0
+results/real_system/csvs/FB_pd_1x_.csv,5830538f7b09d0aded20116a202d0f5848a431c10142ab777f522d89a5a58a7a,282,23,False,False,1
+results/real_system/csvs/ZB_pd_1x.csv,bf425798f5b26054fc12eba823a7b4738e76db62360dabaab900edad5e706dc5,693,19,True,False,0
+results/real_system/csvs/ZB_tvlqr_1x.csv,dafe22faadbdded5ce997fc0b79d61f77960b7058d6f87782c23a0c0e79e0743,245,23,False,False,0
+results/real_system/csvs/ZF_pd_1x.csv,50562f673a0eb763a82cf76e69b7769776c3fca26c8305ea92d788e927a5a617,780,19,True,False,0
+results/real_system/csvs/ZF_tvlqr_1x.csv,122a793752071a3a5e68c99ccb0a653037961878e94ae8984594569fe105613e,263,23,False,False,0

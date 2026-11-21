@@ -1,0 +1,4 @@
+file,MyData_points,MyData_dt_s,top_clock_points,top_angle_torque_time_exact_MyData_subset,measurement_finite_points,measurement_dt_s,measurement_distinct_iepas,measurement_distinct_uepas,VehicleTest_points,VehicleTest_exact_measurement_subset,member_sha256
+OC_120_02g,50000,0.001000,15001,True,2210,0.005000,1,1,1701,True,3b6b612db8aadc51cefe8a1763d069011988a48c46b81198bc82fa1ffedb38f1
+OC_50_02g,81478,0.001000,15001,True,2312,0.005000,1,1,0,,df83668ad392df85ca92639c23fd62c60076f332c168f26c5b23fac1043d12c9
+OC_80_02g,181808,0.001000,181808,True,2310,0.005000,1,1,1901,True,6b64c119eff2d524f30f7ca330fc675dc85e2989e7336e7d4c48f53b8ba24517

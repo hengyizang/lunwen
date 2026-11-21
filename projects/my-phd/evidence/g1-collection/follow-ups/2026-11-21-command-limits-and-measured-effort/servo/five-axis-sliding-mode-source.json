@@ -1,0 +1,429 @@
+{
+  "title": "Replication Data for: Evaluation of Sliding-Mode Position Controllers on Multi-Axis Machine Tools with Compliant Mechanics",
+  "authors": [
+    "Xu, Haijia"
+  ],
+  "doi": "10.18419/darus-6114",
+  "landing": "https://doi.org/10.18419/darus-6114",
+  "repository": "DaRUS, University of Stuttgart",
+  "version": "1.0",
+  "released_utc": "2026-06-09T16:51:45Z",
+  "accessed_utc": "2026-11-21",
+  "release_manifest": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/darus-6114",
+  "release_manifest_sha256": "b887510fbaed88794e80385510cdd96b34ecae6690a2a66058818d0ce8278dd9",
+  "rights": "CC BY 4.0 (DaRUS release-wide). All listed files are public. The repository stores attributed aggregate tables and independent processing code.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence_level": "usable files; complete release downloaded and checked",
+  "queries": [
+    {
+      "provider": "DataCite REST",
+      "query": "(\"feed drive\" OR \"ball screw\" OR \"ballscrew\") AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%22feed+drive%22+OR+%22ball+screw%22+OR+%22ballscrew%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "page_rows": 61,
+      "total_reported": 61,
+      "position_in_returned_page": 20,
+      "response_sha256": "3a39dcb134fc48667c37b965624e68fe1f11c9a1b3da77391bbd87a090177f00"
+    }
+  ],
+  "related_sources": [
+    "Publisher work referenced as IsSupplementTo in the release. https://doi.org/10.1145/3808871.3808873"
+  ],
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.18419/darus-6114",
+      "Evaluation of Sliding-Mode Position Controllers on Multi-Axis Machine Tools with Compliant Mechanics"
+    ],
+    "matched_files": [],
+    "scope": "1141 Git-tracked evidence paths, 301 members inside tar.gz, gzip contents and early baseline-index. Case/punctuation/accents normalized. Paper titles used for replication releases."
+  },
+  "methods": [
+    "Parsed 48 axis CSVs and one observer CSV. Checked increasing timestamps, consistent record ID, finite channels, per-axis RMS errors for desired vs load, desired vs motor and motor vs load, torque extrema and recorded velocity setpoints. Position units stay separate for linear x/y/z (µm) and rotary b/c (µrad).",
+    "Rebuilt the 3D translational norm independently from x/y/z desired minus load positions for every file publishing e_3d. Flagged absolute disagreement over one nanometre. The separate observer table compares x_des to x_act."
+  ],
+  "results": [
+    "48 five-axis acquisitions (438,000 time rows, 240 axis summaries), including 28 excitation sweeps and three 15,000-row multi-axis control traces. All 48 have 1 ms timestamp spacing. One further observer validation CSV has 9,978 rows.",
+    "For lSMC-PI.csv, 760 of 15,000 rows differ by more than 1 nm and the largest discrepancy is 25.40418 µm. The recorded e_3d RMS is 9.24095 µm; recomputing from load positions gives 9.47792 µm. The other 33 files reporting e_3d agree within 1 nm.",
+    "Recomputed multi-axis load-error RMS is 23.56365 µm for P-PI, 10.53385 µm for qSMC-PI and 9.47792 µm for lSMC-PI on their respective runs."
+  ],
+  "limitations": [
+    "This tests agreement with the explicit Cartesian formula, not the cause of the difference in the supplied scalar. Conventions can differ across stages or columns. No documented pre/post limiter pair, drive-limit setting, or directly calibrated external torque transducer. A velocity command and recorded motor torque alone do not identify clipping."
+  ],
+  "files_checked": 50,
+  "total_original_bytes": 251397892,
+  "files": [
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_n20_vAmp_5mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548573",
+      "bytes": 4713129,
+      "dataverse_md5": "0350bc538355d3baa859e9c8a2036cad",
+      "sha256": "7d089bebc5631f2d73152ae623b1c2079ac1a7eee06be13b56ee17a1555d195d"
+    },
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_n20_vAmp_7mm_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548572",
+      "bytes": 4738764,
+      "dataverse_md5": "d4e44c58e63c9f9e71c4782962ed1006",
+      "sha256": "581292807e998e0e08b5000f3dd3005faf9d70622885f457f5d5947df9488dae"
+    },
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_n20_vAmp_7mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548574",
+      "bytes": 4669746,
+      "dataverse_md5": "789714180f3d5ce52b1fb51efcf0a1c3",
+      "sha256": "db66d1d0cb97bd3de8fa81d24ded18de91547655876aeef3eae8152315f966e9"
+    },
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_p11_vAmp_3mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548571",
+      "bytes": 4587079,
+      "dataverse_md5": "e1d27b8cef89a64f0ce215848b261be3",
+      "sha256": "d0fb7c11b302964d37e7bc1a69ce00da8af7b048664bc614a9a8d53a92070d13"
+    },
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_p11_vAmp_5mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548575",
+      "bytes": 4672719,
+      "dataverse_md5": "1b8e2edb712734abaee98c3ea654d238",
+      "sha256": "6c522e0029d49d9f8c8e9c873dce08970a6811b15b2a5943737d2d8707a2104f"
+    },
+    {
+      "path": "01_sysid_freq/b_axis/b_velSweep_s0_p24_vAmp_5mm_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548570",
+      "bytes": 4671960,
+      "dataverse_md5": "5342be6377f2a6737e2c718cb57be6fa",
+      "sha256": "f54b956067bff191d8468560f7d9f5528910e7771fd093aa294116d096994d5c"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_n10_vAmp_4mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548579",
+      "bytes": 4732611,
+      "dataverse_md5": "15634a97cb7db63a40e39f5996d1517a",
+      "sha256": "fb7e6af6cff0b0b2e41cfb01c595957d84b25ac786d189d255d75e341f998b72"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_n20_vAmp_4mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548581",
+      "bytes": 4718577,
+      "dataverse_md5": "fc53dd52e90aa460d382b1246e415ffa",
+      "sha256": "0840a00dc632599e2e0e2012d799c914bbdd66bae5618db09c5c6e0aa8ca1733"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_n33_vAmp_4mm_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548577",
+      "bytes": 4707617,
+      "dataverse_md5": "5f4275f43c06a790bc34317cf4939b91",
+      "sha256": "c1b1521c587aa90c0853c983c30835436f3ef3f2ed38e340bb2e7ce108178a06"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_p26_vAmp_4mm_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548578",
+      "bytes": 4701252,
+      "dataverse_md5": "ab4360026d2a1147390a1b8216d4c063",
+      "sha256": "44ca2ebbcb8b795a8db605cf5996564120eab6d4503b4f7db55d264d64cc2a52"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_p38_vAmp_4mm_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548580",
+      "bytes": 4714244,
+      "dataverse_md5": "f9ecc879fb26701a12d48ce10ea2573a",
+      "sha256": "c3a05564814bd286df5801e0ea6c705c1e3e9b8065c9bbf63384413de4c28271"
+    },
+    {
+      "path": "01_sysid_freq/c_axis/c_velSweep_s0_p50_vAmp_4mm_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548576",
+      "bytes": 4708806,
+      "dataverse_md5": "efcc44d388b0ccb8f2a82be09378e41f",
+      "sha256": "c12015ed54055bfe5609b9fc818f0fb5fdbcb6513b1182a903f87b7764c02d65"
+    },
+    {
+      "path": "02_single_axis_tracking/lsmc.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548600",
+      "bytes": 2037002,
+      "dataverse_md5": "936627ef7aee1c518deaf7c0b891af9f",
+      "sha256": "7898302a513b5c73d0d73dd1d932cbcedb182bd4b675e1370243b1ea69c0cfdb"
+    },
+    {
+      "path": "04_robustness_test/lsmc-D+10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548613",
+      "bytes": 2046498,
+      "dataverse_md5": "d4150394b81f33c4215709d8b26d53f1",
+      "sha256": "639c3923248a3f23a9526afa63d8cb4a56e7dbbf8ed2bae6f813cf5706376053"
+    },
+    {
+      "path": "04_robustness_test/lsmc-D-10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548605",
+      "bytes": 2047035,
+      "dataverse_md5": "44093d62a9f8ada84614a46c26d63bf9",
+      "sha256": "315ac32ece0d32c3abb186be3eedfde2c97b2df699b93ba4a68a89255a9c882b"
+    },
+    {
+      "path": "04_robustness_test/lsmc-nominal.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548610",
+      "bytes": 2043250,
+      "dataverse_md5": "d666455c3f7bc0025728f563e91cf70e",
+      "sha256": "d4972af8840d3772ae3e52dd0ab38b20996c6ffd8960906d764c1d1742817c39"
+    },
+    {
+      "path": "06_multi_axis_tracking/lSMC-PI.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548617",
+      "bytes": 11436083,
+      "dataverse_md5": "5a6aad6c98a582a6ce54b81f7d032a26",
+      "sha256": "127cba57b02bc3d409915c342038e9ddd5f9ef1924789513e816a2fc994fe064"
+    },
+    {
+      "path": "03_single_axis_prbs/lsmc_prbs.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548603",
+      "bytes": 9488150,
+      "dataverse_md5": "80ef8df8288d8f172fb9ccaa2e33a53c",
+      "sha256": "97620273a7461d8afaf2d29f8545da0a2d0c648ea681a7c0f6f76293dbdfbe05"
+    },
+    {
+      "path": "04_robustness_test/lsmc-w+10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548612",
+      "bytes": 1975834,
+      "dataverse_md5": "642066b5bbd799aaced4c11c78149837",
+      "sha256": "cc8d60beac29713789dc64c556c4c5d49ea6f6e1ea844197c3cc7594a05aa397"
+    },
+    {
+      "path": "04_robustness_test/lsmc-w-10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548606",
+      "bytes": 2046053,
+      "dataverse_md5": "a47c3bd10f91b24b74d42bf131ab5ae5",
+      "sha256": "c0e32b9475c4d9b7c49b515ca1543fc17e41705a6eebf95bba397f8f8813c4ff"
+    },
+    {
+      "path": "05_observer/ObserverTestSet.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548615?format=original",
+      "bytes": 377398,
+      "dataverse_md5": "56b18a8729803f71deae031a04445cad",
+      "sha256": "7575ad2fb599a4ba0db1134975076fdd4702a8e31eaffa8c18fcb34eb2a76857"
+    },
+    {
+      "path": "04_robustness_test/P-35.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548604",
+      "bytes": 2030509,
+      "dataverse_md5": "38c33c18d8d3ced1fc322e9ec098262a",
+      "sha256": "0206d5bfd6cde875f6448540a67f516e46fe3897db05b6cf5a62b3b235b3125b"
+    },
+    {
+      "path": "02_single_axis_tracking/P-60.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548599",
+      "bytes": 2025276,
+      "dataverse_md5": "3fa3c35913e992d1aee9c0d37148fcac",
+      "sha256": "a03b626bd76b2e075915eeb07aba4372964c24e7b73d0e747a9aab8819b29e9b"
+    },
+    {
+      "path": "03_single_axis_prbs/P60_prbs.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548601",
+      "bytes": 9372040,
+      "dataverse_md5": "6e22f91f714f799c0536225ed59ad9ce",
+      "sha256": "b577f2ca2a7a2cb4dbea0ef57aad186b96655d622501dc3917cea385e2bfac5e"
+    },
+    {
+      "path": "01_sysid_freq/parameters.txt",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548619",
+      "bytes": 167,
+      "dataverse_md5": "09494b08d1d27cc9e42d39a5101e4429",
+      "sha256": "4d588a29de4bd01e8acd8ab4f7c9e70c1e67d3a330fad5a70ffba233e3444f1d"
+    },
+    {
+      "path": "06_multi_axis_tracking/P-PI.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548618",
+      "bytes": 11450539,
+      "dataverse_md5": "92d43b2123acfe54a7d3ba744edfa02b",
+      "sha256": "d9a68d8896e0467c6d6642e2685d371aa8f554fc551cd734863226c032a176ec"
+    },
+    {
+      "path": "04_robustness_test/qsmc-D+10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548611",
+      "bytes": 1851791,
+      "dataverse_md5": "f71186f0194dbe799d728f957bfba180",
+      "sha256": "03a8c0b65fe67ea2ac07f84b2ff29432c494fdee044315665ef23984a07d6074"
+    },
+    {
+      "path": "04_robustness_test/qsmc-D-10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548608",
+      "bytes": 1847836,
+      "dataverse_md5": "ed1c96edca480cebc49f65c0f10caea0",
+      "sha256": "846dddd57f7a57634c4be14f2f70bef7af73c61056b4dd83d026d3b9b25826b8"
+    },
+    {
+      "path": "02_single_axis_tracking/qsmc-k3omega-epsilon4.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548598",
+      "bytes": 1794879,
+      "dataverse_md5": "386b08106c4ed54df68160fd565eb3eb",
+      "sha256": "0c74707d2ed08fb3c01148dbf3f454a55a542864c551f07e1d8134b73f67a11e"
+    },
+    {
+      "path": "04_robustness_test/qsmc-nominal.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548609",
+      "bytes": 1850052,
+      "dataverse_md5": "9263e009f77e7bd37f1975f3faee24ff",
+      "sha256": "fc764d9e8ca7b79e4f6555299181303e91153dc8001b936f2d72960bc53403e4"
+    },
+    {
+      "path": "06_multi_axis_tracking/qSMC-PI.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548616",
+      "bytes": 11448614,
+      "dataverse_md5": "c39294a0eaf11e7d92b534e17201ce31",
+      "sha256": "f7f5b914a877087b15892f903af35fe0de43b921b786604f2713e17f625af3f7"
+    },
+    {
+      "path": "03_single_axis_prbs/qsmc_prbs.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548602",
+      "bytes": 10169849,
+      "dataverse_md5": "cc53e0ca5094842ab11f1d3d4c2d668e",
+      "sha256": "2a4dd994fc131cb3e7143241cf4c461f5620d63d52b511d0bb98d19959de003a"
+    },
+    {
+      "path": "04_robustness_test/qsmc-w+10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548614",
+      "bytes": 1781763,
+      "dataverse_md5": "261f1523170f9042dbf15d0bfe0a0d1e",
+      "sha256": "68fe6dc525333864dbc168afff0a1075cf627afd2d3fafbf76e226435e4dc0a9"
+    },
+    {
+      "path": "04_robustness_test/qsmc-w-10.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548607",
+      "bytes": 1842294,
+      "dataverse_md5": "625e5806d15d709f998619f349eecf68",
+      "sha256": "a8847e7ad6515227625371777c4314370ad0aa0edb2c343f3741dca0ff546790"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_n150_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548584",
+      "bytes": 6487193,
+      "dataverse_md5": "8934cf9f15861aa8281484791aa8caf7",
+      "sha256": "b2cb21306eab5ea968c33b92def22213db978801618ff8ab7c96e6e376a9f377"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_n50_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548586",
+      "bytes": 6519169,
+      "dataverse_md5": "a76a3bb5620dc9760d086b45cfe3d5ec",
+      "sha256": "376c35d4c7b13ed62fad59e517e5f1d6aaa5b6fd59239c6d760a8cd8b94704a5"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_n50_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548587",
+      "bytes": 6396883,
+      "dataverse_md5": "3cde642d26396c779caf0cfa6d946505",
+      "sha256": "e8046c63285e724fa25b4349c06676dd67e0234ef9f590cc4fd9fc87bf9a27dc"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_p150_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548585",
+      "bytes": 6465315,
+      "dataverse_md5": "3599b79d624eb68b35f145d1d719582e",
+      "sha256": "665207712045af022da717953e853387dec58a931ffbdc879b3db9944391246b"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_p50_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548582",
+      "bytes": 6522022,
+      "dataverse_md5": "3382e1715d38fb19081c0a8ea341f5c0",
+      "sha256": "a1a5cd7d3894ef997996bdec276904caef9e26639825fe9cc0bdf86a35bda7e1"
+    },
+    {
+      "path": "01_sysid_freq/x_axis/x_velSweep_s0_p50_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548583",
+      "bytes": 6457311,
+      "dataverse_md5": "3e0bef8efed1fd13f2d28c7fdf80a14b",
+      "sha256": "7a45f451afca67cbdece94f8a3418292484bfada4ccfe52310eec6fbfbf218a9"
+    },
+    {
+      "path": "01_sysid_freq/y_axis/y_velSweep_s0_n40_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548591",
+      "bytes": 6528689,
+      "dataverse_md5": "7611a0fa2f4cefd64cfddffc98ca43c8",
+      "sha256": "69c4664beb0ca81bc91d2cb8bb49263c8cd586261471bcfe2ce17a046bb2d61f"
+    },
+    {
+      "path": "01_sysid_freq/y_axis/y_velSweep_s0_n75_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548590",
+      "bytes": 6541778,
+      "dataverse_md5": "7df80bdfb59a1330c6e918d3e2845b9b",
+      "sha256": "2da50c750490b5e01c0731a88b96ee49e9cb41d514d1ae62fca657695d5f8d55"
+    },
+    {
+      "path": "01_sysid_freq/y_axis/y_velSweep_s0_p25_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548589",
+      "bytes": 6543533,
+      "dataverse_md5": "b74dba8f11813551f2e76b6ae7b614e7",
+      "sha256": "2e9639a85876d1aba4c824ff4ffe16f79c48db4721c95ce4a8bce9a5adc9b5a0"
+    },
+    {
+      "path": "01_sysid_freq/y_axis/y_velSweep_s0_p60_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548588",
+      "bytes": 6489345,
+      "dataverse_md5": "63f43794e24cfbcab80d37e920d1f7e4",
+      "sha256": "1cc15ceca323c5b072bef2e148cc77fd0fb9ff9ae4a8d3a35f59b4417f943ac7"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_n25_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548596",
+      "bytes": 6531433,
+      "dataverse_md5": "c3e6e7dcef865799dd161e366adb93ec",
+      "sha256": "7ebb17b2cfc1255872b402c41fbce51de50409bc28d06005a77e94da4269dad4"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_n50_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548597",
+      "bytes": 6492881,
+      "dataverse_md5": "eaab740d93e134e41e94d2d57dbd34d7",
+      "sha256": "33f6739189eb886eb96fd72234b30138525461ea696d50c5068928849c672341"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_p0_dir_pos.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548592",
+      "bytes": 6467827,
+      "dataverse_md5": "9dc8f0b8cd1a3fe82051f7d52d99ab36",
+      "sha256": "b794ebc1633f220908fee71a44ef68bc1a9d882d68cf8d14bb8b75f4c7bfbc80"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_p100_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548593",
+      "bytes": 6526715,
+      "dataverse_md5": "6d30cd1ec639f7e8059b6acf2e9b40d5",
+      "sha256": "f21b394b8c1b37c865478d183f6d6863fb930305b7ea4096f6180c984d52437f"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_p50_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548595",
+      "bytes": 6558571,
+      "dataverse_md5": "effb865461509355024473d036b65bf5",
+      "sha256": "66c5a73f54814909086b65b291f046ea5b46e998f9ee99c20572c9dfcc6f72f5"
+    },
+    {
+      "path": "01_sysid_freq/z_axis/z_velSweep_s0_p75_dir_neg.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/548594",
+      "bytes": 6569811,
+      "dataverse_md5": "f56be7fc3dd78d27b7d6f68cdea33f36",
+      "sha256": "b9faea329d753d7d611cec8606005d2b988de918da2388de334174c265e43884"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "five-axis-channel-audit.csv",
+      "rows": 240,
+      "sha256": "cb02d1ef53262d8b298b06f8adde5cd5cd4216115cd4be945a28e2977fd8364a"
+    },
+    {
+      "name": "five-axis-norm-check.csv",
+      "rows": 34,
+      "sha256": "36e496db6416fcc98593646d063d133bab9cfc4e233be7680d2fc2366fa2dd3a"
+    },
+    {
+      "name": "five-axis-observer-set.csv",
+      "rows": 1,
+      "sha256": "cbf585e5fbd494ed3dd6f98ed4e74e2ac0d7bce9fe53ba825ff3aca2dd6d2ae9"
+    }
+  ],
+  "reproduction": {
+    "requirements": "Python 3.11+, NumPy, pandas 2+, h5py for MATLAB HDF5. From this directory:",
+    "download": "python fetch_servo_release.py 6114 RAW",
+    "derive": "python derive_sliding.py RAW OUT",
+    "layout": "RAW/meta6114.json contains a data.latestVersion object; RAW/6114/<Dataverse file id> contains the original versioned bytes. The downloader uses the numeric version route. The analysis verifies original size and MD5 again."
+  }
+}

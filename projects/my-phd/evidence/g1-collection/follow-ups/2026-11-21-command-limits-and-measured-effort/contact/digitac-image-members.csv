@@ -1,0 +1,7 @@
+batch,seed,pose,source_torn_flag,path,uncompressed_bytes,crc32,png_width,png_height,bit_depth,png_colour_type
+1,72,1,0,images/72/pose-0001.png,613184,3c1817ad,480,640,8,2
+1,369,46,1,images/369/pose-0046.png,621039,9893ea80,480,640,8,2
+2,10000,1,0,images/10000/pose-0001.png,607834,8a250621,480,640,8,2
+2,10000,33,1,images/10000/pose-0033.png,612971,03432877,480,640,8,2
+3,112233,1,0,images/112233/pose-0001.png,590371,ee914be4,480,640,8,2
+3,112233,144,1,images/112233/pose-0144.png,610044,14afc261,480,640,8,2

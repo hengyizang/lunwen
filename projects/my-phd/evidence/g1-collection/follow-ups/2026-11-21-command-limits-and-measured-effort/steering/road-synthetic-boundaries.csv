@@ -1,0 +1,3 @@
+platform,member,sha256,rows,fields
+SYNTHETIC_V0,SYNTHETIC/00000.csv,fac0165f4933284c6ce387747df57acd159b419faddd7cb326a6b093896c8558,600,t|vEgo|aEgo|roll|targetLateralAcceleration|steerCommand
+SYNTHETIC_V0,SYNTHETIC/19999.csv,46cc03aba53ca1381d87aa9d189c4048c4c51aef1c6d37cca275447a7dec3ebf,599,t|vEgo|aEgo|roll|targetLateralAcceleration|steerCommand

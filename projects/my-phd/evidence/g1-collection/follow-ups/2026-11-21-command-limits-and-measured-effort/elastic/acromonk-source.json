@@ -1,0 +1,149 @@
+{
+  "title": "AcroMonk: A Minimalist Underactuated Brachiating Robot — physical elbow command, clipped feedforward and torque readback",
+  "authors": [
+    "Mahdi Javadi",
+    "Daniel Harnack",
+    "Paula Stocco",
+    "Shivesh Kumar",
+    "Shubham Vyas",
+    "Daniel Pizzutilo",
+    "Frank Kirchner"
+  ],
+  "landing": "https://github.com/dfki-ric-underactuated-lab/acromonk",
+  "release": "https://github.com/dfki-ric-underactuated-lab/acromonk/tree/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa",
+  "version": "ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa",
+  "commit_date": "2023-08-25",
+  "retrieved_utc": "2026-11-21",
+  "g1_scope": "R2 actuator input, closed-loop response and identification",
+  "evidence": "Public files downloaded, schema and generating or consuming code inspected, numeric outputs recomputed.",
+  "queries": [
+    {
+      "service": "GitHub repository search",
+      "query": "\"actuator\" \"test bench\" torque robot in:readme",
+      "api": "https://api.github.com/search/repositories?q=%22actuator%22+%22test+bench%22+torque+robot+in%3Areadme&per_page=40",
+      "result_position_in_snapshot": 3
+    },
+    {
+      "service": "GitHub recursive tree",
+      "api": "https://api.github.com/repos/dfki-ric-underactuated-lab/acromonk/git/trees/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa?recursive=1",
+      "retention": "Inspect experimental data, canonical producer and reader; avoid software-only, synthetic-only and video-only entries."
+    }
+  ],
+  "neighboring_searches": [
+    "GitHub README queries: \"series elastic actuator\" data; \"actuator\" \"dynamometer\" robot; exoskeleton actuator test data; \"torque tracking\" actuator.",
+    "DataCite datasets, up to 100/query: \"series elastic actuators\"; \"torque tracking\"; \"torque control\" AND exoskeleton; \"quasi-direct drive\"; \"actuator characterization\"; titles.title:(actuator AND torque)."
+  ],
+  "aliases": [
+    "10.1109/LRA.2023.3269296",
+    "arXiv:2305.08373v1",
+    "IEEE document 10106397",
+    "10.5281/zenodo.7638617 v0.1.1; concept 10.5281/zenodo.7638616"
+  ],
+  "rights": "Repository LICENSE specifies BSD-3-Clause. Earlier Zenodo software tag v0.1.1 labels its rights Other (Open). The paper has separate publisher/preprint rights. Link originals; only derived facts, checksums and original script included.",
+  "history": {
+    "keys": [
+      "AcroMonk",
+      "AcroMonk: A Minimalist Underactuated Brachiating Robot",
+      "10.1109/LRA.2023.3269296",
+      "2305.08373",
+      "10.5281/zenodo.7638617",
+      "10.5281/zenodo.7638616",
+      "ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa"
+    ],
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "tracked_evidence_files": 1141,
+    "archive_members": 301,
+    "early_baseline": "g1-staging/baseline-index.json",
+    "matches": [],
+    "normalization": "NFKD, Unicode alphanumeric casefold across text, decompressed gzip and tar member contents; matched all literal normalized aliases."
+  },
+  "method": [
+    "Cross-check the real-system logger: clipping and some sign transforms occur on the host before send_rad_command; the servo returns moteus.Register.TORQUE. In PD mode, both embedded gains are enabled and the feedforward torque is zero. For six newer files compare abs(command)-abs(clipped) > 1e-6 Nm; for two phase-labelled files use the logger mapping.",
+    "Perform a separate five-swing paper check using the max absolute elbow_meas_tau over each full BF_*_5x.csv against Table IV on page 7 of the versioned PDF."
+  ],
+  "findings": [
+    "9 trials contain 12,544 physical rows. Across six newer logs, one BF_tvlqr_1x row reduces magnitude 17.3997584 to 3 Nm; five BF_tvlqr_5x swing rows show reductions, with max original 10.762331 Nm and clipped magnitude 3 Nm.",
+    "For BF_pd_5x swing, all 2,896 host feedforward commands are zero; in 2,333 of those samples absolute servo readback exceeds 0.1 Nm. This is consistent with feedback actuation. Three five-maneuver logs recover the paper peak torque values within 0.00544 Nm.",
+    "Full paper section V reports 5/5 nominal single-BF success for each controller. With the 160 g box disturbance recovery was 5/5 PD, 4/5 TVLQR and 1/5 RL. Under 200 g added swing-arm mass both TVLQR and RL failed in 5/5. These are author-reported outcomes, distinct from the recomputed filename-specific command records."
+  ],
+  "bounds": [
+    "Only two of nine files expose the phase flag. Three older schemas omit both host-feedforward fields. The available motor torque readback does not independently measure shaft torque. Reference minus readback is not tracking failure for an onboard PD feedback loop.",
+    "One time step in FB_pd_1x_.csv is non-increasing. No time differentiation performed. The paper reports perturbation tests; the nine available filenames do not identify individual perturbed trials or expose collision force.",
+    "The publicly archived Zenodo tag predates the analyzed revision; records serve as aliases / provenance only. All numeric tables refer to the Git commit in version."
+  ],
+  "provenance": {
+    "README.md": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/README.md",
+      "bytes": 6493,
+      "sha256": "b699dd08883a5ddb20ef1cf8130055e1b87216beaac81c9537dbc3705f83aeb9"
+    },
+    "LICENSE": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/LICENSE",
+      "bytes": 1548,
+      "sha256": "fa0db36d0932626b1dc6bc9b93b59acfd8356548bbd30feb50590005713541af"
+    },
+    "hardware/testbench-description.md": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/hardware/testbench-description.md",
+      "bytes": 3438,
+      "sha256": "d5ee2679d30118b1dd2cde0edb699cb738c3bdb8adb706854850fb101e8b780a"
+    },
+    "software/python/real_system/robust_forward_brachiation.py": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/software/python/real_system/robust_forward_brachiation.py",
+      "bytes": 23899,
+      "sha256": "85fb482baf8d62c9714f54f369f3863cd99e3d4ea365f80cb3adfa96818221c5"
+    },
+    "software/python/real_system/utils_rpi.py": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/software/python/real_system/utils_rpi.py",
+      "bytes": 9951,
+      "sha256": "46f519da56f6474d2ef6f4456c53683852ba73a97a915a46120633f8c4dbb132"
+    },
+    "software/python/real_system/utils_data.py": {
+      "url": "https://github.com/dfki-ric-underactuated-lab/acromonk/blob/ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa/software/python/real_system/utils_data.py",
+      "bytes": 15792,
+      "sha256": "d2fc040866c7cc6966825a16fc42cb3695271ebd009aacf8cf8ea26f5a4d6b86"
+    }
+  },
+  "raw_inputs": [
+    "All nine CSVs under results/real_system/csvs; no simulation files."
+  ],
+  "raw_file_receipts": [
+    "acromonk-files.csv"
+  ],
+  "derived_files": [
+    {
+      "file": "acromonk-files.csv",
+      "body_rows": 9,
+      "sha256": "b1b262084acf215ff8e3abf8415949dbf3fe3f1856e589ee5cc4cc3a7c320a14"
+    },
+    {
+      "file": "acromonk-paper-check.csv",
+      "body_rows": 3,
+      "sha256": "a1d6a21b16aaa580a337c48774c05a1c7f2c81d29a5fb6699758d88ba794140d"
+    },
+    {
+      "file": "acromonk-phases.csv",
+      "body_rows": 13,
+      "sha256": "bc8922fcfc8fdfccc24a4c9e8f5c77295aea59961307e11b6a515844c2bf2745"
+    }
+  ],
+  "replication": {
+    "software": "Python 3.12.14, numpy 2.3.5, pandas 2.2.3",
+    "script": "derive_acromonk.py",
+    "script_sha256": "a49ad686328eda981ee577ffbdd4187e3bc9cd4e63b1d0158a05e2039584f956",
+    "steps": [
+      "Create a temporary checkout: git clone --no-checkout https://github.com/dfki-ric-underactuated-lab/acromonk.git checkout",
+      "git -C checkout checkout --detach ea0b53d2ac50cf6ac2939ffa207c0790be5f3baa",
+      "mkdir -p output",
+      "OPENBLAS_NUM_THREADS=1 python derive_acromonk.py checkout output",
+      "Compare CSV SHA-256 to derived_files. No robot hardware, ROS or source training environment required."
+    ]
+  },
+  "paper_full_text": {
+    "url": "https://arxiv.org/pdf/2305.08373v1",
+    "sha256": "003e3490d3139149d8d8722479df2ac2269e7b6345d53d9c5eba351b7420831e",
+    "version": "v1, 2023-05-15; accepted IEEE RA-L 8(6), 3637–3644 (2023)",
+    "locator": "pp. 6–7, Section V, Figure 7 and Table IV",
+    "crossref_url": "https://api.crossref.org/works/10.1109/LRA.2023.3269296",
+    "archive_alias": "https://zenodo.org/records/7638617"
+  }
+}

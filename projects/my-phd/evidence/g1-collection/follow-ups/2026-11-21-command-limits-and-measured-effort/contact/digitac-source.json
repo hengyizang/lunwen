@@ -1,0 +1,109 @@
+{
+  "title": "Tactile Reconstruction of Contact Task Frames and Forces for Hybrid Force/Motion Control - Tactile Dataset",
+  "landing": "https://zenodo.org/records/23209032",
+  "doi": "10.5281/zenodo.23209032",
+  "concept_doi": "10.5281/zenodo.23209031",
+  "authors": [
+    "Rapuano, Antonio",
+    "Orelli, Simone",
+    "Bazzana, Barbara",
+    "Franchi, Antonio",
+    "De Luca, Alessandro"
+  ],
+  "publisher": "Zenodo",
+  "version": "Zenodo record 23209032, published 2026-10-07",
+  "retrieved_utc": "2026-11-21",
+  "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ per Zenodo and README. Original aggregate statistics and member checks are derived from Rapuano, Orelli, Bazzana, Franchi and De Luca. No images are redistributed.",
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.5281/zenodo.23209031",
+      "10.5281/zenodo.23209032",
+      "2610.10020",
+      "Tactile Reconstruction of Contact Task Frames and Forces for Hybrid Force/Motion Control",
+      "Rapuano"
+    ],
+    "previous_evidence": "One entry in continuous/datasets-new.csv, marked deterministic_keyword_triage_not_human_screening; no processed numeric or image evidence found. This is a file-level upgrade.",
+    "evidence_paths": 1141,
+    "additional_tar_members": 301,
+    "early_index_also_screened": true,
+    "matches": [
+      "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv"
+    ]
+  },
+  "search_log": {
+    "queries": [
+      "https://api.datacite.org/dois?query=%28%22force+torque+sensor%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=45",
+      "https://api.datacite.org/dois?query=%28%22force%2Ftorque+sensor%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=45",
+      "https://api.datacite.org/dois?query=%28%22peg-in-hole%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=45",
+      "https://api.datacite.org/dois?query=%28%22contact+force+control%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=45"
+    ],
+    "record": "https://zenodo.org/api/records/23209032",
+    "alternate_candidates": [
+      {
+        "id": "10.17632/m7g93whs3t.1",
+        "decision": "Dual-arm insertion already file-verified in prior history."
+      },
+      {
+        "id": "10.5281/zenodo.2641222",
+        "decision": "Elastic joint deflection supplies force estimate, independent Leica reference is for position."
+      },
+      {
+        "id": "10.5281/zenodo.24159271",
+        "decision": "Metadata mentions external force plate and varying payload, but repository response listed zero public files at inspection."
+      }
+    ]
+  },
+  "evidence_level": "Data file and full method text inspected. 10,000 unique seed/pose samples with an ATI Mini45 reference independent of the DigiTac image modality; full ZIP central directory and six complete optical frames read.",
+  "paper": {
+    "citation": "A. Rapuano, S. Orelli, B. Bazzana, A. Franchi, A. De Luca (2026), Tactile Reconstruction of Contact Task Frames and Forces for Hybrid Force/Motion Control",
+    "arxiv": "2610.10020v1",
+    "url": "https://arxiv.org/abs/2610.10020v1",
+    "pdf_url_accessed": "https://arxiv.org/pdf/2610.10020",
+    "pdf_sha256": "944218946071964e2507fba5ec46b444343010ad8a022ed11b8a846ccf71117e",
+    "locators": [
+      "Sec. III, Fig. 3 and Table III: six-phase self-labeling cycle and orientation/weight correction.",
+      "Closed-loop control experiment, Fig. 8c and Table VI: normal force command 2.5 N, both tangential references zero; force curve in this figure is estimated and the control experiment differs from data acquisition."
+    ]
+  },
+  "input_files": [
+    {
+      "file": "images.zip",
+      "bytes": 6040203221,
+      "publisher_checksum": "md5:b97bb39bec05dfbe4770825a9d4ebd86",
+      "url": "https://zenodo.org/api/records/23209032/files/images.zip/content",
+      "verification": "Archive central directory matched exactly to all 10000 CSV image paths (all unique). Six whole PNG archive members verified by CRC and PNG IHDR. Publisher archive MD5 listed for full downloads; not independently recomputed."
+    },
+    {
+      "file": "README.md",
+      "bytes": 8988,
+      "publisher_checksum": "md5:d6fc8b3fe54ded70873e9379b0a52905",
+      "url": "https://zenodo.org/api/records/23209032/files/README.md/content",
+      "sha256": "46b8f6f27fcd7db1c1011fb10a1766028224da10ff80eeaa3224ecbf8e6b4a64",
+      "verification": "Full file received, byte count and publisher MD5 verified."
+    },
+    {
+      "file": "samples.csv",
+      "bytes": 3893398,
+      "publisher_checksum": "md5:59c64d0c9426eae30b2ac2104af0ae48",
+      "url": "https://zenodo.org/api/records/23209032/files/samples.csv/content",
+      "sha256": "57dfe5a33159b6e6319d259272795fa9986753ba21be554407374d6db2bbf296",
+      "verification": "Full file received, byte count and publisher MD5 verified."
+    }
+  ],
+  "protocol": "UR10 presses a DigiTac tool onto a fixed metal plate; ATI Mini45 between flange and tool. The pre-rotation out of contact sets the per-sample tare. The robot then indents, shears and rotates to an attained contact pose where a steady wrench and optical frame are recorded. The posture of the tare can differ from the final posture. Published criterion for steady wrench: all six gauge-voltage channels have standard deviation at most 0.002 V over 3 seconds.",
+  "observations": [
+    "All 10000 labels reconstructed: fc = f + 0.087 kg × 9.81 m/s² × (R−R_pre)ᵀe3. Maximum single-axis disagreement 1.78e-15 N; 7033 points needed a correction above the stated single-axis resolution (1/16 N) on at least one axis. Maximum vector correction 0.697841 N.",
+    "The archive contains a PNG for every CSV path. All six stratified member samples (first flagged and unflagged frame of each batch) returned RGB 480×640, 8 bits per sample with valid archive CRC. The numeric table flags 20 torn frames; these flags describe the camera and are independent of the wrench measurements.",
+    "Attained p_z had 1250 nonnegative entries and all 1750 batch-3 entries were negative. Thresholding attained coordinates describes recorded geometric support; the per-batch README bounds are for the target sampling scheme and do not give per-sample attained pose or physical contact state."
+  ],
+  "limits": [
+    "The six logged F/T channels store the calibrated difference between loaded and pre-rotate gauges. Absolute unloaded offsets, original gauge readings, raw three-second windows and time-resolved contact-onset trajectories are unavailable in the CSV. Torques are not weight-compensated; fc has only three force channels.",
+    "The ATI serves as a separate reference to the optical image. The reconstructed labels come from that same ATI reading and confirm internal label consistency, not absolute calibration against a second force transducer. The 1/16 N resolution is not a force-accuracy threshold.",
+    "Numeric data are settled acquisition samples on a plate, and are not time-aligned force loop traces from Fig. 8. No unbounded or saturated controller commands or assembly insertions are present. Only the six reported image bytes were decompressed and checked, so no population-wide pixel quality check was performed."
+  ],
+  "reproduce": [
+    "Download samples.csv then run python derive_digitac.py samples.csv OUT, using NumPy/pandas. Outputs: digitac-session-corrections.csv, digitac-load-support.csv. Plate-frame normal is (Rᵀ e3)·fc; tangential is orthogonal to it. Quantiles are pandas default linear interpolation. Group only attained p_z signs that exist.",
+    "Run python check_digitac_images.py samples.csv OUT for automatic HTTP byte ranges on the versioned ZIP, or add --archive images.zip with the locally downloaded release. Checks complete archive filename coverage then decompresses one torn and one unflagged frame per batch, verifying CRC and PNG header in digitac-image-members.csv."
+  ]
+}

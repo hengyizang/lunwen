@@ -1,0 +1,155 @@
+{
+  "title": "Robot Arm PayLoad Inertia Prediction Data",
+  "landing": "https://data.mendeley.com/datasets/df4kfzrbrg/1",
+  "doi": "10.17632/df4kfzrbrg.1",
+  "concept_doi": "10.17632/df4kfzrbrg",
+  "authors": [
+    "YANG YANG",
+    "Seong Young Ko"
+  ],
+  "version": "Mendeley Data v1, 2026-04-29; file UUID dab3822f-af58-4a43-b413-8cd9875f15c2.",
+  "tier": "Known catalog entry upgraded to usable raw-telemetry and paired-export measurements. Original batch 2026-11-21/datasets.csv row 154 had only source description; do not count a new dataset or assume that all recorded quantities are actuator inputs.",
+  "rights": "YANG YANG and Seong Young Ko, Mendeley Data v1, CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Collection computed member hashes and original summaries from the credited source. Documentation URL identifies libfranka semantics; no SDK source is republished.",
+  "queries": [
+    {
+      "search": "https://api.datacite.org/dois?query=%28titles.title%3A%28robot+OR+robotic+OR+manipulator%29+AND+%28descriptions.description%3A%22joint+torque%22+OR+descriptions.description%3A%22joint+torques%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "hits": 29,
+      "rows_read": 29,
+      "response_sha256": "b51d93cbe6ac781ce933930a72453d76a150920a8836b68f42ef24ddc4546559"
+    },
+    {
+      "search": "https://api.datacite.org/dois?query=%28titles.title%3A%28%22robot%22+OR+%22quadruped%22+OR+%22manipulator%22%29+AND+%28titles.title%3Apayload+OR+titles.title%3A%22dynamic+identification%22+OR+titles.title%3A%22dynamic+parameter%22+OR+titles.title%3A%22payload+estimation%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "hits": 13,
+      "rows_read": 13,
+      "response_sha256": "6a94dfbb5a90fd2aa76b3e58f01e7ba35dc1b5ad316cab57cb2ac1cf95ee9716"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://data.mendeley.com/datasets/df4kfzrbrg/1",
+      "bytes": 125158,
+      "sha256": "c768df4a695d2f3f3db75e39f4210c73af45fda1701a144867b3be1b4239476d"
+    },
+    {
+      "url": "https://data.mendeley.com/public-api/datasets/df4kfzrbrg?version=1",
+      "bytes": 3293,
+      "sha256": "faf749b90e79bf9dc9d83d1113c72031ace9dbb1ce2a163dc14f012c774d76be"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.17632/df4kfzrbrg.1",
+      "bytes": 8189,
+      "sha256": "02fdc422493af9d0aeef86ca28b74b952be6623a067ab78bde311dabd2b945c0"
+    },
+    {
+      "url": "https://data.mendeley.com/public-api/datasets/df4kfzrbrg/files?folder_id=root&version=1",
+      "bytes": 711,
+      "sha256": "48b4805c8677e9df118420fda8e9b2f9d128b7fd9c10111cfa18a132b950b675"
+    },
+    {
+      "url": "https://frankarobotics.github.io/libfranka/0.15.0/structfranka_1_1RobotState.html",
+      "bytes": 68159,
+      "sha256": "48c90869b3afbad08dcdba86b60cb6b20135e721ba2552aed9be43880156784f"
+    }
+  ],
+  "archive": {
+    "file": "datas.zip",
+    "url": "https://data.mendeley.com/public-files/datasets/df4kfzrbrg/files/dab3822f-af58-4a43-b413-8cd9875f15c2/file_downloaded",
+    "logical_bytes": 6543636505,
+    "publisher_whole_file_sha256": "c3b14ccdf862eb144a35c9cf9c5373d22d041defa25e0c9657a37bd9549285e3",
+    "full_file_hash_checked": false,
+    "central_directory_entries": 8802,
+    "central_directory_offset": 6542347074,
+    "central_directory_bytes": 1289333,
+    "central_directory_sha256": "88c0dc77ac08a05b21e41334fb0b82eac3cd502c648c203a2f5b8c1a3d3ef7fa",
+    "total_HTTP_range_bytes_per_successful_fetch": 169342509,
+    "selected_members_crc32_verified": 424,
+    "selected_uncompressed_bytes": 587144914,
+    "member_sha256_manifest": "panda-member-hashes.csv"
+  },
+  "coverage": {
+    "free_raw_motion_txt_in_archive": 3951,
+    "corresponding_reduced_motion_txt_in_archive": 3951,
+    "selected_free_raw_runs": 41,
+    "selected_paired_reduced_runs": 41,
+    "matched_free_config_JSONs": 35,
+    "contact_raw_runs_all": 294,
+    "contact_config_JSONs": 13,
+    "free_raw_rows_checked": 79016,
+    "contact_raw_rows_checked": 554133,
+    "selection": "All physical Exp_data/*/speedratio0.1_mixmotion_5point_1.txt and name-matched 22-column exports, plus all speedratio*.txt and configuration JSONs under the literal normal contact tractory directory. No simulation logs selected. Six suffixed free condition IDs lack an exact configuration JSON match; no inherited mass assignment was made."
+  },
+  "evidence": [
+    "In 335 original physical logs, every one of 633149 samples reports an exactly zero seven-component tau_J_d. At every sample at least one measured |tau_J| exceeds 1 Nm. RobotState documentation calls tau_J measured link-side torque and tau_J_d desired link-side torque without gravity. O_F_ext_hat_K is a base-frame estimate of the external wrench on the stiffness frame, and tau_ext_hat_filtered is a filtered external torque estimate.",
+    "The 41 physical logfile/export pairs contain the same 79016 rows. All seven joint positions, seven velocities and seven measured torques matched elementwise. The maximum difference for the relative time column was 5e-9 s (rounded). The 22-column exports omit desired torques and external wrench fields. All raw clocks checked strictly increase; the median sample interval of individual selected runs spans roughly 8.26 to 26.45 ms.",
+    "Run-level peak estimated force norms overlap: the selected 41 free logs span 3.887–23.502 N and the 294 contact-directory logs span 3.524–20.907 N. The experiment folder is a trial-level label; neither a row-level contact switch nor a separately calibrated wrench sensor was verified.",
+    "Holdout uses 35 exact configuration records (32 nominal mass groups after rounding to six decimals). Compute per-joint median measured torque in the first 0.1 s of each single named raw/export pair (3–11 samples). Predict from intercept, end2-directory indicator and reported mass using only runs with another rounded mass. Compare against tool-specific training medians. Joint 2 and 4 held-out RMSE are 0.671 and 0.542 Nm vs 2.356 and 1.936 Nm baseline. Two held configurations extrapolate beyond the training mass range. Highest observed absolute joint velocity in any start window is 0.082 rad/s. This is near-start prediction on this trajectory family."
+  ],
+  "bounds": [
+    "The release contains neither a verified current-limit event bit nor a pre-limit versus applied effort pair. Zero tau_J_d can reflect interface semantics or the logger/control mode. It does not imply zero applied torque, zero load, or clipping. The exact libfranka binary used is not documented in the registry; 0.15.0 provides the field definitions used here.",
+    "No row-level physical contact truth, independent force gauge, raw motor current, or independently measured inertial reference was verified. total_mass comes from the source configuration JSON. Load validation uses only the common starting neighborhood; it does not validate arbitrary pose, payload regime, contact classification or full dynamic identification. In the free folder only one motion basename per configuration was decoded."
+  ],
+  "artifacts": [
+    {
+      "file": "panda-export-pairs.csv",
+      "bytes": 6812,
+      "sha256": "5a3af5dea23b12ebecb6f8fd2fcaeea58a4bd9f6e06b7d54f8b142f9eab62d13",
+      "rows": 41
+    },
+    {
+      "file": "panda-load-holdouts.csv",
+      "bytes": 35832,
+      "sha256": "b3b87fe7b65b78ec01eaf0954310a8f8be53ffd55afd63fdcfd67aa8e9c28b0b",
+      "rows": 245
+    },
+    {
+      "file": "panda-member-hashes.csv",
+      "bytes": 68124,
+      "sha256": "c77e4fc9bdf592bc2dda0b8894e2e86fd24d86c8ebbbae5c218abe45d636096e",
+      "rows": 424
+    },
+    {
+      "file": "panda-raw-runs.csv",
+      "bytes": 104650,
+      "sha256": "bd3aa2a153b072a159a626476e2f661bf18294127ab8c02681445d5f39618b59",
+      "rows": 335
+    },
+    {
+      "file": "derive_panda.py",
+      "bytes": 4196,
+      "sha256": "e518083e7b6b9fb37c52f2598f67b74cbf676ca8ee8e59f5170263d3c214a3cd"
+    },
+    {
+      "file": "derive_panda_load_holdout.py",
+      "bytes": 2617,
+      "sha256": "db00327b787e591e63ae6b2ced8d0c82e26f530a393f4afe95361231cccac104"
+    },
+    {
+      "file": "fetch_panda_members.py",
+      "bytes": 4590,
+      "sha256": "01184f90d3ebcd2e1617f3feea8018c9f0efcd11716e9b49688a5c2f492efcc5"
+    }
+  ],
+  "reproduction": [
+    "Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0. Run scripts with their directory on the Python path. CSVs are deterministic summaries of the credited source files.",
+    "Save the fixed-version file listing URL as registry.json. Use a sparse-file-capable filesystem or download the full v1 ZIP. Run python fetch_panda_members.py registry.json selected.zip. A completed run validates content-range offsets, byte counts, central-directory count and CRC32 of every selected member. The whole archive SHA-256 is publisher-reported only.",
+    "Run python derive_panda.py selected.zip OUTPUT and python derive_panda_load_holdout.py selected.zip OUTPUT. Sorted member paths plus CRC32, size and uncompressed SHA-256 identify the checked subset."
+  ],
+  "checked_utc": "2026-11-21",
+  "history": {
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.17632/df4kfzrbrg",
+      "10.17632/df4kfzrbrg.1",
+      "Robot Arm PayLoad Inertia Prediction Data",
+      "Y-a-n-g-Y-a-n-g/Robotic-Arm-Payload-identification",
+      "Yang Ko Robot Arm PayLoad Inertia Prediction Data"
+    ],
+    "matches": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+    ],
+    "tracked_evidence_files": 1141,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  }
+}

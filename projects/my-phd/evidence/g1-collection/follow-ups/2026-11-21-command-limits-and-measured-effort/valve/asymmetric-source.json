@@ -1,0 +1,77 @@
+{
+  "title": "Safety-critical tracking control of a proportional-valve-driven asymmetric hydraulic cylinder via RBF-MPC-CBF",
+  "landing": "https://data.mendeley.com/datasets/zg97984dmy/1",
+  "doi": "10.17632/zg97984dmy.1",
+  "concept_doi": "10.17632/zg97984dmy",
+  "authors": [
+    "李志远",
+    "刘凯翼",
+    "贾宝庆"
+  ],
+  "publisher": "Mendeley Data",
+  "version": "1, issued 2026-10-29",
+  "rights": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ (DataCite rightsList). New summaries with attribution; original CSVs remain at Mendeley Data.",
+  "evidence_level": "All three original experimental CSVs and depositor README downloaded and file digests verified against the publisher listing.",
+  "search_log": {
+    "queries": [
+      "https://api.datacite.org/dois?query=%28titles.title%3A%22hydraulic+cylinder%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=55",
+      "https://api.datacite.org/dois?query=%28titles.title%3A%22hydraulic+actuator%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=55"
+    ],
+    "metadata": "https://api.datacite.org/dois/10.17632/zg97984dmy.1",
+    "enumeration": "https://data.mendeley.com/public-api/datasets/zg97984dmy/files?folder_id=root&version=1",
+    "screening": "Selected physical displacement and applied control voltage on a known command grid, with documented voltage, stroke endpoints and timings."
+  },
+  "input_files": [
+    {
+      "file": "exp1_sinusoidal.csv",
+      "url": "https://data.mendeley.com/public-files/datasets/zg97984dmy/files/4aa7568f-70ec-46f7-9d40-cde614b743e8/file_downloaded",
+      "bytes": 47774,
+      "sha256": "ff3c2232e69f857864dde93a8785ccc248dcbd721c512fc25ab411257ccb939b",
+      "mendeley_file_id": "4aa7568f-70ec-46f7-9d40-cde614b743e8"
+    },
+    {
+      "file": "exp2_step.csv",
+      "url": "https://data.mendeley.com/public-files/datasets/zg97984dmy/files/03c74e60-fc6a-42d5-b0c4-e489bf3017c1/file_downloaded",
+      "bytes": 32029,
+      "sha256": "5ee547ceab970b02d4bf0160e4ada275c0241339387cbb9e130c9e3f21a6de61",
+      "mendeley_file_id": "03c74e60-fc6a-42d5-b0c4-e489bf3017c1"
+    },
+    {
+      "file": "exp3_full_stroke.csv",
+      "url": "https://data.mendeley.com/public-files/datasets/zg97984dmy/files/62e97f76-878d-489b-bef4-9a37858688a1/file_downloaded",
+      "bytes": 159317,
+      "sha256": "69aee85fe4842c7255eee067b0abb95e1a8f118b42f3c98ad56036ce0f10564a",
+      "mendeley_file_id": "62e97f76-878d-489b-bef4-9a37858688a1"
+    },
+    {
+      "file": "README.md",
+      "url": "https://data.mendeley.com/public-files/datasets/zg97984dmy/files/f62bcc43-19c1-4c59-af0a-4b57062e6e1c/file_downloaded",
+      "bytes": 2730,
+      "sha256": "b86d8f24ce178f6b3d35d894313e8f503a6b4da3a6624149b524ac989b010ae2",
+      "mendeley_file_id": "f62bcc43-19c1-4c59-af0a-4b57062e6e1c"
+    }
+  ],
+  "apparatus": "20 kg load, 1.5 MPa supply, 20 ms sample grid, calibrated magnetostrictive position; three separate controller traces per experiment. Source README describes exported final post-compensation/post-limit valve voltage.",
+  "derived": "9 controller-by-experiment rows. Episodes are contiguous samples within 1e-9 V of ±6.5 V. Both 104.4 and 105 mm comparisons are pointwise numeric reference counts; the physical/software interpretation is explicitly documented for experiment 2. Published error and margin fields are checked where available.",
+  "observations": [
+    "Exp2 commanded 30 to 109 mm with 105 mm stored physical boundary. For PSO-PID, MPC-RBF, and RBF-MPC-CBF, respectively: +6.5 V at 51, 44, and 19 samples; peak measured travel 109.097, 109.023, and 104.863 mm.",
+    "Exp3: CBF position exceeded 105 mm in four samples (max 105.042 mm). MPC-RBF and RBF-MPC-CBF compute times exceeded 20 ms in 290 and 109 samples; PID timing is a zero placeholder."
+  ],
+  "limits": [
+    "Applied voltage is the software-logged final output, with no synchronized pre-limit voltage request, coil-current sensor or valve spool measurement. Experiment 1 lacks voltage columns.",
+    "Comparisons use separately collected runs. A pointwise numeric threshold in another trajectory and computation-only durations do not establish the same physical boundary policy or end-to-end deadline misses. File accessibility does not establish peer review."
+  ],
+  "reproduce": "Place the four input_files under INPUT with the listed names. Run python derive_asymmetric.py INPUT OUT (NumPy/pandas). Outputs: asymmetric-controller-traces.csv and asymmetric-voltage-plateaus.csv.",
+  "retrieved_utc": "2026-11-21",
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.17632/zg97984dmy",
+      "Safety-critical tracking control of a proportional-valve-driven asymmetric hydraulic cylinder via RBF-MPC-CBF"
+    ],
+    "matched_paths_by_key": {},
+    "evidence_paths": 1141,
+    "additional_tar_members": 301,
+    "early_index_also_screened": true
+  }
+}

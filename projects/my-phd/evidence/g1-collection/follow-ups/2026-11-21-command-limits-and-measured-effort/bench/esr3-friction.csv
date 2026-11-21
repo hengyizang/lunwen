@@ -1,0 +1,9 @@
+model,run,partition,points,offset_Nm,sign_velocity_coef_Nm,velocity_coef_Nm_per_degps,measured_torque_rmse_Nm
+coulomb,25_Robot_13degps_LinActDisconn,fit,113400,0.073649,2.661053,,0.426329
+coulomb,26_Robot_23degps_LinActDisconn,fit,68600,0.073649,2.661053,,0.468157
+coulomb,27_Robot_37degps_LinActDisconn,holdout,42781,0.073649,2.661053,,0.555753
+coulomb,28_Robot_45degps_LinActDisconn,holdout,35234,0.073649,2.661053,,0.640006
+coulomb_viscous,25_Robot_13degps_LinActDisconn,fit,113400,0.073634,2.475970,0.011043,0.424274
+coulomb_viscous,26_Robot_23degps_LinActDisconn,fit,68600,0.073634,2.475970,0.011043,0.462926
+coulomb_viscous,27_Robot_37degps_LinActDisconn,holdout,42781,0.073634,2.475970,0.011043,0.516418
+coulomb_viscous,28_Robot_45degps_LinActDisconn,holdout,35234,0.073634,2.475970,0.011043,0.570452

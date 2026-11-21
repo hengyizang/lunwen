@@ -1,0 +1,152 @@
+{
+  "title": "TMotorCANControl physical motor torque, ADC and servo bench logs",
+  "authors": [
+    "Mitry Anderson",
+    "Vamsi Peddinti",
+    "University of Michigan Neurobionics Lab (repository owner)"
+  ],
+  "landing": "https://github.com/neurobionics/TMotorCANControl",
+  "release": "https://github.com/neurobionics/TMotorCANControl/tree/bb8d07102dc43fb39ea77d04020415dbfbc72de6",
+  "version": "bb8d07102dc43fb39ea77d04020415dbfbc72de6",
+  "commit_date": "2024-03-19",
+  "retrieved_utc": "2026-11-21",
+  "g1_scope": "R2 actuator input, closed-loop response and identification",
+  "evidence": "Public files downloaded, schema and generating or consuming code inspected, numeric outputs recomputed.",
+  "queries": [
+    {
+      "service": "GitHub repository search",
+      "query": "\"Open Source Leg\" torque control in:readme",
+      "api": "https://api.github.com/search/repositories?q=%22Open+Source+Leg%22+torque+control+in%3Areadme&per_page=40",
+      "result_position_in_snapshot": 1
+    },
+    {
+      "service": "GitHub recursive tree",
+      "api": "https://api.github.com/repos/neurobionics/TMotorCANControl/git/trees/bb8d07102dc43fb39ea77d04020415dbfbc72de6?recursive=1",
+      "retention": "Inspect experimental data, canonical producer and reader; avoid software-only, synthetic-only and video-only entries."
+    }
+  ],
+  "neighboring_searches": [
+    "GitHub README queries: \"series elastic actuator\" data; \"actuator\" \"dynamometer\" robot; exoskeleton actuator test data; \"torque tracking\" actuator.",
+    "DataCite datasets, up to 100/query: \"series elastic actuators\"; \"torque tracking\"; \"torque control\" AND exoskeleton; \"quasi-direct drive\"; \"actuator characterization\"; titles.title:(actuator AND torque)."
+  ],
+  "aliases": [
+    "TMotorCANControl 1.2.6 (setup.cfg)",
+    "AK80-9 torque model and Futek load measurements"
+  ],
+  "rights": "Public repository. Package metadata specifies GPLv3 and root LISCENSE contains GPL v3. No separate experimental-data license identified in the analyzed directories. Link raw files at fixed revision; include independently computed summary facts and original analysis only.",
+  "history": {
+    "keys": [
+      "TMotorCANControl",
+      "neurobionics/TMotorCANControl",
+      "bb8d07102dc43fb39ea77d04020415dbfbc72de6",
+      "Mitry Anderson Vamsi Peddinti"
+    ],
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "tracked_evidence_files": 1141,
+    "archive_members": 301,
+    "early_baseline": "g1-staging/baseline-index.json",
+    "matches": [],
+    "normalization": "NFKD, Unicode alphanumeric casefold across text, decompressed gzip and tar member contents; matched all literal normalized aliases."
+  },
+  "method": [
+    "Separate output-torque commands and internal torque/current/speed estimates from torque read by the external ADC. The servo files name the Futek torque and measured ADC voltage, whereas the six-field MIT files name the ADC torque. Preserve original sign for file bounds. Only within sys_ID_final apply the minus-ADC sign in the source trial8 model.",
+    "Parse fixed first six fields with csv.reader. Three physical files have a seventh zero-valued column on 7,800 rows despite six names. The pinned trial9 writer appends _times_past_current_limit as its seventh element; the same meaning cannot be established separately for every historical writer.",
+    "For fitting, omit the first data row as in the released reader; reproduce its five features using gr=9, kt=0.091, epsilon=0.1 and OLS via numpy.linalg.lstsq. Fix trial8 training data in advance and test each other sys_ID_final CSV; compare predicted torque, internal estimate and logged command to the external ADC. Absolute signed mean residuals below 1e-12 Nm displayed as 0. Classify covariate exceedances by the observed maxima of trial8.",
+    "Plateau table includes exact repeated commands for at least five samples; evaluate the final ceil(n/4) samples without filtering or fitting. Record median and 10th/90th quantiles of sign-adjusted ADC. These are repeated logged reference values.",
+    "For servo data verify the published 40 Nm/V affine loadcell scaling using ADC voltage minus Futek torque/40 and per-file tare span; the source collects 500 tare samples. Compare desired vs observed speed only for logs with a named desired velocity. Canonical SHA-256 joins parsed header/cells with unit separators and LF for comparison across CSV line endings; retain raw file hashes separately."
+  ],
+  "findings": [
+    "72 distinct torque CSVs, 404,336 rows. In trial8, the released formula labelled RMSE computes sqrt(mean(error)^2); evaluating exactly that statistic gives numerically zero while true sqrt(mean(error^2)) is 1.73097486 Nm on 3,299 fitted samples.",
+    "6 other files evaluated with frozen trial8 coefficients. True RMSE for trial5, trial6 and trial9-compensation is 0.818957, 1.001072 and 1.263726 Nm. Early trial1–3 range/external-check failures are 43.1843, 175.140 and 38.2193 Nm; in each some predictor magnitudes exceed the training range.",
+    "In trial1–3 final repeated-label tails, the median external torque lies within 0.054 Nm of zero even though absolute logged command is about 25 Nm. The ramp writer explains why a plateau in this column is insufficient evidence of an applied 25 Nm command.",
+    "52 servo paths yield 35 distinct parsed tables, 3,437 unique-content rows, 20 tables with explicit desired velocity (1,947 rows). 17 archived paths repeat identical cells. The largest within-file implied tare span is under 9e-16 V. In one 30-row log the desired speed is 10 rad/s while speed, duty and iq are zero throughout; this documents a command–response discrepancy with unknown cause."
+  ],
+  "bounds": [
+    "A package status or controller torque estimate is not an independent output torque sensor. Motor serial numbers, calibration certificate, raw ADC device time, power rails, actual post-limit torque command and comparable test fixtures are not confirmed for every legacy trial.",
+    "The ramp writer logs its last nonzero Python torque variable before each output update, then commands zero after ten seconds. trial1–3 show matching repeated ±25 Nm labels after ramp end. Their near-zero late external torque must not be interpreted as sustained 25 Nm command or physical saturation without a transmitted-command trace. The dated logger snapshot is evidence of a plausible concrete mechanism, not a proven byte-identical historical acquisition program.",
+    "The 6 cross-file comparisons are retrospective, not an original author-defined external holdout, and may differ in firmware/scaling, load or orientation. Huge earlier errors and extreme motor readbacks must not be pooled with later-range tests as nominal performance. Duty units and plateau cause are not inferred. Servo and MIT groups are separate acquisitions, never row-joined."
+  ],
+  "provenance": {
+    "README.md": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/README.md",
+      "bytes": 9275,
+      "sha256": "69d1a12ff08ff5bfdfa7ca003840818f45d0c5ffdebb43a586619bb29e3e95a5"
+    },
+    "setup.cfg": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/setup.cfg",
+      "bytes": 1123,
+      "sha256": "2e8eb4d816a555ff8aafb76a5f1d17c2b3da3f46fb5671c8a9475189eeb33eef"
+    },
+    "LISCENSE": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/LISCENSE",
+      "bytes": 35131,
+      "sha256": "8a4c9551082a45e282917d062b4c260d4b9765f0de786c276b03f0191013c946"
+    },
+    "src/TMotorCANControl/test/mit_can/measure_torque_performance.py": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/src/TMotorCANControl/test/mit_can/measure_torque_performance.py",
+      "bytes": 1602,
+      "sha256": "3bc989419d79ebe45f3cc223f4fb1360f2f82a290a7a0c4c3cd6cedc0876fb3a"
+    },
+    "src/TMotorCANControl/test/mit_can/measure_torque_performance_ramp.py": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/src/TMotorCANControl/test/mit_can/measure_torque_performance_ramp.py",
+      "bytes": 1437,
+      "sha256": "a2ef6651a923f70b41e64fcc24abce12ee9ce71356030c82be257ad211cbb7be"
+    },
+    "src/TMotorCANControl/test/mit_can/derive_torque_constants.py": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/src/TMotorCANControl/test/mit_can/derive_torque_constants.py",
+      "bytes": 2750,
+      "sha256": "e1892a11a807a33c64ae68be4800de965faff8d2df8f5e04377bd88b01e64ebb"
+    },
+    "src/TMotorCANControl/test/servo_can/measure_efficiency_speed_steps.py": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/src/TMotorCANControl/test/servo_can/measure_efficiency_speed_steps.py",
+      "bytes": 3646,
+      "sha256": "a5d332426c1da7bc449a1ce952e3c6418d2d6fa273fea64f905cd9174710cb57"
+    },
+    "src/TMotorCANControl/test/servo_can/measure_efficiency_duty_cycle_steps.py": {
+      "url": "https://github.com/neurobionics/TMotorCANControl/blob/bb8d07102dc43fb39ea77d04020415dbfbc72de6/src/TMotorCANControl/test/servo_can/measure_efficiency_duty_cycle_steps.py",
+      "bytes": 3672,
+      "sha256": "af557cd1e9321c52ec7fb88674bfc0bf860a810d41c0b08b5cc7e2eb816335a4"
+    }
+  },
+  "raw_inputs": [
+    "All CSVs under src/TMotorCANControl/test/saved_logs with the six named command/ADC/controller fields and all CSVs under src/TMotorCANControl/test/servo_can with a named Futek Torque (Nm) field."
+  ],
+  "raw_file_receipts": [
+    "tmotor-torque-files.csv",
+    "tmotor-servo-files.csv"
+  ],
+  "derived_files": [
+    {
+      "file": "tmotor-cross-trial.csv",
+      "body_rows": 7,
+      "sha256": "f7b5566f511b80f87c5c2205616a3ba65e90e2e200a164890965198dc761e2fd"
+    },
+    {
+      "file": "tmotor-plateaus.csv",
+      "body_rows": 38,
+      "sha256": "9d2dfc38a1b5bfb09b34e3578118d2056053d9302170af8f4aaafe436e4bacce"
+    },
+    {
+      "file": "tmotor-servo-files.csv",
+      "body_rows": 52,
+      "sha256": "c7a082c5fed0ff02f6602fa4aa0f3040ab23e10a370cf9635585a74eef47500e"
+    },
+    {
+      "file": "tmotor-torque-files.csv",
+      "body_rows": 72,
+      "sha256": "2a963fb4c1fc20e3471abb8dce6dbf2f106d9c174c277b85e7717a8803518d00"
+    }
+  ],
+  "replication": {
+    "software": "Python 3.12.14, numpy 2.3.5, pandas 2.2.3",
+    "script": "derive_tmotor.py",
+    "script_sha256": "fc657d178588a19fbd3d1cd1d95306fea0cd652d152aefe6032949e07971aba2",
+    "steps": [
+      "Create a temporary checkout: git clone --no-checkout https://github.com/neurobionics/TMotorCANControl.git checkout",
+      "git -C checkout checkout --detach bb8d07102dc43fb39ea77d04020415dbfbc72de6",
+      "mkdir -p output",
+      "OPENBLAS_NUM_THREADS=1 python derive_tmotor.py checkout output",
+      "Compare CSV SHA-256 to derived_files. No robot hardware, ROS or source training environment required."
+    ]
+  }
+}

@@ -1,0 +1,95 @@
+{
+  "title": "IPM 2-in-1 Electric Drive Unit Characterization and Efficiency Data",
+  "authors": [
+    "Shiguemoto, Eduardo Akira",
+    "Machado, Fabricio A.",
+    "Dilevrano, Gaetano",
+    "Pellegrino, Gianmario",
+    "Emadi, Ali"
+  ],
+  "doi": "10.5683/SP3/PINP9A",
+  "version": "Borealis V1.0",
+  "published": "2026-01-08T16:40:04Z",
+  "landing": "https://doi.org/10.5683/SP3/PINP9A",
+  "rights": "Creative Commons Attribution 4.0 International per fixed Dataverse version and README (CC BY 4.0); credit named authors, DOI and version. Only original computed summaries shared. https://creativecommons.org/licenses/by/4.0/",
+  "registry": {
+    "name": "ipm-version.meta",
+    "download": "https://borealisdata.ca/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.5683/SP3/PINP9A",
+    "bytes": 7874,
+    "sha256": "f2ee5b030664f48047d509c9b470e6de8896246f1f9a6909577cd6290977a90e",
+    "md5": "0ec232db511c7febf48201f88503519c"
+  },
+  "files": [
+    {
+      "name": "IPM 2-in-1 Characterization.xlsx",
+      "download": "https://borealisdata.ca/api/access/datafile/1020032?format=original",
+      "bytes": 1538791,
+      "sha256": "aea6dad2c439514c282f1c5a4c526ba8c6d39b14379a573184ab7d6d75bcc308",
+      "md5": "2af5d1b2b60a5aaae848d181d10f2273",
+      "file_id": 1020032,
+      "original_size_check": true,
+      "checksum_note": "The Dataverse ingested .tab is only 1,564 bytes. This receipt hashes the full 1,538,791-byte original Excel object; the published ingest checksum cannot authenticate that original."
+    },
+    {
+      "name": "README.txt",
+      "download": "https://borealisdata.ca/api/access/datafile/1020807?format=original",
+      "bytes": 5587,
+      "sha256": "af87d17b2ef73c56e2e9399da74d8c5b55d6f998dac229b7e9cff90c49f7de4f",
+      "md5": "053fead07bb76d899d5e4c14c9f62f5a",
+      "file_id": 1020807,
+      "original_size_check": true
+    }
+  ],
+  "search": {
+    "query": "((titles.title:\"electric drive\" OR titles.title:\"motor control\" OR titles.title:\"BLDC\")) AND types.resourceTypeGeneral:Dataset",
+    "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22electric+drive%22+OR+titles.title%3A%22motor+control%22+OR+titles.title%3A%22BLDC%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+    "registry_total_at_lookup": 414,
+    "first_page_records": 100,
+    "first_page_sha256": "e2118479fcec59b8535caea4590f46b1224739cd88b84d3af25ec412a43f0e7c"
+  },
+  "history": {
+    "keys": [
+      "10.5683/SP3/PINP9A",
+      "IPM 2-in-1 Electric Drive Unit Characterization and Efficiency Data",
+      "10.1109/ITEC63604.2025.11098143",
+      "A Flux Map-Based Approach for Experimental Characterization of an Ipm 2-In-1 Drive Unit for Electric Vehicles"
+    ]
+  },
+  "paper": {
+    "title": "A Flux Map-Based Approach for Experimental Characterization of an Ipm 2-In-1 Drive Unit for Electric Vehicles",
+    "authors": [
+      "Eduardo Akira Shiguemoto",
+      "Fabricio Machado",
+      "Gaetano Dilevrano",
+      "Igor A. Del-Vecchio",
+      "Phillip J. Kollmeyer",
+      "Gianmario Pellegrino",
+      "Ali Emadi"
+    ],
+    "doi": "10.1109/itec63604.2025.11098143",
+    "year": 2025,
+    "level": "Bibliographic source verified from release README, Dataverse related publication field, Crossref and OpenAlex; full paper not verified.",
+    "url": "https://doi.org/10.1109/itec63604.2025.11098143",
+    "crossref": {
+      "name": "ipm-cross",
+      "download": "https://api.crossref.org/works/10.1109/itec63604.2025.11098143",
+      "bytes": 4799,
+      "sha256": "5163ddcfd494b0f35c1f076082062855138d5f860cf056e37db19cccb5ec6d54",
+      "md5": "69762c0874d56886a96e0e23458696a6"
+    },
+    "openalex": {
+      "name": "ipm-paper",
+      "download": "https://api.openalex.org/works/https://doi.org/10.1109/itec63604.2025.11098143",
+      "bytes": 16906,
+      "sha256": "f40f5502d383480b50bde39168412c2926672533138ac5e4eb98c3303f20a45a",
+      "md5": "92a9ff1df1be39f8b8a5b47cead06a60"
+    }
+  },
+  "methods": "Read numeric operating-point rows from FluxMap Test (row 120 headers) and Loss Test (row 140 headers); skip unit rows. Report each dq feedback minus its matched command and the vector norm in Apk. Loss Test speed bins use nearest 100 rpm; all rows also summarized by sheet. As a diagnostic fit unweighted least squares intercept+Iq and intercept+Iq+Id×Iq to FluxMap rows only, separately for D2_Torque_Feedback and tqDyno1Total. Score the same coefficients on Loss Test; report output-scale RMSE.",
+  "results": "142 flux-map rows near 1,003 rpm and 136 loss-test rows spanning 199–11,000 rpm. Vector tracking-error RMS 0.574 and 1.672 Apk, p95 1.129 and 4.077 Apk, respectively. On Loss Test, Iq-only RMSE 0.064 Nm on D2_Torque_Feedback; adding interaction yields 0.064 Nm. For tqDyno1Total it falls from 234.345 to 125.621 Nm. Results differ materially by output channel; preserve both published labels.",
+  "limits": "The README calls D2_Torque_Feedback dyno torque feedback and tqDyno1Total gear-ratio-scaled dyno torque. The fit statistics are specific to the two released channels; the derivation does not assume a fixed conversion or independent torque transducers. The two sheets are from the same drive, have different speed/current coverage, and contain aggregated operating points. No high-rate actuating voltage command/applied pair, anti-windup state, clipping flag or transient reset is measured by these summaries.",
+  "reproduce": "Fetch the original workbook at files[].download under its original name. Run python borealis-ipm.py RAW OUT. Python 3, NumPy 2.3.5, openpyxl 3.1.5.",
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+  "evidence_level": "Source files downloaded and parsed; derived summaries reproduced. Third-party source files are linked at the repository of record."
+}

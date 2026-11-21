@@ -1,0 +1,139 @@
+{
+  "title": "Functional Network-Based Analysis of Industrial Robot Dynamics",
+  "landing": "https://zenodo.org/records/19241681",
+  "doi": "10.5281/zenodo.19241681",
+  "concept_doi": "10.5281/zenodo.19241680",
+  "authors": [
+    "Khalil El Dabett",
+    "Charlotte Geier",
+    "Stephan Hansen"
+  ],
+  "version": "Fixed Zenodo record 19241681, first release, 2026-04-07, record revision 3.",
+  "tier": "New usable physical measurement files and new companion full-text paper, related but distinct scholarly objects.",
+  "rights": "Dataset and published article CC BY 4.0, https://creativecommons.org/licenses/by/4.0/ . Derived CSVs by this collection; source archive and article retained at their respective publishers.",
+  "queries": [
+    {
+      "search": "https://api.datacite.org/dois?query=%28titles.title%3A%28%22inverse+dynamics%22+OR+%22robot+dynamics%22+OR+%22robot+dynamic%22+OR+%22robot+identification%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "hits": 50,
+      "rows_read": 50,
+      "response_sha256": "0431ef952657814252982f52f5083c1e2c7570aa2c973db92530035457100c9c"
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://zenodo.org/api/records/19241681",
+      "bytes": 4050,
+      "sha256": "bc8995fe54d1beb615337c8f6e1bccfed68bd674faa666853ed7a351c71422e1"
+    },
+    {
+      "url": "https://zenodo.org/api/records/19241681/files/data.zip/content",
+      "bytes": 722790,
+      "sha256": "b1b3c332382017a7e14ea5dbf813bed727a1a6bf273b874e33efc47773509db5"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.5281/zenodo.19241681",
+      "bytes": 6624,
+      "sha256": "05df0b127a1bf0fa7d2c85a48901f1279098cf92d2c8b943b927b32fd4dcbc1e"
+    },
+    {
+      "url": "https://www.bibliothek.tu-chemnitz.de/ojs/index.php/GAMMAS/article/view/963",
+      "bytes": 28725,
+      "sha256": "4eed9e199f4062640211de03574a5cb42279a4a37743c284bd103f3b668b38c7"
+    },
+    {
+      "url": "https://www.bibliothek.tu-chemnitz.de/ojs/index.php/GAMMAS/article/download/963/830",
+      "bytes": 15245618,
+      "sha256": "32258823b1511edf0b29127b70120056beaad39f6269b44d0b0a7d605113979b"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.24406/publica-9033",
+      "bytes": 8483,
+      "sha256": "e7eba5f60e00666ea34d834b1c3bf009687dded5570a7f4f0277eeaddfffabc5"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.14464/gammas.v8i1.963",
+      "bytes": 10381,
+      "sha256": "9cfdf77c2d6e1434a51bdddfe0fa63c9130118126d1611939ada31d6f183bb3e"
+    },
+    {
+      "url": "https://publica.fraunhofer.de/handle/publica/518598",
+      "bytes": 964752,
+      "sha256": "acaaa60eb3de10204dfa042dcf5f3d54d1ce288db63c4e58213868a4657059d4"
+    }
+  ],
+  "companion_paper": {
+    "title": "Functional Network-Based Analysis of Industrial Robot Dynamics",
+    "authors": [
+      "Khalil El Dabett",
+      "Stephan Hansen",
+      "Charlotte Geier"
+    ],
+    "date": "2026-06-10",
+    "venue": "GAMM Archive for Students 8(1)",
+    "doi": "10.14464/gammas.v8i1.963",
+    "repository_alias": "10.24406/publica-9033",
+    "fulltext": "https://www.bibliothek.tu-chemnitz.de/ojs/index.php/GAMMAS/article/download/963/830",
+    "locator": "§3.1, §3.2 and Table 1 (test geometry, motion and 500 Hz internal logging); §3.3 (numerically derived velocity), Figure 9 (signal definitions).",
+    "finding": "The five-axis industrial robot has a motor-side and a secondary arm-side encoder. Its A1 first base joint executes controlled angular steps. The paper describes a broader motion and TCP experiment plan than the public ZIP."
+  },
+  "coverage": {
+    "archive_bytes": 722790,
+    "verified_md5": "0548f921f87fda2cf1c5c38697d60af9",
+    "csv_files": 6,
+    "stored_rows": 40580,
+    "unique_content_runs": 5,
+    "unique_rows": 37666,
+    "rate_hz": 500,
+    "signals": "Reference and actual current, reference and actual position, processed velocity. The backlash trial alone explicitly separates motor and arm-side encoder positions.",
+    "preprocessing": "Counted every archive CSV; SHA-256 collapsed identical V35 baseline data before any fit. All six first-row velocity cells are missing. Time and both current channels are finite and strictly increasing time was checked.",
+    "fit": "Fit actual current to intercept + slope × reference current, pooling the four other byte-distinct runs. All samples of the held run were unseen. Different run lengths weight training by sample count. One-step sample index alignment; no lag search."
+  },
+  "evidence": [
+    "Five separate-run fits have slopes 0.73768–0.73862, signed correlation 0.99900–0.99996. Across leave-one-run-out tests the zero-intercept/unit-gain error spans 0.2390–0.3836 versus affine error 0.00119–0.02040 RMSE in stored current units.",
+    "The backlash trace reaches a 0.022534-degree difference between motor and arm displacements, after subtracting both initial positions. This observed difference includes transmission dynamics, encoder effects and compliance."
+  ],
+  "bounds": [
+    "No calibrated current-limit event flag, power-stage limit, independently sensed motor torque, or joint controller gain schedule appears in the released CSVs. A near-constant current scaling or the largest observed error does not identify clipping.",
+    "The held-out groups are five disclosed traces, not five machines or unseen TCP placements. The archive filenames all use P16. Current column units/gain conventions are not specified by their CSV headers."
+  ],
+  "artifacts": [
+    {
+      "file": "axis-heldout.csv",
+      "bytes": 1027,
+      "sha256": "bc043673d6d0e9edc34018f21db43829b044869196331193ef81c1aae7e6d7a3",
+      "rows": 5
+    },
+    {
+      "file": "axis-trials.csv",
+      "bytes": 2147,
+      "sha256": "fa6ff6aefc2d5447c5065930dc65fdd5fca75ead488a367d148140a6c645166b",
+      "rows": 6
+    },
+    {
+      "file": "derive_axis.py",
+      "bytes": 3049,
+      "sha256": "79e519057830d9e187e64697f6fb9c54cea1c6f9d07bbad1354f4c1d965262f1"
+    }
+  ],
+  "reproduction": [
+    "Python 3.12.14, NumPy 2.3.5, SciPy 1.17.0. Run scripts with their directory on the Python path. CSVs are deterministic summaries of the credited source files.",
+    "Download data.zip from the recorded Zenodo file URL, verify size and publisher MD5, then run python derive_axis.py data.zip OUTPUT."
+  ],
+  "checked_utc": "2026-11-21",
+  "history": {
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.5281/zenodo.19241680",
+      "10.5281/zenodo.19241681",
+      "10.14464/gammas.v8i1.963",
+      "10.24406/publica-9033",
+      "Functional Network-Based Analysis of Industrial Robot Dynamics",
+      "El Dabett Geier Hansen"
+    ],
+    "matches": [],
+    "tracked_evidence_files": 1141,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  }
+}

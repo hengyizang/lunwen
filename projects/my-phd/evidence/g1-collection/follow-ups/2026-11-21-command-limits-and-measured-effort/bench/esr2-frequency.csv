@@ -1,0 +1,13 @@
+run,low_Hz,high_Hz,bins,supported_bins,median_H1_magnitude,median_coherence
+_FreqRespOpenCtrl_vehSpd75kmh,0.5,2,8,8,1.399138,0.990391
+_FreqRespOpenCtrl_vehSpd75kmh,2,5,15,15,1.323035,0.993096
+_FreqRespOpenCtrl_vehSpd75kmh,5,10,26,26,0.894969,0.914089
+_FreqRespOpenCtrl_vehSpd75kmh,10,20,51,34,0.611439,0.759690
+_FreqRespPosCtrl_vehSpd75kmh,0.5,2,8,8,1.419090,0.989896
+_FreqRespPosCtrl_vehSpd75kmh,2,5,15,15,1.430340,0.982450
+_FreqRespPosCtrl_vehSpd75kmh,5,10,26,26,0.895692,0.897006
+_FreqRespPosCtrl_vehSpd75kmh,10,20,51,30,0.805507,0.886191
+_FreqRespTrqCtrl_vehSpd75kmh,0.5,2,8,8,1.427554,0.981037
+_FreqRespTrqCtrl_vehSpd75kmh,2,5,15,15,1.551834,0.965735
+_FreqRespTrqCtrl_vehSpd75kmh,5,10,26,26,0.860666,0.903437
+_FreqRespTrqCtrl_vehSpd75kmh,10,20,51,35,0.509800,0.750284

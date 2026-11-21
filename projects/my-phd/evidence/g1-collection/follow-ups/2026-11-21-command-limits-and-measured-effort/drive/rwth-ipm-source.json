@@ -1,0 +1,67 @@
+{
+  "title": "Experimental Dataset of Id–Iq Setpoint Lookup Tables for an Automotive Permanent Magnet Synchronous Machine",
+  "authors": [
+    "Kusche, Oliver",
+    "Bergheim, Yannick",
+    "Jonczyk, Fabian"
+  ],
+  "doi": "10.5281/zenodo.18954780",
+  "concept_doi": "10.5281/zenodo.18954779",
+  "version": "First deposit; version-specific DOI and file IDs listed. Zenodo concept version index 0.",
+  "published": "2026-03-11",
+  "landing": "https://doi.org/10.5281/zenodo.18954780",
+  "rights": "Creative Commons Attribution 4.0 International (CC BY 4.0), per Zenodo release; attribute named depositors and this version. Computed summaries only. https://creativecommons.org/licenses/by/4.0/",
+  "registry": {
+    "name": "lut.meta",
+    "download": "https://zenodo.org/api/records/18954780",
+    "bytes": 10646,
+    "sha256": "a7a4c1f50605551ed295b04256e9ecb61c07b6d18933d723f74803b9f02ab7ad",
+    "md5": "df3a0ec90d08fb96e948cc51fa49b6ce"
+  },
+  "files": [
+    {
+      "name": "dq_Flux_Torque_500Arms.mat",
+      "download": "https://zenodo.org/api/records/18954780/files/dq_Flux_Torque_500Arms.mat/content",
+      "bytes": 1315991,
+      "sha256": "44aa41421b14ccf06e4af7540ebb918e0372b71719a56728c0d7948fa057451d",
+      "md5": "82b5bc67bae547be8604671069d879d6"
+    },
+    {
+      "name": "SetpointLUT_m0.8_500Arms.mat",
+      "download": "https://zenodo.org/api/records/18954780/files/SetpointLUT_m0.8_500Arms.mat/content",
+      "bytes": 174036,
+      "sha256": "d2e0ee9ab014db717b2a4b5ec0c15cba454749af6e1bf0d5121602df6403cbf8",
+      "md5": "bb8e819c77e7797460a49adae7af3859"
+    },
+    {
+      "name": "SetpointLUT_m0.924_500Arms.mat",
+      "download": "https://zenodo.org/api/records/18954780/files/SetpointLUT_m0.924_500Arms.mat/content",
+      "bytes": 184270,
+      "sha256": "78454e5fe5a5afb8e79e63e01aedfd39e1d75ad123c85f5a24b89b648db5d3b4",
+      "md5": "0a7623ecad4b12772e5399e93daff433"
+    }
+  ],
+  "search": {
+    "query": "((titles.title:\"permanent magnet synchronous\" OR titles.title:\"permanent magnet motor\" OR titles.title:\"PMSM\")) AND types.resourceTypeGeneral:Dataset",
+    "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22permanent+magnet+synchronous%22+OR+titles.title%3A%22permanent+magnet+motor%22+OR+titles.title%3A%22PMSM%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+    "registry_total_at_lookup": 126,
+    "first_page_records": 100,
+    "first_page_sha256": "7bba7a7584d8216e2f0c5fc04e6b318a464515d94b16bd6b807b73716acd9754"
+  },
+  "history": {
+    "keys": [
+      "10.5281/zenodo.18954780",
+      "10.5281/zenodo.18954779",
+      "Experimental Dataset of Id–Iq Setpoint Lookup Tables for an Automotive Permanent Magnet Synchronous Machine",
+      "SetpointLUT_m0.924_500Arms.mat",
+      "dq_Flux_Torque_500Arms.mat"
+    ]
+  },
+  "methods": "Experimental commissioning at 1200 rpm, about 40 °C winding temperature and 400 V DC, stator limit 500 Arms, power-invariant dq. Original d/q flux and motor torque are supplied as gridded functions of currents. Two derived MTPA/field-weakening reference LUTs use PWM modulation indices 0.8 (sinusoidal) and 0.924 (space vector). For each LUT speed node, compare each of 109 requested torques to the supplied lower/upper envelope and count finite dq setpoints. Estimate torque by linear interpolation on the supplied measurement-based torque surface as a secondary consistency check. Require finite interpolated torque; preserve missing values. Compare to both the raw and envelope-clipped torque request. Each method has 161 speed nodes; power column is speed times the upper torque limit, expressed in kW.",
+  "results": "All 35,098 cells provide finite current pairs, including 5,196 out-of-envelope SPWM and 4,263 out-of-envelope SVPWM requests. At 16,000 rpm the maximum positive torque is 89.172 Nm and 104.754 Nm respectively. Across all speeds, only 37 out-of-envelope SPWM cells and zero out-of-envelope SVPWM cells return finite interpolated torque from the supplied grid. A finite current pair therefore cannot by itself validate the torque request.",
+  "limits": "Grid nodes and interpolations are derived machine representations. The 1,200 rpm bench did not execute and measure all tabulated target/speed combinations. Missing interpolated torques include edge and missing grid support. No controller-state trace, commanded/applied voltage pair, independent shaft-torque time series or anti-windup reset. The file currents follow the dataset power-invariant dq convention; 500 Arms is a phase RMS limit.",
+  "reproduce": "Place the named input files from files[].download into RAW. Run python rwth-ipm.py RAW OUT. Python 3, NumPy 2.3.5, SciPy 1.17.0.",
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+  "evidence_level": "Source files downloaded and parsed; derived summaries reproduced. Third-party source files are linked at the repository of record."
+}

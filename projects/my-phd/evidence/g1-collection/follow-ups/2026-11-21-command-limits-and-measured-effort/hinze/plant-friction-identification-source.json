@@ -1,0 +1,807 @@
+{
+  "title": "Identification data for plant and friction identification",
+  "authors": [
+    "Hinze, Christoph",
+    "Zeh, Lukas"
+  ],
+  "doi": "10.18419/darus-3003",
+  "landing": "https://doi.org/10.18419/darus-3003",
+  "version": "1.0",
+  "release_utc": "2022-11-03T10:02:17Z",
+  "repository": "DaRUS, University of Stuttgart",
+  "accessed_utc": "2026-11-21",
+  "release_manifest": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/darus-3003",
+  "release_manifest_sha256": "056e07d7484c243e79c236f79fef2e9a860642d39277cc9c17339d8346d3e734",
+  "rights": "CC BY 4.0 (DaRUS release-wide). All files are public. Attributed summaries and independent processing code are retained.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence_level": "usable files; full release downloaded and independently summarized",
+  "queries": [
+    {
+      "method": "backward citation",
+      "source": "https://doi.org/10.18419/opus-13932",
+      "full_text_pdf": "https://elib.uni-stuttgart.de/server/api/core/bitstreams/84dc5048-d940-4152-91e9-1fe8e3380c69/content",
+      "full_text_sha256": "08e06841686c79304c36336f58382c9bcb4759ee261b06f12815fc0f0e323b38",
+      "locator": "Hinze dissertation (2023), bibliographic item [105]."
+    },
+    {
+      "method": "DataCite cross-check",
+      "query": "(\"feed drive\" OR \"ball screw\" OR \"ballscrew\") AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%22feed+drive%22+OR+%22ball+screw%22+OR+%22ballscrew%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "page_results": 61,
+      "rank_in_snapshot": 59,
+      "response_sha256": "3a39dcb134fc48667c37b965624e68fe1f11c9a1b3da77391bbd87a090177f00"
+    }
+  ],
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.18419/darus-3003",
+      "Identification data for plant and friction identification"
+    ],
+    "matched_files": [],
+    "scope": "1141 tracked evidence paths including gzip bodies, 301 further archived members, early baseline-index; Unicode-normalized DOI and title."
+  },
+  "apparatus": "Shared Stuttgart 400 kg ball-screw / linear direct-drive table, 0.72 m travel. The README explicitly refers to the magnetic force compensation from 10.18419/darus-2563. In the author thesis, Appendix A.3 identifies Heidenhain LS187C table linear scale, separate AM2048S/R motor encoder and four Kistler 9323A sensors. Treat as repeated studies on one rig.",
+  "shared_bench_identity": "File bytes SHA-256 plus complete native x_meas_table array serialized as contiguous little-endian float64, one digest per MATLAB acquisition. All six pairwise comparisons among darus-2563/3109/3003/3152 have zero exact content matches on both tests. Partial subsequences, rerendered runs and related settings are outside this equality test.",
+  "methods": [
+    "Used channel-specific MATLAB dSPACE XIndex and nearest timestamps on the first nominal 1 kHz grid; rejected any row with a required or present optional channel farther than 0.1251 ms. Retained points coincide exactly with source timestamps. Inverter torque comes from the drive; table position is a separate encoder signal.",
+    "Scanned all 99 MAT acquisitions for enable-to-disable transitions and nonzero lastError. For the 22 constant-speed files, required planned and measured table speed each within 5% of nominal, in each signed direction. For the 12 motor-sine force runs, retained measured motion amplitude, including full-interval shutdown effects where present.",
+    "Cross-release comparison uses the two 25 mm/s full-stroke runs from this release (compensation active per README and verified nonzero drive command) and the corresponding uncompensated files from darus-2563. For each direction, restrict to 0.02 ≤ planned position < 0.70 m and planned speed within 1%. Compute median nut force and table following error for each 10 mm bin; remove the median of the 68 force bins separately in each run to reduce sensitivity to constant force-sensor drift."
+  ],
+  "results": [
+    "99 numeric files give 1,436,052 synchronized rows with separate motor/table positions, motor request/inverter torque and measured nut load; 188 command-grid rows were excluded for absent coincident signals.",
+    "44 directional cruise summaries cover 1–750 mm/s. For 200 N nominal motor-sine input, the range of measured table travel is 16.64–24.87 µm across 0.1, 0.5 and 1 Hz; for 300 N it is 193.68–859.47 µm. At 340 N it ranges from 0.367 to 9.842 mm; one of these runs experienced shutdown.",
+    "Three sine records include an observed sigEnable 1→0: F340_1_0Hz at 19.27475 s (error 3), F400_0_1Hz at 9.53865 s and F500_0_1Hz at 3.66896 s (error 1). In both error-1 cases the error code clears during the disabled interval.",
+    "At 25 mm/s on the same rig, the spatially centered RMS nut-force-bin medians are 53.08/13.41 N backward and 53.37/13.43 N forward (uncompensated/compensated). Corresponding RMS of the 68 bin medians of table position error is 7.687/1.029 µm and 7.890/1.027 µm."
+  ],
+  "limitations": [
+    "Motor-sine amplitude encoded in a filename is the nominal axial excitation; the force sensor at the nut and the inverter’s torque estimate are separate quantities. Numerical error codes have no release-specific decoder here. Observed disabling is not proof of current saturation.",
+    "Shared apparatus, different acquisition sessions and four physical traversals; compensation comparison cannot separate all tuning, thermal or sensor-drift effects. Spatial-bin metrics are not all-sample RMS."
+  ],
+  "files_checked": 100,
+  "original_bytes": 263085745,
+  "files": [
+    {
+      "path": "const_v_100.mat",
+      "bytes": 2927297,
+      "dataverse_md5": "7099242072b13c35521899406f07083d",
+      "sha256": "d342a66e70192940b45072624210bb17964506a87f97a81a612045f0b5623a26",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134311"
+    },
+    {
+      "path": "const_v_10.mat",
+      "bytes": 3820713,
+      "dataverse_md5": "434b1f5838a17a9485fddbb5a62e7666",
+      "sha256": "d7d87c875091693b5733b3b87c6c0e3dd472e7da06747e76c22091cded2a8d22",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134319"
+    },
+    {
+      "path": "const_v_150.mat",
+      "bytes": 2153357,
+      "dataverse_md5": "7d66b33892fcde68c4406f04a3be486a",
+      "sha256": "e1db316c07aeb7806ac66bb6ca85ef1609d889878f965cf626f9f3cf72eca183",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134308"
+    },
+    {
+      "path": "const_v_15.mat",
+      "bytes": 3867503,
+      "dataverse_md5": "65dfaefafbb1584517e18eb68b281b44",
+      "sha256": "fa7425ba06d9e6cfdb44308e0c258ec1004e423d1651ce1acbad2c795c5aa235",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134314"
+    },
+    {
+      "path": "const_v_1.mat",
+      "bytes": 23787333,
+      "dataverse_md5": "dd87d710307aa73a6e29a931320e8ae8",
+      "sha256": "b4bb5524156fca269e7b032f92b576cefc67ddbd05948b7a807af1c946cda97c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134323"
+    },
+    {
+      "path": "const_v_200.mat",
+      "bytes": 1763472,
+      "dataverse_md5": "1e5d608a29ea53f62ed4fe088a349d86",
+      "sha256": "0bae767afe01d23bd723d859855259cae0f7353a384aaaf05effed6dd2eccbe4",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134322"
+    },
+    {
+      "path": "const_v_20.mat",
+      "bytes": 3869947,
+      "dataverse_md5": "5c9ba8eb1a31053e7d90b592446bd7d4",
+      "sha256": "0c7523100399882f04994bf5d4ec4caae0437aa33fc2706f87302f47b8922e4d",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134310"
+    },
+    {
+      "path": "const_v_250.mat",
+      "bytes": 1541423,
+      "dataverse_md5": "470cfec124501e9f1cdb7a7666e9c0e4",
+      "sha256": "ef52b456ce41c53f75657be1d232a6e8f980de97a6330072930d05b6439cca9b",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134320"
+    },
+    {
+      "path": "const_v_25.mat",
+      "bytes": 3845009,
+      "dataverse_md5": "ce468a796655a54a3900fdd4fc733b67",
+      "sha256": "e500c938a3b9ac06f5bb059613f3b1cc97d434ecd002bdf35e2de3a30194899e",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134325"
+    },
+    {
+      "path": "const_v_300.mat",
+      "bytes": 1384485,
+      "dataverse_md5": "a74df5948d1e638a24000893637d8ac2",
+      "sha256": "799ffeadaf5b718388f404501ba43287debdeab3c2ecd1a9e639e59502036506",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134326"
+    },
+    {
+      "path": "const_v_350.mat",
+      "bytes": 1275730,
+      "dataverse_md5": "843271fa6315e01dd1c2077ec7292c68",
+      "sha256": "34b1f6a1a7a9b15a64e72f1d2d8bf49208ddc3993c1c78274ff220b1e0f6eb3b",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134321"
+    },
+    {
+      "path": "const_v_400.mat",
+      "bytes": 1192827,
+      "dataverse_md5": "12e8a662a4b4d96672700aabcfd70d74",
+      "sha256": "c5d097bd023f97c8e90f42b7c890573d8d813593c4c8d18bad203baf5fb5778c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134328"
+    },
+    {
+      "path": "const_v_450.mat",
+      "bytes": 1144635,
+      "dataverse_md5": "a792b2225ab21b0ba654b4003832ceaa",
+      "sha256": "4c2ca346b3e9952161607dced91ea47a50fd5dc243d22498c03ce6745e38a066",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134317"
+    },
+    {
+      "path": "const_v_500.mat",
+      "bytes": 1086004,
+      "dataverse_md5": "6fc50813c983b8ca62791f61a312fb4f",
+      "sha256": "4078c09a458ce45d3486a5a70fa2dc23fe278871fee40535a389cd9e92747578",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134307"
+    },
+    {
+      "path": "const_v_50.mat",
+      "bytes": 3914186,
+      "dataverse_md5": "b6c37c66c104f6ea3f77fe9046307e9c",
+      "sha256": "0e19de2b79adaf37ba310bb0d571f512fbdb76ad4d13d3f254d9132fb34a0e45",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134313"
+    },
+    {
+      "path": "const_v_550.mat",
+      "bytes": 1043454,
+      "dataverse_md5": "8fab23d19fc118a7f0d0f3ada902ea21",
+      "sha256": "cba02916bda77aac24748bf335f29d80850aff6d3ea62c4f2b93420134b2bfbe",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134318"
+    },
+    {
+      "path": "const_v_5.mat",
+      "bytes": 5348442,
+      "dataverse_md5": "c7270237fe7dab11ff59f8089b57d9ba",
+      "sha256": "19313ef562538616b4e64fc9c36408a434e43dec865e65435e7b3e07f5629c0c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134316"
+    },
+    {
+      "path": "const_v_600.mat",
+      "bytes": 1009200,
+      "dataverse_md5": "6e1ec59b18efb225ad1667bcef54a564",
+      "sha256": "0217a11ca8b8a25e29dc6868a02c9d704079935f81054373ed59d54ddc1454e7",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134324"
+    },
+    {
+      "path": "const_v_650.mat",
+      "bytes": 980405,
+      "dataverse_md5": "9a2eada141e1b4f07b64e7d4c89928e6",
+      "sha256": "42d8ee1f7375f5b6e6f19f30bef2cb036e56d9d392ab79a0fd4026440af292f2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134327"
+    },
+    {
+      "path": "const_v_700.mat",
+      "bytes": 958382,
+      "dataverse_md5": "3222ed0400eba8dcc2a884fbe3f7b82c",
+      "sha256": "eb072e8383ceaf33096dcf8e9385c8e8c52f6120549965d3e723889d2a4c4fc3",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134309"
+    },
+    {
+      "path": "const_v_750.mat",
+      "bytes": 931649,
+      "dataverse_md5": "aff852032fc102a1e0e2aab5b4b34979",
+      "sha256": "c9106a5a24b1be5bd77162dd5b4e587d2a689fa62f4dc7f139cabe9cad94f131",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134315"
+    },
+    {
+      "path": "const_v_75.mat",
+      "bytes": 3688192,
+      "dataverse_md5": "888cf1afcb8721dd144322b8ed7a504e",
+      "sha256": "325d2b92a62cc37d3d922041a9e8dc34d0a2e2249c9b29913069038c8347d1a5",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134312"
+    },
+    {
+      "path": "const_vel_0_720_v25.mat",
+      "bytes": 5763528,
+      "dataverse_md5": "136333b3cf31a18f87ed376ce2886e4a",
+      "sha256": "99a6614cbcaf4ce769ded052103c26ac41324c417dd08c5b3f2a4e93ca83f1d6",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134180"
+    },
+    {
+      "path": "const_vel_720_0_v25.mat",
+      "bytes": 5779070,
+      "dataverse_md5": "ffe8307612b4c5d674a948f638a14225",
+      "sha256": "10251558bbda6daf03b15068903d9847794a4936a2438ad678014aabd5a4bea3",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134179"
+    },
+    {
+      "path": "F_mot_sine_F200_0_1Hz.mat",
+      "bytes": 2509232,
+      "dataverse_md5": "85167523b5027e46abf4a72cf5a5cf38",
+      "sha256": "9d0924d0f74e03a152e76acbb0677301472a88011ef27decfb2efa8d10034e06",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135497"
+    },
+    {
+      "path": "F_mot_sine_F200_0_5Hz.mat",
+      "bytes": 2478295,
+      "dataverse_md5": "fd8bd2adde3dd56a8202eea7c6acba67",
+      "sha256": "66846a911fcb5989e203aa812981d235613ca434ac12dd07f934e5ed6546e25b",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135493"
+    },
+    {
+      "path": "F_mot_sine_F200_1_0Hz.mat",
+      "bytes": 2536368,
+      "dataverse_md5": "9b7bb2fe4dea1d326da3d4fbb6b688c6",
+      "sha256": "d04a6a416155341710239701d667c63bd0804afc7764dbb56ae2657fc18f288d",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135496"
+    },
+    {
+      "path": "F_mot_sine_F300_0_1Hz.mat",
+      "bytes": 2597650,
+      "dataverse_md5": "73e9349fdce7bc6758f18ab4c8b01041",
+      "sha256": "1e77dcff8177564fb69fd183d4802b9900386f82fdde362fadf70ae5b27f9770",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135494"
+    },
+    {
+      "path": "F_mot_sine_F300_0_5Hz.mat",
+      "bytes": 2727287,
+      "dataverse_md5": "f3c0178ad78b5d3565ffb7a7ad8bec45",
+      "sha256": "f69536506d4b8973e3ac390a47d4ddb11e5e7edd23addde075d4c4ead6566a6d",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135491"
+    },
+    {
+      "path": "F_mot_sine_F300_1_0Hz.mat",
+      "bytes": 2807321,
+      "dataverse_md5": "fe15831d21948627286c523d312c8a44",
+      "sha256": "307dea4275a7cd9f139d64733d3f0fff0a03025f433b373f16c82746bcb4a1c1",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135490"
+    },
+    {
+      "path": "F_mot_sine_F340_0_1Hz.mat",
+      "bytes": 2867723,
+      "dataverse_md5": "58578fbb8e635051924294889ae806b0",
+      "sha256": "d14c86a7d0225e1850102a15dd1329ba9fe235d97ac444a571ebe0f774c863b2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135492"
+    },
+    {
+      "path": "F_mot_sine_F340_0_5Hz.mat",
+      "bytes": 2892671,
+      "dataverse_md5": "0b75ffb885558e242d2fe75519041a90",
+      "sha256": "d66e8089bf70c49420fd073c52bbc89e1946901f856da32053de3d8a2dc14ed0",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135498"
+    },
+    {
+      "path": "F_mot_sine_F340_1_0Hz.mat",
+      "bytes": 3061347,
+      "dataverse_md5": "5a2cb27a0410f78a6f190c452a3f0bf3",
+      "sha256": "be7770d318e327c37ca75b60711354cc0971935aee25afb0b20c5c001f67fb6e",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135499"
+    },
+    {
+      "path": "F_mot_sine_F350_1_0Hz.mat",
+      "bytes": 3078727,
+      "dataverse_md5": "031099b16eec1eafad857198abe05aaa",
+      "sha256": "13d47b47cf2b6db7be65dccac2348224fdce7a4b2110f118d0e32746020aca06",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135489"
+    },
+    {
+      "path": "F_mot_sine_F400_0_1Hz.mat",
+      "bytes": 4267474,
+      "dataverse_md5": "4f23d265b3d49764fdbcba4fa75a11fa",
+      "sha256": "da158bcd6e41adb05df05981c49eea1231ff47ce09c381ad85ec5515745eae1a",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135487"
+    },
+    {
+      "path": "F_mot_sine_F500_0_1Hz.mat",
+      "bytes": 2005028,
+      "dataverse_md5": "a365219f7326d52b511f0f8e1cb5bec9",
+      "sha256": "6298dd1b66691e1a5ce333826da9d48a51e1a2f671cab6eae59dad46696843d1",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/135488"
+    },
+    {
+      "path": "Readme.md",
+      "bytes": 3591,
+      "dataverse_md5": "e1ee1d3944a9a1f8c4ce5e98690f4d4c",
+      "sha256": "9ce278b5c7bc757d3009fc1c8221c3adccde0b6cbb5a89fa6395c37cb5d9aa76",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/168722"
+    },
+    {
+      "path": "Validation/SineTrajectory/Sine_xS100_t10_A50_v100_f0-1.mat",
+      "bytes": 2492171,
+      "dataverse_md5": "a9ad8db842a0e0e99203d00577b9660d",
+      "sha256": "0220e41e84d40ee2aef140e0ce8cae3f5d0038296ad9ffd6b205e0a6267d7b58",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145100"
+    },
+    {
+      "path": "Validation/SineTrajectory/Sine_xS250_t20_A100_v100_f0-1.mat",
+      "bytes": 4574689,
+      "dataverse_md5": "036f1b4976caa3eb0d70c5f5bde84b32",
+      "sha256": "b44016bf8020093b11ad3b4a377ae751fa8944f90dda09f5f402b66bc75c6562",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145099"
+    },
+    {
+      "path": "Validation/SineTrajectory/Sine_xS250_t20_A100_v200_f0-1.mat",
+      "bytes": 4574459,
+      "dataverse_md5": "feae5ed3e25ff4424925d1572ec4181b",
+      "sha256": "4a4adbd8c1e984b33eab1a707645a329ac1f70d23ea8acda8a2b2114a0bc8be8",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145103"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v100_xS10_xE500_a1000.mat",
+      "bytes": 2279834,
+      "dataverse_md5": "c8b1364fb76f86c28e52122a093f04e7",
+      "sha256": "384c96275abbd20edf0b2ae8fc3457aa212554fc452c53eac079fe9f402e4789",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145096"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v10_xS10_xE100_a1000.mat",
+      "bytes": 3438150,
+      "dataverse_md5": "6084336db79151f329c1fbcd623ff79b",
+      "sha256": "071c8dc834617b4554ac7d7c4b25ee1697759531694ecdef6f0380df73339870",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145104"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v1__xS10_xE15_a1000.mat",
+      "bytes": 2003876,
+      "dataverse_md5": "c388e07912302f4f29c40bc1cbf1a466",
+      "sha256": "5270cbfd09a0fb932f98512566193a6287d1cc044ecabbfbdd570d91b3df1b6c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145105"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v20_xS10_xE100_a1000.mat",
+      "bytes": 2022592,
+      "dataverse_md5": "63bddad46b01a1aa29b6617572545763",
+      "sha256": "7183a39311341d2d16e695dd6bd08d34892a7a52a37047c2ea25420c7b7ba0a1",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145097"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v300_xS10_xE700_a1000.mat",
+      "bytes": 1463184,
+      "dataverse_md5": "85ac70fbce7886b622969b14887cbc43",
+      "sha256": "3257c0cf02d26393f262aa6bd814f4618dedbdb8eea38848044862b846f1f7c4",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145106"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v50_xS10_xE500_a1000.mat",
+      "bytes": 3944851,
+      "dataverse_md5": "9f26f4aad8e192f47870bed9367805a4",
+      "sha256": "5597da9846563a9821b8a4a468728c1b81204be76fdab3d820fca73c3b680603",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145101"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v750_xS10_xE700_a1000.mat",
+      "bytes": 1157411,
+      "dataverse_md5": "11f48453b0f06e1f910851b4a2071ea5",
+      "sha256": "8fa6bbbab5a7328ae58fd97302261112bf3864e8251b3f0708ef6e596a314b85",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145098"
+    },
+    {
+      "path": "Validation/SProfile/SPP_v750_xS10_xE700_a5000.mat",
+      "bytes": 929948,
+      "dataverse_md5": "fd0eb0864249aa528202c0b848a3121e",
+      "sha256": "c6957578d7ce93fac77ea9696dc4d8818fd747bd78b70a55f0fd0b1bf71a8ed8",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/145102"
+    },
+    {
+      "path": "sweep_F_add_s_0_dir_pos.mat",
+      "bytes": 2283536,
+      "dataverse_md5": "156cd24bbba2c12e838d077ced1e30df",
+      "sha256": "51e16fb6b6f2fe3a2c39e160b97270e050b1f811b508f8a264fd7d0f057a9095",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134517"
+    },
+    {
+      "path": "sweep_F_add_s_100_dir_neg.mat",
+      "bytes": 2248310,
+      "dataverse_md5": "57803208168488dbff33ca54987a3d7e",
+      "sha256": "48bb6640d97c0c571e6e6463a35ad8310047a2214dbd79b1e43126820d4d5b1a",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134521"
+    },
+    {
+      "path": "sweep_F_add_s_100_dir_pos.mat",
+      "bytes": 2244011,
+      "dataverse_md5": "c163c69fbbc7af2a718a5529119edf37",
+      "sha256": "c1d5b9ea4ca8eb816bee23a72c192ec06198044d6caa5aeb4478d63afe378e66",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134519"
+    },
+    {
+      "path": "sweep_F_add_s_150_dir_neg.mat",
+      "bytes": 2228247,
+      "dataverse_md5": "9c7b7d3d5f7347af5ddbf17e4d7acc08",
+      "sha256": "3656223666996d088cb9a72bd879ffcc1e0b83b727e0bc6cbbbb72343d9774a2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134518"
+    },
+    {
+      "path": "sweep_F_add_s_150_dir_pos.mat",
+      "bytes": 2214835,
+      "dataverse_md5": "1b9a020604ac2bb2d126868efb5ea5d1",
+      "sha256": "c64f2c0931d63793d9e3e70ed011b37c77743d093626f76759f8e5c05ac469a2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134536"
+    },
+    {
+      "path": "sweep_F_add_s_200_dir_neg.mat",
+      "bytes": 2232524,
+      "dataverse_md5": "229298480774aa35feac7cf343c2770c",
+      "sha256": "411b4a0bfe88e2a2aea21bc4da61fd9d44e983b0f2c765bf71799b02414325ae",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134535"
+    },
+    {
+      "path": "sweep_F_add_s_200_dir_pos.mat",
+      "bytes": 2233035,
+      "dataverse_md5": "30882e4cd87e75bf785e8d2fcd9c314e",
+      "sha256": "c684335f294906ad74bf7aae0f4a83a6d5716d77dd7146387ca6a49618cbe407",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134524"
+    },
+    {
+      "path": "sweep_F_add_s_250_dir_neg.mat",
+      "bytes": 2220777,
+      "dataverse_md5": "ca770473cd7deabc59d3eeb002afea9e",
+      "sha256": "4e58fd81f4a8498f9df9bc7b019692f332d14f8a137b64d50731bfc9242fa30e",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134527"
+    },
+    {
+      "path": "sweep_F_add_s_250_dir_pos.mat",
+      "bytes": 2220207,
+      "dataverse_md5": "204624668d2407df43dbfa879ee55d74",
+      "sha256": "688a3f56e22bf03a1d836b8214e640557deaa61694686f1990bfa9959893ac06",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134514"
+    },
+    {
+      "path": "sweep_F_add_s_300_dir_neg.mat",
+      "bytes": 2225499,
+      "dataverse_md5": "1aeb2a538a6fe5d84020f8d8c7530fe3",
+      "sha256": "903dfef67703f9883a8f54524923af23964b7cac53d4018db55f6ea9c0dc6214",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134533"
+    },
+    {
+      "path": "sweep_F_add_s_300_dir_pos.mat",
+      "bytes": 2239005,
+      "dataverse_md5": "cc6143961157191f8e1fd9f44cd5b922",
+      "sha256": "707d4ef3ae4f4a851fb21ae59c737548bfb86e2a0ec7027969b7ff4d7db56623",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134537"
+    },
+    {
+      "path": "sweep_F_add_s_350_dir_neg.mat",
+      "bytes": 2222757,
+      "dataverse_md5": "cc5a353fee8246b9bd613cbf3e2bff9f",
+      "sha256": "e787c55a52cb04609e8ebd595c117ecf522ae7920b4dd4968cfd347c0bfa8f74",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134513"
+    },
+    {
+      "path": "sweep_F_add_s_350_dir_pos.mat",
+      "bytes": 2220973,
+      "dataverse_md5": "849aec0a0281b95d8f42a03bb1017bef",
+      "sha256": "b8b6e41bff73cee5785c0b7ba1f25fd4a46457c0b13308e04484f1c8c90ad82d",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134534"
+    },
+    {
+      "path": "sweep_F_add_s_400_dir_neg.mat",
+      "bytes": 2232934,
+      "dataverse_md5": "1dc60a549c983a702732608756ea9f42",
+      "sha256": "003953d4fb4986c6fc0ea672d5f7217e9614571d2a50f22a6fe0351424b3f8e2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134512"
+    },
+    {
+      "path": "sweep_F_add_s_400_dir_pos.mat",
+      "bytes": 2236192,
+      "dataverse_md5": "2cb7ab9af347716cd68f895740f8ee44",
+      "sha256": "eb2af9b41298660b50cd98091144e6e1379989b95719ae1539db852529361bb4",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134515"
+    },
+    {
+      "path": "sweep_F_add_s_450_dir_neg.mat",
+      "bytes": 2219402,
+      "dataverse_md5": "8bf3bcd596095b0de98ed35ee2152752",
+      "sha256": "f9f5f1433cf50fc9f2ff57ecedc3899a831f679eec439b560a640ae2886642c2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134520"
+    },
+    {
+      "path": "sweep_F_add_s_450_dir_pos.mat",
+      "bytes": 2225306,
+      "dataverse_md5": "860d543b97cdb7cb854422bdf1432cc7",
+      "sha256": "f67eb37bb5e533f4cd785a96b837c5a32cca18e44a6a9322890c1e06f892b0b9",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134526"
+    },
+    {
+      "path": "sweep_F_add_s_500_dir_neg.mat",
+      "bytes": 2236877,
+      "dataverse_md5": "23c6c9161ec87ffba93228e2a737b900",
+      "sha256": "598fb9aab61fae4b75983de0d5d891e7a6069b4ea443ebec041957b270a5dac8",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134530"
+    },
+    {
+      "path": "sweep_F_add_s_500_dir_pos.mat",
+      "bytes": 2234127,
+      "dataverse_md5": "c5539e02ef9974d4131b0b27c1ed3e23",
+      "sha256": "2de3d2ccc22a522bf7b6ec03664ced93db468ae964a4772719b8382be9016546",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134528"
+    },
+    {
+      "path": "sweep_F_add_s_50_dir_pos.mat",
+      "bytes": 2228120,
+      "dataverse_md5": "c5abecbf2c54c486c4caeb1c86207058",
+      "sha256": "91fac795d55e6fc81e4dfb12c50bacc42fc31b26aff5e0c352fd7979d038c746",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134522"
+    },
+    {
+      "path": "sweep_F_add_s_550_dir_neg.mat",
+      "bytes": 2223406,
+      "dataverse_md5": "10db1e1cb5676bde85e2e92c3afad877",
+      "sha256": "ac62805ec650aa4851eec9d7ac8016aa7ebbb6cfd31135d10ff3d50429e35c89",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134525"
+    },
+    {
+      "path": "sweep_F_add_s_550_dir_pos.mat",
+      "bytes": 2224305,
+      "dataverse_md5": "c162298b6fef5015f86b29b6bacfc3e7",
+      "sha256": "f2219195227e170e6fed0b2b167761ab00153d4d62de53062c601c54935ac0ec",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134516"
+    },
+    {
+      "path": "sweep_F_add_s_600_dir_neg.mat",
+      "bytes": 2236962,
+      "dataverse_md5": "6bc32f672470020285bd50669b8da78c",
+      "sha256": "67dc2a57388d248e434baed90f9c81d16d6c7d8c9a63c1c8a14b2b8572e2903b",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134532"
+    },
+    {
+      "path": "sweep_F_add_s_600_dir_pos.mat",
+      "bytes": 2245552,
+      "dataverse_md5": "aa126df1e2d2146b535e43034bcefd5f",
+      "sha256": "a4c1fa643c55f8d023b54ab2243f74c1fc1899f2693df871fbb195383ca1685c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134523"
+    },
+    {
+      "path": "sweep_F_add_s_650_dir_neg.mat",
+      "bytes": 2226091,
+      "dataverse_md5": "6c5830e9e2c7713d16bb9582f8a58b9a",
+      "sha256": "56327c6b10b09f8c922096b72b3a7fea3c940a9e57a92390aada226e731f4a32",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134531"
+    },
+    {
+      "path": "sweep_F_add_s_700_dir_neg.mat",
+      "bytes": 2238637,
+      "dataverse_md5": "5108390ecd34bcb30836fb55750b138c",
+      "sha256": "46600f28c9237bdb1052c8bcd2a061f5113f97471571dfa6e7be58c629d7afea",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134529"
+    },
+    {
+      "path": "vel_sweep_s_0_dir_pos.mat",
+      "bytes": 2311064,
+      "dataverse_md5": "52242ae7a732e9217e77c40f49935305",
+      "sha256": "9f46f3aa470b64a456d8264f97cad3615c02ec2a2478398c2e96090a529c75a7",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134462"
+    },
+    {
+      "path": "vel_sweep_s_100_dir_neg.mat",
+      "bytes": 2311922,
+      "dataverse_md5": "2c0e7839e8e37b2cf8bbe02b4103191c",
+      "sha256": "7dc10ddf90e66db26aa7352bc9a7825f69fe424c3f20d42d1bcceed8a26f7863",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134461"
+    },
+    {
+      "path": "vel_sweep_s_100_dir_pos.mat",
+      "bytes": 2266661,
+      "dataverse_md5": "f254838c5fb2658e0d14c8e3baa47052",
+      "sha256": "718189c6e64ab6f751b640931cb239690748d28cdd8645e8f76552d56d6ce292",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134455"
+    },
+    {
+      "path": "vel_sweep_s_150_dir_neg.mat",
+      "bytes": 2272834,
+      "dataverse_md5": "9487f3b0acaf69d74bdce5374152cfb1",
+      "sha256": "726baed5479cf4e902e76377cd32ced63774e95edcfc81cf7481b455c76474b4",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134458"
+    },
+    {
+      "path": "vel_sweep_s_150_dir_pos.mat",
+      "bytes": 2272589,
+      "dataverse_md5": "d128ae0cd0028a35a7b0a32c740c00f0",
+      "sha256": "0e127763f6b6ea83ad069a4af56dd046ba51ece1e8971ff927a0616f833fad26",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134468"
+    },
+    {
+      "path": "vel_sweep_s_200_dir_neg.mat",
+      "bytes": 2264124,
+      "dataverse_md5": "c38ecdb8aec73c0a5a9a219d672a14aa",
+      "sha256": "ed8add108ad7ad321754f84c8cdcec900b7d3030e1a1741489625e44c8ba5fac",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134465"
+    },
+    {
+      "path": "vel_sweep_s_200_dir_pos.mat",
+      "bytes": 2263887,
+      "dataverse_md5": "b26ea9afed2848b737964ca381a4e9ab",
+      "sha256": "ba94054f21ef1f9cf9d94da60db3535790f57682dfcc05f93128b381e4e32389",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134471"
+    },
+    {
+      "path": "vel_sweep_s_250_dir_neg.mat",
+      "bytes": 2257519,
+      "dataverse_md5": "294d34ab4834a50fa7cdf4d073a9ad12",
+      "sha256": "aad7a2483a7eaf90240b280b6c1a4be403a1b58c36460de8a490f67845f72414",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134460"
+    },
+    {
+      "path": "vel_sweep_s_250_dir_pos.mat",
+      "bytes": 2279459,
+      "dataverse_md5": "eaa5f31f6236bcfbd96877a9d98e2695",
+      "sha256": "86636641f5ba017f4dd48c858711dfad2825b68f083a4d05c3feda31f04700b2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134451"
+    },
+    {
+      "path": "vel_sweep_s_300_dir_neg.mat",
+      "bytes": 2273983,
+      "dataverse_md5": "0d06ce2a43661301393c3a8436609cb9",
+      "sha256": "3f398f6c8f07fbf145baf8593cdba3b95f86fbf286ca8bb45920603ccc395f75",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134452"
+    },
+    {
+      "path": "vel_sweep_s_300_dir_pos.mat",
+      "bytes": 2272309,
+      "dataverse_md5": "d7dc4ddfa3f3a15a8f892353e1fafc64",
+      "sha256": "9bdfeae35edfda725314fadc236ad20fa4711428101ce407e2aa856d9bdcaf29",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134453"
+    },
+    {
+      "path": "vel_sweep_s_350_dir_neg.mat",
+      "bytes": 2272526,
+      "dataverse_md5": "be53233d8123c022c677887b63887504",
+      "sha256": "0ba017dc9f5a774eacb0ed82c567c0c301cc0d2b474e33e3d57058b2231642e0",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134470"
+    },
+    {
+      "path": "vel_sweep_s_350_dir_pos.mat",
+      "bytes": 2282082,
+      "dataverse_md5": "f9246aaf5d3e677c7e2203bc9d4db3e4",
+      "sha256": "552a6a98e20fe895f9147c75771944b7c33b6b0f8b5f9c70c65ba3e6b51b13ff",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134466"
+    },
+    {
+      "path": "vel_sweep_s_400_dir_neg.mat",
+      "bytes": 2271926,
+      "dataverse_md5": "e362d36fddca96d37674267316fdccc0",
+      "sha256": "29628db1a17c60b66f90b76c910dc7c0f18876288063d9ba66fc23de7dfbc7c3",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134457"
+    },
+    {
+      "path": "vel_sweep_s_400_dir_pos.mat",
+      "bytes": 2271904,
+      "dataverse_md5": "4677bac4e932de5c5a03d0ba4dea778b",
+      "sha256": "545f7c0a8b99dd7328e3a3a55771c4e65d52d599687f19dc154fba5a8ddf2804",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134473"
+    },
+    {
+      "path": "vel_sweep_s_450_dir_neg.mat",
+      "bytes": 2277573,
+      "dataverse_md5": "f462bfc4a191fd45021bc508a04ce8c9",
+      "sha256": "992f2d4a9df888d16242848a0167933528642e2cccd54e39db8ca4a1cfd6fe28",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134459"
+    },
+    {
+      "path": "vel_sweep_s_450_dir_pos.mat",
+      "bytes": 2286890,
+      "dataverse_md5": "a1f6e263e7b8658dd8fc1adfa202bc8b",
+      "sha256": "747a1a95ba5e032d5c181babb6f901740c466ab7274486eb6c90c6f2f5b0dcf8",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134456"
+    },
+    {
+      "path": "vel_sweep_s_500_dir_neg.mat",
+      "bytes": 2276600,
+      "dataverse_md5": "47a9e90d09319f061537d27c7f1ee517",
+      "sha256": "afa6cd3b144d25291eb7b81f2c77b6741da96e0a9d86733b0c46acc2cdaa8ca2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134449"
+    },
+    {
+      "path": "vel_sweep_s_500_dir_pos.mat",
+      "bytes": 2282608,
+      "dataverse_md5": "ad3657a258fdfa67724ca0e6133abe32",
+      "sha256": "9c2bc6fa64b3dc29adf0b0435f49c9d05bbcc982c3b03ba519e7e96d8ab5c343",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134472"
+    },
+    {
+      "path": "vel_sweep_s_50_dir_pos.mat",
+      "bytes": 2293805,
+      "dataverse_md5": "0e9ca5dcc20c332583de3a9c440ff9e2",
+      "sha256": "b67d177c9f9541bf24ba5df006a49af73509161bdfc8fcbcafcb5fc5b49f8b86",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134467"
+    },
+    {
+      "path": "vel_sweep_s_550_dir_neg.mat",
+      "bytes": 2281206,
+      "dataverse_md5": "df89756b20dcc9ea3d53f417c9a44562",
+      "sha256": "ea1bdd10a334a98b26ae3ae87c110d945d1910bd50b4eb1cce84b879d3e2f855",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134464"
+    },
+    {
+      "path": "vel_sweep_s_550_dir_pos.mat",
+      "bytes": 2284340,
+      "dataverse_md5": "aa9b316df30c3a0e386dd6b7fe51c3d1",
+      "sha256": "c4352c8415817594850ce265113e6e9d45889378377a27e40b390e887ea8d13b",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134474"
+    },
+    {
+      "path": "vel_sweep_s_600_dir_neg.mat",
+      "bytes": 2283020,
+      "dataverse_md5": "d64d3a1d765d8cbb26067cff0fb93b3c",
+      "sha256": "f4f471fa6c38f3b736aa7c13b6f5300fbb79755cd7af027f28c8178b79e874df",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134463"
+    },
+    {
+      "path": "vel_sweep_s_600_dir_pos.mat",
+      "bytes": 2272825,
+      "dataverse_md5": "3257856450c1a301299b03f6bb2f5868",
+      "sha256": "ce12a62b01e7b89dafd1b138030ba2afd56f42011542fe567d2171ba7434e2c2",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134454"
+    },
+    {
+      "path": "vel_sweep_s_650_dir_neg.mat",
+      "bytes": 2281674,
+      "dataverse_md5": "842040f1fcb4cc8153e00f246d94b559",
+      "sha256": "61a7bcb78197f52910d35a37230c7ffb668996458f37b7be8042899040003d7c",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134469"
+    },
+    {
+      "path": "vel_sweep_s_700_dir_neg.mat",
+      "bytes": 2288666,
+      "dataverse_md5": "49e3b9e3ec8020a8d99b09126b399b87",
+      "sha256": "becb7d4217b1f6d2935d3285fe91bd3db58c5c1a362d83955b84185b8d0f6dbb",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134450"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "darus-3003-runs.csv",
+      "rows": 99,
+      "sha256": "ca84f2feae4866e15a51f41261a9595c1fe0540935573b98d3eee13e21a093cd"
+    },
+    {
+      "name": "friction-sine-motion.csv",
+      "rows": 12,
+      "sha256": "8de99f6e0368be60420f9c2397b64a99200e4cb1e119e56ec4b790c4713451d3"
+    },
+    {
+      "name": "friction-cruise.csv",
+      "rows": 44,
+      "sha256": "7b3b63d08df48f96520984951eda68a9de195553f51ac0857d9d27cb4acf3110"
+    },
+    {
+      "name": "friction-disable-events.csv",
+      "rows": 3,
+      "sha256": "95848dd24a8418e59f51cb7e9dc3fbbbee6c02f1955dba4cce8bfdb021edf3e0"
+    },
+    {
+      "name": "paired-25mm-compensation.csv",
+      "rows": 2,
+      "sha256": "204b82cf3776972816ae465c225dd92d321976fc260195ae6a28009bdb3634c6"
+    },
+    {
+      "name": "shared-bench-file-identity.csv",
+      "rows": 6,
+      "sha256": "d491f2140edd5f9625e7fd59472c28aff22fa67fb53208bbff945757a3529494"
+    }
+  ],
+  "reproduction": {
+    "requirements": "Python 3.11+, NumPy, h5py. From the hinze subdirectory, use both new releases and two existing release inputs for the four-way identity and cross-release paired extraction.",
+    "commands": [
+      "python fetch_hinze.py RAW 3003",
+      "python fetch_hinze.py RAW 3152",
+      "python ../servo/fetch_servo_release.py 2563 OLD",
+      "python ../servo/fetch_servo_release.py 3109 OLD",
+      "python derive_hinze.py RAW OUT OLD"
+    ]
+  }
+}

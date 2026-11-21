@@ -1,0 +1,14 @@
+file,phase,rows,readback_min_Nm,readback_max_Nm,paired_command_rows,max_abs_cmd_Nm,max_abs_clipped_Nm,magnitude_reduced_count,max_magnitude_reduction_Nm,nonzero_opposite_sign_count,zero_host_feedforward_count,zero_host_but_abs_readback_above_0p1Nm
+BF_pd_5x.csv,kickback,216,-3.19081974,3.50560641,216,2.5,2.5,0,0,0,0,0
+BF_pd_5x.csv,swing,2896,-1.82335043,1.71860766,2896,0,0,0,0,0,2896,2333
+BF_pd_5x.csv,catch,466,-2.0454185,2.00704908,466,0.8,0.8,0,0,0,0,0
+BF_rl_5x.csv,unlabelled,2827,-2.94678831,3.55543423,2827,2.5,2.5,0,0,0,0,0
+BF_tvlqr_1x.csv,unlabelled,496,-1.96191287,3.33089375,496,17.3997584,3,1,14.3997584,0,0,0
+BF_tvlqr_5x.csv,kickback,191,-3.1291244,3.23054194,191,2.5,2.5,0,0,0,0,0
+BF_tvlqr_5x.csv,swing,2522,-1.80819523,3.15398312,2522,10.762331,3,5,7.762331,0,0,0
+BF_tvlqr_5x.csv,catch,667,-1.48327982,2.90199423,667,0.8,0.8,0,0,0,0,0
+FB_pd_1x_.csv,unlabelled,282,-3.73010111,4.99146557,,,,,,,,
+ZB_pd_1x.csv,unlabelled,693,-1.97908592,1.58864498,693,0,0,0,0,0,693,486
+ZB_tvlqr_1x.csv,unlabelled,245,-2.31794429,1.94478154,,,,,,,,
+ZF_pd_1x.csv,unlabelled,780,-0.788861275,1.29190969,780,0,0,0,0,0,780,562
+ZF_tvlqr_1x.csv,unlabelled,263,-1.43281996,1.61460268,,,,,,,,

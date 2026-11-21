@@ -1,0 +1,177 @@
+{
+  "title": "Identification data for Linear Direct Drive Forces compensation",
+  "authors": [
+    "Hinze, Christoph"
+  ],
+  "doi": "10.18419/darus-2563",
+  "landing": "https://doi.org/10.18419/darus-2563",
+  "repository": "DaRUS, University of Stuttgart",
+  "version": "1.0",
+  "released_utc": "2022-11-02T08:40:54Z",
+  "accessed_utc": "2026-11-21",
+  "release_manifest": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/darus-2563",
+  "release_manifest_sha256": "cc13e914cc77796be9b3ca7bbaca89575ce499b710cba8603c93da6c46fc6e2b",
+  "rights": "CC BY 4.0 (DaRUS release-wide). All listed files are public. The repository stores attributed aggregate tables and independent processing code.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence_level": "usable files; complete release downloaded and checked",
+  "queries": [
+    {
+      "provider": "DataCite REST",
+      "query": "(\"feed drive\" OR \"ball screw\" OR \"ballscrew\") AND types.resourceTypeGeneral:Dataset",
+      "url": "https://api.datacite.org/dois?query=%28%22feed+drive%22+OR+%22ball+screw%22+OR+%22ballscrew%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "page_rows": 61,
+      "total_reported": 61,
+      "position_in_returned_page": 33,
+      "response_sha256": "3a39dcb134fc48667c37b965624e68fe1f11c9a1b3da77391bbd87a090177f00"
+    }
+  ],
+  "related_sources": [
+    "The controller comparison on the same test bench explicitly reuses the force map. https://doi.org/10.18419/darus-3109"
+  ],
+  "history": {
+    "parent_commit": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+    "keys": [
+      "10.18419/darus-2563",
+      "Identification data for Linear Direct Drive Forces compensation"
+    ],
+    "matched_files": [],
+    "scope": "1141 Git-tracked evidence paths, 301 members inside tar.gz, gzip contents and early baseline-index. Case/punctuation/accents normalized. Paper titles used for replication releases."
+  },
+  "methods": [
+    "Nearest-time pairing of the 1 kHz command grid and 4 kHz measured motor and table signals via dSPACE XIndex. Worst timestamp residual is zero. Checked F_nut_sum against the four individual KISTLER channels where available.",
+    "For each uncompensated direction and speed, held out one whole run and trained on the other three speeds in that direction. Kept 0.02 ≤ planned position < 0.70 m, within 1% of commanded cruise speed, and computed median nut force per 10 mm position bin. Compared medians across training speeds with a single median across all training bins; reported equal-bin-weighted test RMSE.",
+    "Read the separate Siemens PRBS export using semicolon delimiter and decimal comma. Fit a one-step model of r78[k] as intercept plus r78[k−1] and r77[k−lag]. Searched lag 0–16 on the first half only with a common set of 1,007 training rows; evaluated all 1,024 second-half rows against persistence."
+  ],
+  "results": [
+    "All eight uncompensated forward/backward runs at 25, 50, 75 and 100 mm/s show a zero commanded LDD force while nut sensors measure loads up to about 643 N in magnitude. Both compensated validation runs have all four component forces; the arithmetic sum agrees exactly with F_nut_sum on the stored grid.",
+    "All eight held-out-speed cases cover 68 common bins. Position-conditioned force RMSE is 2.038–7.192 N, compared with 52.697–55.359 N for the position-independent training median. Same-bench, same-direction repeatability supports disturbance mapping.",
+    "The 2,047-sample PRBS trace uses ±19.999996 N requests and 0.0625 ms spacing. Eleven reported actual-force samples exceed the excitation envelope, range −20.397829 to +21.063169 N. A 3-sample input lag minimizes training one-step error; held-out RMSE 1.964 N versus 3.624 N persistence."
+  ],
+  "limitations": [
+    "PRBS actual force is inverter-reported r78, with no independent force transducer in that CSV. The KISTLER nut force in the MAT experiments measures a different quantity and may drift according to the author.",
+    "The two compensated validation traces run at 10 mm/s. The available uncompensated speeds differ, so a compensation-only causal effect cannot be isolated. The ±20 N PRBS envelope and nominal metadata range ±100 Nm do not establish a physical drive saturation limit. One-step lag is model-specific."
+  ],
+  "files_checked": 12,
+  "total_original_bytes": 48940359,
+  "files": [
+    {
+      "path": "LDD_Transfer_function_Force_controlled.csv",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144246",
+      "bytes": 64274,
+      "dataverse_md5": "bdd94f225701508ab70e7a4ecccc231d",
+      "sha256": "90652a05b2034a054488e8e89dafa514569c3b7bfd5fe22449a3fe03532a4111"
+    },
+    {
+      "path": "Readme.md",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/168002",
+      "bytes": 3151,
+      "dataverse_md5": "9148dae4d4d1ad571f98c54487c4ca48",
+      "sha256": "e11d13d660e3e93833ffa89ac49679d239c449882469866b67b97a7cdeeb78b4"
+    },
+    {
+      "path": "SP_v100_backw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134117",
+      "bytes": 1668562,
+      "dataverse_md5": "df1bb3d47c7fba9860fe5000f0308fa3",
+      "sha256": "8680dd31d6cd84a0214a62d3ba50defb1414212b19e9263d6d338934dcbd038d"
+    },
+    {
+      "path": "SP_v100_forw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134116",
+      "bytes": 1652923,
+      "dataverse_md5": "8b45044e1ff09e46062d065259c8a6dd",
+      "sha256": "88c5004a37b58bc2f06e4318d4bf7331f6ef1230d2e09355ef1b11705a4e1d38"
+    },
+    {
+      "path": "SP_v25_backw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134122",
+      "bytes": 4949281,
+      "dataverse_md5": "932a833cf5f3ba9c0c464d964daf9771",
+      "sha256": "4ec329c624857f76cb507475443d669f9a5b0ddac4f27f78715765deea98e20f"
+    },
+    {
+      "path": "SP_v25_forw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134123",
+      "bytes": 4902293,
+      "dataverse_md5": "7de63dfb5568c34ce8d2f61ae386d154",
+      "sha256": "cd277bd2b773f5736317e3e06cc0d93f67d3db5d5766ad1efa4396cf91ec4b75"
+    },
+    {
+      "path": "SP_v50_backw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134118",
+      "bytes": 2741066,
+      "dataverse_md5": "d41d537a9a30d0b284c2915b46a10be2",
+      "sha256": "e4aa6e38d391e0f1da45c57ebc86ad770347c69e9f36103c8ea838a3d2d8c5ee"
+    },
+    {
+      "path": "SP_v50_forw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134119",
+      "bytes": 2730879,
+      "dataverse_md5": "2af01a1e24ac3d96f7cda3605cf28f19",
+      "sha256": "7d73da41b5c78086798310155e6f2d46e4dc8a48ec73a9708dcc26bba393c5ef"
+    },
+    {
+      "path": "SP_v75_backw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134120",
+      "bytes": 1997101,
+      "dataverse_md5": "4bba42a68620bc46d97554f1f550e0e8",
+      "sha256": "804184d5bc881bd6fcbab9e8d4e530f87fdc15201b7fd76d02e8e73161bf9bae"
+    },
+    {
+      "path": "SP_v75_forw.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/134121",
+      "bytes": 1992115,
+      "dataverse_md5": "a02295921427965c6dacae7eed206aba",
+      "sha256": "16441baa4fcc6533a518fb29aa551e8162285215981949990f6028f78fc45ae4"
+    },
+    {
+      "path": "validate_SP_s0_720_v10_LDAComp.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144244",
+      "bytes": 13088305,
+      "dataverse_md5": "00ddbdf342e2f5b18c2f1c2c084a5ee0",
+      "sha256": "42b255f1fdb15627fcaefb8980f2e75b21c1f367fba491a85d2f3d9d5e3b029f"
+    },
+    {
+      "path": "validate_SP_s720_0_v10_LDAComp.mat",
+      "original_url": "https://darus.uni-stuttgart.de/api/access/datafile/144245",
+      "bytes": 13150409,
+      "dataverse_md5": "b3eb8d74a58bb1a91f09c687ce05ad28",
+      "sha256": "62cf33a5f98a873435db42837cbe4736785e14fbdbf0ce8463579eb4d27781e2"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "ball-screw-force-compensation-runs.csv",
+      "rows": 10,
+      "sha256": "595dfd974ee30d52cba9814af2a4c54e2589a1d39774975a5bef16cbf274f97d"
+    },
+    {
+      "name": "ball-screw-spatial-force-holdout.csv",
+      "rows": 8,
+      "sha256": "3842680a66e796410f12c664e46c52858a122a34995928a955e451dd5d612354"
+    },
+    {
+      "name": "direct-drive-prbs.csv",
+      "rows": 1,
+      "sha256": "38c19af24a48d0c174cba66d20a34606603e43d5f090582d8612a10899b404d1"
+    }
+  ],
+  "reproduction": {
+    "requirements": "Python 3.11+, NumPy, pandas 2+, h5py for MATLAB HDF5. From this directory:",
+    "download": "python fetch_servo_release.py 2563 RAW",
+    "derive": "python derive_ball_screw.py RAW OUT 2563",
+    "layout": "RAW/meta2563.json contains a data.latestVersion object; RAW/2563/<Dataverse file id> contains the original versioned bytes. The downloader uses the numeric version route. The analysis verifies original size and MD5 again."
+  },
+  "companion_full_text": {
+    "citation": "Christoph Hinze (2023). Dynamiksteigerung von Kugelgewindetrieben durch modellbasierte Lageregelung der nachgiebigen Mechanik. Universität Stuttgart, dissertation.",
+    "doi": "10.18419/opus-13932",
+    "landing": "https://doi.org/10.18419/opus-13932",
+    "repository_item": "https://elib.uni-stuttgart.de/server/api/core/items/96f8169d-7b95-4ecc-889c-a9db49742268",
+    "pdf": "https://elib.uni-stuttgart.de/server/api/core/bitstreams/84dc5048-d940-4152-91e9-1fe8e3380c69/content",
+    "pdf_sha256": "08e06841686c79304c36336f58382c9bcb4759ee261b06f12815fc0f0e323b38",
+    "pdf_bytes": 13546481,
+    "pages_in_pdf": 201,
+    "evidence": "Full text reviewed. Appendix A.3, printed pp. 180–181, specifies Heidenhain LS187C linear readout, separate AM2048S/R motor encoder, and four Kistler 9323A force sensors with 5017B1800 amplifier. The author gives 3 µm specified linear measurement accuracy and 4.88 nm readout resolution. Bibliography item [104] explicitly cites this dataset DOI. Section 6.3, printed pp. 79–82, compares speed-controller settings with the position loop deactivated.",
+    "access_rights": "DataCite metadata identifies open access. Only bibliographic facts and location pointers retained; the full text is not mirrored."
+  }
+}

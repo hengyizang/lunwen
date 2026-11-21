@@ -1,0 +1,83 @@
+{
+  "title": "commaSteeringControl — normalized steering request, rate-limited command and lateral response",
+  "authors": [
+    "comma.ai"
+  ],
+  "landing": "https://huggingface.co/datasets/commaai/commaSteeringControl",
+  "release": "https://huggingface.co/datasets/commaai/commaSteeringControl/tree/647fe063d1a955ed0acb3601c2e71e108fdce18b",
+  "version": "647fe063d1a955ed0acb3601c2e71e108fdce18b",
+  "accessed_utc": "2026-11-21",
+  "last_modified": "2024-04-05T23:12:10.000Z",
+  "rights": "MIT per fixed dataset card and repository license tag. Original aggregate tables and analysis are included with attribution. No source vehicle traces are mirrored.",
+  "history": {
+    "keys": [
+      "commaai/commaSteeringControl",
+      "comma-steering-control",
+      "647fe063d1a955ed0acb3601c2e71e108fdce18b"
+    ],
+    "parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b"
+  },
+  "search": {
+    "query": "Hugging Face public dataset catalog, owner commaai; inspect all owner records for vehicle control or robot-actuation signals; resolve pinned platform tree and dataset card.",
+    "owner_index": {
+      "path": "hf-comma",
+      "url": "https://huggingface.co/api/datasets?author=commaai&limit=100",
+      "bytes": 6241,
+      "sha256": "98803f5b2e0b17a8174c1d761370d92d167a9bf4f3b99d8d319eab786eff3d64"
+    },
+    "owner_records": [
+      "commaai/commavq",
+      "commaai/comma2k19",
+      "commaai/commaSteeringControl",
+      "commaai/commabody",
+      "commaai/commaCarSegments",
+      "commaai/comma5k"
+    ],
+    "dataset_metadata": {
+      "path": "commaSteeringControl.json",
+      "url": "https://huggingface.co/api/datasets/commaai/commaSteeringControl",
+      "bytes": 6787,
+      "sha256": "8c9b20ed7a5a42569b4e3a0aae211b1d4dbc4060fce09861831c160143936f18"
+    },
+    "file_index": {
+      "path": "commaSteeringControl-tree.json",
+      "url": "https://huggingface.co/api/datasets/commaai/commaSteeringControl/tree/647fe063d1a955ed0acb3601c2e71e108fdce18b/data?limit=200&expand=false",
+      "bytes": 37751,
+      "sha256": "53b34ed939aa93e92e7eb8d3fe9f8be83f32654d72a4c682cd3facef74b35e7b"
+    },
+    "card": {
+      "path": "commaSteeringControl-README.md",
+      "url": "https://huggingface.co/datasets/commaai/commaSteeringControl/resolve/647fe063d1a955ed0acb3601c2e71e108fdce18b/README.md",
+      "bytes": 6369,
+      "sha256": "c193fb65aa72eb83e42eaeaf311664669e307877a9b69f62ae6ce2951994e562"
+    }
+  },
+  "evidence_level": "Fixed-version file inventory, verified complete files on six platforms, and decoded boundary CSVs on every remaining platform archive. The publisher describes approximately 12,500 hours. Hours are not estimated from this audit.",
+  "files": {
+    "index": "road-platforms.csv",
+    "url_template": "https://huggingface.co/datasets/commaai/commaSteeringControl/resolve/647fe063d1a955ed0acb3601c2e71e108fdce18b/data/{platform}.zip",
+    "directory_checks": "120 complete central directories; 852,798 CSV members including 20,000 SYNTHETIC_V0. The 119 remaining archives contain 832,798 road-schema members in total by directory. Only decoded members were checked for schema. Verified compressed ZIP sizes from LFS registry total 45,492,726,968 bytes; six smallest complete ZIPs matched their LFS SHA-256. For 114 remaining ZIPs read HTTP 206 verified byte ranges plus selected members; their full-file hashes are publisher declarations.",
+    "selection": "Deterministic six smallest ZIPs have 500 segments each. Decode all 3,000, plus lexicographic first and last CSVs on each of the other 114 platforms. 3,226 distinct road-schema source CSVs and 2 synthetic boundary CSVs. CSV CRC is checked by the ZIP reader on every read. SHA-256 digests cover decoded CSV bytes; platform directory hashes cover (name, uncompressed size, compressed size, CRC32) as serialized by fetch_steering.py."
+  },
+  "signal_definitions": {
+    "steer": "Normalized steering torque request in openpilot.",
+    "steerFiltered": "Normalized command after additional rate limiting. Electric power steering may apply further undocumented smoothing.",
+    "latAccelDesired": "Planner lateral acceleration request (m/s²).",
+    "latAccelSteeringAngle": "Estimate from steering angle, roll and the vehicle model (m/s²).",
+    "latAccelLocalizer": "Sensor-fusion estimate on the device (m/s²)."
+  },
+  "method": {
+    "support": "latActive true, steeringPressed false and all required fields finite. Data have already been interpolated by the publisher. RMS reported per segment. All adjacent timestamp spacings checked against 0.1 s ± 0.001 s.",
+    "holdout": "For each complete platform independently, integer segment filename modulo five equal to zero defines test. Common rows and two endpoints for each input, ordinary least squares on [1,u,u*abs(u),u*vEgo/20,roll]. Test RMSE uses full test sufficient statistics. The scope is data quality and signal interpretation at G1.",
+    "quality": "Magnitude thresholds 0.995 and 1.000001 are readout comparisons with the public normalized range. They are not an assertion of steering-rack saturation. The driver mask has no extra recovery window. No independent shaft torque, motor current, driver/route group identifiers or vehicle-specific hardware limit evidence is provided here.",
+    "example": "In VOLKSWAGEN_JETTA_7TH_GEN/00000.csv at the initial time the eligible request was about -1.000579 and the filtered value about -0.940111. It is the sole eligible input beyond |1.000001| among the 3,226 decoded road-schema segments. No eligible filtered value exceeded that tolerance.",
+    "cross_platform": "For the same eligible holdout segments, pool the training subsets of the other five platforms. All 24 within-platform fits reproduced by the separate derive_transfer.py implementation. Transfer increases pooled RMSE in all 24 cells, by 4.03% to 27.64%; in Genesis G70, 46–48 of the 100 segment RMSEs increase and the segment median difference favors transfer for all four combinations. Tables include segment-paired quantiles."
+  },
+  "reproducer": [
+    "python fetch_steering.py ROOT --full-smallest 6",
+    "OPENBLAS_NUM_THREADS=1 python derive_steering.py ROOT OUTPUT",
+    "OPENBLAS_NUM_THREADS=1 python derive_transfer.py ROOT OUTPUT",
+    "Run in a fresh working directory to reconstruct the compact tables; pandas and NumPy are required."
+  ],
+  "limitations": "Six smallest groups and boundary members are a deterministic audit sample. Size and filename selection can bias the distribution. Filename holdout does not guarantee route, driver, time or EPS-firmware independence. Differences between normalized command and filtered command, or between two estimated acceleration endpoints, cannot establish delivered shaft torque or physical saturation."
+}

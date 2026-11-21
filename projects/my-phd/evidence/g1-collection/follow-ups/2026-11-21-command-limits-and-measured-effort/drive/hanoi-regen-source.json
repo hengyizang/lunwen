@@ -1,0 +1,52 @@
+{
+  "title": "Bộ dữ liệu thử nghiệm trên băng thử: phanh tái sinh của mô hình một phần tư xe điện với máy điện trong bánh xe",
+  "authors": [
+    "Lê Hoàng, Long",
+    "Vu Quang, Khong"
+  ],
+  "doi": "10.5281/zenodo.23904118",
+  "concept_doi": "10.5281/zenodo.23904117",
+  "version": "First deposit; version-specific DOI and file IDs listed. Zenodo concept version index 0.",
+  "published": "2026-11-03",
+  "landing": "https://doi.org/10.5281/zenodo.23904118",
+  "rights": "Creative Commons Attribution 4.0 International (CC BY 4.0), per Zenodo release; attribute named depositors and this version. Computed summaries only. https://creativecommons.org/licenses/by/4.0/",
+  "registry": {
+    "name": "regen.meta",
+    "download": "https://zenodo.org/api/records/23904118",
+    "bytes": 3939,
+    "sha256": "758a6595016c716ccb713924dec096f06953219ed7459b5486bc9f4b9361f822",
+    "md5": "e9b8e30c4560eb0949999c9bb8ca9c8c"
+  },
+  "files": [
+    {
+      "name": "du_lieu.zip",
+      "download": "https://zenodo.org/api/records/23904118/files/du_lieu.zip/content",
+      "bytes": 321768,
+      "sha256": "e83fc353358ab5b894fd893dbd3fe48b715cdaf417bab8a3bfcff5f603c9ad4f",
+      "md5": "646f7efe2ea845245bfd3a5458047a4c"
+    }
+  ],
+  "search": {
+    "query": "((titles.title:\"permanent magnet synchronous\" OR titles.title:\"permanent magnet motor\" OR titles.title:\"PMSM\")) AND types.resourceTypeGeneral:Dataset",
+    "url": "https://api.datacite.org/dois?query=%28%28titles.title%3A%22permanent+magnet+synchronous%22+OR+titles.title%3A%22permanent+magnet+motor%22+OR+titles.title%3A%22PMSM%22%29%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+    "registry_total_at_lookup": 126,
+    "first_page_records": 100,
+    "first_page_sha256": "7bba7a7584d8216e2f0c5fc04e6b318a464515d94b16bd6b807b73716acd9754"
+  },
+  "history": {
+    "keys": [
+      "10.5281/zenodo.23904118",
+      "10.5281/zenodo.23904117",
+      "Bộ dữ liệu thử nghiệm trên băng thử: phanh tái sinh của mô hình một phần tư xe điện với máy điện trong bánh xe",
+      "du_lieu__0_5_TT_2026-11-03",
+      "Bộ dữ liệu thử nghiệm trên băng thử phanh tái sinh"
+    ]
+  },
+  "methods": "Vietnamese ZIP description identifies a 72 V in-wheel electric machine on a quarter-vehicle brake bench, distributed for data-processing exercises. Join all 32 per-run CSVs under data/ to TT_file_thu.csv by run name (the dictionary spells the folder ban_ghi/). Use original timestamps. Positive I_b_A charges the battery; only pairs of consecutive samples with a_ref_ms2>0 enter gross positive-power and signed net terminal-energy trapezoids. v_kmh is equivalent linear speed filtered over 10 × 10 ms; whole-run and braking speed RMSE use measured minus reference. I_pb_A is measured excitation current of a magnetic-powder load brake; T_pb_ref_Nm is its torque command. Additional empirical excitation/request medians for coast use zero acceleration request, |battery current|≤0.3 A and torque request ≥2 Nm; this is a per-point screen. Blank fields indicate no eligible observations.",
+  "results": "21,492 samples, 32 runs: 6 coast, 6 constant-deceleration, 5 adaptive, 2 WLTC Low, 13 isolated WLTC events. Observed intervals 0.060–0.140 s. Three constant 60 km/h, 2 m/s² trials produced 4.134–4.185 Wh gross terminal charging energy over eligible braking intervals, versus 4.207–4.253 Wh for three 60 km/h adaptive trials under these criteria. Whole-run speed RMSE on the two full WLTC traces was 0.710 and 0.714 km/h.",
+  "limits": "Educational bench attribution rests on depositor description and bundled data dictionary. Battery charging and measured powder-brake excitation are different signals. No measured load-brake shaft torque, actual motor torque, phase-current setpoint, PI state, direct limiter flag or independently calibrated braking efficiency. The two braking policies need not have equal speed trajectories. Clipped positive trapezoid is defined on nonnegative sample powers, with no sub-sample interpolation across zero crossings.",
+  "reproduce": "Place the named input files from files[].download into RAW. Run python hanoi-regen.py RAW OUT. Python 3, NumPy 2.3.5.",
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+  "evidence_level": "Source files downloaded and parsed; derived summaries reproduced. Third-party source files are linked at the repository of record."
+}

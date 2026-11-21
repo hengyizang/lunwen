@@ -1,0 +1,90 @@
+{
+  "title": "Electric Power Assisted Steering ESR 2",
+  "authors": [
+    "Tushar Chugh"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.3263796",
+  "doi": "10.5281/zenodo.3263796",
+  "concept_doi": "10.5281/zenodo.3263795",
+  "version": "Version-specific DOI; first public version, Zenodo version index 0.",
+  "published": "2019-06-30",
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "1810a7b7ea24aeeca7ceab5efd5e6a61f385b91b",
+  "registry": {
+    "url": "https://zenodo.org/api/records/3263796",
+    "bytes": 4232,
+    "sha256": "eee319bef6de8cb1c7c8fa969e9c90376a95d5df194618d682a9fb57646d8701"
+  },
+  "files": [
+    {
+      "name": "ESR2_SteerByWireForceFeedback.zip",
+      "md5": "9e92b745609cd47d82c5fc61691aebd8",
+      "url": "https://zenodo.org/api/records/3263796/files/ESR2_SteerByWireForceFeedback.zip/content",
+      "bytes": 6487976,
+      "sha256": "30651c4e1b1f3dc6df10b82c1a7846a47c3684050aff55e416822bd02afda8b6"
+    },
+    {
+      "name": "ESR2_ElectricPowerAssistedSteering.rar",
+      "md5": "8f6a4abf55646fe17b28a8ede2e69508",
+      "url": "https://zenodo.org/api/records/3263796/files/ESR2_ElectricPowerAssistedSteering.rar/content",
+      "bytes": 7368951,
+      "sha256": "96988451f43986682618ccfdd52e0e99293050cc8e108fda031993a9bb42c18c"
+    }
+  ],
+  "rights": "Zenodo release metadata designates CC BY 4.0; credit Tushar Chugh and the fixed release DOI. Only newly computed statistics, provenance and reader code are deposited here. https://creativecommons.org/licenses/by/4.0/ Both archived PDF deliverables explicitly identify Volvo Car Corporation, Sweden as proprietary. Those PDFs and the archive data have not been rehosted. The accompanying 2019 thesis credits Tushar Chugh as copyright holder.",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.3263796",
+      "10.5281/zenodo.3263795",
+      "Electric Power Assisted Steering ESR 2",
+      "ESR2_SteerByWireForceFeedback.zip",
+      "ESR2_ElectricPowerAssistedSteering.rar",
+      "Haptic Feedback Control Methods for Steering Systems",
+      "509824_Fulltext.pdf"
+    ]
+  },
+  "reproduce": "Fetch both original archives into RAW with the exact filenames listed in files[].name. Run python volvo_bench.py RAW OUT 2. Python 3.12, NumPy 2.3.5, SciPy 1.17.0, h5py 3.16.0; ESR2 additionally uses libarchive-c and RAR-capable libarchive.so.13.",
+  "search": {
+    "database": "DataCite",
+    "query": "(titles.title:\"steer-by-wire\" OR titles.title:\"steering actuator\" OR titles.title:\"brake-by-wire\" OR titles.title:\"electric power steering\" OR titles.title:\"steering torque\") AND types.resourceTypeGeneral:Dataset",
+    "registry_total": 13,
+    "returned": 13,
+    "url": "https://api.datacite.org/dois?query=%28titles.title%3A%22steer-by-wire%22+OR+titles.title%3A%22steering+actuator%22+OR+titles.title%3A%22brake-by-wire%22+OR+titles.title%3A%22electric+power+steering%22+OR+titles.title%3A%22steering+torque%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=75",
+    "bytes": 34999,
+    "sha256": "de24801f15fb8c465d3077231c103f6864e58e85d1a68cd6cfd7438b657586b6"
+  },
+  "evidence_level": "Two original measured-data archives unpacked and every MAT read (6+4 test-rig and 4 test-track recordings). Two archived reports and the cited thesis inspected in full text.",
+  "documents": [
+    {
+      "url": "ESR2_SteerByWireForceFeedback.zip!ESR2_SteerByWireForceFeedback/D3p5_read_me_SbWFFb.pdf",
+      "bytes": 409552,
+      "sha256": "5c333a5db5bc4d0c6b537a11c118946b4f297cbf75df8caa75accd00043d88b8"
+    },
+    {
+      "url": "ESR2_ElectricPowerAssistedSteering.rar!ESR2_ElectricPowerAssistedSteering/D3p5_read_me_EPAS.pdf",
+      "bytes": 831483,
+      "sha256": "06a1f59d690cff28c1d74640f40e6f9128b324fc02f0b4b50515b9bf23683eec"
+    }
+  ],
+  "citation": {
+    "title": "Haptic Feedback Control Methods for Steering Systems",
+    "authors": [
+      "Tushar Chugh"
+    ],
+    "year": 2019,
+    "version": "Chalmers Licentiate of Engineering thesis 2019:05, 71 PDF pages, institution-hosted full text",
+    "source": {
+      "url": "https://research.chalmers.se/publication/509824/file/509824_Fulltext.pdf",
+      "bytes": 4338991,
+      "sha256": "c2b3ccf65aeb5ceba81f50253ea527e70f91ad1ad79c47cf8861bc8669345b16"
+    },
+    "locator": "Abstract and steering-control analysis. Torque/impedance and position/admittance are distinct architectures; filtering, steering hardware impedance and arm inertia affect comparisons. Both archived reports cite this thesis."
+  },
+  "methods": [
+    "Six force-feedback steering MATs at nominal 75 km/h: frequency-response and on-center excitation, each with open, position and torque architecture. Bind signals by Name and XIndex 1; the shorter secondary clock holds unrelated Value channels. CLcommTorque comes from SensoWheel desired torque; ActualCLTorque from an actual-values mNm-to-Nm block. MmotREQ is a higher-layer request; actual filtered torsion MtbAct, reference MtbRef and converted TS_torque are distinct named signals. MtbRef has a Saturation block in its logged origin; an unclipped input to that block was not identified. esr2-wheel.csv quantifies pairs without shifting time or correcting signs.",
+    "For the three frequency-response tests only, estimate H1 magnitude from CLcommTorque to ActualCLTorque by Welch/CSD on the recorded clock: 1,024 samples, Hann, 50% overlap, mean-subtracted segments. Within each band report median magnitude and coherence only for bins with input PSD at least 0.1% of the global maximum and coherence at least 0.5. Retain both band and supported bin counts.",
+    "RAR contains four independent zero-speed test-rig rack-disturbance files: fixed/free wheel × EPAS on/off. Read demanded and actual rack positions by full drive-path suffix; subtract each channel mean for left tracking residual because absolute origins may differ. Four vehicle runs at 75 km/h provide nine channels each. Summarize each on its own source timestamps, without forcing CAN resampling. FrntSteerFEstimd1 is an estimated front steering force."
+  ],
+  "results": "71,615 force-feedback samples at about 200 Hz. Open-loop frequency test median supported H1 magnitude fell from 1.399 at 0.5–2 Hz (8/8 bins) to 0.611 at 10–20 Hz (34/51). Full-run actual-versus-committed torque RMSE ranged from 0.522 to 1.086 Nm. Across four 1 kHz rack tests (358,181 points), left request span stayed at 1.1236 native units; fixed-wheel actual span changed from 1.250 with EPAS off to 0.540 with EPAS on. Right-side demanded position was constant in every run although the right rack moved. Count the four vehicle files separately from these dynamometer/rig samples.",
+  "limits": "The commanded/actual motor pair is a named drive-feedback channel, not an independently calibrated shaft transducer. Filtered torsion and converted torque-sensor signals have different processing. No proof of PI windup or pre-/post-limit current is available. Recorded spectra describe an excited coupled loop, not an open-plant causal FRF. The physical vehicle and bench are separate campaigns with distinct clocks, drivers/excitation and offsets."
+}

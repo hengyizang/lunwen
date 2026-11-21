@@ -1,0 +1,3 @@
+target_alignment,waypoints,measured_states,overlapping_states,outside_target_interval,overlap_span_s,fields_equal_in_released_and_sent_waypoints,max_residual_after_timestamp_rebase_s,actual_minus_target_bias_sensor_units,mae_sensor_units,rmse_sensor_units,max_abs_error_sensor_units
+linear_interpolation,499,582,497,85,24.9569619,12,2.38418579e-07,-6.48720096,66.7839492,84.2151189,211.861408
+previous_waypoint,499,582,497,85,24.9569619,12,2.38418579e-07,-6.24748491,64.4366197,82.0022697,212
