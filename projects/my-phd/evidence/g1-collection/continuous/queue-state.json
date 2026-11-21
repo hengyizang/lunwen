@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 30,
-  "total_new_literature": 3329,
-  "total_new_datasets": 1507,
-  "total_new_reading_queue": 2849,
+  "round_number": 31,
+  "total_new_literature": 3383,
+  "total_new_datasets": 1539,
+  "total_new_reading_queue": 2899,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -67,7 +67,10 @@
     "dataverse:10.7910/dvn/7iajwu",
     "figshare:34341267",
     "figshare:26243276",
-    "figshare:28589216"
+    "figshare:28589216",
+    "dataverse:10.7910/dvn/qblawv",
+    "dataverse:10.7910/dvn/8cse6u",
+    "dataverse:10.7910/dvn/prdwpp"
   ],
   "cleaned_datasets_meta": [
     {
@@ -951,6 +954,48 @@
       "cleaned_rows": 131,
       "raw_total_rows": 969,
       "verified_sha256": "e125471f983e98ae326e2c47e15f633bb30738e285b9ad6e54b5e364d4d66dbc"
+    },
+    {
+      "slug": "dataverse-qblawv-the-scent-of-the-swarm-f",
+      "key": "dataverse:10.7910/dvn/qblawv",
+      "dataset_name": "The scent of the swarm: first experimental evidence for olfactory resource-tracking in army ant-following birds",
+      "doi": "10.7910/dvn/qblawv",
+      "landing_url": "https://doi.org/10.7910/DVN/QBLAWV",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qblawv-the-scent-of-the-swarm-f-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qblawv-the-scent-of-the-swarm-f-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qblawv_the_scent_of_the_swarm_f.py",
+      "cleaned_rows": 21,
+      "raw_total_rows": 55,
+      "verified_sha256": "c03b06209bced89256541d58f0f58fb6c909ed88c887eda5b71e8330133e73f0"
+    },
+    {
+      "slug": "dataverse-8cse6u-drone-telemetry-record-d",
+      "key": "dataverse:10.7910/dvn/8cse6u",
+      "dataset_name": "Drone Telemetry Record Data",
+      "doi": "10.7910/dvn/8cse6u",
+      "landing_url": "https://doi.org/10.7910/DVN/8CSE6U",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-8cse6u-drone-telemetry-record-d-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-8cse6u-drone-telemetry-record-d-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_8cse6u_drone_telemetry_record_d.py",
+      "cleaned_rows": 35,
+      "raw_total_rows": 54420,
+      "verified_sha256": "2fc41b3c7af0a4d9c039844abf7dd8792e0d87797fce4561e9b0567ec7605454"
+    },
+    {
+      "slug": "dataverse-prdwpp-consumer-perception-of-u",
+      "key": "dataverse:10.7910/dvn/prdwpp",
+      "dataset_name": "Consumer Perception of Using Drones for Medicine and Health Supplies Delivery Surveys",
+      "doi": "10.7910/dvn/prdwpp",
+      "landing_url": "https://doi.org/10.7910/DVN/PRDWPP",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-prdwpp-consumer-perception-of-u-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-prdwpp-consumer-perception-of-u-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_prdwpp_consumer_perception_of_u.py",
+      "cleaned_rows": 86,
+      "raw_total_rows": 211,
+      "verified_sha256": "d0bf909055054e213b261600064ab6904c898bcc4adf4f5185e45241ad376e7c"
     }
   ],
   "snowballed_dois": [
@@ -989,6 +1034,7 @@
     "10.1109/tase.2025.3634193",
     "10.1109/tro.2022.3226365",
     "10.1155/2022/5552166",
+    "10.1155/2023/2420903",
     "10.1177/20556683241280733",
     "10.1186/s12903-023-03340-0",
     "10.1186/s40510-024-00543-1",
@@ -1010,7 +1056,8 @@
     "10.3390/sym15091776",
     "10.48550/arxiv.2609.35709",
     "10.48550/arxiv.2610.25628",
-    "10.5194/ms-15-531-2024"
+    "10.5194/ms-15-531-2024",
+    "10.5772/intechopen.1010959"
   ],
   "rounds_history": [
     {
@@ -1282,33 +1329,42 @@
       "net_new_datasets": 54,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 31,
+      "completed_at": "2026-11-21T09:59:10Z",
+      "batch_label": "Broad Engineering R31: Smart_Factory_DigitalTwin / R1_Force_Contact",
+      "net_new_literature": 54,
+      "net_new_datasets": 32,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T09:54:02Z",
+  "updated_at": "2026-11-21T09:59:10Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 303,
+    "Adjacent": 306,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 387,
-    "Mechanical_Physics_AI": 963,
-    "Mechatronics_PHM_Control": 760,
-    "Robotics_Embodied": 1046,
+    "Mechanical_Physics_AI": 966,
+    "Mechatronics_PHM_Control": 769,
+    "Robotics_Embodied": 1056,
     "R5_MultiRobot_Comm": 244,
-    "R1_Force_Contact": 124,
+    "R1_Force_Contact": 128,
     "Smart_Manufacturing": 491,
-    "Smart_Factory_DigitalTwin": 161
+    "Smart_Factory_DigitalTwin": 201
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 657,
-    "Mechatronics_PHM_Control": 478,
-    "Smart_Manufacturing": 284,
-    "Robotics_Embodied": 462,
-    "R5_MultiRobot_Comm": 75,
+    "Mechanical_Physics_AI": 674,
+    "Mechatronics_PHM_Control": 492,
+    "Smart_Manufacturing": 285,
+    "Robotics_Embodied": 463,
+    "R5_MultiRobot_Comm": 76,
     "Smart_Factory_DigitalTwin": 69,
     "R2_Aerial_Actuator": 83,
     "R1_Force_Contact": 57
@@ -1316,6 +1372,7 @@
   "probed_uncleanable_keys": [
     "dataverse:10.7910/dvn/1vt6fz",
     "dataverse:10.7910/dvn/29444",
+    "dataverse:10.7910/dvn/2es4c1",
     "dataverse:10.7910/dvn/2jxwvw",
     "dataverse:10.7910/dvn/4sjujn",
     "dataverse:10.7910/dvn/7cbbat",

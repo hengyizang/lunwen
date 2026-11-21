@@ -1,0 +1,36 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Drone_Flights_data_dictionary.tab,Column Name,categorical_or_text,11,11,0,11,,,,,,,"{""Time Elapsed (Âµs)"": 1, ""Date / Time (UTC)"": 1, ""Pilot"": 1}"
+Drone_Flights_data_dictionary.tab,Description,categorical_or_text,11,11,0,11,,,,,,,"{""Time elapsed since start, in microseconds."": 1, ""Coordinated Universal Time (UTC) timestamp of the data entry."": 1, ""Name or ID of the pilot."": 1}"
+5_RSMH.tab,Time Elapsed (µs),numeric,16934,16934,0,16934,3.06494e+08,4.38679e+08,5.7084e+08,5.7086e+08,7.03053e+08,8.3531e+08,1.52687e+08
+5_RSMH.tab,Date / Time (UTC),categorical_or_text,16934,16919,15,1057,,,,,,,"{""2024-10-10T15:18:23.999502+00:00"": 21, ""2024-10-10T15:21:00.000496+00:00"": 20, ""2024-10-10T15:15:33.999508+00:00"": 19}"
+5_RSMH.tab,Pilot,categorical_or_text,16934,0,16934,0,,,,,,,{}
+5_RSMH.tab,Flight Mode,categorical_or_text,16934,16934,0,5,,,,,,,"{""Mission"": 8123, ""Offboard"": 5471, ""Precision Land"": 1849}"
+5_RSMH.tab,Latitude,numeric,16934,16932,2,288,37.6979,37.6981,37.6987,37.6986,37.699,37.699,0.000429157
+5_RSMH.tab,Longitude,numeric,16934,16932,2,1006,-75.7401,-75.7401,-75.7362,-75.7338,-75.7267,-75.724,0.00656703
+5_RSMH.tab,Altitude,numeric,16934,16932,2,2637,11.7919,31.3303,59.5605,47.8712,61.6115,62.1473,15.1699
+5_RSMH.tab,Airspeed (m/s),categorical_or_text,16934,0,16934,0,,,,,,,{}
+5_RSMH.tab,Heading,numeric,16934,16931,3,10637,-179.996,-85.5552,-84.8427,420.949,94.3069,10313.2,1528
+5_RSMH.tab,Battery Voltage,numeric,16934,16933,1,830,46.1562,46.9562,47.4188,47.5278,48.1437,49.3469,0.723744
+5_RSMH.tab,Battery Charge (%),numeric,16934,16933,1,26,75,82,88,87.8468,94,100,7.0945
+1_RSMH.tab,Time Elapsed (µs),numeric,17552,17552,0,17552,2.3373e+09,2.47443e+09,2.61143e+09,2.61149e+09,2.74868e+09,2.88573e+09,1.58329e+08
+1_RSMH.tab,Date / Time (UTC),categorical_or_text,17552,17538,14,1096,,,,,,,"{""2024-10-10T15:00:57.899604+00:00"": 18, ""2024-10-10T15:03:13.899601+00:00"": 18, ""2024-10-10T15:03:21.899601+00:00"": 18}"
+1_RSMH.tab,Pilot,categorical_or_text,17552,0,17552,0,,,,,,,{}
+1_RSMH.tab,Flight Mode,categorical_or_text,17552,17552,0,5,,,,,,,"{""Mission"": 8730, ""Offboard"": 5337, ""Precision Land"": 1900}"
+1_RSMH.tab,Latitude,numeric,17552,17549,3,976,37.6979,37.6987,37.7016,37.701,37.7031,37.7031,0.00210547
+1_RSMH.tab,Longitude,numeric,17552,17549,3,1066,-75.7403,-75.7402,-75.7356,-75.7337,-75.7264,-75.724,0.00662878
+1_RSMH.tab,Altitude,numeric,17552,17549,3,2738,12.0921,30.5102,60.7788,49.0525,62.0867,62.5326,15.146
+1_RSMH.tab,Airspeed (m/s),categorical_or_text,17552,0,17552,0,,,,,,,{}
+1_RSMH.tab,Heading,numeric,17552,17550,2,11817,-179.676,-68.676,-45.5759,416.272,111.592,10313.2,1511.99
+1_RSMH.tab,Battery Voltage,numeric,17552,17551,1,747,44.9844,45.7687,45.9813,46.1818,46.575,48.6031,0.620017
+1_RSMH.tab,Battery Charge (%),numeric,17552,17551,1,33,57,64,72,72.7094,81,89,9.36979
+2_RSMH.tab,Time Elapsed (µs),numeric,19923,19923,0,19923,2.23069e+08,3.78564e+08,5.34108e+08,5.34109e+08,6.89688e+08,8.45292e+08,1.79651e+08
+2_RSMH.tab,Date / Time (UTC),categorical_or_text,19923,19908,15,1244,,,,,,,"{""2024-10-10T16:04:02.000487+00:00"": 20, ""2024-10-10T16:04:12.000487+00:00"": 20, ""2024-10-10T16:04:22.000486+00:00"": 20}"
+2_RSMH.tab,Pilot,categorical_or_text,19923,0,19923,0,,,,,,,{}
+2_RSMH.tab,Flight Mode,categorical_or_text,19923,19923,0,5,,,,,,,"{""Mission"": 10244, ""Offboard"": 6104, ""Precision Land"": 2002}"
+2_RSMH.tab,Latitude,numeric,19923,19921,2,1383,37.6979,37.7004,37.708,37.7067,37.7129,37.7129,0.00604619
+2_RSMH.tab,Longitude,numeric,19923,19921,2,799,-75.7322,-75.7321,-75.7316,-75.7295,-75.7262,-75.724,0.00326928
+2_RSMH.tab,Altitude,numeric,19923,19921,2,3100,11.0979,40.0307,63.297,52.5359,64.574,65.3226,14.3822
+2_RSMH.tab,Airspeed (m/s),categorical_or_text,19923,0,19923,0,,,,,,,{}
+2_RSMH.tab,Heading,numeric,19923,19920,3,13284,-179.844,-6.27625,-5.32693,513.413,145.995,10313.2,1940.16
+2_RSMH.tab,Battery Voltage,numeric,19923,19922,1,875,46.0312,46.6875,47.2531,47.2929,47.8156,50.0469,0.744213
+2_RSMH.tab,Battery Charge (%),numeric,19923,19922,1,33,68,75,83,83.2422,91,100,9.06217

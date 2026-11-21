@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 31,
+  "completed_at": "2026-11-21T09:59:10Z",
+  "batch_label": "Broad Engineering R31: Smart_Factory_DigitalTwin / R1_Force_Contact",
+  "base_head_sha": "f61ba6b2e4a771aa0011a3b927c840ddeb048fb6",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 116,
+    "duplicates_skipped": 62,
+    "net_new": 54,
+    "new_reading_queue": 50,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "smart factory energy scheduling",
+        "receipt_id": "20261121t095910z-arxiv-cbb88565ac",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Asmart+AND+all%3Afactory+AND+all%3Aenergy+AND+all%3Ascheduling&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "f94a95ac65aa54a2518b874f331d43fefbdc098485aedacb72c193c87f756824",
+        "normalized_results_sha256": "16af8ecceb9266d50a014e333696e8fb2b1ff0c11d50f04b9f7483d1cceb72d2"
+      },
+      {
+        "provider": "crossref",
+        "query": "smart factory energy scheduling",
+        "receipt_id": "20261121t095910z-crossref-8d5f259c8b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=smart+factory+energy+scheduling&rows=12",
+        "result_count": 12,
+        "response_sha256": "cd30e878eb6df5d0a620d784b7194c1405977e9972581d251c82a920f23c5cdb",
+        "normalized_results_sha256": "576f1661d6b9e71472573ea9badadb7b13789e7e64573ed90c1f91beed2b45f9"
+      },
+      {
+        "provider": "openalex",
+        "query": "smart factory energy scheduling",
+        "receipt_id": "20261121t095912z-openalex-e3288784d1",
+        "request_url": "https://api.openalex.org/works?search=smart+factory+energy+scheduling&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a91b655ddb55b5d721cd6fe8f7ed832443e0665a9d2c0d41b25cc5867794bbff",
+        "normalized_results_sha256": "e10be39b16ecdfc3b5db2efaaff9527e3eb2b27df074dd778cfc2f0ad8ea6c02"
+      },
+      {
+        "provider": "arxiv",
+        "query": "AGV warehouse fleet scheduling",
+        "receipt_id": "20261121t095914z-arxiv-eee8f51ccb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3AAGV+AND+all%3Awarehouse+AND+all%3Afleet+AND+all%3Ascheduling&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "83f894ecaec15c2f315fb1a499601d46399d2515ba52f9a98b67c930240dc2d9",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "AGV warehouse fleet scheduling",
+        "receipt_id": "20261121t095915z-crossref-02ff46fbcf",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=AGV+warehouse+fleet+scheduling&rows=12",
+        "result_count": 12,
+        "response_sha256": "a5eed0a8f9393f7d58babe449dd06d1ba3446f671bf4a30a299912a0d50d231b",
+        "normalized_results_sha256": "d2f3c499a017fdaaaebc38cc5104e5ab001cca6e78c59ba3669808d31d06dda4"
+      },
+      {
+        "provider": "openalex",
+        "query": "AGV warehouse fleet scheduling",
+        "receipt_id": "20261121t095916z-openalex-7a74576625",
+        "request_url": "https://api.openalex.org/works?search=AGV+warehouse+fleet+scheduling&per-page=12",
+        "result_count": 12,
+        "response_sha256": "88e5e302ee89aaeb553c96a993f4f8138d091f2317f83ff9ad7fa7434045dd2e",
+        "normalized_results_sha256": "fa9ce238e9207933826402e4515a8d9daed74dbe9eb2fc42dc586fae8e5f3080"
+      },
+      {
+        "provider": "arxiv",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t095918z-arxiv-ec249f11c1",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awrist+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Asensor+AND+all%3Abias&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "7a06e23a82f5164ecd3ab42268b0766c67b5618fd9543a2cecc1c53a35fa460e",
+        "normalized_results_sha256": "9660307011627f352a46b665e18f112f19869c68c1dcbb5dec95abc65c1bd690"
+      },
+      {
+        "provider": "crossref",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t095919z-crossref-4768826f32",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=wrist+force+torque+sensor+bias&rows=12",
+        "result_count": 12,
+        "response_sha256": "5e33e5660a30aeee317216a6b63f1f5d70d85600c5958db007d1cdd32da8fd0e",
+        "normalized_results_sha256": "eae2c816d1c19286a8c10d0e861e9b60ab0a2fd847fa0fd2fe9298763cd619ec"
+      },
+      {
+        "provider": "openalex",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t095921z-openalex-f89c0a01c1",
+        "request_url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias&per-page=12",
+        "result_count": 12,
+        "response_sha256": "df0c879d41fd1a74e9547d7d13540812c50cfc246972c2dbdd3caf0418aeb7f2",
+        "normalized_results_sha256": "42be6d18d0a733148ef8fe2b9a49d1627b80530fef32756d47e1de96b2dfa12a"
+      },
+      {
+        "provider": "arxiv",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t095922z-arxiv-e863a9a39a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apeg-in-hole+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Aestimation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "5620b2eeca1658dbb32e986a741e2b6d5e851e5f000309428a5f75afdc062de7",
+        "normalized_results_sha256": "b94912bfb3129aecd20cca340ecfb5202eaf9fdc11b898433f15e1af5138c552"
+      },
+      {
+        "provider": "crossref",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t095923z-crossref-50b91eece9",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=peg-in-hole+force+torque+estimation&rows=12",
+        "result_count": 12,
+        "response_sha256": "d4d615c00795bc1c7e8055a9875c338741ba1f3b71b55228f758a336817f0960",
+        "normalized_results_sha256": "ff59535f238da65fa862d1a9d2918397675ec150a8cccfd03a95d966cfaf9130"
+      },
+      {
+        "provider": "openalex",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t095925z-openalex-1d4d766648",
+        "request_url": "https://api.openalex.org/works?search=peg-in-hole+force+torque+estimation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2aa8ec11352dd62dc5c99d5973472ce23a442061472f1e6dd414e3d8c413ba42",
+        "normalized_results_sha256": "ea90730fabd377ff66765a8adc7093327aa695d2d574400da170eed29ce60212"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.5772/intechopen.1010959",
+        "receipt_id": "20261121t095926z-opencitations-e3dda17851",
+        "result_count": 1,
+        "response_sha256": "566b9d663c03575df654bb049bad4e1325a2597cc6064706c10bb64877bf3ea6"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1155/2023/2420903",
+        "receipt_id": "20261121t095928z-opencitations-fa7c37dc99",
+        "result_count": 2,
+        "response_sha256": "5722e4bd98f62519e2256515f480b9d186dfa65799f114830e59af190faa8680"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 175,
+    "off_topic_filtered": 121,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 22,
+    "net_new": 32,
+    "provider_statuses": [
+      {
+        "query": "battery state health",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery state health",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "battery state health",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery state health",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery state health",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "lithium battery degradation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lithium battery degradation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "lithium battery degradation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lithium battery degradation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lithium battery degradation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "fuel cell fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "fuel cell fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fuel cell fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fuel cell fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fuel cell fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "wind turbine scada",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine scada",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "wind turbine scada",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine scada",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine scada",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 4,
+    "cleaned": [
+      {
+        "slug": "dataverse-qblawv-the-scent-of-the-swarm-f",
+        "key": "dataverse:10.7910/dvn/qblawv",
+        "dataset_name": "The scent of the swarm: first experimental evidence for olfactory resource-tracking in army ant-following birds",
+        "doi": "10.7910/dvn/qblawv",
+        "landing_url": "https://doi.org/10.7910/DVN/QBLAWV",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qblawv-the-scent-of-the-swarm-f-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qblawv-the-scent-of-the-swarm-f-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qblawv_the_scent_of_the_swarm_f.py",
+        "cleaned_rows": 21,
+        "raw_total_rows": 55,
+        "verified_sha256": "c03b06209bced89256541d58f0f58fb6c909ed88c887eda5b71e8330133e73f0"
+      },
+      {
+        "slug": "dataverse-8cse6u-drone-telemetry-record-d",
+        "key": "dataverse:10.7910/dvn/8cse6u",
+        "dataset_name": "Drone Telemetry Record Data",
+        "doi": "10.7910/dvn/8cse6u",
+        "landing_url": "https://doi.org/10.7910/DVN/8CSE6U",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-8cse6u-drone-telemetry-record-d-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-8cse6u-drone-telemetry-record-d-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_8cse6u_drone_telemetry_record_d.py",
+        "cleaned_rows": 35,
+        "raw_total_rows": 54420,
+        "verified_sha256": "2fc41b3c7af0a4d9c039844abf7dd8792e0d87797fce4561e9b0567ec7605454"
+      },
+      {
+        "slug": "dataverse-prdwpp-consumer-perception-of-u",
+        "key": "dataverse:10.7910/dvn/prdwpp",
+        "dataset_name": "Consumer Perception of Using Drones for Medicine and Health Supplies Delivery Surveys",
+        "doi": "10.7910/dvn/prdwpp",
+        "landing_url": "https://doi.org/10.7910/DVN/PRDWPP",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-prdwpp-consumer-perception-of-u-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-prdwpp-consumer-perception-of-u-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_prdwpp_consumer_perception_of_u.py",
+        "cleaned_rows": 86,
+        "raw_total_rows": 211,
+        "verified_sha256": "d0bf909055054e213b261600064ab6904c898bcc4adf4f5185e45241ad376e7c"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

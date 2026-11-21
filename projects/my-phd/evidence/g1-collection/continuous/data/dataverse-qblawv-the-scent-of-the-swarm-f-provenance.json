@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-qblawv-the-scent-of-the-swarm-f",
+  "dataset_name": "The scent of the swarm: first experimental evidence for olfactory resource-tracking in army ant-following birds",
+  "doi": "10.7910/dvn/qblawv",
+  "landing_url": "https://doi.org/10.7910/DVN/QBLAWV",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/QBLAWV",
+  "access_date": "2026-11-21",
+  "round_number": 31,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "antswarm_tracking.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14103422",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/QBLAWV/19fb04d7575-0d78cb008aaf?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27antswarm_tracking.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095935Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=802fa39a30cc4ea733cb4de6fa4a8ab7aabfa9f84763e29d31ab9948b4843968",
+      "http_status": 200,
+      "bytes": 1894,
+      "publisher_checksum": "dataverse_original_md5:d72fefb2398392db14b9c26cb361027e",
+      "verified_md5": "881de8df7767ba46dbe216f842c23076",
+      "verified_sha256": "c03b06209bced89256541d58f0f58fb6c909ed88c887eda5b71e8330133e73f0"
+    },
+    {
+      "file": "detections_olfaction.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14103424",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/QBLAWV/19fb04eb0e2-39a269ed2d11?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27detections_olfaction.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095936Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d371d028201d601b991a61b75905f3f7ce829b2a470d4d37a079bf43516334ba",
+      "http_status": 200,
+      "bytes": 2305,
+      "publisher_checksum": "dataverse_original_md5:78f422f3814b81dbe4efd503b65eb5c8",
+      "verified_md5": "e7cf122f6c04bce59bd098a7ac799292",
+      "verified_sha256": "717aa8266505ad5c53b5d88bae0fd6c326b20cc0befc24e512f4f8149e1f4147"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-qblawv-the-scent-of-the-swarm-f",
+  "raw_total_bytes": 4199,
+  "raw_total_rows": 55,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-qblawv-the-scent-of-the-swarm-f-cleaned.csv",
+  "cleaned_csv_sha256": "36a02e291586e8754b3ac9bbf9799c5b346e34c0e5af469c3df71b0b552fb1f6",
+  "cleaned_rows": 21,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "antswarm_tracking.tab": {
+      "Swarm_name": 0,
+      "Location": 0,
+      "Date": 0,
+      "Experiment": 0,
+      "Sample": 0
+    },
+    "detections_olfaction.tab": {
+      "ID": 0,
+      "Date": 0,
+      "Swarm": 0,
+      "Location": 0,
+      "Unic_name": 0,
+      "Phase": 0,
+      "Sample": 0,
+      "VideoName": 0,
+      "Time": 0,
+      "Weather": 0,
+      "Temperature": 0,
+      "Species": 0,
+      "Individual": 0,
+      "Observation": 0,
+      "BCB": 0,
+      "Behavior": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

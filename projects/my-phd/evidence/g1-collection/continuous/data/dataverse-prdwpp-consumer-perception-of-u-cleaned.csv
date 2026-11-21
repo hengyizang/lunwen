@@ -1,0 +1,87 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,﻿Respondent ID,numeric,103,102,1,5,1.14626e+11,1.14627e+11,1.14628e+11,1.14628e+11,1.14628e+11,1.1463e+11,1.20975e+06
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Collector ID,numeric,103,102,1,1,4.31569e+08,4.31569e+08,4.31569e+08,4.31569e+08,4.31569e+08,4.31569e+08,0
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Start Date,categorical_or_text,103,102,1,102,,,,,,,"{""2024-06-24 13:11:36"": 1, ""2024-06-24 12:24:53"": 1, ""2024-06-24 05:34:13"": 1}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,End Date,categorical_or_text,103,102,1,102,,,,,,,"{""2024-06-24 13:13:25"": 1, ""2024-06-24 12:25:58"": 1, ""2024-06-24 05:37:16"": 1}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Question 1: How familiar are you with the concept of using drones for delivering medicine and health supplies?,categorical_or_text,103,103,0,4,,,,,,,"{""Somewhat familiar"": 49, ""Not at all familiar"": 35, ""Extremely familiar"": 18}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Question 2: What is your initial reaction to the idea of using drones for delivering medicine and health supplies,categorical_or_text,103,103,0,6,,,,,,,"{""Neutral"": 33, ""Positive"": 29, ""Negative"": 18}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Question 3: What potential benefits do you see in using drones for delivering medicine and health supplies? (Select all that apply),categorical_or_text,103,37,66,1,,,,,,,"{""Faster delivery times"": 37}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 7,categorical_or_text,103,78,25,1,,,,,,,"{""Delivery to home bound residents"": 78}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 8,categorical_or_text,103,64,39,1,,,,,,,"{""Improved access to remote or rural areas"": 64}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 9,categorical_or_text,103,41,62,1,,,,,,,"{""Reduced transportation costs"": 41}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 10,categorical_or_text,103,33,70,1,,,,,,,"{""Ensures medications always on hand"": 33}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 11,categorical_or_text,103,13,90,13,,,,,,,"{""Other (please specify)"": 1, ""These are all farcical options I would put in a survey if I were a drone operator."": 1, ""You should focus on improving the car..."
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,"Question 4: What concerns do you have, if any, regarding the use of drones for delivering medicine and health supplies? (Select all that apply)",categorical_or_text,103,61,42,1,,,,,,,"{""Safety of the delivered items"": 61}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 13,categorical_or_text,103,45,58,1,,,,,,,"{""Privacy concerns"": 45}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 14,categorical_or_text,103,71,32,1,,,,,,,"{""Potential for drone malfunction or accidents"": 71}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 15,categorical_or_text,103,18,85,1,,,,,,,"{""Environmental impact"": 18}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 16,categorical_or_text,103,16,87,16,,,,,,,"{""Other (please specify)"": 1, ""theft"": 1, ""Costs , inability to comparison shop based on cost"": 1}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Question 5: Would you be comfortable receiving medicine or health supplies delivered by a drone?,categorical_or_text,103,103,0,4,,,,,,,"{""Yes"": 53, ""No"": 33, ""It depends (please specify)"": 16}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 18,categorical_or_text,103,17,86,17,,,,,,,"{""It depends (please specify)"": 1, ""I would want assurance that privacy would not be compromised. "": 1, ""You need to improve the care in your hospital first...."
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,"Question 6: How likely would you be to use a service that offers drone delivery of medicine and health supplies, assuming all safety and privacy measures are ensured?",categorical_or_text,103,24,79,1,,,,,,,"{""Very likely"": 24}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 20,categorical_or_text,103,30,73,1,,,,,,,"{""Likely"": 30}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 21,categorical_or_text,103,18,85,1,,,,,,,"{""Neutral"": 18}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 22,categorical_or_text,103,15,88,1,,,,,,,"{""Unlikely"": 15}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 23,categorical_or_text,103,20,83,1,,,,,,,"{""Very unlikely"": 20}"
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Question 7: Do you have any additional comments or suggestions regarding the use of drones for delivering medicine and health supplies?,categorical_or_text,103,25,78,25,,,,,,,"{""Open-Ended Response"": 1, ""It's inapplicable to me."": 1, ""Riverside can’t meet the demand requirement for writing needed prescriptions, so how can deliver t..."
+Future of Health Delivery Drone Survey Community   Survey_RawData.csv,Unnamed: 25,categorical_or_text,103,0,103,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,﻿Respondent ID,numeric,99,98,1,9,1.18626e+11,1.18626e+11,1.18627e+11,1.18627e+11,1.18627e+11,1.18637e+11,1.65347e+06
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Collector ID,numeric,99,98,1,1,4.56627e+08,4.56627e+08,4.56627e+08,4.56627e+08,4.56627e+08,4.56627e+08,0
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Start Date,categorical_or_text,99,98,1,98,,,,,,,"{""2024-06-28 11:25:54"": 1, ""2024-06-24 11:19:31"": 1, ""2024-06-20 20:12:50"": 1}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,End Date,categorical_or_text,99,98,1,97,,,,,,,"{""2024-06-13 12:22:18"": 2, ""2024-06-28 11:27:34"": 1, ""2024-06-24 11:21:30"": 1}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Question 1: How familiar are you with the concept of using drones for delivering medicine and health supplies?,categorical_or_text,99,99,0,4,,,,,,,"{""Somewhat familiar"": 60, ""Extremely familiar"": 20, ""Not at all familiar"": 18}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Question 2: What is your initial reaction to the idea of using drones for delivering medicine and health supplies,categorical_or_text,99,99,0,4,,,,,,,"{""Extremely positive"": 36, ""Positive"": 32, ""Neutral"": 28}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Question 3: What potential benefits do you see in using drones for delivering medicine and health supplies? (Select all that apply),categorical_or_text,99,60,39,1,,,,,,,"{""Faster delivery times"": 60}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 7,categorical_or_text,99,84,15,1,,,,,,,"{""Delivery to home bound residents"": 84}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 8,categorical_or_text,99,78,21,1,,,,,,,"{""Improved access to remote or rural areas"": 78}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 9,categorical_or_text,99,47,52,1,,,,,,,"{""Reduced transportation costs"": 47}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 10,categorical_or_text,99,51,48,1,,,,,,,"{""Ensures medications always on hand"": 51}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 11,categorical_or_text,99,8,91,7,,,,,,,"{""none"": 2, ""Other (please specify)"": 1, ""Better patient care and outcomes"": 1}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,"Question 4: What concerns do you have, if any, regarding the use of drones for delivering medicine and health supplies? (Select all that apply)",categorical_or_text,99,57,42,1,,,,,,,"{""Safety of the delivered items"": 57}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 13,categorical_or_text,99,42,57,1,,,,,,,"{""Privacy concerns"": 42}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 14,categorical_or_text,99,66,33,1,,,,,,,"{""Potential for drone malfunction or accidents"": 66}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 15,categorical_or_text,99,11,88,1,,,,,,,"{""Environmental impact"": 11}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 16,categorical_or_text,99,15,84,15,,,,,,,"{""Other (please specify)"": 1, "" Very costly for a matter that has of not that much importance. I have rarely seen anyone not be able to get food and medicine..."
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Question 5: Would you be comfortable receiving medicine or health supplies delivered by a drone?,categorical_or_text,99,90,9,2,,,,,,,"{""Yes"": 68, ""No"": 22}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 18,categorical_or_text,99,9,90,9,,,,,,,"{""It depends (please specify)"": 1, ""If it was a last resort for me to receive meds or supplies"": 1, ""if I needed the medication ASAP or it was crucial, I rat..."
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,"Question 6: How likely would you be to use a service that offers drone delivery of medicine and health supplies, assuming all safety and privacy measures are ensured?",categorical_or_text,99,43,56,1,,,,,,,"{""Very likely"": 43}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 20,categorical_or_text,99,26,73,1,,,,,,,"{""Likely"": 26}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 21,categorical_or_text,99,18,81,1,,,,,,,"{""Neutral"": 18}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 22,categorical_or_text,99,8,91,1,,,,,,,"{""Unlikely"": 8}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 23,categorical_or_text,99,8,91,1,,,,,,,"{""Very unlikely"": 8}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Question 7: Do you have any additional comments or suggestions regarding the use of drones for delivering medicine and health supplies?,categorical_or_text,99,23,76,21,,,,,,,"{""none"": 2, ""no"": 2, ""Open-Ended Response"": 1}"
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 25,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 26,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 27,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 28,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 29,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 30,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 31,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 32,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 33,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 34,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 35,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 36,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 37,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 38,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 39,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 40,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 41,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 42,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 43,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 44,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 45,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 46,categorical_or_text,99,0,99,0,,,,,,,{}
+Future of Health Delivery Drone Survey RSMH Team   Members_RawData.csv,Unnamed: 47,categorical_or_text,99,0,99,0,,,,,,,{}
+READ_ME.txt,Survey:,categorical_or_text,2,1,1,1,,,,,,,"{""determine"": 1}"
+READ_ME.txt,Consumer,categorical_or_text,2,1,1,1,,,,,,,"{""if"": 1}"
+READ_ME.txt,Perception,categorical_or_text,2,1,1,1,,,,,,,"{""there"": 1}"
+READ_ME.txt,of,categorical_or_text,2,1,1,1,,,,,,,"{""is"": 1}"
+READ_ME.txt,Using,categorical_or_text,2,1,1,1,,,,,,,"{""duplication"": 1}"
+READ_ME.txt,Drones,categorical_or_text,2,1,1,1,,,,,,,"{""of"": 1}"
+READ_ME.txt,for,categorical_or_text,2,1,1,1,,,,,,,"{""responses"": 1}"
+READ_ME.txt,Medicine,categorical_or_text,2,1,1,1,,,,,,,"{""between"": 1}"
+READ_ME.txt,and,categorical_or_text,2,1,1,1,,,,,,,"{""the"": 1}"
+READ_ME.txt,Health,categorical_or_text,2,1,1,1,,,,,,,"{""two"": 1}"
+READ_ME.txt,Supplies,categorical_or_text,2,1,1,1,,,,,,,"{""groups"": 1}"
+READ_ME.txt,Delivery,categorical_or_text,2,1,1,1,,,,,,,"{""surveyed."": 1}"

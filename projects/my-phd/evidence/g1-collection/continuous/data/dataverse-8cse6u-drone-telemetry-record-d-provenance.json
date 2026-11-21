@@ -1,0 +1,145 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-8cse6u-drone-telemetry-record-d",
+  "dataset_name": "Drone Telemetry Record Data",
+  "doi": "10.7910/dvn/8cse6u",
+  "landing_url": "https://doi.org/10.7910/DVN/8CSE6U",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/8CSE6U",
+  "access_date": "2026-11-21",
+  "round_number": 31,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Drone_Flights_data_dictionary.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11692118",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/8CSE6U/197cb9ba84a-cc9e1f844deb?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Drone_Flights_data_dictionary.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095940Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=83d13bcd2d2131dd6460d0638cadfd4c879c77399e2e585ba63998282f03986d",
+      "http_status": 200,
+      "bytes": 717,
+      "publisher_checksum": "dataverse_original_md5:d51fadd0467a5646fba901a2afeefc62",
+      "verified_md5": "ebd9afb4fb7346533ff5e4a2724a4414",
+      "verified_sha256": "2fc41b3c7af0a4d9c039844abf7dd8792e0d87797fce4561e9b0567ec7605454"
+    },
+    {
+      "file": "5_RSMH.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11692113",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/8CSE6U/197cb9b3794-3cbfac811e0a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%275_RSMH.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095942Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=2b44cd0dfa2bf4cf3073811cfe10cf4f5effe41f8f2102ecce8bf7ae5b04edd5",
+      "http_status": 200,
+      "bytes": 1806986,
+      "publisher_checksum": "dataverse_original_md5:db659bddac23d25da814679917d50fd4",
+      "verified_md5": "77d950b67a9a030fd0ad7fefa35deaf9",
+      "verified_sha256": "3bc58064b3d97164d721e1aba4bde8f54b30f67c773e7dc2e38b7998ab8ca915"
+    },
+    {
+      "file": "1_RSMH.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11692120",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/8CSE6U/197cb9b36d8-26bc4cd65c55?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%271_RSMH.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095944Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=e6601aadebfec1286efd482cb70d6191269761f00bd5154588ba67377f111d8b",
+      "http_status": 200,
+      "bytes": 1893469,
+      "publisher_checksum": "dataverse_original_md5:dd998c80a8b2c027f8c650c36cfe1626",
+      "verified_md5": "6a866682d88849fa225a965560c5e298",
+      "verified_sha256": "08f5fd4b69b2325e5b425113b8ed6b85d66dd049c29ba857efc562a0d0af5f67"
+    },
+    {
+      "file": "2_RSMH.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11692119",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/8CSE6U/197cb9b3618-3b74fe27fe77?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%272_RSMH.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095947Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=302498010fda63844f2f84e0fcdf73e025ca50584e843840809273bf5d735fd2",
+      "http_status": 200,
+      "bytes": 2127262,
+      "publisher_checksum": "dataverse_original_md5:0628b4bd063600cb2a327386c03ff87b",
+      "verified_md5": "07633eb3178cc34f300911a187b658c5",
+      "verified_sha256": "17a61124aa84dedc590f51378ff2711c2b2fcf5a43bdf1beb04e151f11c456ed"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-8cse6u-drone-telemetry-record-d",
+  "raw_total_bytes": 5828434,
+  "raw_total_rows": 54420,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-8cse6u-drone-telemetry-record-d-cleaned.csv",
+  "cleaned_csv_sha256": "125b1acf0be832f08811770f39dada8874142a034bc0ef4cf769f121112bd6ad",
+  "cleaned_rows": 35,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Drone_Flights_data_dictionary.tab": {
+      "Column Name": 0,
+      "Description": 0
+    },
+    "5_RSMH.tab": {
+      "Time Elapsed (µs)": 0,
+      "Date / Time (UTC)": 15,
+      "Pilot": 16934,
+      "Flight Mode": 0,
+      "Latitude": 2,
+      "Longitude": 2,
+      "Altitude": 2,
+      "Airspeed (m/s)": 16934,
+      "Heading": 3,
+      "Battery Voltage": 1,
+      "Battery Charge (%)": 1
+    },
+    "1_RSMH.tab": {
+      "Time Elapsed (µs)": 0,
+      "Date / Time (UTC)": 14,
+      "Pilot": 17552,
+      "Flight Mode": 0,
+      "Latitude": 3,
+      "Longitude": 3,
+      "Altitude": 3,
+      "Airspeed (m/s)": 17552,
+      "Heading": 2,
+      "Battery Voltage": 1,
+      "Battery Charge (%)": 1
+    },
+    "2_RSMH.tab": {
+      "Time Elapsed (µs)": 0,
+      "Date / Time (UTC)": 15,
+      "Pilot": 19923,
+      "Flight Mode": 0,
+      "Latitude": 2,
+      "Longitude": 2,
+      "Altitude": 2,
+      "Airspeed (m/s)": 19923,
+      "Heading": 3,
+      "Battery Voltage": 1,
+      "Battery Charge (%)": 1
+    }
+  },
+  "time_monotonicity": {
+    "5_RSMH.tab": {
+      "column": "Time Elapsed (µs)",
+      "numeric_samples": 16934,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 3.0,
+      "median_step": 37453.0,
+      "max_step": 76808.0
+    },
+    "1_RSMH.tab": {
+      "column": "Time Elapsed (µs)",
+      "numeric_samples": 17552,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 11.0,
+      "median_step": 36719.0,
+      "max_step": 123591.0
+    },
+    "2_RSMH.tab": {
+      "column": "Time Elapsed (µs)",
+      "numeric_samples": 19923,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 20.0,
+      "median_step": 38481.5,
+      "max_step": 60393.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
