@@ -1,0 +1,85 @@
+{
+  "title": "Motor-Current Dataset for Cycle-Level Payload Estimation on Two KUKA KR3 Robots",
+  "type": "Verified primary hardware release. Original per-trace statistics and detected excursions.",
+  "dataset_doi": "10.5281/zenodo.21456277",
+  "concept_doi": "10.5281/zenodo.21456276",
+  "version": "Zenodo v1, record 21456277",
+  "issued": "2026-07-20",
+  "verified_utc_date": "2026-11-21",
+  "creators": [
+    "Bátrla, Adam",
+    "Hercík, Radim",
+    "Byrtus, Radek",
+    "Majidzadeh Gorjani, Ojan"
+  ],
+  "rights": "CC BY 4.0. Derived per-trace summaries, positive-excursion summaries and load-rank comparisons. No original recordings redistributed.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+  "source": {
+    "landing": "https://zenodo.org/records/21456277",
+    "archive_url": "https://zenodo.org/records/21456277/files/KUKA_payload_dataset.zip?download=1",
+    "bytes": 25857481,
+    "publisher_checksum": "md5:efe9394bf2579f380832eed6d501c614",
+    "verified_archive_sha256": "51f93e8c453dd857170698627dc1d64ef14839e5c6efdb68148d01e0100c1253",
+    "readme_member": "readme.md",
+    "readme_sha256": "70f45d5bc56acd35cb68999b4b79071e21c686f663ff7bb910493dfe566496e7",
+    "csv_validation": "CRC checked when reading each member; 128 complete distinct CSVs, 6 finite current values in amperes and 1 integer Sample value per row; per-member SHA-256 retained in trace table."
+  },
+  "article": {
+    "doi": "10.3390/s26154867",
+    "title": "Sensorless Payload Estimation in an Industrial Robot Using Internal Motor-Current Signals",
+    "author_version": "Publisher PDF, 21 pages",
+    "pdf_url": "https://mdpi-res.com/d_attachment/sensors/sensors-26-04867/article_deploy/sensors-26-04867.pdf",
+    "pdf_sha256": "c94242e26968eaffd684ef321346f8e979c438f8bc87003b37235bfdb2652b7a",
+    "sections": "Sections 3.1–3.3; Table 2; time axis in Fig. 4; Data Availability links the concept DOI. All 128 file row counts independently compared with the 128 corresponding cells in Table 2."
+  },
+  "trace_design": "Robot R1 contributes D1–D4 and robot R2 D5–D8. Four complete recordings for each of 16 weighed stack configurations per unit. Mass in the filename is in grams. Each file is documented as one five-cycle A2 movement test at 15% of maximum speed between −75° and −120°. The other axes continue active motor control. Each row contains six synchronized measured motor currents, no position, control request, command threshold or external torque measurement.",
+  "clock": "The archive README calls Sample a controller timestamp in milliseconds; the paper §3.1, README and Zenodo description report a 12 ms configured sampling period. Across all 685272 adjacent within-file steps the stored integer counter increases by 4, beginning at zero in every file. Raw counter spans are 21312–21880. The CSV has no independent elapsed-time clock. Keep counter units or row distances. The documentation does not resolve the mismatch between configured period and exported counter. No physical sampling rate is inferred.",
+  "derivations": {
+    "traces": "Per entire recorded file compute min/max and RMS for each actual motor-current channel in amperes, including dwell. RMS is square root of arithmetic mean of squared samples; round output to 9 decimals. Count native Sample increments without re-timing.",
+    "excursions": "Within each file select positive A2 values strictly above 1.0 A. Consecutive selected indices belong to the same cluster if their difference is <=150 rows. The peak is the earliest maximum within that cluster. Record zero-based sample row indices and original Sample at the peak. Repeating the counting rule at 0.8 A and 1.2 A gives five clusters for all 128 files at all three thresholds. These 640 peaks are features of the A2 waveform, consistent with five programmed cycles per file; they are not author labels, independent trials, complete cycle boundaries, saturation events or mechanical reversal times. Peak-to-peak intervals are in row units only.",
+    "payload_pairs": "Order the measured masses within each unit by ascending rank (stack size). Compare the four recording-level A2 RMS values separately for each unit, keeping each measured mass in grams, and compute the difference between the two medians (R2−R1). Only 1739, 1884 and 2609 g coincide exactly across units. No sample-wise train/test split or component-level identification performed."
+  },
+  "checks": {
+    "trace_count": 128,
+    "read_rows": 685400,
+    "robot_row_counts": {
+      "R1": 342721,
+      "R2": 342679
+    },
+    "rows_by_series": {
+      "1": 85935,
+      "2": 85606,
+      "3": 85572,
+      "4": 85608,
+      "5": 85829,
+      "6": 85621,
+      "7": 85611,
+      "8": 85618
+    },
+    "min_max_A2_A": [
+      -2.623304315,
+      1.602078692
+    ],
+    "comparison_example": "At 1739 g the four-file median A2 RMS is 0.755165016 A on R1 and 0.680030620 A on R2. RMS spans the full trace. This is a conditional comparison of two robot units; causal attribution to a drive parameter, torque saturation or clipping would require additional signals."
+  },
+  "limits": "No motor current request, voltage, drive limit, calibrated applied torque, position or vendor cycle marker in CSV. Six simultaneous currents are observations. Current extrema alone cannot establish active saturation. Mass is a deadweight label, not a time-series torque. Nominally identical robot models supply two physical units; repeated cycles inside a file are dependent. Keep file/series/robot groupings for generalization tests. Exact rank-matched payload can differ between robots.",
+  "search_log": [
+    {
+      "query": "Motor-Current Dataset for Cycle-Level Payload Estimation on Two KUKA KR3 Robots; Zenodo 21456277",
+      "record_api": "https://zenodo.org/api/records/21456277",
+      "record_sha256": "6784b4c0bc346f3db3df41442548f749c5f361f330ee11aec7c59d05e1d48743",
+      "datacite": "https://api.datacite.org/dois/10.5281/zenodo.21456277",
+      "datacite_sha256": "fd05060ddea968cf049b493e3e2a789cdacd29dcd85e519d290fe71cb6ebdd36",
+      "result": "Fixed record, concept ID, creators, archive MD5 and CC BY 4.0 matched."
+    },
+    {
+      "query": "payload Bátrla KUKA current cycle level robot generalization Hercík 2026 payload estimation",
+      "result": "Matched existing publisher paper and checked its linked concept DOI. Downloaded the publisher full text and compared every Table 2 trace count."
+    }
+  ],
+  "dedup": {
+    "git_revision": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "history": "Version and concept ID and case-insensitive full title checked against projects/my-phd/evidence (55 continuous rounds, 5 previous targeted follow-ups) and the early project catalogue. No earlier dataset match. The companion paper DOI/title already occurs in the initial collection literature.csv and citation-edges.csv; its experiment family and article are not new publications."
+  },
+  "reproduction": "Python 3.11+ standard library: python derive_kuka_current.py KUKA_payload_dataset.zip OUTPUT_DIR. Per-run quantification uses original files; the script requires Zenodo v1's archive MD5."
+}

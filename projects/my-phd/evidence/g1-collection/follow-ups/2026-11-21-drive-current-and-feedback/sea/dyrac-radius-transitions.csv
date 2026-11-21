@@ -1,0 +1,9 @@
+file,rows,span_s,setpoints_mm,motor_on_endstop_off_rows,over_10_Nm_all,over_10_Nm_motor_on_endstop_off,direction,command_transitions,fully_active_holds,starts_within_10pct_previous,reached_90pct_before_next_command,median_first_90pct_ms,min_first_90pct_ms,max_first_90pct_ms
+DyracCalibration-StiffnessChange-pulse-r11to19mm-noAssist-fixedMotor1-extForce.mat,62646,62.645,11|19.5,57458,769,769,increase,62,57,56,56,49.5,41,380
+DyracCalibration-StiffnessChange-pulse-r11to19mm-noAssist-fixedMotor1-extForce.mat,62646,62.645,11|19.5,57458,769,769,decrease,63,57,56,56,51,50,59
+DyracCalibration-StiffnessChange-pulse-r1to19mm-noAssist-fixedMotor1-extForce.mat,95876,95.875,1|19,92395,447,447,increase,95,92,92,91,61,59,170
+DyracCalibration-StiffnessChange-pulse-r1to19mm-noAssist-fixedMotor1-extForce.mat,95876,95.875,1|19,92395,447,447,decrease,96,93,91,91,55,54,56
+DyracCalibration-StiffnessChange-pulse-r1to9mm-noAssist-fixedMotor1-extForce.mat,50766,50.765,1|19.5,43449,221,221,increase,50,43,43,37,62,59,253
+DyracCalibration-StiffnessChange-pulse-r1to9mm-noAssist-fixedMotor1-extForce.mat,50766,50.765,1|19.5,43449,221,221,decrease,51,44,38,38,60,59,72
+DyracCalibration-StiffnessChange-pulse-r8to14mm-noAssist-fixedMotor1-extForce.mat,91206,91.205,6|19.5,73730,181,181,increase,91,73,73,57,66,47,398
+DyracCalibration-StiffnessChange-pulse-r8to14mm-noAssist-fixedMotor1-extForce.mat,91206,91.205,6|19.5,73730,181,181,decrease,91,74,58,58,55.5,48,57

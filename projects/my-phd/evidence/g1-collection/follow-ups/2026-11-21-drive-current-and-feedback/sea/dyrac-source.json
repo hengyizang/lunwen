@@ -1,0 +1,246 @@
+{
+  "title": "Solidworks model and system identification data of the Dynamic Robotic Actuator (Dyrac)",
+  "author": "Manuel Aiple",
+  "doi": "10.4121/13625951",
+  "version": "1",
+  "accessed_utc": "2026-11-21",
+  "source": "https://doi.org/10.4121/13625951",
+  "rights": "CC0 1.0 Universal (DataCite and 4TU record). Independent per-file metrics and accession information only.",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "scope": "Downloaded all 24 published MAT records. Excludes CAD, assembly documents and source geometry. All 24 byte counts and MD5 digests matched the publisher listing. Added SHA-256 for rechecks. Source directories use the exact listed filenames.",
+  "queries": [
+    {
+      "query": "\"series elastic actuator\" \"dataset\" torque tracking zenodo experimental data records identification / variable stiffness actuator experimental data torque reference dataset series elastic figshare mendeley open dataset control robot",
+      "result": "4TU/TU Delft Dyrac record and reusable MATLAB data, including a dedicated damper calibration."
+    },
+    {
+      "query": "Dyrac Aiple variable physical stiffness and damping output torque sensor identification methods",
+      "result": "Aiple, Gregoor and Schiele, arXiv:1906.07669, sec. 3, Figs. 10–14. Torque/angle and radius transitions use this single actuator."
+    },
+    {
+      "query": "10.4121/13625951 via DOI redirect and DataCite JSON",
+      "landing": {
+        "bytes": 62631,
+        "sha256": "9b32e6ff58cb6b9dc269b2ee9c5f3d0b520079bb42d2ea14f59cacaae1f306a9"
+      },
+      "metadata_url": "https://api.datacite.org/dois/10.4121/13625951",
+      "metadata": {
+        "bytes": 6919,
+        "sha256": "97ef866cfc506907194ccb9f820fc599e5783ddff173e931a8ef193ee7d50529"
+      }
+    }
+  ],
+  "paper": {
+    "title": "A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping",
+    "id": "arXiv:1906.07669",
+    "pdf_url": "https://arxiv.org/pdf/1906.07669",
+    "locator": "Fig. 5 geometry and Section 3 Figs. 10–14; motor 1 fixed, external torque applied to output, ATI Gamma z-axis calibrated for ±10 N m. The paper identifies Figs. 10–12 as different summaries of the same measurements.",
+    "receipt": {
+      "bytes": 3402234,
+      "sha256": "b12276ac5ae7cb561941492ed39c87892e1ba25af33d2b7d8345c3c4ff27873e"
+    }
+  },
+  "source_fields": {
+    "time": "Relative experimental seconds. All 24 files have monotonically increasing 1 ms sample increments to 1e-9 s tolerance.",
+    "ToSensor": "Measured output torque in N m. Counts above ±10 N m indicate values outside the published calibrated sensor range; these alone do not establish sensor clipping or a motor limit.",
+    "alpha": "Output deflection in radians per source geometry. Verified etaactual = phiactual + alpha on every relevant row (absolute tolerance 1e-8 rad).",
+    "rset and ractual": "Commanded and measured pivot radii in meters, converted to mm. Files differ in startup state. Retain actual commanded values separately from filename labels.",
+    "Jup3TargetTorque / ToEstimated / T1 T2 T3 / Jup*CurrentActualThousands": "Distinct channels. Motor-3 command, estimated torque, motor channels and external output torque must not be substituted. Published engineering conversion for the raw drive-current fields was not established."
+  },
+  "fixed_radius_analysis": "19 files, indexed by the nominal radius in the filename. Fit a signed least-squares affine ToSensor(alpha) relation separately for each run using motors active, endstop inactive, abs(ToSensor)<=10 N m, rset matching nominal within 1e-7 mm, and abs(ractual-nominal)<=0.5 mm. Retain fit rows, slope/intercept, in-sample RMS and R². This descriptive pooled slope includes loading/unloading hysteresis and is sensitive to angle sampling. It is not a tangent stiffness, an identified torque bias, an independent validation or the pointwise torque/deflection metric in Fig. 11.",
+  "pulse_analysis": "Four files contribute eight direction-specific summaries. Repeated per-file rows/flags in both direction rows count each file only once. Use transitions in rset, require motor-on/endstop-off from the preceding sample to the next command or file end and starting ractual within 10% of the previous level (tolerance scaled by command amplitude). Report first observed crossing of 90% of the commanded change in that direction. Denominators before filtering, after filtering and crossing counts are saved separately. No interpolation, imputation, pooling of directions, settling-time assumption or independence claim for repeated pulses. Fig. 14 uses selected small/large steps, so these whole-file statistics need not reproduce its values.",
+  "calibration_analysis": "T3calib is a separate actuator-3 command/Tz sensor calibration acquisition with a different schema. Summarize logged channel extrema and duration only; no thermal/current limit or inferred unit conversion.",
+  "data_quality": [
+    "In r1to9mm, the logged setpoints are 1 and 19.5 mm. In r8to14mm, they are 6 and 19.5 mm. In r11to19mm, the upper recorded level is 19.5 mm. r1to19mm logs 1 and 19 mm.",
+    "The r2mm spring-identification file contains 1 and 2 mm commands. The fit uses the documented nominal 2 mm stage only.",
+    "For the 19 spring runs, 41,306 motor-on/endstop-off samples exceed the stated ATI calibration band; the fit excludes these values. Torque sign is the native sensor sign, and the fitted intercept cannot establish a true sensor bias."
+  ],
+  "dedup": {
+    "branch_head": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "historical_text_files_checked": 539,
+    "scope": "Project evidence including all continuous and targeted collections in the local state-branch evidence tree, and early baseline index. Normalized alphanumeric case folding. Central bibliography separately checks author/title and arXiv aliases.",
+    "dataset_keys": [
+      "10.4121/13625951",
+      "13625951.v1",
+      "solidworks model and system identification data of the dynamic robotic actuator",
+      "c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8"
+    ],
+    "dataset_matches": [],
+    "paper_keys": [
+      "1906.07669",
+      "A dynamic robotic actuator with variable physical stiffness and damping"
+    ],
+    "paper_matches": []
+  },
+  "inputs": [
+    {
+      "bytes": 21998144,
+      "md5": "8565e69ad8bd0ea9da92d0556814366e",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/74066cd8-00cd-4a51-8e79-c2be42e49568",
+      "name": "DyracCalibration-SpringIdentification-r10mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "586e6505faad41456331cec71b4bd48583d838e97a0108cf9ac7d27274dc3675"
+    },
+    {
+      "bytes": 21146280,
+      "md5": "77d2881463154e75c880d0aab86db2b2",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/8d2cc097-d336-47bd-be45-8cbed61ccb06",
+      "name": "DyracCalibration-SpringIdentification-r11mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "413e23b46bda59f1e4a4dcb342b7d27e06b612af2db73534c697bfebf81c7881"
+    },
+    {
+      "bytes": 19685440,
+      "md5": "d2694256ceb10c1e7613e80ef431a1f9",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/5a9ea516-90c1-471b-b0a3-dd3a0a362da7",
+      "name": "DyracCalibration-SpringIdentification-r12mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "5c41abc2e25204e856e2d322f1d335bb8bcf7a14012ff6f13496cdbf03a2410e"
+    },
+    {
+      "bytes": 20704744,
+      "md5": "83ce296875b2900fbce41415139990ce",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/099aa4f3-575e-4edc-868c-98e4686085ab",
+      "name": "DyracCalibration-SpringIdentification-r13mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "5ae9f56e5ea6edc800e309c18b801a392e57ded4c2aaef7f995a92c60deda963"
+    },
+    {
+      "bytes": 20591024,
+      "md5": "2b3f8e28f366168b35205fe9a8420317",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/4c24b892-fcbb-4d11-8b89-e286b0efaba7",
+      "name": "DyracCalibration-SpringIdentification-r14mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "497b2e48839cf69a11477b2b2c44aa71fb12318e32d9818d3f7c3a7fe49f2cd8"
+    },
+    {
+      "bytes": 21289000,
+      "md5": "14916bc4cd19d4a43bd375047449bee6",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/784b9294-be68-4942-9a96-e1f6948ee09e",
+      "name": "DyracCalibration-SpringIdentification-r15mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "9bc5af2fcec971d2466753f4eea2fb0569c1da6d91774fc12be8868cf51b5b6b"
+    },
+    {
+      "bytes": 19866264,
+      "md5": "e2796bf8c35299ba044f8a5ca96268cb",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/449cb91a-83b5-4ac4-a544-7483819f2bdf",
+      "name": "DyracCalibration-SpringIdentification-r16mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "44de31852e7ab97d3e38e5cb88d9e5c2f99a2795da05b8ff15ac6ff7acc66726"
+    },
+    {
+      "bytes": 22303664,
+      "md5": "a607a7b2a8338242cb9c6265b187e447",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/a61a0c8b-0722-4839-a17e-72197d033382",
+      "name": "DyracCalibration-SpringIdentification-r17mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "38e0f2578f7c869bf4e7e9487f0ae6da03406e928eafeb4418b711bb834389f0"
+    },
+    {
+      "bytes": 21672560,
+      "md5": "6eb4f0272113a9f2d0adc394ca063739",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/4e1ea991-f0f2-48ff-aeec-302a598e9b22",
+      "name": "DyracCalibration-SpringIdentification-r18mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "c21fab9b44bd8e2e8b64a771bd0d243813a1d89fcf9ac946137937f7daa33aa1"
+    },
+    {
+      "bytes": 22149784,
+      "md5": "24677c6645ade98bb6d84ed4f333ec94",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/29fc9a1f-7da2-49c7-9699-1d909e69c129",
+      "name": "DyracCalibration-SpringIdentification-r19mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "7eca0863b1a97e908e5d2eeb92b4d91042bc965cd612ca883ee795f2d61ea8bc"
+    },
+    {
+      "bytes": 16614920,
+      "md5": "c1e3bb9d2402d7fc1562c1d7a7fa76dc",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/08255955-f2c6-49c0-adef-e535cb5e552a",
+      "name": "DyracCalibration-SpringIdentification-r1mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "deda657e317fcaa49d440e787804dd5e5040a50e4da10cd8d66559c50131fb89"
+    },
+    {
+      "bytes": 19286464,
+      "md5": "8dec29219fac0562dc6941777b3642c5",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/ec9e14a0-981c-4c8e-8eb8-1da369500246",
+      "name": "DyracCalibration-SpringIdentification-r2mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "e9f56a066086ebc2d9d4b0ff41ef8f558b8598e8870cec13ce31a604e4065179"
+    },
+    {
+      "bytes": 20145024,
+      "md5": "4c54eb78eddfd7e58cbeeb82d7fea8ca",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/d26d1648-f3cf-4889-ab2d-2c0094a62b66",
+      "name": "DyracCalibration-SpringIdentification-r3mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "54d462989a6dbcd43d38d4bc59d5d6cf63e475f435fda233cbca011c1a4462ed"
+    },
+    {
+      "bytes": 20649008,
+      "md5": "c1082897089734cde88c98cf74491492",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/61a6c102-2caa-4022-b193-6c26bcddbeb3",
+      "name": "DyracCalibration-SpringIdentification-r4mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "c2a7d8bea4725e649a9919cfe1d29f83b6fdc6d4ad870a131caa8b976c82c62d"
+    },
+    {
+      "bytes": 22363864,
+      "md5": "ef4f5a3e36781072f042db6be591837a",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/d7cd23cb-54f9-433b-a120-d64c4e07ca9d",
+      "name": "DyracCalibration-SpringIdentification-r5mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "6281684589f35a5ce81e27c7182a4b4e7c0873413397f41576fb2e9525d0f4b5"
+    },
+    {
+      "bytes": 19910864,
+      "md5": "fc164bca5343529c6ec7a7204849348b",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/09b82c29-16ab-4142-b367-4cf1ac96fd11",
+      "name": "DyracCalibration-SpringIdentification-r6mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "c4da0d6e8fe2c728a4dbddf268f845bacd5f5b48676417eb38210fbf3ec98758"
+    },
+    {
+      "bytes": 20682440,
+      "md5": "4593daa3d3512306fa086b34ebf930eb",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/bd67834b-8532-42ed-a1ed-c2bee2ec1ea4",
+      "name": "DyracCalibration-SpringIdentification-r7mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "66e3c48d0a82d53db27799286ffd86d386bb9080e652cf7bcb5c877b3b3ddac8"
+    },
+    {
+      "bytes": 19774848,
+      "md5": "00135a5c080fa04f1c036e6c0734d73a",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/ee74c0c7-3f80-4bbd-844d-3fd280b1ac6a",
+      "name": "DyracCalibration-SpringIdentification-r8mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "2e3bcda53f536024cf6ad1555e1b42569902be135e557287f3d655221a8a7878"
+    },
+    {
+      "bytes": 19386824,
+      "md5": "76af27ba5a066a61f403d34e459f253f",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/3b7317aa-2d35-479c-86e6-9c61ce1db5c3",
+      "name": "DyracCalibration-SpringIdentification-r9mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "a98c260f01b4f3beb1b0e94a6172924b73aa423555c5d91f4281a6512118ec75"
+    },
+    {
+      "bytes": 13972384,
+      "md5": "f2708f60c6d9cd19a7aaed485263307f",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/6c085888-03a7-49f9-a12b-5b39606cd9f4",
+      "name": "DyracCalibration-StiffnessChange-pulse-r11to19mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "d8a25948a182e42a04ebcf1672a7b6b2ee32eaf8da456a5568c812317fb5a15b"
+    },
+    {
+      "bytes": 21382664,
+      "md5": "fd4d1dcad5e07687e51b11078f159ce1",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/29454552-6c74-46c4-ae80-6d7db0e0991e",
+      "name": "DyracCalibration-StiffnessChange-pulse-r1to19mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "4b612e40c16c53b30e2318428e780d5356091028290729925149b2a7365b556b"
+    },
+    {
+      "bytes": 11323144,
+      "md5": "b2b7db3b9d4510e3f8db85fa8d49fca8",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/15cb7b26-6758-4caf-bee7-46c3d61d7051",
+      "name": "DyracCalibration-StiffnessChange-pulse-r1to9mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "abaffe6bfe39504b19bc8e12dc66213773559017092b4efb272290d18e1f92c3"
+    },
+    {
+      "bytes": 20341264,
+      "md5": "59a5d524312b7aee15c8a5bfda6f9445",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/5ad07b1f-bc1a-44bb-a9c8-adcb17c643b3",
+      "name": "DyracCalibration-StiffnessChange-pulse-r8to14mm-noAssist-fixedMotor1-extForce.mat",
+      "sha256": "20d1935054d1dbe00f979ad2d90aeab7d46d7a59e09ab04b0cce960c3fb3ed52"
+    },
+    {
+      "bytes": 11029128,
+      "md5": "36c5d7abf9616443a5d18f1d2a40bb53",
+      "url": "https://data.4tu.nl/file/c5ba8e5a-4ec3-44a3-85a4-5405e071ceb8/42d96c3f-3b5b-4f69-9eb3-a68755f01a20",
+      "name": "DyracCalibration-T3calib.mat",
+      "sha256": "d08a2f2f9a01add33356fbadd8b3ca0fa899e755397dcedea8f6df5cfb51b684"
+    }
+  ],
+  "reproduce": "Download the 24 inputs by their listed name and URL. Run python derive_dyrac.py SOURCE_DIRECTORY OUTPUT_DIRECTORY with NumPy and SciPy. The script rechecks the publisher MD5 of each file."
+}

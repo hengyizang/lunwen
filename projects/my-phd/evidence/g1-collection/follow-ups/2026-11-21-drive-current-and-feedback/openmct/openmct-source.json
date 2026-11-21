@@ -1,0 +1,120 @@
+{
+  "title": "Dataset for an end-to-end open-source DC motor control workflow: current calibration, system identification, and controller validation",
+  "creators": [
+    "Von Chong, Alejandro",
+    "Cardenas, Dorindo"
+  ],
+  "concept_doi": "10.17632/5xvg43r9r8",
+  "canonical_version_doi": "10.17632/5xvg43r9r8.2",
+  "releases": [
+    {
+      "version": 1,
+      "doi": "10.17632/5xvg43r9r8.1",
+      "issued": "2026-05-11T15:35:05Z",
+      "catalogue": "https://data.mendeley.com/datasets/5xvg43r9r8/1",
+      "download": "https://data.mendeley.com/public-api/zip/5xvg43r9r8/download/1",
+      "zip_bytes_observed": 11047088,
+      "zip_sha256_observed": "0f1781b7443dc5f6cfaab8e8cb473ca84832f8d8e4ad8e0b368da09d1a1a06df",
+      "members": 122,
+      "all_zip_member_CRCs_checked": true,
+      "author_checksum_manifest_files_verified": null,
+      "metadata_url": "https://api.datacite.org/dois/10.17632/5xvg43r9r8.1",
+      "metadata_sha256": "af0499a8aaefb1e7081fc4864537184409196763ada6c140a0053b99c8ba2ece",
+      "documentation_sha256": {
+        "README.md": "003b9bf6101a1fcbec769b647eaf5aa798d0275f17a0b219bfdd8f452fe3b6fb",
+        "DATA_DESCRIPTION.md": "f015801923f2fd17b833159f1de2f64b60450913d5ad1c774a5a3118e86f5479",
+        "DATASET_METADATA.md": "d78ae38798af173354420b478dfa31925e6a231b4f8a46650b2ac2a341461682",
+        "LICENSE": "6653abbba7534e1ef8acb3bd234c355932b31da0aba54a6a26a10b66a620ed46",
+        "01_current_calibration/current_calibration.m": "1887df2346613bdd35fb15baf549e0b8420f15415fc9673cf43ca32e9c345163"
+      }
+    },
+    {
+      "version": 2,
+      "doi": "10.17632/5xvg43r9r8.2",
+      "issued": "2026-09-06T21:56:38Z",
+      "catalogue": "https://data.mendeley.com/datasets/5xvg43r9r8/2",
+      "download": "https://data.mendeley.com/public-api/zip/5xvg43r9r8/download/2",
+      "zip_bytes_observed": 14677377,
+      "zip_sha256_observed": "e80e73a9d8a0f7801f0dd25f82a0968b39587d663d8d5b7914808aed6ad184e1",
+      "members": 161,
+      "all_zip_member_CRCs_checked": true,
+      "author_checksum_manifest_files_verified": 160,
+      "metadata_url": "https://api.datacite.org/dois/10.17632/5xvg43r9r8.2",
+      "metadata_sha256": "4a9d0292bb92a3d3beae1accd8fbf78b030a796b58743eac9b4a60afb9d297a6",
+      "documentation_sha256": {
+        "README.md": "bb36b8199c35c07862494708c54e999f874a4568dc5e04bc88bb64b29d503748",
+        "DATA_DESCRIPTION.md": "be38f9732ba98b861126197d3ec3b657a860af25bee6cd5e631595f1352ef573",
+        "DATASET_METADATA.md": "4933fbc260d14d0c04f586dceb335ba7474e4fe7ee4d53e20e05f5534c48b754",
+        "CITATION.cff": "d1f3df46fe031e9056935c3db7cbd8be0063f1291d28d6752a9028231e325a20",
+        "LICENSE": "6653abbba7534e1ef8acb3bd234c355932b31da0aba54a6a26a10b66a620ed46",
+        "01_current_calibration/current_calibration.m": "94949a579f05e7b389b64b8d2382670da84f5212e78330c46bae6e33452ac4ac",
+        "01_current_calibration/current_calibration_age_sensitivity.csv": "36ba911c8c10157ac1f76e56d71a8757d037e7e06dd070b5c761c6b5f54864c9",
+        "Firmware/DC_Motor/src/main.cpp": "5392a5e02e2af5292f38a84272256551de8bf908cda3e2d5042b7d184b752ef1",
+        "Firmware/DC_Motor/GUI.py": "cd228354b1c102caab52930f5f5a119bfb40b90c582c2fe0dd5aa5a1c6cb99b1",
+        "SHA256SUMS.txt": "1eba9cb538e7761ae394cc01da4eefe9f86c9c27764cdbf643ae842b16a6a095"
+      }
+    }
+  ],
+  "checked_utc_date": "2026-11-21",
+  "license": "CC BY 4.0 for both dataset versions, Alejandro Von Chong and Dorindo Cardenas. Tables here are independently derived from original deposits. The archived firmware and GUI include separate third-party notices; no source snapshots or raw logs are redistributed here.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "related_publications": [
+    {
+      "doi": "10.1016/j.dib.2026.113274",
+      "role": "dataset article, discovered by Crossref bibliographic search"
+    },
+    {
+      "doi": "10.1016/j.ohx.2026.e00794",
+      "role": "hardware article, same search"
+    }
+  ],
+  "evidence": "Physical brushed DC motor on OpenMCT; per-row drive output, encoder speed, on-board current sensing, and independent asynchronous bench digital multimeter (DMM) current when enabled. Both versioned archives and all raw text logs were read.",
+  "versions": "v1 has 13 log members recorded in May (including the chirp). v2 has 13 September revised campaign logs and reuses the byte-identical optional May chirp. The 12 common non-chirp paths refer to different acquisition dates and byte payloads; v2 also adds a 50 ms APRBS test. The 27 version/log entries correspond to 26 distinct raw payloads, 105694 rows after chirp deduplication. Report separately by release. Shared apparatus, day, references or recurring policies constrain statistical independence.",
+  "firmware": {
+    "release_commit": "ebdb5643aa06eeb82041b7ba49c13afab9ca68f8",
+    "firmware_link": "https://github.com/AlejoBSmith/DC_Motor/blob/ebdb5643aa06eeb82041b7ba49c13afab9ca68f8/src/main.cpp",
+    "GUI_link": "https://github.com/AlejoBSmith/DC_Motor/blob/ebdb5643aa06eeb82041b7ba49c13afab9ca68f8/GUI.py",
+    "source_locations": "V2 DATASET_METADATA.md documents the archived snapshot. Firmware src/main.cpp lines 353–418 constructs constrained control, lines 526–558 apply speed control, dead-zone compensation and the 0–255 bound. Lines 612–618 log PWMOUT alongside speed, interval and current signals; pre-limit effort is not logged. GUI.py lines 2563–2584 append fields for the most recently observed DMM sample. These source locations refer to the archived revised campaign only. Calibration precedes deployment of the final fitted ADC conversion. The stored CURRENT_AVG in that calibration run uses a provisional equation. The chirp predates this firmware and its exact checkout is not archived."
+  },
+  "interpretation": {
+    "dmm": "A Siglent SDM3045X supplies signed current at an independent asynchronous rate. The GUI appends the last reading and monotonic timestamp/ID when writing a serial row. Each log owns its IDs; do not pool IDs by numerical equality across files. Complete DMM tuples have finite current, time and age and a nonnegative ID. The first unavailable values use -1/NaN. Within each ID, current and timestamp are invariant in both releases. A repeated value alone does not imply a repeated reading because different IDs may quantize to the same value. DMM_AGE_ms is host-side age of the cached observation, not sensor conversion latency or time of motor command adoption. DMM and drive feedback can refer to different instants.",
+    "timing": "DT_ms is the firmware loop interval as transmitted. V2 revised acquisition records store a single nominal DT_ms value per file at display resolution of 0.001 ms; absence of variation in this field does not bound actual sub-microsecond jitter.",
+    "pwm": "REF denotes a speed setpoint for closed-loop speed tests but is an excitation command in System Identification mode. PWM is the integer applied PWM duty command (0–255 counts), not measured terminal voltage, torque or unsaturated command demand. The output table separates zero duty at zero/nonzero references, full-duty rows, and contiguous full-duty episodes. RMSE against a speed reference would not estimate clipping. The optional chirp reaches PWM=255 on two separate rows in both archive listings. This is one open-loop input record. V2 has two adjacent full-duty rows only in the underdamped discrete speed run; they form one observed episode with REF=231, MEAS=221 and 253. None of the four v2 continuous PI recordings reaches 255. Endpoint counts cannot directly quantify the amount or even the presence of request truncation.",
+    "calibration": "Computed only for v2. At each age threshold select complete tuples, then the first minimum-age firmware row per DMM ID. Fit a line mapping CURRENT_RAW ADC counts to abs(DMM_CURRENT_A) × 1000 mA. Reject absolute centered initial residual >4×1.4826×MAD, then refit without clipping. Verified candidate counts, retained counts, rejections, slope, intercept and RMSE for all seven thresholds against the deposited CSV to relative/absolute tolerance 1e-9. Eligible rows and counts give a direct view of reuse under each cutoff. The residual describes this fitted calibration run and does not characterize absolute instrument accuracy. Drive current does not independently measure delivered mechanical torque."
+  },
+  "history": {
+    "head": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "source_class": "One newly verified dataset family; two versions with one repeated chirp.",
+    "normalized_keys": [
+      "5xvg43r9r8",
+      "OpenMCT",
+      "AlejoBSmith/DC_Motor",
+      "Dataset for an end-to-end open-source DC motor control workflow: current calibration, system identification, and controller validation"
+    ],
+    "coverage": "Normalized DOI stem, software slug and complete registered title against 539 available Git project evidence text files including early baseline-index.json. No match before this batch."
+  },
+  "queries": [
+    {
+      "query": "OpenMCT current calibration and physical controller validation, Mendeley 5xvg43r9r8",
+      "result": "The unversioned landing page resolved to /2. Checked both version-specific DataCite records, ZIPs, provenance notes and native logs."
+    },
+    {
+      "query": "openmct Von Chong end-to-end DC motor control workflow current calibration",
+      "source": "Crossref works query.bibliographic, top five",
+      "result": "Two related published article identifiers listed above. The software/hardware paper preprint and journal report may refer to the same platform."
+    },
+    {
+      "query": "Find GUI/firmware write-time DMM algorithm, PWM clamp and calibration residual rules",
+      "result": "Directly inspected archived src/main.cpp, GUI.py, current_calibration.m, DATASET_METADATA.md, 01_current_calibration/README.md, checksum list and age-sensitivity output."
+    }
+  ],
+  "reproduction": {
+    "invoke": "python derive_openmct.py OPENMCT_V1.zip OPENMCT_V2.zip OUTPUT_DIR",
+    "tested": "Python 3.13.5, NumPy 2.2.4. Mendeley ZIP wrappers may have regenerated metadata. Fixed SHA-256 for the sorted raw-member name/hash list identifies each release; individual hashes are in openmct-dmm-by-log.csv.",
+    "tables": [
+      "openmct-dmm-by-log.csv (27 rows)",
+      "openmct-output-endpoints.csv (16 rows including chirp in each release)",
+      "openmct-calibration-age.csv (7 thresholds)"
+    ]
+  }
+}

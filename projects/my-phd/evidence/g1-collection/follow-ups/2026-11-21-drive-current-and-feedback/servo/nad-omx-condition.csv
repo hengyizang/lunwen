@@ -1,0 +1,5 @@
+task,distinct_trajectories_in_task,recorded_rows,median_of_run_median_abs_goal_minus_pos3_rad,median_of_run_median_abs_current3_mA,median_of_run_median_abs_pwm3_counts
+pick_place_empty,10,15288,0.0115049,143.915,44.0
+pick_place_empty_degrade,10,11252,0.01572337,191.6625,63.0
+pick_place_object_200g,10,13245,0.01840785,219.235,75.0
+pick_place_object_200g_degrade,10,10113,0.0122719,161.4,53.5

@@ -1,0 +1,88 @@
+{
+  "dataset": "Neural Actuation Dataset (NAD)",
+  "source": "frankzydou/NAD",
+  "version": "88838bce278e381a830a71af83e27dfbb1dac414",
+  "date_checked_utc": "2026-11-21",
+  "release_last_modified_utc": "2026-07-13T04:32:43.000Z",
+  "edition": "https://huggingface.co/datasets/frankzydou/NAD/tree/88838bce278e381a830a71af83e27dfbb1dac414",
+  "rights": "Dataset card declares MIT. Copyright (c) 2026 The NeuralActuator Authors. The committed tables contain newly computed summaries and source checksums. Raw data, video and article text are available separately at the linked sources.",
+  "attribution": "Zhiyang Dou, John U. Onyemelukwe, Hangxing Zhang, Heng Zhang, Minghao Guo, Yunsheng Tian, Michal Piotr Lipiec, Joshua Jacob, Chao Liu, Peter Yichen Chen, Yuri Ivanov, Wojciech Matusik, NeuralActuator (RSS 2026).",
+  "arxiv": "2607.11734v1",
+  "licence_url": "https://raw.githubusercontent.com/Frank-ZY-Dou/Dynamics-Modeling/541a93aac4368e73883e86a51f31a7add6bde059/NeuralActuator/LICENSE",
+  "source_scope": "All 485 canonical CSV file paths under data/, 193,571,267 source bytes. Parquet repackings, videos and checkpoints excluded. Every downloaded source file matched the repository file size and Git blob SHA-1 at the pinned revision. Raw-byte SHA-256 and the representative of each exact duplicate appear in nad-files.csv.",
+  "url_per_raw_path": "https://huggingface.co/datasets/frankzydou/NAD/raw/88838bce278e381a830a71af83e27dfbb1dac414/{path}",
+  "file_tree": {
+    "url": "https://huggingface.co/api/datasets/frankzydou/NAD/tree/88838bce278e381a830a71af83e27dfbb1dac414/data?recursive=true&limit=1000",
+    "sha256": "e8c1cdb0f98688cbdbcdfb8d14edeb497063e2f498066db9f346931369940a83",
+    "pagination": "Single response, no Link continuation. Direct CSV Git blobs."
+  },
+  "input_check": "derive_nad.py checks a SHA-256 digest over all sorted path+tab+Git-blob-SHA1+newline records before processing. It rejects other file sets, nonfinite measurements, unexpected force sentinel layouts or non-monotone timestamps.",
+  "duplicate_policy": "Count source paths separately from byte-unique files. Within a repeated SHA-256, prefer a training path over a test alias, then lexical order. Within the 40-path motor-condition comparison use each unique file once in that task, including neutral references that are also filed under free motion. Byte uniqueness does not prove independent trials.",
+  "limitations": [
+    "OMX has goal positions, current in mA, and signed PWM counts. Pre-limiter effort, configured current/PWM bounds and independently measured link torque are unobserved. The three external forces of the 60 sensor-push files have measured values; no moment channels are provided in these CSVs.",
+    "SO-101 has two different registers in counts. The model configuration reads load as its current feature. Even counts at the observed absolute maximum 1000 do not establish drive clipping. The same-joint count comparison uses an exact zero; it is not a mechanical load/current conversion.",
+    "Franka tau_d is the controller-output channel, tau is link-side measured joint torque and tau_ext is estimated external torque. Different definitions, compensation and control modes limit tracking interpretations. A simultaneous zero in all seven tau_d channels does not imply a zero sensor measurement or a motor-saturation event.",
+    "In SO-101 and Franka, force_z values are weight-derived labels. OMX uses measured push forces and otherwise task-specific labels or absent data. -999 means unavailable. No sentinel is counted as a measured zero. A known payload cannot provide dynamic six-axis force or a saturation label.",
+    "The OMX condition analysis uses the median within each trajectory, then the median across ten trials for each task. Trajectory durations and hand-driven leader commands can differ. The paper describes an added mechanical restriction (rubber bands) on joint 3. The descriptive comparisons do not identify an intrinsic motor degradation or a current limit."
+  ],
+  "search_log": [
+    {
+      "query": "NeuralActuator dataset servo current load torque command data card and paired actuator logs",
+      "result": "Author project page and Hugging Face data card, followed through their links to the author code, raw CSV tree, licence and versioned manuscript.",
+      "project": "https://frank-zy-dou.github.io/projects/NeuralActuator/index.html"
+    },
+    {
+      "query": "NeuralActuator / Neural Actuation Modeling / frankzydou/NAD / arXiv 2607.11734 in historical evidence and early catalogue",
+      "history_commit": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+      "checked": "Scanned project evidence, including initial, continuous (55 rounds), five later focused collections, and early baseline-index.json.",
+      "matches": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json"
+      ],
+      "conclusion": "Existing dataset catalogue entry upgraded to full-release file verification; not a new release count."
+    }
+  ],
+  "source_evidence": [
+    {
+      "url": "https://huggingface.co/datasets/frankzydou/NAD/raw/88838bce278e381a830a71af83e27dfbb1dac414/README.md",
+      "sha256": "714e52ccf4255683d90682b940a570b457670a84f5d28bdfbdba61f4d343bbca",
+      "locator": "Versioned data card including sensor fields, units, sentinel policy and rights."
+    },
+    {
+      "url": "https://arxiv.org/pdf/2607.11734v1",
+      "sha256": "afd85ee96bdb317575f3895c9d58b83517784d550e836c5d4ab24e0983fe7d78",
+      "locator": "26-page author manuscript, Sec. III, hardware and data collection; mechanical restrictions in joint 3, weight labels, actuator telemetry. Sections IV and appendix describe evaluation; results here are independently computed."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Frank-ZY-Dou/Dynamics-Modeling/541a93aac4368e73883e86a51f31a7add6bde059/NeuralActuator/teleop/so101/record_teleop_data.py",
+      "sha256": "754b9d64c8c7eee0be81fb8b655090044c7a9744b89f3b417218351ccf543131",
+      "locator": "CSV construction after follower.send_action(), lines 561–580. Separate Present_Current and Present_Load registers, followed by three missing force sentinels."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Frank-ZY-Dou/Dynamics-Modeling/541a93aac4368e73883e86a51f31a7add6bde059/NeuralActuator/configs/so101_extended.yaml",
+      "sha256": "8152db80590b888572a302fc6b0f1968339332c91410e10b07411b9630c597c9",
+      "locator": "Line 35 selects load as the current feature and line 48 masks invalid force."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Frank-ZY-Dou/Dynamics-Modeling/541a93aac4368e73883e86a51f31a7add6bde059/NeuralActuator/teleop/omx/dxl_arm.py",
+      "sha256": "bbbd391efcab4e38fb4e66550188d612c456fd28e7c45db02ebc5ccccfb1bb2d",
+      "locator": "OMX collection code: set_goal_current is an interface option. The deposited CSV schema contains measured current and goal position. It does not log a requested current limit."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Frank-ZY-Dou/Dynamics-Modeling/541a93aac4368e73883e86a51f31a7add6bde059/NeuralActuator/LICENSE",
+      "sha256": "f7dca68ac5ef25ab25986c9d3eb2b7c386b945b09ea13f668518b566aae427c5",
+      "locator": "MIT License, copyright (c) 2026 The NeuralActuator Authors. HF dataset card separately declares MIT for the dataset."
+    }
+  ],
+  "recompute": {
+    "setup": "Python 3 with pandas and numpy. Acquire just data/** from the pinned HF revision into a directory whose child is data (HF snapshot_download allow_patterns=[\"data/**/*.csv\"]).",
+    "command": "python derive_nad.py SNAPSHOT_ROOT OUTPUT_DIRECTORY",
+    "tables": [
+      "nad-files.csv",
+      "nad-channel-ranges.csv",
+      "nad-platforms.csv",
+      "nad-omx-condition.csv"
+    ],
+    "read_csv": "pandas.read_csv(float_precision=\"round_trip\"). Exact zero and sentinel comparisons on recorded values; ranges preserve source units; no resampling."
+  }
+}

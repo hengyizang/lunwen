@@ -1,0 +1,11 @@
+name,release,landing,verified_files_and_channels,rights,history_status,provenance
+串联弹性执行器的实物力矩控制,固定 Git ebd7ba9,https://github.com/Liken233/Transformer_RL/tree/ebd7ba9bddbdad731246e8cef737990a643270c4/experiment_data,6 份试验，安全命令、驱动原始值、试验通过标记,论文 CC BY 4.0，数据仓未见单独许可，仅保存独立统计,new,sea/sea-tracking-source.json
+Dyrac 可变刚度驱动器,4TU v1,https://doi.org/10.4121/13625951,24 份 MAT，半径设定、弹簧与扭矩标定,CC0 1.0,new,sea/dyrac-source.json
+永磁同步电机示波器实测,Mendeley v1,https://doi.org/10.17632/jvnmbgfccr.1,35 份通道身份明确的 q 轴给定/反馈，另核验相电流、冲突副本及观察通道,CC BY 4.0,new,motor/pmsm-scope-source.json
+CREATOR 永磁同步电机,TU Graz v1,https://doi.org/10.3217/sns1d-77m43,六个运行工况及三组无载标定；设定、功率与另次扭矩测量,CC BY-NC 4.0，仅保存署名出处及独立事实统计,new,motor/creator-source.json
+两台 KUKA KR3 的载荷与电流,Zenodo v1,https://doi.org/10.5281/zenodo.21456277,两台机器人的 128 份六轴电流文件，只有实际电流,CC BY 4.0,new,crossrobot/kr3-current-source.json
+转向台架负荷阶跃试验,固定 Git 2804e02,https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009/data/raw/bench_phase1/test5_torque_speed_load,作者标注台架的 25 个位置阶跃；扭矩从电流换算、未记录逐次采集后端,数据 CC BY 4.0,new,steer/steering-step-source.json
+OpenMCT 直流电机,Mendeley v1 与 v2，同一家族,https://doi.org/10.17632/5xvg43r9r8.2,PWM、转速与独立万用表电流记录，含异步采样 ID,"CC BY 4.0 for both dataset versions, Alejandro Von Chong and Dorindo Cardenas. Tables here are independently derived from original deposits. The archived firmware and GUI include separate third-party notices; no source snapshots or raw logs are redistributed here.",new,openmct/openmct-source.json
+EMPS 机电定位系统,官方固定 ZIP,https://www.nonlinearbenchmark.org/benchmarks/emps,两份实测 MAT；有无脉冲扰动，估计/验证和力的单位边界,公开下载，未见原始数据再分发许可，仅保存独立统计,upgrade,emps/emps-source.json
+KUKA KR300 工业机器人辨识,TU Kaiserslautern，2022,https://doi.org/10.26204/data/5,12 份高频原始文件，与两份汇编任务逐字段核对,发布列 MIT、CC BY-SA 4.0，本目录派生表按 CC BY-SA 4.0 署名,upgrade,kuka/kuka-source.json
+Neural Actuation Dataset 舵机机械臂,固定 HF 88838bc,https://huggingface.co/datasets/frankzydou/NAD/tree/88838bce278e381a830a71af83e27dfbb1dac414,完整 485 个 CSV；分离电流、输出、控制器命令和训练/测试副本,数据卡 MIT,upgrade,servo/nad-source.json

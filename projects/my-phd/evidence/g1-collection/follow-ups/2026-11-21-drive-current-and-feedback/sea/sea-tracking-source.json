@@ -1,0 +1,161 @@
+{
+  "title": "Real hardware tracking and payload trials accompanying Transformer-Based Temporal Reinforcement Learning for Series Elastic Actuator Control",
+  "authors": [
+    "Wenxuan Wu",
+    "Yaoyao Lu",
+    "Xiangzhong Yan",
+    "Ziqian Li",
+    "Yuan Liu",
+    "Xinyu Liu",
+    "Feiyan Min"
+  ],
+  "paper_doi": "10.3390/act15100504",
+  "repository": "https://github.com/Liken233/Transformer_RL",
+  "commit": "ebd7ba9bddbdad731246e8cef737990a643270c4",
+  "release_url": "https://github.com/Liken233/Transformer_RL/tree/ebd7ba9bddbdad731246e8cef737990a643270c4/experiment_data",
+  "accessed_utc": "2026-11-21",
+  "rights": "The paper is CC BY 4.0. No explicit repository license was found in the pinned tree or the root README. Only bibliographic records, file hashes, independently computed numerical observations and new analysis code are included. No upstream code, CSVs, MAT files or figures are redistributed.",
+  "queries": [
+    {
+      "query": "\"series elastic actuator\" dataset experimental data torque control data repository torque tracking github zenodo 4tu",
+      "result": "Publisher full text gives a GitHub data-availability statement."
+    },
+    {
+      "query": "10.3390/act15100504, hardware results and public repository experiment_data tree",
+      "paper_url": "https://mdpi-res.com/d_attachment/actuators/actuators-15-00504/article_deploy/actuators-15-00504.pdf",
+      "paper_pdf": {
+        "bytes": 2440179,
+        "sha256": "34c5759bd918d975129921da91f9e8826bb351527e9165e4aac9e8e26beb2420"
+      },
+      "metadata_url": "https://api.crossref.org/works/10.3390/act15100504",
+      "crossref": {
+        "bytes": 16388,
+        "sha256": "d11402af54c2beb366bb590a70be68216e4e95c1bbeb61dc374cd67012759116"
+      },
+      "locator": "Section 3.3, Figs. 12–14, Table 4, data availability; encoders on link/motor, 10 ms control period, four additional payload conditions."
+    }
+  ],
+  "scope": "One series elastic actuator. Two publisher-cleaned time series (multi-target and sine) and four distinct load-step recordings from hardware. No simulation, figures, duplicate MAT exports or processed slices counted as independent experiments. No separate spring force/torque transducer is documented in this release.",
+  "methods": [
+    "For the four complete load trials, use the first external target above 15° through the last recorded row, matching the authors’ comparison window. Recomputed per-sample angle RMSE against the authors’ summary to 1e-7 deg. All full CSV rows for key time, angle and command chain fields were checked against the original MAT using atol 1e-10 and rtol 2e-12. The official summary CSV hashes correspond exactly to CRLF serialization; repository CSVs use LF. Stored hashes identify the Git bytes.",
+    "For the cleaned sine and multi-target trials use all supplied rows; no pre-start period is available. Signal extrema and RMS weight samples equally within each retained bounded window. The 100 Hz hardware control period is distinct from the irregular exported controller_clock_s intervals, which have median 26–31 ms in these windows.",
+    "The 150 raw software limit comes from the four MAT reports and the two cleaned-trial descriptions. abs(safe_command_raw)>=150 counts direct evidence of a sample reaching that numeric boundary. Drive torque feedback, policy numeric output, candidate, safe command, pre-integer and integer PDO have different meanings. Raw drive units lack a verified N m or A conversion. Motor-minus-link angle uses two encoders and is not calibrated to motor torque.",
+    "Same-row safe_command_raw and pre_integer_command_raw values are compared with a 1e-6 raw tolerance. For the two cleaned files, additionally count nonzero atomic_safe_applied_error_raw under the same tolerance. Treat the difference as a diagnostic for interpretation, not a clipping or fault count: neither row-level differences nor zero diagnostic errors certify the drive’s physical response at high bandwidth."
+  ],
+  "limitations": [
+    "Only one load trial per added mass. The 0 g MAT report records completed=1, passed=0, command_passed=0 with timing/state/operation_enabled passing; this is a publisher test status, not proof of physical saturation. All retained rows have zero fault code.",
+    "For the published cleaned multi-target and sine CSVs the author descriptions and article are the source for raw limits. The paper’s example multi-target trajectory prose omits the +90° target present in the archive; use actual external_target_rad when analyzing the file.",
+    "No limit was reached in these exported rows. This does not bound unlogged intervals, diagnose why the command check failed, or establish absence of all motor/drive limitations."
+  ],
+  "dedup": {
+    "branch_head": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "historical_text_files_checked": 539,
+    "scope": "Project evidence including all continuous and targeted collections in the local state-branch evidence tree, and early baseline index. Normalized alphanumeric case folding. Central bibliography separately checks author/title and arXiv aliases.",
+    "lookup_keys": [
+      "Liken233/Transformer_RL",
+      "10.3390/act15100504",
+      "Transformer-Based Temporal Reinforcement Learning for Series Elastic Actuator Control",
+      "step_sequence_clean.csv"
+    ],
+    "matches": []
+  },
+  "inputs": [
+    {
+      "file": "README.md",
+      "git_blob": "bea1a5bb7a73c2c8f11dbb4ca124cdd882386b88",
+      "bytes": 5347,
+      "sha256": "60c0378ca89c08aa7c9dfd7f54949dbeaab00de9957c4466b1bbc82647367425"
+    },
+    {
+      "file": "experiment_data/hardware_multi_target_step/experiment_description.txt",
+      "git_blob": "c62ab3761aae339e352d56f640e48428635227f8",
+      "bytes": 1547,
+      "sha256": "a70e0f584b87a31200a88e3764dca5723edb388d8b47a5a237611c417af54e44"
+    },
+    {
+      "file": "experiment_data/hardware_multi_target_step/step_sequence_clean.csv",
+      "git_blob": "afd1c5f890182dd00dff3b962a52a593c8fe02cf",
+      "bytes": 397707,
+      "sha256": "41735e8702ef0b1f70b3c8376b300600d8d5e917d1aa94bfede066bdcf35d9f3"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/README.txt",
+      "git_blob": "bd8f9538c5d3e93f1183cbd6deadec6129746c53",
+      "bytes": 1319,
+      "sha256": "a67ec9e1316634b1345f46b756c49cb88279b5b755554267f44a16fc0f50098a"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_0g.mat",
+      "git_blob": "dd0618eb184868604863f9c233fd071dd57d69cb",
+      "bytes": 13138,
+      "sha256": "d93d6789a2b5c82af080ada5033f13ce504953276d34f6b2cc226c5a28f0deaa"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_0g_full.csv",
+      "git_blob": "ad0b2b7eceb50264c1389d58b08c25901bfdb63c",
+      "bytes": 62197,
+      "sha256": "0693402af52e0e91f68d6d41869834530fc744afff352e91961c3866d10aa457"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_1200g.mat",
+      "git_blob": "a656de1f7ae129ff27ba686b7892978a5d7adc19",
+      "bytes": 13963,
+      "sha256": "86c5edc913eb11be44c4b4f6394b97f404904377dfdf259c437389a31e96344e"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_1200g_full.csv",
+      "git_blob": "11f97dfd45482c678dd4eeb6197044433ecf4ca1",
+      "bytes": 74351,
+      "sha256": "ff4d939109034c5ade4318d2fa6f2e4e365e4ed33dd4b6045bdf62e5045e1a1c"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_400g.mat",
+      "git_blob": "a8e7102dce46fa8111b83c7862a21eabbc94b57e",
+      "bytes": 17512,
+      "sha256": "b45f0916133dbf83626ad3a91b0426e58454a5b07d5bb136001920a1d6e708e9"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_400g_full.csv",
+      "git_blob": "b664a52f5f8ac6bb9e2ac641c3694f3e291761de",
+      "bytes": 75233,
+      "sha256": "0ab4ae4f2e93449597326357e9755267c77b32807bbebe52a4fdc1f1b4dae4d0"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_800g.mat",
+      "git_blob": "4e55ad3018c613f25c9ff7dcf2d173baa4b23cb7",
+      "bytes": 15901,
+      "sha256": "10dcbed85b3a34098a6d524d5a7be5be51699e90398cdcbc0990db170ba45889"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/original/step30_800g_full.csv",
+      "git_blob": "f915e4dd891b98780b1a4977728550a9925ec19c",
+      "bytes": 74676,
+      "sha256": "8094982947ec171de1f86145040373d9a6e4c14a13314bbd32c6e7dcefaaad08"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/data/summary_metrics.csv",
+      "git_blob": "bda7682143fc45f41320e3e89ad78199fb169423",
+      "bytes": 1286,
+      "sha256": "390c8127c01a07c4922011a270de32f6d2df72ad4b40e8bbe3bb0f28c57a7adf"
+    },
+    {
+      "file": "experiment_data/hardware_payload_experiment/step30_load_comparison_0g_400g_800g_1200g_20260915/scripts/build_step30_load_comparison_package.py",
+      "git_blob": "f0b22f4f1d8a6e19a28f72590c050275a9034fda",
+      "bytes": 13737,
+      "sha256": "36c3fa7fc2f4dda066c3e2847dc562f5b1da7a76099ab4db8eff1743b308bf3f"
+    },
+    {
+      "file": "experiment_data/hardware_sinusoidal_tracking/experiment_description.txt",
+      "git_blob": "eb0fe2c73638a4c88bce9142e5e1fb73b15596dd",
+      "bytes": 1392,
+      "sha256": "ef4fa62612d472334a606b73967f28c0cd818541483476a8829ce962b6049207"
+    },
+    {
+      "file": "experiment_data/hardware_sinusoidal_tracking/sine60p10_clean.csv",
+      "git_blob": "449266b6a4c87aa8e9925be609485e6dd62e891c",
+      "bytes": 448729,
+      "sha256": "199058a4eb59199a7b863bfd037904112dae2e61fa1f391fee0d925f29fa8195"
+    }
+  ],
+  "reproduce": "Checkout the pinned commit, then run python derive_sea_tracking.py REPOSITORY OUTPUT_DIRECTORY with NumPy and SciPy."
+}

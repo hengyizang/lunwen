@@ -1,0 +1,178 @@
+{
+  "title": "Electro-Mechanical Positioning System (EMPS)",
+  "authors": [
+    "Alexandre Janot",
+    "Maxime Gautier",
+    "Mathieu Brunot"
+  ],
+  "cite_as": "Data Set and Reference Models of EMPS, 2019 Workshop on Nonlinear System Identification Benchmarks, Eindhoven, April 10–12, 2019.",
+  "landed": "https://www.nonlinearbenchmark.org/benchmarks/emps",
+  "checked_utc_date": "2026-11-21",
+  "release": "https://drive.google.com/file/d/1zwoXYa9-3f8NQ0ohzmjpF7UxbNgRTHkS/view",
+  "download": "https://drive.usercontent.google.com/download?id=1zwoXYa9-3f8NQ0ohzmjpF7UxbNgRTHkS&export=download&confirm=t",
+  "public_archive_version": "Official ZIP without numbered release; members’ modification times are 2015–2018 and the requested citation is the 2019 workshop report. Version pinned by SHA-256.",
+  "bytes": 1949929,
+  "sha256": "f0e575c2aba2cb1e236516eefb17674b7e1e4a28de6bfcdc5b5ad68193ef9f59",
+  "evidence": "Two distinct dSPACE physical recordings. All MAT arrays parsed, clock and numeric checks applied. Recomputed tracking and pulse summaries and a held-out inverse force-proxy regression. Release scripts and the validation model diagram were inspected separately.",
+  "rights": "Public, free download. No explicit raw-data redistribution license located on the benchmark landing page or in the archive README; the archive contains third-party components bearing copyright notices. Only original code, independent aggregates, hashes and source references are included here.",
+  "archives": [
+    {
+      "member": "Simulation_EMPS.m",
+      "bytes": 2832,
+      "crc32": "668d9647",
+      "sha256": "cbd9562ce562399db5c6df4ca20cdde4b5ebae53e8b8cd1865b39ab3c8c9bd83"
+    },
+    {
+      "member": "Simulation_EMPS_Validation.m",
+      "bytes": 2915,
+      "crc32": "a4ed88e1",
+      "sha256": "936bdd8f0ca17cfab12997daf7e81aa69c2b685d08c8545400bde19b21f76fdf"
+    },
+    {
+      "member": "Simulink_EMPS_Rigide.slx",
+      "bytes": 21994,
+      "crc32": "6f5cdfc9",
+      "sha256": "8f30f5392fc593b6e88125404ce1661f0ac7c2c2f00582e33c1531235c02289d"
+    },
+    {
+      "member": "Simulink_EMPS_Rigide_Pulse.slx",
+      "bytes": 22531,
+      "crc32": "b6785c45",
+      "sha256": "548f838ad85dc9fac38a092df03755827d3c2e76bd8a9ba89a7de36c529fd9e3"
+    },
+    {
+      "member": "DATA_EMPS.mat",
+      "bytes": 626039,
+      "crc32": "8de4f21c",
+      "sha256": "6cf6814ae14618795da0101aae2bb97ff0c6351b0501b5492751b02b07facf7e"
+    },
+    {
+      "member": "DATA_EMPS_PULSES.mat",
+      "bytes": 630990,
+      "crc32": "d9c93224",
+      "sha256": "0eab75bb1f6b16228ee78791343a88bf9bfd9a51036ac9807d7b5fc11c0e1704"
+    },
+    {
+      "member": "diffcent.m",
+      "bytes": 383,
+      "crc32": "482f4fba",
+      "sha256": "14696c5e8acb2183a09961390c9654650094da7b8dbd209b6767243ed6b03893"
+    },
+    {
+      "member": "EMPS.jpg",
+      "bytes": 215668,
+      "crc32": "dc270ead",
+      "sha256": "057871cfaee1970010befc28083ea1a948347cf28d442e410a95570771c3ca28"
+    },
+    {
+      "member": "EMPS_Description.pdf",
+      "bytes": 556542,
+      "crc32": "b9189416",
+      "sha256": "c55700774db197693f2ec3f9b2bf394337a68afe97b1e9666642775655feeb6a"
+    },
+    {
+      "member": "nu2stab.m",
+      "bytes": 737,
+      "crc32": "e65b6880",
+      "sha256": "86eab49d22b0afe3f6c877fccebac70a558dc71c29edfa5aba3ba6574620ff18"
+    },
+    {
+      "member": "README.txt",
+      "bytes": 1616,
+      "crc32": "128eb5c1",
+      "sha256": "0ffc03ef3cb82650fbc1db073762d549c00ea8f4633acfc5ca28c704bb3cd6c7"
+    },
+    {
+      "member": "Script_IDIM_LS.m",
+      "bytes": 3510,
+      "crc32": "9e9b7ad5",
+      "sha256": "6794f48e70d2bb755f9be82b107ce3eb3f90114eb750fde87f7d3c0f746ef77c"
+    },
+    {
+      "member": "Script_IDIM_LS_Asym_Fric.m",
+      "bytes": 3667,
+      "crc32": "857c003d",
+      "sha256": "45025471413d9cdc33dbef3d30ce19c97a7b8037afc70cb6bb128cef7706a1b2"
+    },
+    {
+      "member": "Script_IDIM_LS_CTV.m",
+      "bytes": 3169,
+      "crc32": "d26b7adb",
+      "sha256": "be003808b08c1fa8413dcbb47d000dfe4d23ca7d3b1a01367fee81194f1b1b22"
+    }
+  ],
+  "model_sources": {
+    "workshop_report": "https://drive.google.com/file/d/1exVubd77fHvV4uhAjYJp1TA_9ZKJbVdV/view",
+    "report_location": "§§1.3–2.2, equations 6–7, §3.5, and cross-tests §§3.4–3.6. The standalone PDF matches the embedded report byte-for-byte.",
+    "simulation_graph": "Simulink_EMPS_Rigide_Pulse.slx / simulink/blockdiagram.xml. At top level the controller output is delayed (29), saturated (39; limits ±viradm), and added (44) to the repeating input (45; rep_seq_y=pulses_N). The sum goes to vir_s (30) and the plant (3), then an internal gain (21; gtau). Simulation_EMPS_Validation.m sets viradm=10 and applies gtau to both vir_s and vir for comparison. This describes the published simulation, and the two MAT files do not expose independent hardware saturation readback.",
+    "input_units": "README names vir as input force and §2.2 of the report lists N. Equation 7 links force to controller output by drive gain. Both Simulation_EMPS_Validation.m and identification scripts treat vir as controller voltage and multiply it by gtau (35.15065188248547 N/V). Raw extrema are reported in stored units, with gain-derived force separately labeled. The archived estimation and validation files contain no independent measured load force, measured motor current, pre-limit and post-limit signal pair, or drive limit flag.",
+    "pulse_caveat": "The release calls pulses_N a force in newtons. Its direct numerical addition in the simulation, before the drive gain and after modeled clipping, makes its physical interpretation ambiguous. A numerical residual near the stored pulse magnitude is not a calibrated pulse force measurement.",
+    "loaders": [
+      {
+        "source": "https://github.com/MaartenSchoukens/nonlinear_benchmarks/blob/f9fb3883086870a27b31917ccde1f78c95d53cb2/nonlinear_benchmarks/benchmarks.py#L15-L52",
+        "source_sha256": "cf6749f3e1c34df5686ee4a1e2ec0909ad5c04fd8efefd64c18674cc2f61ee0b",
+        "finding": "Author-linked loader returns vir as input and qm as output from the identical ZIP. It sets the test initialization window to 20 samples. The aggregate statistics here cover the full MAT files or explicitly specified derivative/filter trimming; they do not use that benchmark scoring window."
+      },
+      {
+        "source": "https://github.com/GerbenBeintema/deepSI/blob/109cf74f49a7b27539232c53981584befc1becc0/deepSI/datasets/nonlinearbenchmark.py#L19-L46",
+        "source_sha256": "f619093faea448b21d4e396d9835071471b2fb555355570fc7fb0c022861258c",
+        "finding": "The legacy deepSI wrapper selects vir or reference qg as model input via vir_as_u, returning qm in both cases. It downloads the same Google file ID and same two MAT filenames. The reference-driven task measures closed-loop tracking and is a different input/output definition over the same experimental acquisitions."
+      }
+    ]
+  },
+  "analysis": {
+    "trajectory_and_pulses": "Both acquisitions use bang-bang reference accelerations and nested position/velocity PD loops. qg refers to the load-side position reference in metres, qm to encoder-derived load-position metres, and t to seconds. The samples have the same row count, their qg differs by at most 6.67e-16 m when compared by row, and the test changes the disturbance. They are two acquisitions on one apparatus; the test does not demonstrate generalization to a new reference shape. Cross-file matching uses row index; no absolute clock synchronization is assumed. In validation pulses_N has levels 0 and 5. The observed 25 high runs include 24 complete 500-sample runs and one trailing 497-sample run with its falling edge outside the record. The estimation MAT omits the pulse channel.",
+    "pd_residuals": "Samples k=2 through n−1 (zero based) use v[k]=(qm[k]−qm[k−2])/(2×0.001), obtained from the stated two-point FIR position smoothing and one-step backward differentiation. Reconstructed numeric PD signal kv×(kp×(qg[k]−qm[k])−v[k]) is subtracted from same-row stored vir. Do not fit a gain or shift. Segregate pulse on/off. Small residuals in the nominal run and large pulse-on residuals in test help reject the interpretation that the same unmodified feedback channel alone accounts for both files. An exact digital implementation or physical actuation time cannot be recovered from this check.",
+    "inverse_models": "The force proxy equals archived gtau times vir. Fourth-order forward/backward 100 Hz low-pass position filtering (SciPy butter in second-order sections followed by sosfiltfilt), central differences at nominal 1 kHz, then remove the first 49 rows per the author MATLAB index 50. Low-pass decimate each regressor and force proxy by 10 with SciPy decimate (default eighth-order IIR, zero-phase). Fit only DATA_EMPS.mat using ordinary least squares. Symmetric model uses acceleration, velocity, sign(velocity), intercept. Directional model fits separate viscous and Coulomb terms for each sign and has no independent offset. Four result rows reuse these two fits. No measured force sensor is used. All filters are offline and acausal; these are inverse reconstruction residuals, not closed-loop prediction or actuator response times.",
+    "published_reference_check": "The workshop report prints symmetric relative errors 4.0834% on estimation and 5.9824% on cross-test. The independent SciPy implementation obtains 4.1240% and 5.9958%. The author scripts use MATLAB filtering and decimation; this table reports independently calculated values and does not claim a bitwise replication. Comparisons between the two friction models concern only these two runs."
+  },
+  "queries": [
+    {
+      "query": "EMPS official ZIP, landing link and author report",
+      "landing": "https://www.nonlinearbenchmark.org/benchmarks/emps",
+      "landing_sha256": "4fe18db0d3ad354d6ac6b3d02adcc7acfe6a2776ee33cc547b73e152abea0883",
+      "result": "Google-hosted ZIP contains 14 members including two MAT files, a report, model, and example scripts. The standalone report and the report embedded in the ZIP are identical."
+    },
+    {
+      "query": "\"EMPS\" \"DATA_EMPS\" nonlinear system identification different dataset EMPS pulse Matlab multisine Janot archive EMPS dataset benchmark",
+      "result": "Checked official benchmark and current and legacy Python loaders; these wrap the same measurements."
+    },
+    {
+      "query": "\"Data Set and Reference Models of EMPS\" \"Janot\" benchmark datasets open source pulses validation citation physics informed identification EMPS",
+      "result": "Recovered author benchmark citation and technical report; alternate loader signatures led to the deepSI cross-check."
+    },
+    {
+      "query": "DataCite titles.title:\"Electro-Mechanical Positioning System\"",
+      "endpoint": "https://api.datacite.org/dois?query=titles.title%3A%22Electro-Mechanical+Positioning+System%22&page%5Bsize%5D=20",
+      "result": "0 exact phrase results in this query. Release identity is the official ZIP, pinned by file ID and hash."
+    }
+  ],
+  "history": {
+    "prior_head": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "lookup_keys": [
+      "Electro-Mechanical Positioning System (EMPS)",
+      "nonlinearbenchmark.org/benchmarks/emps",
+      "Data Set and Reference Models of EMPS",
+      "DATA_EMPS.mat",
+      "DATA_EMPS_PULSES.mat",
+      "1zwoXYa9-3f8NQ0ohzmjpF7UxbNgRTHkS",
+      "10.1080/00207179.2016.1209565"
+    ],
+    "status": "File-level upgrade to the existing G1 source. The 2019 workshop report and 2016 Janot et al. article had already been screened. The two MAT files, two loader modes and model variants represent no new dataset releases or papers.",
+    "prior_paths": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+      "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv"
+    ]
+  },
+  "reproduce": {
+    "invoke": "python derive_emps.py EMPS.zip OUTPUT_DIR",
+    "tested": "Python 3.13.5, NumPy 2.2.4, SciPy 1.15.3 on CPU",
+    "outputs": [
+      "emps-experiments.csv",
+      "emps-pulse-windows.csv",
+      "emps-pd-residuals.csv",
+      "emps-inverse-models.csv"
+    ],
+    "note": "SHA-256 check conditions all calculations on the exact release bytes; floats are written to ten significant digits."
+  }
+}

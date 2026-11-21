@@ -1,0 +1,40 @@
+citing,cited,verification,source
+10.1109/tcst.2021.3059284,10.1109/tmech.2013.2270435,OpenAlex referenced_works,https://doi.org/10.1109/tcst.2021.3059284
+10.1109/tcst.2021.3059284,10.1109/iros.1995.525827,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1109/tcst.2021.3059284
+10.1017/wtc.2023.20,10.1109/tmech.2013.2270435,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1017/wtc.2023.20
+10.1017/wtc.2023.20,10.1109/iros.1995.525827,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1017/wtc.2023.20
+10.1541/ieejias.140.378,10.1109/tmech.2013.2270435,Crossref deposited reference title + OpenAlex referenced_works,https://doi.org/10.1541/ieejias.140.378
+10.1541/ieejias.140.378,10.1109/iros.1995.525827,Crossref deposited reference title,https://doi.org/10.1541/ieejias.140.378
+10.1109/lra.2024.3393213,10.1109/iros.1995.525827,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1109/lra.2024.3393213
+10.1016/j.isatra.2021.01.020,10.1109/tmech.2013.2270435,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.isatra.2021.01.020
+10.1016/j.isatra.2021.01.020,10.1109/iros.1995.525827,Crossref deposited reference title + OpenAlex referenced_works,https://doi.org/10.1016/j.isatra.2021.01.020
+10.1016/j.ifacol.2015.12.231,10.1115/1.4027506,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2015.12.231
+10.1016/j.ifacol.2015.12.231,10.1109/tcst.2012.2185697,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2015.12.231
+10.1016/j.ifacol.2015.12.231,10.1109/tcst.2013.2246163,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2015.12.231
+10.1016/j.conengprac.2018.02.010,10.1080/00207179.2016.1209565,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.conengprac.2018.02.010
+10.1016/j.conengprac.2018.02.010,10.1109/tcst.2012.2185697,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.conengprac.2018.02.010
+10.1016/j.conengprac.2018.02.010,10.1109/tcst.2013.2246163,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.conengprac.2018.02.010
+10.14736/kyb-2018-1-0202,10.1016/j.ifacol.2015.12.231,OpenAlex referenced_works,https://doi.org/10.14736/kyb-2018-1-0202
+10.14736/kyb-2018-1-0202,10.1109/tcst.2012.2185697,OpenAlex referenced_works,https://doi.org/10.14736/kyb-2018-1-0202
+10.14736/kyb-2018-1-0202,10.1109/tcst.2013.2246163,OpenAlex referenced_works,https://doi.org/10.14736/kyb-2018-1-0202
+10.1016/j.ifacol.2018.09.183,10.1016/j.ifacol.2015.12.231,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.1016/j.conengprac.2018.02.010,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.14736/kyb-2018-1-0202,Crossref deposited reference title + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.1080/00207179.2016.1209565,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.1115/1.4027506,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.1109/tcst.2012.2185697,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1016/j.ifacol.2018.09.183,10.1109/tcst.2013.2246163,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1016/j.ifacol.2018.09.183
+10.1080/00207179.2016.1209565,10.1016/j.ifacol.2015.12.231,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1080/00207179.2016.1209565
+10.1080/00207179.2016.1209565,10.1115/1.4027506,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1080/00207179.2016.1209565
+10.1080/00207179.2016.1209565,10.1109/tcst.2012.2185697,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1080/00207179.2016.1209565
+10.1080/00207179.2016.1209565,10.1109/tcst.2013.2246163,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1080/00207179.2016.1209565
+10.3390/act15100504,10.1109/tmech.2013.2270435,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.3390/act15100504
+10.3390/act15100504,10.1109/iros.1995.525827,Crossref deposited reference title,https://doi.org/10.3390/act15100504
+10.3390/act15100504,10.3390/act14020087,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.3390/act15100504
+10.1109/tmech.2013.2270435,10.1109/iros.1995.525827,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.1109/tmech.2013.2270435
+10.1109/tcst.2013.2246163,10.1109/tcst.2012.2185697,Crossref deposited reference title + OpenAlex referenced_works,https://doi.org/10.1109/tcst.2013.2246163
+10.3390/act14020087,10.1109/iros.1995.525827,Crossref deposited reference title,https://doi.org/10.3390/act14020087
+10.1016/j.dib.2026.113274,10.1016/j.ohx.2026.e00794,"Crossref deposited reference DOI + OpenAlex referenced_works + Published full text, ref. [1], JATS bib0001",https://doi.org/10.1016/j.dib.2026.113274
+10.3389/frobt.2025.1528266,10.1109/tcst.2021.3059284,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.3389/frobt.2025.1528266
+10.3389/frobt.2025.1528266,10.1017/wtc.2023.20,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.3389/frobt.2025.1528266
+10.3389/frobt.2025.1528266,10.1109/iros.1995.525827,Crossref deposited reference DOI + OpenAlex referenced_works,https://doi.org/10.3389/frobt.2025.1528266

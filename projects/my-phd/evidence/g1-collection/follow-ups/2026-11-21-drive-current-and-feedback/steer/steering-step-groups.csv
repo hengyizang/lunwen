@@ -1,0 +1,6 @@
+load_setting_Nm,traces,rows,prestep_rows,mean_of_trace_peaks_deg_s,poststep_mean_of_peaks_deg_s,poststep_min_of_peaks_deg_s,poststep_max_of_peaks_deg_s,mean_of_peak_abs_current_A,poststep_mean_of_peak_abs_current_A,mean_of_late_mean_abs_position_error_deg
+0.0,5,601,61,361.5,361.5,313.75,396.875,8.29046,8.29046,6.456930101
+0.5,5,602,63,370.25,370.25,326.25,400.0,8.18446,8.18446,6.400304333
+1.0,5,604,62,369.25,369.25,311.25,393.75,8.33312,8.33312,5.371818116
+1.5,5,599,61,383.5,383.5,361.25,398.75,8.45296,8.45296,5.680270652
+2.0,5,598,62,388.25,388.25,352.5,403.125,8.57258,8.57258,5.593292391

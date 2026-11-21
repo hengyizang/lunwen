@@ -1,0 +1,7 @@
+profile,cycle,aligned_samples,span_s,step_s,min_torque_input_Nm,max_torque_input_Nm,max_abs_torque_input_Nm,torque_input_at_or_above_max_count,peak_speed_input_rpm,speed_input_at_max_count,measured_input_power_min_W,measured_input_power_max_W,measured_output_power_min_W,measured_output_power_max_W
+Mid_sized_vehicle,Artemis,2137,1068.0,0.5,-0.068347,0.047739,0.068347,0,7050.0,2,-27.364,22.431,-27.939,17.521
+Mid_sized_vehicle,Bcdc,3481,1740.0,0.5,-0.075294,0.057811,0.075294,0,5929.9,0,-19.315,14.178,-18.718,10.448
+Mid_sized_vehicle,Wltp,3601,1800.0,0.5,-0.034506,0.04379,0.04379,0,7050.0,1,-8.9128,18.409,-9.5934,13.95
+Small_sized_vehicle,Artemis,2137,1068.0,0.5,-0.060571,0.043189,0.060571,0,7050.0,2,-25.349,23.812,-25.645,18.621
+Small_sized_vehicle,Bcdc,3481,1740.0,0.5,-0.068015,0.052264,0.068015,0,7050.2,0,-21.837,16.69,-20.601,11.441
+Small_sized_vehicle,Wltp,3601,1800.0,0.5,-0.031105,0.039633,0.039633,0,7050.1,0,-7.8787,19.405,-8.6685,14.628

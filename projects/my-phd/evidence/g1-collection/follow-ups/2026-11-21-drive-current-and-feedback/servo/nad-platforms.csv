@@ -1,0 +1,4 @@
+platform,deposited_paths,deposited_rows,unique_files,unique_rows,force_all3_valid,force_z_only,force_all3_missing,all_tau_d_zero_rows,all_tau_d_zero_measured_nonzero_rows,nonzero_velocity_command_rows,load_abs1000_joint_samples,load_nonzero_current_zero_joint_samples
+Franka,35,32538,34,31609,0,31609,0,11148,11148,0,,
+OMX,350,318692,340,303404,37010,46925,219469,,,,,
+SO-101,100,65916,100,65916,0,39725,26191,,,,5,96879

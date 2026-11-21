@@ -1,0 +1,98 @@
+{
+  "retrieved_utc": "2026-11-21",
+  "scope": "Curated PMSM servo acquisitions with command and observed torque/current/power roles; targeted landing-page and archive checks. No simulation, design-only or general fault datasets counted as physical tracking data.",
+  "datacite_queries": [
+    {
+      "query": "titles.title:\"permanent magnet synchronous motor\"",
+      "uri": "https://api.datacite.org/dois?query=titles.title%3A%22permanent+magnet+synchronous+motor%22&resource-type-id=dataset&page%5Bsize%5D=100",
+      "hits": 21,
+      "page_returned": 21,
+      "response_sha256": "55e27088b37479b62aeaa99a284f3cf80d93bf0c9dd0a36e7a118a731bbc07f2"
+    },
+    {
+      "query": "titles.title:\"motor drive\"",
+      "uri": "https://api.datacite.org/dois?query=titles.title%3A%22motor+drive%22&resource-type-id=dataset&page%5Bsize%5D=100",
+      "hits": 43,
+      "page_returned": 43,
+      "response_sha256": "6fb4775e38c806dbfc31434605ac15af8b30723bef698bf1b5ddd1a36e5d18c7"
+    },
+    {
+      "query": "titles.title:\"DC motor\" AND (titles.title:\"identification\" OR titles.title:\"control\")",
+      "uri": "https://api.datacite.org/dois?query=titles.title%3A%22DC+motor%22+AND+%28titles.title%3A%22identification%22+OR+titles.title%3A%22control%22%29&resource-type-id=dataset&page%5Bsize%5D=100",
+      "hits": 30,
+      "page_returned": 30,
+      "response_sha256": "d965de01e8c0f1b0ceecedf4371b4386ba2adfce4c967dbf3afc2bab3d3da7d4"
+    },
+    {
+      "query": "titles.title:\"PMSM\"",
+      "uri": "https://api.datacite.org/dois?query=titles.title%3A%22PMSM%22&resource-type-id=dataset&page%5Bsize%5D=100",
+      "hits": 78,
+      "page_returned": 78,
+      "response_sha256": "743e343607c8b494722bd808ecf7c8e458867941e0014ef827e9d0264146af3f"
+    },
+    {
+      "query": "titles.title:\"electric drive\"",
+      "uri": "https://api.datacite.org/dois?query=titles.title%3A%22electric+drive%22&resource-type-id=dataset&page%5Bsize%5D=100",
+      "hits": 18,
+      "page_returned": 18,
+      "response_sha256": "d8fcd75885151253af8b3e51aae2279546331dc095ebb0e01ff4fd2c5ba40c39"
+    }
+  ],
+  "crossref_queries": [
+    {
+      "url": "https://api.crossref.org/works?query.bibliographic=CREATOR+Case+PMSM+and+IM+electric+machine+data+for+validation+and+benchmarking+of+simulation+and+modeling+approaches&rows=2",
+      "sha256": "929974dbb48a896a758c86b76e33f789b2c84e44e6071f3e5c3a86194754d011",
+      "exact_title_match": "10.1108/compel-11-2024-0462"
+    },
+    {
+      "url": "https://api.crossref.org/works?query.bibliographic=Current+Harmonic+Suppression+in+Permanent+Magnet+Synchronous+Motor+Drives+Using+Adaptive+Sliding+Mode+Control+and+Integral+Periodic+Residual+Compensation&rows=2",
+      "sha256": "d540fd2c4d8ce68866334d3444d47700c5b8a711a7a18437124d19f5b646c172",
+      "exact_title_match": null
+    }
+  ],
+  "screening": [
+    {
+      "id": "10.5281/zenodo.23164569",
+      "reason": "Deposit description identifies 256 simulated closed-loop scenarios, even with current-reference-limit sensitivity tests; no physical recordings counted."
+    },
+    {
+      "id": "10.6084/m9.figshare.24204510.v1",
+      "reason": "Already covered by project figure-data follow-up."
+    },
+    {
+      "id": "10.18150/xgkvul",
+      "reason": "Existing project catalogue item. Dataverse lists a 4.15 GB archive; did not inspect data files in this batch."
+    },
+    {
+      "id": "10.6084/m9.figshare.30993643.v1",
+      "reason": "Publisher lists processed figure curves. Its file endpoint returned HTTP 403 during the check; not promoted to file evidence."
+    },
+    {
+      "id": "10.6084/m9.figshare.30911423.v1",
+      "reason": "Item already catalogued; file endpoint returned HTTP 403. Excluded."
+    },
+    {
+      "id": "10.5281/zenodo.24138712",
+      "reason": "Discovery candidate; Zenodo export endpoint returned HTTP 403, not promoted to file evidence."
+    }
+  ],
+  "history_commit": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+  "historical_text_files_plus_early_index": 539,
+  "historical_lookup_keys": {
+    "10.17632/jvnmbgfccr.1": [
+      "10.17632/jvnmbgfccr.1",
+      "10.17632/jvnmbgfccr",
+      "Raw oscilloscope records for Current Harmonic Suppression in Permanent Magnet Synchronous Motor Drives Using Adaptive Sliding Mode Control and Integral Periodic Residual Compensation"
+    ],
+    "10.3217/sns1d-77m43": [
+      "10.3217/sns1d-77m43",
+      "10.3217/gprtr-a5s58",
+      "CREATOR Case: Permanent Magnet Synchronous Motor Data"
+    ]
+  },
+  "normalized_id_or_title_matches": {
+    "10.17632/jvnmbgfccr.1": [],
+    "10.3217/sns1d-77m43": []
+  },
+  "access": "The embedded Mendeley public-files URL gave HTTP 403, but the publisher’s versioned dataset ZIP endpoint delivered the exact hashed release file. The TU Graz concept DOI resolves to the version DOI; count once."
+}

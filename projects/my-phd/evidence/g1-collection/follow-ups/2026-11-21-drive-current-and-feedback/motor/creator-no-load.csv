@@ -1,0 +1,4 @@
+source_member,rotor_location,stated_warmup_minutes,speed_settings,min_speed_rpm,max_speed_rpm,measured_min_torque_Nm,measured_max_torque_Nm,measured_torque_at_min_speed_Nm,measured_torque_at_max_speed_Nm
+PM_synchronous_motor/Measurement_results/No_load_tests/M20231005.csv,outside stator,90,16,100.01,7000.0,-0.00028814,0.0052043,-0.00028814,0.0052043
+PM_synchronous_motor/Measurement_results/No_load_tests/M20231017.csv,outside stator,120,16,100.0,7000.0,-0.00025937,0.0045835,-0.00025937,0.0045835
+PM_synchronous_motor/Measurement_results/No_load_tests/M20231018.csv,inside stator,120,16,100.0,7000.0,0.0018748,0.0078599,0.0018748,0.0078599

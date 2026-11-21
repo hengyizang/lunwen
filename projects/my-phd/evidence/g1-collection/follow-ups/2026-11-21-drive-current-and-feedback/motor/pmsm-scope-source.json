@@ -1,0 +1,56 @@
+{
+  "title": "Raw oscilloscope records for Current Harmonic Suppression in Permanent Magnet Synchronous Motor Drives Using Adaptive Sliding Mode Control and Integral Periodic Residual Compensation",
+  "doi": "10.17632/jvnmbgfccr.1",
+  "concept_doi": "10.17632/jvnmbgfccr",
+  "authors": [
+    "Xiao Zhang",
+    "Guoqiang Zhang",
+    "Yubo Liu",
+    "Xuang Gong",
+    "Shiming Xu"
+  ],
+  "release_version": 1,
+  "published": "2026-11-01T09:17:18.693Z",
+  "landing": "https://data.mendeley.com/datasets/jvnmbgfccr/1",
+  "metadata_uri": "https://data.mendeley.com/public-api/datasets/jvnmbgfccr",
+  "metadata_sha256": "31b97d5fd3cb58b626771aaa646c5609fbc9919bd2de79de801636422139d084",
+  "licence": "Creative Commons Attribution 4.0 International",
+  "licence_url": "http://creativecommons.org/licenses/by/4.0",
+  "date_verified": "2026-11-21",
+  "acquisition": {
+    "url": "https://data.mendeley.com/public-api/zip/jvnmbgfccr/download/1",
+    "outer_zip_sha256": "a7ffbe8b57023f0c63d51a37332d5c6f43c8444fec880d4b37a482a188012979",
+    "inner_zip": "EPSR_ASMC_IPRC_Research_Data.zip",
+    "publisher_sha256": "1e9e05f44aa4dc3603710ff25ecc8af98c99ba426057245da706ea66875c4ce8",
+    "observed_inner_sha256": "1e9e05f44aa4dc3603710ff25ecc8af98c99ba426057245da706ea66875c4ce8",
+    "inner_bytes": 116904652,
+    "manifest_and_header_sources": [
+      {
+        "member": "README.md",
+        "sha256": "f33f8fe1b968b90b0e58dfa9e249136f2f0ae5bffdc0b8c9447777ae9b671fbd"
+      },
+      {
+        "member": "manifest.csv",
+        "sha256": "094d7a7c72ce7130b1a7d62f218a346a83194a073f0b16f7d25e8ef437cf5e23"
+      },
+      {
+        "member": "waveform_metadata.csv",
+        "sha256": "9c9247eae60249250c4ec150272f6115025350429530b8b51feaac7c5bbf2b1d"
+      },
+      {
+        "member": "tools/signal_utils.py",
+        "sha256": "e85fa0f051269ff7e680e37064fcf22dc42bf27a1878535ba80de3e491e29b8f"
+      }
+    ],
+    "verification": "Read the original release-supplied manifest and SHA-256-checked all 130 raw files, including screenshots. Decoded and cross-checked all 260 channel headers against waveform_metadata.csv. Counts below concern only binary waveform files."
+  },
+  "analysis": {
+    "measurement": "DAC voltage from a DSP observation channel. Documented conversion is i[A]=4*(V-2.5); no independent probe calibration is provided. Group 1 provides mechanical speed, d-axis observed current, q-axis current reference and q-axis observed current, respectively. Group 2 provides electrical angle, speed and phase a/b current observations. Physical channel labels come from the release README plus binary channel labels 1–4.",
+    "timebase": "Scope samples, not controller cycles; each pair uses matching index and identical sampling interval and length. The greatest channel-origin difference in any four-channel file is 0.11969 ns, much smaller than the shortest 500 ns scope interval. No resampling or lag fitting.",
+    "derived": "For unambiguous group1 binaries compute whole-record mean iq reference and mean iq feedback and RMS(reference−feedback) on all samples before filtering. For group2 compute whole-record RMS of each phase current in the author scale. No extra no-load offset estimate. Report these raw-scale summaries to seven decimal places for reproducibility; they do not establish instrument accuracy.",
+    "quality": "65 binary paths, 63 unique byte sequences. Two pairs have identical SHA-256 across group1/group2 under the 500rpm IPRC mismatch/0.5Ld and 2Ld directory labels; each has corresponding duplicate screenshot bytes. Four manifest paths are retained for traceability; all four have blank physical statistics. The 35 remaining group1 records contain 32,599,996 pairs. The 26 remaining group2 records contain no q-reference channel. Condition follows the explicit non-group path component: 400/800 rpm folders reverse the directory ordering and some manifest condition_folder cells merely say group1/group2.",
+    "limits": "No before/after-limiter command, DC bus, driver utilization flag or mechanical torque feedback is supplied in these groups. Current deviations cannot identify limiter events. File counts are acquisition records with incompletely documented replication, not independent trials. The original IPRC folder is the combined ASMC-IPRC, not an IPRC-only ablation."
+  },
+  "derived_table": "pmsm-scope-records.csv",
+  "reproduce": "Python 3.11+ and NumPy: python derive_pmsm_waveforms.py EPSR_ASMC_IPRC_Research_Data.zip pmsm-scope-records.csv"
+}

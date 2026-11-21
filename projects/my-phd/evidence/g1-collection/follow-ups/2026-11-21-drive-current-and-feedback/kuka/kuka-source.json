@@ -1,0 +1,117 @@
+{
+  "title": "Dataset and Baseline for an Industrial Robot Identification Benchmark",
+  "dataset_doi": "10.26204/data/5",
+  "authors": [
+    "Weigand, Jonas",
+    "Götz, Julian",
+    "Ulmen, Jonas",
+    "Ruskowski, Martin"
+  ],
+  "publisher": "TU Kaiserslautern",
+  "release": "2022 deposit, fixed here by publisher MD5 and SHA-256; technical report revised separately in 2023",
+  "checked_date_utc": "2026-11-21",
+  "reuse": "Upgrade of the pre-existing KUKA Industrial Robot Identification Benchmark catalogue in g1-collection/2026-11-21/datasets.csv. No new dataset counted.",
+  "rights": {
+    "release_notices": [
+      {
+        "rights": "MIT License",
+        "rightsUri": "https://opensource.org/licenses/MIT",
+        "schemeUri": "https://spdx.org/licenses/",
+        "rightsIdentifier": "mit",
+        "rightsIdentifierScheme": "SPDX"
+      },
+      {
+        "rights": "Creative Commons Attribution Share Alike 4.0 International",
+        "rightsUri": "https://creativecommons.org/licenses/by-sa/4.0/legalcode",
+        "schemeUri": "https://spdx.org/licenses/",
+        "rightsIdentifier": "cc-by-sa-4.0",
+        "rightsIdentifierScheme": "SPDX"
+      }
+    ],
+    "table_license": "CC BY-SA 4.0 for these derived tables; attribute Weigand, Götz, Ulmen & Ruskowski. The release names MIT and CC BY-SA 4.0. Raw arrays, MATLAB code and papers are linked at source."
+  },
+  "query_log": [
+    {
+      "query": "industrial robot benchmark nonlinear system identification real robot KUKA robot joint torque input dataset industrial robot forward dynamics multisine nonlinearbenchmark.org",
+      "found": "Official benchmark landing page links the deposited RAR files and a later report. Retrieved both publications and checked publisher checksums for original deposit files. Historical match by benchmark title."
+    },
+    {
+      "query": "high fidelity industrial robot identification benchmark torque input measured current public dataset KUKA NEWEUL robot dynamics position control drive torques csv git Stuttgart",
+      "found": "Cross-checked DFKI author-hosted report, §§2.1–2.3, Table 3 and Appendix A.1. For exact preprocessing and train/test separation read MASTER_filter_and_combine_datasets.m in the raw archive."
+    }
+  ],
+  "retrieved": [
+    {
+      "url": "https://www.nonlinearbenchmark.org/benchmarks/industrial-robot",
+      "bytes": 157529,
+      "sha256": "a366074be1a1a099ba3e3d77e00e420a78967fe95990db3778848744f05ab640"
+    },
+    {
+      "url": "https://api.datacite.org/dois/10.26204/data/5",
+      "bytes": 10099,
+      "sha256": "81d45387afe9dcd9e305d54eb124036cd4e8331fc1adea36df28f24ee425c2c3"
+    },
+    {
+      "url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/",
+      "bytes": 2665,
+      "sha256": "5fce06f37c9c92d1985b201fbf861ae0cbd6e91b0fda6ef3839be62d405b932d"
+    },
+    {
+      "url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_Without_Raw_Data.rar",
+      "bytes": 12717003,
+      "sha256": "909523da90cc341257059faa6dd1fa18ffc64245df3191ea0014da0fb3c19bca",
+      "publisher_md5": "6fffa993f60d65f85100bad053888df2",
+      "checksum_url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_Without_Raw_Data.rar.md5"
+    },
+    {
+      "url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_With_Raw_Data.rar",
+      "bytes": 227384738,
+      "sha256": "9011509cf901dcb50a8de1e4a5a0fcf6cb8bed2f64945ba0fbbfb8e0b54886fe",
+      "publisher_md5": "4a9d3adbbca1c9b68577d6db63d58c58",
+      "checksum_url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_With_Raw_Data.rar.md5"
+    },
+    {
+      "url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_Description.pdf",
+      "bytes": 9631807,
+      "sha256": "5c4ca1dca67604e954438e3defbcff5cef2eca5b1edf82f07c80b89fac6273b2",
+      "publisher_md5": "21396005a20bdfaebfa4da416d8e1b60",
+      "checksum_url": "https://fdm-fallback.uni-kl.de/TUK/FB/MV/WSKL/0001/Robot_Identification_Benchmark_Description.pdf.md5"
+    },
+    {
+      "url": "https://www.dfki.de/fileadmin/user_upload/import/15661_Robot_Identification_Benchmark_Description.pdf",
+      "bytes": 9898554,
+      "sha256": "ed5037cd23c7500bd0c428a74b01ac5096250abea0f2fb6cff2fbb6329513135"
+    }
+  ],
+  "inside_raw_archive": {
+    "MASTER_filter_and_combine_datasets.m": "90287f6bee2e256e029d2a2e5e4e022ed7b974fb992da22339326008fb6906e7",
+    "MASTER_identification_linear.m": "b025dcc890a8d8e0e3f8f8d8dc98a31166e51f1b044154a30ac059826fdab97b",
+    "forward_identification_without_raw_data.mat": "3e53759871d844d418b526000cebf231345540276dc2f9801799577f5edef296",
+    "inverse_identification_without_raw_data.mat": "0615b1692bde550785a34f197880586c2cd4bc5faa61f5345d2fba2840b46ae4",
+    "raw_data/recording_2021_12_15_20H_29M.mat": "631a228e87f2f1673e2f13f0fad4b96a351d02ea52a004cffeb555d4288b3b12",
+    "raw_data/recording_2021_12_15_20H_38M.mat": "9f65ec79d3b0fd0eacce812dc136c8dc3c47b5395bbf0970c4a749995e240ce5",
+    "raw_data/recording_2021_12_15_20H_45M.mat": "48b17a5c06749addf47e7b7c239dcc5e7ab20149c597c2b2a0455de13eda7c78",
+    "raw_data/recording_2021_12_15_21H_11M.mat": "d3751156a526955a379b35f565e84aeb57f1d836f7b148be54de6725b3a8703e",
+    "raw_data/recording_2021_12_15_21H_32M.mat": "5bd7a8cd2fc0275c341c263f5698bcc5caa79fe6805cd20edc3d59668ed5bffc",
+    "raw_data/recording_2021_12_15_21H_3M.mat": "d4b3e0bb87dc006dcdbf97bcf081e61836f69d9297a3fd21df1e4a53b387925d",
+    "raw_data/recording_2021_12_15_21H_41M.mat": "6feba6f7698d773c6bdb4615e440ca9fec7304ddb7c5b7b2e590ae7e58b0cca0",
+    "raw_data/recording_2021_12_15_21H_54M.mat": "ea28d7ecf8e8021583aa8b3cb7f4b7a260debf563cd39fec2705a092fb7d427e",
+    "raw_data/recording_2021_12_15_22H_10M.mat": "eb343ae87aa610751f6571b2cd8e51f1a019c6644972278e35c8121d545d7404",
+    "raw_data/recording_2021_12_15_22H_41M.mat": "cc1decda74c5cb818f801226b9ca56339373ad5a5d70e260b1bd354dbb4ac197",
+    "raw_data/recording_2021_12_15_22H_50M.mat": "a3b34640262ffd6350dcb4bcceed5a9ec5e6d92972b47c7e4bfad181106afa25",
+    "raw_data/recording_2021_12_15_22H_58M.mat": "2704934128cf19851fbd07088441d17a0a9e28bd01fcdcaed469170b60c6bdfe",
+    "saved_linear_model/trained_model.mat": "50e8556c66d4f78243b93460dc17ea8031ea8812606f1075bec57dc767ca0809",
+    "visualization_functions/input_spectrum.m": "c67b819ca1d126557489aa2153a85b913304a0fc377e5808e39e198ac5187bfb",
+    "visualization_functions/output_spectrum.m": "18d09c805d44dd509d9f58063e8096a9b7758d96fd12901038d645fa1078b4c1"
+  },
+  "interpretation": {
+    "acquisition": "One real six-joint industrial robot. Twelve MAT recordings with three designed trajectories per file, each run twice (36 designs; 72 executions). The last filename in the author processing order is held out. Time steps within a raw file are 4 ms. Results summarize acquisition files and axes, not independent samples.",
+    "ports": "The MAT embedded README calls tau_ref_ff feedforward, tau_fb_meas the position-control feedback contribution, and tau_meas real motor torque. The report §2.2 states torque is inferred from winding currents and the motor torque constant. Table 3 sketches a torque sum; Appendix A.1 Eq. 13 describes commanded torque. Subtracting the same-index sum of the two logged terms from tau_meas yields a channel consistency diagnostic. No independent calibrated load-side torque, pre/post-limiter pair or limiter flag is evidenced here. A difference is not a measured clipping event; the archive does not establish its cause.",
+    "axes": "For axes 1 to 3 use secondary encoders; axes 4 to 6 do not have this sensor and the corresponding q_se_meas fields are constant zero in all files. Use the motor resolver for these axes per the author script.",
+    "prepared": "Prepared files in the two archives are byte-identical copies. In each split, forward model input torques and inverse model target torques match exactly. The script concatenates files within split, applies forward-backward filtering, constructs shifted and filtered inverse-model inputs, then takes every 25th sample. Do not count tasks, copies or train/test views as extra acquisitions or use acausal preprocessed features as real-time inputs.",
+    "time": "In each prepared split the script uses linspace(0,n*0.1,n); the effective timestamp increment is slightly larger than 0.1 s. Both saved time vectors and nominal step are retained.",
+    "definitions": "RMS per file and joint, no lag fit. measured_minus_FF_plus_FB_rms_Nm = RMS(tau_meas - (tau_ref_ff + tau_fb_meas)). The >0.01 Nm count uses an analyst-selected numerical difference threshold, not a hardware limit. Positions are degrees, torques are motor-side Nm.",
+    "coverage": "All 12 raw MAT files and both prepared MAT files analyzed. Videos and saved performance model excluded."
+  },
+  "reproduce": "Extract both official RAR files separately with a RAR-capable archive reader; run python derive_industrial_robot.py WITH_RAW_DIR WITHOUT_RAW_DIR OUTPUT_DIR (Python, NumPy, SciPy)."
+}

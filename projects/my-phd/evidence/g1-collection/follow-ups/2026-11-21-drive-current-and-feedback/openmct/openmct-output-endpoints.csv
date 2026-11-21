@@ -1,0 +1,17 @@
+version,member,mode_as_logged,rows,pwm_min,pwm_max,pwm_zero_and_reference_zero,pwm_zero_and_reference_nonzero,pwm_255_rows,pwm_255_runs,pwm_255_zero_based_row_indices,pwm_255_reference_as_stored,pwm_255_measured_speed_as_stored
+1,04_continuous_PID_validation/10_ms/raw_data_10ms.txt,Speed Control,2084,0,209,1084,0,0,0,,,
+1,04_continuous_PID_validation/20_ms/raw_data_20ms.txt,Speed Control,980,0,203,480,0,0,0,,,
+1,04_continuous_PID_validation/50_ms/raw_data_50ms.txt,Speed Control,393,0,208,193,0,0,0,,,
+1,04_continuous_PID_validation/5_ms/raw_data_5ms.txt,Speed Control,4136,0,197,2136,0,0,0,,,
+1,05_discrete_controller_validation/Case_a_integrator_overdamped_gain_of_3.86/raw_data.txt,Speed Control,2432,0,198,1182,10,0,0,,,
+1,05_discrete_controller_validation/Case_b_integrator_underdamped_gain_of_13/raw_data.txt,Speed Control,2428,0,246,1178,10,0,0,,,
+1,05_discrete_controller_validation/Case_c_integrator_with_added_zero_at_0.66_gain_of_9.9/raw_data.txt,Speed Control,2435,0,179,1185,0,0,0,,,
+1,optional_characterization/raw_chirp_data.txt,System Identification,7300,5,255,0,0,2,2,"2056,4192","255,255","112,125"
+2,04_continuous_PID_validation/10_ms/raw_data_10ms.txt,Speed Control,3000,0,211,1650,0,0,0,,,
+2,04_continuous_PID_validation/20_ms/raw_data_20ms.txt,Speed Control,1499,0,197,824,0,0,0,,,
+2,04_continuous_PID_validation/50_ms/raw_data_50ms.txt,Speed Control,599,0,201,329,0,0,0,,,
+2,04_continuous_PID_validation/5_ms/raw_data_5ms.txt,Speed Control,6016,0,209,3016,0,0,0,,,
+2,05_discrete_controller_validation/Case_a_integrator_overdamped_gain_of_3.86/raw_data.txt,Speed Control,1500,0,195,825,9,0,0,,,
+2,05_discrete_controller_validation/Case_b_integrator_underdamped_gain_of_13/raw_data.txt,Speed Control,1499,0,255,824,9,2,1,"606,607","231,231","221,253"
+2,05_discrete_controller_validation/Case_c_integrator_with_added_zero_at_0.66_gain_of_9.9/raw_data.txt,Speed Control,1500,0,194,825,0,0,0,,,
+2,optional_characterization/raw_chirp_data.txt,System Identification,7300,5,255,0,0,2,2,"2056,4192","255,255","112,125"

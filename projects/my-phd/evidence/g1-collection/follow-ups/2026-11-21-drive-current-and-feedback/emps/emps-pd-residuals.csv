@@ -1,0 +1,4 @@
+member,pulse_as_stored,comparable_rows,median_vir_minus_PD,rmse_vir_minus_PD,rmse_tracking_error_mm
+DATA_EMPS.mat,channel_absent,24839,-1.133570464e-07,0.003654959647,0.5777819874
+DATA_EMPS_PULSES.mat,0,12342,-1.321128146e-05,0.004659521783,0.5813724848
+DATA_EMPS_PULSES.mat,5,12497,5.0694698,5.069500339,0.5907208802

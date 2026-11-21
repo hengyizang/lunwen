@@ -1,0 +1,5 @@
+fit_member,evaluated_member,model,decimated_rows,fit_rank,condition_number_unscaled_X_eval,mass_kg,viscous_positive_Ns_per_m,coulomb_positive_N,viscous_negative_Ns_per_m,coulomb_negative_N,offset_N,drive_gain_force_proxy_rmse_N,relative_l2_force_proxy_error_pct
+DATA_EMPS.mat,DATA_EMPS.mat,symmetric_with_offset,2480,4,25.98897327,95.10403241,203.1312436,20.43774941,203.1312436,20.43774941,-3.17970605,2.20567021,4.124039921
+DATA_EMPS.mat,DATA_EMPS_PULSES.mat,symmetric_with_offset,2480,4,26.0223291,95.10403241,203.1312436,20.43774941,203.1312436,20.43774941,-3.17970605,3.411035775,5.995831071
+DATA_EMPS.mat,DATA_EMPS.mat,directional_no_offset,2480,5,26.02121961,95.14722224,166.7092414,20.14350892,239.6792611,20.71637307,,1.70457692,3.187123458
+DATA_EMPS.mat,DATA_EMPS_PULSES.mat,directional_no_offset,2480,5,26.05389004,95.14722224,166.7092414,20.14350892,239.6792611,20.71637307,,3.067598583,5.392145997

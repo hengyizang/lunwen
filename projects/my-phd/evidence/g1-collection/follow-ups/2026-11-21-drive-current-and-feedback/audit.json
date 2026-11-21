@@ -1,0 +1,219 @@
+{
+  "accessed_utc_date": "2026-11-21",
+  "prior_branch_commit": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+  "stage": "G1/topic-intelligence",
+  "history_files_screened": 539,
+  "literature_snapshot": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+  "intervening_historical_paths": [],
+  "catalogue_match_method": "Normalized release DOI/concept DOI/fixed source slug and titles in prior tracked project evidence; includes early catalogue. Article and data identifiers remain distinct. Related files or publications may share an acquisition. See lit/search.json and per-source receipts for version/author-title aliases and retrievals.",
+  "dataset_families": 10,
+  "new_dataset_families": 7,
+  "upgraded_dataset_families": 3,
+  "datasets": {
+    "sea/sea-tracking-source.json": {
+      "release_identifiers": [
+        "Liken233/Transformer_RL",
+        "Transformer-Based Temporal Reinforcement Learning for Series Elastic Actuator Control"
+      ],
+      "history_matches": []
+    },
+    "sea/dyrac-source.json": {
+      "release_identifiers": [
+        "10.4121/13625951",
+        "Solidworks model and system identification data of the Dynamic Robotic Actuator",
+        "DyracCalibration-SpringIdentification"
+      ],
+      "history_matches": []
+    },
+    "motor/pmsm-scope-source.json": {
+      "release_identifiers": [
+        "10.17632/jvnmbgfccr",
+        "jvnmbgfccr",
+        "Current Harmonic Suppression in Permanent Magnet Synchronous Motor Drives Using Adaptive Sliding Mode Control and Integral Periodic Residual Compensation"
+      ],
+      "history_matches": []
+    },
+    "motor/creator-source.json": {
+      "release_identifiers": [
+        "10.3217/sns1d-77m43",
+        "10.3217/gprtr-a5s58",
+        "CREATOR Case: Permanent Magnet Synchronous Motor Data"
+      ],
+      "history_matches": []
+    },
+    "crossrobot/kr3-current-source.json": {
+      "release_identifiers": [
+        "10.5281/zenodo.21456277",
+        "10.5281/zenodo.21456276",
+        "Motor-Current Dataset for Cycle-Level Payload Estimation on Two KUKA KR3 Robots"
+      ],
+      "history_matches": []
+    },
+    "steer/steering-step-source.json": {
+      "release_identifiers": [
+        "JCamiloD06/load-dependent-steering-mpc",
+        "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control"
+      ],
+      "history_matches": []
+    },
+    "openmct/openmct-source.json": {
+      "release_identifiers": [
+        "10.17632/5xvg43r9r8",
+        "5xvg43r9r8",
+        "Dataset for an end-to-end open-source DC motor control workflow"
+      ],
+      "history_matches": []
+    },
+    "emps/emps-source.json": {
+      "release_identifiers": [
+        "Electro-Mechanical Positioning System",
+        "nonlinearbenchmark.org/benchmarks/emps",
+        "1zwoXYa9-3f8NQ0ohzmjpF7UxbNgRTHkS"
+      ],
+      "history_matches": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature-search.json",
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-message-age-control-updates/lit/r5-literature-search.json"
+      ]
+    },
+    "kuka/kuka-source.json": {
+      "release_identifiers": [
+        "10.26204/data/5",
+        "KUKA Industrial Robot Identification Benchmark",
+        "Dataset and Baseline for an Industrial Robot Identification Benchmark",
+        "nonlinearbenchmark.org/benchmarks/industrial-robot"
+      ],
+      "history_matches": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+      ]
+    },
+    "servo/nad-source.json": {
+      "release_identifiers": [
+        "Neural Actuation Dataset",
+        "frankzydou/NAD",
+        "NeuralActuator NAD"
+      ],
+      "history_matches": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+      ]
+    }
+  },
+  "papers_retained": 31,
+  "new_papers": 22,
+  "evidence_status": {
+    "new bibliography record / full text": 15,
+    "new bibliography record / author abstract": 7,
+    "historical / author abstract": 5,
+    "historical / full text": 4
+  },
+  "citation_edges": 39,
+  "recomputed_tables": {
+    "crossrobot/kr3-current-excursions.csv": {
+      "rows": 640,
+      "sha256": "eaa52ea9759f4e08c97f2034ff5f0a56b4a8bb3ee607e8fd1fe1a3f9246982ae"
+    },
+    "crossrobot/kr3-current-traces.csv": {
+      "rows": 128,
+      "sha256": "f0b25aee61fb4dfbbb08c21a70d7527c5518e15433124593538a98ac91df818e"
+    },
+    "crossrobot/kr3-payload-pairs.csv": {
+      "rows": 16,
+      "sha256": "e71d91c67628116c3e4d48644a5c8032c1985d393af3ed9fbc50cf5320416e84"
+    },
+    "emps/emps-experiments.csv": {
+      "rows": 2,
+      "sha256": "7747127f4c147ccb307cf8e7b6f8fa4d3fed4263d8da082fb91b960f5d364ba5"
+    },
+    "emps/emps-inverse-models.csv": {
+      "rows": 4,
+      "sha256": "f10c5e460abb1b87dc78839f2a2237343bc24a06e3ca37630c78458b55d5a2f2"
+    },
+    "emps/emps-pd-residuals.csv": {
+      "rows": 3,
+      "sha256": "6a85c9a1a2dc92de633d669bcc5cbb3208886239f8f3714d1f25c8ad3ffe044c"
+    },
+    "emps/emps-pulse-windows.csv": {
+      "rows": 25,
+      "sha256": "15449f7af69e66fa7e1516126cbcacfef70e8af2aecc6b510d89aac90f729615"
+    },
+    "kuka/kuka-joint-channels.csv": {
+      "rows": 72,
+      "sha256": "ad1ceb4c35e63bc38f33390445322643e7776d4763c1c7a972faea05d5dbce1a"
+    },
+    "kuka/kuka-prepared-splits.csv": {
+      "rows": 2,
+      "sha256": "bdd93a2c4b290a4c675636597f21a4c339b76d8f1ef8629c509e8038a16384e3"
+    },
+    "kuka/kuka-recordings.csv": {
+      "rows": 12,
+      "sha256": "c756ae5a02832abd7cdb97e1135076c4c4bbbb185b1c6fad1a4459594045f07e"
+    },
+    "motor/creator-drive-cycles.csv": {
+      "rows": 6,
+      "sha256": "719bd595d4514b45bab4b075d3da6aa82814675db4f6e905bd8a626b84220884"
+    },
+    "motor/creator-no-load.csv": {
+      "rows": 3,
+      "sha256": "26ddf8c8120eca2bad90ab5e51916fd2226a562d8d63f8d565451f8a48dcdd22"
+    },
+    "motor/pmsm-scope-records.csv": {
+      "rows": 65,
+      "sha256": "ecc474ee0a6dc5e2a987256295b61bff1cff62d142905d3c6d83a5591d44352d"
+    },
+    "openmct/openmct-calibration-age.csv": {
+      "rows": 7,
+      "sha256": "cad886ea70fdf7a0ace0bc9e2b54936997f86c25eb3d5f11353a0b986ca8ca9c"
+    },
+    "openmct/openmct-dmm-by-log.csv": {
+      "rows": 27,
+      "sha256": "ec479dc3bf0a5981e221bbf8bbbff73a3854d6020530fa5a1aa15463d400d214"
+    },
+    "openmct/openmct-output-endpoints.csv": {
+      "rows": 16,
+      "sha256": "374a296086f23dfbd7d20f6af66fed58bb923735757c54ee00d631b55676a960"
+    },
+    "sea/dyrac-damper-calibration.csv": {
+      "rows": 1,
+      "sha256": "9ea3dd5e45e20b27a0160cd78d713dcf7bc6dcfafcdc951bcd57a2fa3db07ef7"
+    },
+    "sea/dyrac-radius-transitions.csv": {
+      "rows": 8,
+      "sha256": "6299e26c096a8ae9006838e6368fa09aa62f3bd9abe1f1a70f64afff7f7167b5"
+    },
+    "sea/dyrac-spring-runs.csv": {
+      "rows": 19,
+      "sha256": "8383bf9cc2bc355bb8c9bbc96c49cfcc227740b1dcce5f1cdb9dc8a84f418d4e"
+    },
+    "sea/sea-tracking-runs.csv": {
+      "rows": 6,
+      "sha256": "fd494b4d7d5b95f3ed95ccc566bd4821559b0d312580421ec6b1d0b3c3aefa02"
+    },
+    "servo/nad-channel-ranges.csv": {
+      "rows": 79,
+      "sha256": "03b60ccacda7fcd88c97b7d310714140caece0f4631c8da51e5c3c2e78d743b2"
+    },
+    "servo/nad-files.csv": {
+      "rows": 485,
+      "sha256": "a655e76811eb1faa4ffd35d2dbcf618493697651a67ed826c4b3a1e4faeaf788"
+    },
+    "servo/nad-omx-condition.csv": {
+      "rows": 4,
+      "sha256": "bf171ee96fda0bb5479e22fbddfe144ec228dbb91af06e8400a8e38b0100c1fe"
+    },
+    "servo/nad-platforms.csv": {
+      "rows": 3,
+      "sha256": "ab212646bbe49a2bb44f4bdf3a7f77b96c55793e0abcb388ac2ff6691fefabcd"
+    },
+    "steer/steering-step-groups.csv": {
+      "rows": 5,
+      "sha256": "112cb8579834dbe24b7e64fb79accc556ec95fd44c5efb3c9de352330bc7b29a"
+    },
+    "steer/steering-step-traces.csv": {
+      "rows": 25,
+      "sha256": "a9e86b1f2140a9a82c14a0db4c32a6df9ea326ddeb4ce3658e9e1c73930a2df5"
+    }
+  }
+}

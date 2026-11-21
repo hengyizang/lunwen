@@ -1,0 +1,144 @@
+{
+  "title": "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control — Phase 1 Test 5",
+  "authors": [
+    "Juan Camilo Díaz-López",
+    "Jesús Alberto Lastra-Robles",
+    "Francisco Javier Burgos-Flórez"
+  ],
+  "repository": "https://github.com/JCamiloD06/load-dependent-steering-mpc",
+  "commit": "2804e024cc5384aeb49a2fada341d9b707eac009",
+  "archive_version": "https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009",
+  "checked_utc_date": "2026-11-21",
+  "rights": "README §7 grants CC BY 4.0 for experimental data and documentation; repository LICENSE is MIT for the software and hardware codebase. This package publishes only original numerical summaries.",
+  "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+  "trace_sha256": {
+    "t5_load_0.0Nm_rep01.csv": "2b6698adb84c94a72039796554f5d80b981d59231372ecfa20534e13b92ba65b",
+    "t5_load_0.0Nm_rep02.csv": "f88823ed0aa1a94b8bcdca5ffe2bbf43eaf4262e62a9fe918f718f9deff514db",
+    "t5_load_0.0Nm_rep03.csv": "9ba99f03699fe43c59cb57a7a84bbc9bd066b0cd7747ca689aa6b2f848c7a903",
+    "t5_load_0.0Nm_rep04.csv": "4d763441295d3bb0bf20b16ddf1c006afa9d37f047aa3fa6b8d2026ee52bd2d6",
+    "t5_load_0.0Nm_rep05.csv": "6f6b889e79cd44e86317a71849dba7dad98e1237fe0746045e6769be3ba51dcd",
+    "t5_load_0.5Nm_rep01.csv": "6fabc2e919eb3b7200997c3fb506c6bb734b0424bdae749c4c4df6d94ebf159e",
+    "t5_load_0.5Nm_rep02.csv": "03c7e313b8d724befce487262d022ed771442b05d236e436815794fd7e8d4b22",
+    "t5_load_0.5Nm_rep03.csv": "38233e9baa2992ec5bf36835795113e2985982e529f2c093299bf240e8c92ed6",
+    "t5_load_0.5Nm_rep04.csv": "aaac8441f6b030318c19a048568a131565559fd6cef3db46f2587bfdcee4fade",
+    "t5_load_0.5Nm_rep05.csv": "163f4299f45966796ae5ea8925d4ec23d9da3484c35dfc952bf746b67440af8d",
+    "t5_load_1.0Nm_rep01.csv": "ea28c01098fac176f118fb6127c1fd15bdb8b2aec3ba206020e962c1e950566c",
+    "t5_load_1.0Nm_rep02.csv": "56f27ae064d7d71d3b92c9266eedeee3753fcde427885df155fde02a630eeab9",
+    "t5_load_1.0Nm_rep03.csv": "c2432f305633ed1c39b8f9ed5ad9220b39ba2dd4362148d32e73cce2296c0d40",
+    "t5_load_1.0Nm_rep04.csv": "d0724129268a98d2a0f1289a028ac2fcdffabb54022b2850796661f07463b188",
+    "t5_load_1.0Nm_rep05.csv": "8a90f837a90aa77d64837576b3ae0f5af6e030a4c8e2f939605b1614100784ac",
+    "t5_load_1.5Nm_rep01.csv": "cfb3557ac93f3a720a544e66721c55d258a67cff9b20bab3969e0e75367757b0",
+    "t5_load_1.5Nm_rep02.csv": "7ea698587f94eb0cf92dc5855cb805008aaec166f9316c4cd8b4dca28d2ebdb0",
+    "t5_load_1.5Nm_rep03.csv": "316b2043616fa6b84eae98518350d72477a684e627078bcba6dc3bdcb97521fc",
+    "t5_load_1.5Nm_rep04.csv": "76c2af15020e9d55e456db6fb36aad300a691277bd7f5482e406674e365825af",
+    "t5_load_1.5Nm_rep05.csv": "98d4dd2bbd022de474b54c00f54c4f95010eecf8f47f3e702302758d54afc241",
+    "t5_load_2.0Nm_rep01.csv": "d19d2814c9ba361ea0ba6c4ae68e2f1a8209fc5f6064c682981c186184491c73",
+    "t5_load_2.0Nm_rep02.csv": "ab9f11c0c4ec864d8e333d9e65c3e491e13fb7697ead2e29f5e023be86c92f4d",
+    "t5_load_2.0Nm_rep03.csv": "53ed637fc402453dbfea553673e9cafec69d07bb7fba5e770cc034be293dfbfe",
+    "t5_load_2.0Nm_rep04.csv": "1ab4c0392fbab83896bb88d69c88bbe29cab26e46f6f5a43abbd58edae3ecc8d",
+    "t5_load_2.0Nm_rep05.csv": "778dce5d4fe32549c3e8d7f5f579834b9c95c6bfccba0c83f62e498231bdc685"
+  },
+  "tree_api": "https://api.github.com/repos/JCamiloD06/load-dependent-steering-mpc/git/trees/2804e024cc5384aeb49a2fada341d9b707eac009?recursive=1",
+  "source_verification": "Fetched every Test 5 CSV and the relevant code/documentation from raw.githubusercontent.com at the fixed SHA. File bytes verified against Git tree blob IDs (SHA-1 of blob header+raw bytes). Each archived trace also has a SHA-256 check enforced by the reproduction script.",
+  "supporting_files": {
+    "README.md": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/README.md",
+      "git_blob": "cdca206683c7c28a2ac699c2905c4fc40c7a8f1c",
+      "sha256": "b4143b68c887fc001235a5ddd6dc5324ea1c98f7497aab2bedcec55327e094fb"
+    },
+    "LICENSE": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/LICENSE",
+      "git_blob": "fa5c0e80bb67bdeb384df3de1b818955f806229d",
+      "sha256": "01c1e9f9bc9333001e2f6504ec3d9f7cc8a953ba58ef76dd1ebe96f44a07e1c2"
+    },
+    "scripts/bench/run_phase1_battery.py": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/scripts/bench/run_phase1_battery.py",
+      "git_blob": "c8365a737898732e4ee8666303fb8d8d29baa4ba",
+      "sha256": "058e3ede85371c02509641a85aaca38c8d59cfc1245baac4ac195204f59b60b7"
+    },
+    "scripts/bench/odrive_ascii_interface.py": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/scripts/bench/odrive_ascii_interface.py",
+      "git_blob": "209a61242310da531b22382ecd0da08221c4bc25",
+      "sha256": "63e69d6b7439343e1ceac7a37e5b2a4bd0e337c98271bddc936bc82df5fc9b82"
+    },
+    "scripts/matlab/process_phase1_bench_data.m": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/scripts/matlab/process_phase1_bench_data.m",
+      "git_blob": "9ec4ae61363f8b0170c7644e5998c64f0f1a9853",
+      "sha256": "171e140f09143f8bd27939679d577c32fd75d847e92e8daed28c6bcfeddf1f78"
+    },
+    "scripts/matlab/process_phase2_capacity_envelope.m": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/scripts/matlab/process_phase2_capacity_envelope.m",
+      "git_blob": "01c1a11b735dd2839a51fd4f9553ab3b57a35c28",
+      "sha256": "f5f6c8a2e3fd80e9093589383ad40257b295662d2a30531ea1b81529bbf4949e"
+    },
+    "data/raw/bench_phase1/calibration_finalff_torque.csv": {
+      "url": "https://github.com/JCamiloD06/load-dependent-steering-mpc/blob/2804e024cc5384aeb49a2fada341d9b707eac009/data/raw/bench_phase1/calibration_finalff_torque.csv",
+      "git_blob": "f30498f0c14045716d1dd9d8f0950a588dea3bc3",
+      "sha256": "1a8d696a60e8f5879f0cc78b01fc87d4b091ffde617014a0078f9b1cdea03c5e"
+    }
+  },
+  "measurement": "The authors label this position-control direct-drive steering bench as physical. In the real serial branch, the collector commands position, queries encoder feedback and quadrature current, and reads the DC bus; time_s comes from the host before the sequential calls, not from the inner FOC loop. The CSV field torque_cmd_Nm always stores the nonnegative load condition, while the inner position command includes negative feedforward after the step when load>0. FFB USB is optional, so physical externally applied torque is not independently known. torque_meas_Nm is derived as Iq × 0.55 Nm/A by the real acquisition code. vel_cmd_deg_s is zero velocity feedforward during a position step, not a commanded zero-speed experiment.",
+  "boundary": "All 25 published Test 5 CSVs only: 5 repeats at load settings 0, 0.5, 1.0, 1.5 and 2.0 Nm. A docstring also mentions 2.5 Nm but the actual loop and archived data stop at 2.0. No SIL, HIL, traffic scenarios, calibration or other bench tests enter the summaries. Configuration/source line labels cannot substitute for observed limiting events.",
+  "origin_check": "The released collector supports serial and explicit/default mock execution. In this version read_vbus in mock returns 24 + 0.1*sin(...), bounded by [23.90,24.10] V after recording to two decimals. Mock returns position rounded to a 0.125° grid, still exactly representable at the emitted 3 decimals. Each file is tested against both invariants. The raw traces violate this unmodified mock model. No per-run backend flag, command transcript, serial-port identity or independently measured load / shaft torque is contained in the CSV, so this check cannot certify how the deposited files were produced. The separate calibration log names COM3 and does not document the port for these 25 specific files. Some unsuccessful serial read paths in the supplied interface can return zero feedback or 24 V; we do not reclassify zero/24 readings.",
+  "window": "Identify the sole −50° to +50° switch by pos_cmd_deg within each trace. Report startup separately, extrema after the switch, first peak timing relative to the logged switch, and mean absolute final-position error for time_s ≥0.8 up to the recorded end. The late interval is explicitly chosen for description, not certified steady state. Positive peak speeds are not absolute speeds. Also compute full-file peaks to match the MATLAB Phase 1 logic and take arithmetic means over five peaks; these tests measure position-step transients.",
+  "limits": "No two independent load and actuator torque channels; torque_cmd_Nm is not the internal requested actuator torque or torque measured externally. The analysis scripts fix 2.45 Nm stall and a shape parameter of 4.5. No stall or 2.45 Nm condition is measured in Test 5. Unmeasured current demand, rail usage, gating flags and phase/PWM voltage preclude samplewise conclusions about current or voltage saturation. The stored voltage is DC bus supply, not motor winding voltage or controller headroom.",
+  "queries": [
+    {
+      "query": "open-source loading bench steering actuator torque current speed loaded position control",
+      "result": "Retrieved the authors’ GitHub repo and compared Phase 1 Test 5 raw traces with the collection code and both MATLAB analyses."
+    },
+    {
+      "query": "exact project title with author Díaz-López DOI publication",
+      "result": "Exact web search located the software/data repository. No separately verified peer-reviewed paper DOI included here."
+    }
+  ],
+  "dedup": {
+    "checked_from": "7ebcb26f8ec2642c0be87789c585bbe811e6e8d8",
+    "keys": [
+      "JCamiloD06/load-dependent-steering-mpc",
+      "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control",
+      "Díaz-López"
+    ],
+    "result": "No matching source in previous G1 evidence text or early project catalogue."
+  },
+  "reproducibility": "Python 3.11+ standard library: python derive_steering_step.py /path/to/pinned/checkout OUTPUT. The analysis reads only the 25 Test 5 CSVs and verifies all digests.",
+  "verified_results": {
+    "raw_files": 25,
+    "raw_rows": 3004,
+    "rows_before_step": 309,
+    "bus_range_V": [
+      24.11,
+      24.61
+    ],
+    "rows_outside_stock_mock_bus_range": 3004,
+    "rows_outside_stock_mock_position_grid": 2919,
+    "files_with_both_contradictions": 25,
+    "max_abs_difference_between_tau_log_and_0p55_times_Iq_Nm": 7.5e-05,
+    "median_host_interrow_interval_per_run_range_ms": [
+      8.0,
+      8.4
+    ],
+    "load_settings_Nm": [
+      0,
+      0.5,
+      1,
+      1.5,
+      2
+    ],
+    "mean_peak_positive_speed_by_load_deg_s": [
+      361.5,
+      370.25,
+      369.25,
+      383.5,
+      388.25
+    ],
+    "mean_peak_abs_iq_by_load_A": [
+      8.29046,
+      8.18446,
+      8.33312,
+      8.45296,
+      8.57258
+    ],
+    "interpretation": "The five positive-speed peak means do not decrease monotonically over the tested load settings. Their values describe transient peaks in this position-step protocol, not maximum sustainable speeds, a causal load effect, or independently measured stall under a 2.45 Nm load."
+  }
+}

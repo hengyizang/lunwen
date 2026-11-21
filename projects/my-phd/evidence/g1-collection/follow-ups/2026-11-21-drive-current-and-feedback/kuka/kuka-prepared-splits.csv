@@ -1,0 +1,3 @@
+split,raw_recording_files,raw_samples,prepared_samples,forward_inputs,inverse_inputs,forward_input_equals_inverse_target,first_time_s,last_time_s,nominal_ms,archived_mean_step_ms
+train,11,999691,39988,6,18,1,0.0,3998.8,100,100.002500813
+test,1,90881,3636,6,18,1,0.0,363.6,100,100.027510316

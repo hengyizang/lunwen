@@ -1,0 +1,208 @@
+{
+  "title": "CREATOR Case: Permanent Magnet Synchronous Motor Data",
+  "doi": "10.3217/sns1d-77m43",
+  "concept_doi": "10.3217/gprtr-a5s58",
+  "authors": [
+    "Dhakal, Pawan Kumar",
+    "Heidarikani, Kourosh",
+    "Muetze, Annette",
+    "Seebacher, Roland"
+  ],
+  "version": "1",
+  "published": "2024-11-04",
+  "landing": "https://repository.tugraz.at/records/sns1d-77m43",
+  "metadata_uri": "https://repository.tugraz.at/api/records/sns1d-77m43",
+  "metadata_sha256": "b4ffad6c464ccf9b62786fb3df34782b7cf6a6a648b0deca9a7b2a68d518842a",
+  "license": "Creative Commons Attribution Non Commercial 4.0 International",
+  "license_url": "https://creativecommons.org/licenses/by-nc/4.0/",
+  "distribution": "Citation, metadata and independently calculated per-run descriptive statistics. Raw source files remain with TU Graz.",
+  "date_verified": "2026-11-21",
+  "assets": [
+    {
+      "file": "PM_synchronous_motor.zip",
+      "bytes": 12555471,
+      "sha256": "dc4b98c0f787d61008d3ef9fa17617c800eeb9fd9409301ad0cc1b8aa74f00ef",
+      "source_md5": "04bf59f344a04b76a7c3907ee032ab9f",
+      "url": "https://repository.tugraz.at/api/records/sns1d-77m43/files/PM_synchronous_motor.zip/content"
+    },
+    {
+      "file": "README.md",
+      "bytes": 892,
+      "sha256": "b8e378d815dbe6fe566907216d06a90e63b6fc014588e16e52afa5a936629f3a",
+      "source_md5": "bcd3ad71aaa3a8c3b12aa8dc67946909",
+      "url": "https://repository.tugraz.at/api/records/sns1d-77m43/files/README.md/content"
+    },
+    {
+      "file": "CREATOR_Machine_Data_2024-11-04.pdf",
+      "bytes": 2088845,
+      "sha256": "9b39065969b80c87a3605cd56a860ae70e5a9e747f405fb9b37dc8e83dd25003",
+      "source_md5": "8323104b23febb59d3c514c7bc46270e",
+      "url": "https://repository.tugraz.at/api/records/sns1d-77m43/files/CREATOR_Machine_Data_2024-11-04.pdf/content"
+    }
+  ],
+  "analysed_members": [
+    {
+      "member": "PM_synchronous_motor/Design_parameters/Electrical_parameters/Electrical_properties_of_PMSM.csv",
+      "sha256": "3591e464b1f07e29c7e94a8b1b87547fbf30381185123225ff691b7197a44512",
+      "bytes": 255
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Artemis_input_power.csv",
+      "sha256": "d592423db9ac07476343e9e6b7bfe6a5abe11af355403aed37d8a2c78ef8379f",
+      "bytes": 25749
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Artemis_output_power.csv",
+      "sha256": "e271466108ba32889817f678472f04e5eb1669249bd2b763063dfa92956d214f",
+      "bytes": 25840
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Bcdc_input_power.csv",
+      "sha256": "b24851d5cb3d6d1ca86ab549cc7b818c77babb1055ca7292aa1efec4ccc71d2f",
+      "bytes": 44563
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Bcdc_output_power.csv",
+      "sha256": "3a2377a2d26f70cb89f84dff2b021ea37fb757e575d0e9d2b663b79a07b28fbd",
+      "bytes": 42782
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Wltp_input_power.csv",
+      "sha256": "58c2a41f7e4692e8c8bc2175c5df91d17e7fe5c4649c4bda233ea01cedd1efed",
+      "bytes": 45970
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Mid_sized_vehicle/Wltp_output_power.csv",
+      "sha256": "c96e7412c64fdb97c7613e25b0b3580e5b6bc36e4975d6ae6168cc97bdbc4465",
+      "bytes": 45552
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/README.md",
+      "sha256": "3c52aec7480d625893a9e1ebc9fdedc82ae416e8773ee306847f1d8244f8b4e1",
+      "bytes": 1787
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Artemis_input_power.csv",
+      "sha256": "4bc6c4d0f2baed36b2a51bbf3357b725cb698012f984a53f3618061a2b37200c",
+      "bytes": 27828
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Artemis_output_power.csv",
+      "sha256": "b9bd5c772f290cb7edffef590ad78b82b2c87c96025628de38bcdf22ad5bf016",
+      "bytes": 27888
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Bcdc_input_power.csv",
+      "sha256": "d0a5369fce12e6a1e0078f4dd25dcb85ae8a89594aaf4e98df37659ca772817f",
+      "bytes": 47952
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Bcdc_output_power.csv",
+      "sha256": "42a123d74711080644ff9a837122a2637a219ef7a65f5f529e920e3cabaca81f",
+      "bytes": 44957
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Wltp_input_power.csv",
+      "sha256": "3e1b938d9062ebc13bb0f81309fc6e2d06cccdabfb381a1b731be32d34b06824",
+      "bytes": 49597
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_measurement_results/Small_sized_vehicle/Wltp_output_power.csv",
+      "sha256": "74ef89351e3d6d3917b953644151abecbd648edc1f105d0e3e9a49b3a16aef41",
+      "bytes": 47954
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Artemis_speed_rpm.csv",
+      "sha256": "c310598cd52dfc1553d21925a0356288e34a9d7d0b8002738ab8e47a1570d75e",
+      "bytes": 25012
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Artemis_torque_nm.csv",
+      "sha256": "82f4f5a71ed8056954e028c746e688f5568ab76266931f85c0a9a473ac590912",
+      "bytes": 30668
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Bcdc_speed_rpm.csv",
+      "sha256": "0cff8cb883e848c6ae9302506f2fa7f63172d7fe2ae342fe0fc781bab6a0422c",
+      "bytes": 38216
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Bcdc_torque_nm.csv",
+      "sha256": "b90ba9604d484694bf27d8c196e0e919033a8b68711abd26ef91356542ef141b",
+      "bytes": 46915
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Wltp_speed_rpm.csv",
+      "sha256": "eb537a39490b5244d22e340449690ea63afcf86707a5b86aa834c5eba8be3fb8",
+      "bytes": 41696
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Mid_sized_vehicle/Wltp_torque_nm.csv",
+      "sha256": "20600cbb5b61c4ed2a3f98840e653023a5d7891dc54d9ba7cc2c3e77ecaf1764",
+      "bytes": 51220
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/README.md",
+      "sha256": "c99eef1c6d39eef3b854ee9e9ceae52f26927a3b04d91507557b8322316c078a",
+      "bytes": 2291
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Artemis_speed_rpm.csv",
+      "sha256": "554922db811bc80f0b38fb91e9ea90732d3b7f2117a916752391fec631559f18",
+      "bytes": 27201
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Artemis_torque_nm.csv",
+      "sha256": "e7a7bdd19dea03be1f023ac70167f683e91fac056e7a80c37e90bfea3143d391",
+      "bytes": 32510
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Bcdc_speed_rpm.csv",
+      "sha256": "8385f66719835d1689768a93e5aa34fbf46016ad51e662b60fff4c09d97a1ee0",
+      "bytes": 41849
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Bcdc_torque_nm.csv",
+      "sha256": "d4aa44bf588d13c1af069adcdceda5b46d8caa0e3005a5450d202ae54330e37c",
+      "bytes": 50320
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Wltp_speed_rpm.csv",
+      "sha256": "a3f9ce5a768479ea74bfc234aca05c5c06c3e3b70214f132d36442429edea10b",
+      "bytes": 45341
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/Drive_cycle_torque_speed_data/Small_sized_vehicle/Wltp_torque_nm.csv",
+      "sha256": "7b15b2ec0dac9acb406e93b4b8e0cdf0fa539ee47b3a5f1976ed2d0b00dbc96b",
+      "bytes": 54739
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/No_load_tests/M20231005.csv",
+      "sha256": "bf50c7068654ee0e1f066be297843ea2ec797227890cbc5bb5aa9f5695de0a8b",
+      "bytes": 276
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/No_load_tests/M20231017.csv",
+      "sha256": "5cb5ae3f5c0c392c370e31c22ddf926a356cd2f93056fbd30c302e9be39c0cd3",
+      "bytes": 272
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/No_load_tests/M20231018.csv",
+      "sha256": "4b30f6ad7f850b361d1b9106e345ef021d212a631ddf512e9dd567dc86fcef8c",
+      "bytes": 271
+    },
+    {
+      "member": "PM_synchronous_motor/Measurement_results/No_load_tests/README.md",
+      "sha256": "28d2c1e202d389c85b6f9f497e312e8800a2a518d2fb62ae63912cd8cf3d55f3",
+      "bytes": 2618
+    }
+  ],
+  "paper": {
+    "doi": "10.1108/compel-11-2024-0462",
+    "full_text": "CREATOR_Machine_Data_2024-11-04.pdf included in fixed release, §6.2.3, Table 6 / Table 8, Appendix B Fig. 19. Downscaled input profiles drive a torque-controlled test PMSM and speed-controlled load machine. Source maximum torque is 0.15 Nm, maximum speed 7050 rpm, maximum DC-link 326 V, maximum current 0.3 Arms."
+  },
+  "analysis": "Six separate cases combine three driving cycles and two scaled vehicle models. In each case timestamp equality across all four CSVs and 0.5 s grid were verified. Torque and speed CSVs are model-derived inputs; power CSVs are experimental electrical input and mechanical output. MAT copies of the same exports were excluded. The small-profile files have headers; the mid-profile files are headerless. Tested cycle torque magnitudes against the tabled maximum. The speed count is strict equality to the published max, not proximity; e.g. rounded input profiles include values of 7050.1 or 7050.2 rpm.",
+  "no_load": "Three separate tests from the no-load README recorded torque during a decreasing speed sweep with two minutes between readings. Rotor outside stator for the first two measurements; rotor inside for the third. Values are reported in Nm, only one recorded torque per speed. Warmup and date differ; cannot identify sensor bias from these records alone.",
+  "limits": "Cycle traces include no independently measured iq/id, before/after limit command, DC voltage or shaft torque trace. Speed and torque profiles were both derived from the scaled vehicle models. Same-time power and speed/torque input fields do not validate tracking or active limiting. The six cases reuse one machine. The no-load torque measurements have a distinct acquisition protocol and are not cycle tracking feedback.",
+  "reproduce": "Python 3.11+ standard library: python derive_creator_bench.py PM_synchronous_motor.zip OUTPUT_DIR (existing directory)."
+}
