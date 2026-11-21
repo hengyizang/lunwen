@@ -1,0 +1,11 @@
+source_file,Model,FeatureSet,F1_macro_mean,F1_macro_std,BalAcc_mean,BalAcc_std
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,LGBM,MI_top100,0.7625311805751471,0.0101574331264952,0.7519113538930988,0.0144151996078749
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,LGBM,MI_top50,0.7391025749492547,0.0067011487210944,0.7150736125234147,0.0072376383366307
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,LGBM,Corr<0.95_(166),0.7321727999065921,0.0170132638875353,0.7146011179078102,0.0139238569550044
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,LGBM,Full_215,0.7310426205652572,0.0234089183234447,0.7165595941493929,0.022798427705049
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,LGBM,MI_top30,0.6978671584934105,0.0186130474870435,0.672376527004127,0.0137137600643056
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,SVM,MI_top50,0.6986687065107622,0.0144382002962122,0.6849852143989998,0.0181646507904319
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,SVM,MI_top100,0.6986075958747596,0.013594346977707,0.6826447355956731,0.0158272958765401
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,SVM,Full_215,0.6728643661348729,0.0186602682222661,0.6352570337085369,0.0190228737254782
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,SVM,MI_top30,0.6583330953705753,0.0044384214274309,0.6352805790700528,0.0017996901490044
+Data Sheet 4_Optimizing predictive maintenance with synthetic data_ a case study on ABB IRB 1100 industrial robot.csv,SVM,Corr<0.95_(166),0.6346935553241749,0.0199678208549568,0.5837877717982662,0.0281793498910016

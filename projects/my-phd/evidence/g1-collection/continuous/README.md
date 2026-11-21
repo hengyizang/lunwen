@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：41
-- **最近更新时间 (UTC)**：2026-11-21T10:49:08Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4342 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1865 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：3765 条
-- **累计已完成确定性清洗数据集**：90 个
+- **已完成轮次**：42
+- **最近更新时间 (UTC)**：2026-11-21T10:54:08Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4492 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1890 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：3886 条
+- **累计已完成确定性清洗数据集**：93 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 147 | 97 |
-| `R2_Aerial_Actuator` | 397 | 110 |
-| `R5_MultiRobot_Comm` | 252 | 90 |
-| `Robotics_Embodied` | 1358 | 580 |
-| `Mechanical_Physics_AI` | 1397 | 824 |
-| `Mechatronics_PHM_Control` | 1135 | 628 |
-| `Smart_Manufacturing` | 538 | 363 |
-| `Smart_Factory_DigitalTwin` | 214 | 73 |
+| `R1_Force_Contact` | 147 | 99 |
+| `R2_Aerial_Actuator` | 402 | 110 |
+| `R5_MultiRobot_Comm` | 253 | 90 |
+| `Robotics_Embodied` | 1359 | 585 |
+| `Mechanical_Physics_AI` | 1424 | 849 |
+| `Mechatronics_PHM_Control` | 1246 | 637 |
+| `Smart_Manufacturing` | 541 | 381 |
+| `Smart_Factory_DigitalTwin` | 219 | 75 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 336 | 0 |
+| `Adjacent` | 363 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-prdwpp-consumer-perception-of-u` | Consumer Perception of Using Drones for Medicine and Health Supplie... | 10.7910/dvn/prdwpp | `summary_table` | 86 | `d0bf90905505` | [CSV](data/dataverse-prdwpp-consumer-perception-of-u-cleaned.csv) · [JSON](data/dataverse-prdwpp-consumer-perception-of-u-provenance.json) · [PY](data/derive_dataverse_prdwpp_consumer_perception_of_u.py) |
-| `figshare-30944375-the-datasets-of-the-2017` | the datasets of the 2017 Changdao swarm in eastern China | 10.6084/m9.figshare.30944375.v1 | `summary_table` | 8 | `136c8c0214d4` | [CSV](data/figshare-30944375-the-datasets-of-the-2017-cleaned.csv) · [JSON](data/figshare-30944375-the-datasets-of-the-2017-provenance.json) · [PY](data/derive_figshare_30944375_the_datasets_of_the_2017.py) |
-| `figshare-31158421-data-set-for-fabrication` | Data set for "Fabrication and Wear Analysis of AA2024 Aluminium Hyb... | 10.6084/m9.figshare.31158421.v1 | `summary_table` | 6 | `ce1d3a0f8aac` | [CSV](data/figshare-31158421-data-set-for-fabrication-cleaned.csv) · [JSON](data/figshare-31158421-data-set-for-fabrication-provenance.json) · [PY](data/derive_figshare_31158421_data_set_for_fabrication.py) |
 | `figshare-34066695-data-sheet-1-artificial` | Data Sheet 1_Artificial intelligence-assisted design and CFD re-opt... | 10.3389/fenrg.2026.1956543.s001 | `cleaned_rows` | 8 | `4f9ab8a6081d` | [CSV](data/figshare-34066695-data-sheet-1-artificial-cleaned.csv) · [JSON](data/figshare-34066695-data-sheet-1-artificial-provenance.json) · [PY](data/derive_figshare_34066695_data_sheet_1_artificial.py) |
 | `dataverse-getyap-drone-medical-package-de` | Drone Medical Package Delivery for Improved Transportation and Bett... | 10.7910/dvn/getyap | `cleaned_rows` | 202 | `ebb7e13fb595` | [CSV](data/dataverse-getyap-drone-medical-package-de-cleaned.csv) · [JSON](data/dataverse-getyap-drone-medical-package-de-provenance.json) · [PY](data/derive_dataverse_getyap_drone_medical_package_de.py) |
 | `dataverse-fs95y3-gomezmurillotarwater-ant` | GomezMurilloTarwater_Antswarmmechs_Biotropica | 10.7910/dvn/fs95y3 | `cleaned_rows` | 133 | `3cc853cf2fb0` | [CSV](data/dataverse-fs95y3-gomezmurillotarwater-ant-cleaned.csv) · [JSON](data/dataverse-fs95y3-gomezmurillotarwater-ant-provenance.json) · [PY](data/derive_dataverse_fs95y3_gomezmurillotarwater_ant.py) |
@@ -71,12 +68,14 @@
 | `dataverse-nssigl-date-stamping-us-housing` | Date-stamping US housing market explosivity | 10.7910/dvn/nssigl | `summary_table` | 30 | `0ba1e5896d69` | [CSV](data/dataverse-nssigl-date-stamping-us-housing-cleaned.csv) · [JSON](data/dataverse-nssigl-date-stamping-us-housing-provenance.json) · [PY](data/derive_dataverse_nssigl_date_stamping_us_housing.py) |
 | `dataverse-sqs8my-replication-data-for-tur` | Replication Data for: "Turning on Those Who Turn to the Courts: Exp... | 10.7910/dvn/sqs8my | `summary_table` | 190 | `200f97378710` | [CSV](data/dataverse-sqs8my-replication-data-for-tur-cleaned.csv) · [JSON](data/dataverse-sqs8my-replication-data-for-tur-provenance.json) · [PY](data/derive_dataverse_sqs8my_replication_data_for_tur.py) |
 | `dataverse-mygsyo-replication-data-for-foo` | Replication Data for: Foot-propelled swimming kinematics and turnin... | 10.7910/dvn/mygsyo | `summary_table` | 24 | `b5455e1580d1` | [CSV](data/dataverse-mygsyo-replication-data-for-foo-cleaned.csv) · [JSON](data/dataverse-mygsyo-replication-data-for-foo-provenance.json) · [PY](data/derive_dataverse_mygsyo_replication_data_for_foo.py) |
+| `figshare-32362119-data-sheet-1-optimizing` | Data Sheet 1_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s005 | `summary_table` | 214 | `4c4a5f96d2e1` | [CSV](data/figshare-32362119-data-sheet-1-optimizing-cleaned.csv) · [JSON](data/figshare-32362119-data-sheet-1-optimizing-provenance.json) · [PY](data/derive_figshare_32362119_data_sheet_1_optimizing.py) |
+| `figshare-32362125-data-sheet-3-optimizing` | Data Sheet 3_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s003 | `cleaned_rows` | 209 | `bcaa8ca93639` | [CSV](data/figshare-32362125-data-sheet-3-optimizing-cleaned.csv) · [JSON](data/figshare-32362125-data-sheet-3-optimizing-provenance.json) · [PY](data/derive_figshare_32362125_data_sheet_3_optimizing.py) |
+| `figshare-32362128-data-sheet-4-optimizing` | Data Sheet 4_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s002 | `cleaned_rows` | 10 | `a8e35125db9c` | [CSV](data/figshare-32362128-data-sheet-4-optimizing-cleaned.csv) · [JSON](data/figshare-32362128-data-sheet-4-optimizing-provenance.json) · [PY](data/derive_figshare_32362128_data_sheet_4_optimizing.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 17 | 2026-11-21T08:49:03Z | Broad Engineering R17: Robotics_Embodied (2026) | +48 | +0 | +3 | [round-17-audit.json](rounds/round-17-audit.json) |
 | 18 | 2026-11-21T08:54:12Z | Broad Engineering R18: Mechanical_Physics_AI (2026) | +80 | +0 | +3 | [round-18-audit.json](rounds/round-18-audit.json) |
 | 19 | 2026-11-21T08:59:01Z | Broad Engineering R19: R1_Force_Contact | +99 | +43 | +3 | [round-19-audit.json](rounds/round-19-audit.json) |
 | 20 | 2026-11-21T09:04:03Z | Broad Engineering R20: R1_Force_Contact / R2_Aerial_Actuator | +159 | +45 | +3 | [round-20-audit.json](rounds/round-20-audit.json) |
@@ -101,3 +100,4 @@
 | 39 | 2026-11-21T10:39:02Z | Broad Engineering R39: Robotics_Embodied | +92 | +32 | +3 | [round-39-audit.json](rounds/round-39-audit.json) |
 | 40 | 2026-11-21T10:44:10Z | Broad Engineering R40: Mechatronics_PHM_Control | +111 | +12 | +2 | [round-40-audit.json](rounds/round-40-audit.json) |
 | 41 | 2026-11-21T10:49:08Z | Broad Engineering R41: Mechatronics_PHM_Control | +140 | +29 | +3 | [round-41-audit.json](rounds/round-41-audit.json) |
+| 42 | 2026-11-21T10:54:08Z | Broad Engineering R42: Mechatronics_PHM_Control | +150 | +25 | +3 | [round-42-audit.json](rounds/round-42-audit.json) |

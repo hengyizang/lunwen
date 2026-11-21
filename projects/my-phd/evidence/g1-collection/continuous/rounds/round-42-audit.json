@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 42,
+  "completed_at": "2026-11-21T10:54:08Z",
+  "batch_label": "Broad Engineering R42: Mechatronics_PHM_Control",
+  "base_head_sha": "f075dee002196d1494d0441001b8033f87364771",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 162,
+    "duplicates_skipped": 12,
+    "net_new": 150,
+    "new_reading_queue": 121,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "industrial motor current signature",
+        "receipt_id": "20261121t105408z-arxiv-5a43a9175c",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aindustrial+AND+all%3Amotor+AND+all%3Acurrent+AND+all%3Asignature&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "a95806dfd57550eb6bde73ebde48a4c26e51c19bf57cd882172e47153fb89b8e",
+        "normalized_results_sha256": "5cadd770fe0ee56dca4a04c924c837ed1de1c7dcef16c0224ce7029f1ba6a260"
+      },
+      {
+        "provider": "openalex",
+        "query": "industrial motor current signature",
+        "receipt_id": "20261121t105409z-openalex-497ee8dae2",
+        "request_url": "https://api.openalex.org/works?search=industrial+motor+current+signature&per-page=12",
+        "result_count": 12,
+        "response_sha256": "099d1f27e848719abd74a8e8186343e7ee3a09b6646756adaadbeec79b3d043d",
+        "normalized_results_sha256": "9f04a8cfac8f878f02fa86b9ef651c3ce328a11d75be0d60d70fec1f56806966"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "industrial motor current signature",
+        "receipt_id": "20261121t105410z-europe-pmc-3592b8f7e8",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=industrial+motor+current+signature&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1fd3b76ca0650f6b5fb62edfa2acf9d552a766b6a616a4a69dc193590e2c76a2",
+        "normalized_results_sha256": "e8df075fa8203981de917eb5adc9568705225248df11f98b8b9f408414309049"
+      },
+      {
+        "provider": "arxiv",
+        "query": "lithium battery thermal runaway",
+        "receipt_id": "20261121t105415z-arxiv-fd5f84f6d0",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Alithium+AND+all%3Abattery+AND+all%3Athermal+AND+all%3Arunaway&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "03828596866b3cd05a69451728607892f727fd7ffdb32033d99c237a94448f74",
+        "normalized_results_sha256": "10ec11d02a43dc848fbb666e31e68d328228bfc877bdf4746741d303ce1da3f3"
+      },
+      {
+        "provider": "openalex",
+        "query": "lithium battery thermal runaway",
+        "receipt_id": "20261121t105416z-openalex-d669a58326",
+        "request_url": "https://api.openalex.org/works?search=lithium+battery+thermal+runaway&per-page=12",
+        "result_count": 12,
+        "response_sha256": "92b2c9c24d5f3b2ae90bce4a53dee7f40d31f8f081e89188b0a10575c51cd053",
+        "normalized_results_sha256": "2b443cae4d5fd3cb1c69ff13403503f6f3780dff52bce120f5811aae498da2b5"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "lithium battery thermal runaway",
+        "receipt_id": "20261121t105418z-europe-pmc-b45d94cc82",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=lithium+battery+thermal+runaway&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "18c5d37e95529fa24859ecd463098b1aced0339ae69e1d416d9dcbbdf6485dfe",
+        "normalized_results_sha256": "37c2902db29069de259ff6047fb78ab286cf8a3d460d60795629eeb20a090bc4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "turbofan engine remaining life",
+        "receipt_id": "20261121t105424z-arxiv-5aa201660f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aturbofan+AND+all%3Aengine+AND+all%3Aremaining+AND+all%3Alife&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "b1e6e198d2c3eb669c72477a54fe72232a1acee8eb2428ffd565be579b779aff",
+        "normalized_results_sha256": "37c5670f0045f2def5f79272d804c23e8e62be7dec784635862335a97e890663"
+      },
+      {
+        "provider": "openalex",
+        "query": "turbofan engine remaining life",
+        "receipt_id": "20261121t105425z-openalex-4d92f2555d",
+        "request_url": "https://api.openalex.org/works?search=turbofan+engine+remaining+life&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4badb601d7437c14831958cc11a5119d8016db2884717f90ad204d67e9de10aa",
+        "normalized_results_sha256": "75bd1246e5b67da51cde63548d2e12f3c013bb38d65bdedf892d09df3be4a9e9"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "turbofan engine remaining life",
+        "receipt_id": "20261121t105427z-europe-pmc-a58a9d0b64",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=turbofan+engine+remaining+life&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "dc2814d5d339744ab14d61c18725b60149d636b8125e663f0fd2208946806751",
+        "normalized_results_sha256": "b94574adc548988b3346fcf039f50a4bd38f552d2b4daaf06404aec6dc40ba7c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "transfer learning machinery fault",
+        "receipt_id": "20261121t105434z-arxiv-74a44f9735",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atransfer+AND+all%3Alearning+AND+all%3Amachinery+AND+all%3Afault&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "39ae9ba81789e22db41ca7df56e09fe9d93426b1623534c2130e2ec365e46088",
+        "normalized_results_sha256": "f92e64cf736e1cdcdfbbd380223ec16785bdd4b35ecd73aad075357e861724e5"
+      },
+      {
+        "provider": "openalex",
+        "query": "transfer learning machinery fault",
+        "receipt_id": "20261121t105435z-openalex-d67cd9b1e2",
+        "request_url": "https://api.openalex.org/works?search=transfer+learning+machinery+fault&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a732bd235fe143185d2c6448b7754c07f3940e4663221949b0f621f5029513e0",
+        "normalized_results_sha256": "c7683e8a3f08a37cd975ed5e90c68cb7e05959dda7e88dd853c710bfd375279d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "transfer learning machinery fault",
+        "receipt_id": "20261121t105436z-europe-pmc-c9cd3888da",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=transfer+learning+machinery+fault&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "72ae6a8237bf094464a86909e7a449ecb47c2622c0b1a390110923052c9a1512",
+        "normalized_results_sha256": "fd4e4869521d3b775c9255a738d7e4c5fba9b3d90d763ca15ff9079b7fa9b73a"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.4028/www.scientific.net/amm.444-445.1740",
+        "receipt_id": "20261121t105442z-opencitations-7f72cd1fd9",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/tii.2012.2228661",
+        "receipt_id": "20261121t105443z-opencitations-a9cacb2a9d",
+        "result_count": 27,
+        "response_sha256": "53d502a2c1b4b4361ff66b4b49c359bacd397890e25e0bd6fef083fd25aa5d73"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 168,
+    "off_topic_filtered": 77,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 66,
+    "net_new": 25,
+    "provider_statuses": [
+      {
+        "query": "melt pool sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "melt pool sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "melt pool sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "finite element sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "finite element sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "topology optimization sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "topology optimization sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "structural vibration sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "structural vibration sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      }
+    ],
+    "probed_for_cleaning": 10,
+    "cleaned": [
+      {
+        "slug": "figshare-32362119-data-sheet-1-optimizing",
+        "key": "figshare:32362119",
+        "dataset_name": "Data Sheet 1_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.csv",
+        "doi": "10.3389/fmech.2026.1781598.s005",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_csv/32362119",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32362119-data-sheet-1-optimizing-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32362119-data-sheet-1-optimizing-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32362119_data_sheet_1_optimizing.py",
+        "cleaned_rows": 214,
+        "raw_total_rows": 2000,
+        "verified_sha256": "4c4a5f96d2e19882efed951d704fc2ab22d0c109554d17f058c68777b44ec746"
+      },
+      {
+        "slug": "figshare-32362125-data-sheet-3-optimizing",
+        "key": "figshare:32362125",
+        "dataset_name": "Data Sheet 3_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.csv",
+        "doi": "10.3389/fmech.2026.1781598.s003",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_3_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_csv/32362125",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32362125-data-sheet-3-optimizing-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32362125-data-sheet-3-optimizing-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32362125_data_sheet_3_optimizing.py",
+        "cleaned_rows": 209,
+        "raw_total_rows": 209,
+        "verified_sha256": "bcaa8ca936394f851b0e580974a5b1c61d1beb5939b01150ad00f61dfd141f60"
+      },
+      {
+        "slug": "figshare-32362128-data-sheet-4-optimizing",
+        "key": "figshare:32362128",
+        "dataset_name": "Data Sheet 4_Optimizing predictive maintenance with synthetic data: a case study on ABB IRB 1100 industrial robot.csv",
+        "doi": "10.3389/fmech.2026.1781598.s002",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_4_Optimizing_predictive_maintenance_with_synthetic_data_a_case_study_on_ABB_IRB_1100_industrial_robot_csv/32362128",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32362128-data-sheet-4-optimizing-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32362128-data-sheet-4-optimizing-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32362128_data_sheet_4_optimizing.py",
+        "cleaned_rows": 10,
+        "raw_total_rows": 10,
+        "verified_sha256": "a8e35125db9c36d5376bf50bbc08ecd5cdbf24d1f81fa13d28e3e0a4a513c4eb"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
