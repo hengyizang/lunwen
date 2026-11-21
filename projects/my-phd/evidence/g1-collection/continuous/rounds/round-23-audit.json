@@ -1,0 +1,353 @@
+{
+  "schema_version": "1.0",
+  "round": 23,
+  "completed_at": "2026-11-21T09:19:02Z",
+  "batch_label": "Broad Engineering R23: Robotics_Embodied",
+  "base_head_sha": "a39adc6fb6c2bb2b55698ddfdabb78a48e76ddb7",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 230,
+    "duplicates_skipped": 28,
+    "net_new": 202,
+    "new_reading_queue": 137,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "prosthetic hand myoelectric control",
+        "receipt_id": "20261121t091902z-openalex-f0d9cc5ce5",
+        "request_url": "https://api.openalex.org/works?search=prosthetic+hand+myoelectric+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4a6dc095af8cbbc09c7882cffea1d743faf2a06e20ce70ec3934d6d8e5b25d6b",
+        "normalized_results_sha256": "30f7dbe19c5db1ac6044d22e0241f9c58c5c6fe808dae364748835f2b463a49d"
+      },
+      {
+        "provider": "crossref",
+        "query": "prosthetic hand myoelectric control",
+        "receipt_id": "20261121t091903z-crossref-0de1b1bd7d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=prosthetic+hand+myoelectric+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "47cee2c450e9cb5c263c59b39078154edfe8a295b5adde641dd93c9d1c825754",
+        "normalized_results_sha256": "b4050f39ff08cd726963c599ed157488a1c94f2a5d3b2a304102b3533d0b5943"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "prosthetic hand myoelectric control",
+        "receipt_id": "20261121t091904z-europe-pmc-8a74eb4d30",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=prosthetic+hand+myoelectric+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "b151e84b2269ad0935f34d5e69857fa38c3583ea5d2c4e4e14f2162139cc0db9",
+        "normalized_results_sha256": "06fc13317025c462deecfd024be4f68a199fede2520a8d65872eeef571d4aa7f"
+      },
+      {
+        "provider": "hal",
+        "query": "prosthetic hand myoelectric control",
+        "receipt_id": "20261121t091906z-hal-69a415a94d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=prosthetic+hand+myoelectric+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "4ae445ce3b8f4476ce05e56b9eb0f60dc4741b8c5df351c275805c62ae99bcb1",
+        "normalized_results_sha256": "3a6f73ae86096ebcbc3eb83df5c7a03a3fdb5cfc67a5a4f158ff81308279dbc5"
+      },
+      {
+        "provider": "openalex",
+        "query": "surgical robot instrument tracking",
+        "receipt_id": "20261121t091908z-openalex-c602869d63",
+        "request_url": "https://api.openalex.org/works?search=surgical+robot+instrument+tracking&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d909c3463c0d578e5742e87b83ff0d8cbf965ffdb8b2f6ef1f3fa2269f8a0e83",
+        "normalized_results_sha256": "393e3c78526425e537e7662c3df1a03767c1587c1699c83a2270012116e3bb1a"
+      },
+      {
+        "provider": "crossref",
+        "query": "surgical robot instrument tracking",
+        "receipt_id": "20261121t091910z-crossref-93700fbb3c",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=surgical+robot+instrument+tracking&rows=12",
+        "result_count": 12,
+        "response_sha256": "811e28a85e43b27b3e3be5598161cf42529dd994c81c7508a5c72735112ffe36",
+        "normalized_results_sha256": "167566c9fe222995b8621432bca6b980526378c941bf8f8622d2ad4352bc70c2"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "surgical robot instrument tracking",
+        "receipt_id": "20261121t091911z-europe-pmc-5f76cf5691",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=surgical+robot+instrument+tracking&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "0e1f292849493bdc4a6695e17738a3fd3c9c5f74dddcd7e07abf81d675d86ad3",
+        "normalized_results_sha256": "57d6b5bc7106e9634572d603cf56fbafa0f3b730e90b1a84941b2bb069fd0bc6"
+      },
+      {
+        "provider": "hal",
+        "query": "surgical robot instrument tracking",
+        "receipt_id": "20261121t091914z-hal-b124c8c92d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=surgical+robot+instrument+tracking&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "379ce94e49ab96961cdb9e452a354d78dcc797ad250e7bc7d21c310297d73a61",
+        "normalized_results_sha256": "4fecfd84be34a972539af8a34bba88e93949a12cf8e7269f5728b2c32b93d4bc"
+      },
+      {
+        "provider": "openalex",
+        "query": "deformable object robotic manipulation",
+        "receipt_id": "20261121t091915z-openalex-6f02a6f08f",
+        "request_url": "https://api.openalex.org/works?search=deformable+object+robotic+manipulation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "43642da6375d7b5de588ead6d7f470e341a43c42c44e99ec0280f03bea66633a",
+        "normalized_results_sha256": "a4b2abce0ea6bdf933844d20581dc55e6e02c9713d5ded2e2b48df171c7fc230"
+      },
+      {
+        "provider": "crossref",
+        "query": "deformable object robotic manipulation",
+        "receipt_id": "20261121t091917z-crossref-abcba8746e",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=deformable+object+robotic+manipulation&rows=12",
+        "result_count": 12,
+        "response_sha256": "500d6f7eb28b395845a4e119b7d504b7e5937ef7fe3b4432c8f4477a2114355d",
+        "normalized_results_sha256": "6e08941c1b1598683714b06b95c3de65d784c1b822a2e87e2938c879ac9f8df2"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "deformable object robotic manipulation",
+        "receipt_id": "20261121t091918z-europe-pmc-6ff1e075e3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=deformable+object+robotic+manipulation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "7968f9a377f4c42354374a8d664f77a3f5ade9f0a229e3f34ef7e17c8162aeff",
+        "normalized_results_sha256": "2f5a93b0f42f44bd60529d39648985484c032c40c3ce3997918fb159018a05c3"
+      },
+      {
+        "provider": "hal",
+        "query": "deformable object robotic manipulation",
+        "receipt_id": "20261121t091920z-hal-ed7554c502",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=deformable+object+robotic+manipulation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "4bea3941eb75328099b492892cf0a4f0bfa8d215229e76a60d72c5f2535b213b",
+        "normalized_results_sha256": "1e395db5addebd584bb7a2ff31e11c3378b73fcf647d2af2d8dee21e1bc7fb4b"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic bin picking pose",
+        "receipt_id": "20261121t091921z-openalex-b8f8749d20",
+        "request_url": "https://api.openalex.org/works?search=robotic+bin+picking+pose&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9eb3fa580b7d43831d80dc9f4e6fa21af2a442d8246b0fbad0ce385df2fd5aed",
+        "normalized_results_sha256": "f2414cf98586d3e9cdaf26e8d2f6d92e849876935af2219fbf9583d4f1a61869"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic bin picking pose",
+        "receipt_id": "20261121t091923z-crossref-dbd524027b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+bin+picking+pose&rows=12",
+        "result_count": 11,
+        "response_sha256": "a9c3f498f19080d6801bb7c22b2e2b26627f8265307abead9b96bc9e2840d794",
+        "normalized_results_sha256": "e986992bf86e7d8aa69535d0925ef01e886335eaf94507e682830469b415b98e"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic bin picking pose",
+        "receipt_id": "20261121t091924z-europe-pmc-43386cd289",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+bin+picking+pose&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "ca2b4803779f97a3b1b893fd8c9c22dd22b6dcbffb81e1a2a77f997283e716cd",
+        "normalized_results_sha256": "baf2657de180de9e3a171d9bdb2b7dd738c11af34a6420e1fa1f35ff3e5a8d98"
+      },
+      {
+        "provider": "hal",
+        "query": "robotic bin picking pose",
+        "receipt_id": "20261121t091926z-hal-22504bd62a",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=robotic+bin+picking+pose&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 3,
+        "response_sha256": "02f13eca5edbeb2f6f5d1a3c7986eed87ca593883bfa3c8deae494843e8bbddd",
+        "normalized_results_sha256": "c6f993c1c36cbb7ba3e27197d663038c5f39f011443db518d093d66fdac93df0"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/tro.2022.3226365",
+        "receipt_id": "20261121t091927z-opencitations-45e9ee66a6",
+        "result_count": 32,
+        "response_sha256": "8b3ee98c153a14f8316f9cca028454c0dd9ee9cbf9b51c23129ca6f5b49d1126"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/iros.2018.8593904",
+        "receipt_id": "20261121t091928z-opencitations-c8d3e2f36d",
+        "result_count": 16,
+        "response_sha256": "40f72578351030ec863b2ed82da4b439ee2262d34c2e1994fda778d5409156bb"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 196,
+    "off_topic_filtered": 137,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 19,
+    "net_new": 40,
+    "provider_statuses": [
+      {
+        "query": "ultrasonic testing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ultrasonic testing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "ultrasonic testing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ultrasonic testing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ultrasonic testing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "infrared thermography",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "eddy current testing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "eddy current testing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "eddy current testing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "eddy current testing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "eddy current testing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "gear pitting",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "gear pitting",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "gear pitting",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gear pitting",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "gear pitting",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 3,
+    "cleaned": [
+      {
+        "slug": "dataverse-a9lpy7-urbaning-v2x",
+        "key": "dataverse:10.7910/dvn/a9lpy7",
+        "dataset_name": "UrbanIng-V2X",
+        "doi": "10.7910/dvn/a9lpy7",
+        "landing_url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-a9lpy7-urbaning-v2x-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-a9lpy7-urbaning-v2x-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_a9lpy7_urbaning_v2x.py",
+        "cleaned_rows": 25,
+        "raw_total_rows": 160,
+        "verified_sha256": "a659594d5e30d32174c66a20a867cf510ca7d918a10344c9e23b0c691184be93"
+      },
+      {
+        "slug": "dataverse-m6jxed-open-ended-creative-and",
+        "key": "dataverse:10.7910/dvn/m6jxed",
+        "dataset_name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "doi": "10.7910/dvn/m6jxed",
+        "landing_url": "https://doi.org/10.7910/DVN/M6JXED",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-m6jxed-open-ended-creative-and-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-m6jxed-open-ended-creative-and-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_m6jxed_open_ended_creative_and.py",
+        "cleaned_rows": 29,
+        "raw_total_rows": 144,
+        "verified_sha256": "a01a6467f93ce2a525ae6ecd003a2a87430f108a7494822c16b3ca6ade675b5b"
+      },
+      {
+        "slug": "dataverse-ckmbcg-replication-data-for-fee",
+        "key": "dataverse:10.7910/dvn/ckmbcg",
+        "dataset_name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+        "doi": "10.7910/dvn/ckmbcg",
+        "landing_url": "https://doi.org/10.7910/DVN/CKMBCG",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ckmbcg-replication-data-for-fee-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ckmbcg-replication-data-for-fee-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ckmbcg_replication_data_for_fee.py",
+        "cleaned_rows": 166,
+        "raw_total_rows": 8844,
+        "verified_sha256": "f7f3adef2265c62c3784813adf7e85f886de20e559871b799c65a239b9c2071f"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

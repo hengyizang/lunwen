@@ -1,0 +1,167 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+image_lit.tab,user_id,categorical_or_text,268,268,0,268,,,,,,,"{""0043a22068838364"": 1, ""022dbb59b9a867d9"": 1, ""02580189c1d3aa64"": 1}"
+image_lit.tab,group_name,numeric,268,268,0,3,0,0,1,0.955224,2,2,0.806023
+image_lit.tab,images_shown,numeric,268,268,0,1,32,32,32,32,32,32,0
+image_lit.tab,correct,numeric,268,268,0,18,10,18,21,20.7313,23,29,3.41217
+image_lit.tab,incorrect,numeric,268,268,0,18,3,9,11,11.2687,14,22,3.41217
+image_lit.tab,male,numeric,268,235,33,2,0,0,0,0.404255,1,1,0.491795
+image_lit.tab,age,numeric,268,263,5,4,1,2,2,2.5019,3,4,0.928244
+image_lit.tab,education,numeric,268,265,3,4,1,2,3,2.72453,3,4,0.918848
+image_lit.tab,white,numeric,268,266,2,2,0,0,1,0.669173,1,1,0.471398
+image_lit.tab,socialmedia,numeric,268,266,2,5,1,5,5,4.65038,5,5,0.825273
+image_lit.tab,familiar,numeric,268,266,2,4,1,2,2,2.2594,3,4,0.599061
+image_lit.tab,conserve,numeric,268,267,1,5,1,1,2,2.36704,3,5,1.16016
+image_lit.tab,classification_image1,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 138, ""incorrect"": 130}"
+image_lit.tab,classification_image10,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 160, ""incorrect"": 108}"
+image_lit.tab,classification_image11,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 160, ""incorrect"": 108}"
+image_lit.tab,classification_image12,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 169, ""incorrect"": 99}"
+image_lit.tab,classification_image13,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 172, ""incorrect"": 96}"
+image_lit.tab,classification_image14,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 172, ""incorrect"": 96}"
+image_lit.tab,classification_image15,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 169, ""incorrect"": 99}"
+image_lit.tab,classification_image16,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 173, ""incorrect"": 95}"
+image_lit.tab,classification_image17,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 178, ""incorrect"": 90}"
+image_lit.tab,classification_image18,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 179, ""incorrect"": 89}"
+image_lit.tab,classification_image19,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 177, ""incorrect"": 91}"
+image_lit.tab,classification_image2,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 143, ""incorrect"": 125}"
+image_lit.tab,classification_image20,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 182, ""incorrect"": 86}"
+image_lit.tab,classification_image21,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 180, ""incorrect"": 88}"
+image_lit.tab,classification_image22,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 181, ""incorrect"": 87}"
+image_lit.tab,classification_image23,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 179, ""incorrect"": 89}"
+image_lit.tab,classification_image24,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 180, ""incorrect"": 88}"
+image_lit.tab,classification_image25,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 182, ""incorrect"": 86}"
+image_lit.tab,classification_image26,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 185, ""incorrect"": 83}"
+image_lit.tab,classification_image27,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 189, ""incorrect"": 79}"
+image_lit.tab,classification_image28,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 190, ""incorrect"": 78}"
+image_lit.tab,classification_image29,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 194, ""incorrect"": 74}"
+image_lit.tab,classification_image3,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 153, ""incorrect"": 115}"
+image_lit.tab,classification_image30,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 207, ""incorrect"": 61}"
+image_lit.tab,classification_image31,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 200, ""incorrect"": 68}"
+image_lit.tab,classification_image32,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 210, ""incorrect"": 58}"
+image_lit.tab,classification_image4,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 156, ""incorrect"": 112}"
+image_lit.tab,classification_image5,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 158, ""incorrect"": 110}"
+image_lit.tab,classification_image6,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 157, ""incorrect"": 111}"
+image_lit.tab,classification_image7,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 160, ""incorrect"": 108}"
+image_lit.tab,classification_image8,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 162, ""incorrect"": 106}"
+image_lit.tab,classification_image9,categorical_or_text,268,268,0,2,,,,,,,"{""correct"": 161, ""incorrect"": 107}"
+image_lit.tab,image_type_image1,numeric,268,268,0,2,0,0,1,0.529851,1,1,0.500042
+image_lit.tab,image_type_image10,numeric,268,268,0,2,0,0,0,0.399254,1,1,0.490661
+image_lit.tab,image_type_image11,numeric,268,268,0,2,0,0,0,0.473881,1,1,0.500251
+image_lit.tab,image_type_image12,numeric,268,268,0,2,0,0,1,0.541045,1,1,0.499245
+image_lit.tab,image_type_image13,numeric,268,268,0,2,0,0,1,0.526119,1,1,0.500251
+image_lit.tab,image_type_image14,numeric,268,268,0,2,0,0,0,0.470149,1,1,0.500042
+image_lit.tab,image_type_image15,numeric,268,268,0,2,0,0,1,0.503731,1,1,0.500922
+image_lit.tab,image_type_image16,numeric,268,268,0,2,0,0,1,0.585821,1,1,0.493501
+image_lit.tab,image_type_image17,numeric,268,268,0,2,0,0,0,0.41791,1,1,0.494138
+image_lit.tab,image_type_image18,numeric,268,268,0,2,0,0,0,0.470149,1,1,0.500042
+image_lit.tab,image_type_image19,numeric,268,268,0,2,0,0,1,0.578358,1,1,0.494746
+image_lit.tab,image_type_image2,numeric,268,268,0,2,0,0,1,0.544776,1,1,0.498923
+image_lit.tab,image_type_image20,numeric,268,268,0,2,0,0,1,0.544776,1,1,0.498923
+image_lit.tab,image_type_image21,numeric,268,268,0,2,0,0,0,0.466418,1,1,0.499804
+image_lit.tab,image_type_image22,numeric,268,268,0,2,0,0,1,0.608209,1,1,0.489064
+image_lit.tab,image_type_image23,numeric,268,268,0,2,0,0,0,0.477612,1,1,0.500433
+image_lit.tab,image_type_image24,numeric,268,268,0,2,0,0,1,0.600746,1,1,0.490661
+image_lit.tab,image_type_image25,numeric,268,268,0,2,0,0,0,0.488806,1,1,0.50081
+image_lit.tab,image_type_image26,numeric,268,268,0,2,0,0,1,0.522388,1,1,0.500433
+image_lit.tab,image_type_image27,numeric,268,268,0,2,0,0,1,0.537313,1,1,0.499539
+image_lit.tab,image_type_image28,numeric,268,268,0,2,0,0,0,0.41791,1,1,0.494138
+image_lit.tab,image_type_image29,numeric,268,268,0,2,0,0,0.5,0.5,1,1,0.500935
+image_lit.tab,image_type_image3,numeric,268,268,0,2,0,0,0,0.458955,1,1,0.499245
+image_lit.tab,image_type_image30,numeric,268,268,0,2,0,0,1,0.526119,1,1,0.500251
+image_lit.tab,image_type_image31,numeric,268,268,0,2,0,0,0,0.447761,1,1,0.498194
+image_lit.tab,image_type_image32,numeric,268,268,0,2,0,0,0.5,0.5,1,1,0.500935
+image_lit.tab,image_type_image4,numeric,268,268,0,2,0,0,0,0.395522,1,1,0.489877
+image_lit.tab,image_type_image5,numeric,268,268,0,2,0,0,0,0.440299,1,1,0.497352
+image_lit.tab,image_type_image6,numeric,268,268,0,2,0,0,1,0.574627,1,1,0.495324
+image_lit.tab,image_type_image7,numeric,268,268,0,2,0,0,0,0.496269,1,1,0.500922
+image_lit.tab,image_type_image8,numeric,268,268,0,2,0,0,0,0.455224,1,1,0.498923
+image_lit.tab,image_type_image9,numeric,268,268,0,2,0,0,0,0.496269,1,1,0.500922
+image_lit.tab,ip_type_image1,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 142, ""erasing"": 41, ""photoshop-touchup"": 36}"
+image_lit.tab,ip_type_image10,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 107, ""erasing"": 64, ""photoshop-touchup"": 37}"
+image_lit.tab,ip_type_image11,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 127, ""splicing"": 43, ""photoshop-touchup"": 37}"
+image_lit.tab,ip_type_image12,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 145, ""photoshop-touchup"": 41, ""splicing"": 39}"
+image_lit.tab,ip_type_image13,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 141, ""splicing"": 36, ""copy-paste"": 35}"
+image_lit.tab,ip_type_image14,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 126, ""copy-paste"": 44, ""photoshop-touchup"": 35}"
+image_lit.tab,ip_type_image15,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 135, ""splicing"": 39, ""copy-paste"": 38}"
+image_lit.tab,ip_type_image16,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 157, ""photoshop-touchup"": 34, ""splicing"": 33}"
+image_lit.tab,ip_type_image17,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 112, ""erasing"": 58, ""copy-paste"": 36}"
+image_lit.tab,ip_type_image18,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 126, ""erasing"": 47, ""splicing"": 35}"
+image_lit.tab,ip_type_image19,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 155, ""erasing"": 35, ""copy-paste"": 32}"
+image_lit.tab,ip_type_image2,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 146, ""copy-paste"": 37, ""erasing"": 35}"
+image_lit.tab,ip_type_image20,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 146, ""copy-paste"": 39, ""erasing"": 38}"
+image_lit.tab,ip_type_image21,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 125, ""copy-paste"": 42, ""splicing"": 34}"
+image_lit.tab,ip_type_image22,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 163, ""splicing"": 36, ""copy-paste"": 25}"
+image_lit.tab,ip_type_image23,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 128, ""erasing"": 49, ""splicing"": 35}"
+image_lit.tab,ip_type_image24,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 161, ""copy-paste"": 31, ""splicing"": 28}"
+image_lit.tab,ip_type_image25,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 131, ""copy-paste"": 41, ""erasing"": 36}"
+image_lit.tab,ip_type_image26,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 140, ""photoshop-touchup"": 37, ""copy-paste"": 35}"
+image_lit.tab,ip_type_image27,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 144, ""copy-paste"": 39, ""splicing"": 36}"
+image_lit.tab,ip_type_image28,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 112, ""copy-paste"": 46, ""photoshop-touchup"": 41}"
+image_lit.tab,ip_type_image29,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 134, ""photoshop-touchup"": 40, ""splicing"": 39}"
+image_lit.tab,ip_type_image3,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 123, ""erasing"": 41, ""copy-paste"": 39}"
+image_lit.tab,ip_type_image30,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 141, ""splicing"": 39, ""photoshop-touchup"": 38}"
+image_lit.tab,ip_type_image31,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 120, ""photoshop-touchup"": 59, ""splicing"": 45}"
+image_lit.tab,ip_type_image32,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 134, ""photoshop-touchup"": 55, ""splicing"": 49}"
+image_lit.tab,ip_type_image4,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 106, ""erasing"": 54, ""copy-paste"": 47}"
+image_lit.tab,ip_type_image5,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 118, ""erasing"": 50, ""copy-paste"": 37}"
+image_lit.tab,ip_type_image6,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 154, ""splicing"": 41, ""photoshop-touchup"": 34}"
+image_lit.tab,ip_type_image7,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 133, ""erasing"": 45, ""copy-paste"": 37}"
+image_lit.tab,ip_type_image8,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 122, ""splicing"": 47, ""photoshop-touchup"": 37}"
+image_lit.tab,ip_type_image9,categorical_or_text,268,268,0,5,,,,,,,"{""no"": 133, ""erasing"": 55, ""copy-paste"": 31}"
+image_lit.tab,time_spent_image1,numeric,268,268,0,267,1.0518,6.05495,7.7411,10.3975,10.5906,150.817,13.1105
+image_lit.tab,time_spent_image10,numeric,268,268,0,268,1.0137,6.00598,7.8466,11.1217,10.8817,304.579,19.7583
+image_lit.tab,time_spent_image11,numeric,268,268,0,267,1.3946,6.35853,8.0276,10.5259,11.6037,86.2476,8.51042
+image_lit.tab,time_spent_image12,numeric,268,268,0,268,1.2554,6.07108,8.2559,10.2507,11.7189,72.5669,7.37719
+image_lit.tab,time_spent_image13,numeric,268,268,0,268,1.5512,5.94923,7.75575,9.5614,10.9476,50.315,6.05619
+image_lit.tab,time_spent_image14,numeric,268,268,0,268,1.3131,6.08228,8.60075,11.0433,11.9605,107.267,10.1032
+image_lit.tab,time_spent_image15,numeric,268,268,0,268,1.0645,6.06695,7.9653,10.9831,11.6201,118.336,12.0634
+image_lit.tab,time_spent_image16,numeric,268,268,0,268,1.1686,5.6958,7.43075,9.4493,10.6282,130.393,9.14473
+image_lit.tab,time_spent_image17,numeric,268,268,0,268,2.1714,5.90195,7.549,10.0926,11.0961,114.802,9.11736
+image_lit.tab,time_spent_image18,numeric,268,268,0,268,1.1768,5.79305,7.5154,9.32237,10.8085,47.9724,5.97728
+image_lit.tab,time_spent_image19,numeric,268,268,0,268,1.0086,6.00955,7.7213,9.53531,10.677,115.788,8.28303
+image_lit.tab,time_spent_image2,numeric,268,268,0,268,1.1644,5.91493,7.5979,10.2776,10.8068,123.317,10.6336
+image_lit.tab,time_spent_image20,numeric,268,268,0,266,1.3645,5.864,7.3912,9.04208,10.3064,51.4878,5.7119
+image_lit.tab,time_spent_image21,numeric,268,268,0,268,1.0696,5.9624,7.96925,10.1953,11.7598,80.7442,8.07125
+image_lit.tab,time_spent_image22,numeric,268,268,0,268,1.0739,5.96335,7.49855,9.78323,10.2059,124.415,9.79678
+image_lit.tab,time_spent_image23,numeric,268,268,0,268,1.0895,5.88685,7.4506,9.53436,11.1429,48.9711,6.30778
+image_lit.tab,time_spent_image24,numeric,268,268,0,268,1.0651,5.87485,7.4148,9.24304,9.78632,50.4513,6.24958
+image_lit.tab,time_spent_image25,numeric,268,268,0,267,1.1135,6.1347,7.5472,10.1909,10.883,104.531,9.54094
+image_lit.tab,time_spent_image26,numeric,268,268,0,267,1.0131,5.9894,8.18265,9.76922,11.6391,53.9924,6.17091
+image_lit.tab,time_spent_image27,numeric,268,268,0,268,1.1186,5.94358,7.2396,9.03404,10.435,44.1289,5.60302
+image_lit.tab,time_spent_image28,numeric,268,268,0,268,1.0998,5.75185,7.4573,9.32862,10.679,57.9808,7.17878
+image_lit.tab,time_spent_image29,numeric,268,268,0,268,1.9268,5.91812,7.27825,9.77232,10.2745,144.042,11.2684
+image_lit.tab,time_spent_image3,numeric,268,268,0,268,1.3519,6.04268,7.68185,9.51428,10.5627,79.712,7.40302
+image_lit.tab,time_spent_image30,numeric,268,268,0,268,1.2257,5.9092,7.5243,9.60809,10.9404,55.0173,7.07003
+image_lit.tab,time_spent_image31,numeric,268,268,0,268,2.031,5.9961,7.41175,9.06073,10.6365,40.2586,5.44854
+image_lit.tab,time_spent_image32,numeric,268,268,0,268,1.7605,6.16873,7.67195,9.93386,10.3106,113.664,9.52537
+image_lit.tab,time_spent_image4,numeric,268,268,0,268,1.1682,5.91033,7.5777,9.44383,10.632,55.1348,6.4011
+image_lit.tab,time_spent_image5,numeric,268,268,0,268,1.0559,5.83125,7.30595,9.41292,10.691,109.624,8.98451
+image_lit.tab,time_spent_image6,numeric,268,268,0,268,3.1998,6.45383,8.56135,11.1254,12.3098,55.2795,7.94758
+image_lit.tab,time_spent_image7,numeric,268,268,0,266,1.0916,6.20597,7.89945,9.8439,11.4427,46.958,6.44641
+image_lit.tab,time_spent_image8,numeric,268,268,0,267,0.2698,6.00205,7.92335,10.7277,11.8622,83.3022,9.76702
+image_lit.tab,time_spent_image9,numeric,268,268,0,268,1.6904,6.0058,7.56705,9.91454,10.5796,106.667,8.75199
+image_lit.tab,t1vscon,numeric,268,187,81,2,0,0,1,0.502674,1,1,0.501335
+image_lit.tab,t2vscon,numeric,268,174,94,2,0,0,0,0.465517,1,1,0.500249
+image_lit.tab,t1vst2,numeric,268,175,93,2,1,1,1,1.46286,2,2,0.500049
+image_lit.tab,image1,numeric,268,268,0,2,0,0,1,0.514925,1,1,0.500712
+image_lit.tab,image2,numeric,268,268,0,2,0,0,1,0.533582,1,1,0.499804
+image_lit.tab,image3,numeric,268,268,0,2,0,0,1,0.570896,1,1,0.495874
+image_lit.tab,image4,numeric,268,268,0,2,0,0,1,0.58209,1,1,0.494138
+image_lit.tab,imagefourth,numeric,268,268,0,5,0,2,2,2.20149,3,4,0.930385
+image_lit.tab,treatmentvscontrol,numeric,268,268,0,2,0,0,1,0.652985,1,1,0.476911
+data.tab,user_id,categorical_or_text,8576,8576,0,268,,,,,,,"{""0043a22068838364"": 32, ""022dbb59b9a867d9"": 32, ""02580189c1d3aa64"": 32}"
+data.tab,group_name,categorical_or_text,8576,8576,0,3,,,,,,,"{""treatment1"": 3008, ""control"": 2976, ""treatment2"": 2592}"
+data.tab,images_shown,numeric,8576,8576,0,1,32,32,32,32,32,32,0
+data.tab,correct,numeric,8576,8576,0,18,10,18,21,20.7313,23,29,3.406
+data.tab,incorrect,numeric,8576,8576,0,18,3,9,11,11.2687,14,22,3.406
+data.tab,What gender do you identify with?,categorical_or_text,8576,8576,0,4,,,,,,,"{""Woman"": 3584, ""Man"": 3040, ""Prefer not to say"": 1056}"
+data.tab,Which age group do you belong to?,categorical_or_text,8576,8416,160,4,,,,,,,"{""25-34"": 3296, ""34-50"": 2560, ""50 <"": 1408}"
+data.tab,What is your highest completed level of education?,categorical_or_text,8576,8480,96,4,,,,,,,"{""College Degree"": 3776, ""Some College"": 1984, ""Graduate Degree"": 1696}"
+data.tab,What race do you identify as?,categorical_or_text,8576,8512,64,5,,,,,,,"{""White"": 5696, ""Black"": 1024, ""Asian"": 704}"
+data.tab,How often do you use social media?,categorical_or_text,8576,8512,64,5,,,,,,,"{""Daily"": 6656, ""At least once a week"": 1344, ""Less than once a month"": 224}"
+data.tab,How familiar are you with image manipulation?,categorical_or_text,8576,8512,64,4,,,,,,,"{""Somewhat familiar"": 5280, ""Very familiar"": 2528, ""Not familiar at all"": 576}"
+data.tab,What is your political orientation?,categorical_or_text,8576,8544,32,6,,,,,,,"{""Liberal"": 2432, ""Somewhat Liberal"": 2368, ""Moderate"": 1888}"
+data.tab,image,categorical_or_text,8576,8576,0,32,,,,,,,"{""image1"": 268, ""image2"": 268, ""image3"": 268}"
+data.tab,classification,categorical_or_text,8576,8576,0,2,,,,,,,"{""correct"": 5556, ""incorrect"": 3020}"
+data.tab,image_type,numeric,8576,8576,0,2,0,0,0,0.499883,1,1,0.500029
+data.tab,manip_type,categorical_or_text,8576,8576,0,5,,,,,,,"{""no"": 4287, ""erasing"": 1074, ""splicing"": 1072}"
+data.tab,time_spent,numeric,8576,8576,0,8152,0.2698,5.98453,7.69215,9.90747,10.9811,304.579,9.0057

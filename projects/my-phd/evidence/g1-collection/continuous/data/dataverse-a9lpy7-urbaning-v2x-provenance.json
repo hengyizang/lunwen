@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-a9lpy7-urbaning-v2x",
+  "dataset_name": "UrbanIng-V2X",
+  "doi": "10.7910/dvn/a9lpy7",
+  "landing_url": "https://doi.org/10.7910/DVN/A9LPY7",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/A9LPY7",
+  "access_date": "2026-11-21",
+  "round_number": 23,
+  "observed_license_metadata": "CC BY-NC-ND 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "av_vehicle_data.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12684160",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/A9LPY7/19a1240b918-b764d296b0ed?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27av_vehicle_data.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091936Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3ff88568bce133fe7cd2adec901d4d5598f3ce38ce0df65d8f99588a6ae3c474",
+      "http_status": 200,
+      "bytes": 326,
+      "publisher_checksum": "md5:e41f4d65ecc07c51880ac0e25a014536",
+      "verified_md5": "e41f4d65ecc07c51880ac0e25a014536",
+      "verified_sha256": "a659594d5e30d32174c66a20a867cf510ca7d918a10344c9e23b0c691184be93"
+    },
+    {
+      "file": "labels_av_track_ids.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12684162",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/A9LPY7/19a1240c699-7f16aca6f22d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27labels_av_track_ids.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091938Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=5d29599d692a14bf8aa99e1dfabb13ece3d57e8f293b36e3a0d0cfb642e615ed",
+      "http_status": 200,
+      "bytes": 2761,
+      "publisher_checksum": "md5:5bb9b9b32c67d1a95256bc722ad40900",
+      "verified_md5": "5bb9b9b32c67d1a95256bc722ad40900",
+      "verified_sha256": "98c4b2111849e2b16e227662d521e7a8895fabfd13f2306420932cf241a9e474"
+    },
+    {
+      "file": "20241126_0008_crossing1_01.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12684174",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/A9LPY7/19a12527edf-dc38cb6fcae6?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2720241126_0008_crossing1_01.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091939Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ebe5de0c15d0d862948e52c46172b7f306848d19a7268391452e4442bc579349",
+      "http_status": 200,
+      "bytes": 1914856,
+      "publisher_checksum": "md5:1c13b61ed9d82deea9972d6f8b4721db",
+      "verified_md5": "1c13b61ed9d82deea9972d6f8b4721db",
+      "verified_sha256": "f4f8733aa2117c8d4784c6aaac8b17d5e7c231d41b5038239136d179f77abddc"
+    },
+    {
+      "file": "20241127_0024_crossing3_08.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12684200",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/A9LPY7/19a12536eb3-bdc8991aca57?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2720241127_0024_crossing3_08.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091942Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=993896ebfe6df808bf129fde254cfc4013b1c1e62a6073b3c8912d0e8e957d49",
+      "http_status": 200,
+      "bytes": 2078877,
+      "publisher_checksum": "md5:7a642f99e8d846f5675a6bffe3e77f57",
+      "verified_md5": "7a642f99e8d846f5675a6bffe3e77f57",
+      "verified_sha256": "b6b6a58536663e4640f422ef97cbf7b227714e3032677d66f8ebf8f7b7ea4f2f"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-a9lpy7-urbaning-v2x",
+  "raw_total_bytes": 3996820,
+  "raw_total_rows": 160,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-a9lpy7-urbaning-v2x-cleaned.csv",
+  "cleaned_csv_sha256": "d41ba4e912caec98e37d5d1c5e53bd8cdb26005f61288486bc7e4ee2abd39fed",
+  "cleaned_rows": 25,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "20241126_0008_crossing1_01.json": {
+      "track_id": 0,
+      "object_type": 0,
+      "dimensions": 0,
+      "timestamps": 0,
+      "positions": 0,
+      "orientations": 0,
+      "attributes.vehicle_type": 9,
+      "attributes.occlusion": 0,
+      "attributes.person_type": 71,
+      "attributes.pedestrian_state": 72,
+      "attributes.chassis_type": 74,
+      "attributes.cyclist_state": 78
+    },
+    "20241127_0024_crossing3_08.json": {
+      "track_id": 0,
+      "object_type": 0,
+      "timestamps": 0,
+      "dimensions": 0,
+      "positions": 0,
+      "orientations": 0,
+      "attributes.vehicle_type": 21,
+      "attributes.occlusion": 0,
+      "attributes.trailer_type": 80,
+      "attributes.chassis_type": 80,
+      "attributes.person_type": 63,
+      "attributes.cyclist_state": 75,
+      "attributes.pedestrian_state": 69
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

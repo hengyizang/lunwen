@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 22,
-  "total_new_literature": 2101,
-  "total_new_datasets": 1090,
-  "total_new_reading_queue": 1879,
+  "round_number": 23,
+  "total_new_literature": 2303,
+  "total_new_datasets": 1130,
+  "total_new_reading_queue": 2016,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -49,7 +49,10 @@
     "dataverse:10.7910/dvn/zyqvlr",
     "figshare:35049556",
     "figshare:34163973",
-    "figshare:32625708"
+    "figshare:32625708",
+    "dataverse:10.7910/dvn/a9lpy7",
+    "dataverse:10.7910/dvn/m6jxed",
+    "dataverse:10.7910/dvn/ckmbcg"
   ],
   "cleaned_datasets_meta": [
     {
@@ -681,6 +684,48 @@
       "cleaned_rows": 130,
       "raw_total_rows": 140,
       "verified_sha256": "c69c4879f96b7376041776797a1b2d9478ab499ce8bccc870479ce9ab66c94e3"
+    },
+    {
+      "slug": "dataverse-a9lpy7-urbaning-v2x",
+      "key": "dataverse:10.7910/dvn/a9lpy7",
+      "dataset_name": "UrbanIng-V2X",
+      "doi": "10.7910/dvn/a9lpy7",
+      "landing_url": "https://doi.org/10.7910/DVN/A9LPY7",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-a9lpy7-urbaning-v2x-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-a9lpy7-urbaning-v2x-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_a9lpy7_urbaning_v2x.py",
+      "cleaned_rows": 25,
+      "raw_total_rows": 160,
+      "verified_sha256": "a659594d5e30d32174c66a20a867cf510ca7d918a10344c9e23b0c691184be93"
+    },
+    {
+      "slug": "dataverse-m6jxed-open-ended-creative-and",
+      "key": "dataverse:10.7910/dvn/m6jxed",
+      "dataset_name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+      "doi": "10.7910/dvn/m6jxed",
+      "landing_url": "https://doi.org/10.7910/DVN/M6JXED",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-m6jxed-open-ended-creative-and-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-m6jxed-open-ended-creative-and-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_m6jxed_open_ended_creative_and.py",
+      "cleaned_rows": 29,
+      "raw_total_rows": 144,
+      "verified_sha256": "a01a6467f93ce2a525ae6ecd003a2a87430f108a7494822c16b3ca6ade675b5b"
+    },
+    {
+      "slug": "dataverse-ckmbcg-replication-data-for-fee",
+      "key": "dataverse:10.7910/dvn/ckmbcg",
+      "dataset_name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+      "doi": "10.7910/dvn/ckmbcg",
+      "landing_url": "https://doi.org/10.7910/DVN/CKMBCG",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ckmbcg-replication-data-for-fee-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ckmbcg-replication-data-for-fee-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ckmbcg_replication_data_for_fee.py",
+      "cleaned_rows": 166,
+      "raw_total_rows": 8844,
+      "verified_sha256": "f7f3adef2265c62c3784813adf7e85f886de20e559871b799c65a239b9c2071f"
     }
   ],
   "snowballed_dois": [
@@ -702,6 +747,7 @@
     "10.1038/s41598-026-47975-9",
     "10.1109/auteee67053.2025.11322247",
     "10.1109/icuas69441.2026.11598692",
+    "10.1109/iros.2018.8593904",
     "10.1109/iros60139.2025.11247435",
     "10.1109/lcsys.2025.3610637",
     "10.1109/lra.2025.3609669",
@@ -709,6 +755,7 @@
     "10.1109/robosoft60065.2024.10521997",
     "10.1109/robosoft63089.2025.11020810",
     "10.1109/tase.2025.3634193",
+    "10.1109/tro.2022.3226365",
     "10.1371/journal.pone.0210058",
     "10.18178/ijmerr.15.1.65-79",
     "10.2139/ssrn.7447982",
@@ -924,36 +971,45 @@
       "net_new_datasets": 83,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 23,
+      "completed_at": "2026-11-21T09:19:02Z",
+      "batch_label": "Broad Engineering R23: Robotics_Embodied",
+      "net_new_literature": 202,
+      "net_new_datasets": 40,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T09:14:08Z",
+  "updated_at": "2026-11-21T09:19:02Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 125,
+    "Adjacent": 173,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 344,
-    "Mechanical_Physics_AI": 548,
-    "Mechatronics_PHM_Control": 458,
-    "Robotics_Embodied": 782,
-    "R5_MultiRobot_Comm": 239,
-    "R1_Force_Contact": 119,
-    "Smart_Manufacturing": 212,
-    "Smart_Factory_DigitalTwin": 147
+    "Mechanical_Physics_AI": 565,
+    "Mechatronics_PHM_Control": 484,
+    "Robotics_Embodied": 921,
+    "R5_MultiRobot_Comm": 240,
+    "R1_Force_Contact": 123,
+    "Smart_Manufacturing": 218,
+    "Smart_Factory_DigitalTwin": 148
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 521,
-    "Mechatronics_PHM_Control": 313,
+    "Mechanical_Physics_AI": 551,
+    "Mechatronics_PHM_Control": 322,
     "Smart_Manufacturing": 273,
     "Robotics_Embodied": 273,
-    "R5_MultiRobot_Comm": 35,
+    "R5_MultiRobot_Comm": 36,
     "Smart_Factory_DigitalTwin": 63,
-    "R2_Aerial_Actuator": 38,
-    "R1_Force_Contact": 47
+    "R2_Aerial_Actuator": 43,
+    "R1_Force_Contact": 48
   },
   "probed_uncleanable_keys": [
     "dataverse:10.7910/dvn/29444",

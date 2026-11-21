@@ -1,0 +1,30 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+OLA_07_creative_play_2026-06_codebook.tab,variable,categorical_or_text,23,23,0,23,,,,,,,"{""participant_code"": 1, ""startdate"": 1, ""enddate"": 1}"
+OLA_07_creative_play_2026-06_codebook.tab,label,categorical_or_text,23,23,0,23,,,,,,,"{""Study-local anonymous identifier assigned during de-identification. It has no meaning outside this file."": 1, ""Date the participant began the questionnaire..."
+OLA_07_creative_play_2026-06_codebook.tab,type,categorical_or_text,23,23,0,4,,,,,,,"{""categorical"": 15, ""text"": 6, ""numeric"": 1}"
+OLA_07_creative_play_2026-06_codebook.tab,n_answered,numeric,23,23,0,8,0,118,120,100.217,121,121,44.1835
+OLA_07_creative_play_2026-06_codebook.tab,n_missing,numeric,23,23,0,8,0,0,1,20.7826,3,121,44.1835
+OLA_07_creative_play_2026-06_codebook.tab,values,categorical_or_text,23,23,0,16,,,,,,,"{""free text"": 6, ""2026-06-13; 2026-06-14; 2026-06-15"": 3, ""100"": 1}"
+OLA_07_creative_play_2026-06.tab,participant_code,categorical_or_text,121,121,0,121,,,,,,,"{""OLA-07-001"": 1, ""OLA-07-002"": 1, ""OLA-07-003"": 1}"
+OLA_07_creative_play_2026-06.tab,startdate,categorical_or_text,121,121,0,3,,,,,,,"{""2026-06-13"": 61, ""2026-06-15"": 33, ""2026-06-14"": 27}"
+OLA_07_creative_play_2026-06.tab,enddate,categorical_or_text,121,121,0,3,,,,,,,"{""2026-06-13"": 61, ""2026-06-15"": 33, ""2026-06-14"": 27}"
+OLA_07_creative_play_2026-06.tab,progress,numeric,121,121,0,1,100,100,100,100,100,100,0
+OLA_07_creative_play_2026-06.tab,duration_in_seconds,numeric,121,121,0,103,18,183,237,307.372,336,1478,222.27
+OLA_07_creative_play_2026-06.tab,finished,numeric,121,121,0,1,1,1,1,1,1,1,0
+OLA_07_creative_play_2026-06.tab,recordeddate,categorical_or_text,121,121,0,3,,,,,,,"{""2026-06-13"": 61, ""2026-06-15"": 33, ""2026-06-14"": 27}"
+OLA_07_creative_play_2026-06.tab,q1,categorical_or_text,121,120,1,7,,,,,,,"{""Licensed professional counselor / therapist"": 52, ""Clinical social worker"": 30, ""Other (please specify)"": 18}"
+OLA_07_creative_play_2026-06.tab,q1_7_text,categorical_or_text,121,17,104,17,,,,,,,"{""behavior therapist"": 1, ""LMSW earning clinical hours"": 1, ""Behavior therapist "": 1}"
+OLA_07_creative_play_2026-06.tab,q2,categorical_or_text,121,120,1,5,,,,,,,"{""Sometimes"": 48, ""Rarely"": 29, ""Often"": 17}"
+OLA_07_creative_play_2026-06.tab,q3,categorical_or_text,121,120,1,49,,,,,,,"{""Reducing anxiety,Emotional expression,Improving present-moment awareness,Enjoyment and positive affect"": 12, ""Reducing anxiety,Emotional expression,Improvi..."
+OLA_07_creative_play_2026-06.tab,q3_8_text,categorical_or_text,121,6,115,6,,,,,,,"{""Expression with language barrier "": 1, ""Overcoming language barrier"": 1, ""therapeutic community-building"": 1}"
+OLA_07_creative_play_2026-06.tab,q4,categorical_or_text,121,120,1,5,,,,,,,"{""Mixed"": 57, ""Generally open"": 35, ""Often hesitant"": 24}"
+OLA_07_creative_play_2026-06.tab,q5,categorical_or_text,121,120,1,3,,,,,,,"{""Often"": 67, ""Sometimes"": 29, ""Almost always"": 24}"
+OLA_07_creative_play_2026-06.tab,q6,categorical_or_text,121,120,1,35,,,,,,,"{""Visible physical relaxation,More open verbal communication,Improved emotional access,Better session engagement overall,Increased playfulness or humor"": 16,..."
+OLA_07_creative_play_2026-06.tab,q6_7_text,categorical_or_text,121,2,119,2,,,,,,,"{""Sometimes there's a negative response, as though the lack of immediate \\payoff\\\"" proved that their initial lack of willingness to participate was warran..."
+OLA_07_creative_play_2026-06.tab,q7,categorical_or_text,121,119,2,6,,,,,,,"{""More open verbal communication"": 30, ""Better session engagement overall"": 26, ""Visible physical relaxation"": 25}"
+OLA_07_creative_play_2026-06.tab,q7_7_text,categorical_or_text,121,0,121,0,,,,,,,{}
+OLA_07_creative_play_2026-06.tab,q8,categorical_or_text,121,120,1,4,,,,,,,"{""Far fewer"": 55, ""Somewhat fewer"": 43, ""About the same"": 13}"
+OLA_07_creative_play_2026-06.tab,q9,categorical_or_text,121,120,1,5,,,,,,,"{""Increased somewhat"": 45, ""Stayed the same"": 38, ""Decreased somewhat"": 22}"
+OLA_07_creative_play_2026-06.tab,q10,categorical_or_text,121,118,3,118,,,,,,,"{""test"": 1, ""I noticed a Client become more playful and lighter in that moment, initially. After that, I saw them become more attuned with their hurt/pain. I..."
+OLA_07_creative_play_2026-06.tab,q11,categorical_or_text,121,118,3,118,,,,,,,"{""test"": 1, ""I use language like \\curious\\\"" to help soften internal judgement and discomfort.\"""": 1, ""Seeing how others express themselves in vulnerable w..."
+OLA_07_creative_play_2026-06.tab,q12,categorical_or_text,121,118,3,5,,,,,,,"{""4 to 7 years"": 40, ""8 to 15 years"": 30, ""16 years or more"": 24}"

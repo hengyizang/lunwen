@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-m6jxed-open-ended-creative-and",
+  "dataset_name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+  "doi": "10.7910/dvn/m6jxed",
+  "landing_url": "https://doi.org/10.7910/DVN/M6JXED",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/M6JXED",
+  "access_date": "2026-11-21",
+  "round_number": 23,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "OLA_07_creative_play_2026-06_codebook.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14255448",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/M6JXED/1a0bf64df80-4068cd3d0781?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27OLA_07_creative_play_2026-06_codebook.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091947Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=e619e97274478c51305b727c06b95a8ee339b2e9d6e69224d93d56c105731a5b",
+      "http_status": 200,
+      "bytes": 4296,
+      "publisher_checksum": "dataverse_original_md5:8bda8accd2a0c09ffdf50da13cc10e9b",
+      "verified_md5": "599605fbafd9d7304a28e5c09c09e419",
+      "verified_sha256": "a01a6467f93ce2a525ae6ecd003a2a87430f108a7494822c16b3ca6ade675b5b"
+    },
+    {
+      "file": "OLA_07_creative_play_2026-06.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14255449",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/M6JXED/1a0bf64d3d5-d92c80faa75a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27OLA_07_creative_play_2026-06.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091948Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=187f144f17ddb8666a89752cb68255a1d2688c1e84033b591b7c203390a9f03e",
+      "http_status": 200,
+      "bytes": 91875,
+      "publisher_checksum": "dataverse_original_md5:3027cbbdc981d86f32fc401291ed93e7",
+      "verified_md5": "0347d676d39fa078d986501f66f3ff21",
+      "verified_sha256": "ab951508fd39501c5be5ff0a6040be973f117c7506fc463fd54e864a20fc9821"
+    },
+    {
+      "file": "OLA_07_creative_play_2026-06_README.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14255450",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/M6JXED/1a0bf64eb33-20c52a0bceca?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27OLA_07_creative_play_2026-06_README.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091950Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=4d900b8afd30bd86b2a5e6883bed7a02a6fe9397e802a0955ba8dc29fc4384b0",
+      "http_status": 200,
+      "bytes": 2848,
+      "publisher_checksum": "md5:c586993998611c72c001793aa25e0ba0",
+      "verified_md5": "c586993998611c72c001793aa25e0ba0",
+      "verified_sha256": "8e00b728913d123d2c4e707fe56033ffbfaaaa82f447ecdf20d82b9d40c4c490"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-m6jxed-open-ended-creative-and",
+  "raw_total_bytes": 99019,
+  "raw_total_rows": 144,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-m6jxed-open-ended-creative-and-cleaned.csv",
+  "cleaned_csv_sha256": "16a4a419dd9d588ed74830158b7eb5cd54ad3031fd9da6848e2872288af04e4d",
+  "cleaned_rows": 29,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "OLA_07_creative_play_2026-06_codebook.tab": {
+      "variable": 0,
+      "label": 0,
+      "type": 0,
+      "n_answered": 0,
+      "n_missing": 0,
+      "values": 0
+    },
+    "OLA_07_creative_play_2026-06.tab": {
+      "participant_code": 0,
+      "startdate": 0,
+      "enddate": 0,
+      "progress": 0,
+      "duration_in_seconds": 0,
+      "finished": 0,
+      "recordeddate": 0,
+      "q1": 1,
+      "q1_7_text": 104,
+      "q2": 1,
+      "q3": 1,
+      "q3_8_text": 115,
+      "q4": 1,
+      "q5": 1,
+      "q6": 1,
+      "q6_7_text": 119,
+      "q7": 2,
+      "q7_7_text": 121,
+      "q8": 1,
+      "q9": 1,
+      "q10": 3,
+      "q11": 3,
+      "q12": 3
+    }
+  },
+  "time_monotonicity": {
+    "OLA_07_creative_play_2026-06.tab": {
+      "column": "duration_in_seconds",
+      "numeric_samples": 121,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -1129.0,
+      "median_step": 22.0,
+      "max_step": 1009.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
