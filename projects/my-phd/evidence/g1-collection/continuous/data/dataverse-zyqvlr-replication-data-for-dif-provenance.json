@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-zyqvlr-replication-data-for-dif",
+  "dataset_name": "Replication Data for: Differences in thermal tolerance and locomotion capacity support distinct dispersal strategies in larvae Halarachnidae mites",
+  "doi": "10.7910/dvn/zyqvlr",
+  "landing_url": "https://doi.org/10.7910/DVN/ZYQVLR",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/ZYQVLR",
+  "access_date": "2026-11-21",
+  "round_number": 21,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "data_hot_thermal_tolerance.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12052710",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ZYQVLR/1991c5cff23-a4c14c3eff79?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27data_hot_thermal_tolerance.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091058Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=18b92f9fc5efab26801d07753adca1954fecd1c3e081b1586842791b1b9baa8f",
+      "http_status": 200,
+      "bytes": 147,
+      "publisher_checksum": "dataverse_original_md5:42994445abe9bf7fb77ef1ed49608bd6",
+      "verified_md5": "9edd2838b9fb70573f7391bdce4fa3c0",
+      "verified_sha256": "b90d59c6e0ac73507af49555cd74be08e529c89883199ff550d2952b6f5e4d2e"
+    },
+    {
+      "file": "data_thermal_tolerance_time.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12052712",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ZYQVLR/1991c5d18d1-ae4c3964898c?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27data_thermal_tolerance_time.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091059Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6bea27667583cbdba489b3cf4cfd0b08ab6a16334add777e40dfda2bcf0eee90",
+      "http_status": 200,
+      "bytes": 157,
+      "publisher_checksum": "dataverse_original_md5:bbb3fdff46f5da2fbbfdbc98a253c77f",
+      "verified_md5": "e0c6e9cfdb7c9dee5ef3221fab7e9199",
+      "verified_sha256": "048828367bdcbdc9c000cd4702d811b237f05ae1173b7ef3d8751367d55afa1b"
+    },
+    {
+      "file": "data_cold_thermal_tolerance.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12052713",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ZYQVLR/1991c5cf407-6210c710583f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27data_cold_thermal_tolerance.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091101Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=77d418d043a071627b382a2fe73c1e0a834791d067b0683e83b1649dc52ed444",
+      "http_status": 200,
+      "bytes": 229,
+      "publisher_checksum": "dataverse_original_md5:869408be7d16f959923947ec1c56ac64",
+      "verified_md5": "9829d075339604fd9c40617d97a0d11f",
+      "verified_sha256": "a2ac10bdf9b7c1817d26fbbff35a75be893f2fe1a97ba6a9fb192a04a804481e"
+    },
+    {
+      "file": "data_hot_thermal_tolerance_age.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12052709",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ZYQVLR/1991c5d017c-f56dc8e9d2b7?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27data_hot_thermal_tolerance_age.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091102Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=9eb5beed2d736d402e4e6299a654da6f7b3d8a5664e3f5630639f7115bedf6eb",
+      "http_status": 200,
+      "bytes": 241,
+      "publisher_checksum": "dataverse_original_md5:ec9d2f69711f02ab8f656eeb30394e7d",
+      "verified_md5": "c45da0e0538049d244617cd08e29803e",
+      "verified_sha256": "7cf9c4ce537e761747b202aff847e99d8f3979d898f9d0f1e7f881e6161758b6"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-zyqvlr-replication-data-for-dif",
+  "raw_total_bytes": 774,
+  "raw_total_rows": 35,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-zyqvlr-replication-data-for-dif-cleaned.csv",
+  "cleaned_csv_sha256": "1993c3eab7e8f56b9f4d009e4af3166ccd219962ad9861330310ba5f08b005ad",
+  "cleaned_rows": 23,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "data_hot_thermal_tolerance.tab": {
+      "temperature": 0,
+      "alive.oa": 0,
+      "total.oa": 0,
+      "alive.od": 0,
+      "total.od": 0
+    },
+    "data_thermal_tolerance_time.tab": {
+      "temperature": 0,
+      "time": 0,
+      "alive.oa": 0,
+      "total.oa": 0,
+      "alive.od": 0,
+      "total.od": 0
+    },
+    "data_cold_thermal_tolerance.tab": {
+      "temperature": 0,
+      "oa.alive": 0,
+      "oa.total": 0,
+      "od.alive": 0,
+      "od.total": 0,
+      "age": 0
+    },
+    "data_hot_thermal_tolerance_age.tab": {
+      "temperature": 0,
+      "alive.oa": 0,
+      "total.oa": 0,
+      "alive.od": 0,
+      "total.od": 0,
+      "age": 0
+    }
+  },
+  "time_monotonicity": {
+    "data_thermal_tolerance_time.tab": {
+      "column": "time",
+      "numeric_samples": 8,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -3.0,
+      "median_step": 1.0,
+      "max_step": 1.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

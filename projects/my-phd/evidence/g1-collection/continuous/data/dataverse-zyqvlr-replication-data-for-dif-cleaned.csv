@@ -1,0 +1,24 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+data_hot_thermal_tolerance.tab,temperature,numeric,9,9,0,9,37,41,43,43,45,49,3.53553
+data_hot_thermal_tolerance.tab,alive.oa,numeric,9,9,0,5,0,1,6,4.88889,8,8,3.58624
+data_hot_thermal_tolerance.tab,total.oa,numeric,9,9,0,1,8,8,8,8,8,8,0
+data_hot_thermal_tolerance.tab,alive.od,numeric,9,9,0,6,0,1,6,4.55556,7,8,3.32081
+data_hot_thermal_tolerance.tab,total.od,numeric,9,9,0,1,8,8,8,8,8,8,0
+data_thermal_tolerance_time.tab,temperature,numeric,8,8,0,2,40,40,40.5,40.5,41,41,0.534522
+data_thermal_tolerance_time.tab,time,numeric,8,8,0,4,1,1.75,2.5,2.5,3.25,4,1.19523
+data_thermal_tolerance_time.tab,alive.oa,numeric,8,8,0,3,6,7,7.5,7.375,8,8,0.744024
+data_thermal_tolerance_time.tab,total.oa,numeric,8,8,0,2,7,7.75,8,7.75,8,8,0.46291
+data_thermal_tolerance_time.tab,alive.od,numeric,8,8,0,6,1,2,4.5,4.625,7.25,8,2.82527
+data_thermal_tolerance_time.tab,total.od,numeric,8,8,0,2,7,7.75,8,7.75,8,8,0.46291
+data_cold_thermal_tolerance.tab,temperature,numeric,8,8,0,4,-7.5,-5.625,-3.5,-3.625,-1.5,0,3.05602
+data_cold_thermal_tolerance.tab,oa.alive,numeric,8,8,0,5,16,22,23.5,22.5,25,25,3.29502
+data_cold_thermal_tolerance.tab,oa.total,numeric,8,8,0,1,25,25,25,25,25,25,0
+data_cold_thermal_tolerance.tab,od.alive,numeric,8,8,0,5,8,12,21,18.625,25,25,7.08998
+data_cold_thermal_tolerance.tab,od.total,numeric,8,8,0,3,13,22.25,25,22.125,25,25,5.33017
+data_cold_thermal_tolerance.tab,age,categorical_or_text,8,8,0,2,,,,,,,"{""young"": 4, ""old"": 4}"
+data_hot_thermal_tolerance_age.tab,temperature,numeric,10,10,0,5,40,41,42,42,43,44,1.49071
+data_hot_thermal_tolerance_age.tab,alive.oa,numeric,10,10,0,7,6,8,8.5,9.1,10.75,12,2.079
+data_hot_thermal_tolerance_age.tab,total.oa,numeric,10,10,0,2,8,8,10,10,12,12,2.10819
+data_hot_thermal_tolerance_age.tab,alive.od,numeric,10,10,0,5,2,6,6.5,6.3,7.75,8,1.82878
+data_hot_thermal_tolerance_age.tab,total.od,numeric,10,10,0,1,8,8,8,8,8,8,0
+data_hot_thermal_tolerance_age.tab,age,categorical_or_text,10,10,0,2,,,,,,,"{""young"": 5, ""old"": 5}"

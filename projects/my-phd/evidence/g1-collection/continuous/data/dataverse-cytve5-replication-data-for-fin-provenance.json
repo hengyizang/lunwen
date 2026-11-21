@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-cytve5-replication-data-for-fin",
+  "dataset_name": "Replication Data for: Fin-fin interactions during locomotion in a simplified biomimetic fish model",
+  "doi": "10.7910/dvn/cytve5",
+  "landing_url": "https://doi.org/10.7910/DVN/CYTVE5",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/CYTVE5",
+  "access_date": "2026-11-21",
+  "round_number": 21,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "AllSpecies.FinPhasing.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4642492",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CYTVE5/179717b6b1f-a52b7320c9da?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27AllSpecies.FinPhasing.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091039Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=98e07d63579aa69a0eba73813ffe9ca1132af15edb0da2386de60a6f5d70dc27",
+      "http_status": 200,
+      "bytes": 2608,
+      "publisher_checksum": "dataverse_original_md5:12b3001774620c7c317c7883be3bab27",
+      "verified_md5": "1f9ff83a80ee59f6ab1d90aaf3a56a3c",
+      "verified_sha256": "921a4b6940c9b66069a97bd0a8fc83b50320027a4f677946d6f29a6108040831"
+    },
+    {
+      "file": "DataForStatsAnalysis.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4642496",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CYTVE5/179717df320-1a93f51fcf40?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27DataForStatsAnalysis.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091041Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=1eaf14219866d570ede8af6f460645996940304944326861dcad8779195a77e9",
+      "http_status": 200,
+      "bytes": 3108,
+      "publisher_checksum": "dataverse_original_md5:9c9fc4ddc397180a90d7e5f9640aa98c",
+      "verified_md5": "7bb330c11f0421689d83d68c8d3179ef",
+      "verified_sha256": "ec93f305ee9337ad9bc8ba56c2625b9b1490ab00d37c360eefc4b21cd96b0f5a"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-cytve5-replication-data-for-fin",
+  "raw_total_bytes": 5716,
+  "raw_total_rows": 77,
+  "duplicate_rows_removed": 1,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-cytve5-replication-data-for-fin-cleaned.csv",
+  "cleaned_csv_sha256": "7170f92b42f651a482786b619ac114d62d3d75774a50a4c64fbc2d3d78ff908f",
+  "cleaned_rows": 20,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "AllSpecies.FinPhasing.tab": {
+      "species": 0,
+      "position": 0,
+      "fin": 0,
+      "Swim speed (body lengths/second)": 29,
+      "Frequency": 23,
+      "Phase angle": 0,
+      "Dorsal amplitude": 5,
+      "Caudal amplitude": 5
+    },
+    "DataForStatsAnalysis.tab": {
+      "Placeholder": 0,
+      "Material": 0,
+      "Position": 0,
+      "Frequency": 0,
+      "Fx": 0,
+      "Fy": 0,
+      "angPhaseTop": 11,
+      "cmAmpDor": 11,
+      "cmAmpCaud": 11,
+      "power": 0,
+      "powvel": 0,
+      "SPS": 0
+    }
+  },
+  "time_monotonicity": {
+    "AllSpecies.FinPhasing.tab": {
+      "column": "Swim speed (body lengths/second)",
+      "numeric_samples": 15,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -1.0,
+      "median_step": 0.0,
+      "max_step": 0.75
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

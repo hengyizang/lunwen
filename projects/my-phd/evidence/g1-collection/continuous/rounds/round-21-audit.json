@@ -1,0 +1,368 @@
+{
+  "schema_version": "1.0",
+  "round": 21,
+  "completed_at": "2026-11-21T09:08:59Z",
+  "batch_label": "Broad Engineering R21: R2_Aerial_Actuator / R5_MultiRobot_Comm",
+  "base_head_sha": "d0cba6708b802aa873696fa50b776aad5e5ea6d5",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 154,
+    "duplicates_skipped": 20,
+    "net_new": 134,
+    "new_reading_queue": 85,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "tilted hexarotor wrench control",
+        "receipt_id": "20261121t090859z-arxiv-3c6b4df72a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atilted+AND+all%3Ahexarotor+AND+all%3Awrench+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 5,
+        "response_sha256": "10994023a1989fb1e03a24a5a181a40c543040b3c4bf1e23d334af762c18d7b8",
+        "normalized_results_sha256": "226f47dcf7d3b8a4bd1ef9dd1cab24371f2567ecef27d0ecc8c7e8381053c022"
+      },
+      {
+        "provider": "openalex",
+        "query": "tilted hexarotor wrench control",
+        "receipt_id": "20261121t090859z-openalex-d6682f2c16",
+        "request_url": "https://api.openalex.org/works?search=tilted+hexarotor+wrench+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "36171917b46f4c922b9d11e3ff42595b27b94d0bdb5ef3a26397897783ed59bc",
+        "normalized_results_sha256": "195b6f10c3f9be657874d33091da7e1947eccb1f51326a142a21ff48aa75faf8"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "tilted hexarotor wrench control",
+        "receipt_id": "20261121t090901z-europe-pmc-54b562370b",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=tilted+hexarotor+wrench+control&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "eb34237dd7b2732caf78e9ae8156c55abfe87a3561010ac3733178637d3d9ca7",
+        "normalized_results_sha256": "1e69d477e8e2881a6ce79d3c16282b06d503466efcbd38d3e76831c79c4b71b4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "coaxial helicopter fault tolerant",
+        "receipt_id": "20261121t090903z-arxiv-e8e5a8436d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acoaxial+AND+all%3Ahelicopter+AND+all%3Afault+AND+all%3Atolerant&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "f49812739edacc1b2d7b06c56eea3f6a51e2a1e5c57668de7ed8d00b1e30d758",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "coaxial helicopter fault tolerant",
+        "receipt_id": "20261121t090903z-openalex-7ab29271b1",
+        "request_url": "https://api.openalex.org/works?search=coaxial+helicopter+fault+tolerant&per-page=12",
+        "result_count": 12,
+        "response_sha256": "06eeaf01f8d89568d58773e68612ff4361789947932a7cdbe61db14c255e99f4",
+        "normalized_results_sha256": "cee588ba275135e2367d2a5a48cbb1d316cfadb173357fe9dd03bc87d5abcfe8"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "coaxial helicopter fault tolerant",
+        "receipt_id": "20261121t090905z-europe-pmc-5880eb0c5e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=coaxial+helicopter+fault+tolerant&pageSize=12&format=json",
+        "result_count": 4,
+        "response_sha256": "a8e394fe58ee1fb09492cdec45b79e6681c991a9b457b0fa1192510547fd56ba",
+        "normalized_results_sha256": "26f178dccb12f064d5a117d9b19ad2660ff4a8d4acd4b815b4ddcc40b9014966"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot task allocation auction",
+        "receipt_id": "20261121t090917z-arxiv-0944c9beb1",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amulti-robot+AND+all%3Atask+AND+all%3Aallocation+AND+all%3Aauction&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "76d7bd51ad12dc6f157d540dd6c5d261973161b584d639d6a62026c3843038a9",
+        "normalized_results_sha256": "00bce2b0fa645bb9c0c92802a81cc9d604f9cbf0c110b53f87f185f96a2839c8"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot task allocation auction",
+        "receipt_id": "20261121t090918z-openalex-3f058bf79c",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+task+allocation+auction&per-page=12",
+        "result_count": 12,
+        "response_sha256": "bea28255aa9173d0a7a90da84b4419f48b8c038ddbfa9f5ef5659f7ff44f1b20",
+        "normalized_results_sha256": "33a185816e9ef82c4b25b7b501637e4de8c852cbd81f165726c8086cb1d93edc"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multi-robot task allocation auction",
+        "receipt_id": "20261121t090920z-europe-pmc-175da54939",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multi-robot+task+allocation+auction&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a18b514bb097e521954388e303e28c91dad3d28087639b535eb5e6df930d21d7",
+        "normalized_results_sha256": "e980208c4b75792ff6dab239bf7342adde7a11d4d177145f9bf2e0f479e8ea4b"
+      },
+      {
+        "provider": "arxiv",
+        "query": "swarm formation obstacle avoidance",
+        "receipt_id": "20261121t090938z-arxiv-df6bf8d98c",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aswarm+AND+all%3Aformation+AND+all%3Aobstacle+AND+all%3Aavoidance&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "4a6414e65e1d7c4ececea8ba1e41a4c48e20bfaa423dfcdb1ecbe599d4925778",
+        "normalized_results_sha256": "939104ce1cdbd7e48a29680edd94b784b5ece96d7ddcd9518ee49c22c60d4d27"
+      },
+      {
+        "provider": "openalex",
+        "query": "swarm formation obstacle avoidance",
+        "receipt_id": "20261121t090939z-openalex-254dba78a2",
+        "request_url": "https://api.openalex.org/works?search=swarm+formation+obstacle+avoidance&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e84fd6bd45cd6053fedc8fa9b468a6443b3d36a49621972e138751e832efe305",
+        "normalized_results_sha256": "07fca0bfb536d9f8c307e74d04e6431e7f49cd2524eb7404d4a6e46dcd65d2d4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "swarm formation obstacle avoidance",
+        "receipt_id": "20261121t090940z-europe-pmc-36b819afa8",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=swarm+formation+obstacle+avoidance&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "ad967e23621db3c436553769d2917e3c975c75450d9a60749c6e176a362d1c18",
+        "normalized_results_sha256": "509117741fc5c2a3c8cd50e0309fef27a3c7ca50ee748c3bafb024a5abfebd96"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1038/s41598-020-70828-y",
+        "receipt_id": "20261121t090942z-opencitations-0221da3982",
+        "result_count": 48,
+        "response_sha256": "aae68640885df9acb7c1098d1c0024a878160af8ed0c48c8e5d1bc7d02f427a6"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/978-3-030-38688-7_3",
+        "receipt_id": "20261121t090944z-opencitations-49f172461f",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 190,
+    "off_topic_filtered": 102,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 41,
+    "net_new": 47,
+    "provider_statuses": [
+      {
+        "query": "directed energy deposition",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "directed energy deposition",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "directed energy deposition",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "directed energy deposition",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "directed energy deposition",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "powder bed fusion",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "powder bed fusion",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "powder bed fusion",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "powder bed fusion",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "powder bed fusion",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "selective laser melting",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "selective laser melting",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "selective laser melting",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "selective laser melting",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "selective laser melting",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "composite delamination",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "composite delamination",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "composite delamination",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "composite delamination",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "composite delamination",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 18,
+    "cleaned": [
+      {
+        "slug": "dataverse-cytve5-replication-data-for-fin",
+        "key": "dataverse:10.7910/dvn/cytve5",
+        "dataset_name": "Replication Data for: Fin-fin interactions during locomotion in a simplified biomimetic fish model",
+        "doi": "10.7910/dvn/cytve5",
+        "landing_url": "https://doi.org/10.7910/DVN/CYTVE5",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-cytve5-replication-data-for-fin-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-cytve5-replication-data-for-fin-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_cytve5_replication_data_for_fin.py",
+        "cleaned_rows": 20,
+        "raw_total_rows": 77,
+        "verified_sha256": "921a4b6940c9b66069a97bd0a8fc83b50320027a4f677946d6f29a6108040831"
+      },
+      {
+        "slug": "dataverse-snbqc2-replication-data-for-usi",
+        "key": "dataverse:10.7910/dvn/snbqc2",
+        "dataset_name": "Replication Data for \"Using TrackMate to Analyze Drosophila Larval and Adult Locomotion\"",
+        "doi": "10.7910/dvn/snbqc2",
+        "landing_url": "https://doi.org/10.7910/DVN/SNBQC2",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-snbqc2-replication-data-for-usi-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-snbqc2-replication-data-for-usi-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_snbqc2_replication_data_for_usi.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 106,
+        "verified_sha256": "4c66f11347a1326b16ff6b3befc6a95fb1733558a8ac21143f772356a40d370c"
+      },
+      {
+        "slug": "dataverse-zyqvlr-replication-data-for-dif",
+        "key": "dataverse:10.7910/dvn/zyqvlr",
+        "dataset_name": "Replication Data for: Differences in thermal tolerance and locomotion capacity support distinct dispersal strategies in larvae Halarachnidae mites",
+        "doi": "10.7910/dvn/zyqvlr",
+        "landing_url": "https://doi.org/10.7910/DVN/ZYQVLR",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-zyqvlr-replication-data-for-dif-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-zyqvlr-replication-data-for-dif-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_zyqvlr_replication_data_for_dif.py",
+        "cleaned_rows": 23,
+        "raw_total_rows": 35,
+        "verified_sha256": "b90d59c6e0ac73507af49555cd74be08e529c89883199ff550d2952b6f5e4d2e"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "url": "https://doi.org/10.7910/DVN/M6JXED",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+        "url": "https://doi.org/10.7910/DVN/CKMBCG",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

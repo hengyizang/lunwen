@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-snbqc2-replication-data-for-usi",
+  "dataset_name": "Replication Data for \"Using TrackMate to Analyze Drosophila Larval and Adult Locomotion\"",
+  "doi": "10.7910/dvn/snbqc2",
+  "landing_url": "https://doi.org/10.7910/DVN/SNBQC2",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/SNBQC2",
+  "access_date": "2026-11-21",
+  "round_number": 21,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Fig2H_ATR+_calcs_all.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5206512",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SNBQC2/17c2d76d2fd-9d9fb884a7ce?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Fig2H_ATR%252B_calcs_all.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091049Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=5556fb4a64a502b6e4bf3837986b2db1b71ecec5a4e5aec8cddbc4186a9c3ec8",
+      "http_status": 200,
+      "bytes": 859,
+      "publisher_checksum": "dataverse_original_md5:d82e0fd9f92c30703b2b7d646e549c44",
+      "verified_md5": "e50bb7b178d4ff805cf6f43f5f3b275e",
+      "verified_sha256": "4c66f11347a1326b16ff6b3befc6a95fb1733558a8ac21143f772356a40d370c"
+    },
+    {
+      "file": "Fig2D_Larval_free_motion.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5206514",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SNBQC2/17c2d76cce8-5677301d28e0?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Fig2D_Larval_free_motion.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091051Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3bf23014cd9a45aadec0a331c8a19af0757f625545a3844845bd775cbac97222",
+      "http_status": 200,
+      "bytes": 1706,
+      "publisher_checksum": "dataverse_original_md5:7d4de2389c9b32eb4d0e70f1ade5268e",
+      "verified_md5": "afb74aaf3b94307eca221269a45d01e4",
+      "verified_sha256": "f2b06c512b2c7b72a33b9d1e1df9e14557a329140f9715a2217d07ca32f7e64e"
+    },
+    {
+      "file": "Fig1D_Adult_free_movement.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5206521",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SNBQC2/17c2d76c8d3-d79b763d23eb?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Fig1D_Adult_free_movement.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091052Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=17cb52bff747f4f0cc0ac70d367c269f6f6e3d3ceb346307821a2a68d2b7ae8a",
+      "http_status": 200,
+      "bytes": 1922,
+      "publisher_checksum": "dataverse_original_md5:31faef7a0be5713b24a961b82376e5c5",
+      "verified_md5": "cbeae9e2913ea673a6370c0d4956654b",
+      "verified_sha256": "13a0e7a7eed4feb60c434ff466f95bf9b0fa238d6920390974db41557649e027"
+    },
+    {
+      "file": "Fig1H_HC_Chrimson_PI_Comparison.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5206516",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/SNBQC2/17c2d76cb7f-34148b10ce36?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Fig1H_HC_Chrimson_PI_Comparison.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T091054Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=fac6e5694f3083443886ff6e22887522268474389f240d6cf9c0ffd6d62872fe",
+      "http_status": 200,
+      "bytes": 2039,
+      "publisher_checksum": "dataverse_original_md5:263c86c1bbf35528b9f39ca20effa441",
+      "verified_md5": "e2b4d3cf5b567531ba3efceae2fdc32e",
+      "verified_sha256": "2371f1cb59c8e8bb996c5dc09656bda6754cbee03e36d02ae4954a26a4f5f33e"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-snbqc2-replication-data-for-usi",
+  "raw_total_bytes": 6526,
+  "raw_total_rows": 106,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-snbqc2-replication-data-for-usi-cleaned.csv",
+  "cleaned_csv_sha256": "6ecccc817d4d3330a6bdd77a004a52e2204f794764b83a0a8ca0b5ffbf8e292b",
+  "cleaned_rows": 30,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Fig2H_ATR+_calcs_all.tab": {
+      "Trial": 1,
+      "RawFile": 1,
+      "LightON": 0,
+      "LightOFF": 0
+    },
+    "Fig2D_Larval_free_motion.tab": {
+      "Raw_File": 0,
+      "Genotype": 0,
+      "Trial_number": 0,
+      "Distance": 0,
+      "LogDistance": 0,
+      "Average_Speed": 0
+    },
+    "Fig1D_Adult_free_movement.tab": {
+      "Initials": 0,
+      "Genotype": 0,
+      "Date": 0,
+      "Trial_number": 0,
+      "DOB": 0,
+      "Gender": 0,
+      "Distance": 0,
+      "Speed": 0
+    },
+    "Fig1H_HC_Chrimson_PI_Comparison.tab": {
+      "Genotype": 0,
+      "Trial": 0,
+      "ATR": 0,
+      "Gender": 0,
+      "StartPosition": 0,
+      "LightOn": 0,
+      "LightOff": 0,
+      "PI": 0,
+      "I": 30,
+      "J": 28,
+      "AverageAI": 28,
+      "SEM": 28
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

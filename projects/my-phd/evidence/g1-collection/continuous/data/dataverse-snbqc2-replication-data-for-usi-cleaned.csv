@@ -1,0 +1,31 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Fig2H_ATR+_calcs_all.tab,Trial,numeric,16,15,1,15,1,4.5,8,8,11.5,15,4.47214
+Fig2H_ATR+_calcs_all.tab,RawFile,numeric,16,15,1,15,72524,73719,74647,75560.9,75839,80851,2774.17
+Fig2H_ATR+_calcs_all.tab,LightON,numeric,16,16,0,16,0.341356,0.57613,0.720549,0.754295,0.89406,1.15914,0.241902
+Fig2H_ATR+_calcs_all.tab,LightOFF,numeric,16,16,0,16,0.00636619,0.826873,0.993344,0.922134,1.08383,1.29142,0.296639
+Fig2D_Larval_free_motion.tab,Raw_File,categorical_or_text,30,30,0,30,,,,,,,"{""GH015026"": 1, ""GH015023"": 1, ""GH015017"": 1}"
+Fig2D_Larval_free_motion.tab,Genotype,categorical_or_text,30,30,0,2,,,,,,,"{""93a"": 15, ""CS"": 15}"
+Fig2D_Larval_free_motion.tab,Trial_number,numeric,30,30,0,17,1,5,8.5,8.76667,12.75,17,4.68809
+Fig2D_Larval_free_motion.tab,Distance,numeric,30,30,0,30,348.461,423.562,531.65,554.561,629.182,887.102,151.792
+Fig2D_Larval_free_motion.tab,LogDistance,numeric,30,30,0,30,2.54215,2.62692,2.72556,2.72883,2.7987,2.94797,0.115753
+Fig2D_Larval_free_motion.tab,Average_Speed,numeric,30,30,0,30,2.90385,3.52969,4.43042,4.62134,5.24318,7.39252,1.26493
+Fig1D_Adult_free_movement.tab,Initials,categorical_or_text,30,30,0,1,,,,,,,"{""AH"": 30}"
+Fig1D_Adult_free_movement.tab,Genotype,categorical_or_text,30,30,0,2,,,,,,,"{""Gr28bd"": 15, ""Q6"": 15}"
+Fig1D_Adult_free_movement.tab,Date,categorical_or_text,30,30,0,2,,,,,,,"{""5/26/21"": 15, ""5/25/21"": 15}"
+Fig1D_Adult_free_movement.tab,Trial_number,numeric,30,30,0,15,1,4.25,8,8,11.75,15,4.39435
+Fig1D_Adult_free_movement.tab,DOB,categorical_or_text,30,30,0,3,,,,,,,"{""5/24/21"": 15, ""5/23/21"": 10, ""5/22/21"": 5}"
+Fig1D_Adult_free_movement.tab,Gender,categorical_or_text,30,30,0,2,,,,,,,"{""F"": 16, ""M"": 14}"
+Fig1D_Adult_free_movement.tab,Distance,numeric,30,30,0,30,278.369,3416.57,6050.94,5963.76,7414.72,13103,3323.4
+Fig1D_Adult_free_movement.tab,Speed,numeric,30,30,0,30,2.31974,28.4714,50.4245,49.698,61.7893,109.192,27.695
+Fig1H_HC_Chrimson_PI_Comparison.tab,Genotype,categorical_or_text,30,30,0,1,,,,,,,"{""HC-Chrimson"": 30}"
+Fig1H_HC_Chrimson_PI_Comparison.tab,Trial,numeric,30,30,0,17,1,4.25,8.5,8.53333,12.75,17,4.95311
+Fig1H_HC_Chrimson_PI_Comparison.tab,ATR,categorical_or_text,30,30,0,2,,,,,,,"{""ATR-"": 15, ""ATR+"": 15}"
+Fig1H_HC_Chrimson_PI_Comparison.tab,Gender,categorical_or_text,30,30,0,2,,,,,,,"{""M"": 17, ""F"": 13}"
+Fig1H_HC_Chrimson_PI_Comparison.tab,StartPosition,categorical_or_text,30,30,0,2,,,,,,,"{""Right"": 18, ""Left"": 12}"
+Fig1H_HC_Chrimson_PI_Comparison.tab,LightOn,numeric,30,30,0,14,0,0,16.5,19.9,38.25,57,19.9868
+Fig1H_HC_Chrimson_PI_Comparison.tab,LightOff,numeric,30,30,0,14,3,21.75,43.5,40.1,60,60,19.9868
+Fig1H_HC_Chrimson_PI_Comparison.tab,PI,numeric,30,30,0,14,-0.9,-0.275,0.45,0.336667,1,1,0.666227
+Fig1H_HC_Chrimson_PI_Comparison.tab,I,categorical_or_text,30,0,30,0,,,,,,,{}
+Fig1H_HC_Chrimson_PI_Comparison.tab,J,categorical_or_text,30,2,28,2,,,,,,,"{""ATR-"": 1, ""ATR+"": 1}"
+Fig1H_HC_Chrimson_PI_Comparison.tab,AverageAI,numeric,30,2,28,2,-0.248889,0.0438889,0.336667,0.336667,0.629444,0.922222,0.828101
+Fig1H_HC_Chrimson_PI_Comparison.tab,SEM,numeric,30,2,28,2,0.0412332,0.056679,0.0721247,0.0721247,0.0875705,0.103016,0.0436872

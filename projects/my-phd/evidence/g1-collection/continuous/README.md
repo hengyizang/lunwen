@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：20
-- **最近更新时间 (UTC)**：2026-11-21T09:04:03Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1861 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：960 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1692 条
-- **累计已完成确定性清洗数据集**：39 个
+- **已完成轮次**：21
+- **最近更新时间 (UTC)**：2026-11-21T09:08:59Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1995 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1007 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1777 条
+- **累计已完成确定性清洗数据集**：42 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 113 | 47 |
-| `R2_Aerial_Actuator` | 267 | 38 |
-| `R5_MultiRobot_Comm` | 149 | 32 |
-| `Robotics_Embodied` | 672 | 270 |
-| `Mechanical_Physics_AI` | 531 | 411 |
-| `Mechatronics_PHM_Control` | 434 | 290 |
-| `Smart_Manufacturing` | 212 | 250 |
-| `Smart_Factory_DigitalTwin` | 144 | 63 |
+| `R1_Force_Contact` | 119 | 47 |
+| `R2_Aerial_Actuator` | 316 | 38 |
+| `R5_MultiRobot_Comm` | 203 | 32 |
+| `Robotics_Embodied` | 719 | 271 |
+| `Mechanical_Physics_AI` | 537 | 442 |
+| `Mechatronics_PHM_Control` | 452 | 296 |
+| `Smart_Manufacturing` | 212 | 268 |
+| `Smart_Factory_DigitalTwin` | 146 | 63 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 81 | 0 |
+| `Adjacent` | 125 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-ckliy1-perception-and-acoustic` | Perception and acoustic data with R scripts | 10.7910/dvn/ckliy1 | `summary_table` | 77 | `408482190050` | [CSV](data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv) · [JSON](data/dataverse-ckliy1-perception-and-acoustic-provenance.json) · [PY](data/derive_dataverse_ckliy1_perception_and_acoustic.py) |
-| `dataverse-myrxr8-autonomous-integrated-sy` | Autonomous Integrated Systems in Archaeology | 10.7910/dvn/myrxr8 | `summary_table` | 9 | `5749db2a529a` | [CSV](data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv) · [JSON](data/dataverse-myrxr8-autonomous-integrated-sy-provenance.json) · [PY](data/derive_dataverse_myrxr8_autonomous_integrated_sy.py) |
-| `dataverse-z1ohnl-replication-data-for-rol` | Replication Data for: Role of single chemical heterogeneities in ge... | 10.7910/dvn/z1ohnl | `summary_table` | 12 | `ff5918e2ede4` | [CSV](data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv) · [JSON](data/dataverse-z1ohnl-replication-data-for-rol-provenance.json) · [PY](data/derive_dataverse_z1ohnl_replication_data_for_rol.py) |
 | `dataverse-ekpfj2-replication-data-for-art` | Replication Data for: Artificial tactile and proprioceptive feedbac... | 10.7910/dvn/ekpfj2 | `cleaned_rows` | 14 | `24d19e803082` | [CSV](data/dataverse-ekpfj2-replication-data-for-art-cleaned.csv) · [JSON](data/dataverse-ekpfj2-replication-data-for-art-provenance.json) · [PY](data/derive_dataverse_ekpfj2_replication_data_for_art.py) |
 | `dataverse-k7igab-replication-data-for-ear` | Replication Data for: Early attentional processing and cortical rem... | 10.7910/dvn/k7igab | `summary_table` | 14 | `e3205034d9b3` | [CSV](data/dataverse-k7igab-replication-data-for-ear-cleaned.csv) · [JSON](data/dataverse-k7igab-replication-data-for-ear-provenance.json) · [PY](data/derive_dataverse_k7igab_replication_data_for_ear.py) |
 | `figshare-34476927-data-sheet-1-a-vision-ba` | Data Sheet 1_A vision-based closed-loop framework for adaptive ergo... | 10.3389/frobt.2026.1948863.s003 | `cleaned_rows` | 30 | `45ac02efcb33` | [CSV](data/figshare-34476927-data-sheet-1-a-vision-ba-cleaned.csv) · [JSON](data/figshare-34476927-data-sheet-1-a-vision-ba-provenance.json) · [PY](data/derive_figshare_34476927_data_sheet_1_a_vision_ba.py) |
@@ -71,6 +68,9 @@
 | `figshare-32025606-snu-planetary-gearbox-da` | SNU Planetary Gearbox Dataset | 10.6084/m9.figshare.32025606.v5 | `cleaned_rows` | 28 | `e4e0dcbb38b8` | [CSV](data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv) · [JSON](data/figshare-32025606-snu-planetary-gearbox-da-provenance.json) · [PY](data/derive_figshare_32025606_snu_planetary_gearbox_da.py) |
 | `figshare-34002057-clustering-enhanced-mcnn` | Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under M... | 10.6084/m9.figshare.34002057.v2 | `summary_table` | 20 | `3ae2b31aaf2d` | [CSV](data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv) · [JSON](data/figshare-34002057-clustering-enhanced-mcnn-provenance.json) · [PY](data/derive_figshare_34002057_clustering_enhanced_mcnn.py) |
 | `figshare-26318407-non-muscle-powered-actua` | Non-muscle powered actuation inspired by cellular morphology and hy... | 10.6084/m9.figshare.26318407.v1 | `summary_table` | 20 | `e0f9dedbdb67` | [CSV](data/figshare-26318407-non-muscle-powered-actua-cleaned.csv) · [JSON](data/figshare-26318407-non-muscle-powered-actua-provenance.json) · [PY](data/derive_figshare_26318407_non_muscle_powered_actua.py) |
+| `dataverse-cytve5-replication-data-for-fin` | Replication Data for: Fin-fin interactions during locomotion in a s... | 10.7910/dvn/cytve5 | `summary_table` | 20 | `921a4b6940c9` | [CSV](data/dataverse-cytve5-replication-data-for-fin-cleaned.csv) · [JSON](data/dataverse-cytve5-replication-data-for-fin-provenance.json) · [PY](data/derive_dataverse_cytve5_replication_data_for_fin.py) |
+| `dataverse-snbqc2-replication-data-for-usi` | Replication Data for "Using TrackMate to Analyze Drosophila Larval... | 10.7910/dvn/snbqc2 | `summary_table` | 30 | `4c66f11347a1` | [CSV](data/dataverse-snbqc2-replication-data-for-usi-cleaned.csv) · [JSON](data/dataverse-snbqc2-replication-data-for-usi-provenance.json) · [PY](data/derive_dataverse_snbqc2_replication_data_for_usi.py) |
+| `dataverse-zyqvlr-replication-data-for-dif` | Replication Data for: Differences in thermal tolerance and locomoti... | 10.7910/dvn/zyqvlr | `summary_table` | 23 | `b90d59c6e0ac` | [CSV](data/dataverse-zyqvlr-replication-data-for-dif-cleaned.csv) · [JSON](data/dataverse-zyqvlr-replication-data-for-dif-provenance.json) · [PY](data/derive_dataverse_zyqvlr_replication_data_for_dif.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -96,3 +96,4 @@
 | 18 | 2026-11-21T08:54:12Z | Broad Engineering R18: Mechanical_Physics_AI (2026) | +80 | +0 | +3 | [round-18-audit.json](rounds/round-18-audit.json) |
 | 19 | 2026-11-21T08:59:01Z | Broad Engineering R19: R1_Force_Contact | +99 | +43 | +3 | [round-19-audit.json](rounds/round-19-audit.json) |
 | 20 | 2026-11-21T09:04:03Z | Broad Engineering R20: R1_Force_Contact / R2_Aerial_Actuator | +159 | +45 | +3 | [round-20-audit.json](rounds/round-20-audit.json) |
+| 21 | 2026-11-21T09:08:59Z | Broad Engineering R21: R2_Aerial_Actuator / R5_MultiRobot_Comm | +134 | +47 | +3 | [round-21-audit.json](rounds/round-21-audit.json) |
