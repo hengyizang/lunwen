@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-wjgdur-fem-data-for-large-radiu",
+  "dataset_name": "FEM data for large radius bending",
+  "doi": "10.7910/dvn/wjgdur",
+  "landing_url": "https://doi.org/10.7910/DVN/WJGDUR",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/WJGDUR",
+  "access_date": "2026-11-21",
+  "round_number": 47,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "FEM_Dataverse.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3047755",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WJGDUR/15dfa3244fc-282b99410ec4?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27FEM_Dataverse.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T122101Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=c5b56a26b254b01beb7b06f85020815b69effd5566f586436c8b0794d7e8b953",
+      "http_status": 200,
+      "bytes": 9082,
+      "publisher_checksum": "dataverse_original_md5:bb00ea38218e7d9aeb6daee3d770c77b",
+      "verified_md5": "e862129d2922695ce76c6daabb469651",
+      "verified_sha256": "9c74ea6f9d84a0e79f4e14f1992d5862d35d78affa5111f1070b597412445c5d"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-wjgdur-fem-data-for-large-radiu",
+  "raw_total_bytes": 9082,
+  "raw_total_rows": 172,
+  "duplicate_rows_removed": 120,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-wjgdur-fem-data-for-large-radiu-cleaned.csv",
+  "cleaned_csv_sha256": "47a6cf3814fb3e03e250b7912ac1777ed21f7e9eb7c86a3a52b03d0f0be6899b",
+  "cleaned_rows": 52,
+  "cleaned_cols": 19,
+  "null_counts_by_file": {
+    "FEM_Dataverse.tab": {
+      "Material": 1,
+      "t,mm": 1,
+      "Rp,mm": 1,
+      "wo,mm": 1,
+      "c,mm": 4,
+      "s,mm": 52,
+      "BA,°": 4,
+      "PA,°": 4,
+      "SB,°": 4,
+      "Force,kN/m": 4,
+      "BA,mm": 4,
+      "Thel": 1,
+      "Calculationtime,min": 1,
+      "Delta,°": 8,
+      "Delta,%": 8,
+      "P": 52,
+      "Q": 52,
+      "R": 52
+    }
+  },
+  "time_monotonicity": {
+    "FEM_Dataverse.tab": {
+      "column": "Calculationtime,min",
+      "numeric_samples": 51,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": false,
+      "min_step": 0.0,
+      "median_step": 0.0,
+      "max_step": 1.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

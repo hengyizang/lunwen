@@ -1,0 +1,355 @@
+{
+  "schema_version": "1.0",
+  "round": 47,
+  "completed_at": "2026-11-21T12:19:05Z",
+  "batch_label": "Broad Engineering R47: Smart_Factory_DigitalTwin",
+  "base_head_sha": "b6e15c67b817678281b7506e4662310b3f5ab25b",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 399,
+    "duplicates_skipped": 41,
+    "net_new": 358,
+    "new_reading_queue": 137,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "shop floor cyber physical",
+        "receipt_id": "20261121t121905z-openalex-578790a169",
+        "request_url": "https://api.openalex.org/works?search=shop+floor+cyber+physical&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6656089f6834b85cdc6f8a6c784b0893d57c90796f41b69c52cfd6ddbe031d66",
+        "normalized_results_sha256": "8b2a1730dab67873d810f4d24f1e12510d7f6a8974acb7749199c83aafe4bfd3"
+      },
+      {
+        "provider": "crossref",
+        "query": "shop floor cyber physical",
+        "receipt_id": "20261121t121907z-crossref-17491743a2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=shop+floor+cyber+physical&rows=12",
+        "result_count": 11,
+        "response_sha256": "dff12103c0843910bb0defa6e2cd503ef93e254896c4b3ec7ecd60bd361d55f1",
+        "normalized_results_sha256": "bd6e5f8da773ad7f5df77fb3677127eb52942113f10c79b5e9ae558235c1cef6"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "shop floor cyber physical",
+        "receipt_id": "20261121t121909z-europe-pmc-64a0f8299d",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=shop+floor+cyber+physical&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "4b02001dc61ceeaa4754191a27bc3284fdd7303dd8f6e8aba3d4fd5570263b3f",
+        "normalized_results_sha256": "c91e48850a8082bb87d1b069ff8a629cff2d4e963c9a540a4badb84193af59ef"
+      },
+      {
+        "provider": "hal",
+        "query": "shop floor cyber physical",
+        "receipt_id": "20261121t121921z-hal-fd2e6bfc4a",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=shop+floor+cyber+physical&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "a25c55db2280a9d57ea3d0da6b2a3df32c842581f7f2e3fcb10bb7c173d82f65",
+        "normalized_results_sha256": "b909ce97ff149243a4a91f6d286969c7d23c2fe5d99c5ddb2e73f6b247344385"
+      },
+      {
+        "provider": "openalex",
+        "query": "supply chain manufacturing twin",
+        "receipt_id": "20261121t121923z-openalex-b5f0e63d45",
+        "request_url": "https://api.openalex.org/works?search=supply+chain+manufacturing+twin&per-page=12",
+        "result_count": 12,
+        "response_sha256": "600315b01482e82631014762b50adec4dfaed4a7a9478c95fec97f97e643d644",
+        "normalized_results_sha256": "ba8fc4c3f16f5dd1712f7b5b599d12da42cb2fd1191ea3e6c79a5ad3ebf94551"
+      },
+      {
+        "provider": "crossref",
+        "query": "supply chain manufacturing twin",
+        "receipt_id": "20261121t121925z-crossref-bf4897ec5d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=supply+chain+manufacturing+twin&rows=12",
+        "result_count": 11,
+        "response_sha256": "412a8b45181dea347c111baed5e6e156775b3c1b6b3f0f30021782c9a14afba2",
+        "normalized_results_sha256": "9b124966f9fb024f172fe8e38ff9219e59c73a3510486ab1748e226401e6ca57"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "supply chain manufacturing twin",
+        "receipt_id": "20261121t121926z-europe-pmc-a5303d26a5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=supply+chain+manufacturing+twin&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "41b65108707dc8aa5f41a47eaa2f0f0ce9bd79670735080af9159608ed4bfd22",
+        "normalized_results_sha256": "74c621c7869db4ec32a744108e8802e5be09f026d895aa2675a4c558402e5526"
+      },
+      {
+        "provider": "hal",
+        "query": "supply chain manufacturing twin",
+        "receipt_id": "20261121t121939z-hal-e6b1024429",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=supply+chain+manufacturing+twin&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "65a6f6bc943f4a0e7ee956072eec4dad829a3906c362b8516a6ebcebb01db0fa",
+        "normalized_results_sha256": "a717fc69eb4e2450c0de480acf055421cb28fbe418514ca930c45837c2dc8541"
+      },
+      {
+        "provider": "openalex",
+        "query": "automated optical inspection manufacturing",
+        "receipt_id": "20261121t121941z-openalex-9fd2944d02",
+        "request_url": "https://api.openalex.org/works?search=automated+optical+inspection+manufacturing&per-page=12",
+        "result_count": 12,
+        "response_sha256": "21d0f475f5045ee73379cfb984f1b7606d00446dcf978988b0f7207d9834f2ad",
+        "normalized_results_sha256": "8135a1df38cabbc78954797b0e80c974b2e7520bc82dbd74b13074e0eac834fc"
+      },
+      {
+        "provider": "crossref",
+        "query": "automated optical inspection manufacturing",
+        "receipt_id": "20261121t121943z-crossref-110b8b0640",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=automated+optical+inspection+manufacturing&rows=12",
+        "result_count": 12,
+        "response_sha256": "8b9b20bd4bbf4f17aa61df5c3264fe657c144c66e8699d65987a1764b8e29643",
+        "normalized_results_sha256": "8a4f464da285573df327cba640c8796ffcfd625a0667e6633cef6c7fb3265f40"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "automated optical inspection manufacturing",
+        "receipt_id": "20261121t121944z-europe-pmc-137d332a8d",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=automated+optical+inspection+manufacturing&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "614ded3039036b4961a44533c95c054237378c5c3da54ceae7ceef27d308e5bb",
+        "normalized_results_sha256": "ccca9138d4cf3bc3e542e50e3a0f2aa3c712c213dd56539be6b1ae467c0e623d"
+      },
+      {
+        "provider": "hal",
+        "query": "automated optical inspection manufacturing",
+        "receipt_id": "20261121t121949z-hal-d3d77a9ebe",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=automated+optical+inspection+manufacturing&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 5,
+        "response_sha256": "32e672eb5c1891cb245b71c444fba0ab168547b758a162bfd0158f49b6634821",
+        "normalized_results_sha256": "734593a9fa3124bdf64f8ede14f19d034c4087451d2e0b000274017bd0301d3d"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic cell digital twin",
+        "receipt_id": "20261121t121950z-openalex-65b91c3db4",
+        "request_url": "https://api.openalex.org/works?search=robotic+cell+digital+twin&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a0a76a58d157121977e20c321f40a0da9846e011e736c9cab7e3f16d1c26af95",
+        "normalized_results_sha256": "d6d2d23945826684af6b6a9e657dfb260545fb774318af7fb984f129ee19aa24"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic cell digital twin",
+        "receipt_id": "20261121t121952z-crossref-b8581cc463",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+cell+digital+twin&rows=12",
+        "result_count": 12,
+        "response_sha256": "5a73e69fca8a01a5ecf32fb5892704ce5ea0d6cb29ef9224bb8fb78455979f76",
+        "normalized_results_sha256": "562ffb8157495459a7d74b28d94848c426e3a87cf1d7fbfc76863ea6b87a20bf"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic cell digital twin",
+        "receipt_id": "20261121t121954z-europe-pmc-c4648915c2",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+cell+digital+twin&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "2a3186735983390507eabb1b9ff978bf9c5634fdd04ad23b5a6476b2bd24c01e",
+        "normalized_results_sha256": "eb60351df7261078fe82610890a237e4690551bc19d8c5e3f111db335061d4ea"
+      },
+      {
+        "provider": "hal",
+        "query": "robotic cell digital twin",
+        "receipt_id": "20261121t122004z-hal-0cfe0dfb95",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=robotic+cell+digital+twin&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "687a124fad0c04c9fca4afe584e3c03182af4bf1acedb466b49dcef5a032d477",
+        "normalized_results_sha256": "e32411f038d1cb7393456f7b6ff8408ba01d478e95d5437e88a5b3ff9de0c927"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/s00170-021-06976-w",
+        "receipt_id": "20261121t122006z-opencitations-7abdefe63c",
+        "result_count": 156,
+        "response_sha256": "89005fbb798fd30aa8dea363d7a379bfa4752e6055597007066c5e75db29e8c8"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.procs.2022.01.348",
+        "receipt_id": "20261121t122008z-opencitations-5e94134051",
+        "result_count": 71,
+        "response_sha256": "fb53123328c23a6ec24a77f8f50ae09d703f2f489423f3adac49de08be0296ae"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 83,
+    "off_topic_filtered": 45,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 32,
+    "net_new": 6,
+    "provider_statuses": [
+      {
+        "query": "tribology wear sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tribology wear sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tribology wear sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tribology wear sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cfd surrogate sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "cfd surrogate sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cfd surrogate sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "cfd surrogate sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "uav thrust sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "uav thrust sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "uav thrust sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "uav thrust sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "uav thrust sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "v2x perception sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "v2x perception sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "v2x perception sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "v2x perception sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "v2x perception sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-xfuwjg-simjeb-simulated-jet-eng",
+        "key": "dataverse:10.7910/dvn/xfuwjg",
+        "dataset_name": "SimJEB: Simulated Jet Engine Bracket Dataset",
+        "doi": "10.7910/dvn/xfuwjg",
+        "landing_url": "https://doi.org/10.7910/DVN/XFUWJG",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-xfuwjg-simjeb-simulated-jet-eng-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-xfuwjg-simjeb-simulated-jet-eng-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_xfuwjg_simjeb_simulated_jet_eng.py",
+        "cleaned_rows": 381,
+        "raw_total_rows": 381,
+        "verified_sha256": "687a77d3e3657f38086b13a18c78696b9d8d8e911a6ac728c2cb39cb4a6923ae"
+      },
+      {
+        "slug": "dataverse-wjgdur-fem-data-for-large-radiu",
+        "key": "dataverse:10.7910/dvn/wjgdur",
+        "dataset_name": "FEM data for large radius bending",
+        "doi": "10.7910/dvn/wjgdur",
+        "landing_url": "https://doi.org/10.7910/DVN/WJGDUR",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wjgdur-fem-data-for-large-radiu-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wjgdur-fem-data-for-large-radiu-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wjgdur_fem_data_for_large_radiu.py",
+        "cleaned_rows": 52,
+        "raw_total_rows": 172,
+        "verified_sha256": "9c74ea6f9d84a0e79f4e14f1992d5862d35d78affa5111f1070b597412445c5d"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-1g3ssb-multi-sensor-based-power\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Expt_3.tab: f16dec591ac709ffce5ed7d82ce87db76c86744b84d76a32087457068e1e40be != fa922de59b6813263e8e926123b56cd969a99e7d37baf817094308875786cb7c\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
