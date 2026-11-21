@@ -1,0 +1,4 @@
+first_split,second_split,shared_unique_tactile_depth_pairs,identical_six_number_labels,differing_six_number_labels
+train,val,1122,1122,0
+train,test,1921,1921,0
+val,test,225,225,0

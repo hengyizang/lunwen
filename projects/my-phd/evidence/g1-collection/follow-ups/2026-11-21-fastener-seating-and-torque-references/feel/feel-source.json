@@ -1,0 +1,134 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "FeelAnyForce released tactile/depth split files (TacForce)",
+  "landing": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/tree/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9",
+  "authors": [
+    "Amir-Hossein Shahidzadeh",
+    "Gabriele Caddeo",
+    "Koushik Alapati",
+    "Lorenzo Natale",
+    "Cornelia Fermüller",
+    "Yiannis Aloimonos"
+  ],
+  "rights": "CC BY 4.0 per the pinned Hugging Face dataset card. Credit the paper authors and dataset uploader amirsh1376. Only new aggregate statistics, sample identities, file digests and independent readers are included.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "amirsh1376/FeelAnyForce",
+      "b757dc72ba7ad9a0b501d92fa097d5a91474fbc9",
+      "TacForce_train_set.csv",
+      "TacForce_test_set.csv"
+    ],
+    "related_paper_keys": [
+      "FeelAnyForce: Estimating Contact Force Feedback from Tactile Sensation for Vision-Based Tactile Sensors",
+      "10.1109/ICRA55743.2025.11127723",
+      "2410.02048"
+    ],
+    "interpretation": "Associated paper already screened. The pinned data release and exact split files are checked separately."
+  },
+  "queries_and_followup": [
+    "Followed FeelAnyForce project and code dataset links to the Hugging Face tree; checked tactile/depth/FT paths in the three label files, then compared the meaning of the default test split with the paper methods and source code."
+  ],
+  "revision": "b757dc72ba7ad9a0b501d92fa097d5a91474fbc9",
+  "tree": {
+    "url": "https://huggingface.co/api/datasets/amirsh1376/FeelAnyForce/tree/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9?recursive=true&expand=true",
+    "bytes": 9184,
+    "sha256": "107202bd4e19a11b0063bf53a709491577f063348bb6090bb27e51836bb78066"
+  },
+  "data_card": {
+    "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/README.md",
+    "bytes": 504,
+    "sha256": "0bf4a5af4d2d14be4a88b3c7a0def7f6149543f0a56cf621e968d2d7271ad237"
+  },
+  "files": [
+    {
+      "name": "TacForce_test_set.csv",
+      "bytes": 393130,
+      "git_blob": "e2e13700610f8951d40a12fd10ee4a6685cb34a6",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/TacForce_test_set.csv"
+    },
+    {
+      "name": "TacForce_train_set.csv",
+      "bytes": 13410820,
+      "git_blob": "db64a6a062342fdcb40c8cf62e4964f6cf144997",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/TacForce_train_set.csv",
+      "lfs_sha256": "6a662ce1bf0433b4f9d4d9c4f730074cd8e0c8e14b07204985d2fff0d35dced7"
+    },
+    {
+      "name": "TacForce_val_set.csv",
+      "bytes": 1507817,
+      "git_blob": "cfc7b05176a5373ca19944075468a21ac5bbacbd",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/TacForce_val_set.csv"
+    },
+    {
+      "name": "dataset.z01",
+      "bytes": 21474836480,
+      "git_blob": "6474a55bfc1245998434775537508c892f9249b2",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/dataset.z01",
+      "lfs_sha256": "2118965b83d5e8bbb9d1cbe4b979572f892a4cb640dc1708a4f1eb22d7b0f3b5"
+    },
+    {
+      "name": "dataset.z02",
+      "bytes": 21474836480,
+      "git_blob": "166fa02b1047b5e8c4af1ad23ff2f85f76f2d0bb",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/dataset.z02",
+      "lfs_sha256": "596373b06a370ee908a667ce22b47b3f0b5fd7c01fc4146b24f0193b675f5d1e"
+    },
+    {
+      "name": "dataset.z03",
+      "bytes": 21474836480,
+      "git_blob": "d421a8157ec33563f5946d90186876b87b394899",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/dataset.z03",
+      "lfs_sha256": "65c199169896d2c9d2937f9b130a1241bc5ac75f5e9b2f92a0995d41dbb5f1f8"
+    },
+    {
+      "name": "dataset.zip",
+      "bytes": 17449663328,
+      "git_blob": "34b26795d161013a5dad05f861d52ec751850f12",
+      "url": "https://huggingface.co/datasets/amirsh1376/FeelAnyForce/resolve/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9/dataset.zip",
+      "lfs_sha256": "4b1efb5e9e1a732426e377f07261ba1d3a5b558f83030cc7cad6c252343be91a"
+    }
+  ],
+  "paper_doi": "10.1109/ICRA55743.2025.11127723",
+  "arxiv": "2410.02048",
+  "paper": {
+    "url": "https://prg.cs.umd.edu/research/FeelAnyForce_files/FeelAnyForce.pdf",
+    "bytes": 4994511,
+    "sha256": "14bd5c3efd1ff27cb852db7943da5fc2af5de535cc5a8e0ac2e6d01f299d6695"
+  },
+  "code": [
+    {
+      "url": "https://github.com/prgumd/FeelAnyForce/blob/1947bc8e1cbe9531686589e947787576ec06e06d/args.py",
+      "bytes": 4537,
+      "sha256": "55cb6b17a5c7475fcc64d18ea146725d4964b49923fabd421dd2f5e8ec0897eb"
+    },
+    {
+      "url": "https://github.com/prgumd/FeelAnyForce/blob/1947bc8e1cbe9531686589e947787576ec06e06d/training_multi_head.py",
+      "bytes": 13519,
+      "sha256": "3c58904d596419ab9e8e26b4b71e53da5d442c881949dc89552a7de1fb1bdec7"
+    },
+    {
+      "url": "https://github.com/prgumd/FeelAnyForce/blob/1947bc8e1cbe9531686589e947787576ec06e06d/dataset.py",
+      "bytes": 3697,
+      "sha256": "c43b0b3f4a6625e6a6dbea8a18ede8a03a43415af2b740e856bd4ea7b4928c19"
+    }
+  ],
+  "evidence": "All labels and the ZIP64 central directory inspected. Exactly one complete PNG + depth NPY pair from each of the seven membership combinations inspected, with CRC32, SHA-256 and dimensions. Other members were verified at directory-entry level.",
+  "archive": {
+    "entries": 305818,
+    "PNG": 203766,
+    "NPY": 101883,
+    "directories": 169,
+    "volumes_total_bytes": 81874172768,
+    "central_sha256": "4e205b1deacea03a542f06258403b81620e909e8899ca336a31b82ebc01c39e4",
+    "central_bytes": 38401830
+  },
+  "interpretation": [
+    "The release has six numeric components per label. dataset.py selects the first three. The test CSV is configured as labels_test_seen in args.py and used for the seen evaluation in training_multi_head.py. The study separately evaluates unseen indenters.",
+    "2,106/2,864 distinct test paths also occur with identical tactile/depth paths and identical six-number targets in training or validation (1,921 + 225 − 40). Seven membership counts appear in feel-payload-checks.csv, once for each modality. The remaining 758 test paths are unique to that split by pathname. This result concerns only the released seen split.",
+    "Authors describe taring before each contact during capture and the inability to do so over the entire pushing interval in their real-world experiment, author PDF p. 6. No standalone absolute moment reference follows from the six published labels."
+  ],
+  "reproduction": [
+    "Save the tree API response as tree.json, place all three TacForce CSVs beside it, and run python derive_feel.py ROOT OUT --fetch (Python and NumPy). It retrieves the end records, central directory and example payloads using validated HTTP 206 ranges from the pinned four-volume ZIP. Later runs can use the local cache."
+  ]
+}

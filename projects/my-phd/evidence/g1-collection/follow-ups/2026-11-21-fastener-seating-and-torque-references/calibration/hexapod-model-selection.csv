@@ -1,0 +1,5 @@
+model,stated_free_parameters,published_fivefold_cv_error,published_bic,cv_error_over_full_model,bic_difference_from_full
+six rotations and six translations,36,12,1580,1.0,0
+six rotations and one translation,21,17,1674,1.416667,94
+six translations only,18,62,2352,5.166667,772
+one translation,3,105,2546,8.75,966

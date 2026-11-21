@@ -1,0 +1,17 @@
+source,release,file_evidence,rights,history_status,source_record
+螺栓扭矩与夹紧力,https://doi.org/10.17632/jffwrb4pcd.4,48 个试验的扭矩和轴向夹紧力，按角度独立插值,CC BY 4.0,new,fastener/clamp-source.json
+航空螺纹锁紧环机器人装配,https://doi.org/10.17632/26674p3hvg.1,479 次实物试验，六维位姿和腕部扳手半段重复，保留人工结局,CC BY 4.0,new,fastener/collar-source.json
+AURSAD 自动拧紧,https://doi.org/10.5281/zenodo.4559556,主轴目标和实际力矩、忙碌状态与预设异常类别按装配阶段分别核验,CC BY 4.0,new,screwdriver/aursad-source.json
+端子压接力曲线,https://doi.org/10.7910/DVN/WBDKN6,"2,439 条原始曲线，质量类别与力监控验收，三个发布版本排重",Dataverse CC0 1.0；Zenodo CC BY 4.0,new,connector/crimp-source.json
+两类卡扣的轴向力,https://doi.org/10.5281/zenodo.1209203,220 次试验，按归档拆分计算训练和测试表现,CC BY 4.0,new,connector/snap-source.json
+连接器摇动插接,https://doi.org/10.6084/m9.figshare.32133736.v1,双侧位移与力时间序列，三件试样的 28 次重复,Figshare 数据 CC BY 4.0；论文、补充材料 CC BY-NC-ND 4.0,new,connector/wiggle-source.json
+并联机器人接触力,https://doi.org/10.25835/6khpt790,五表覆盖与逐个连续片段核验，测量和观测器的越阈事件,CC BY-NC-SA 4.0，派生表同许可,new,contact/parallel-contact-source.json
+人形机器人接触扳手,https://huggingface.co/datasets/BlablaO/contact-review-dataset/tree/dc0b642ce732df1cd2042ab8b6e06d21593255de,372 个窗口，核验有效掩码和从标量、方向、作用点计算的六维量,CC BY-NC 4.0,new,contact/sixth-contact-source.json
+抓取滑移与第三探头,https://doi.org/10.5281/zenodo.1172620,63 个 ROS bag，核查独立探头可见范围与滑移指标,CC BY 4.0,new,contact/slip-probe-source.json
+器械轴杆与外置 ATI,https://zenodo.org/records/21036880,39 段同步表，核对原生话题、导出器补零和省略力矩,CC BY 4.0,new,bias/shaft-source.json
+PTB 静态扭矩传递标准,https://zenodo.org/records/10259588,三个装夹角、两个方向的轴向力矩和同一传感器两种输出,CC BY 4.0,new,bias/ptb-static-source.json
+PTB 多分量动态传感器,https://oar.ptb.de/resources/show/10.7795/720.20181105,激振质量与光学位移场，通道和工况核对,CC BY 4.0,new,bias/ptb-dynamic-source.json
+UR10e 表面精整工装测力,https://doi.org/10.5281/zenodo.6457906,67 条出版曲线和 68 个条件，包括中止试验,归档 other-open，内附 GPLv3，派生汇总按 GPLv3；论文 CC BY 4.0,new,fixture/finishing-source.json
+高载荷协作机器人工装碰撞,https://doi.org/10.5281/zenodo.7240050,55 次日志可配对的碰撞；两个测量话题与记录时钟,CC BY 4.0,upgrade,fixture/collision-source.json
+RBO 关节物体与手持工具交互,https://doi.org/10.5281/zenodo.1036660,358 个包的索引；14 组腕力与独立物体运动 CSV，含已知工具偏置,CC BY 4.0,new,rbo/rbo-source.json
+FeelAnyForce 触觉与深度文件,https://huggingface.co/datasets/amirsh1376/FeelAnyForce/tree/b757dc72ba7ad9a0b501d92fa097d5a91474fbc9,发布标签六个分量、跨拆分路径重合与实际图像、深度样本,CC BY 4.0,new,feel/feel-source.json

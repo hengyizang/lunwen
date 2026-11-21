@@ -1,0 +1,78 @@
+{
+  "accessed_utc": "2026-11-21",
+  "title": "Dataset for the publication: Tactile Convolutional Networks for Online Slip and Rotation Detection",
+  "authors": [
+    {
+      "name": "Meier, Martin",
+      "affiliation": "Bielelfeld University"
+    }
+  ],
+  "doi": "10.5281/zenodo.1172620",
+  "concept_doi": "10.5281/zenodo.1172619",
+  "landing": "https://doi.org/10.5281/zenodo.1172620",
+  "version": "First version (Zenodo relation index 0), fixed record 1172620; no depositor version string.",
+  "rights": "CC BY 4.0 per Zenodo, credit Martin Meier. New summaries and source references only.",
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "historical_paths": 944,
+    "tar_members_expanded": 301,
+    "early_baseline_checked": true,
+    "keys": [
+      "10.5281/zenodo.1172620",
+      "10.5281/zenodo.1172619",
+      "Tactile Convolutional Networks for Online Slip and Rotation Detection",
+      "10.1007/978-3-319-44781-0_2"
+    ],
+    "matches": [],
+    "method": "Compared normalized DOI, code/data aliases, titles and the listed publication identifiers with historical state and early catalogue; readable decompressed members included."
+  },
+  "queries": [
+    "tactile slip onset ground truth optical encoder laser displacement force load cell robot finger tactile sensor dataset public raw rosbag files",
+    "Tactile Convolutional Networks for Online Slip and Rotation Detection UBI0All labeling external sensor object slip paper PDF Meier",
+    "Zenodo original record → institutional full text → Section 2.2 → all original bag connections, frame schemas and header times."
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/1172620",
+    "bytes": 4475,
+    "sha256": "613cbfc2f074f75765cca6806392c844a68a04f179309dc49af560194ee7c2df"
+  },
+  "archive": {
+    "url": "https://zenodo.org/api/records/1172620/files/tactile_data.tar.bz2/content",
+    "bytes": 229885673,
+    "sha256": "9355e3685c0ca1afc2877f5469fe6e93f2220d7fd37f336d61dfb4966fb9035d",
+    "verified_publisher_checksum": "md5:724c3bf4476cc45cadebf985dfc9b69e"
+  },
+  "paper": {
+    "doi": "10.1007/978-3-319-44781-0_2",
+    "creators": [
+      "Martin Meier",
+      "Florian Patzelt",
+      "Robert Haschke",
+      "Helge J. Ritter"
+    ],
+    "full_text": {
+      "url": "https://noah.nrw/ubbihs/download/pdf/5132524",
+      "bytes": 1114062,
+      "sha256": "9711f96bba406fc6b61bbba40f63d658e85d6d8b76341da75ba6597b1ff6786c"
+    },
+    "locator": "Sections 2.1–2.2. A third piezoresistive probe touches the object from above. The paper uses a decline in summed contact for slip onset and loss of both gripping contacts for the end."
+  },
+  "coverage": {
+    "original_bags": 63,
+    "with_probe": 62,
+    "missing_probe": [
+      "jenga_stable_1.bag"
+    ],
+    "message_counts": {
+      "/left/image": 655846,
+      "/right/image": 655733,
+      "/teensy/tactile": 323291
+    },
+    "all_individual_bag_sha256": "slip-streams.csv"
+  },
+  "signals": "Raw Myrmex left/right images are 16×16 float32. UBI0All is 5 banks of 12 unsigned 16-bit distal fields, with values 0–1023 in first bank and all remaining banks zero in this release. Use inverted first-bank sum 12×1023 − sum(raw counts) as an uncalibrated strength proxy. Compare only streams with actual messages and keep the full available coverage.",
+  "method": "Use ROS Header nanoseconds for comparisons. Store bag-record minus Header offsets separately (software times; hardware synchronization accuracy not established by close stamps alone). Define start/end strengths as medians of first/last 250ms. For a decline greater than 10×max(1,1.4826×starting MAD), find first downward crossing of midpoint after initial 250ms with at least 10ms continuously under threshold. Report half-drop times only when both participating streams qualify. Preserve missing and unstable cases; the comparator is an offline whole-window statistic, not the authors’ online slip-onset detector.",
+  "collection_note": "The paper describes 64 trials. The archived tar enumerates 63 bag members, 62 with the overhead probe; the absent trial cannot be reconstructed from the paper count. Of 44 files without stable in the name, 33 yield half-drop landmarks on all three channels. None of the 18 stable-named files with a present overhead probe yields that probe landmark.",
+  "limits": "The third probe is a separate physical contact with the same transduction principle. No calibrated per-taxel normal force, electrical switch edge, optical motion truth or explicit ground-truth slip timestamp topic is in these bag files. A waveform difference measures response and geometry as well as any timing differences. Stable/rotate/down filename categories indicate conditions, not frame annotations.",
+  "reproduce": "Download complete original tar.bz2 and verify listed MD5. Extract .bag members under INPUT_DIR. Run python derive_slip.py INPUT_DIR OUT with rosbags and numpy; no bag conversion or ROS installation is required."
+}

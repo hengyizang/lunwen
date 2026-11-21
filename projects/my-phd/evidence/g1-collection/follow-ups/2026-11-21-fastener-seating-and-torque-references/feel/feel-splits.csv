@@ -1,0 +1,4 @@
+split,source_csv,sha256,rows,unique_tactile_paths,extra_occurrences,unique_depth_paths,image_path_hits,depth_path_hits,median_abs_fz_n
+train,TacForce_train_set.csv,6a662ce1bf0433b4f9d4d9c4f730074cd8e0c8e14b07204985d2fff0d35dced7,96520,91596,4924,91596,96520,96520,6.01
+val,TacForce_val_set.csv,aa15b146d225fa9cb98e39507c36c303ba1f819e23d65d25cbb925418183e4d0,10725,10651,74,10651,10725,10725,6.792
+test,TacForce_test_set.csv,22c909ab07fc327c0cfbdd96b2dab22aab750d398511468b7d13964ecd44ef31,2864,2864,0,2864,2864,2864,4.109

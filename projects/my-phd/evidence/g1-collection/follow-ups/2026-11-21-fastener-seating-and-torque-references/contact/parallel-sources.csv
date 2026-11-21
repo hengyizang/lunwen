@@ -1,0 +1,6 @@
+member,sha256,rows,columns,raw_six_axis_measured,projected_reference,nonfinite,backward_time_steps,equal_time_steps,non_1ms_steps,dt_median_ms
+classification_body/test.csv,7f2ed53d627d5b26958c4e2959f5c243417a5294eee4c0102e0fdaeb246fbab5,312354,53,1,1,0,37,0,1455,1.0
+classification_body/train.csv,31735a1eaed34e33fc76053017957ca40df720edacb96e651e27cfe22c63e241,171778,53,1,1,0,19,0,2286,1.0
+classification_type/test.csv,a7a551b5bac4e9ce07907116014c14ccd80577429a8f11681a17605e8db29719,23629,41,0,0,0,10,0,134,1.0
+classification_type/train.csv,837186107643c9e27727608c1613d53e6439a31faad408bd4bf11aeb239142ea,112787,41,0,0,0,21,0,384,1.0
+regression_location_force/data.csv,fc995e637a030378e9aef1349cc41a77bb9d4c41abca85293338fcd9e1b25b21,139759,47,1,1,0,8,0,8,1.0

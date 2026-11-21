@@ -1,0 +1,10 @@
+section_mm2,prepared_condition,crimps,prep_ok_monitor_ok,prep_ok_monitor_nok,prep_nok_monitor_ok,prep_nok_monitor_nok
+0.35,OK,838,838,0,0,0
+0.35,crimped insulation,180,0,0,16,164
+0.35,one missing strand,96,0,0,60,36
+0.35,two missing strands,103,0,0,2,101
+0.5,OK,790,790,0,0,0
+0.5,crimped insulation,117,0,0,17,100
+0.5,one missing strand,76,0,0,63,13
+0.5,three missing strands,51,0,0,1,50
+0.5,two missing strands,188,0,0,41,147

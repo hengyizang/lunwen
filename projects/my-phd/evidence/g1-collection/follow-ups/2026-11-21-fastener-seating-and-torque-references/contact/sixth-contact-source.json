@@ -1,0 +1,53 @@
+{
+  "accessed_utc": "2026-11-21",
+  "title": "SixthSense G1 Contact Dataset",
+  "contributors": "BlablaO (Hugging Face depositor); Xingzhou Chen, Xiayan Xu, Yan Ning, Ling Shi, Jiyu Yu, Yizheng Zhang, Siyi Qian, Lingzhu Xiang, Jiahao Chen, Yuquan Wang, Haodong Zhang (data-card citation).",
+  "landing": "https://huggingface.co/datasets/BlablaO/contact-review-dataset/tree/dc0b642ce732df1cd2042ab8b6e06d21593255de",
+  "version": "Pinned Hugging Face commit dc0b642ce732df1cd2042ab8b6e06d21593255de",
+  "rights": "CC BY-NC 4.0 per data card, https://creativecommons.org/licenses/by-nc/4.0/. Attribute the named authors and depositor. Only new numerical summaries of public sensor metadata, identifiers and reconstruction code; camera videos and original HDF5s not mirrored.",
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "historical_paths": 944,
+    "tar_members_expanded": 301,
+    "early_baseline_checked": true,
+    "keys": [
+      "BlablaO/contact-review-dataset",
+      "dc0b642ce732df1cd2042ab8b6e06d21593255de",
+      "2605.01427",
+      "SixthSense: Task-Agnostic Proprioception-Only Whole-Body Wrench Estimation for Humanoids",
+      "SixthSense G1 Contact Dataset"
+    ],
+    "matches": [],
+    "method": "Compared normalized DOI, code/data aliases, titles and the listed publication identifiers with historical state and early catalogue; readable decompressed members included."
+  },
+  "queries": [
+    "robot physical interaction contact onset ground truth skin collision dataset force sensor external FSR robot timestamp data ground truth collision data download contact times",
+    "HF data card → pinned commit → recursively listed LFS objects → all numeric HDF5s → per-record resampling and force formula attributes → arXiv paper §V-B real experiments."
+  ],
+  "registry": {
+    "sha": "dc0b642ce732df1cd2042ab8b6e06d21593255de",
+    "tree": "https://huggingface.co/api/datasets/BlablaO/contact-review-dataset/tree/dc0b642ce732df1cd2042ab8b6e06d21593255de?recursive=true&limit=1000",
+    "complete_tree_cache_sha256": "0bd8e624931a1b65de3f436efdf7c279b93517270b3bb915330de05ee7a16966",
+    "release_file_template": "https://huggingface.co/datasets/BlablaO/contact-review-dataset/resolve/dc0b642ce732df1cd2042ab8b6e06d21593255de/{file}",
+    "readme": {
+      "url": "https://huggingface.co/datasets/BlablaO/contact-review-dataset/raw/dc0b642ce732df1cd2042ab8b6e06d21593255de/README.md",
+      "bytes": 7053,
+      "sha256": "91816b90256e4ef835ab99de8407009d70ec73cbc5aca1a8f05ff450e90bb7da"
+    }
+  },
+  "paper": {
+    "arxiv": "2605.01427v2",
+    "doi": "10.48550/arXiv.2605.01427",
+    "full_text": {
+      "url": "https://arxiv.org/pdf/2605.01427v2",
+      "bytes": 6535586,
+      "sha256": "de170fb54b93cd0a83a459fc62384379f53c603b77c54b0b3e9ba28c97f6db5b"
+    },
+    "locator": "Section V-B, real-robot hardware and data collection. The SRI M3701C is physically remounted on marked contact sites; the rod applies force along its measurement direction."
+  },
+  "scope": "All 372 HDF5 files from the pinned tree (312 standing, 30 walking, 30 lying). Every file length and SHA-256 checked against Hugging Face LFS. Individual SHA-256 values appear in sixth-windows.csv. Videos not downloaded or analyzed. Only standing trials contain sensor-based external force. The 60 other windows have all-zero force-valid masks.",
+  "time": "50 Hz aligned robot grid. 46,125 valid force samples across 46,800 standing grid rows. Read stored annotation timestamp and validity mask. Per source, force sensor scalar Fz is resampled linearly without extrapolation and with a 100ms gap bound; preserve native noise and CRC provenance flags. 42,343 native sensor rows are marked unverified by source, while 53 have a true crc_matches field. Neither flag independently validates or invalidates physical readings; published values are analyzed as reported. The paper describes acquisition at 100 Hz. Median native sensor-clock sample intervals over the 312 released windows range from 10.345 to 15.350 ms; the independently stored receipt time has a different cadence. The 20ms resampled grid is separate.",
+  "force": "Use signed gain and polarity times baseline-subtracted scalar Fz and annotated pelvis-frame axis for reconstructed 3D force. Its maximum valid component difference to released force is below 4e-6 N. Cross product of published pelvis-relative point with released force reproduces the pelvis-origin moment to below 9e-7 Nm in every valid row. These derived forces/moments do not represent six independent calibrated measurement channels; this check confirms construction, not calibration. The 312 windows come from 15 sensor recording IDs.",
+  "timing_sensitivity": "Use published 20ms grid and only valid, consecutive samples. Find a rising threshold crossing within ±0.5s of the event preceded by one below threshold and followed by three samples at or above. Require a unique candidate for the compared offset. At 2/5/10 N, respective unique counts 296/308/310; medians −20/+40/+100ms against the stored event. This is threshold sensitivity, not physical latency or a new contact ground truth. The median force at the 312 stored event frames is 3.9375 N.",
+  "reproduce": "Download the files matching {stand,walk,lie}/*/data.h5 from the fixed release, keeping folder structure. Run python derive_sixth.py INPUT_DIR OUT (h5py and numpy)."
+}

@@ -1,0 +1,3 @@
+from_version,to_version,matched_ids,removed_ids,added_ids,labels_or_material_changed,raw_changed,baseline_changed,roi_changed,min_old_minus_new_baseline_count,max_old_minus_new_baseline_count
+1,2,2439,20603,,0,0,0,0,0.0,0.0
+2,3,2439,,,0,0,2270,2270,-10.0,3.0

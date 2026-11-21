@@ -1,0 +1,71 @@
+{
+  "accessed_utc": "2026-11-21",
+  "research_question": "R1 insertion, snap and crimp force against independent geometric or outcome evidence.",
+  "title": "Force-Moment Mechanics of Wiggling in Connector Insertion",
+  "depositor": [
+    "Junmin Park"
+  ],
+  "doi": "10.6084/m9.figshare.32133736.v1",
+  "concept_doi": "10.6084/m9.figshare.32133736",
+  "landing": "https://doi.org/10.6084/m9.figshare.32133736.v1",
+  "version": "Figshare v1; file 64134163",
+  "rights": "Data CC BY 4.0 (Figshare). Attribute Junmin Park and associated article authors. Article and supplement CC BY-NC-ND 4.0; only factual source locations and independently computed results shared. No article figures, raw human recordings or archive components mirrored.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "evidence_files": 944,
+    "additional_tar_members": 301,
+    "early_index": true,
+    "keys": [
+      "10.6084/m9.figshare.32133736",
+      "figshare.com/articles/dataset/Force-Moment_Mechanics_of_Wiggling_in_Connector_Insertion/32133736",
+      "figshare.com/files/64134163"
+    ],
+    "matches": [],
+    "paper_matching_keys": [
+      "10.1038/s41467-026-74643-3",
+      "Force-Moment Mechanics of Wiggling in Connector Insertion"
+    ],
+    "paper_matches": [
+      "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv",
+      "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+    ],
+    "scope": "Release identifiers, version or stable URL and repository/title aliases; paper matches tracked independently of data DOI."
+  },
+  "search": [
+    "electrical connector insertion force displacement dataset csv press fit mating extraction force",
+    "\"force-moment mechanics of wiggling\" data repository figshare supplementary",
+    "Publication data availability → fixed Figshare package → Supplemental Note 6, Fig. S8, Tables 1–3 and Supplemental Note 7. Read all S8 arrays and the paired force/torque and EMG numeric CSVs."
+  ],
+  "record": {
+    "url": "https://api.figshare.com/v2/articles/32133736",
+    "bytes": 2707,
+    "sha256": "4e617b86eb532b50b45ac0b8dce1fd65cf6b85f7d3514c0318fd7dd76c7b22bb"
+  },
+  "archive": {
+    "download": "https://ndownloader.figshare.com/files/64134163",
+    "published": "2026-04-30T10:17:07Z",
+    "verified_md5": "42fe8892c8b4498ef3703f027dc9d39f",
+    "member_count": 217,
+    "bytes": 957205208,
+    "sha256": "f2fb7618a3bd129dea3f0f65f9e28f2986d3e1dd5f03bde53b8b321c490ac126"
+  },
+  "article": {
+    "doi": "10.1038/s41467-026-74643-3",
+    "xml": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13447849/fullTextXML",
+    "bytes": 296143,
+    "sha256": "4f7484b6337057144072ef0c3ddad38ea7960b7b167f268a467d1eeea6c0f41b"
+  },
+  "supplement": {
+    "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC13447849.1/41467_2026_74643_MOESM1_ESM.pdf",
+    "md5": "d2dc01db9ce221fa52eadab520974ddc",
+    "bytes": 3587213,
+    "sha256": "cb0358f444f7661b04311633cf6125cb51c304018decf2390b866712d658c630"
+  },
+  "scope": "Complete upstream ZIP verified by MD5. Detailed offline analysis covers all 28 figure S8 text arrays and 54 human-session force/torque CSV to EMG CSV pairs. Other figure arrays and proprietary SLK exports were not counted as additional independent trials. No executable content was used.",
+  "measured": "The physical fixture uses one six-axis F/T sensor below the fixed connector and two separate laser displacement sensors observing opposite sides of the translating socket. Initial pin contact is a calibration reference. No separate electrical closure/completion signal. Two-leg reaction forces are model-derived, not two physically independent load cells.",
+  "column_interpretation": "Figure arrays are headerless and ship without the analysis code or a column dictionary. For S8 only, the plotted axes, time range and traces are consistent with one-based column 1 as seconds, 5 and 6 as opposing laser-travel series in mm, 7 as the rotational waveform in degrees, 8 and 9 as the two model forces and 10 and 11 as symmetric friction bounds (sum zero on every row). Retain positional names; sensor A/B ambiguity cannot change which travel advances more from one direction to the other. The method does not distinguish commanded from measured rotation by column name.",
+  "method": "Build segments only between successive opposite high-amplitude extrema (regions beyond 80% of the absolute maximum of column 7, midpoint sample of tied extrema). Exclude incomplete outer segments. Trial-level travel from onset uses median over final 100 samples minus median over 100 samples before first 10%-amplitude rotation. These definitions are independent of the authors’ published half-cycle segmentation. Per-row clocks do not prove physical simultaneity.",
+  "findings": "The archive has 10 LCB30 two-pin, 8 three-pin power-plug and 10 D-sub 25-pin repeats, one physical specimen per type, with 1,768,022 rows. The S8 caption agrees with 10/8/10; Note 6 describes 10 each and Table 2 lists 10 power-plug trials. The additional two are not identifiable in the S8c files. In 243 negative-to-positive complete swings column 5 advances farther in the insertion direction every time; the order reverses on all 255 positive-to-negative swings. Starting preload and missing contact timestamps preclude independent contact-onset or completion time.",
+  "human_session_limits": "54 FT/EMG filenames match (three participant directories × three connector prefixes × two modes × three trials); scope exports carry six numeric channels, EMG CSVs five. File pairs have different row counts in every case. EMG spans are 1.6845–13.3874 s shorter than FT spans inferred from the stored export-header FILETIME difference. Analysis preserves different row clocks and excludes explicit maximum/minimum/mean EMG footer rows. No row-wise fused dataset inferred.",
+  "reproduce": "python derive_wiggle.py dataset.zip OUT (NumPy)."
+}

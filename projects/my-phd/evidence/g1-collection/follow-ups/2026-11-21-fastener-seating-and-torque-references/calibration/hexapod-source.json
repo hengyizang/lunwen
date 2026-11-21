@@ -1,0 +1,22 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "In-Situ Calibration of Six-Axis Force/Torque Transducers on a Six-Legged Robot",
+  "authors": [
+    "Ziyou Wu",
+    "Shai Revzen"
+  ],
+  "doi": "10.1115/1.4066455",
+  "landing": "https://doi.org/10.1115/1.4066455",
+  "paper": {
+    "url": "https://www.birds.eecs.umich.edu/assets/pdf/2024-Wu-Revzen-ASME-JDSMC.pdf",
+    "bytes": 1199622,
+    "sha256": "d3a225cc9759bcb28db755b961ae9cf32020b3bcd59dc80eea0c59fb71cf217e"
+  },
+  "rights": "Author-hosted paper available for reading. Data availability statement gives access upon reasonable request. Only four factual Table 1 model-selection statistics and new computed comparisons are recorded, no article or original samples are redistributed.",
+  "history": "Existing study, newly extracted Table 1; excluded from the counts of new papers and of available datasets.",
+  "queries_and_followup": [
+    "Wu Revzen in-situ calibration six-axis six-legged robot offset; followed the DOI and the authors’ PDF and checked the data availability statement."
+  ],
+  "evidence": "Table 1 and Section 5.2: four models evaluated by the reported mean of mean squared errors over five folds and BIC. The full 36-parameter model has error 12; the three-parameter model has 105, or 8.75 times the rounded full-model figure. Separate residual comparisons report 63% and 90% RMSE reductions. Section 6 reports up to 10 N offset change after six months with several possible causes. These are hip-mounted transducers and a paper-level comparison.",
+  "reproduction": "python derive_hexapod_table.py AUTHORS_PDF OUT (Python plus pdftotext with -layout)."
+}

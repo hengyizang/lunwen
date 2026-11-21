@@ -1,0 +1,158 @@
+{
+  "accessed_utc": "2026-11-21",
+  "stage": "G1",
+  "branch_of_question": "R1 wrist wrench reference, bias and cross-axis effects",
+  "title": "Shaft-integrated Force Sensing with Transformer-based Dynamics Compensation for Telesurgery",
+  "authors": [
+    "Yang, Shuyuan",
+    "Boone, Grant",
+    "Markert, Timo",
+    "Matich, Sebastian",
+    "Theissler, Andreas",
+    "Atzmueller, Martin",
+    "Chua, Zonghe"
+  ],
+  "doi": "10.1109/TMRB.2026.3699214",
+  "landing": "https://zenodo.org/records/21036880",
+  "version": "v1",
+  "source_id": "Zenodo 21036880; parent 21036879, reservoir record supplies IEEE DOI instead of a separately minted Zenodo DOI.",
+  "rights": "Dataset license CC BY 4.0 via Zenodo metadata. Credit Shuyuan Yang, Grant Boone, Timo Markert, Sebastian Matich, Andreas Theissler, Martin Atzmueller, Zonghe Chua. New numerical summaries and independent scripts only.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "zenodo.org/records/21036880",
+      "zenodo.org/records/21036879",
+      "10.1109/TMRB.2026.3699214",
+      "2605.31434",
+      "Shaft-integrated Force Sensing with Transformer-based Dynamics Compensation for Telesurgery",
+      "enhanced-telerobotics/shaft_force_sensing",
+      "Yang, Shuyuan; Boone, Grant; Markert, Timo"
+    ],
+    "historical_paths": 944,
+    "tar_members_scanned": 301,
+    "baseline_index_checked": true,
+    "method": "Case-folded, decomposed Unicode, removed punctuation and spaces; scanned complete identifiers/titles and author aliases, including all G1 batch records and extracted tar/gzip evidence.",
+    "matches": []
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/21036880",
+    "bytes": 5876,
+    "sha256": "6211e3924913563782daa6d2354c459d48fa0dbe0a5fdcdf28919827042b8e84"
+  },
+  "paper": {
+    "arxiv": "2605.31434v2",
+    "journal_doi": "10.1109/TMRB.2026.3699214",
+    "crossref": {
+      "url": "https://api.crossref.org/works/10.1109/TMRB.2026.3699214",
+      "bytes": 8544,
+      "sha256": "77456583bc9753fc86121fc2e3a61f2da739f6a18ead4ab69927550feb94d47c"
+    },
+    "full_text": {
+      "url": "https://arxiv.org/pdf/2605.31434v2",
+      "bytes": 4805676,
+      "sha256": "78160c1aa28d9555af6612df323d3d85430db86c5ebeac6201d9d4590af2e36d"
+    },
+    "locator": "Sections IV and V, Table I (6 HEX10 inputs, 3 ATI target components), Fig. 4 traction and palpation setups, Fig. 6 and accompanying text on observed cable preload and axial range."
+  },
+  "project_code": "https://github.com/enhanced-telerobotics/shaft_force_sensing/tree/744cc169b1d0a8e01debe33b64c84ee97cd6f7b3",
+  "exporter": {
+    "url": "https://github.com/enhanced-telerobotics/dvrk_bag_extraction/blob/27e8a67a68795d4d28b318778df7af0f2456c2f9/extract.py",
+    "bytes": 15921,
+    "sha256": "ede3c446af7a43dd17c4ed7333f1ba2af64907595b5e2195b910b79322dcd358"
+  },
+  "sources": {
+    "Free.zip": {
+      "url": "https://zenodo.org/api/records/21036880/files/Free.zip/content",
+      "bytes": 551357964,
+      "sha256": "ee76928d9ed3459563da6b01f26e4bd580f3b8e95273f0c7ee5bcc6f9344469f",
+      "verified_md5": "md5:541157336c5dc2a264304dbfa483c720"
+    },
+    "record.sh": {
+      "url": "https://zenodo.org/api/records/21036880/files/record.sh/content",
+      "bytes": 912,
+      "sha256": "98af2dbe8f66be1b60a96408fc6cf0ca6f52dbb2d8ee78f5b9a6523d7586985e",
+      "verified_md5": "md5:35578b34695b5ba1616b8958066b5c64"
+    },
+    "data.tar.gz": {
+      "url": "https://zenodo.org/api/records/21036880/files/data.tar.gz/content",
+      "bytes": 1921382400,
+      "sha256": "fec1d23a9909e98052e5818a9ce6b37f9d507d58fe64089f3ef244abc1a9c6d1",
+      "verified_md5": "md5:01cdb5d43450288928a8cd5ff803e56e"
+    },
+    "Palpation.zip": {
+      "url": "https://zenodo.org/api/records/21036880/files/Palpation.zip/content",
+      "publisher_md5": "md5:f7c9a04d5330128343e77bcec458ad8a",
+      "publisher_bytes": 1055427642,
+      "checked": "Retrieved release ZIP central directory and verified individual metadata.yaml CRC32 in every bag. Container-wide checksum and full native streams were not checked; the processed CSVs from these runs were checked."
+    },
+    "Traction.zip": {
+      "url": "https://zenodo.org/api/records/21036880/files/Traction.zip/content",
+      "publisher_md5": "md5:71c951fbecdb63ba26e5daea5b8ec704",
+      "publisher_bytes": 996486257,
+      "checked": "Retrieved release ZIP central directory and verified individual metadata.yaml CRC32 in every bag. Container-wide checksum and full native streams were not checked; the processed CSVs from these runs were checked."
+    },
+    "Teleop_compressed.zip": {
+      "url": "https://zenodo.org/api/records/21036880/files/Teleop_compressed.zip/content",
+      "publisher_md5": "md5:c05bff46628ce9a4be491b6807a23ddd",
+      "publisher_bytes": 951365202,
+      "checked": "Retrieved release ZIP central directory and verified individual metadata.yaml CRC32 in every bag. All 27 native DB3 members also received and verified against their ZIP CRC32; see per-file SHA-256 in shaft-native-replay.csv."
+    }
+  },
+  "queries": [
+    "robot wrist six axis force torque sensor shaft calibration force bias independent reference ATI raw dataset free space robot contact open force torque data",
+    "Zenodo collection → project website and v2 paper → authors’ force_data ROS2 extractor → all prepared data and all four native ZIP inventories → raw /ati_data WrenchStamped inspection."
+  ],
+  "file_scope": "Release includes autonomous Free (3), Palpation (6), Traction (3), and teleoperation in 3 configurations × 3 conditions × 3 trials. The full 1,921,382,400-byte data.tar.gz is an uncompressed tar with a misleading suffix. Read all 39 CSVs. Read auxiliary orientation/Jacobian NPZs for all 12 free runs; only orientation used. Read 39 individual metadata.yaml members from the native ZIPs, and independently decoded the original SQLite messages in 3 autonomous Free and all 27 Teleop bags. Full Palpation/Traction SQLite payloads, image arrays and videos were not analyzed.",
+  "physics": "Real dVRK EndoWrist with a shaft-mounted HEX10 measuring six components including internal cable load. The independently mounted ATI Nano17 senses the external object/spring-support reaction in contact conditions. Autonomous/teleoperated free runs have no ATI topic. The processed release saves 3 rotated ATI force components, omits all ATI moments, and fills absent ATI input with zeros. The separate /ati_data original ROS2 messages in all 18 loaded teleoperation bags contain six numeric fields including nonzero moment observations. Forces and moments at the ATI fixture origin cannot serve directly as independent tip torque labels: verify scales, frames, sign convention and moment-arm translation. ATI frame ID in the audited messages is empty; the coordinate frame is selected from the source TF calibration. Raw moments are left in native numerical units pending independent unit documentation.",
+  "timing": "Published preprocessing intersects available topics using bag timestamps, samples the latest measurement at or before each 10-ms grid point, and rotates external force into HEX10 frame. CSV omits timestamps. Native replay decodes little-endian ROS2 CDR and validates payload dimensions and ROS topic types; each unique native six-component float32 value matched to the prepared row constrains the possible grid-origin interval. Take the midpoint of a feasible interval for replay. Compare independently measured ATI force norm without frame dependence. Ambiguous repeated vectors are excluded from estimating the origin but included in evaluating all output rows; origin bounds are computed from the HEX10 only.",
+  "native_replay": {
+    "native_bags": 30,
+    "native_bags_with_ati": 18,
+    "native_ati_records": 1119596,
+    "native_ati_all_zero_torque_records": 0,
+    "feasible_replays": 30,
+    "replayable_rows": 724642,
+    "six_shaft_values_matched": 724642,
+    "cases_without_feasible_origin": [],
+    "caveat": "Small differences in ATI native versus exported force norm can include timing ambiguity as well as float rounding; the external sensor generally samples faster. No raw/processed torque comparison exists for ATI because the exporter omitted it.",
+    "independent_force_norm_check": "Across the 18 independently replayed loaded teleoperation bags, the largest bag-specific 99th percentile of the absolute norm difference between raw ATI and the published rotated ATI force is 2.68e-7 N. Some individual rows can differ because feasible origins do not fix every ATI sample."
+  },
+  "counts": {
+    "prepared_sessions": 39,
+    "prepared_rows": 1782478,
+    "free_sessions": 12,
+    "free_rows": 502324,
+    "free_all_zero_ati_force_rows": 502324,
+    "loaded_sessions": 27,
+    "loaded_rows": 1280154,
+    "loaded_all_zero_ati_force_rows": 0,
+    "loaded_ati_messages_in_native_metadata": 6412825,
+    "free_rows_Fz_below_minus19_N": 1171,
+    "loaded_rows_Fz_below_minus19_N": 61927,
+    "all_rows_Fz_above_plus25_N": 0
+  },
+  "zero_and_orientation": "The paper reports observed 6 N cable pretension and nominal axial range −19 to +25 N after accounting for it. Negative threshold crossings count shaft compressions, not ADC clipping. Free data provide a no-external-contact condition, not a torque-zero drift standard. Using only the 3 autonomous free training bags, an affine regression of measured shaft torque vector on the third column of the supplied base-to-HEX10 rotation (base +z expressed in sensor coordinates) fares worse than the train-mean vector on every one of 12 bag-held-out tests (3 autonomous and 9 teleop). Training excludes the test bag. This rejects that particular simple orientation-only cross-run baseline here, without determining whether gravity, cable dynamics, hysteresis, electronics, timing or another term caused the residual.",
+  "related_screen": "Skrede calibration and payload datasets were previously indexed. Other open-source calibration software without verified measured torque references was screened as background only.",
+  "reproduce": "Download the exact prepared data and the four native ZIPs under their published filenames. Run OPENBLAS_NUM_THREADS=1 python derive_shaft.py data.tar.gz ZIP_DIRECTORY OUT (NumPy, pandas, PyYAML). Extract only *.db3 from Free.zip and Teleop_compressed.zip into a separate NATIVE_DIR retaining original parent folder names; run OPENBLAS_NUM_THREADS=1 python derive_shaft_native.py data.tar.gz NATIVE_DIR OUT (NumPy, pandas, stdlib sqlite3). Individual member SHA-256 and raw topic counts appear in the two CSVs.",
+  "executed_registry_queries": [
+    {
+      "source": "shaft",
+      "url": "https://zenodo.org/api/records?q=%22Shaft-integrated+Force+Sensing%22&size=8",
+      "query": "\"Shaft-integrated Force Sensing\"",
+      "returned_ids": [
+        "21036880"
+      ],
+      "total": 1
+    },
+    {
+      "source": "shaft",
+      "url": "https://zenodo.org/api/records?q=%22wrist%22+AND+%22force+torque%22+AND+%22calibration%22&size=8",
+      "query": "\"wrist\" AND \"force torque\" AND \"calibration\"",
+      "returned_ids": [
+        "11096791",
+        "1126095"
+      ],
+      "total": 2
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "title": "AURSAD: Universal Robot Screwdriving Anomaly Detection Dataset",
+  "doi": "10.5281/zenodo.4559556",
+  "concept_doi": "10.5281/zenodo.4487072",
+  "landing": "https://doi.org/10.5281/zenodo.4559556",
+  "version": "1.1",
+  "publication_date": "2021-02-01",
+  "authors": [
+    "Błażej Leporowski",
+    "Daniella Tola",
+    "Casper Hansen",
+    "Alexandros Iosifidis"
+  ],
+  "rights": "CC BY 4.0 for the Zenodo dataset; credit the four creators. The deposited tables contain our calculated segment counts and extrema. Original HDF5, pickle, and preprint PDF are linked.",
+  "license_uri": "https://creativecommons.org/licenses/by/4.0/",
+  "checked_utc": "2026-11-21",
+  "record_metadata_url": "https://zenodo.org/api/records/4559556",
+  "metadata_sha256": "93de5ce868572aa00aa56a295597c54e1f3ed25e825346f462fddd314e217b44",
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.5281/zenodo.4559556",
+      "10.5281/zenodo.4487072",
+      "10.5281/zenodo.4487073",
+      "AURSAD",
+      "2102.01409",
+      "Universal Robot Screwdriving Anomaly Detection Dataset"
+    ],
+    "prior_matches": [],
+    "history_paths": 944,
+    "additionally_scanned_tar_members": 301,
+    "early_baseline_checked": true,
+    "normalization": "Casefolded Unicode and alphanumeric comparison covering files at the pinned Git object, expanding gzip and tar contents."
+  },
+  "queries": [
+    "robot screwdriving robotic screw fastening torque angle dataset assembly tightening time series failure dataset",
+    "AURSAD + Universal Robot Screwdriving Anomaly Detection Dataset → fixed Zenodo release 4559556 and the linked report arXiv:2102.01409; verify against latest version API and check Appendix B for field semantics.",
+    "Adjacent source checked as a catalogue lead: KIT RADAR 10.35097/yjdmucmycjkbm09g. Outer archive listing only; inner run data not confirmed, no statistics derived, not counted."
+  ],
+  "associated_report": {
+    "title": "AURSAD: Universal Robot Screwdriving Anomaly Detection Dataset",
+    "id": "arXiv:2102.01409v2",
+    "url": "https://arxiv.org/abs/2102.01409v2",
+    "pdf_sha256_read": "46b25bfda22733af0bcb65432f734f9bbb50f91d99933ccd0c027eca5f5d899e",
+    "sections": "Sections 3, 4.2, 5, 6, Appendix A and field table in Appendix B."
+  },
+  "release": {
+    "file": "AURSAD.h5",
+    "url": "https://zenodo.org/api/records/4559556/files/AURSAD.h5/content",
+    "verified_file_digest": {
+      "sha256": "40ae5ce055a7f9cf399f4485bc667c81171013b3742799ed3f28f1e7243c7aea",
+      "bytes": 6417816949,
+      "md5": "08e4706cf15144761a12cb86bd071d72"
+    },
+    "zenodo_checksum": "md5:08e4706cf15144761a12cb86bd071d72",
+    "verification": "Entire original HDF5 in 192 HTTP 206 byte ranges; per-response Content-Range and lengths checked, full-file MD5 matched repository, SHA-256 locally computed. Other distribution AURSAD.pkl omitted.",
+    "latest_checked_on_access": "https://zenodo.org/api/records/4559556/versions/latest",
+    "old_release": "10.5281/zenodo.4487073"
+  },
+  "evidence_level": "downloaded original measurement file and read full paper; all 6,249,074 rows processed.",
+  "hardware_and_recording": "Real UR3e arm and OnRobot screwdriving tool, nominally sampled at 100 Hz. Register relay on a separate URScript thread and common RTDE stream through the robot controller as described in Section 4.2. Appendix A documents problems with direct screwdriver acquisition. Signals share published rows; no separately verified device-level latency correction is applied.",
+  "fields": {
+    "sample_nr_and_label": "Contiguous equal pairs define a segment; sample numbers and CSV row ranges allow independent extraction. Labels 0–4 are assembly observations, 5 = auxiliary loosening or picking.",
+    "spindle": "output_double_register_24/25/26 = achieved, current and target torque in N m, respectively. Achieved can hold a prior result. Peaks are maxima of absolute values.",
+    "tcp": "Euclidean norm of actual_TCP_force_3..5 (rotational wrench channels, N m). The three-axis resultant at the TCP is frame- and load-dependent, and differs physically from axial spindle torque.",
+    "status": "output_bit_register_67 = tightening, 70 = driver busy, 71 = process not OK and 72 = OK. In this release bit 67 is a short pulse rather than a sustained operation interval. The primary active window selects bit 70 within assembly events (labels 0–4). The intersection of bits 67 and 70 is reported separately as a diagnostic.",
+    "threshold": "A threshold attainment in the summaries means at least one active row with a strictly positive setpoint and abs(current torque) >= target torque. No interpolation or timing claim is used.",
+    "clock": "Output t_first_s/t_last_s are controller timestamps; clock checks exclude event boundaries. Nominal step is 10 ms."
+  },
+  "counts": {
+    "hdf_rows": 6249074,
+    "stored_columns_including_metadata": 134,
+    "contiguous_sample_and_label_segments": 4094,
+    "distinct_sample_numbers": 4094,
+    "per_stored_label_segments": {
+      "normal": 1420,
+      "damaged screw": 221,
+      "extra assembly component": 183,
+      "missing screw": 218,
+      "damaged thread": 3,
+      "loosening / screw picking": 2049
+    },
+    "rows_with_both_tightening_and_busy": 62,
+    "segments_with_both_ok_and_not_ok_at_some_point": 0,
+    "simultaneous_ok_and_not_ok_rows": 0,
+    "within_segment_backward_clock_steps": 4,
+    "within_segment_equal_clock_steps": 0,
+    "within_segment_clock_steps_over_15ms": 15214
+  },
+  "limits": [
+    "The release does not provide an independently calibrated in-line torque reference, clamp/preload measurement or a timestamped physical seat-contact label. A spindle register crossing or an OK bit cannot establish preload or seating independently.",
+    "Normal and anomaly labels refer to entire events. Missing-screw events include induced omissions and actual pick-up failures without separate labels (Section 5.1). Damaged plate thread has only three samples.",
+    "The extra assembly component is an added washer. The auxiliary class is not a sixth tightening outcome. The data does not justify comparison of TCP-moment magnitude to a signed drive-axis moment without frame, alignment and load treatment."
+  ],
+  "outputs": {
+    "screwdriver-events-by-label.csv": {
+      "sha256": "a71ebe35475baa8a3a463aec754a0a4e8f0f98585b7017c81fd5a5e419c5c301",
+      "data_rows": 6
+    },
+    "screwdriver-segments.csv": {
+      "sha256": "c316cbcbea3c6ada1e1e92d8fac011e095e62b5bdab223468245911f8d96abfc",
+      "data_rows": 4094
+    }
+  },
+  "reproduce": "Using NumPy and h5py, run python derive_aursad.py AURSAD.h5 OUTPUT_DIR. Event classes, conditional peak extrema (N m), and threshold counts are in screwdriver-events-by-label.csv. screwdriver-segments.csv records half-open source row ranges and per-segment flags and extrema.",
+  "findings": [
+    "In busy rows of labeled tightening events the instantaneous absolute spindle torque reached the positive target at least once in 616 of 1,420 normal, 51 of 221 damaged-screw, 28 of 183 extra-component, 4 of 218 missing-screw, and 1 of 3 damaged-thread events. A positive threshold occurrence is neither necessary for the normal class nor sufficient to reject a missing-screw event in these observations.",
+    "Process OK bit 72 and process not OK bit 71 remained zero across all recorded rows. Bit 67 appeared only on 2,039 rows; just 62 of those also had busy bit 70. Explicitly time-matched manual seat labels cannot be obtained from these flags."
+  ],
+  "validation": "Both derived CSVs were regenerated twice and byte-compared. An independent NumPy memory map of native HDF5 blocks checked per-class sample counts, row counts, events with active busy bits, events reaching positive target torque, OK and not-OK. All six label groups agreed."
+}

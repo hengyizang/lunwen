@@ -1,0 +1,77 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "The RBO Dataset of Articulated Objects and Interactions",
+  "landing": "https://doi.org/10.5281/zenodo.1036660",
+  "doi": "10.5281/zenodo.1036660",
+  "concept_doi": "10.5281/zenodo.1036659",
+  "authors": [
+    "Martín-Martín, Roberto",
+    "Eppner, Clemens",
+    "Brock, Oliver"
+  ],
+  "rights": "CC BY 4.0 per Zenodo, credit Roberto Martín-Martín, Clemens Eppner and Oliver Brock. Included tables are independently derived. Original recordings remain at the deposit.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.5281/zenodo.1036660",
+      "10.5281/zenodo.1036659",
+      "tu-rbo/articulated-objects",
+      "The RBO Dataset of Articulated Objects and Interactions",
+      "10.1177/0278364919844314",
+      "1806.06465"
+    ]
+  },
+  "queries_and_followup": [
+    "Looked up The RBO Dataset of Articulated Objects and Interactions for wrist wrench, tool mass, bias and independent motion observations. Followed the project download link to the fixed Zenodo deposit and checked the methods and visualizer against the bag indexes and numeric exports."
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/1036660",
+    "bytes": 179998,
+    "sha256": "01d14c0f57bc4cb908bbceae61e50a6ec3dafb26c9ccff91aaf2c0fe0ae86a03"
+  },
+  "interactions": {
+    "url": "https://zenodo.org/api/records/1036660/files/interactions_index.csv/content",
+    "bytes": 23134,
+    "sha256": "3d702eff42469b33c616c1708e8ed7bb24ed9f6f8a08096e7e04e5be099c1db7"
+  },
+  "project": {
+    "url": "https://tu-rbo.github.io/articulated-objects/",
+    "bytes": 172249,
+    "sha256": "590cbde4c9d5d0076f54e0c49451faf5081bd0912f6bd6b7e45c966d1be2599d"
+  },
+  "visualizer": {
+    "url": "https://github.com/tu-rbo/articulated-objects/blob/b191d0cd3a076757fc60b8e1feed8bf5d0bd1103/scripts/rbo_visualizer.py",
+    "bytes": 12443,
+    "sha256": "500825bb3cf01faf264cc0841460765411cff7878ffbabf5bda141e604023d79"
+  },
+  "paper_version": "10.1177/0278364919844314, author preprint arXiv:1806.06465v1",
+  "paper": {
+    "url": "https://arxiv.org/pdf/1806.06465v1",
+    "bytes": 3149794,
+    "sha256": "1b67ca6badb99ff56011bb4942883c11d4d3d972af3eb3d0904faf2b204dd1be"
+  },
+  "evidence": "Full-text methods, all 358 ROS1 bag index tails and 14 complete exported archives, one per object. Human-held tool. Authors describe OptiTrack-based estimation of object joint motion.",
+  "coverage": {
+    "registry_files": 732,
+    "experiments": 358,
+    "wrench_experiments": 78,
+    "wrench_messages": 151806,
+    "joint_state_messages": 402927,
+    "all_messages_in_indexes": 3943295,
+    "head_and_tail_bytes": 49826154,
+    "numeric_archives": 14,
+    "complete_compressed_bytes": 2221523423,
+    "wrench_rows": 24038,
+    "joint_rows": 24003,
+    "export_to_bag": "Counts of both streams match the recorder indexes in all 14 complete exports."
+  },
+  "method": [
+    "arXiv v1 p. 5, Interaction Wrenches. Applied published sensor-frame constant offsets F=(-0.927,1.122,1.332) N and M=(0.104,0.027,-0.033) N m. The static tool-only moment bound is 0.163 kg × 9.80665 m/s² × 0.015 m, approximately 0.02398 N m. 23,923 of 24,038 torque norms after constant subtraction exceeded this bound. Distinct hand-applied loads, acceleration and contact can contribute. Gravity and inertia were not removed sample by sample.",
+    "All published 358 experiment labels agree with the presence of positive WrenchStamped counts. 280 bags have no recorded wrench. Header time equality between wrench and joint exports gave zero matches in each of the 14 selected files. The change test uses overlapping header time, the first 250 ms baseline, a 30 ms sustained threshold, and a maximum 100 ms gap. Joint proxy is first change exceeding 5% of its own 5th–95th percentile excursion. At 1/2/4 N, both changes were observable in 13/12/9 archives and force changed first in 11/7/7. Absence of a cycle marker or first-contact switch limits onset interpretation.",
+    "One archive per object minimizes compressed bytes among labeled wrench trials, with filename as tiebreaker. This purposeful sample supports checks of channel meaning, not prevalence estimates. Only recorder headers and tail indexes were read for all 358 bags. Each sampled CSV member has its own digest and per-archive MD5."
+  ],
+  "reproduction": [
+    "Save registry response as zen.json and download interactions_index.csv from its registered file URL. Run python fetch_rbo_indexes.py zen.json interactions_index.csv indexes and python derive_rbo_indexes.py zen.json interactions_index.csv indexes OUT.",
+    "Download the 14 complete archives named in rbo-wrench-samples.csv from https://zenodo.org/api/records/1036660/files/{archive}/content into ARCHIVES. Run python derive_rbo_wrench.py zen.json interactions_index.csv ARCHIVES OUT (Python 3.11+, NumPy)."
+  ]
+}

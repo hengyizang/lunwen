@@ -1,0 +1,90 @@
+{
+  "title": "Dataset on force and torque for fastener clamping",
+  "doi": "10.17632/jffwrb4pcd.4",
+  "concept_doi": "10.17632/jffwrb4pcd",
+  "landing": "https://doi.org/10.17632/jffwrb4pcd.4",
+  "version": 4,
+  "publication_date": "2023",
+  "creators_and_contributors": [
+    "Farias, Adalto",
+    "Leonardi, Fabrizio",
+    "Delijaicov, Sérgio",
+    "Centro Universitario Da FEI"
+  ],
+  "rights": "CC BY 4.0, per DataCite version metadata. Attribute the depositors and coauthors. Independent derived statistics and a reader only.",
+  "checked_utc": "2026-11-21",
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.17632/jffwrb4pcd",
+      "Dataset on force and torque for fastener clamping",
+      "Dataset on critical angular clamping speeds of fasteners",
+      "10.1016/j.dib.2023.110022"
+    ],
+    "prior_matches": [],
+    "history_paths": 944,
+    "additionally_scanned_tar_members": 301,
+    "early_baseline_checked": true,
+    "normalization": "Casefolded Unicode and alphanumeric comparison covering files at the pinned Git object, expanding gzip and tar contents."
+  },
+  "record_metadata_url": "https://api.datacite.org/dois/10.17632/jffwrb4pcd.4",
+  "metadata_sha256": "33bb7c3eb8759062f194ccc3b1b80f2e0ab26cd6b0a1f949b7aae32e1648e2fa",
+  "associated_paper": {
+    "doi": "10.1016/j.dib.2023.110022",
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10792756/fullTextXML",
+    "xml_sha256": "0d74666e4e6390749c64499abb63c2aad66f4b3154ee911537cb33e1b054793d"
+  },
+  "archive": {
+    "url": "https://data.mendeley.com/public-api/zip/jffwrb4pcd/download/4",
+    "sha256": "6567526756432a8b37f3a8ac57133b0a587ca59938260dac267b9dd61d67a08b",
+    "bytes": 2559944,
+    "checked_members": 150,
+    "all_members_verified_with_publisher_SHA256": true
+  },
+  "listing": {
+    "folder_list_sha256": "496b3561c750b6111660515589e7b39db6eb23483e953c41858c42fe07ea5ec6",
+    "url_template": "https://data.mendeley.com/public-api/datasets/jffwrb4pcd/files?folder_id={id}&version=4&$start=0&$limit=1000",
+    "retrieved_folders": [
+      {
+        "folder": "root",
+        "id": "root",
+        "listing_items": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "folder": "1-raw_data_torque",
+        "id": "19c41b0d-6a0d-4f37-86a0-1b79383b0040",
+        "listing_items": 48,
+        "sha256": "dca12aa5db1dc03b390e5e71ee8366c5490ef7407380e6c6047917a5bd6404bf"
+      },
+      {
+        "folder": "2-raw_data_force",
+        "id": "8d91d28b-865a-4a10-8fc4-4ff0a345853a",
+        "listing_items": 48,
+        "sha256": "e9d592fb46b02c60b623ac1b389f7a158e19d302ca2a079b1e437e8118c26475"
+      },
+      {
+        "folder": "3-raw_data_plots",
+        "id": "aa430d35-0637-4a91-b8f4-155786ca8f91",
+        "listing_items": 48,
+        "sha256": "b5ce580f9458aa2c031ba71a2b4954e4b44e140bb0ad7bc11392a1af7b7dd016"
+      },
+      {
+        "folder": "4-DOE_tables",
+        "id": "77df3ca2-e595-452d-906b-5e9667045b6e",
+        "listing_items": 6,
+        "sha256": "2af2ee918f3a3aaf1ff02da98f1898d2f8edf01ecd9bd6eac1b620990f745b0a"
+      }
+    ]
+  },
+  "queries": [
+    "bolted joint tightening dataset torque clamp force angle open research data torque angle preload zenodo figshare",
+    "bolted joints tightening experimental dataset clamp load torque friction coefficient raw data Mendeley load cell",
+    "Version 4 data record → versioned original ZIP → publisher checksums → data paper Methods, Table 2 and Supplementary Tables 1–6. Older data titles/versions belong to one family."
+  ],
+  "scope": "48 actual M10 × 1.50 trials with 16 combinations of nominal coating friction (0.10/0.20), tightening speed level, nut coating, and bearing-plate hardness; 3 trials per combination. All 150 archive members include separate force and torque CSVs for each trial, one plot per trial and six supplementary tables. Source assigns a separate clamping force curve in kN and screwdriver torque curve in N·m. It describes a calibrated testXpert II system, but does not provide a separate traceable calibration certificate or per-sample sensor uncertainty. No robot wrist torque channel.",
+  "units": "Article Methods calls the two speed levels 10 and 200 rpm, within a stated 340 rpm screwdriver capability. The archived DOE tables label 10 and 200 as rad/s and the instrument limit contradicts that interpretation. Preserve the published levels categorically; no time estimates from speed. The clamping protocol specifies 40 N·m and an additional 180°, so final torque is not constant.",
+  "analysis": "Retain original row order. None of the 48 force angle arrays is identical to its matching torque angle array. Find the first increasing crossing of 40 N·m (linear interpolation). At that angular coordinate evaluate all adjacent force-curve segments bracketing the angle and any exact angle observations. Retain the force value only when that association is unique. Crossing angle is a numeric level, not an independently measured instant of seating. No clock time is in the curves. Group medians are calculated on three trials per factor cell. Table P and T are authors’ summary responses distinct from last samples or curve maxima.",
+  "outcomes": "32,159 force rows and 34,950 torque rows. All 48 first 40 N·m crossing angles have one force interpolation, from 14.85446 to 32.10135 kN. Higher nominal friction gave lower median tabulated P and higher median tabulated T for all eight matched combinations of the other three factors. The labelled interventions include surface treatment; these results do not define a universal torque–preload factor.",
+  "reproduce": "Python 3 + NumPy: python derive_clamp.py V4.zip OUT"
+}

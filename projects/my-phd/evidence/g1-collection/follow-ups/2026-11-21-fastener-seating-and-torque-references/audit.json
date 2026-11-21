@@ -1,0 +1,378 @@
+{
+  "accessed_utc": "2026-11-21",
+  "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+  "gate": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "prior_rounds": 55,
+  "prior_followups": 9,
+  "tracked_evidence_paths_screened": 944,
+  "additional_tar_members": 301,
+  "early_catalog_screened": true,
+  "dataset_families": 16,
+  "new_dataset_families": 15,
+  "upgraded_dataset_families": 1,
+  "per_release_history": {
+    "fastener/clamp": {
+      "keys": [
+        "10.17632/jffwrb4pcd",
+        "Dataset on force and torque for fastener clamping",
+        "Dataset on critical angular clamping speeds of fasteners",
+        "10.1016/j.dib.2023.110022"
+      ],
+      "prior_files": []
+    },
+    "fastener/collar": {
+      "keys": [
+        "10.17632/26674p3hvg",
+        "Robotic assembly data of threaded fasteners: aeronautical collars",
+        "Kinematic and dynamic data from a robotic assembly of aeronautical threaded fasteners",
+        "10.1016/j.dib.2023.109674"
+      ],
+      "prior_files": []
+    },
+    "screwdriver/aursad": {
+      "keys": [
+        "10.5281/zenodo.4559556",
+        "10.5281/zenodo.4487072",
+        "10.5281/zenodo.4487073",
+        "AURSAD",
+        "2102.01409",
+        "Universal Robot Screwdriving Anomaly Detection Dataset"
+      ],
+      "prior_files": []
+    },
+    "connector/crimp": {
+      "keys": [
+        "10.7910/DVN/WBDKN6",
+        "Crimp Force Curve Dataset",
+        "Crimp Force Curves Dataset",
+        "zenodo.org/records/15421197",
+        "BJhof/cfc-analysis"
+      ],
+      "prior_files": []
+    },
+    "connector/snap": {
+      "keys": [
+        "10.5281/zenodo.1209203",
+        "10.5281/zenodo.1209202",
+        "zenodo.org/records/1209203",
+        "DS.04.CERTH.SnapFitForceProfiles",
+        "DS04CERTHSnapFitForceProfiles"
+      ],
+      "prior_files": []
+    },
+    "connector/wiggle": {
+      "keys": [
+        "10.6084/m9.figshare.32133736",
+        "figshare.com/articles/dataset/Force-Moment_Mechanics_of_Wiggling_in_Connector_Insertion/32133736",
+        "figshare.com/files/64134163"
+      ],
+      "prior_files": []
+    },
+    "contact/parallel-contact": {
+      "keys": [
+        "10.25835/6khpt790",
+        "9de10f70-364b-4d90-9651-d891dbb7d918",
+        "Datasets for classification and regression in human-robot interaction with parallel robots",
+        "10.1109/IROS55552.2023.10342345",
+        "2308.09650",
+        "10.1109/IROS55552.2023.10341581"
+      ],
+      "prior_files": []
+    },
+    "contact/sixth-contact": {
+      "keys": [
+        "BlablaO/contact-review-dataset",
+        "dc0b642ce732df1cd2042ab8b6e06d21593255de",
+        "2605.01427",
+        "SixthSense: Task-Agnostic Proprioception-Only Whole-Body Wrench Estimation for Humanoids",
+        "SixthSense G1 Contact Dataset"
+      ],
+      "prior_files": []
+    },
+    "contact/slip-probe": {
+      "keys": [
+        "10.5281/zenodo.1172620",
+        "10.5281/zenodo.1172619",
+        "Tactile Convolutional Networks for Online Slip and Rotation Detection",
+        "10.1007/978-3-319-44781-0_2"
+      ],
+      "prior_files": []
+    },
+    "bias/shaft": {
+      "keys": [
+        "zenodo.org/records/21036880",
+        "zenodo.org/records/21036879",
+        "10.1109/TMRB.2026.3699214",
+        "2605.31434",
+        "Shaft-integrated Force Sensing with Transformer-based Dynamics Compensation for Telesurgery",
+        "enhanced-telerobotics/shaft_force_sensing",
+        "Yang, Shuyuan; Boone, Grant; Markert, Timo"
+      ],
+      "prior_files": []
+    },
+    "bias/ptb-static": {
+      "keys": [
+        "10.5281/zenodo.10259588",
+        "10.5281/zenodo.10259587",
+        "19ENG08.Calibration_FhG _TorqueTransducer.PTB.FhG.v1.20231108",
+        "T40FH_calibration.xlsx",
+        "231112002",
+        "May, Christian; Heller, Marcel; Baer, Oksana"
+      ],
+      "prior_files": []
+    },
+    "bias/ptb-dynamic": {
+      "keys": [
+        "10.7795/720.20181105",
+        "10.5194/jsss-7-577-2018",
+        "Dynamic characterization of multi-component sensors for force and moment",
+        "Nitsche, Jan; Kumme, Rolf; Tutsch, Rainer"
+      ],
+      "prior_files": []
+    },
+    "fixture/finishing": {
+      "keys": [
+        "10.5281/zenodo.6457906",
+        "10.5281/zenodo.6457905",
+        "JKU-Linz-Institute-of-Robotics/ur10e_force_control_comparison",
+        "zenodo.org/records/6457906",
+        "3b9b1b2d7b794634d644a9a5d08cf900492d95cb"
+      ],
+      "prior_files": []
+    },
+    "fixture/collision": {
+      "keys": [
+        "10.5281/zenodo.7240050",
+        "10.5281/zenodo.7235962",
+        "zenodo.org/records/7240050",
+        "High-payload collaborative robot: independent external F/T",
+        "High Payload Collaborative Robot - Joint States/Motor Current/TCP Force-Torque"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/r1-dataset-fit.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+      ]
+    },
+    "rbo/rbo": {
+      "keys": [
+        "10.5281/zenodo.1036660",
+        "10.5281/zenodo.1036659",
+        "tu-rbo/articulated-objects",
+        "The RBO Dataset of Articulated Objects and Interactions",
+        "10.1177/0278364919844314",
+        "1806.06465"
+      ],
+      "prior_files": []
+    },
+    "feel/feel": {
+      "keys": [
+        "amirsh1376/FeelAnyForce",
+        "b757dc72ba7ad9a0b501d92fa097d5a91474fbc9",
+        "TacForce_train_set.csv",
+        "TacForce_test_set.csv"
+      ],
+      "prior_files": []
+    }
+  },
+  "bibliographic_records": 109,
+  "new_bibliographic_records": 85,
+  "bibliographic_evidence": {
+    "new bibliography record / author abstract": 49,
+    "new bibliography record / full text": 30,
+    "new bibliography record / bibliographic screening": 6,
+    "historical / author abstract": 17,
+    "historical / bibliographic screening": 3,
+    "historical / full text": 4
+  },
+  "citation_relations": 95,
+  "citation_evidence": {
+    "verified reference": 95
+  },
+  "independently_recomputed_tables": {
+    "bias/ptb-axial-transfer.csv": {
+      "rows": 128,
+      "sha256": "1fd42a22a96661b894fd22cdadbaac4a23edac60390e2d2177984f98630faa61"
+    },
+    "bias/ptb-dynamic-acquisitions.csv": {
+      "rows": 7,
+      "sha256": "0a832c32ec5d00b9e48e432cdf24d67f216d4d2c95614c08fca2569944015316"
+    },
+    "bias/ptb-rigid-motion.csv": {
+      "rows": 420,
+      "sha256": "4e8802327c62ba26d7cc07dff6cfe5362499312ddc290ac6b34d1bdfb4d32676"
+    },
+    "bias/ptb-torque-holdouts.csv": {
+      "rows": 12,
+      "sha256": "65a31f7c32324c5c3f5337d22d67bf821b774230968ef756609d63c4696b1280"
+    },
+    "bias/ptb-torque-mounts.csv": {
+      "rows": 12,
+      "sha256": "5d0209547dc228f5849bcb5c6d53840684b9eab1d28d1bae96e98ddb1ab1c03e"
+    },
+    "bias/shaft-free-holdout.csv": {
+      "rows": 12,
+      "sha256": "af503166e25509eb3d2df3005b87b593e01ae60fb4cb5a7b171ad0370d0963e9"
+    },
+    "bias/shaft-native-replay.csv": {
+      "rows": 30,
+      "sha256": "8566efea170f2b8908dac46ba90343ac30ceed6a1aaaae32128f9bfbaf744a55"
+    },
+    "bias/shaft-reference-coverage.csv": {
+      "rows": 39,
+      "sha256": "71e5a5d13e04d40649d2f7600d03418c8ed96106f03b7ae1a8a1c7852dc54421"
+    },
+    "calibration/hexapod-model-selection.csv": {
+      "rows": 4,
+      "sha256": "de7da5993f9fc4f1eed02a59aa1eb02a4653819d11c7481b68703a2f7686ff94"
+    },
+    "connector/crimp-cross-version.csv": {
+      "rows": 2,
+      "sha256": "bf456aae1fdce7cc93b9fd5fca8fbc8cad057706d24a9341ec452b45ebe3abd1"
+    },
+    "connector/crimp-quality-labels.csv": {
+      "rows": 9,
+      "sha256": "dd818a0aa172a96e1e7246f5aa482aa6e9ced583f454f69d1b965ee5d56af4aa"
+    },
+    "connector/crimp-versions.csv": {
+      "rows": 3,
+      "sha256": "c964753855bea34c5c4bb5f0a1da0fd01683b72aa4b33b281549f615a40cff00"
+    },
+    "connector/snap-heldout-features.csv": {
+      "rows": 8,
+      "sha256": "49b0c424ad4726be8f2050be4788bed90cd936389bed7de3fdc13f892f4a3cfe"
+    },
+    "connector/snap-trials.csv": {
+      "rows": 220,
+      "sha256": "cc0fd05cd1132697e5b4e60607f9df8163e9b19b38c23c0eaac1c4816bf3e877"
+    },
+    "connector/wiggle-half-cycles.csv": {
+      "rows": 498,
+      "sha256": "d2cf9050be0d4650ab915ea9e0a08b34743f7a1c408a505a435c96f3fb58e9ca"
+    },
+    "connector/wiggle-runs.csv": {
+      "rows": 28,
+      "sha256": "10a3cad7f1d61994e9a9292345fcbcd2b04821d268c93a5df9f5d0b88df34235"
+    },
+    "connector/wiggle-session-timing.csv": {
+      "rows": 54,
+      "sha256": "4c8a47091511a845d275a3f26382851935e0c4441251642813df7be5a2ac486e"
+    },
+    "contact/parallel-force-crossings.csv": {
+      "rows": 81,
+      "sha256": "09a8502d2bd385dec4c1f2fef6f31e72ffe102cd8c24482b77def70735b48105"
+    },
+    "contact/parallel-sources.csv": {
+      "rows": 5,
+      "sha256": "ababa92be4a8f145d0b04e24b041a3ea1af60defa0a8579f90b5a03372d76276"
+    },
+    "contact/parallel-wrench-reference.csv": {
+      "rows": 51,
+      "sha256": "329d66382d079e0e8ebe6cc1a4e41780f4256e717ef76cf74f4e0287d08abd82"
+    },
+    "contact/sixth-crossings.csv": {
+      "rows": 936,
+      "sha256": "89b4785773fc00a542546fb5cd6af17453314b1c0d315436aa45b141e0ebd554"
+    },
+    "contact/sixth-source-recordings.csv": {
+      "rows": 15,
+      "sha256": "8dfc2752b0f81123d4254b0f6675929979fd3502a1d0b8cf9f721eaba330eff8"
+    },
+    "contact/sixth-windows.csv": {
+      "rows": 372,
+      "sha256": "1890e2cca42c59e054f50a00aa315d02f838788e0fe60d63819874ba61c3d497"
+    },
+    "contact/slip-probe-comparisons.csv": {
+      "rows": 63,
+      "sha256": "8255580e82d92ce4b1392b40641db46a8f7c6df31102e1a5e5f3291f4cca627a"
+    },
+    "contact/slip-streams.csv": {
+      "rows": 188,
+      "sha256": "aec54844a19eb1bae3729c306444e7729ce0b0d13fc55c705204155b3fa6f48d"
+    },
+    "fastener/clamp-force-torque-runs.csv": {
+      "rows": 48,
+      "sha256": "0932e4f7069fdf1835b9089f2ec808c2f6fad5b3ab663f5379a06761d01d7e81"
+    },
+    "fastener/clamp-friction-contrasts.csv": {
+      "rows": 8,
+      "sha256": "2b9a0f34ed59c89f5dd35c735166ade240d7f00dde29a0a1209b39ca79b763e0"
+    },
+    "fastener/collar-manual-outcomes.csv": {
+      "rows": 3,
+      "sha256": "fc517319179a5d0833d1e2d45203064e558ea46ba0ce74fa4c8b1590084dcc5b"
+    },
+    "fastener/collar-wrist-trials.csv": {
+      "rows": 479,
+      "sha256": "71642279ba5b10300e53efc60734e727f7f61cac18b250bd5b57c53803857580"
+    },
+    "feel/feel-payload-checks.csv": {
+      "rows": 14,
+      "sha256": "7539a4595ae095fc326f1cf11956a4f4fb87dd468feb2846e0dae211023e1560"
+    },
+    "feel/feel-split-intersections.csv": {
+      "rows": 3,
+      "sha256": "3873dec12abc41abe135c3722c805bc3cae0c979eb18d17aeee939252c725df4"
+    },
+    "feel/feel-splits.csv": {
+      "rows": 3,
+      "sha256": "18b386fb4da8a8f673ccaab878c7bff2124a84c35fa1ac7107701bb8d8dc6f9d"
+    },
+    "fixture/collision-bags.csv": {
+      "rows": 80,
+      "sha256": "98e1e9621512b78bc3ae3ae54828c121e43cff82392f034bb985c98d9d7e2032"
+    },
+    "fixture/collision-fixture-conditions.csv": {
+      "rows": 55,
+      "sha256": "d65b82266b7120a3ffc0cbb86a0b3490d9391c33a17b0c4036341c5b933982fa"
+    },
+    "fixture/collision-wrench-topics.csv": {
+      "rows": 110,
+      "sha256": "16fc3f642ad718fa453fe66cc6d43c2d7f5999da7395564bb4ef7a78b35f3ffb"
+    },
+    "fixture/finishing-force-traces.csv": {
+      "rows": 67,
+      "sha256": "8a5f718132645dd6f4db287d3708760e37caf5afcbea665c4538874614987d50"
+    },
+    "fixture/finishing-published-conditions.csv": {
+      "rows": 68,
+      "sha256": "454ec6c86dd8aeb45fa8226f8166ec87f00476ba4f9212f3dc8a31416fa26917"
+    },
+    "rbo/rbo-bag-indexes.csv": {
+      "rows": 358,
+      "sha256": "b89c8cf61eb28b7fd0cc0b4f84f27dbc836531086151a81e12f8d2352fec6093"
+    },
+    "rbo/rbo-change-thresholds.csv": {
+      "rows": 42,
+      "sha256": "edd7079fff5b87534a6c847142481e7e62b1468cc7ab995858f98fef2f6d2c8c"
+    },
+    "rbo/rbo-wrench-samples.csv": {
+      "rows": 14,
+      "sha256": "986916feb5487ed7758734e501e8900664163189c5d03d9bd329ffb1cc69a930"
+    },
+    "screwdriver/screwdriver-events-by-label.csv": {
+      "rows": 6,
+      "sha256": "a71ebe35475baa8a3a463aec754a0a4e8f0f98585b7017c81fd5a5e419c5c301"
+    },
+    "screwdriver/screwdriver-segments.csv": {
+      "rows": 4094,
+      "sha256": "c316cbcbea3c6ada1e1e92d8fac011e095e62b5bdab223468245911f8d96abfc"
+    }
+  },
+  "interpretation": "A release counts once across mirrors, versions and file representations. Shared bench, lab or robot does not establish independent experimental subjects. The Wu and Revzen paper table is counted as publication evidence only. File coverage and permission are documented per release. The derivatives do not redistribute original waveforms, articles or videos.",
+  "run_checks": {
+    "branch": "cloud-state/my-phd",
+    "parent_state_file": "projects/my-phd/state/run.json",
+    "workflow_queries": [
+      "gh run list --repo hengyizang/lunwen --status in_progress --limit 10",
+      "gh run list --repo hengyizang/lunwen --status queued --limit 10"
+    ],
+    "queued_and_running_at_second_check": 0,
+    "date_utc": "2026-11-21",
+    "scope": "Evidence collection within G1. Existing automation invocation, free public sources only."
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "accessed_utc": "2026-11-21",
+  "research_question": "R1 insertion, snap and crimp force against independent geometric or outcome evidence.",
+  "title": "Crimp Force Curve Dataset",
+  "authors": [
+    "Hofmann, Bernd",
+    "Bründl, Patrick",
+    "Franke, Jörg"
+  ],
+  "doi": "10.7910/DVN/WBDKN6",
+  "landing": "https://doi.org/10.7910/DVN/WBDKN6",
+  "version": "Harvard Dataverse versions 1.0, 2.0 and 3.0. Zenodo record 15421197 carries the Harvard DOI; its one pickle has the same size and published MD5 as Harvard v2, not v3.",
+  "rights": "Harvard Dataverse CC0 1.0 for all three dataset releases. Zenodo record specifies CC BY 4.0; attribute Hofmann, Bründl and Franke. Companion paper and software have separate terms. Only derived aggregate statistics, source references and independent reader shared.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "evidence_files": 944,
+    "additional_tar_members": 301,
+    "early_index": true,
+    "keys": [
+      "10.7910/DVN/WBDKN6",
+      "Crimp Force Curve Dataset",
+      "Crimp Force Curves Dataset",
+      "zenodo.org/records/15421197",
+      "BJhof/cfc-analysis"
+    ],
+    "matches": [],
+    "paper_matching_keys": [
+      "10.1038/s41597-025-05858-0",
+      "A Dataset of Univariate Crimp Force Curves for Data-Driven Time Series Analysis"
+    ],
+    "paper_matches": [],
+    "scope": "Release identifiers, version or stable URL and repository/title aliases; paper matches tracked independently of data DOI."
+  },
+  "search": [
+    "industrial press fitting force displacement curve assembly quality data open repository CSV",
+    "\"crimp force curve dataset\" independent defect labels extracted strands",
+    "Zenodo same DOI → Harvard Dataverse version list → all three original files, source article and pinned preprocessing code."
+  ],
+  "registry": {
+    "url": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions?persistentId=doi:10.7910/DVN/WBDKN6",
+    "bytes": 19623,
+    "sha256": "786cd06f7b579deade16d759212776815332933181c9cf9296417447ae770891"
+  },
+  "mirror": {
+    "url": "https://zenodo.org/records/15421197",
+    "file": "https://zenodo.org/api/records/15421197/files/crimp_force_curves_dataset.pkl/content",
+    "verified_md5": "md5:1fb170027a907c3f292150e5b9dd39cd",
+    "bytes": 5683,
+    "sha256": "5ed66c14a833951bc21ffc40fc402e9003d7b8516c1e5948bced8a263f820d94"
+  },
+  "files": [
+    {
+      "version": 1,
+      "source_file": "crimp_force_curves.pkl",
+      "local_name": "crimp-v1.pkl",
+      "published": "2025-03-21T15:32:57Z",
+      "file_id": 11006281,
+      "md5": "f1c39c33177631850e2daa65121205ef",
+      "download": "https://dataverse.harvard.edu/api/access/datafile/11006281",
+      "bytes": 149311209,
+      "sha256": "88c99f0e829669499e4ea56c1660039680996f828f07fbc8ce9e6eb87269e789"
+    },
+    {
+      "version": 2,
+      "source_file": "crimp_force_curves_dataset.pkl",
+      "local_name": "crimp_force_curves_dataset.pkl",
+      "published": "2025-03-25T10:02:47Z",
+      "file_id": 11028498,
+      "md5": "1fb170027a907c3f292150e5b9dd39cd",
+      "download": "https://dataverse.harvard.edu/api/access/datafile/11028498",
+      "bytes": 149289365,
+      "sha256": "fcd58d5cbd14bbef74cec7b6c66c93210c4b2c0d2d7c062c381273ac28a8aee0"
+    },
+    {
+      "version": 3,
+      "source_file": "crimp_force_curves_dataset.pkl",
+      "local_name": "crimp-v3.pkl",
+      "published": "2025-07-11T14:06:10Z",
+      "file_id": 11719733,
+      "md5": "41631f2f1701cedca4be391eb567f4de",
+      "download": "https://dataverse.harvard.edu/api/access/datafile/11719733",
+      "bytes": 149269880,
+      "sha256": "18fcc4c4f450526cd76187a9a55f0ee4446af9d9d5b2ae8d34a0207728e26b7f"
+    }
+  ],
+  "associated_article": {
+    "doi": "10.1038/s41597-025-05858-0",
+    "xml": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12381248/fullTextXML",
+    "locator": "Methods, Data Records and Technical Validation, including manufactured defects, encoded outputs and sensor placement.",
+    "bytes": 64459,
+    "sha256": "fc0de8dc804c78c7c09b1c8c7399cc7e2fd1dd8e5ebaa2fdffa8c9f77099819f"
+  },
+  "preprocessing": {
+    "pinned": "https://github.com/BJhof/cfc-analysis/blob/cf20535104426debce0ff29cc51068865062cfdc/preprocessing.py",
+    "bytes": 1182,
+    "sha256": "82e42947edfdd5d55625f45e0c4aa464fb61dca59c5a06538b9caab4566acac5"
+  },
+  "measured": "Eccentric press connecting-rod strain sensor sampled over press angle. Each trace uses uncalibrated force sensor counts in 3,566 positions. No independent contact switch, actual conductor sliding displacement, pull-out force, continuity measurement, or per-row physical force unit provided.",
+  "labels": "Use fixed preparation label (OK, one/two/three missing strands, crimped insulation) as a separate process input, and compare with the force-based inline monitor label. Correct preparation does not independently prove electrical contact/retention performance. In version 3, 200 of 811 prepared NOK crimps pass the monitor: 123/172 of the one-missing-strand cases. All 1,628 prepared OK cases pass. Counts conditional on prepared specimens, operator and process; not a population prevalence.",
+  "version_audit": "v1 contains 2,440 unique IDs; v2 drops ID 20603. All other raw waves and annotations remain identical. v2/v3 share 2,439 IDs and raw waves (8,697,474 raw values). Baseline and 500-point ROI change for 2,270 IDs only by a constant offset inside each wave (v2 minus v3, −10 to +3 counts). Only v3 reconstructs baseline as raw[0]−raw for all rows; in v2 this holds for 169. The ROI is baseline[1575:2075] in each version.",
+  "reproduce": "Save the three Harvard downloads under files[].local_name (or use the matching Zenodo v2 mirror); python derive_crimp.py INPUT_DIR OUT. Tested with pandas 2.2 and NumPy. Exact pinned file checksum required before pickle loading."
+}

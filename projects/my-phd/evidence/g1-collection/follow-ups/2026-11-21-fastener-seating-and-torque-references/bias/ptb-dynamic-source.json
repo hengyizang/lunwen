@@ -1,0 +1,76 @@
+{
+  "accessed_utc": "2026-11-21",
+  "stage": "G1",
+  "branch_of_question": "R1 wrist wrench reference, bias and cross-axis effects",
+  "title": "Dataset for Dynamic characterization of multi-component sensors for force and moment",
+  "authors": [
+    "Nitsche, Jan",
+    "Kumme, Rolf",
+    "Tutsch, Rainer"
+  ],
+  "doi": "10.7795/720.20181105",
+  "version": "PTB Open Access Repository release underlying the 2018 article; depositor supplies no version number. ZIP identity pinned below.",
+  "landing": "https://oar.ptb.de/resources/show/10.7795/720.20181105",
+  "registry": {
+    "url": "https://api.datacite.org/dois/10.7795/720.20181105",
+    "bytes": 9218,
+    "sha256": "5ab513ff456b074163d7c015090529ae683a95e02c7b52a6fa5c0d61d7e36557"
+  },
+  "rights": "Data and open article CC BY 4.0, Jan Nitsche, Rolf Kumme, Rainer Tutsch. New numerical summaries and independent derivation code.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.7795/720.20181105",
+      "10.5194/jsss-7-577-2018",
+      "Dynamic characterization of multi-component sensors for force and moment",
+      "Nitsche, Jan; Kumme, Rolf; Tutsch, Rainer"
+    ],
+    "historical_paths": 944,
+    "tar_members_scanned": 301,
+    "baseline_index_checked": true,
+    "method": "Case-folded, decomposed Unicode, removed punctuation and spaces; scanned complete identifiers/titles and author aliases, including all G1 batch records and extracted tar/gzip evidence.",
+    "matches": []
+  },
+  "queries": [
+    "multi component force moment sensor calibration six axis reference forces torques raw data cross sensitivity dynamic calibration shaker laser vibrometer",
+    "Nitsche Kumme Tutsch Dynamic characterization multi component sensors force moment dataset",
+    "Journal article DOI → Data availability PTB DOI → repository files → ZIP readme → optical, electrical and DIC member headers."
+  ],
+  "paper": {
+    "doi": "10.5194/jsss-7-577-2018",
+    "title": "Dynamic characterization of multi-component sensors for force and moment",
+    "full_text": {
+      "url": "https://jsss.copernicus.org/articles/7/577/2018/jsss-7-577-2018.pdf",
+      "bytes": 6597291,
+      "sha256": "f6403b0182a4957b4870e6225c4839e3582324e621c1a0ae8a7ede1954376232"
+    },
+    "locator": "Sections 3.2–3.4 describe optical measurement; section 5.2 and Figure 12 give axial resonances. Section 4.2 introduces moment modeling."
+  },
+  "archive": {
+    "url": "https://oar.ptb.de/files/download/681c51a053218de84f08e731",
+    "bytes": 39674686,
+    "sha256": "1e79f76466d233861e0e99fd1bd4a6fe9acbe941b1c29fbc11449559ae545819",
+    "verified_publisher_md5": "8c2bc01de8112b1dc8d58147bd85a16e"
+  },
+  "remaining_member_sha256": {
+    "DataAvailable/content.txt": "57debae7a5d973abd01a663f70d7f42608fad0a5b106188ca799cf04b382defc",
+    "DataAvailable/ExpAnalysisSetUp/DIC_results/Angle_Tran_result.tsv": "c6f3002a5774eea5ac201ac28440a55322fa6384b53d353d38bc8f491fc29cc1"
+  },
+  "coverage": "Read all 429 non-directory members. All 7 UFF acquisitions (291 traces) are parsed, and all 420 per-object/per-frame DIC facet files are fitted. DataAvailable/content.txt supplies acquisition role and validity codes, and the separate supplied transformation table is identified by digest. The original images are not included in this ZIP.",
+  "instrument": "Actual commercial six-component sensor, real masses, electrodynamic shaker. Independent physical observations include laser vibrometer and photogrammetry; in the two z-axis scans a simultaneous shaker acceleration is available. X/Y second block is the camera trigger; the adjacent voltage trace is the excited-axis electrical force signal. The separately filed setup scan swaps force and trigger block positions.",
+  "method": "For each of 16 points per axial mass group, mean-remove both acceleration traces and find the largest unwindowed FFT amplitude ratio over 500–2200 Hz. Vary the minimum allowed denominator relative to the in-band maximum. The 420 DIC files mark load mass A and shaker surface B. Retain facets with all three error codes equal to 3, fit a 3D proper rotation and translation by SVD; supply angle and RMS residual in export coordinates.",
+  "findings": "At denominator floor 0, m1 peaks span 1471.875–1477.34375 Hz and m2 spans 1090.625–1093.75 Hz. The paper reports 1477.35/1092.97 Hz. Raising the floor to 10% shifts the ranges to 1531.25–1532.8125 and 1249.21875–1320.3125 Hz. During a resonance base-motion amplitudes can be low. Across frames, A has 258147 and B 159600 valid facet observations; these are repeated views.",
+  "limits": "The data support independent motion and force-axis dynamic validation. They provide neither three independent physical applied-moment traces nor a time sequence measuring static wrist torque zero or temperature drift. The applied-moment model in the paper and its separate internal-mass measurements cannot be inferred as archived raw moment loads. Use this source as a dynamic reference and a counterexample to using the sensor name to infer channel coverage.",
+  "reproduce": "Download the fixed ZIP, verify both digests, then run OPENBLAS_NUM_THREADS=1 python derive_ptb_dynamic.py PTB_ZIP OUTPUT_DIRECTORY (NumPy). The per-trace role is defined in the original content.txt.",
+  "executed_registry_queries": [
+    {
+      "source": "ptb-dynamic",
+      "url": "https://api.datacite.org/dois?query=titles.title%3A%22Dynamic+characterization+of+multi-component+sensors+for+force+and+moment%22&page%5Bsize%5D=8",
+      "query": "titles.title:\"Dynamic characterization of multi-component sensors for force and moment\"",
+      "returned_ids": [
+        "10.7795/720.20181105"
+      ],
+      "total": 1
+    }
+  ]
+}

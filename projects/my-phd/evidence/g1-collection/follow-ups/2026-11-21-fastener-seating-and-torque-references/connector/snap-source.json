@@ -1,0 +1,99 @@
+{
+  "accessed_utc": "2026-11-21",
+  "research_question": "R1 insertion, snap and crimp force against independent geometric or outcome evidence.",
+  "title": "DS.04.CERTH.SnapFitForceProfiles",
+  "authors": [
+    "Stefanos Doltsinis",
+    "Marios Krestenitis",
+    "Zoe Doulgeri"
+  ],
+  "doi": "10.5281/zenodo.1209203",
+  "concept_doi": "10.5281/zenodo.1209202",
+  "version": "First archived release (version index 0); no supplied version string in record metadata.",
+  "landing": "https://doi.org/10.5281/zenodo.1209203",
+  "rights": "CC BY 4.0, credit Stefanos Doltsinis, Marios Krestenitis and Zoe Doulgeri. Only derived summaries and an independent script included.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "evidence_files": 944,
+    "additional_tar_members": 301,
+    "early_index": true,
+    "keys": [
+      "10.5281/zenodo.1209203",
+      "10.5281/zenodo.1209202",
+      "zenodo.org/records/1209203",
+      "DS.04.CERTH.SnapFitForceProfiles",
+      "DS04CERTHSnapFitForceProfiles"
+    ],
+    "matches": [],
+    "paper_matching_keys": [
+      "10.1109/TASE.2019.2932834",
+      "A Machine Learning Framework for Real-Time Identification of Successful Snap-Fit Assemblies"
+    ],
+    "paper_matches": [],
+    "scope": "Release identifiers, version or stable URL and repository/title aliases; paper matches tracked independently of data DOI."
+  },
+  "search": [
+    "\"press-fit\" \"dataset\" assembly force displacement press fitting data",
+    "electrical connector insertion force displacement dataset CSV snap-fit joint",
+    "CERTH force profiles → Zenodo record and archive → archive README and all eight MATLAB measurement/label files. Crossref creator and snap classifier lookup."
+  ],
+  "record": {
+    "url": "https://zenodo.org/api/records/1209203",
+    "bytes": 4909,
+    "sha256": "0c0c0f1aa3d8bd58f05336498d232f92951f949971aac497f12b156a5c61c274"
+  },
+  "archive": {
+    "download": "https://zenodo.org/api/records/1209203/files/DS.04.CERTH.SnapFitForceProfiles.zip/content",
+    "verified_md5": "md5:c4cc49458d5ede683583aa24b687b560",
+    "bytes": 3364270,
+    "sha256": "0002f6cbfd0f4e471c2bd99d4b4e5a7af5cc98d39fbff904aa544fc563debf8f"
+  },
+  "members": {
+    "README.txt": {
+      "bytes": 811,
+      "sha256": "02266e51a5ed76b232a86255c8916208b78120c25b46065b3fae8a17e8c21ad9"
+    },
+    "annular snap/Annular_Snap_Testing.mat": {
+      "bytes": 509477,
+      "sha256": "6e451ccda5e38a4324b3fe79911b8db4022c7f25bab91b608c14d12dded0ee61"
+    },
+    "annular snap/Annular_Snap_Testing_Labels.mat": {
+      "bytes": 211,
+      "sha256": "4fe64eb97042169d2a9d6e9659f7ffb7d1f5edefc66df6a049c7fe263526afd2"
+    },
+    "annular snap/Annular_Snap_Training.mat": {
+      "bytes": 975997,
+      "sha256": "6f3e7236a94c986af0f6a5a9fd1dde86323b56b53e50f671ade80d8ae76334b1"
+    },
+    "annular snap/Annular_Snap_Training_Labels.mat": {
+      "bytes": 218,
+      "sha256": "c3e47d55f6c8dfa63094486be0c316e29b3f64b554b5742d487c0f57d348f5b4"
+    },
+    "cantilever snap/Cantilver_Snap_Testing.mat": {
+      "bytes": 1071214,
+      "sha256": "aae57533bb5b8f429c9aa6b95cd2445ffbbd92d1470d32ef73200e0b4f412e15"
+    },
+    "cantilever snap/Cantilver_Snap_Testing_Labels.mat": {
+      "bytes": 219,
+      "sha256": "9ba271d1fb48fa58050bd6d54abc31ab9e6699cd71c3e64bffa82a50dd535a7e"
+    },
+    "cantilever snap/Cantilver_Snap_Training.mat": {
+      "bytes": 804803,
+      "sha256": "2683eae38eaafb41105f292c2545bf980011eba40371a86085ba6deef5f094d9"
+    },
+    "cantilever snap/Cantilver_Snap_Training_Labels.mat": {
+      "bytes": 223,
+      "sha256": "f13936cbf578423c0a8b3d9c722002022eaf6c568cf3bca2311610d5dff8415e"
+    }
+  },
+  "associated_publication": {
+    "doi": "10.1109/TASE.2019.2932834",
+    "reference": "Doltsinis et al., A Machine Learning Framework for Real-Time Identification of Successful Snap-Fit Assemblies",
+    "registry": "https://api.crossref.org/works/10.1109/TASE.2019.2932834"
+  },
+  "observations": "220 distinct force traces (555,046 scalar samples) for two physical snap joints with a separate numeric outcome vector for each file. Eight MATs contain no synchronized displacement, electrical continuity, or event timestamp. Numeric unit and sample rate are not stated in the archive README, so results are in recorded force units and samples. Numeric label-to-success polarity is not assumed.",
+  "ambiguities": "README says 50 Training, 60 Testing; actual files have 60 Training and 50 Testing for each joint. Depositor says human (50) and robot (60), while archive README describes human for training and robot for testing. Preserve archive split name and mark physical actor assignment uncertain. Cantilever training has 29 labels 1 and 31 labels 0. Field names skip some integers; match labels positionally to the stored struct order, not by blindly indexing its field suffix. The order pairing has no separate per-trial label key.",
+  "method": "For each geometry separately, fit four one-feature thresholds using Training only. Select best training balanced accuracy over both directions, midpoints and constant predictors. Evaluate once on the released Testing portion; ties favor above, then lowest threshold. Both signal amplitude and trial length may encode stopping or processing policy; these tests do not timestamp the snap.",
+  "findings": "The maximum fall from a preceding peak achieves balanced accuracy 0.94 on 50 annular test cases and 0.60 on 50 cantilever test cases using the geometry-specific training threshold. Length alone gives 0.52 and 0.76. These are secondary descriptive baselines using positional labels, not the authors’ classifier.",
+  "reproduce": "python derive_snap.py DS.04.CERTH.SnapFitForceProfiles.zip OUT (NumPy, SciPy)."
+}

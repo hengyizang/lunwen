@@ -1,0 +1,7 @@
+stored_label,label_name,segments,distinct_sample_ids,rows,with_active_tightening,active_segments_current_at_least_target,segments_with_any_ok_flag,segments_with_any_not_ok_flag,active_current_torque_per_segment_peak_min_Nm,active_current_torque_per_segment_peak_median_Nm,active_current_torque_per_segment_peak_max_Nm,active_achieved_torque_per_segment_peak_min_Nm,active_achieved_torque_per_segment_peak_median_Nm,active_achieved_torque_per_segment_peak_max_Nm,active_tcp_moment_norm_per_segment_peak_min_Nm,active_tcp_moment_norm_per_segment_peak_median_Nm,active_tcp_moment_norm_per_segment_peak_max_Nm
+0,normal,1420,1420,2206903,1420,616,0,0,0.094,0.48200002,0.81000006,0.0,0.0,0.0,0.9466961,2.49483241,5.42503657
+1,damaged screw,221,221,340822,221,51,0,0,0.13700001,0.44900003,0.67900002,0.0,0.0,0.0,1.51897998,2.51587543,5.42503657
+2,extra assembly component,183,183,283212,183,28,0,0,0.21000001,0.45000002,0.74800003,0.0,0.0,0.0,1.68269676,2.51683747,4.7182522
+3,missing screw,218,218,291419,218,4,0,0,0.058,0.13150001,0.58700001,0.0,0.0,0.0,0.64179544,1.73904821,3.84117227
+4,damaged thread,3,3,4008,3,1,0,0,0.43200001,0.43200001,0.53500003,0.0,0.0,0.0,2.51566153,2.51566153,2.63690748
+5,loosening / screw picking,2049,2049,3122710,0,0,0,0,,,,,,,,,

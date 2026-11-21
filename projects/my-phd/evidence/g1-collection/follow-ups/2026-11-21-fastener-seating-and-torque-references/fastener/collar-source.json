@@ -1,0 +1,74 @@
+{
+  "title": "Robotic assembly data of threaded fasteners: aeronautical collars",
+  "doi": "10.17632/26674p3hvg.1",
+  "concept_doi": "10.17632/26674p3hvg",
+  "landing": "https://doi.org/10.17632/26674p3hvg.1",
+  "version": 1,
+  "publication_date": "2023",
+  "creators_and_contributors": [
+    "Gustavo Lahr",
+    "Gustavo José Giardini Lahr",
+    "Thiago Henrique Segreto Silva",
+    "Glauco Augusto de Paula Caurin",
+    "Guilherme Ribeiro Moreira",
+    "Thiago Boaventura",
+    "Arash Ajoudani"
+  ],
+  "rights": "CC BY 4.0, per DataCite version metadata. Attribute the depositors and coauthors. Independent derived statistics and a reader only.",
+  "checked_utc": "2026-11-21",
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.17632/26674p3hvg",
+      "Robotic assembly data of threaded fasteners: aeronautical collars",
+      "Kinematic and dynamic data from a robotic assembly of aeronautical threaded fasteners",
+      "10.1016/j.dib.2023.109674"
+    ],
+    "prior_matches": [],
+    "history_paths": 944,
+    "additionally_scanned_tar_members": 301,
+    "early_baseline_checked": true,
+    "normalization": "Casefolded Unicode and alphanumeric comparison covering files at the pinned Git object, expanding gzip and tar contents."
+  },
+  "record_metadata_url": "https://api.datacite.org/dois/10.17632/26674p3hvg.1",
+  "metadata_sha256": "29d0a62aa9b84ca899dab03b5ba7b2dde1c8dad5f8fabae93ae8516163ef3bee",
+  "associated_paper": {
+    "doi": "10.1016/j.dib.2023.109674",
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10630597/fullTextXML",
+    "xml_sha256": "3aa5cbfe2313bc681af4497416f0db59afdeb93acf9290435754ca3bdb1525ad"
+  },
+  "archive": {
+    "url": "https://data.mendeley.com/public-api/zip/26674p3hvg/download/1",
+    "sha256": "bb5f871dc1cbae504a5e8caa2ecdd9c27248d25c6b2f4b986a25e0c005417bce",
+    "bytes": 89813887,
+    "checked_members": 480,
+    "all_members_verified_with_publisher_SHA256": true
+  },
+  "listing": {
+    "folder_list_sha256": "ebea95ff76dd25986ff4ad9d547e0ae8511bec680c86ea9e09d662bd459f7270",
+    "url_template": "https://data.mendeley.com/public-api/datasets/26674p3hvg/files?folder_id={id}&version=1&$start=0&$limit=1000",
+    "retrieved_folders": [
+      {
+        "folder": "root",
+        "id": "root",
+        "listing_items": 1,
+        "sha256": "e0bb9c9a12db5f83289142e6fb6fd6a8112760d246d6436e4ac2a84e657f402b"
+      },
+      {
+        "folder": "data",
+        "id": "1091be03-7cb0-456e-be2a-ea1dc2741e30",
+        "listing_items": 479,
+        "sha256": "a200efbab8e680121487413f98a114cd4c9a9c6a5fda7d372a071615c9eeb1cd"
+      }
+    ]
+  },
+  "queries": [
+    "robot screwdriving robotic screw fastening torque angle dataset assembly tightening time series failure dataset",
+    "A KUKA KR16 threaded collar installation data record → author metadata and all 479 original files → companion article Experimental Design, Table 1 and Figures 3–4; review manual labels and full time columns."
+  ],
+  "scope": "One robot, one tool setup: KUKA KR16, SMC three-finger gripper and wrist-mounted ATI Delta SI-660-60. The data comprise 479 trials, each with an operator-verified post-task outcome: 306 mounted, 112 not mounted and 61 jammed. 12 measured pose/wrench columns use different frames: pose is in world coordinates; body-frame force and torque are recorded by the wrist sensor. Six velocities are one-step derivatives. The manual terminal label gives no timestamp for first engagement, seat or jam onset. No independent spindle or bolt preload transducer appears in the CSV.",
+  "duplicate_check": "Every file has even length and the second half is numerically identical to the first half on all 12 pose and wrench channels in the same order. Timestamps advance across the splice; exactly one row per file differs in the six derived velocity channels between copies. Therefore take one half per trial for statistics. 2,469,998 export rows collapse to 1,234,999 retained. Individual end times 30.888–31.068 s agree with the approximate duration in the paper. Metadata individual_time is a separate task-report field and is not treated as onset or raw-series duration.",
+  "metrics": "Report axial torque in the sensor frame, maximum moment norm, and first sustained negative axial-force crossings (3 consecutive samples) at illustrative levels of 5, 10 and 20 N below the median of the first 20 samples. These are retrospective threshold events. Neither the 20-sample baseline nor the thresholds are independent proof of unloaded wrist bias or physical contact. All 479 source sequences are finite, strictly time-increasing; within each retained half the published time grid advances about 12 ms.",
+  "outcomes": "Per-trial peak |Mz| ranges overlap: jammed 0.1794–0.7751, mounted 0.0909–0.8406, not-mounted 0.1110–0.7845 N·m. Respective group medians 0.2631, 0.27705 and 0.2903 N·m. A single threshold on peak Z torque cannot exactly classify jammed vs mounted. Different terminal states need not imply distinct single-channel peak torques.",
+  "reproduce": "Python 3 + NumPy: python derive_collars.py V1.zip OUT"
+}

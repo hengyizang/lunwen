@@ -1,0 +1,72 @@
+{
+  "title": "High Payload Collaborative Robot - Joint States/Motor Current/TCP Force-Torque",
+  "authors": [
+    {
+      "name": "Katsampiris Salgado, Konstantinos",
+      "affiliation": "LMS - Uni Patras"
+    },
+    {
+      "name": "Haninger, Kevin",
+      "affiliation": "Fraunhofer IPK"
+    }
+  ],
+  "doi": "10.5281/zenodo.7240050",
+  "concept_doi": "10.5281/zenodo.7235962",
+  "landing": "https://doi.org/10.5281/zenodo.7240050",
+  "version": "1",
+  "accessed_utc": "2026-11-21",
+  "publication_date": "2022-10-21",
+  "metadata": {
+    "url": "https://zenodo.org/api/records/7240050",
+    "sha256": "313f588e7341f8fafad29b0cec19b09b7e59478dbb9a9c5e424f8f9cbb0ffb26"
+  },
+  "file": {
+    "url": "https://zenodo.org/api/records/7240050/files/data.zip/content",
+    "bytes": 788355579,
+    "verified_md5": "md5:c67b6072ffc1ad5ae627fc464422d158",
+    "sha256": "632bcbf176feeb5dbd6bc706e239bfe15c07bb7b9132a44a3df49b17faaf3de2",
+    "archive_files": 84,
+    "zip_crc_check": "All members passed."
+  },
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.5281/zenodo.7240050",
+      "10.5281/zenodo.7235962",
+      "zenodo.org/records/7240050",
+      "High-payload collaborative robot: independent external F/T",
+      "High Payload Collaborative Robot - Joint States/Motor Current/TCP Force-Torque"
+    ],
+    "matching_paths": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/r1-dataset-fit.csv",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv"
+    ],
+    "tracked_evidence": 944,
+    "extra_tar_members": 301,
+    "early_catalogue": true
+  },
+  "rights": "Zenodo release CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Attribute Konstantinos Katsampiris Salgado and Kevin Haninger. Included are new statistics, conditions, digests, and our own reader; the raw recordings remain at their source.",
+  "search": [
+    "robotic drilling dataset force torque sensor Kistler ATI robot industrial force raw data",
+    "High Payload Collaborative Robot Salgado Haninger redundancy collision detection end effector external force torque sensor 7240050",
+    "Prior inventory → fixed Zenodo record → complete archive, both CALPAK DOCX logs and ROS1 connection tables. Followed source authors and title to related paper DOI."
+  ],
+  "companion": {
+    "doi": "10.1016/j.rcim.2023.102708",
+    "title": "Collision detection for collaborative assembly operations on high-payload robots",
+    "landing": "https://doi.org/10.1016/j.rcim.2023.102708",
+    "evidence": "Publisher article page and registered metadata. Reported reductions/latencies in the paper are not used as labels in the calculations here."
+  },
+  "source_documents_sha256": {
+    "data/2022_01_25_LMS/README.txt": "da621c9dbbcffda4b94749def7bbd032a56e17feed5aa4ab4878caf238f5f5c0",
+    "data/2022_02_10_LMS/README.txt": "00860c568145432a8d55688868430235889a2bffaf08805a022fa3b6d6453e72",
+    "data/2022_08_03_calpak/README_1.docx": "e3eed411b63a84348d902b5a13a0a0ad2f0bd5d289396a75c3ca17d05574288b",
+    "data/2022_08_04_calpak/README_2.docx": "e6ead156af374452ed62e17bb0ccf23cb288b8e028d8312827fc0160123d3934"
+  },
+  "evidence": "Full original ZIP and all 80 bag files checked by checksum and ROS connection metadata. Read external + robot-end force streams and Boolean detector signals for all 55 numbered, documentation-linked CALPAK August events (17 August 3 and 38 August 4). The 25 remaining bags, including unnumbered and earlier sessions, are listed separately as file/connection evidence. The previous project record had decoded a prefix of one bag.",
+  "experiments": "The two source log sheets specify speed override, pads, arm extension, orientation, and panel condition (with additional detector selection and notes where available). For 17 trials on August 3 the authors list a peak force, with no computation rule in that table. All 55 August fixture runs contain /external_ft_sensor and /coll_det_ee/force JointState effort arrays. The robot topic labels x, y, z, tx, ty, tz, sum_abs in the checked sample; the external JointState has no component names in that sample. The raw ROS arrays do not encode measurement units or a frame transform. We retain raw numerical units for triplet norms and do not swap axes or compare torque components as if they shared a load origin.",
+  "methods": "Decode each archived ROS1 JointState using the message layout, retain publisher timestamp, recorder timestamp, and first six effort values. Separate reference clocks and robot/fixture axes. Compute per-topic median first 0.5 s as descriptive initial reference, without claiming physical unloaded bias. Report force-like and moment-like triplet norms; a descriptive event threshold is three consecutive samples above magnitude 20 in the baseline-subtracted first triplet. Boolean false-to-true events are counted using bag recorder stamps. If a flag was already true at start, the next observed rising edge is used. Differences are recorder-level alignment diagnostics, not hardware latency, injury thresholds or physical switch certificates.",
+  "checks": "Complete coverage: 2,211,926 external-sensor messages and 840,895 robot EE force messages in the 55 documented trials. External median(header−bag) is +130.904 to +131.908 s and the robot EE median is −1.321 to −0.626 s. The median offsets differ by 131.548 to 133.082 s across each trial. With external axis lengths/units treated as archived, 16 of 17 original listed peaks fall within 15 numeric units of the raw first-triplet norm peak. The remaining 2022_08_03_calpak/3.bag lists 397 but the largest recorded norm is 240.6. This mismatch cannot establish whether metadata assignment or computation differs; preserve both. Detector flags and magnitude exceedances do not uniquely label first contact or steady contact.",
+  "reproduce": "Python 3.12, NumPy, rosbags 0.11.10; python derive_collision.py data.zip OUTPUT_DIR. Uses one temporary extracted bag at a time; about 170 MB temporary space. All four channels decoded for each documented August trial. A separate ROS1 typestore deserialization of trial 3 independently checked both topic counts, norms and median timestamp offsets."
+}

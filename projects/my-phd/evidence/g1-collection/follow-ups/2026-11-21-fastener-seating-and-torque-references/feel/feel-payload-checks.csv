@@ -1,0 +1,15 @@
+membership,unique_paths_with_membership,modality,sampled_archive_member,starting_part,raw_bytes,crc32,sha256,shape,format_or_dtype
+test,758,tactile,dataset/cross7/tactile/1713284388067.png,dataset.z01,112408,22a89948,0499f8d38b4a3b2b341ffd8692c721f093a9881c03bbca752c2c6f35a21d20d7,240x320,PNG
+test,758,depth,dataset/cross7/depth/1713284388067.npy,dataset.z01,614528,dd37f96e,b799d356d66aebed33eb7202c74349ead75bd5cad67d64c9be774c6fd1dad2ad,240x320,float64
+test+train,1881,tactile,dataset/cross7/tactile/1713283883862.png,dataset.z01,112408,171e662b,b670e638c20273f1d3210cf730c97a6bf7b329c63e9067e06f5223d995c91dd7,240x320,PNG
+test+train,1881,depth,dataset/cross7/depth/1713283883862.npy,dataset.z01,614528,539d7a81,d839d1e0e0120a6fe01fe34eedca50acc0dea787f0b4e6a9e174cb7065e5a31e,240x320,float64
+test+train+val,40,tactile,dataset/ring14/tactile/1712699232489.png,dataset.z03,110240,b122a14a,912e77a7d3d3c1454b7e49c28bbdbfd25ae38023a2f9e4e01e29052d8bd00043,240x320,PNG
+test+train+val,40,depth,dataset/ring14/depth/1712699232489.npy,dataset.z03,614528,abaabbbf,1690b34c73f3e5478068f92a2ad513653568b4a9a1ff5ba996c0a11fcab9610c,240x320,float64
+test+val,185,tactile,dataset/cross7/tactile/1713286302919.png,dataset.z01,109224,5246764f,f20fd0412822b68cf70e1f5d96c4bf10d595a20659d7e6be193baddc723988ef,240x320,PNG
+test+val,185,depth,dataset/cross7/depth/1713286302919.npy,dataset.z01,614528,c1e6665e,f69971fb8076ef6b3be5708d9c2398ad0db3385107360a4ce83a318bde3095ef,240x320,float64
+train,88593,tactile,dataset/cross7/tactile/1713283344874.png,dataset.z01,109783,5d675aa1,7cef46bbec65ab3b8260b2af53ed89ca54fd7d0a066c78b3d05dda8fea66a8e0,240x320,PNG
+train,88593,depth,dataset/cross7/depth/1713283344874.npy,dataset.z01,614528,2cd49e55,bb372de59a790ecb119f4a43d67b48de62726f4cb9976cbaf7810bfd8d53028c,240x320,float64
+train+val,1082,tactile,dataset/ring14/tactile/1712698374569.png,dataset.z03,108914,a635587f,22d1b994968a9726779613ec92c0a93c1f8278dd94daf507e2f43718d1b62835,240x320,PNG
+train+val,1082,depth,dataset/ring14/depth/1712698374569.npy,dataset.z03,614528,585db2bb,f85a964ce4a4064b051c8bb74f137a785ed51c3788411a27bf3516db642d2d65,240x320,float64
+val,9344,tactile,dataset/cross7/tactile/1713283340923.png,dataset.z01,109441,20119f9b,5cc055d9334339a6f3d153b3e77d2594fc370faad527fabf784f6e00c256ff18,240x320,PNG
+val,9344,depth,dataset/cross7/depth/1713283340923.npy,dataset.z01,614528,88449169,4633d47f4d5b5422830842c783bfbe959df70b68e067f92c917a80f748fe5488,240x320,float64

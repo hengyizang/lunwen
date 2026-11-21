@@ -1,0 +1,9 @@
+geometry,feature,train_trials,test_trials,predicts_numeric_one,threshold,train_balanced_accuracy,true_0_pred_0,true_0_pred_1,true_1_pred_0,true_1_pred_1,test_balanced_accuracy
+annular,samples,60,50,above,3139.5,0.6333333,24,1,23,2,0.52
+annular,peak_to_peak,60,50,above,18.945078000000002,0.9,6,19,0,25,0.62
+annular,max_prior_peak_drop,60,50,above,0.8776849999999996,0.8333333,22,3,0,25,0.94
+annular,peak_less_tail_median,60,50,above,0.2710074999999996,0.6833333,20,5,11,14,0.68
+cantilever,samples,60,50,above,2095.5,0.865406,17,8,4,21,0.76
+cantilever,peak_to_peak,60,50,above,16.159749,0.7258065,20,5,0,25,0.9
+cantilever,max_prior_peak_drop,60,50,above,2.15592,0.9677419,6,19,1,24,0.6
+cantilever,peak_less_tail_median,60,50,above,0.3398950000000007,0.7986652,0,25,11,14,0.28

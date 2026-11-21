@@ -1,0 +1,72 @@
+{
+  "title": "JKU-Linz-Institute-of-Robotics/ur10e_force_control_comparison: Release for accepted open-access journal paper (Mechanical Sciences, Advances in Service and Industrial Robotics – RAAD2021)",
+  "authors": [
+    {
+      "name": "Stefan Gadringer",
+      "affiliation": "Johannes Kepler University Linz"
+    }
+  ],
+  "doi": "10.5281/zenodo.6457906",
+  "concept_doi": "10.5281/zenodo.6457905",
+  "landing": "https://doi.org/10.5281/zenodo.6457906",
+  "version": "v1.0.0",
+  "accessed_utc": "2026-11-21",
+  "publication_date": "2022-04-13",
+  "metadata": {
+    "url": "https://zenodo.org/api/records/6457906",
+    "sha256": "1a89c605325f21fc94aa42217cc3f867116cb9eed649e38b9c4e7c91491d955d"
+  },
+  "file": {
+    "url": "https://zenodo.org/api/records/6457906/files/JKU-Linz-Institute-of-Robotics/ur10e_force_control_comparison-v1.0.0.zip/content",
+    "bytes": 78149770,
+    "verified_md5": "md5:4b911f42582557cf7b5d01c81a8a56ab",
+    "sha256": "141e6b865b00629f4679076b1a4bedc7aefcd56ed760c25bec4d1659f3b2c004",
+    "archive_files": 325,
+    "zip_crc_check": "All members passed."
+  },
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.5281/zenodo.6457906",
+      "10.5281/zenodo.6457905",
+      "JKU-Linz-Institute-of-Robotics/ur10e_force_control_comparison",
+      "zenodo.org/records/6457906",
+      "3b9b1b2d7b794634d644a9a5d08cf900492d95cb"
+    ],
+    "matching_paths": [],
+    "tracked_evidence": 944,
+    "extra_tar_members": 301,
+    "early_catalogue": true
+  },
+  "rights": "Zenodo metadata labels the release as other-open. The archived root LICENSE contains GNU GPL v3 text, also present in the pinned GitHub mirror. Credit Stefan Gadringer / JKU Linz. Force-plot and table-derived summaries are shared under GNU GPL v3 (https://www.gnu.org/licenses/gpl-3.0.html); the journal article is CC BY 4.0. Independent reader and statistics only, upstream PDFs and control programs remain at source.",
+  "search": [
+    "robotic milling dataset force torque sensor robot flange dynamometer Kistler reference raw data",
+    "robot grinding force sensor load cell workpiece and wrist force measurement dataset polishing robotic contact open data force control robot",
+    "Article code/data availability → fixed Zenodo v1.0.0 → GitHub mirror → source path-planning programs, individual force profiles and five-run mean evaluation tables."
+  ],
+  "mirror": "https://github.com/JKU-Linz-Institute-of-Robotics/ur10e_force_control_comparison/tree/3b9b1b2d7b794634d644a9a5d08cf900492d95cb",
+  "companion": {
+    "doi": "10.5194/ms-13-361-2022",
+    "title": "Assessment of force control for surface finishing – an experimental comparison between Universal Robots UR10e and FerRobotics active contact flange",
+    "link": "https://ms.copernicus.org/articles/13/361/2022/ms-13-361-2022.pdf",
+    "sha256": "52be2d301a962d337df35449def113e16449687fa7b8ed39183545b8f6e7fdff",
+    "locators": "Sections 4–7, Figures 4, 7, 11, Table 2, appendix B. Authors describe ATI Delta SI-660-60 under the workpiece, TCP transformation, 800 µs ATI / 2 ms robot timing and five-run averages."
+  },
+  "prior_related_bibliography": {
+    "terms": [
+      "10.5194/ms-13-361-2022",
+      "Assessment of force control for surface finishing",
+      "10.1007/978-3-030-75259-0_9"
+    ],
+    "paths": [
+      "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv",
+      "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+    ],
+    "reason": "The journal work is historical. This fixed numerical-figure artifact and its repository identifiers were not in the prior retained evidence."
+  },
+  "scope": "Physical UR10e, ACF-K and iron reel on test surfaces or direct sensor contact. This is a force-control comparison on finishing surrogate paths. ATI fixture signal is an independent physical reference transformed to TCP using robot orientation, not an independent six-axis load history at the wrist. The ACF and UR are alternative controller configurations, not simultaneous robot-side force sensors. Original force/time arrays are not included in this fixed release; the individually exported vector figures and publisher numerical evaluation tables were verified.",
+  "measurement": "All 67 individual single-controller force plots (23 ramp, 36 straight, 8 direct contact) have one blue measured Fz path and one red desired Fd. Read vector segment endpoints, match both axes to printed numeric ticks and PDF grid lines. Reconstruct N and s with linear interpolation and check for monotone paired timestamps and affine tick residual <0.03 axis units. Force values reported to 0.001 N purely for reproduction, not experimental precision (published normal-force resolution 0.25 N). Baseline from −0.5 to −0.1 s is on the author-aligned clock. Calculate contact-window samples for [0,4) s ramp/straight and [0,6) s direct, consistent with the author periods; boundary rounding can shift a single sample. Peak timing relative to the registered zero is not independent contact-onset latency.",
+  "tables": "All 14 per-controller scenario/speed mean PDFs contain 68 condition rows. Extract numerical columns using their page positions, keeping a blank for undefined settling and identifying an explicit aborted trial condition. Link single-profile maximum error to the five-run averaged maximum error by (scenario, controller, speed, force, gain or ramp). Figures named _1_ represent plotted single runs; comparison, current and velocity figure renderings are not additional trials. The paper reports means across five repetitions; individual waveforms for all five cannot be recovered from this release.",
+  "results": "Across 877,085 plotted vertices, all 67 individual curves matched one completed table condition. One of 68 conditions (UR ramp, 55 N, 0.25 m/s, gain 1) explicitly aborted on maximum position deviation; six completed conditions have no settling time in the published tables. For the direct-contact 100 N settings, four individual 0.25 m/s plots reach 929.930 to 1163.722 N versus the 0.1 m/s plots at 283.094 to 494.009 N. These are registered single-trace peaks, not the five-run averages. The pre-event Fz medians span −0.161 to 0.167 N, without an independent applied torque or unloaded wrist reference.",
+  "reproduce": "Python, NumPy and PyMuPDF. python derive_finishing.py downloaded_release.zip OUTPUT_DIR. Verify the archive MD5 before recomputation."
+}

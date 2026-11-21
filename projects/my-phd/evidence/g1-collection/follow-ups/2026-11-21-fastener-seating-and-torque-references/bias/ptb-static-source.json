@@ -1,0 +1,123 @@
+{
+  "accessed_utc": "2026-11-21",
+  "stage": "G1",
+  "branch_of_question": "R1 wrist wrench reference, bias and cross-axis effects",
+  "title": "19ENG08.Calibration_FhG _TorqueTransducer.PTB.FhG.v1.20231108",
+  "authors": [
+    "May, Christian",
+    "Heller, Marcel",
+    "Baer, Oksana"
+  ],
+  "doi": "10.5281/zenodo.10259588",
+  "concept_doi": "10.5281/zenodo.10259587",
+  "version": "1.0",
+  "landing": "https://zenodo.org/records/10259588",
+  "registry": {
+    "url": "https://zenodo.org/api/records/10259588",
+    "bytes": 5719,
+    "sha256": "60977b51f1b836be3bbb62edbfef191669bf18bea35bf98ff0c2f13f88a84612"
+  },
+  "rights": "CC BY 4.0 per Zenodo; credit Christian May, Marcel Heller and Oksana Baer. Aggregate analyses only, entire calibration certificates available through source links.",
+  "history": {
+    "parent": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "keys": [
+      "10.5281/zenodo.10259588",
+      "10.5281/zenodo.10259587",
+      "19ENG08.Calibration_FhG _TorqueTransducer.PTB.FhG.v1.20231108",
+      "T40FH_calibration.xlsx",
+      "231112002",
+      "May, Christian; Heller, Marcel; Baer, Oksana"
+    ],
+    "historical_paths": 944,
+    "tar_members_scanned": 301,
+    "baseline_index_checked": true,
+    "method": "Case-folded, decomposed Unicode, removed punctuation and spaces; scanned complete identifiers/titles and author aliases, including all G1 batch records and extracted tar/gzip evidence.",
+    "matches": []
+  },
+  "queries": [
+    "torque transducer calibration dataset reference torque different mounting positions zero signal hysteresis static calibration torque standards raw data",
+    "PTB Fraunhofer torque transducer calibration data multiple mounting positions certificate measured torque XLSX",
+    "Zenodo DOI and files → original workbook and both signed certificates, pages 2 and 5 → cross-check 0/120/240° table coordinates and zero-return units."
+  ],
+  "sources": {
+    "T40FH_calibration.xlsx": {
+      "url": "https://zenodo.org/api/records/10259588/files/T40FH_calibration.xlsx/content",
+      "bytes": 56248,
+      "sha256": "315bd852ec15c1bdbf958d9ec083b76ef403a1e13b7b7388950cf4899e7d0025",
+      "verified_md5": "md5:b82ecc054375acc5019561226d1fd55d"
+    },
+    "README_Calibration_FhG _TorqueTransducer.txt": {
+      "url": "https://zenodo.org/api/records/10259588/files/README_Calibration_FhG%20_TorqueTransducer.txt/content",
+      "bytes": 1897,
+      "sha256": "8d3b679bf4d238a17a4d777215f85a56b3e40db76babd88b47366fe89ef581e8",
+      "verified_md5": "md5:c5df11e5929840babc146e5b7796d860"
+    },
+    "12140_22-12.pdf": {
+      "url": "https://zenodo.org/api/records/10259588/files/12140_22-12.pdf/content",
+      "bytes": 667625,
+      "sha256": "312dabe792c9b19b173a02969255e56a9c2ec6c95844aa24bc888721535614c3",
+      "verified_md5": "md5:e2167fcb2ae9aef35745a80ade964100"
+    },
+    "12141_22-12.pdf": {
+      "url": "https://zenodo.org/api/records/10259588/files/12141_22-12.pdf/content",
+      "bytes": 664257,
+      "sha256": "473fe34dd817c5f7768df2c6a921c2d22881d46b613cb0956766d9a5f639c9ac",
+      "verified_md5": "md5:28b4d31bee636b32233f694722d0181a"
+    }
+  },
+  "grade": "Independent physical applied static torque from PTB 1.1 MN·m torque standard machine. One HBM T40F 125 kN·m transducer, serial 231112002; kHz frequency and VDC channels read the same device. Same measurement represented twice in workbooks and certificates. The two directions and mounting rotations are repeated conditions.",
+  "coverage": "8 signed nonzero setpoints per direction from ±20 to ±125 kN·m and an unloaded value: 3 mounting positions at 0, 120 and 240 degrees, increasing and decreasing sweeps, second increasing reading at 0° and listed preloads. Certificate page 2 quotes temperature 20.1°C and expanded relative uncertainties for the applied torque (k=2) of 0.1% for 20–80 kN·m and 0.08% for 100–125 kN·m. This is not an experiment across temperatures.",
+  "cleaning": "On page 5, table 11, extract 36 rows × 6 indication fields for each of the 2 certificate channels, checking each number or printed dash against the corresponding fixed-location XLSX cell. The unused A46 plot label contains #REF! on both sheets and is excluded. Compare increasing/released zeros and maximum branch differences. Fit increasing readings versus signed setpoint through zero on two mounting positions and evaluate the excluded position for all eight nonzero points. The resulting held-out errors describe linear model transfer in Nm, not certified uncertainty.",
+  "observations": "Absolute frequency before mounting 240.1161 kHz and after calibration 240.1190 kHz (difference +0.0029 kHz). The corresponding absolute VDC fields are blank. The six initial relative frequency zeros are all 0. Released relative frequency zeros for CW are +0.0034, +0.0001, −0.0042 kHz and CCW −0.0002, −0.0069, −0.0008 kHz in ascending mounting-angle order. Turning-point values at 125 kN·m are common to increasing and decreasing directions. Output agreement does not create an independent second sensor.",
+  "metadata_discrepancy": "The registry abstract and README abstract name DIN 51309:2005-12, but the README methods and both certificates specify DIN 51309:2022-08. README collection date 2023-06-22 disagrees with certificate calibration date 2022-12-20; certificate issued 2023-02-06. Retain both statements, using certificate tables for numerical results.",
+  "limits": "Industrial single-axis torque reference far above robot wrist scales. Static before/after offset includes possible mounting and path dependence, and cannot isolate temporal zero drift. No six-axis wrist compensation coefficients or temperature series are available.",
+  "reproduce": "Download the XLSX and two PDFs into INPUT_DIR under their published names. With NumPy, openpyxl and Poppler pdftotext installed run python derive_ptb_static.py INPUT_DIR OUTPUT_DIRECTORY.",
+  "executed_registry_queries": [
+    {
+      "source": "ptb-static",
+      "url": "https://zenodo.org/api/records?q=%22torque+transducer%22+AND+%22calibration%22&size=8",
+      "query": "\"torque transducer\" AND \"calibration\"",
+      "returned_ids": [
+        "10212491",
+        "10212474",
+        "10212544",
+        "10209501",
+        "10209533",
+        "10259588",
+        "10212395",
+        "8112428"
+      ],
+      "total": 14
+    }
+  ],
+  "screened_neighbours": {
+    "followup_query": "https://zenodo.org/api/records?q=%22torque+transducer%22+AND+%22calibration%22&size=20",
+    "project_siblings": [
+      [
+        "10212474",
+        "19ENG08.Calibration_T10F_3kNm_TorqueTransducer.PTB.v1.20231106"
+      ],
+      [
+        "10212491",
+        "19ENG08.Calibration_T12HP_2kNm_TorqueTransducer.PTB.v1.20231106"
+      ],
+      [
+        "10212544",
+        "19ENG08.Calibration_2kNm_TorqueTransducer.VTT.PTB.v1.20231106"
+      ],
+      [
+        "10209501",
+        "19ENG08.Calibration_special_2kNm_TorqueTransducer.CMI.v1.20231106"
+      ],
+      [
+        "10209533",
+        "19ENG08.Calibration_2kNm_TorqueTransducer.GUM.PTB.v1.20231106"
+      ],
+      [
+        "10212395",
+        "19ENG08.Calibration_5MNm_TorqueTransducer.PTB.v1.20231106"
+      ]
+    ],
+    "scope": "These WindEFCY release neighbours were screened by title and project only; distinct devices may improve a future transfer check. No numerical result is assigned to them here."
+  }
+}

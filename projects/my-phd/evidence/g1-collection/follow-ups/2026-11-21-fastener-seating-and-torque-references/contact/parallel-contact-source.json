@@ -1,0 +1,129 @@
+{
+  "accessed_utc": "2026-11-21",
+  "title": "Datasets for classification and regression in human-robot interaction with parallel robots",
+  "author": "Aran Mohammad",
+  "doi": "10.25835/6khpt790",
+  "landing": "https://doi.org/10.25835/6khpt790",
+  "version": "Fixed CKAN dataset UUID 9de10f70-364b-4d90-9651-d891dbb7d918, 2025-11-14 metadata snapshot, no version string supplied",
+  "registry": {
+    "url": "https://data.uni-hannover.de/api/3/action/package_show?id=datasets-for-classification-and-regression-in-human-robot-interaction-with-parallel-robots",
+    "bytes": 15448,
+    "sha256": "b3befc2b106124ab4e712d107fca1144bcdcf9ba958c5dc1ee9c477973dd82cf"
+  },
+  "history": {
+    "parent_commit": "6f8c4f595769afc32be6092fd9d1e7647c1ad748",
+    "historical_paths": 944,
+    "tar_members_expanded": 301,
+    "early_baseline_checked": true,
+    "keys": [
+      "10.25835/6khpt790",
+      "9de10f70-364b-4d90-9651-d891dbb7d918",
+      "Datasets for classification and regression in human-robot interaction with parallel robots",
+      "10.1109/IROS55552.2023.10342345",
+      "2308.09650",
+      "10.1109/IROS55552.2023.10341581"
+    ],
+    "matches": [],
+    "method": "Compared normalized DOI, code/data aliases, titles and the listed publication identifiers with historical state and early catalogue; readable decompressed members included."
+  },
+  "rights": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (https://creativecommons.org/licenses/by-nc-sa/4.0/), Aran Mohammad. New summaries under the same CC BY-NC-SA 4.0. Original sensor tables not mirrored.",
+  "queries": [
+    "robot physical interaction contact onset ground truth skin collision dataset foam force sensor external FSR robot timestamp data ground truth collision data download contact times",
+    "Dataset landing → all three CKAN ZIPs and READMEs → companion DOI/arXiv, acquisition §IV-A and experiments, Figures 4 and 6."
+  ],
+  "paper": {
+    "doi": "10.1109/IROS55552.2023.10342345",
+    "other_study_doi": "10.1109/IROS55552.2023.10341581",
+    "version": "arXiv:2308.09650v1",
+    "full_text": {
+      "url": "https://arxiv.org/pdf/2308.09650v1",
+      "bytes": 3638056,
+      "sha256": "55377f72b1a01af76d181e5024a04d59b633ff8cd365d4371282abab9c573f02"
+    }
+  },
+  "sources": [
+    {
+      "archive": {
+        "url": "https://data.uni-hannover.de/dataset/9de10f70-364b-4d90-9651-d891dbb7d918/resource/06de2d8a-2299-4cc2-ab95-58f2ff559ec0/download/classification_body.zip",
+        "bytes": 117066438,
+        "sha256": "1cb113262189e422859cf977b27af580bac930ce38db5fd7b831459dd3bcf779"
+      },
+      "resource_id": "06de2d8a-2299-4cc2-ab95-58f2ff559ec0",
+      "source_modified": "2025-11-13T16:13:14.220518",
+      "members": {
+        "classification_body/main.py": {
+          "bytes": 4959,
+          "sha256": "4d00f16a18bef7a62a7ffbab82b82368a4a88c3932e7d3be28ed3f08b1083a14"
+        },
+        "classification_body/README.md": {
+          "bytes": 2657,
+          "sha256": "b8980761c8e5ec0d881b5436caa7bcd92b750627b7f24af1c6387cbf0528e282"
+        },
+        "classification_body/test.csv": {
+          "bytes": 242651823,
+          "sha256": "7f2ed53d627d5b26958c4e2959f5c243417a5294eee4c0102e0fdaeb246fbab5"
+        },
+        "classification_body/train.csv": {
+          "bytes": 133794624,
+          "sha256": "31735a1eaed34e33fc76053017957ca40df720edacb96e651e27cfe22c63e241"
+        }
+      }
+    },
+    {
+      "archive": {
+        "url": "https://data.uni-hannover.de/dataset/9de10f70-364b-4d90-9651-d891dbb7d918/resource/def3fcb3-d029-4564-9bd6-83cf37739e14/download/classification_type.zip",
+        "bytes": 26093989,
+        "sha256": "e150ffd21a2c8ceced7327be60d0ede1ee27bfdef8713e69c17fb2028e6b41d5"
+      },
+      "resource_id": "def3fcb3-d029-4564-9bd6-83cf37739e14",
+      "source_modified": "2025-11-13T16:04:28.903957",
+      "members": {
+        "classification_type/main.py": {
+          "bytes": 5055,
+          "sha256": "a879ce6f27b1ccd838139078f70f4d6900d81d109da2388cdfc60cc689c21f72"
+        },
+        "classification_type/README.md": {
+          "bytes": 2262,
+          "sha256": "8ef025909ef6c2d71bcd4f1ce45cf8bf089a2348e69e7347f43798cc46d20559"
+        },
+        "classification_type/test.csv": {
+          "bytes": 14931872,
+          "sha256": "a7a551b5bac4e9ce07907116014c14ccd80577429a8f11681a17605e8db29719"
+        },
+        "classification_type/train.csv": {
+          "bytes": 71098431,
+          "sha256": "837186107643c9e27727608c1613d53e6439a31faad408bd4bf11aeb239142ea"
+        }
+      }
+    },
+    {
+      "archive": {
+        "url": "https://data.uni-hannover.de/dataset/9de10f70-364b-4d90-9651-d891dbb7d918/resource/87fb1ea7-ce32-479f-a41c-67429bf45e56/download/regression_location_force.zip",
+        "bytes": 22166723,
+        "sha256": "4d7ff219b24d275c7cddacdb60f910e5f7c87ebdf2d67184e464ce1b64103ac8"
+      },
+      "resource_id": "87fb1ea7-ce32-479f-a41c-67429bf45e56",
+      "source_modified": "2025-11-13T16:12:00.670947",
+      "members": {
+        "regression_location_force/data.csv": {
+          "bytes": 87873211,
+          "sha256": "fc995e637a030378e9aef1349cc41a77bb9d4c41abca85293338fcd9e1b25b21"
+        },
+        "regression_location_force/main.py": {
+          "bytes": 1356,
+          "sha256": "db4cc9b8d955c38f1711da126d7a6c4b8bd10ba90c75ca251220a08132051280"
+        },
+        "regression_location_force/README.md": {
+          "bytes": 2379,
+          "sha256": "51dea717590c6acd36fd45578c7f772327f47b533997ded9fd5aecfd7cb33294"
+        }
+      }
+    }
+  ],
+  "grade": "Real planar parallel robot. Six-axis KMS40 sensor mounted successively on specific links or the platform, manual contact force applied to the sensor. Independent sensing physics from the model-based momentum observer; joint/external platform forces projected from the sensor are transformations of that same measurement, not additional sensors.",
+  "scope": "All 3 original CKAN ZIPs, 5 CSVs, 760,307 published rows. Raw F/T and the projected reference are present in both collided-body splits and the regression file. Contact-type train/test (136,416 rows) lack those measurements. No per-row independent electrical first-touch label. Acquisition and software used 1 kHz; the time column in the training and testing exports has jumps and resets.",
+  "cleaning": "Check all columns for nonfinite values, time reversals and missing 1ms steps. Analyze reference/estimate pairs for elapsed times within continuous runs only. Compare the components of the projected platform wrench in base coordinates; x and y in N, last component is a moment in Nm. Group residuals by body within original split. Do not pool force and moment units.",
+  "timing": "Restrict event comparison to the nine unbroken 1-ms stretches of the regression file, each with constant chain/link/location. Compare norms of planar projected forces at thresholds 2/5/10 N. A rise requires 1/5/10 consecutive observations on each side of the threshold. Pair only mutually unique same-segment crossings within ±100 ms. These analyst-defined events are neither contact-onset ground truth nor a reproduction of paper detection accuracy. They can include multiple crossings within a single physical contact.",
+  "findings": "At 5 N, raising persistence from 1 to 5 to 10 points per side changes the sensor count from 94 to 44 to 42; the observer counts are 2,363, 24 and 2. The measurement onset rule strongly affects counts on identical records.",
+  "reproduce": "Python + numpy/pandas. Obtain the 3 listed original ZIPs into INPUT_DIR named classification_body.zip, classification_type.zip and regression_location_force.zip; run python derive_parallel.py INPUT_DIR OUT."
+}
