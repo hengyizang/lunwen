@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-21",
+  "scope": "secondary low-priority targeted structural FEM references and public data. Only sources listed on first-party project pages, repositories and corresponding original papers. No full text synthesis or claims of systematic coverage.",
+  "seed_queries": [
+    "SimJEB structural finite elements bracket dataset",
+    "MeshGraphNets DeformingPlate",
+    "ETH truss homogenized stiffness dataset",
+    "Mechanical MNIST benchmarks",
+    "Hannover cantilever beam damage measurements",
+    "finite element stress image dataset"
+  ],
+  "datasets": 12,
+  "records": 10,
+  "metadata_lookups": [
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1115/1.4067089",
+      "sha256": "9a259cca704e0e9662a2c4e28426ce4d66ecf8776647106b6400d7302e4f9c50",
+      "title": "DeepJEB: 3D Deep Learning-Based Synthetic Jet Engine Bracket Dataset",
+      "year": 2024
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1111/cgf.14353",
+      "sha256": "0ba75056bbfd43f3d2135a7dbb9d487102572dccdd28a3e43478e3cbfcfded3e",
+      "title": "SimJEB: Simulated Jet Engine Bracket Dataset",
+      "year": 2021
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1073/pnas.2111505119",
+      "sha256": "251d321c82ef405dd4902b771138116a033e69500b42cf838720947695f051cb",
+      "title": "Inverting the structure–property map of truss metamaterials by deep learning",
+      "year": 2021
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1038/s41467-023-42068-x",
+      "sha256": "30d659b6259df279727fa39f797675271e15264bc8b5f2e3ca60fcc235a29d68",
+      "title": "Unifying the design space and optimizing linear and nonlinear truss metamaterials by generative modeling",
+      "year": 2023
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1038/s41597-026-08450-2",
+      "sha256": "a306ab591cef722ae956cae66333833ba56d14f85e29e7c774c12c33eb65bb12",
+      "title": "TrussGraph: A dataset of graph-based trusses for machine learning and structural design applications",
+      "year": 2026
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.eml.2020.100659",
+      "sha256": "124e3d7aba5582da0f7c93d41854f7df2ff750a4231d14e967d32c94e81e5548",
+      "title": "Mechanical MNIST: A benchmark dataset for mechanical metamodels",
+      "year": 2020
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.jmbbm.2020.104276",
+      "sha256": "2012bac36ef0a2b924e50df8ed523f158614530714ac2719ae16ff5d52a660d4",
+      "title": "Exploring the potential of transfer learning for metamodels of heterogeneous material deformation",
+      "year": 2020
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1115/1.4054898",
+      "sha256": "2ea024ff2cec76b6612d61bc4d7d2b95a909aacc46d256a4c5238ad3dcd4fa21",
+      "title": "Enhancing Mechanical Metamodels With a Generative Model-Based Augmented Training Dataset",
+      "year": 2022
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1007/s13349-023-00701-9",
+      "sha256": "8afed9e815b80d54bf7332d6940301b3d82828a864cdc5da672e6090ca0a7425",
+      "title": "Validation of an FE model updating procedure for damage assessment using a modular laboratory experiment with a reversible damage mechanism",
+      "year": 2023
+    }
+  ]
+}

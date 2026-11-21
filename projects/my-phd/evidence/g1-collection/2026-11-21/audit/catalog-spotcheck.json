@@ -1,0 +1,532 @@
+{
+  "method": "取各层中按 SHA-256(seed + \"|\" + stratum + \"|\" + url + \"|\" + title) 升序的前 12 条。相同组码时按原行序；R1|R2 行在两层都有资格，本次未重复抽中。每层前三条查 Crossref DOI；另做题名-版本核验，详见 confirmed-aliases.json。",
+  "scope": "只据题名裁定直接/邻域/不同设定等；未作全文纳排、风险偏倚或科学有效性评估。R1 参考腕部偏置/校准/负载与接触；R2 参考机器人/四旋翼系统与执行器辨识；R5 参考多机器人通信、协同状态估计与时延/丢包。不用小样本比例外推全库。",
+  "sampling_utc": "2026-11-21T04:15:59.810385+00:00",
+  "catalog_path": "g1-collection/2026-11-21/literature.csv",
+  "sampled_snapshot_sha256": "4e51d122af48321d2aca6072cdf86453a96457f46e0d9b573de786f5fe1c0e7f",
+  "sampled_snapshot_bytes": 7608067,
+  "sampled_snapshot_rows": 16381,
+  "seed": "G1-CATALOG-QA-20261121-A",
+  "population_by_stratum": {
+    "R1": 179,
+    "R2": 408,
+    "R5": 297,
+    "adjacent": 15498
+  },
+  "n_by_stratum": 12,
+  "sample_rows": 48,
+  "sample_csv_sha256": "ea834afdc28be7ac280479878458f5eaec072ea7a4f7689ac1c37b802ff386c8",
+  "topic_assessments": {
+    "R1": {
+      "other_setting": 3,
+      "adjacent_method": 9
+    },
+    "R2": {
+      "adjacent_method": 1,
+      "non_primary_document": 1,
+      "topic_candidate": 9,
+      "secondary_document": 1
+    },
+    "R5": {
+      "adjacent_method": 4,
+      "other_setting": 7,
+      "robot_communication_candidate": 1
+    },
+    "adjacent": {
+      "adjacent_method": 11,
+      "preprint_candidate": 1
+    }
+  },
+  "registry_sample": [
+    {
+      "id": "R101",
+      "url": "https://api.crossref.org/works/10.1016/j.measurement.2022.112119",
+      "record_identifier": "10.1016/j.measurement.2022.112119",
+      "checked_utc": "2026-11-21T04:16:45.124383+00:00",
+      "returned_doi": "10.1016/j.measurement.2022.112119",
+      "returned_title": "Spindle-mounted self-decoupled force/torque sensor for cutting force detection in a precision machine tool",
+      "returned_year": 2022,
+      "record_type": "journal-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "847a45f73a19d36977736c1d422329dd0d6139277c53c0468286b132af9b1bb3",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R102",
+      "url": "https://api.crossref.org/works/10.1109/icra.2015.7139476",
+      "record_identifier": "10.1109/icra.2015.7139476",
+      "checked_utc": "2026-11-21T04:16:45.125005+00:00",
+      "returned_doi": "10.1109/icra.2015.7139476",
+      "returned_title": "Inertial parameters identification and joint torques estimation with proximal force/torque sensing",
+      "returned_year": 2015,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "3aa4879768b7f68846978a390fdedb9bdb8eb88499ebe8e539bf1e83bfd08aae",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R103",
+      "url": "https://api.crossref.org/works/10.1109/mfi.2016.7849470",
+      "record_identifier": "10.1109/mfi.2016.7849470",
+      "checked_utc": "2026-11-21T04:16:45.247078+00:00",
+      "returned_doi": "10.1109/mfi.2016.7849470",
+      "returned_title": "Accuracy specifications of calibration device for force-torque sensors",
+      "returned_year": 2016,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "cd95216502708a508249bb76c9144f971b0dd4f3c22ce5e7990e552fc4cb5bc9",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R201",
+      "url": "https://api.crossref.org/works/10.2514/6.2002-4568",
+      "record_identifier": "10.2514/6.2002-4568",
+      "checked_utc": "2026-11-21T04:16:45.278531+00:00",
+      "returned_doi": "10.2514/6.2002-4568",
+      "returned_title": "Inertia Parameter Identification for a Free-Flying Space Robot",
+      "returned_year": 2002,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "f678ef8f1456679b8c1cb4f29931aa0783621dab522b2416c724ff184d96e4bb",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R202",
+      "url": "https://api.crossref.org/works/10.2514/6.2018-1917.c1",
+      "record_identifier": "10.2514/6.2018-1917.c1",
+      "checked_utc": "2026-11-21T04:16:45.363752+00:00",
+      "returned_doi": "10.2514/6.2018-1917.c1",
+      "returned_title": "Correction: Quadrotor Model Generation using System Identification Techniques",
+      "returned_year": 2018,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "e6cb058a4210516c40fd7551cf85a6b27997edba36e8aaf0a43a9a7165f890c2",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R203",
+      "url": "https://api.crossref.org/works/10.3390/machines14070783",
+      "record_identifier": "10.3390/machines14070783",
+      "checked_utc": "2026-11-21T04:16:45.392262+00:00",
+      "returned_doi": "10.3390/machines14070783",
+      "returned_title": "Robot Dynamic Parameter Identification Based on Nonlinear Friction and Hierarchical Iterative Optimization",
+      "returned_year": 2026,
+      "record_type": "journal-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "462611bef288bb102796f1026eb2cc96d000ede0925ceae5d5ff3eba4cd740e0",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R501",
+      "url": "https://api.crossref.org/works/10.1109/acc.2014.6859440",
+      "record_identifier": "10.1109/acc.2014.6859440",
+      "checked_utc": "2026-11-21T04:16:45.478388+00:00",
+      "returned_doi": "10.1109/acc.2014.6859440",
+      "returned_title": "Localized distributed state feedback control with communication delays",
+      "returned_year": 2014,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "355ffe1d72956dab8838f8dfcb639888a973923fe0a7eacd8a06d9d8f7410745",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R502",
+      "url": "https://api.crossref.org/works/10.1007/s11277-006-9033-x",
+      "record_identifier": "10.1007/s11277-006-9033-x",
+      "checked_utc": "2026-11-21T04:16:45.594284+00:00",
+      "returned_doi": "10.1007/s11277-006-9033-x",
+      "returned_title": "Channel and Delay Estimation Algorithm for Asynchronous Cooperative Diversity",
+      "returned_year": 2006,
+      "record_type": "journal-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "fe8958bbcf0ff7f458c661e9053e884ad5c05aa149ac5760ec4015488f396872",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "R503",
+      "url": "https://api.crossref.org/works/10.1109/access.2024.3477713",
+      "record_identifier": "10.1109/access.2024.3477713",
+      "checked_utc": "2026-11-21T04:16:45.619622+00:00",
+      "returned_doi": "10.1109/access.2024.3477713",
+      "returned_title": "Cooperative Control of Multi-Agent Systems Under Communication Delays and Packet Loss Scenarios",
+      "returned_year": 2024,
+      "record_type": "journal-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "cb842f48fd968f32d76b34e26a226a069a05cb08f1ca58a7cf5df2628e00bfb5",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "adjacent01",
+      "url": "https://api.crossref.org/works/10.1007/978-981-19-3998-3_149",
+      "record_identifier": "10.1007/978-981-19-3998-3_149",
+      "checked_utc": "2026-11-21T04:16:45.698929+00:00",
+      "returned_doi": "10.1007/978-981-19-3998-3_149",
+      "returned_title": "Event-Triggered Distributed Multi-sensor Data Fusion for Networked Systems with Delayed Measurements",
+      "returned_year": 2022,
+      "record_type": "book-chapter",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "c3b5c04203e72919fad0c706d01b512285685e46bc7a3c3144aacaa3bf66d22a",
+      "status": "ok",
+      "transient_errors": []
+    },
+    {
+      "id": "adjacent02",
+      "url": "https://api.crossref.org/works/10.1109/mwscas.2018.8623937",
+      "record_identifier": "10.1109/mwscas.2018.8623937",
+      "checked_utc": "2026-11-21T04:16:45.726334+00:00",
+      "returned_doi": "10.1109/mwscas.2018.8623937",
+      "returned_title": "Controlling Robot Gripper Force By Transferring Human Forearm Stiffness Using Force Myography",
+      "returned_year": 2018,
+      "record_type": "proceedings-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "c2fcf5a3401758ff2ab8c105c7097a8178ef0716cd2f1ada858d915396befd14",
+      "status": "ok",
+      "transient_errors": [
+        "HTTP Error 429: Too Many Requests"
+      ]
+    },
+    {
+      "id": "adjacent03",
+      "url": "https://api.crossref.org/works/10.3182/20130708-3-cn-2036.00063",
+      "record_identifier": "10.3182/20130708-3-cn-2036.00063",
+      "checked_utc": "2026-11-21T04:16:45.902678+00:00",
+      "returned_doi": "10.3182/20130708-3-cn-2036.00063",
+      "returned_title": "Motion Planning for Multi-robot Coordination",
+      "returned_year": 2013,
+      "record_type": "journal-article",
+      "title_agrees_after_normalization": true,
+      "identifier_agrees": true,
+      "year_agrees": true,
+      "response_sha256": "ca28477d1fad0d61c9cc1a57ce44888c110dff5844537d0fc19d0352ed399644",
+      "status": "ok",
+      "transient_errors": []
+    }
+  ],
+  "post_regeneration_diagnostics": {
+    "snapshot_utc": "2026-11-21T04:20:41.262065+00:00",
+    "sha256": "37a95c4f87d3ebf91baa6dd3a81524d0bbc18a5587a23a1d04837a8c4264b9b0",
+    "rows": 15927,
+    "note": "全表扫描与11对版本检查使用重生成后的不同快照；不是从新快照重新抽样。后续发布版本减重或调整分层时可按原始 DOI/URL 回定位。",
+    "lookup_of_48_samples": {
+      "R101": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R102": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R103": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R104": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R105": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R1"
+      },
+      "R106": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R107": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R108": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R109": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R110": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R1"
+      },
+      "R111": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R112": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R1"
+      },
+      "R201": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R202": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R203": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R204": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R205": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R206": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R207": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R208": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R209": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R210": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R211": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R212": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R2"
+      },
+      "R501": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R502": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R503": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R504": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R505": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R506": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R507": {
+        "found": true,
+        "snapshot2_tier": "priority_title_match",
+        "snapshot2_priority": "R5"
+      },
+      "R508": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R509": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R510": {
+        "found": false,
+        "snapshot2_tier": null,
+        "snapshot2_priority": null
+      },
+      "R511": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "R512": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent01": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent02": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent03": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent04": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent05": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent06": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent07": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent08": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent09": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent10": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent11": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      },
+      "adjacent12": {
+        "found": true,
+        "snapshot2_tier": "adjacent_title_screen",
+        "snapshot2_priority": ""
+      }
+    },
+    "scan": {
+      "duplicate_exact_nonempty_doi_groups": 0,
+      "duplicate_exact_nonempty_arxiv_id_groups": 0,
+      "duplicate_exact_nonempty_url_groups": 0,
+      "correction_or_erratum_title_prefix": {
+        "count": 8,
+        "examples": [
+          {
+            "title": "Correction: Quadrotor Model Generation using System Identification Techniques",
+            "url": "https://doi.org/10.2514/6.2018-1917.c1"
+          },
+          {
+            "title": "Correction: Investigating the Effects of Robot Engagement Communication on Learning from Demonstration",
+            "url": "https://doi.org/10.1007/s12369-024-01159-5"
+          }
+        ]
+      },
+      "editorial_preface_title_prefix": {
+        "count": 3,
+        "examples": [
+          {
+            "title": "Editorial: Enhanced human modeling in robotics for socially-aware place navigation",
+            "url": "https://doi.org/10.3389/frobt.2024.1348022"
+          },
+          {
+            "title": "Editorial: Reinforcement learning for real-world robot navigation",
+            "url": "https://doi.org/10.3389/frobt.2026.1861947"
+          }
+        ]
+      },
+      "noisy_cjk_cyrillic_or_kana_title_candidate": {
+        "count": 1,
+        "examples": [
+          {
+            "title": "Deep Reinforcement Learning-Based Job Shop Scheduling of燬mart燤anufacturing",
+            "url": "https://doi.org/10.32604/cmc.2022.030803"
+          }
+        ]
+      }
+    },
+    "normalized_title_collision_groups": 11,
+    "version_decision_file": "confirmed-aliases.json",
+    "sources_of_bias": [
+      "英文检索/排序以及基于英文词的题名规则，不支持对中文/其他语言研究代表性作判断。",
+      "每库按排名只取若干页，热门技术和较完整索引有优势，文献是候选记录数。",
+      "同名异人、会议/期刊/预印本和更正通告可分别有有效 DOI；标识符成功只核实可检索性。",
+      "题名不含机器人却出现协作、同步或 force/torque 的项可能被提为优先；题名无直接线索也不能证明正文绝不涉及相关问题。"
+    ]
+  }
+}

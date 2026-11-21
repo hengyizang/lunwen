@@ -1,0 +1,305 @@
+{
+  "as_of": "2026-11-21",
+  "input_screened_rows": {
+    "anchor-literature.csv": 20,
+    "wrist-literature.csv": 379,
+    "r2-literature.csv": 165,
+    "r5-literature.csv": 1134,
+    "citation-literature.csv": 599,
+    "fem-literature.csv": 10,
+    "manip-literature.csv": 7964,
+    "nav-literature.csv": 3827,
+    "adj-literature.csv": 2832
+  },
+  "input_sha256": {
+    "anchor-literature.csv": "0b4994f4941baa3917822e32fb487d84b5f61a7e43e25404e6a1f05fcf2371a0",
+    "wrist-literature.csv": "0d22c05bd77b4bb679f8e158c614cfc8606cd6553561df85fa922b2511fc19c3",
+    "r2-literature.csv": "a64de444ddb5d454adc98ed6e0eb180d211972de23509f0eb4e19efc46c5f1eb",
+    "r5-literature.csv": "f0b28eccd2360810cebb4fe99e3e1b79f1cd1975a6dcfb1e034430f87a8d3fa3",
+    "citation-literature.csv": "325ade95452cb2a717d362524f58dc0f307b67957ee5d7b8449d37dd1eb18313",
+    "fem-literature.csv": "975c80507bfa2214d7bef60f0a8c6f7059844bb64eaf6101182189bbaa35f02e",
+    "manip-literature.csv": "434c5ae8e4f281dbb36708768d67219d24f78460d9fce00daa6ec1cfe721ecac",
+    "nav-literature.csv": "7e9f58359f8b68ff71bf028bfef5ac92aa4e8ac39fa2bb330b10e9323f11a517",
+    "adj-literature.csv": "00bb4bd221d296df9336360f7f98631b6ff5ae5a0e0793913399a9a0063f50ee"
+  },
+  "eligible_occurrences": 16436,
+  "excluded_input_occurrences": {
+    "correction, editorial or withdrawn notice; preserved in audit": 11,
+    "wireless topic without control/estimation/robotics scope": 124,
+    "citation neighbour without a target-domain title signal; edge retained": 356,
+    "quarantined: DOI registry/source title conflicts with indexed title": 1,
+    "non-study item, withdrawn record, or unrelated application": 2
+  },
+  "duplicate_occurrences_merged": 526,
+  "unique_catalog_records": 15910,
+  "tiers": {
+    "priority_source_checked": 14,
+    "adjacent_source_checked": 6,
+    "priority_title_match": 508,
+    "adjacent_title_screen": 15382
+  },
+  "priority_tags_overlap": {
+    "R1": 44,
+    "R2": 408,
+    "R5": 70
+  },
+  "prior_baseline": {
+    "commit": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+    "source_files": [
+      {
+        "path": "evidence/literature-api-ledger.jsonl",
+        "sha256": "182ca1f52079d5b90d9dad92659938a184c29558dd2ef14aa775154bf034eb8b",
+        "bytes": 81759
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080436z-crossref-19bb06bbf0.json",
+        "sha256": "378121b2d51e1c9a87c9a5d9aeafca7d32f0218658e9f6477c3899ad053e6900",
+        "bytes": 10837
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080437z-arxiv-c4b36481ec.json",
+        "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "bytes": 704
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080437z-hal-0bb9b3709f.json",
+        "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "bytes": 558
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080439z-crossref-907ef1f1cf.json",
+        "sha256": "da4b52434f8f3161301dbaed589f622df1d9b84bd6a2597c8ed3faab1ea609f3",
+        "bytes": 10701
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080439z-arxiv-4b57e24a39.json",
+        "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "bytes": 704
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080440z-hal-8c7a04e924.json",
+        "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "bytes": 558
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080523z-crossref-70ac78d0f8.json",
+        "sha256": "5bd11614daaa58913d833d6aabc2e49850b19110e7514d65a6764c65bf5eb284",
+        "bytes": 23251
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080523z-arxiv-600f307e0d.json",
+        "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "bytes": 704
+      },
+      {
+        "path": "evidence/literature/normalized/20261101t080524z-hal-d5bb84cfea.json",
+        "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "bytes": 558
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082426z-crossref-3ad00f7944.json",
+        "sha256": "6e697db1f70e081cae1662d4e799740a4a94cf1f26a6f4891df4db9261b27a6e",
+        "bytes": 16369
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082641z-arxiv-75c13380a0.json",
+        "sha256": "2fa21e00a6a55be71bf69a5fbac4bc3076cf85c55b90065a18d8b01d5624d2af",
+        "bytes": 20645
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082641z-europe-pmc-b1bf19d06a.json",
+        "sha256": "b7873fb99982d909349552fb24dca4ae74bf8bab543c676dcb4d1357301a5b4c",
+        "bytes": 9038
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082643z-dblp-69a8a57e8d.json",
+        "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+        "bytes": 3882
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082725z-crossref-a693871055.json",
+        "sha256": "592a3aba1e7f9876614c093173e89a7231d9e359181a48ee85d90ee2afa00e99",
+        "bytes": 15395
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082941z-arxiv-a54a4827eb.json",
+        "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "bytes": 704
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082941z-europe-pmc-1830c3fc7d.json",
+        "sha256": "0acff6e71d0ddd9fe5c7dbd176d245acfddd6caad0503eb52d655854a6960169",
+        "bytes": 8825
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t082942z-dblp-b8fd00c15d.json",
+        "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+        "bytes": 3882
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t092422z-crossref-3df34635a3.json",
+        "sha256": "ad2981b5a0b8071a8e84b426583a9f4cedb6c8f0142bd15f14585c2133684667",
+        "bytes": 15974
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t092636z-arxiv-13a277a434.json",
+        "sha256": "6b12ecd866986baad848b33980c641ae81a91df0d19c23c8df32736bd4b9d13a",
+        "bytes": 704
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t092636z-europe-pmc-fade3fd0a8.json",
+        "sha256": "50a2ba0324346640dedf044620300b5ece3c3daf75c216306b634312bcbd17f2",
+        "bytes": 8692
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t092644z-dblp-ee7deca3cb.json",
+        "sha256": "16ff166f98b113efea8c6372c81582ca80f65215627699d8cc8aee163bbc58f4",
+        "bytes": 3882
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t092655z-hal-b7b436c13f.json",
+        "sha256": "755b8700e1f10e73c6da7a2e1c5b5e261db88973230e9bed47863a9ba6a8236e",
+        "bytes": 558
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101601z-arxiv-580cd9b947.json",
+        "sha256": "d8f2a76fb30381a639c0841cd35df7f58339cbf8f9bf87f38f4486376d925f74",
+        "bytes": 5833
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101602z-crossref-aa43de26ee.json",
+        "sha256": "97f12142b7ff7701dab100ec0278b509191ac167713897a8a1df5bf4d671c764",
+        "bytes": 4224
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101604z-arxiv-171c1c878b.json",
+        "sha256": "f3b2ed457524e70666c83d92802ca038191f0b2dfd1b27690b37ce9ad8d7a791",
+        "bytes": 6032
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101605z-crossref-ed5828dd6a.json",
+        "sha256": "e648d4c26bc9114fccc02be00e0ea1a0cd10b6cca5cdbbdc51cda51223e2a88c",
+        "bytes": 2146
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101607z-arxiv-3fb4c7a7b8.json",
+        "sha256": "467378e73e7f2df8b7e86c970174714ffe2b6c8ba745b0081a92418b36770b94",
+        "bytes": 6631
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101607z-crossref-e535abdcb3.json",
+        "sha256": "a1096baa052071e4860527b769a3f9734e0b93049032a0c914c7c64ba2f8bc2a",
+        "bytes": 2241
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101610z-arxiv-685c580641.json",
+        "sha256": "8874f5993660208313c5cc3e5e4e7e3a123550c9fc61ffbeea72bee03f14e56a",
+        "bytes": 6346
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101611z-crossref-522ca81e1a.json",
+        "sha256": "33a9ebb5c34d958a3e262b293596d0bf7e8356843072f50ab07118374dcb2c45",
+        "bytes": 6282
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101614z-arxiv-73ac34f1a2.json",
+        "sha256": "12ccdc00608e599d71434caa6d04e97f8f431b954727d13261c91efbee987885",
+        "bytes": 5573
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101614z-crossref-38f9da1cbe.json",
+        "sha256": "766c8d19817c31e9746dda7fc1a489db969c04e92f9256217ad657c72d589255",
+        "bytes": 4858
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101617z-arxiv-ff95f87255.json",
+        "sha256": "8a55990ab4ba24adb4a78b06a3fe1765b8a00d39db09657011e02307e3222d8f",
+        "bytes": 6025
+      },
+      {
+        "path": "evidence/literature/normalized/20261108t101618z-crossref-f4ed1f2dee.json",
+        "sha256": "25c819b84b220b795c8db4372d741c6596508f0a6397e20e80f41570b803271f",
+        "bytes": 6081
+      },
+      {
+        "path": "evidence/auxiliary/session-g1-sources-20261108.json",
+        "sha256": "357168c0aa6079583642fb927e047cbf1fae6f2d77f73fe8a17f808193ad4146",
+        "bytes": 37409
+      },
+      {
+        "path": "evidence/auxiliary/session-g1-batch2-sources-20261108.json",
+        "sha256": "f4e179ae2149873bc3d602b1dbeafa69377830ba9681fc4c93c237eeb082d5ef",
+        "bytes": 43182
+      },
+      {
+        "path": "evidence/auxiliary/session-g1-batch2-deepening-sources-20261108.json",
+        "sha256": "bf7f83d24cbb9247627cf656592824ce400b22c549f74b366825a1387091666b",
+        "bytes": 145577
+      },
+      {
+        "path": "evidence/literature/primary/batch2-source-excerpts-20261108.json",
+        "sha256": "f53688a6776b1ce7e9d1b5103a51cfcc6ffbd18e1efa439dcd77666abe3662a4",
+        "bytes": 31186
+      },
+      {
+        "path": "evidence/dataset-search-log.jsonl",
+        "sha256": "91dc085635b81cf69149629d189f6ad11788a2938073a632416c4715d08faf96",
+        "bytes": 31993
+      },
+      {
+        "path": "data/discovery-broad-auto-20261101T080436670556Z.json",
+        "sha256": "18c197ed434a31d96b88e41b11ad7b7fb59ddf22dad2c94a771b4499a728c428",
+        "bytes": 1588979
+      },
+      {
+        "path": "data/discovery-broad-auto-20261108T082426952293Z.json",
+        "sha256": "95036488b25b3f4f771268261daf37031a9aedb1f6a07e6c70a8077dee61d87a",
+        "bytes": 1246382
+      },
+      {
+        "path": "data/discovery-broad-auto-20261108T111810282362Z.json",
+        "sha256": "8d7971b8358bf3ed4d262ace4c34ef478fc2e76638eb1f8a4284fd5310d73b29",
+        "bytes": 1272585
+      }
+    ],
+    "prior_work_ids": 201,
+    "prior_dataset_ids": 745
+  },
+  "baseline_matches": {
+    "unmatched_in_checked_baseline": 15882,
+    "matched_identifier": 25,
+    "possible_title_match": 3
+  },
+  "rows_with_doi": 13987,
+  "rows_with_arxiv_id": 2215,
+  "rows_with_unresolved_equal_titles": 2,
+  "screening": "Per-stream title/metadata retrieval and eligibility rules in search audits. Final merge removes missing identifiers/URLs, obvious withdrawn/non-research headings and out-of-scope applications. Priority tags are deterministic title signals: R1 manipulator/wrist/assembly and force/torque measurement + calibration/estimation; R2 robot/actuator and identification, saturation or reference-governor; R5 explicit mobile/multi-robot, cooperative localization or formation context + timing, delay, loss or intermittent communication. A missing tag can be a false negative. No inference of method efficacy from tags. Bibliographic types come from provider metadata. Exact calendar-day eligibility is not known for records containing only year.",
+  "identity_rule": "Merge on equal normalized DOI, arXiv family, exact URL or normalized title and matching first author string. Distinct publication DOIs are kept unless a relationship was separately confirmed. Unresolved equal titles flagged. Preprint and publisher versions can still be distinct. baseline matched_identifier uses DOI/arXiv/URL; title-only matches are uncertain, remaining entries are unmatched in the checked snapshot only.",
+  "registry_status_final_primary_dois": {
+    "exact_title": 13668,
+    "normalized_title_match": 291,
+    "no_primary_doi": 1923,
+    "possible_title_mismatch": 2,
+    "title_variant_review": 9,
+    "high_similarity_title": 7,
+    "title_difference_review": 3,
+    "registry_no_title_returned": 7
+  },
+  "doi_audit_input_count": 14002,
+  "doi_audit_registered_count": 13995,
+  "doi_audit_status": {
+    "exact_title": 13682,
+    "normalized_title_match": 291,
+    "possible_title_mismatch": 2,
+    "title_variant_review": 9,
+    "high_similarity_title": 7,
+    "title_difference_review": 3,
+    "registry_no_title_returned": 7,
+    "confirmed_unrelated_title": 1
+  },
+  "citation_edge_observations": 622,
+  "citation_edges_flagged": 1,
+  "citation_distinct_directed_pairs": 621,
+  "guide_records": 31,
+  "dataset_release_records": 191
+}

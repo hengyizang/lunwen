@@ -1,0 +1,131 @@
+{
+  "source_repository": "syediu/nanobench",
+  "source_commit": "934a1ab92c458cad99c9278a5cb63bf68af6e56c",
+  "source_authors": [
+    "Syed Izzat Ullah",
+    "Jose Baca"
+  ],
+  "license": "BSD-3-Clause",
+  "source_license_url": "https://github.com/syediu/nanobench/blob/934a1ab92c458cad99c9278a5cb63bf68af6e56c/LICENSE",
+  "source_license_notice": "BSD 3-Clause License\n\nCopyright (c) 2026, Syed Izzat Ullah and Jose Baca\n\nRedistribution and use in source and binary forms, with or without\nmodification, are permitted provided that the following conditions are met:\n\n1. Redistributions of source code must retain the above copyright notice,\n   this list of conditions and the following disclaimer.\n\n2. Redistributions in binary form must reproduce the above copyright notice,\n   this list of conditions and the following disclaimer in the documentation\n   and/or other materials provided with the distribution.\n\n3. Neither the name of the copyright holder nor the names of its contributors\n   may be used to endorse or promote products derived from this software\n   without specific prior written permission.\n\nTHIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\"\nAND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE\nIMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE\nARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE\nLIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR\nCONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF\nSUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS\nINTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN\nCONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)\nARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE\nPOSSIBILITY OF SUCH DAMAGE.\n",
+  "source_readme": "https://github.com/syediu/nanobench/blob/934a1ab92c458cad99c9278a5cb63bf68af6e56c/README.md",
+  "readme_sha256": "dcdadfbc306d9218905e08e5710e1bd23f22522aa3d5d3d318821214404f8197",
+  "readme_locators": {
+    "synchronization": "L135; onboard channels interpolated onto the Vicon time base",
+    "time_position_pwm_units": "L143–L152",
+    "estimator_uses_vicon": "L162",
+    "common_position_frame": "L344",
+    "dataset_license": "L381–L383"
+  },
+  "derived_file": "r2-nanobench-derived.csv.gz",
+  "derived_sha256": "9ce94acb28f2cc44b372e254353d4bee87c278ec3bd39b3b1035e4fdfad0e9cd",
+  "uncompressed_sha256": "3b2166ce2b0be6d92004c26a743f077d1a513384bb25e5a6ca83da849d925d3d",
+  "reproduction": "python r2-nanobench-derive.py SOURCE_DIRECTORY OUTPUT.csv.gz; inputs bound by sibling nanobench-provenance.json; filenames and acquisition URLs are listed there.",
+  "script_sha256": "1bc5001d13d5ec30e6f8fbf783ab0d637e97ddc3da1e2506de9c8ebece1f3800",
+  "shape": {
+    "rows": 17118,
+    "columns": 8
+  },
+  "fields": {
+    "trial": "Original recording stem, not an independent aircraft identifier.",
+    "sample_in_trial": "One-based original CSV row index.",
+    "relative_time_s": "Original host time t minus that recording’s first t, computed in decimal seconds.",
+    "motor_pwm_mean": "Arithmetic mean of four motor commands in publisher PWM units (nominal 0 through 65535).",
+    "motor_pwm_range": "Maximum of the four PWM commands minus their minimum at this row.",
+    "position_difference_norm_m": "Unaligned Euclidean distance, in metres, between released concurrent Vicon position and Vicon-aided onboard EKF position in the Vicon frame.",
+    "motor_state": "four_commands_zero, any_command_nonzero or missing_pwm; this describes logged commands only.",
+    "missing_columns": "Missing or nonfinite source field names delimited by |; empty when all fields used are finite."
+  },
+  "limits": [
+    "Positions share a reference frame and Vicon observations were fused by the onboard filter. This difference measures internal consistency, not performance against an independent reference.",
+    "PWM commands are resampled inputs; zero commands do not directly measure rotor speed or physical stop. Motion-capture and onboard signals were time-aligned offline; 100 Hz tabular rows do not imply 100 Hz independent measurements in every channel.",
+    "The two multisine recordings use CF_01. The 211-row oval recording contains only four-zero commands and spans about 2.10 s despite a nominal 30 s configuration; no completed oval is evidenced.",
+    "No imputation, row removal, target-velocity inference or coordinate realignment was applied."
+  ],
+  "checks": [
+    "Recomputed twice in Python standard library with byte-identical gzip output.",
+    "Compared all 17,118 derived rows against original source ordering, decimal relative time, every PWM status and feature, and every Euclidean position distance with separate row-wise code."
+  ],
+  "runs": [
+    {
+      "trial": "A1b_multisine_sysid_rep1",
+      "rows": 7224,
+      "zero_command_rows": 550,
+      "missing_source_fields_rows": 0,
+      "span_s": "72.230414390",
+      "motor_pwm_mean_range": [
+        0.0,
+        59789.9555166
+      ],
+      "motor_pwm_range_range": [
+        0.0,
+        18714.9341442
+      ],
+      "fusion_position_difference_norm_range_m": [
+        2.88109453854e-05,
+        0.0425636141378
+      ],
+      "source_csv_sha256": "fa4bc4d57cd9ad7b0e2f862e2e3adec7d10ba27bf2b28f11c26ad779cc519c1d"
+    },
+    {
+      "trial": "A1b_multisine_sysid_rep2",
+      "rows": 7207,
+      "zero_command_rows": 540,
+      "missing_source_fields_rows": 0,
+      "span_s": "72.260587692",
+      "motor_pwm_mean_range": [
+        0.0,
+        62522.9187247
+      ],
+      "motor_pwm_range_range": [
+        0.0,
+        20383.4307244
+      ],
+      "fusion_position_difference_norm_range_m": [
+        2.23681091512e-05,
+        0.118750570288
+      ],
+      "source_csv_sha256": "39d7e4fc8deeec12e5e871715d8392be573a646525f4aadb9ab963a0474485d9"
+    },
+    {
+      "trial": "B3_figure8_medium_rep1",
+      "rows": 2476,
+      "zero_command_rows": 552,
+      "missing_source_fields_rows": 0,
+      "span_s": "24.760291576",
+      "motor_pwm_mean_range": [
+        0.0,
+        60359.2912107
+      ],
+      "motor_pwm_range_range": [
+        0.0,
+        19716.6354095
+      ],
+      "fusion_position_difference_norm_range_m": [
+        5.47345384561e-06,
+        0.068546258219
+      ],
+      "source_csv_sha256": "03713f2e118eff8332e79e6ab497e5d1a09025dbf411f1c8bd503d8af9d9bd98"
+    },
+    {
+      "trial": "B7_oval_slow_rep1",
+      "rows": 211,
+      "zero_command_rows": 211,
+      "missing_source_fields_rows": 0,
+      "span_s": "2.099993229",
+      "motor_pwm_mean_range": [
+        0.0,
+        0.0
+      ],
+      "motor_pwm_range_range": [
+        0.0,
+        0.0
+      ],
+      "fusion_position_difference_norm_range_m": [
+        5.16629150165e-05,
+        0.000333341437385
+      ],
+      "source_csv_sha256": "a767bddb76c60b4a15cd0df380d184155924eefcf9a290bdf22c04913be3b079"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "title": "RoboLoc-G: Multisensor Localization Dataset from a Robotic Gantry System",
+  "source_doi": "10.5281/zenodo.15989282",
+  "source": "https://zenodo.org/records/15989282",
+  "creators": [
+    "Domínguez-Bolaño, Tomás",
+    "Carro Lagoa, Ángel",
+    "Barral Vales, Valentín",
+    "Escudero, Carlos J.",
+    "García-Naya, José A."
+  ],
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "modification": "Derivative by Codex. Local recoding of anchors/session identifiers, within-clock intervals, double difference and comparison to the reported frame RTT. Attribution and changes should accompany reuse.",
+  "fields": {
+    "trajectory": "Trajectory path in the original release.",
+    "source_row": "One-based record ordinal within trajectory, in release order.",
+    "anchor_local_id": "Anchor identifier recoded by first appearance within each trajectory.",
+    "session_local_id": "Session surrogate identifier from the observed outer timestamp and anchor within each trajectory.",
+    "t4_minus_t1_ps": "Interval t4−t1 on one device, in picoseconds per data card.",
+    "t3_minus_t2_ps": "Interval t3−t2 on the other device, in picoseconds per data card.",
+    "double_difference_ps": "Difference of those two intervals in ps. Can be negative in the released observations.",
+    "reported_frame_rtt_raw": "Source frames.rtt integer, retaining zero. Data card and chipset SDK differ on its units; kept unconverted.",
+    "reported_minus_derived_numeric": "Numeric subtraction of the double difference from the original frame RTT, with no unit conversion.",
+    "comparison_status": "Categorical comparison: equal or reported_zero_negative_difference in this snapshot. Code also detects missing fields."
+  },
+  "scope": "Whole eight gtec-ftm.csv Wi-Fi fine-time-measurement files in archived UWB_FTM_IMU trajectories. Physical gantry robot and fixed anchors; Wi-Fi frame handshakes for ranging, not application-level age of information or inter-mobile-robot traffic. Other instruments/ground truth not downloaded here. Sampling units are table records, not individual successful round trips.",
+  "unit_evidence": {
+    "dataset": "https://zenodo.org/records/15989282",
+    "hardware": "https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s2/api-reference/network/esp_wifi.html",
+    "disagreement": "Data card labels frames.rtt (per-frame) ns. ESP-IDF v5.4 for ESP32-S2 lists wifi_ftm_report_entry_t.rtt in ps. The source card and SDK both label report-level rtt_est and rtt_raw as ns. Raw per-frame limits remain unlabeled by design. The dataset release's exact firmware build has not been established."
+  },
+  "rows": 15152,
+  "trajectory_count": 8,
+  "within_trajectory_sessions": 1062,
+  "raw_comparison_counts": {
+    "equal": 15150,
+    "reported_zero_negative_difference": 2
+  },
+  "negative_double_difference_ps": [
+    -9374,
+    -7812
+  ],
+  "source_member_hashes": "r5-ftm-provenance.json",
+  "source_member_hashes_file_sha256": "fbf028dbb892d644a764ea8126c9ba9e5205ffc416015c5a0ffeab6abddd1fd6",
+  "rebuild": "python r5-ftm-frame-derive.py INPUT_DIRECTORY r5-ftm-frame-derived.csv.gz",
+  "script_sha256": "1ca2e1d5620f087227f3b8bb74dc62022995cc571dedb7c1f2a30c53e444303a",
+  "sha256_csv": "9db2e770749ba16a6890bd11c6d627246d5e85d892767b82b40b7f28d06c2fe9",
+  "sha256_compressed": "5cadfc4e6fb4a99fa0aa0b33fb4d3ea65b7f4abc2058a6bda744e9a2c5b09e97",
+  "limitations": [
+    "Session surrogate uses recorded grouping; it does not independently enumerate transmissions or missing frames.",
+    "Measurements concern a single gantry robot and fixed anchors, not multi-robot application-level message delay or age of information.",
+    "No assumption about the rounding or clipping mechanism for the two negative differences. Per-frame clock checks do not establish device synchronization."
+  ]
+}

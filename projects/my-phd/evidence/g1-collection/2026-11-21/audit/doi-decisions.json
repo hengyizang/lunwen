@@ -1,0 +1,251 @@
+{
+  "as_of_utc": "2026-11-21T07:15:39.672643+00:00",
+  "input_validation_sha256": "fccdb5d2a854c5be0c5343609925f220515fd908711455f1f0a17a9085773064",
+  "review_scope": "All 22 registry audit exceptions in the requested five statuses, including the one already confirmed wrong DOI. Related-identifier declarations on preprint pages do not independently establish DOI registration.",
+  "quarantine": [
+    {
+      "doi": "10.1109/iros.2011.6048074",
+      "catalog_title": "Humanoid robot HRP-4 - Humanoid robotics platform with lightweight and slim body -",
+      "registered_title": "Hybrid discriminative visual object tracking with confidence fusion for robotics applications",
+      "reason": "Crossref redirects the supplied DOI to 10.1109/IROS.2011.6094891 for a visual object tracking paper; Kaneko et al. HRP-4 is independently registered under 10.1109/IROS.2011.6094465.",
+      "source": "https://api.crossref.org/works/10.1109/iros.2011.6048074",
+      "correct_work_doi": "10.1109/iros.2011.6094465",
+      "correct_work_source": "https://api.crossref.org/works/10.1109/iros.2011.6094465"
+    }
+  ],
+  "decisions": [
+    {
+      "doi": "10.21203/rs.3.rs-11320915/v1",
+      "catalog_title": "Covariance Alignment for Dynamic Domain Adaptation in Robotic Trajectory Identification Under Variable Loading and Speed Regimes",
+      "registered_title": "Lightweight Covariance Alignment for Payload-Robust Condition Monitoring of Industrial Robots",
+      "original_status": "possible_title_mismatch",
+      "decision": "same_identifier_and_authors_title_history_unresolved",
+      "reason": "OpenAlex 显示原目录题名，Crossref 登记题名为 Lightweight Covariance Alignment…；同一个预印本 DOI、Research Square 地址和五位作者均吻合。原始版本页面遇到 403，无法证实何时改题；保留两个题名并按同一 DOI 计数。",
+      "source": "https://api.crossref.org/works/10.21203/rs.3.rs-11320915/v1",
+      "additional_sources": [
+        "https://api.openalex.org/works/https://doi.org/10.21203/rs.3.rs-11320915/v1"
+      ]
+    },
+    {
+      "doi": "10.25077/ajeeet.v4i2.101",
+      "catalog_title": "Nonlinear Parameter Identification of the Franka Emika PANDA Robot: A Comparative Analysis of Friction Models",
+      "registered_title": "Nonlinear Parameter Identification of the Franka Emika PANDA Robot",
+      "original_status": "title_variant_review",
+      "decision": "registered_subtitle",
+      "reason": "出版方显示完整题名；登记的 subtitle 字段含摩擦模型比较副题。",
+      "source": "https://ajeeet.ft.unand.ac.id/index.php/ajeeet/article/view/101",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.2200/s00954ed2v01y201909cnt023",
+      "catalog_title": "Age of Information: A New Metric for Information Freshness",
+      "registered_title": "Age of Information",
+      "original_status": "title_difference_review",
+      "decision": "registered_subtitle",
+      "reason": "Crossref 的 subtitle 字段补全信息新鲜度副题。",
+      "source": "https://api.crossref.org/works/10.2200/s00954ed2v01y201909cnt023",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.3303/cet1974103",
+      "catalog_title": "An Effective Milp-based Decomposition Algorithm for the Integrated Design and Scheduling of Flexible Job-shop Plants",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "publisher_attests_title_and_doi",
+      "reason": "出版方文章页同时列有题名和 DOI，Handle 也提供出版机构的 PDF 地址。",
+      "source": "https://www.cetjournal.it/index.php/cet/article/view/CET1974103",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.5281/zenodo.22776582",
+      "catalog_title": "Augmented Reality Interfaces for Human-Robot Collaboration: Development of a ROS 2-Based Sensor Streaming Framework and Validation via SLAM Algorithms",
+      "registered_title": "Interfacce di realtà aumentata per la Human-Robot Collaboration: sviluppo di un framework di streaming sensoriale basato su ROS2 e validazione tramite algoritmi di SLAM",
+      "original_status": "title_difference_review",
+      "decision": "translated_catalog_title",
+      "reason": "DataCite 收录意大利语题名，原目录英文表达对应人机协作、ROS2 传感流和 SLAM 验证三个具体要素。保留其语言区别。",
+      "source": "https://api.datacite.org/dois/10.5281/zenodo.22776582",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1109/mra.2015.2448951",
+      "catalog_title": "Benchmarking in Manipulation Research: The YCB Object and Model Set and Benchmarking Protocols",
+      "registered_title": "Benchmarking in Manipulation Research: Using the Yale-CMU-Berkeley Object and Model Set",
+      "original_status": "title_variant_review",
+      "decision": "preprint_publication_title_variant",
+      "reason": "作者预印本使用 YCB Object and Model Set and Benchmarking Protocols，作者项目页列出杂志正式题名及同一 DOI。",
+      "source": "https://arxiv.org/abs/1502.03143",
+      "additional_sources": [
+        "https://ycb-benchmarks.s3.amazonaws.com/index.html"
+      ]
+    },
+    {
+      "doi": "10.3785/j.issn.1008-973x.2012.06.023",
+      "catalog_title": "Collision detection and safe reaction of manipulator based on disturbance observer",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "publisher_attests_title_and_doi",
+      "reason": "浙江大学学报工程版英文页面同时列出题名、DOI 和页码。",
+      "source": "https://www.zjujournals.com/eng/EN/10.3785/j.issn.1008-973X.2012.06.023",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1117/12.2558168",
+      "catalog_title": "Compute-Bound and Low-Bandwidth Distributed 3D Graph-SLAM",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "author_reports_doi_registry_unresolved",
+      "reason": "该题名在 arXiv 有作者记录，明确将此 DOI 列为 related DOI。Handle 和 Crossref 单项均未返回登记项。",
+      "source": "https://arxiv.org/abs/2005.10222",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1177/1729881418797494",
+      "catalog_title": "Distributed area coverage control with imprecise robot localization: Simulation and experimental studies",
+      "registered_title": "Distributed area coverage control with imprecise robot localization",
+      "original_status": "title_variant_review",
+      "decision": "registered_subtitle",
+      "reason": "Simulation and experimental studies 完整保存在登记的副题字段。",
+      "source": "https://api.crossref.org/works/10.1177/1729881418797494",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.22105/jarie.2024.445684.1599",
+      "catalog_title": "Dynamic stochastic job shop scheduling problem with random machine failures using discrete event simulation and design of experiments",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "doi_resolves_publisher_title_not_independently_read",
+      "reason": "Handle 指向期刊文章 212308，OpenAlex 索引题名和 DOI 相符。期刊原页直接访问返回 403，保留出版方逐项核对缺口。",
+      "source": "https://doi.org/api/handles/10.22105/jarie.2024.445684.1599",
+      "additional_sources": [
+        "https://www.journal-aprie.com/article_212308.html"
+      ]
+    },
+    {
+      "doi": "10.1007/s10514-012-9291-2",
+      "catalog_title": "Force feedback exploiting tactile and proximal force/torque sensing: Theory and implementation on the humanoid robot iCub",
+      "registered_title": "Force feedback exploiting tactile and proximal force/torque sensing",
+      "original_status": "title_variant_review",
+      "decision": "registered_subtitle",
+      "reason": "Crossref subtitle 字段明确包括 iCub 上的理论与实现。",
+      "source": "https://api.crossref.org/works/10.1007/s10514-012-9291-2",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.15607/rss.2006.ii.001",
+      "catalog_title": "Haptic Playback: Modeling, Controller Design, and Stability Analysis",
+      "registered_title": "Haptic Playback: Modeling, Controller Design, and",
+      "original_status": "title_variant_review",
+      "decision": "publisher_attests_untruncated_title",
+      "reason": "RSS 正式会议论文页列出 Stability Analysis 完整题名和对应 DOI。Crossref 返回的题名末尾截断。",
+      "source": "https://roboticsproceedings.org/rss02/p01.html",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1177/0018720816644364",
+      "catalog_title": "Human–Robot Interaction: Status and Challenges",
+      "registered_title": "Human–Robot Interaction",
+      "original_status": "title_difference_review",
+      "decision": "registered_subtitle",
+      "reason": "登记副题为 Status and Challenges。",
+      "source": "https://api.crossref.org/works/10.1177/0018720816644364",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.67171/f4b54292",
+      "catalog_title": "Industrial Robotic Arm Prototype Design Using Adaptive Control for Improved Accuracy of Automated Assembly",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "publisher_attests_title_and_doi",
+      "reason": "期刊 HTML 的 citation_title 与 citation_doi 元标签提供完整题名和此 DOI；本轮 Handle 和 Crossref 均未返回。",
+      "source": "https://ejournal.grafindoscience.com/jst/article/view/158",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1145/3838684.3846872",
+      "catalog_title": "KerColle: Unlocking Fine-Grained GPU Concurrency in Vision-Language-Action Models",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "author_reports_doi_registry_unresolved",
+      "reason": "arXiv 作者页面给出同一题名并列出 ACM 相关 DOI。本轮 Handle 和 Crossref 均未返回此标识。",
+      "source": "https://arxiv.org/abs/2609.22335",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1177/0278364912471865",
+      "catalog_title": "Manipulation in Clutter with Whole-Arm Tactile Sensing",
+      "registered_title": "Reaching in clutter with whole-arm tactile sensing",
+      "original_status": "title_variant_review",
+      "decision": "preprint_publication_title_variant",
+      "reason": "arXiv 版本以 Manipulation 开头，期刊版使用 Reaching。作者姓名、研究和预印本的相关出版 DOI 一致。",
+      "source": "https://arxiv.org/abs/1304.6146",
+      "additional_sources": [
+        "https://journals.sagepub.com/doi/10.1177/0278364912471865"
+      ]
+    },
+    {
+      "doi": "10.1016/j.neucom.2022.06.085",
+      "catalog_title": "Neuromorphic adaptive spiking CPG towards bio-inspired locomotion of legged robots",
+      "registered_title": "Neuromorphic adaptive spiking CPG towards bio-inspired locomotion",
+      "original_status": "title_variant_review",
+      "decision": "preprint_publication_title_variant",
+      "reason": "arXiv 题名后缀包括 of legged robots，期刊正式题名较短。",
+      "source": "https://arxiv.org/abs/2101.09709",
+      "additional_sources": [
+        "https://www.sciencedirect.com/science/article/pii/S0925231222008165"
+      ]
+    },
+    {
+      "doi": "10.11896/jsjkx.250100088",
+      "catalog_title": "Reinforcement Learning Method for Solving Flexible Job Shop Scheduling Problem Based onDouble Layer Attention Network",
+      "registered_title": "",
+      "original_status": "registry_no_title_returned",
+      "decision": "publisher_attests_title_and_doi",
+      "reason": "《计算机科学》英文文章页公布中英文题名和该 DOI。其英文题名原样含 onDouble 连写。",
+      "source": "https://www.jsjkx.com/EN/10.11896/jsjkx.250100088",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1007/978-1-4471-4396-3",
+      "catalog_title": "Robust and Adaptive Control: With Aerospace Applications",
+      "registered_title": "Robust and Adaptive Control",
+      "original_status": "title_variant_review",
+      "decision": "registered_subtitle",
+      "reason": "Crossref 的 subtitle 字段为 With Aerospace Applications。",
+      "source": "https://api.crossref.org/works/10.1007/978-1-4471-4396-3",
+      "additional_sources": []
+    },
+    {
+      "doi": "10.1109/icra.2013.6630825",
+      "catalog_title": "Technical Report: Cooperative Multi-Target Localization With Noisy Sensors",
+      "registered_title": "Cooperative multi-target localization with noisy sensors",
+      "original_status": "title_variant_review",
+      "decision": "preprint_publication_title_variant",
+      "reason": "作者技术报告题名前加 Technical Report，Crossref 的会议版使用主体题名；保留载体区别。",
+      "source": "https://arxiv.org/abs/1302.3857",
+      "additional_sources": [
+        "https://api.crossref.org/works/10.1109/icra.2013.6630825"
+      ]
+    },
+    {
+      "doi": "10.4995/riai.2022.18534",
+      "catalog_title": "Visual-tactile manipulation to collect household waste in outdoor",
+      "registered_title": "Manipulación visual-táctil para la recogida de residuos domésticos en exteriores",
+      "original_status": "possible_title_mismatch",
+      "decision": "translated_catalog_title",
+      "reason": "出版方使用西班牙语题名；英文题名逐项对应视觉触觉、家庭废品收集与户外场景。",
+      "source": "https://polipapers.upv.es/index.php/RIAI/article/view/18534",
+      "additional_sources": []
+    }
+  ],
+  "citation_edge_review": [
+    {
+      "citing_id": "openalex:W2994672405",
+      "cited_id_as_observed": "openalex:W3147253688",
+      "as_observed_target_doi": "https://doi.org/10.1109/iros.2011.6048074",
+      "decision": "cited_work_confirmed_in_original_reference; indexed_target_doi_wrong",
+      "correct_target_doi": "10.1109/iros.2011.6094465",
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6960532/fullTextXML",
+      "original_locator": "ref B8-sensors-19-05521, numbered reference 8; authors Kaneko et al., HRP-4, IROS 2011, pp. 4400–4407. Reference omits DOI. A separate Crossref record confirms corrected DOI."
+    }
+  ]
+}

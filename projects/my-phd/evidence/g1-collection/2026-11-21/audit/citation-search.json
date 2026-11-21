@@ -1,0 +1,515 @@
+{
+  "repository_baseline": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+  "processed_at_utc": "2026-11-21T04:11:46+00:00",
+  "provider": "OpenAlex",
+  "backward_definition": "seed.referenced_works, directed from seed to target",
+  "forward_definition": "filter=cites:seed, target cites seed; ranked by cited_by_count descending within a ceiling of 500 per seed",
+  "limits": "Provider links are discovery leads and may omit references/citing works. Public anonymous free access. Metadata requests joined only by exact OpenAlex work ID. This exploration does not establish coverage or novelty. Different versions may have different incoming/outgoing links.",
+  "selected_seed_count": 12,
+  "resolved_seeds": [
+    {
+      "priority": "R1",
+      "title": "Automated Continuous Force-Torque Sensor Bias Estimation",
+      "url": "https://arxiv.org/abs/2403.01068",
+      "matched_openalex_id": "W4392490463",
+      "matched_openalex_doi": "https://doi.org/10.48550/arxiv.2403.01068",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/cfe7a55a0555ba1018fc.json",
+      "backward_edges_indexed": 3,
+      "forward_count_reported_at_lookup": 2,
+      "forward_rows_fetched": 2
+    },
+    {
+      "priority": "R1",
+      "title": "Six-Axis Force Torque Sensor Model-Based In Situ Calibration Method and Its Impact in Floating-Based Robot Dynamic Performance",
+      "url": "https://www.mdpi.com/1424-8220/19/24/5521",
+      "matched_openalex_id": "W2994672405",
+      "matched_openalex_doi": "https://doi.org/10.3390/s19245521",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/bbab0ffe8de78bbda933.json",
+      "backward_edges_indexed": 40,
+      "forward_count_reported_at_lookup": 15,
+      "forward_rows_fetched": 15
+    },
+    {
+      "priority": "R1",
+      "title": "Fast Payload Calibration for Sensorless Contact Estimation Using Model Pre-training",
+      "url": "https://arxiv.org/abs/2409.03369",
+      "matched_openalex_id": "W4402300308",
+      "matched_openalex_doi": "https://doi.org/10.1109/lra.2024.3455800",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/309f39f2ea61d7b38f0b.json",
+      "backward_edges_indexed": 19,
+      "forward_count_reported_at_lookup": 11,
+      "forward_rows_fetched": 10
+    },
+    {
+      "priority": "R1",
+      "title": "SDI: A sparse drift identification approach for force/torque sensor calibration in industrial robots",
+      "url": "https://doi.org/10.1016/j.neucom.2024.129292",
+      "matched_openalex_id": "W4405861921",
+      "matched_openalex_doi": "https://doi.org/10.1016/j.neucom.2024.129292",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/b951dd900d32f44ae6a4.json",
+      "backward_edges_indexed": 49,
+      "forward_count_reported_at_lookup": 13,
+      "forward_rows_fetched": 13
+    },
+    {
+      "priority": "R2",
+      "title": "Fault- and saturation-aware quadrotor tracking via MRAC with an RL-inspired adaptive reference governor",
+      "url": "https://www.nature.com/articles/s41598-026-65823-8",
+      "matched_openalex_id": "W7201980120",
+      "matched_openalex_doi": "https://doi.org/10.1038/s41598-026-65823-8",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/2d50d28bc703de700cba.json",
+      "backward_edges_indexed": 27,
+      "forward_count_reported_at_lookup": 0,
+      "forward_rows_fetched": 0
+    },
+    {
+      "priority": "R2",
+      "title": "Leveling the Playing Field: Carefully Comparing Classical and Learned Controllers for Quadrotor Trajectory Tracking",
+      "url": "https://arxiv.org/abs/2506.17832",
+      "matched_openalex_id": "W6948099722",
+      "matched_openalex_doi": "https://doi.org/10.48550/arxiv.2506.17832",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/9d3b26da29bc8f9477ed.json",
+      "backward_edges_indexed": 26,
+      "forward_count_reported_at_lookup": 5,
+      "forward_rows_fetched": 5
+    },
+    {
+      "priority": "R2",
+      "title": "DATT: Deep Adaptive Trajectory Tracking for Quadrotor Control",
+      "url": "https://proceedings.mlr.press/v229/huang23a.html",
+      "matched_openalex_id": "W4387687865",
+      "matched_openalex_doi": "https://doi.org/10.48550/arxiv.2310.09053",
+      "verification_method": "title",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/42e8b39c6fc60ec015b8.json",
+      "backward_edges_indexed": 33,
+      "forward_count_reported_at_lookup": 77,
+      "forward_rows_fetched": 76
+    },
+    {
+      "priority": "R5",
+      "title": "Decentralized Multi-Robot Formation Control with Communication Delay and Asynchronous Clock",
+      "url": "https://doi.org/10.1007/s10846-017-0557-y",
+      "matched_openalex_id": "W2609260874",
+      "matched_openalex_doi": "https://doi.org/10.1007/s10846-017-0557-y",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/5c31cfc72634f92ec9e5.json",
+      "backward_edges_indexed": 44,
+      "forward_count_reported_at_lookup": 22,
+      "forward_rows_fetched": 22
+    },
+    {
+      "priority": "R5",
+      "title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+      "url": "https://arxiv.org/abs/2402.09382",
+      "matched_openalex_id": "W4408126053",
+      "matched_openalex_doi": "https://doi.org/10.1109/tvt.2025.3546857",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/91694f22111ede7db0f0.json",
+      "backward_edges_indexed": 46,
+      "forward_count_reported_at_lookup": 19,
+      "forward_rows_fetched": 18
+    },
+    {
+      "priority": "R5",
+      "title": "Decentralized probabilistic multi-robot collision avoidance using buffered uncertainty-aware Voronoi cells",
+      "url": "https://doi.org/10.1007/s10514-021-10029-2",
+      "matched_openalex_id": "W4210521410",
+      "matched_openalex_doi": "https://doi.org/10.1007/s10514-021-10029-2",
+      "verification_method": "doi",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/1c4f34e7955aac0b0352.json",
+      "backward_edges_indexed": 41,
+      "forward_count_reported_at_lookup": 84,
+      "forward_rows_fetched": 81
+    },
+    {
+      "priority": "R5",
+      "title": "ReCoDe: Reinforcement Learning-based Dynamic Constraint Design for Multi-Agent Coordination",
+      "url": "https://proceedings.mlr.press/v305/amir25a.html",
+      "matched_openalex_id": "W4416407760",
+      "matched_openalex_doi": "https://doi.org/10.48550/arxiv.2507.19151",
+      "verification_method": "title",
+      "title_similarity": 1.0,
+      "source_file": "citation-raw/0f127e10f1b6e4fe72c0.json",
+      "backward_edges_indexed": 43,
+      "forward_count_reported_at_lookup": 1,
+      "forward_rows_fetched": 1
+    }
+  ],
+  "unresolved_seeds": {
+    "Rapid Mismatch Estimation via Neural Network Informed Variational Inference": "seed unresolved"
+  },
+  "requests": [
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2403.01068?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:41+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2403.01068?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/cfe7a55a0555ba1018fc.json",
+      "sha256": "8248b76e1e2c751804fcbc24d9b3172359d0c2e6cb93553f5a89a9073117d982",
+      "bytes": 2584
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:41+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/bbab0ffe8de78bbda933.json",
+      "sha256": "a13a4b9e8ea13a6c81df181d2947b5e0bf7dc94a8a797d0cb77181c444778903",
+      "bytes": 7420
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.neucom.2024.129292?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1016/j.neucom.2024.129292?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/b951dd900d32f44ae6a4.json",
+      "sha256": "beb51925e0c8126630dcd77b31c1768f03c923b3c93973c6166c4e20e0311c9d",
+      "bytes": 6911
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2409.03369?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2409.03369?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/309f39f2ea61d7b38f0b.json",
+      "sha256": "f523dbfe72186cb45e8cf81f1082e05caf3b04bf8cefefd76244541707ab4dec",
+      "bytes": 3947
+    },
+    {
+      "request_url": "https://api.openalex.org/works?search=Rapid+Mismatch+Estimation+via+Neural+Network+Informed+Variational+Inference&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works?search=Rapid+Mismatch+Estimation+via+Neural+Network+Informed+Variational+Inference&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/58fd10c1b9dfe008d489.json",
+      "sha256": "4c4930d811f8342a13014f038b4ad149e57b131cb3061f1c80b8c9bdfe326be6",
+      "bytes": 52677
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.1038/s41598-026-65823-8?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1038/s41598-026-65823-8?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/2d50d28bc703de700cba.json",
+      "sha256": "4741c50c9c81ec64c6f604a5024da7af617a794cb6f1b437bc4e31bd91ea8ae0",
+      "bytes": 4886
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2506.17832?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2506.17832?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/9d3b26da29bc8f9477ed.json",
+      "sha256": "0d918e97d9e50a863e800c218da7c56566445d5cd3d0da026433b54013ffd6b8",
+      "bytes": 4899
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.1007/s10846-017-0557-y?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1007/s10846-017-0557-y?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/5c31cfc72634f92ec9e5.json",
+      "sha256": "92725ca0a9bfda2b7a069d76c5fd2b647cf6f09cac550e9c47b659c23fc152d9",
+      "bytes": 7829
+    },
+    {
+      "request_url": "https://api.openalex.org/works?search=DATT%3A+Deep+Adaptive+Trajectory+Tracking+for+Quadrotor+Control&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works?search=DATT%3A+Deep+Adaptive+Trajectory+Tracking+for+Quadrotor+Control&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/42e8b39c6fc60ec015b8.json",
+      "sha256": "9e44676315b0a069f97447f651b95c2b7fbf1b958b01805b52e848ad38cf001b",
+      "bytes": 32321
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2402.09382?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.48550/arxiv.2402.09382?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/91694f22111ede7db0f0.json",
+      "sha256": "c6dea7431bad7315df7328b951c0d41124300c94314982bc7da21eed1861bbfd",
+      "bytes": 5046
+    },
+    {
+      "request_url": "https://api.openalex.org/works/https://doi.org/10.1007/s10514-021-10029-2?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:42+00:00",
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1007/s10514-021-10029-2?select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/1c4f34e7955aac0b0352.json",
+      "sha256": "18232d8ab0985ccdf75776e44e41db7b486d0ec38a29137c18796765ad3b51c5",
+      "bytes": 5526
+    },
+    {
+      "request_url": "https://api.openalex.org/works?search=ReCoDe%3A+Reinforcement+Learning-based+Dynamic+Constraint+Design+for+Multi-Agent+Coordination&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?search=ReCoDe%3A+Reinforcement+Learning-based+Dynamic+Constraint+Design+for+Multi-Agent+Coordination&per_page=5&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count%2Creferenced_works",
+      "status": 200,
+      "raw_path": "citation-raw/0f127e10f1b6e4fe72c0.json",
+      "sha256": "1372aa03bc75ddb6a917aadd7bf34cf8927958755f63b6dcc2988259b2d7fd5e",
+      "bytes": 32499
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4402300308&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4402300308&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/819dccd894f8bdb50a4c.json",
+      "sha256": "4e39c08405cf6b4517c202d0ecbad0d0e404badbbd4b9133d9f94cef91de53c5",
+      "bytes": 95206
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4392490463&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4392490463&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/bb851613f501aff75b0c.json",
+      "sha256": "a7bd299836fb1cbdb7e100bb4b3cacbde043164ae61fd0574a36847998f9a398",
+      "bytes": 20369
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW2994672405&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW2994672405&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/307ea5cfc42f2933e6be.json",
+      "sha256": "bc44cd149028a040dadbecc07bfe335efbed40ead8498f468286c7218fb1738a",
+      "bytes": 89186
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW7201980120&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW7201980120&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/7f88a36953a2029187cf.json",
+      "sha256": "b6260f8f711eb58c3d012fb4880521c4f481b8fc0c8b0dda16cb855860badc4b",
+      "bytes": 1120
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4405861921&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4405861921&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/b59c59e1fa8b4faecdf5.json",
+      "sha256": "8c96f3e8aac4082c0ef3edf9f444e60af89ec34d326a3c7973fd6c8a8a98fb44",
+      "bytes": 77407
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW6948099722&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW6948099722&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/cb37e098c7bdf71ca540.json",
+      "sha256": "40f7faf78d9869554d437344aed01308d3a08d0c59bb963c2d12fc6c4902d88e",
+      "bytes": 17827
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW2609260874&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:43+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW2609260874&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/fb7deb32f68e42558525.json",
+      "sha256": "0d748cd24c73ec3c1b14e81d7b3040b15cd8c57fd7f22601311b940da6e8a6f3",
+      "bytes": 100133
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4387687865&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:44+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4387687865&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/e60d3b57c48570f4bbc4.json",
+      "sha256": "b53fd96333cb7d62d835ee342a5b2ff8e2e2742cd3416eefd545bba0f48d19dd",
+      "bytes": 407896
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4408126053&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:44+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4408126053&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/6dd7bc3b431aa042867e.json",
+      "sha256": "fc1cf34a76f4e047fe685b1fa154f3b23ad3f38d1a3cc47f03e39df55864a4a3",
+      "bytes": 135305
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4416407760&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:44+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4416407760&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/a1b768a45f905bcf4a7f.json",
+      "sha256": "03d6dfdc3f5b3a0452833e4d422caff90fa7f6b1c4683a14cfb25737dc981c47",
+      "bytes": 5006
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=cites%3AW4210521410&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "retrieved_utc": "2026-11-21T04:11:44+00:00",
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4210521410&sort=cited_by_count%3Adesc&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count&per_page=100&cursor=%2A",
+      "status": 200,
+      "raw_path": "citation-raw/c573eb68e9073777a5d8.json",
+      "sha256": "d8907722113b14649ac27b3fed66976f20590045e0d5348441b92269d936734f",
+      "bytes": 414126
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW1026002591%7CW1030513622%7CW1484217450%7CW1489244333%7CW1501589002%7CW1505754525%7CW1517023801%7CW1548299109%7CW1569787476%7CW1578580665%7CW1603030703%7CW1605218591%7CW1689203892%7CW1839010761%7CW192919555%7CW1963840845%7CW1965751196%7CW1965760189%7CW1966413418%7CW1976129091%7CW1977871568%7CW1980764519%7CW1982592145%7CW1983573679%7CW1983764986%7CW1983815479%7CW1986621758%7CW1989927461%7CW1993200481%7CW1995286048%7CW1997488333%7CW1999131722%7CW2001428612%7CW2001471851%7CW2001570019&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW1026002591%7CW1030513622%7CW1484217450%7CW1489244333%7CW1501589002%7CW1505754525%7CW1517023801%7CW1548299109%7CW1569787476%7CW1578580665%7CW1603030703%7CW1605218591%7CW1689203892%7CW1839010761%7CW192919555%7CW1963840845%7CW1965751196%7CW1965760189%7CW1966413418%7CW1976129091%7CW1977871568%7CW1980764519%7CW1982592145%7CW1983573679%7CW1983764986%7CW1983815479%7CW1986621758%7CW1989927461%7CW1993200481%7CW1995286048%7CW1997488333%7CW1999131722%7CW2001428612%7CW2001471851%7CW2001570019&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/99a1af6e2a73de9b363e.json",
+      "sha256": "7016741daec4b50011076ecdc7c79d69cd92309de6a7f3220d81e6a3b77636f7",
+      "bytes": 167715
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2002440441%7CW2005389191%7CW2005443352%7CW2008516441%7CW2018280292%7CW2027995116%7CW2030421203%7CW2034810439%7CW2040900884%7CW2041109651%7CW2044494131%7CW2064714226%7CW2065762231%7CW2071211071%7CW2072337003%7CW2078856056%7CW2079758116%7CW2082200644%7CW2082786478%7CW2083205586%7CW2086435648%7CW2092463101%7CW2092924973%7CW2095233962%7CW2098692763%7CW2099618002%7CW2102341081%7CW2105235982%7CW2106129306%7CW2106613397%7CW2107292630%7CW2107396783%7CW2107523033%7CW2109191523%7CW2109656638&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2002440441%7CW2005389191%7CW2005443352%7CW2008516441%7CW2018280292%7CW2027995116%7CW2030421203%7CW2034810439%7CW2040900884%7CW2041109651%7CW2044494131%7CW2064714226%7CW2065762231%7CW2071211071%7CW2072337003%7CW2078856056%7CW2079758116%7CW2082200644%7CW2082786478%7CW2083205586%7CW2086435648%7CW2092463101%7CW2092924973%7CW2095233962%7CW2098692763%7CW2099618002%7CW2102341081%7CW2105235982%7CW2106129306%7CW2106613397%7CW2107292630%7CW2107396783%7CW2107523033%7CW2109191523%7CW2109656638&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/dd4388d3c4b0301363b5.json",
+      "sha256": "c6af6d1c49087dfef64c0560e153cab056ac9d7e61c53ad4d77f62e09e3f721f",
+      "bytes": 169441
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2110178871%7CW2114791779%7CW2115519955%7CW2119120935%7CW2120693140%7CW2121385616%7CW2121693658%7CW2125708330%7CW2127372041%7CW2127763473%7CW2129748948%7CW2130280438%7CW2133319100%7CW2135805553%7CW2138728841%7CW2140760475%7CW2141359401%7CW2141666765%7CW2141774578%7CW2142943472%7CW2142992961%7CW2143277772%7CW2143526512%7CW2147626503%7CW2148084973%7CW2149085596%7CW2149790773%7CW2149971042%7CW2152139894%7CW2157614425%7CW2157656968%7CW2161765392%7CW2162991084%7CW2164522996%7CW2164807077&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2110178871%7CW2114791779%7CW2115519955%7CW2119120935%7CW2120693140%7CW2121385616%7CW2121693658%7CW2125708330%7CW2127372041%7CW2127763473%7CW2129748948%7CW2130280438%7CW2133319100%7CW2135805553%7CW2138728841%7CW2140760475%7CW2141359401%7CW2141666765%7CW2141774578%7CW2142943472%7CW2142992961%7CW2143277772%7CW2143526512%7CW2147626503%7CW2148084973%7CW2149085596%7CW2149790773%7CW2149971042%7CW2152139894%7CW2157614425%7CW2157656968%7CW2161765392%7CW2162991084%7CW2164522996%7CW2164807077&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/a80d52a8c61225f6cda9.json",
+      "sha256": "f94ef0b88a75f1254fbdcf3e9bb2b9ff932f43123809612e2259ad8165b5a7c6",
+      "bytes": 197646
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2165413656%7CW2166162370%7CW2174070521%7CW2201087437%7CW2223055204%7CW2245915858%7CW2261110142%7CW2271348937%7CW2282034761%7CW2291649624%7CW2330464261%7CW2339027962%7CW2345103413%7CW2410617946%7CW2475498549%7CW2487166257%7CW2489231587%7CW2513988836%7CW2516551914%7CW2519887557%7CW2521892376%7CW2530825138%7CW2540104143%7CW2540120844%7CW2545799808%7CW2560504659%7CW2561149586%7CW2570779523%7CW2573311857%7CW2580891082%7CW2587415290%7CW2588802774%7CW2589017104%7CW2592457170%7CW2600080636&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2165413656%7CW2166162370%7CW2174070521%7CW2201087437%7CW2223055204%7CW2245915858%7CW2261110142%7CW2271348937%7CW2282034761%7CW2291649624%7CW2330464261%7CW2339027962%7CW2345103413%7CW2410617946%7CW2475498549%7CW2487166257%7CW2489231587%7CW2513988836%7CW2516551914%7CW2519887557%7CW2521892376%7CW2530825138%7CW2540104143%7CW2540120844%7CW2545799808%7CW2560504659%7CW2561149586%7CW2570779523%7CW2573311857%7CW2580891082%7CW2587415290%7CW2588802774%7CW2589017104%7CW2592457170%7CW2600080636&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/174009414f9a1bbef4de.json",
+      "sha256": "4d0aa6bd571dbdfeba2d6989dd761c2b917b4c63157747840d7d6f51cc168c45",
+      "bytes": 194476
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2607001947%7CW2607714105%7CW2615240970%7CW2617654331%7CW2726964406%7CW2733312032%7CW2736601468%7CW2736730865%7CW2738778707%7CW2765971924%7CW2767518630%7CW2768966190%7CW2769498435%7CW2769697319%7CW2769773494%7CW2771809894%7CW2772589676%7CW2773771478%7CW2775408149%7CW2784236316%7CW2786317709%7CW2790268363%7CW2793442176%7CW2799701748%7CW2818868293%7CW2883837786%7CW2884957812%7CW2885002379%7CW2886374915%7CW2887284608%7CW2888250150%7CW2890813673%7CW2891392570%7CW2891428573%7CW2891701184&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2607001947%7CW2607714105%7CW2615240970%7CW2617654331%7CW2726964406%7CW2733312032%7CW2736601468%7CW2736730865%7CW2738778707%7CW2765971924%7CW2767518630%7CW2768966190%7CW2769498435%7CW2769697319%7CW2769773494%7CW2771809894%7CW2772589676%7CW2773771478%7CW2775408149%7CW2784236316%7CW2786317709%7CW2790268363%7CW2793442176%7CW2799701748%7CW2818868293%7CW2883837786%7CW2884957812%7CW2885002379%7CW2886374915%7CW2887284608%7CW2888250150%7CW2890813673%7CW2891392570%7CW2891428573%7CW2891701184&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/763b865819a384649b0b.json",
+      "sha256": "4e5c161d8e94cdd819e917d2404dd39aeee208591d64f414c8cda49d58d9b250",
+      "bytes": 205106
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2995631631%7CW2995780442%7CW2999729662%7CW3000704917%7CW3003390524%7CW3004353477%7CW3011990051%7CW3027939032%7CW3033968601%7CW3035038584%7CW3035313359%7CW3035586429%7CW3037593164%7CW3042805573%7CW3049083193%7CW3089097539%7CW3091228207%7CW3091689077%7CW3093410526%7CW3094287715%7CW3095315965%7CW3099689767%7CW3112540535%7CW3112867370%7CW3114692877%7CW3122325486%7CW3125416317%7CW3126191784%7CW3128809819%7CW3130631955%7CW3131518230%7CW3137295945%7CW3138173230%7CW3139105246%7CW3147253688&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2995631631%7CW2995780442%7CW2999729662%7CW3000704917%7CW3003390524%7CW3004353477%7CW3011990051%7CW3027939032%7CW3033968601%7CW3035038584%7CW3035313359%7CW3035586429%7CW3037593164%7CW3042805573%7CW3049083193%7CW3089097539%7CW3091228207%7CW3091689077%7CW3093410526%7CW3094287715%7CW3095315965%7CW3099689767%7CW3112540535%7CW3112867370%7CW3114692877%7CW3122325486%7CW3125416317%7CW3126191784%7CW3128809819%7CW3130631955%7CW3131518230%7CW3137295945%7CW3138173230%7CW3139105246%7CW3147253688&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/2e57d8fdf65daa29b218.json",
+      "sha256": "047c423965e7c5a2e279ca1a945d753fdf5c42a65203f4b7ae4198eb933a357b",
+      "bytes": 205463
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW2892862852%7CW2895824696%7CW2895857504%7CW2901402208%7CW2902168191%7CW2908598901%7CW2909324603%7CW2909550103%7CW2914821757%7CW2915117209%7CW2920864394%7CW2921077764%7CW2922374759%7CW2922422094%7CW2942259124%7CW2947461021%7CW2949676527%7CW2951830135%7CW2962232176%7CW2963575966%7CW2963869366%7CW2963918661%7CW2964222556%7CW2964935532%7CW2969092468%7CW2971054685%7CW2972912463%7CW2972941110%7CW2975836349%7CW2980802157%7CW2982172847%7CW2984211142%7CW2985215612%7CW2992286867%7CW2995358840&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW2892862852%7CW2895824696%7CW2895857504%7CW2901402208%7CW2902168191%7CW2908598901%7CW2909324603%7CW2909550103%7CW2914821757%7CW2915117209%7CW2920864394%7CW2921077764%7CW2922374759%7CW2922422094%7CW2942259124%7CW2947461021%7CW2949676527%7CW2951830135%7CW2962232176%7CW2963575966%7CW2963869366%7CW2963918661%7CW2964222556%7CW2964935532%7CW2969092468%7CW2971054685%7CW2972912463%7CW2972941110%7CW2975836349%7CW2980802157%7CW2982172847%7CW2984211142%7CW2985215612%7CW2992286867%7CW2995358840&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/9230aef673bcd8d2e71c.json",
+      "sha256": "ef2cabd9efdb9b92ae4e26d42fabf8309592872b1a8019834183e555fe74dac8",
+      "bytes": 188394
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW4386285856%7CW4386766506%7CW4387146095%7CW4387740675%7CW4388071119%7CW4389610026%7CW4389751015%7CW4391549657%7CW4391919254%7CW4392908050%7CW4393285713%7CW4393930864%7CW4396542455%7CW4396703971%7CW4399039797%7CW4400678962%7CW4401413634%7CW4401414310%7CW4401536715%7CW4401879375%7CW4402474373%7CW4403555635%7CW4404563081%7CW4405778926%7CW4414490865%7CW4416670909%7CW4416730487%7CW618254468%7CW6650575149%7CW6677437978%7CW6681338125%7CW6885021584%7CW6903731130%7CW6920475523%7CW6930911246&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:45+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW4386285856%7CW4386766506%7CW4387146095%7CW4387740675%7CW4388071119%7CW4389610026%7CW4389751015%7CW4391549657%7CW4391919254%7CW4392908050%7CW4393285713%7CW4393930864%7CW4396542455%7CW4396703971%7CW4399039797%7CW4400678962%7CW4401413634%7CW4401414310%7CW4401536715%7CW4401879375%7CW4402474373%7CW4403555635%7CW4404563081%7CW4405778926%7CW4414490865%7CW4416670909%7CW4416730487%7CW618254468%7CW6650575149%7CW6677437978%7CW6681338125%7CW6885021584%7CW6903731130%7CW6920475523%7CW6930911246&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/c864b1d578a4e4855aeb.json",
+      "sha256": "ebb33489a56d3b55e5270f46917a38375a5a49523728ca82c0d739c2fdbdaed7",
+      "bytes": 149485
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW3155949096%7CW3156295478%7CW3158895321%7CW3161656418%7CW3164033018%7CW3166816823%7CW3167152511%7CW3169652387%7CW3171970564%7CW3172143820%7CW3175651440%7CW3177010373%7CW3178216332%7CW3178351738%7CW3186266681%7CW3192144420%7CW3193344654%7CW3194773380%7CW3197225143%7CW3198384873%7CW3206822272%7CW3207496839%7CW3209058326%7CW3209876175%7CW3211491225%7CW3216772467%7CW4200100878%7CW4205596827%7CW4205942557%7CW4225689035%7CW4226476336%7CW4229014698%7CW4240817057%7CW4241360378%7CW4282842355&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:46+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW3155949096%7CW3156295478%7CW3158895321%7CW3161656418%7CW3164033018%7CW3166816823%7CW3167152511%7CW3169652387%7CW3171970564%7CW3172143820%7CW3175651440%7CW3177010373%7CW3178216332%7CW3178351738%7CW3186266681%7CW3192144420%7CW3193344654%7CW3194773380%7CW3197225143%7CW3198384873%7CW3206822272%7CW3207496839%7CW3209058326%7CW3209876175%7CW3211491225%7CW3216772467%7CW4200100878%7CW4205596827%7CW4205942557%7CW4225689035%7CW4226476336%7CW4229014698%7CW4240817057%7CW4241360378%7CW4282842355&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/1307898af6457f2750cc.json",
+      "sha256": "dbf46da02e112f67cc6a681269bba00febfa8c5e2b1d979786c92ae879c48d4b",
+      "bytes": 188494
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW7099381766%7CW7123362478%7CW7130390441%7CW7133195524%7CW7133198115%7CW7133231168%7CW7154414662%7CW7161139977&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:46+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW7099381766%7CW7123362478%7CW7130390441%7CW7133195524%7CW7133198115%7CW7133231168%7CW7154414662%7CW7161139977&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/78e4a4ce2e27106d311a.json",
+      "sha256": "dcbe3553d8b8136c274b82f9fefd8c2ae6588f340970945790cd5f6b70d3ce84",
+      "bytes": 37167
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=openalex_id%3AW4283785851%7CW4285102199%7CW4285102576%7CW4285282961%7CW4285791425%7CW4292179081%7CW4296790959%7CW4297474727%7CW4300839023%7CW4312427786%7CW4312744983%7CW4313026526%7CW4313816864%7CW4314946893%7CW4315488601%7CW4315489198%7CW4320914292%7CW4322124312%7CW4322727884%7CW4322742154%7CW4352977012%7CW4367016688%7CW4376481299%7CW4376502360%7CW4377988037%7CW4379879636%7CW4380765985%7CW4380887703%7CW4381735025%7CW4381748126%7CW4381946688%7CW4383108791%7CW4383109238%7CW4385194665%7CW4385338567&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "retrieved_utc": "2026-11-21T04:11:46+00:00",
+      "final_url": "https://api.openalex.org/works?filter=openalex_id%3AW4283785851%7CW4285102199%7CW4285102576%7CW4285282961%7CW4285791425%7CW4292179081%7CW4296790959%7CW4297474727%7CW4300839023%7CW4312427786%7CW4312744983%7CW4313026526%7CW4313816864%7CW4314946893%7CW4315488601%7CW4315489198%7CW4320914292%7CW4322124312%7CW4322727884%7CW4322742154%7CW4352977012%7CW4367016688%7CW4376481299%7CW4376502360%7CW4377988037%7CW4379879636%7CW4380765985%7CW4380887703%7CW4381735025%7CW4381748126%7CW4381946688%7CW4383108791%7CW4383109238%7CW4385194665%7CW4385338567&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype%2Ccited_by_count",
+      "status": 200,
+      "raw_path": "citation-raw/0385ca3a77ece931fc92.json",
+      "sha256": "3f955e8696124ec22c43e2e4c79ac0f0bb936fd0b6ac6a29dc009bc1c5ad3dfd",
+      "bytes": 205433
+    },
+    {
+      "request_url": "https://api.openalex.org/works?filter=doi%3A10.1109%2Frobot.2010.5509858%7C10.1109%2Flra.2018.2800106%7C10.1109%2Flra.2025.3573169%7C10.1109%2Flra.2024.3519857%7C10.48550%2Farxiv.2502.02663%7C10.1109%2Ficra.2013.6631072%7C10.1109%2Ficra57147.2024.10610232%7C10.1109%2Ficra57147.2024.10610082&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype",
+      "retrieved_utc": "2026-11-21T04:13:52+00:00",
+      "final_url": "https://api.openalex.org/works?filter=doi%3A10.1109%2Frobot.2010.5509858%7C10.1109%2Flra.2018.2800106%7C10.1109%2Flra.2025.3573169%7C10.1109%2Flra.2024.3519857%7C10.48550%2Farxiv.2502.02663%7C10.1109%2Ficra.2013.6631072%7C10.1109%2Ficra57147.2024.10610232%7C10.1109%2Ficra57147.2024.10610082&per_page=100&select=id%2Cdoi%2Cdisplay_name%2Cpublication_year%2Cpublication_date%2Cauthorships%2Cprimary_location%2Ctype",
+      "status": 200,
+      "raw_path": "citation-raw/067b40bae195c18b8464.json",
+      "sha256": "fd2ae63c33782150894fa5fe6379d3dbbd0faeaa194629e5545aeb81e0971c18",
+      "bytes": 44958
+    },
+    {
+      "request_url": "https://arxiv.org/abs/2502.02663",
+      "retrieved_utc": "2026-11-21T04:14:28+00:00",
+      "status": 200,
+      "final_url": "https://arxiv.org/abs/2502.02663",
+      "raw_path": "citation-raw/arxiv2502-02663-identity.html",
+      "bytes": 40430,
+      "sha256": "48c430e8be1eee35734d4dbfb21958f8417a4b1c6668bfff6420540240e61353"
+    }
+  ],
+  "edge_counts": {
+    "backward": 379,
+    "forward": 243
+  },
+  "unique_neighbor_ids": 607,
+  "resolved_neighbor_records": 599,
+  "missing_neighbor_ids": [
+    "W6650575149",
+    "W6677437978",
+    "W6681338125",
+    "W6885021584",
+    "W6903731130",
+    "W6920475523",
+    "W6930911246",
+    "W7099381766"
+  ],
+  "official_pdf_backward_sources": [
+    {
+      "priority": "R1",
+      "title": "Rapid Mismatch Estimation via Neural Network Informed Variational Inference",
+      "id": "pmlr:v305/jaszczuk25a",
+      "url": "https://proceedings.mlr.press/v305/jaszczuk25a.html",
+      "bibliography_receipt": "citation-raw/pmlr-RME-bibliographic-identities.json",
+      "pdf_sha256": "c749929493bd20875ba1f47c2889efdd24c3393a5c4d7d7537423de7576b57ca",
+      "backward_selected_entries": 8,
+      "original_bibliography_count": 36,
+      "forward": "OpenAlex did not resolve the seed; no forward count assumed."
+    }
+  ],
+  "title_priority_screened": 34,
+  "after_cutoff_records": 0,
+  "method_note": "OpenAlex direct forward/back edges for matched seeds. Separate PMLR bibliography pass for RME, whose OpenAlex title did not match. Human-readable priority tags are based on target title and proven edge only; no inferred full-text inclusion."
+}

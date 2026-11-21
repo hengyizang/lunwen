@@ -1,0 +1,1418 @@
+{
+  "last_updated_UTC": "2026-11-21T04:08:58.133547+00:00",
+  "status": "finished",
+  "topic": "Robot manipulation, tactile/force contact, cross-embodiment/OOD generalization and demonstration/diffusion policies.",
+  "scope": "Public research metadata discovery, no raw data, no experiments, no full-text review.",
+  "sources": [
+    "Crossref REST API (45 targeted relevance-ranked searches, up to two pages of 250 per query)",
+    "CoRL published PMLR volume indexes listed in the publisher archive",
+    "RSS proceedings volumes listed in publisher archive",
+    "arXiv cs.RO Atom search"
+  ],
+  "screening": "Normalized English TITLE must match at least one topic expression and either a robotics context expression in the title or a robotics venue/arXiv cs.RO category. Some medical and dual-use topics excluded. No real-world validation inferred.",
+  "rules": {
+    "topic": {
+      "tactile-force-contact": "\\btactile\\b|\\bhaptic\\w*\\b|contact (?:rich|aware|implicit|invariant|dynamics|mode|model|estimation|localiz|state|transition)|(?:force|impedance|admittance|compliance) (?:control|feedback|regulation|trajectory|learning|tracking)|\\bvisuotactile\\b|\\bvisuo tactile\\b",
+      "manipulation-dexterity": "\\bmanipulat(?:ion|or|ors|ing|e|ive|able)\\b|\\bgrasp\\w*\\b|\\bdexterous\\b|\\bdexterity\\b|in hand|\\bbimanual\\b|deformable objects?|\\bgrippers?\\b|pick and place|peg in hole|robotic assembly|robot assembly|robot hand\\b",
+      "demonstration-policy-learning": "imitation learning|learn\\w* from demonstrations?|behavior(?:al)? clon(?:ing|e)|behaviour(?:al)? cloning|diffusion polic\\w*|action chunk\\w*|policy diffusion|teleoperation|robot demonstrations?|vision language action|visuomotor polic\\w*|robot(?:ic)? polic(?:y|ies)|robot learning dataset|robot foundation model",
+      "cross-robot-generalization": "cross embod\\w*|cross robot\\w*|multi embod\\w*|cross morphology|(?:robot|embodiment|policy) (?:generalization|generalisation|generalist|transfer)|generalist robot|sim to real|sim2real|domain randomization|out of distribution"
+    },
+    "title_context": "\\brobot\\w*\\b|\\bmanipulator\\w*\\b|\\bgripper\\w*\\b|\\bvisuomotor\\b|\\bteleoperat\\w*\\b|\\bin hand manipulation\\b|\\bcobot\\w*\\b|\\bcross embodiment\\b|\\bvision language action\\b",
+    "exclusions": "\\b(?:missile|weapon|munition|military|firearm|explosive|bomb|malware|cyberattack|cyber attack|pathogen|viral|virulence)\\w*\\b|(?:optical|ion|spin|magnetic) (?:micromanipulation|manipulation)|\\b(?:molecular|nanoparticle) manipulation\\b|\\b(?:knee|stroke|rehabilitation|surgical|surgery|laparoscop\\w*|catheter\\w*|endoscop\\w*|prosthes\\w*|dental|exoskeleton\\w*)\\b|\\b(?:erratum|corrigendum|retracted|retraction|withdrawn|front matter|preface|table of contents|author index|copyright|call for papers)\\b"
+  },
+  "metadata_preference": "RSS publisher, PMLR publisher, Crossref, arXiv. Year is publication year of the selected record; remaining matched URLs retained. CoRL may publish one year after event.",
+  "dedup": "Connected components using exact normalized title, DOI if available, or URL (arXiv version removed). Distinct preprint titles may remain.",
+  "coverage_limits": [
+    "Rank limits per query, English-title lexical filters, venue years index-dependent, missing dates excluded. Live Crossref totals are search estimates.",
+    "No full-text screening, no verification of real-robot trials per work, no quality or novelty conclusion.",
+    "Robotics-conference indexes can include sim-only work, peripheral methods and false positives. A paper-to-data link and rights are not established here."
+  ],
+  "raw_retrieval_events": 27320,
+  "rows_kept_before_dedup": 15171,
+  "deduplicated_candidates": 7964,
+  "doi_rows": 6574,
+  "single_preferred_records_by_source": {
+    "RSS Proceedings": 370,
+    "PMLR": 470,
+    "Crossref": 6176,
+    "arXiv": 948
+  },
+  "errors": 0,
+  "log": [
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v100/",
+      "returned": 110,
+      "accepted_before_dedup": 20,
+      "missing": [],
+      "response_sha256": "13c5f8504612969fc76a0547437d5e1ed00f6bc9e5961950dce9bd074e02962c"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v155/",
+      "returned": 165,
+      "accepted_before_dedup": 36,
+      "missing": [],
+      "response_sha256": "80350d6dac2b430312639d7a7c8973e5f5c91e1430c45a50fa7b10b7668b6905"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v164/",
+      "returned": 166,
+      "accepted_before_dedup": 38,
+      "missing": [],
+      "response_sha256": "5dbbb03b4b021f50898b66ce2f9896ef809a2813210e17c1a97809ac36e0bf71"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v205/",
+      "returned": 197,
+      "accepted_before_dedup": 52,
+      "missing": [],
+      "response_sha256": "ea69a217883f22500ce1153fc23c6dfa140ffbebb60081945b57baebee5e8db4"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v229/",
+      "returned": 201,
+      "accepted_before_dedup": 66,
+      "missing": [],
+      "response_sha256": "7411f1baa35bc2034af476079fc14dc7198aea1943979f832c0415e34eb91421"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v270/",
+      "returned": 264,
+      "accepted_before_dedup": 109,
+      "missing": [],
+      "response_sha256": "9bf9b3c63c131f8779ee3af7e9ffb3950be4e8eed0dd88d5dd75c7e956764bae"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v305/",
+      "returned": 263,
+      "accepted_before_dedup": 119,
+      "missing": [],
+      "response_sha256": "6d006392265f4eec3a40cb44a89cf1c9b75d9b2cb393acdf711e91bda0d60e80"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v78/",
+      "returned": 49,
+      "accepted_before_dedup": 12,
+      "missing": [],
+      "response_sha256": "9cf96de10cea85ea94e841861d6a17deccf9d89a0058c991fab7c69ac9a300e9"
+    },
+    {
+      "source": "CoRL",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://proceedings.mlr.press/v87/",
+      "returned": 75,
+      "accepted_before_dedup": 18,
+      "missing": [],
+      "response_sha256": "9820e3ef1d900d1479a1dd2e90bdbf36d88bd1841cac3c1c23cf1aa4cd548396"
+    },
+    {
+      "source": "Crossref",
+      "query": "action chunking robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=action+chunking+robot+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 186,
+      "total_reported": 678696,
+      "response_sha256": "6940f8b59f2feed7e7e54e058b2f2c54b1e12b4e5245bfb984dfb3a28607ef36"
+    },
+    {
+      "source": "Crossref",
+      "query": "action chunking robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=action+chunking+robot+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 200,
+      "total_reported": 678696,
+      "response_sha256": "df5ea504edde7af552dc60e597dc60e7b2044d057727b793201eaa6fabb4ef3d"
+    },
+    {
+      "source": "Crossref",
+      "query": "cross embodiment robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=cross+embodiment+robot+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 186,
+      "total_reported": 1091337,
+      "response_sha256": "a3fa97e514dc33f51c9f859d804f1faa2b1376046f7277bffdc6074bf7aed6cc"
+    },
+    {
+      "source": "Crossref",
+      "query": "cross embodiment robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=cross+embodiment+robot+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 221,
+      "total_reported": 1091337,
+      "response_sha256": "f038626c6382af1e12cabec30a4bc7808efe4694eb81e90149744cbd605a5847"
+    },
+    {
+      "source": "Crossref",
+      "query": "deformable object manipulation robot",
+      "url": "https://api.crossref.org/works?query.title=deformable+object+manipulation+robot&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 191,
+      "total_reported": 476373,
+      "response_sha256": "b42024406d9608dcf5ccc0247a23291eb4e2b524232e76a0c8e3d69ca6b067ee"
+    },
+    {
+      "source": "Crossref",
+      "query": "deformable object manipulation robot",
+      "url": "https://api.crossref.org/works?query.title=deformable+object+manipulation+robot&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 148,
+      "total_reported": 476373,
+      "response_sha256": "a860dcbf85d1912d0b70dc5bd49f4220df2af24eb724fdfe3931f18ded8167e2"
+    },
+    {
+      "source": "Crossref",
+      "query": "diffusion policy robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=diffusion+policy+robot+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 222,
+      "total_reported": 1258142,
+      "response_sha256": "6b33f074882e5ed00455a00556591a80b5a945951238afda7f7c525f3d3ceb72"
+    },
+    {
+      "source": "Crossref",
+      "query": "diffusion policy robot manipulation",
+      "url": "https://api.crossref.org/works?query.title=diffusion+policy+robot+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 188,
+      "total_reported": 1258142,
+      "response_sha256": "41dbafd98ee3342a7a1a888a0146952b185c76b1f190eddb6a237971416891c5"
+    },
+    {
+      "source": "Crossref",
+      "query": "multi robot policy generalization cross embodiment",
+      "url": "https://api.crossref.org/works?query.title=multi+robot+policy+generalization+cross+embodiment&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 40,
+      "total_reported": 2887223,
+      "response_sha256": "650a5c26996ae5af9be2b22f70bdf37be5d48bd1acc8c350d3a3397f2b32fd24"
+    },
+    {
+      "source": "Crossref",
+      "query": "multi robot policy generalization cross embodiment",
+      "url": "https://api.crossref.org/works?query.title=multi+robot+policy+generalization+cross+embodiment&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 19,
+      "total_reported": 2887223,
+      "response_sha256": "6fb549feacc207a47d98f0fdb45947b57061407f4e315eea027d759c98d8f525"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot affordance transfer tool use manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+affordance+transfer+tool+use+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 136,
+      "total_reported": 2925530,
+      "response_sha256": "e0703031303eae0b561a60905feb852487e7b269dcb8d5612d08983415fdd69a"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot affordance transfer tool use manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+affordance+transfer+tool+use+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 138,
+      "total_reported": 2925530,
+      "response_sha256": "aa4b335a2881a39edeacc92c5a50299a12c367c1863eefe1ec74152c2f1ce8b6"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot bimanual manipulation learning",
+      "url": "https://api.crossref.org/works?query.title=robot+bimanual+manipulation+learning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 189,
+      "total_reported": 2466860,
+      "response_sha256": "a058105170d17a9b4a6a18b3398f926474db7cde3dd559340dfe4b273de71794"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot bimanual manipulation learning",
+      "url": "https://api.crossref.org/works?query.title=robot+bimanual+manipulation+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 190,
+      "total_reported": 2466860,
+      "response_sha256": "c0ee99fa8d81ca382c0f5c58d5449c2efb4522cb20a3626d5709546a32567cbc"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot bin picking real world benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+bin+picking+real+world+benchmark&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 32,
+      "total_reported": 1432329,
+      "response_sha256": "ccda0b3d6b9b3218c3da8558294b2a262cd678c97161a953bce97ef7aa1a11ac"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot bin picking real world benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+bin+picking+real+world+benchmark&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 24,
+      "total_reported": 1432329,
+      "response_sha256": "feab3ed58307f2e685215599af337a4c4cafa4a3461de8a454d3bb3b17ec5932"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot compliant control contact manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+compliant+control+contact+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 148,
+      "total_reported": 2436987,
+      "response_sha256": "6431593cd1cf395cc8145561a61c0609737c6d55698cd539b672930978a6d2e7"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot compliant control contact manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+compliant+control+contact+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 143,
+      "total_reported": 2436987,
+      "response_sha256": "e00e18ecb63036e6d706e2c31f24978631547326ff81590c1b3eeb724bf6576c"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot contact rich manipulation model predictive control",
+      "url": "https://api.crossref.org/works?query.title=robot+contact+rich+manipulation+model+predictive+control&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 143,
+      "total_reported": 5595155,
+      "response_sha256": "2a137ca11a6a20768cf9402c915376757643568f1eb6d53c1769148b75b8e489"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot contact rich manipulation model predictive control",
+      "url": "https://api.crossref.org/works?query.title=robot+contact+rich+manipulation+model+predictive+control&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 67,
+      "total_reported": 5595155,
+      "response_sha256": "d11dde6f9207087afb1f127135b18eb79fa215c062a2ced6a7bd1fdc5cd5d8af"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot contact state estimation force sensing",
+      "url": "https://api.crossref.org/works?query.title=robot+contact+state+estimation+force+sensing&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 68,
+      "total_reported": 2790018,
+      "response_sha256": "d1ba72bce7bc861bb4d45ed3cfd7b6611097a73c95933ada6d46f556a13e3382"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot contact state estimation force sensing",
+      "url": "https://api.crossref.org/works?query.title=robot+contact+state+estimation+force+sensing&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 56,
+      "total_reported": 2790018,
+      "response_sha256": "6d4296a7d660af09fbf2bc8419e9f06108f2f29cd0599f6cb1fc3d67896f284b"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot data collection in the wild manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+data+collection+in+the+wild+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 96,
+      "total_reported": 2621227,
+      "response_sha256": "417e4b866d662083551a0cbe85e6edc25e54851dd27762455c3b4eb5f8a38666"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot data collection in the wild manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+data+collection+in+the+wild+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 40,
+      "total_reported": 2621227,
+      "response_sha256": "cfc1b5880ff10380ff0259980fb4a7154122bda37da9f241d1c0db780ac608dc"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot deformable object dressing task cloth manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+deformable+object+dressing+task+cloth+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 187,
+      "total_reported": 783201,
+      "response_sha256": "1b4134603907385e44df451ba52d1874e25fa963c730efcbfd33c2c008dd2793"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot deformable object dressing task cloth manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+deformable+object+dressing+task+cloth+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 160,
+      "total_reported": 783201,
+      "response_sha256": "b48a2510865d7b20e828c3af9e8381e2e8ec84e5ea533471fb09aa339f03ea9d"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot dexterous in hand manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+dexterous+in+hand+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 211,
+      "total_reported": 425615,
+      "response_sha256": "6faa67afb71f138971a90ad3d94cf645f06e1ac8406c89c3a4747c99834f8427"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot dexterous in hand manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+dexterous+in+hand+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 185,
+      "total_reported": 425615,
+      "response_sha256": "27f8881c16ce3bf03c6c1b88c2a72e88dadbc647b53bcd301b354cb61af3a9bb"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot force control contact rich manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+force+control+contact+rich+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 200,
+      "total_reported": 2808855,
+      "response_sha256": "8885dc773eb4501c037c456d755d96496b74b3a8a5b91a3318a62558420d8926"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot force control contact rich manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+force+control+contact+rich+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 176,
+      "total_reported": 2808855,
+      "response_sha256": "f00d48e44ad34a39e7b243081f4cbc2f9cd700a0c3a3bc728e6789802dd8a4d1"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot foundation model manipulation benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+foundation+model+manipulation+benchmark&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 202,
+      "total_reported": 3364231,
+      "response_sha256": "8f0b7f3d8ab608243e75a63e94ef2802b60310330ba95ba898585906e0f173be"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot foundation model manipulation benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+foundation+model+manipulation+benchmark&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 182,
+      "total_reported": 3364231,
+      "response_sha256": "9c7066d116749c0e55d8c1d6810201cfba5f705fa7f3038e07a6b799e3f7a65b"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot grasp stability grasp success prediction tactile",
+      "url": "https://api.crossref.org/works?query.title=robot+grasp+stability+grasp+success+prediction+tactile&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 161,
+      "total_reported": 1709771,
+      "response_sha256": "614cda9468e949e01e2c818d2efee500fff25bd35507dcd5a5c687f3d186872f"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot grasp stability grasp success prediction tactile",
+      "url": "https://api.crossref.org/works?query.title=robot+grasp+stability+grasp+success+prediction+tactile&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 107,
+      "total_reported": 1709771,
+      "response_sha256": "8cc8cc9ea3bb0e8c52bbe4b90139a5ae13649d3fff93c07b2acd24e9cc544ac2"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot grasping slip detection tactile",
+      "url": "https://api.crossref.org/works?query.title=robot+grasping+slip+detection+tactile&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 186,
+      "total_reported": 1766443,
+      "response_sha256": "b2bcaedddaccfac1899e22593f3732dd58765fb12b11c7e068e2d11f20f7e71d"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot grasping slip detection tactile",
+      "url": "https://api.crossref.org/works?query.title=robot+grasping+slip+detection+tactile&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 196,
+      "total_reported": 1766443,
+      "response_sha256": "db6c0ae95540d117708bc58d7fac85f74dbc3cda29c48e4b33ab2ea6de30a848"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot gripper object handover human robot",
+      "url": "https://api.crossref.org/works?query.title=robot+gripper+object+handover+human+robot&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 114,
+      "total_reported": 2431478,
+      "response_sha256": "18d09a51bb2bae3bf7e30dd57ba1474f902045891480cb73cf6cb4a01e2aca7e"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot gripper object handover human robot",
+      "url": "https://api.crossref.org/works?query.title=robot+gripper+object+handover+human+robot&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 55,
+      "total_reported": 2431478,
+      "response_sha256": "11adfebfed0732b3eca267e905452b1b52614fe54d3bdcc78b0cd025787e7ad2"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot hand teleoperation demonstration manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+hand+teleoperation+demonstration+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 231,
+      "total_reported": 504051,
+      "response_sha256": "2ec8ceae43bf6f9b39e76bda17299cc07f11e11e49fa586a343ef5c9184a06ea"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot hand teleoperation demonstration manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+hand+teleoperation+demonstration+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 228,
+      "total_reported": 504051,
+      "response_sha256": "6582edc63c5f2f573bf28aa2dc2a6eb3727696f811bd83f6229a16efe43681b3"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot imitation learning manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+imitation+learning+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 194,
+      "total_reported": 2474729,
+      "response_sha256": "96d2ac903ba7969ff64de84f127a3347f4ae8f844a3984efe1ef65a6b1394a7e"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot imitation learning manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+imitation+learning+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 163,
+      "total_reported": 2474729,
+      "response_sha256": "c02b538673d91cd704cd66d23ef6d4f41801d79de8fca492059a2a277994cacc"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot impedance control assembly",
+      "url": "https://api.crossref.org/works?query.title=robot+impedance+control+assembly&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 187,
+      "total_reported": 2424967,
+      "response_sha256": "13f6c24ffb8ad02ad68e25f3ded269079b11166ab2281fbd7669ad3e99fba846"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot impedance control assembly",
+      "url": "https://api.crossref.org/works?query.title=robot+impedance+control+assembly&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 171,
+      "total_reported": 2424967,
+      "response_sha256": "43ea01e521e62f60a895a9b72b084fc595f3630d7af9f27d2984a78621512e00"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot industrial precision assembly force control learning",
+      "url": "https://api.crossref.org/works?query.title=robot+industrial+precision+assembly+force+control+learning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 106,
+      "total_reported": 5186469,
+      "response_sha256": "98dcc9fae8dd9b4655acff3d3d77fb31f95ba2b1eac42a33e293c262b0307aa8"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot industrial precision assembly force control learning",
+      "url": "https://api.crossref.org/works?query.title=robot+industrial+precision+assembly+force+control+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 126,
+      "total_reported": 5186469,
+      "response_sha256": "3860270bf5c52c78a897437f4733c9c8f263eedd30b609f55c14d00a003be459"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot insertion peg in hole learning",
+      "url": "https://api.crossref.org/works?query.title=robot+insertion+peg+in+hole+learning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 120,
+      "total_reported": 2589868,
+      "response_sha256": "97c84c553b6b78bba508d6fa2838db32df91b2351d7b0e8842f0237dea76522a"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot insertion peg in hole learning",
+      "url": "https://api.crossref.org/works?query.title=robot+insertion+peg+in+hole+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 73,
+      "total_reported": 2589868,
+      "response_sha256": "f262ea6adc8ac3ec7e62628f8d9d92b2701961eb524d98d35a741b5313edd56a"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot learning autonomous disassembly remanufacturing",
+      "url": "https://api.crossref.org/works?query.title=robot+learning+autonomous+disassembly+remanufacturing&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 11,
+      "total_reported": 2534830,
+      "response_sha256": "30738363aeff8d831bcf8058231029e4d5384fe4455d486511ec09228c2ac585"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot learning autonomous disassembly remanufacturing",
+      "url": "https://api.crossref.org/works?query.title=robot+learning+autonomous+disassembly+remanufacturing&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 4,
+      "total_reported": 2534830,
+      "response_sha256": "362aa1db36174527a77c2b6b6e4c2c309fc9b9b1da6bf74585669096c7daf6ae"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot learning from demonstration manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+learning+from+demonstration+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 198,
+      "total_reported": 10230166,
+      "response_sha256": "a36a725b6123eb071070268de32c9bd0378b065e1403763ec4e591e8e9396af8"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot learning from demonstration manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+learning+from+demonstration+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 169,
+      "total_reported": 10230166,
+      "response_sha256": "0731d304e94a48fc3c6c39f359a138f4bd51393699b0e2206eec9591e87d5e93"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation active perception tactile exploration",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+active+perception+tactile+exploration&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 144,
+      "total_reported": 1261458,
+      "response_sha256": "9f716b09c0c612d4f30c9c77ec8d035d5054d0dc9d4f45a4709d3272f25b7600"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation active perception tactile exploration",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+active+perception+tactile+exploration&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 90,
+      "total_reported": 1261458,
+      "response_sha256": "0f30e8bf504fe2398e3c054b3fd8efc0c2fdfa86a98f77a27ebdf9d95a0f069a"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation bilateral teleoperation force feedback",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+bilateral+teleoperation+force+feedback&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 237,
+      "total_reported": 832617,
+      "response_sha256": "ea6c2cfe44c89d9b1ab3f0fe26c473dfb706c6dd58979ed21f25182c54f8da13"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation bilateral teleoperation force feedback",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+bilateral+teleoperation+force+feedback&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 221,
+      "total_reported": 832617,
+      "response_sha256": "7e196c4c6687e0aa220fae197d77879d858c01aa25853aaf403f0dbbd78ba528"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation cable cloth folding",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+cable+cloth+folding&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 148,
+      "total_reported": 459984,
+      "response_sha256": "62df8ea524eb8d9fc9536ea94ed2f6c7ca0b9161f62622562a701feda2137798"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation cable cloth folding",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+cable+cloth+folding&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 146,
+      "total_reported": 459984,
+      "response_sha256": "4666ac66c8eb28f9ee1bf304665842b198e7bb868ab5e82f604ce76ffe3b66fb"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation domain randomization sim to real",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+domain+randomization+sim+to+real&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 182,
+      "total_reported": 1296982,
+      "response_sha256": "15116907123bc3a1fa7327aaf99017be135bb44f0712de61b5f99c93d4090bf5"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation domain randomization sim to real",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+domain+randomization+sim+to+real&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 176,
+      "total_reported": 1296982,
+      "response_sha256": "479125baed842aa035bd669644bdff341e0b8fc6a5c7296c92ec1ca0defc34b7"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation long horizon task planning",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+long+horizon+task+planning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 126,
+      "total_reported": 1810882,
+      "response_sha256": "eb6ba8ca1dae1f2c45c6faff91d46602db7356cab662d9d513c84992e4c6d8eb"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation long horizon task planning",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+long+horizon+task+planning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 67,
+      "total_reported": 1810882,
+      "response_sha256": "21bdac93428aa7c3dd74ca96a4bfb53c4e28315a222262d4e330577ddc00c9f6"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation out of distribution generalization",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+out+of+distribution+generalization&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 33,
+      "total_reported": 1376884,
+      "response_sha256": "d27972b8ac6f66dc3980926c17baefb5e720dd297b7848177d48ab83990cfc7e"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation out of distribution generalization",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+out+of+distribution+generalization&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 131,
+      "total_reported": 1376884,
+      "response_sha256": "bd50c0a5193af6f7279272ab3cf0bf39e94f3cae22a55dac9be1ad0891589f19"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation repeatability benchmark generalization",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+repeatability+benchmark+generalization&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 174,
+      "total_reported": 360910,
+      "response_sha256": "bddb55302ec91e5124e3ec1a8a9a3decc3085fe6036b38d3527d2350f6c7e914"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation repeatability benchmark generalization",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+repeatability+benchmark+generalization&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 152,
+      "total_reported": 360910,
+      "response_sha256": "c7eaf69ad9995cee2e9720cb286dfc61d816fe1c46924ffc3aba12060bb1943f"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation safety uncertainty control",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+safety+uncertainty+control&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 170,
+      "total_reported": 2949327,
+      "response_sha256": "442010ff0e19d5cd73fdb88a204f9f50692183183a2db34d6f733f52c397d657"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation safety uncertainty control",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+safety+uncertainty+control&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 183,
+      "total_reported": 2949327,
+      "response_sha256": "5fd7e5ec6348362fb015ddc64411f437a01512db20e7fb33093d4b05ec959ddb"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation sample efficiency offline reinforcement learning",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+sample+efficiency+offline+reinforcement+learning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 43,
+      "total_reported": 3227390,
+      "response_sha256": "8320623fa153147136626018acc6413443c72239f703435a7e16b924c257ef5f"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulation sample efficiency offline reinforcement learning",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulation+sample+efficiency+offline+reinforcement+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 30,
+      "total_reported": 3227390,
+      "response_sha256": "106ebf17a4ef910a13bfe0e120e269ed5075bd370ad457463a57cf1d9937168c"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot nonprehensile manipulation pushing sliding",
+      "url": "https://api.crossref.org/works?query.title=robot+nonprehensile+manipulation+pushing+sliding&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 177,
+      "total_reported": 366784,
+      "response_sha256": "f9b33921269e46d56f5d3a45cecf9566dbe0e111de07eeaba5be0d46a5fff2d4"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot nonprehensile manipulation pushing sliding",
+      "url": "https://api.crossref.org/works?query.title=robot+nonprehensile+manipulation+pushing+sliding&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 191,
+      "total_reported": 366784,
+      "response_sha256": "354cb74a5e758a6d782c56dc3fe9d7387b5df4f1f204786fab1982a4da24f1d7"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot object reorientation underactuated dexterous hand",
+      "url": "https://api.crossref.org/works?query.title=robot+object+reorientation+underactuated+dexterous+hand&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 191,
+      "total_reported": 547777,
+      "response_sha256": "7c95c01b739df5ad3ca695e46c26be5dd8a8e8650f9e5f2f741be30a978d5ffd"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot object reorientation underactuated dexterous hand",
+      "url": "https://api.crossref.org/works?query.title=robot+object+reorientation+underactuated+dexterous+hand&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 134,
+      "total_reported": 547777,
+      "response_sha256": "9e9e4d9b6806dc926782696be4dd84e297d46c0d8574f1c532cf65a991256469"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot policy recovery manipulation failure",
+      "url": "https://api.crossref.org/works?query.title=robot+policy+recovery+manipulation+failure&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 186,
+      "total_reported": 1768114,
+      "response_sha256": "7f589ac099147b8b2e1dcafeed73d89cfdebb1ffd8578404b609fede88d35873"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot policy recovery manipulation failure",
+      "url": "https://api.crossref.org/works?query.title=robot+policy+recovery+manipulation+failure&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 204,
+      "total_reported": 1768114,
+      "response_sha256": "ea399ba0c3e726e21e24186fdbd389ab4a1839c9d3dc52cd4ae430c1ba105f14"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot real world grasping dataset benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+real+world+grasping+dataset+benchmark&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 61,
+      "total_reported": 1486618,
+      "response_sha256": "c27acf665a60ab2411331add49980712b32bf40a2655dcd796480e880dd0929e"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot real world grasping dataset benchmark",
+      "url": "https://api.crossref.org/works?query.title=robot+real+world+grasping+dataset+benchmark&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 57,
+      "total_reported": 1486618,
+      "response_sha256": "0dc269ebd12ce04f4e1795b982adf9870aece94c62b31c00b1d37ce8a454fe24"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot sim to real calibration system identification dynamics randomization",
+      "url": "https://api.crossref.org/works?query.title=robot+sim+to+real+calibration+system+identification+dynamics+randomization&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 98,
+      "total_reported": 5492672,
+      "response_sha256": "e06b65142923ae87772b72343c06b49db267f267c4e767f240fb9f1c5d4c7a80"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot sim to real calibration system identification dynamics randomization",
+      "url": "https://api.crossref.org/works?query.title=robot+sim+to+real+calibration+system+identification+dynamics+randomization&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 34,
+      "total_reported": 5492672,
+      "response_sha256": "bc5736f9703f4a746f29f72e0ff45e76a5b82cc573db2432eb5722a0b9541750"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot tactile manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+tactile+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 220,
+      "total_reported": 306403,
+      "response_sha256": "3ef763c7604ae7357a698a4617d160553d57e2327771bff1decd411fbb10b657"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot tactile manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+tactile+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 226,
+      "total_reported": 306403,
+      "response_sha256": "083c1eefa3cddff2750149fa6c5cbc19b35beac33034722c9a2b5b1bc9df50f8"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot tactile sim to real transfer",
+      "url": "https://api.crossref.org/works?query.title=robot+tactile+sim+to+real+transfer&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 172,
+      "total_reported": 1521521,
+      "response_sha256": "bbbc8bf6d2adb7d90f1629e768725d2ab95ead9d4f51346b3b1b3fe169729b3b"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot tactile sim to real transfer",
+      "url": "https://api.crossref.org/works?query.title=robot+tactile+sim+to+real+transfer&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 167,
+      "total_reported": 1521521,
+      "response_sha256": "3f3c73afd38a42e9f4bb4f48a17b07cb8784043ea4c1267b27645860b8fb25ab"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot vision tactile manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+vision+tactile+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 175,
+      "total_reported": 501897,
+      "response_sha256": "427b6ec51d0007d5213d28a77bc638c25a0667ef7ee5bb857731fd1c04e461a8"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot vision tactile manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+vision+tactile+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 161,
+      "total_reported": 501897,
+      "response_sha256": "858893acc6b3aedda1474f728e26f157c9cbafd526f400229376a99c51fd728a"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot visuomotor policy imitation learning",
+      "url": "https://api.crossref.org/works?query.title=robot+visuomotor+policy+imitation+learning&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 155,
+      "total_reported": 3051288,
+      "response_sha256": "ac0c1c5785ed77a2b1bd00349900de09dcdbde107dd5d5eabf46b06f6b358687"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot visuomotor policy imitation learning",
+      "url": "https://api.crossref.org/works?query.title=robot+visuomotor+policy+imitation+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 92,
+      "total_reported": 3051288,
+      "response_sha256": "89d282a0aceb401ead3aa2383afd44ad28c72044755ad2ac2375993723b9c07e"
+    },
+    {
+      "source": "Crossref",
+      "query": "vision language action models robotic manipulation",
+      "url": "https://api.crossref.org/works?query.title=vision+language+action+models+robotic+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 0,
+      "returned": 250,
+      "accepted_before_dedup": 215,
+      "total_reported": 2368050,
+      "response_sha256": "76a5bd4826583dfe0eb44bf2f1ef19e62e1721511256e41509429a34d55ad6a7"
+    },
+    {
+      "source": "Crossref",
+      "query": "vision language action models robotic manipulation",
+      "url": "https://api.crossref.org/works?query.title=vision+language+action+models+robotic+manipulation&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "offset": 250,
+      "returned": 250,
+      "accepted_before_dedup": 174,
+      "total_reported": 2368050,
+      "response_sha256": "f801512678d6fa43af93c89183ec308bb3e76b4ade138118da8aee2ce7ce48be"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss01/",
+      "returned": 48,
+      "accepted_before_dedup": 3,
+      "missing": [],
+      "response_sha256": "1325dcab9930773a02a62c7b9f608237e9f51242bf23a254cdf4e93ef3f9a398"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss02/",
+      "returned": 39,
+      "accepted_before_dedup": 3,
+      "missing": [],
+      "response_sha256": "43c11b6bbe181a784f0f8d0d166165bcd0b238f826adacb8fac2b737772d5961"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss03/",
+      "returned": 41,
+      "accepted_before_dedup": 3,
+      "missing": [],
+      "response_sha256": "d094c42a892f50f41cd7ab8184e93d91177d30622d53118e49c17ef5f57a3c1e"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss04/",
+      "returned": 40,
+      "accepted_before_dedup": 7,
+      "missing": [],
+      "response_sha256": "be556d2a493630c6339cea0333a499acf7baf5043374a76ee5543e2c1bd0a600"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss05/",
+      "returned": 39,
+      "accepted_before_dedup": 4,
+      "missing": [],
+      "response_sha256": "37f6ade6cae146c13d32cb285e14750819265957504fc613fa0403ba3acd5b0f"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss06/",
+      "returned": 40,
+      "accepted_before_dedup": 5,
+      "missing": [],
+      "response_sha256": "36006c4f580e8c34b279be06e737967b00731a544618b4c0044e6beed4472fd9"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss07/",
+      "returned": 45,
+      "accepted_before_dedup": 10,
+      "missing": [],
+      "response_sha256": "fc91836f08f1ffedb4bb18a81a13df405de9af2b9f9f78c574279c1e6504b400"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss08/",
+      "returned": 60,
+      "accepted_before_dedup": 9,
+      "missing": [],
+      "response_sha256": "9f93713d2d0ebda108cadf7c36458cff061cd1a9036020215adcd70f1988b358"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss09/",
+      "returned": 55,
+      "accepted_before_dedup": 12,
+      "missing": [],
+      "response_sha256": "9522a3fe9d3f1fac07608d2162e8a8dfb0e68dc823e99caa5073aedc0aaee484"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss10/",
+      "returned": 57,
+      "accepted_before_dedup": 6,
+      "missing": [],
+      "response_sha256": "f611c1b5be9f589953047202b25726ca62c6b228a3bef9cf529623ef231b9757"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss11/",
+      "returned": 49,
+      "accepted_before_dedup": 2,
+      "missing": [],
+      "response_sha256": "0403726f9999d02f1c4c7c855072b3d27c83a5d7595f39128ffffcf49823111f"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss12/",
+      "returned": 47,
+      "accepted_before_dedup": 3,
+      "missing": [],
+      "response_sha256": "9626d560ea96f2e044337379d5d479f81952b5aa6da1915f4f5976051052356d"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss13/",
+      "returned": 75,
+      "accepted_before_dedup": 8,
+      "missing": [],
+      "response_sha256": "ac48a359fa1b51d87907f8540d255a79ee756a2b2839a69cea4d586e7aba795a"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss14/",
+      "returned": 71,
+      "accepted_before_dedup": 14,
+      "missing": [],
+      "response_sha256": "39ba8bf6e8e6de0d396173512ba4934a82a9dc9140d568225a891421eec628c9"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss15/",
+      "returned": 84,
+      "accepted_before_dedup": 8,
+      "missing": [],
+      "response_sha256": "612ed7086bb7ecb5ad5d8a887c6784b4a6ade7433c7562d4f9539d9837b786b8"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss16/",
+      "returned": 103,
+      "accepted_before_dedup": 21,
+      "missing": [],
+      "response_sha256": "a7b1b246a2d7114eaa3be966bd2319e96993d05580e27b421fc036909d7a46d1"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss17/",
+      "returned": 92,
+      "accepted_before_dedup": 15,
+      "missing": [],
+      "response_sha256": "96cf8517de397d69b1da2eb876598ad9d37de7ff0284a4173634286cbc19df5d"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss18/",
+      "returned": 74,
+      "accepted_before_dedup": 18,
+      "missing": [],
+      "response_sha256": "e91f6d9e521cc5a3e38f5caf1da862c367f6d106bb759e76753edc05d7c277bf"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss19/",
+      "returned": 112,
+      "accepted_before_dedup": 28,
+      "missing": [],
+      "response_sha256": "0b826e0406a5e8eb50bc2bb1d402c67d90ff88aabd08c3393ec2ed9d19f9b949"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss20/",
+      "returned": 134,
+      "accepted_before_dedup": 51,
+      "missing": [],
+      "response_sha256": "3cdbe134023fbc8b9b6ee0755afbf670f17052c56ba57e8394539258b911a954"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss21/",
+      "returned": 163,
+      "accepted_before_dedup": 59,
+      "missing": [],
+      "response_sha256": "5d8e530b5ce7184795c14a7dca615f9c1a8b0b189661e0e6e795167b68b8516d"
+    },
+    {
+      "source": "RSS",
+      "query": "complete venue volume index, filtered by title",
+      "url": "https://www.roboticsproceedings.org/rss22/",
+      "returned": 210,
+      "accepted_before_dedup": 81,
+      "missing": [],
+      "response_sha256": "e12629c63d2d6eac2fbcc063b0f063140d2869a6dbd76330251454cc2b4b1999"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:\"sim-to-real\" AND (ti:grasping OR ti:manipulation OR ti:robot))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3A%22sim-to-real%22+AND+%28ti%3Agrasping+OR+ti%3Amanipulation+OR+ti%3Arobot%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 94,
+      "total_reported": "164",
+      "response_sha256": "827c918049ea3d43087bed7326123e4f362fb356f640fcdc7e497481928197d4"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:\"sim-to-real\" AND (ti:grasping OR ti:manipulation OR ti:robot))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3A%22sim-to-real%22+AND+%28ti%3Agrasping+OR+ti%3Amanipulation+OR+ti%3Arobot%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 64,
+      "accepted_before_dedup": 60,
+      "total_reported": "164",
+      "response_sha256": "440737a3b9336ef4c3764ff574ce86055d927c8805c3096a47fc7662d0c64657"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:\"vision-language-action\" OR ti:\"vision language action\")",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3A%22vision-language-action%22+OR+ti%3A%22vision+language+action%22%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 99,
+      "total_reported": "923",
+      "response_sha256": "86ac2c97a8a7c70cf64980256681a23cdbadadbd699f341ab279a766f2bd1d96"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:\"vision-language-action\" OR ti:\"vision language action\")",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3A%22vision-language-action%22+OR+ti%3A%22vision+language+action%22%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 97,
+      "total_reported": "923",
+      "response_sha256": "03eef56d2958966301b9d7fc88ba8cd786b66e2bc34832330569e1ccd3d9d54c"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:embodiment OR ti:embodiments OR ti:generalist)",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Aembodiment+OR+ti%3Aembodiments+OR+ti%3Ageneralist%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 24,
+      "total_reported": "1494",
+      "response_sha256": "f74744069674b630cb94fac8841985b407481ee456946c1618fdb9c22bc931a7"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:embodiment OR ti:embodiments OR ti:generalist)",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Aembodiment+OR+ti%3Aembodiments+OR+ti%3Ageneralist%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 19,
+      "total_reported": "1494",
+      "response_sha256": "2bec586faa3cd5fc4d06f7d18c2f70dfb5daeb6fb52c012db856d516e0dbfa60"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:imitation AND (ti:robot OR ti:manipulation))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Aimitation+AND+%28ti%3Arobot+OR+ti%3Amanipulation%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 83,
+      "total_reported": "323",
+      "response_sha256": "1e824c16e3a8ac5d6bbb6e27a164d4d2af4f00429d68cb5941aeb9bd544b2cea"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:imitation AND (ti:robot OR ti:manipulation))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Aimitation+AND+%28ti%3Arobot+OR+ti%3Amanipulation%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 72,
+      "total_reported": "323",
+      "response_sha256": "16cecbc12d0cb213163f088ccaac1e541032f023fa76843f2c9618762f8b51fb"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:benchmark OR ti:dataset OR ti:datasets))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Abenchmark+OR+ti%3Adataset+OR+ti%3Adatasets%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 99,
+      "total_reported": "205",
+      "response_sha256": "af182f6cc680b90a0a3979cfb9c3a8320ac311271d507a2dbc28c29404db7b1d"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:benchmark OR ti:dataset OR ti:datasets))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Abenchmark+OR+ti%3Adataset+OR+ti%3Adatasets%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 99,
+      "total_reported": "205",
+      "response_sha256": "a90a8a2a122f7278d341857e9cf5c035ed5b5688f17127825be360dcee9df270"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:bimanual OR ti:dexterous OR ti:deformable))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Abimanual+OR+ti%3Adexterous+OR+ti%3Adeformable%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 100,
+      "total_reported": "666",
+      "response_sha256": "538a4a4222c86828efae1a94562f32df097a74d5363d74f6dffeb5d9aa179e63"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:bimanual OR ti:dexterous OR ti:deformable))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Abimanual+OR+ti%3Adexterous+OR+ti%3Adeformable%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 100,
+      "total_reported": "666",
+      "response_sha256": "9c47dc6fcf9504d5e831d26b7f5fe021a0076eb23c7de8be462873239271b22b"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:tactile OR ti:contact OR ti:force))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Atactile+OR+ti%3Acontact+OR+ti%3Aforce%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 99,
+      "total_reported": "593",
+      "response_sha256": "e239641d368d1d3b6913f7eb7bcd8a7bd3bbabe8ab8e28f10c3fabc089345ce8"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:manipulation AND (ti:tactile OR ti:contact OR ti:force))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Amanipulation+AND+%28ti%3Atactile+OR+ti%3Acontact+OR+ti%3Aforce%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 100,
+      "total_reported": "593",
+      "response_sha256": "a43c69c588e5abb8bd6bfc2f60d1e1ce92bc8d6b6fb7360f3720eff3612012c5"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:policy AND (ti:diffusion OR ti:visuomotor))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Apolicy+AND+%28ti%3Adiffusion+OR+ti%3Avisuomotor%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 100,
+      "accepted_before_dedup": 94,
+      "total_reported": "412",
+      "response_sha256": "8f72ee229dbf8db9c292d0ab155923c734f7b40d7d5f4734483e9fcaf25082fc"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:policy AND (ti:diffusion OR ti:visuomotor))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Apolicy+AND+%28ti%3Adiffusion+OR+ti%3Avisuomotor%29%29&start=100&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 100,
+      "returned": 100,
+      "accepted_before_dedup": 87,
+      "total_reported": "412",
+      "response_sha256": "5e2f6c972dd883537eaa465417edd0be337a1636e5e0067de7b43ebfa98fbcb0"
+    },
+    {
+      "source": "arXiv",
+      "query": "cat:cs.RO AND (ti:tactile AND (ti:grasping OR ti:grasp OR ti:gripper))",
+      "url": "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO+AND+%28ti%3Atactile+AND+%28ti%3Agrasping+OR+ti%3Agrasp+OR+ti%3Agripper%29%29&start=0&max_results=100&sortBy=relevance&sortOrder=descending",
+      "offset": 0,
+      "returned": 88,
+      "accepted_before_dedup": 88,
+      "total_reported": "88",
+      "response_sha256": "94cd2a50163779cd87e80e65773c7d5a146a6aa9ff128c2c0752ceb606080e9c"
+    }
+  ],
+  "recovered_prior_requests": [
+    {
+      "source": "Crossref",
+      "query": "deformable object manipulation robot",
+      "url": "https://api.crossref.org/works?query.title=deformable+object+manipulation+robot&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot bimanual manipulation learning",
+      "url": "https://api.crossref.org/works?query.title=robot+bimanual+manipulation+learning&rows=250&offset=250&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot hand teleoperation demonstration manipulation",
+      "url": "https://api.crossref.org/works?query.title=robot+hand+teleoperation+demonstration+manipulation&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot impedance control assembly",
+      "url": "https://api.crossref.org/works?query.title=robot+impedance+control+assembly&rows=250&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "error": "HTTP Error 429: Too Many Requests"
+    }
+  ]
+}

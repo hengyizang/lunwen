@@ -1,0 +1,209 @@
+[
+  {
+    "query": "https://api.crossref.org/works?query.title=Automated+Continuous+Force-Torque+Sensor+Bias+Estimation&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2403.01068",
+    "guide_title": "Automated Continuous Force-Torque Sensor Bias Estimation",
+    "response_sha256": "6dd559dfa8557119faabec14585f0841d847f1e737a4283186c279dbd6b9ffa2"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1109/JSEN.2021.3056943",
+    "locator": "https://doi.org/10.1109/JSEN.2021.3056943",
+    "guide_title": "Bias Estimation and Gravity Compensation for Wrist-Mounted Force/Torque Sensor",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1109/CASE58245.2025.11163796",
+    "locator": "https://doi.org/10.1109/CASE58245.2025.11163796",
+    "guide_title": "Estimating Force/Torque Sensor Offsets and Gravity Parameters Using Only Wrench Measurements to Facilitate Human Demonstration of Robot Manipulation Tasks in Contact",
+    "response_sha256": "fa52edba26d369eb39d468acd810d23bee5639c944fc68d390bf9fdd6adcf4c0",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Fast+Payload+Calibration+for+Sensorless+Contact+Estimation+Using+Model+Pre-training&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2409.03369",
+    "guide_title": "Fast Payload Calibration for Sensorless Contact Estimation Using Model Pre-training",
+    "response_sha256": "23703f3faa64152504cbfacb0a87e93e3eb4405cbbaf51a36bde36f729a9147b",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=In-Situ+Calibration+of+Six-Axis+Force%2FTorque+Transducers+on+a+Six-Legged+Robot&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://www.birds.eecs.umich.edu/assets/pdf/2024-Wu-Revzen-ASME-JDSMC.pdf",
+    "guide_title": "In-Situ Calibration of Six-Axis Force/Torque Transducers on a Six-Legged Robot",
+    "response_sha256": "7d1da6d8ea65009530a4a04d9f1de2836bfa41e6028c580ec67cedf57ce1ab9e",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=PRISM%3A+Precision+and+contact-rich+Real-world+Industrial+Skill+dataset+with+Multimodal+sensing&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2608.17962",
+    "guide_title": "PRISM: Precision and contact-rich Real-world Industrial Skill dataset with Multimodal sensing",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=REASSEMBLE%3A+A+Multimodal+Dataset+for+Contact-rich+Robotic+Assembly+and+Disassembly&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2502.05086",
+    "guide_title": "REASSEMBLE: A Multimodal Dataset for Contact-rich Robotic Assembly and Disassembly",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Rapid+Mismatch+Estimation+via+Neural+Network+Informed+Variational+Inference&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://proceedings.mlr.press/v305/jaszczuk25a.html",
+    "guide_title": "Rapid Mismatch Estimation via Neural Network Informed Variational Inference",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1016/j.neucom.2024.129292",
+    "locator": "https://doi.org/10.1016/j.neucom.2024.129292",
+    "guide_title": "SDI: A sparse drift identification approach for force/torque sensor calibration in industrial robots",
+    "response_sha256": "7d478be9129ff32ba6b07208be595675f4cf1e5cc55ca1f4b2b668f618cd0ec7",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Six-Axis+Force+Torque+Sensor+Model-Based+In+Situ+Calibration+Method+and+Its+Impact+in+Floating-Based+Robot+Dynamic+Performance&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://www.mdpi.com/1424-8220/19/24/5521",
+    "guide_title": "Six-Axis Force Torque Sensor Model-Based In Situ Calibration Method and Its Impact in Floating-Based Robot Dynamic Performance",
+    "response_sha256": "649ecdd7c6c5bb5d565b31de28d27026c6e256ac253d066c12bb351bde30c856",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Temperature+Compensation+Method+for+a+Six-Axis+Force%2FTorque+Sensor+Using+a+Gated+Recurrent+Unit&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://pure.kaist.ac.kr/en/publications/temperature-compensation-method-for-a-six-axis-forcetorque-sensor/",
+    "guide_title": "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=DATT%3A+Deep+Adaptive+Trajectory+Tracking+for+Quadrotor+Control&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://proceedings.mlr.press/v229/huang23a.html",
+    "guide_title": "DATT: Deep Adaptive Trajectory Tracking for Quadrotor Control",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1038/s41598-026-65823-8",
+    "locator": "https://www.nature.com/articles/s41598-026-65823-8",
+    "guide_title": "Fault- and saturation-aware quadrotor tracking via MRAC with an RL-inspired adaptive reference governor",
+    "response_sha256": "ff1c9f53a9574eb95bf1c5f7523f42c00c43fdef75239427e43f94edb840df23",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Leveling+the+Playing+Field%3A+Carefully+Comparing+Classical+and+Learned+Controllers+for+Quadrotor+Trajectory+Tracking&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2506.17832",
+    "guide_title": "Leveling the Playing Field: Carefully Comparing Classical and Learned Controllers for Quadrotor Trajectory Tracking",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=CU-Multi%3A+A+Dataset+for+Multi-Robot+Data+Association&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arpg.colorado.edu/cumulti/",
+    "guide_title": "CU-Multi: A Dataset for Multi-Robot Data Association",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1007/s10846-017-0557-y",
+    "locator": "https://doi.org/10.1007/s10846-017-0557-y",
+    "guide_title": "Decentralized Multi-Robot Formation Control with Communication Delay and Asynchronous Clock",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1007/s10514-021-10029-2",
+    "locator": "https://doi.org/10.1007/s10514-021-10029-2",
+    "guide_title": "Decentralized probabilistic multi-robot collision avoidance using buffered uncertainty-aware Voronoi cells",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1109/TFR.2025.3586209",
+    "locator": "https://doi.org/10.1109/TFR.2025.3586209",
+    "guide_title": "Multirobot Decentralized Collaborative SLAM in Planetary Analogue Environments: Dataset, Challenges, and Lessons Learned",
+    "response_sha256": "5c7bccacfd706fa3a0d227721cd36b67e3e11baf831f136230eb21826b9d7fc1",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Range-based+Cooperative+Localization+with+Nonlinear+Observability+Analysis&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+    "guide_title": "Range-based Cooperative Localization with Nonlinear Observability Analysis",
+    "response_sha256": "989516ad0b20892f33d0ecfbb51380cd0a6f5ae306ca2fb774c8a530dd00dd49",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=ReCoDe%3A+Reinforcement+Learning-based+Dynamic+Constraint+Design+for+Multi-Agent+Coordination&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://proceedings.mlr.press/v305/amir25a.html",
+    "guide_title": "ReCoDe: Reinforcement Learning-based Dynamic Constraint Design for Multi-Agent Coordination",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Safe+Distributed+Control+of+Multi-Robot+Systems+with+Communication+Delays&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2402.09382",
+    "guide_title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Sampling+of+the+Wiener+Process+for+Remote+Estimation+over+a+Channel+with+Random+Delay&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/1707.02531",
+    "guide_title": "Sampling of the Wiener Process for Remote Estimation over a Channel with Random Delay",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=The+UTIAS+multi-robot+cooperative+localization+and+mapping+dataset&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://asrl.utias.utoronto.ca/datasets/mrclam/index.html",
+    "guide_title": "The UTIAS multi-robot cooperative localization and mapping dataset",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Lifelong+Multi-Agent+Path+Finding+in+Large-Scale+Warehouses&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2005.07371",
+    "guide_title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Multi-Agent+Path+Finding+with+Kinematic+Constraints&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://www.cs.sfu.ca/~hangma/pub/icaps16.pdf",
+    "guide_title": "Multi-Agent Path Finding with Kinematic Constraints",
+    "response_sha256": "527fb479bc842f696c21ed1344014dd74da342f93a65418f2ceeefe35a5677f2",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Autonomous+Ground+Navigation+in+Highly+Constrained+Spaces%3A+Lessons+Learned+From+the+Third+BARN+Challenge+at+ICRA+2024&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://people.cs.gmu.edu/~xiao/Research/BARN_Challenge/BARN_Challenge24.html",
+    "guide_title": "Autonomous Ground Navigation in Highly Constrained Spaces: Lessons Learned From the Third BARN Challenge at ICRA 2024",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Can+Vision+Foundation+Models+Navigate%3F+Zero-Shot+Real-World+Evaluation+and+Lessons+Learned&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2603.25937",
+    "guide_title": "Can Vision Foundation Models Navigate? Zero-Shot Real-World Evaluation and Lessons Learned",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=Navigating+to+Objects+in+the+Real+World&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://theophilegervet.github.io/projects/real-world-object-navigation/",
+    "guide_title": "Navigating to Objects in the Real World",
+    "lookup_error": "HTTP Error 429: Too Many Requests",
+    "match": "retained in source-linked reading guide only"
+  },
+  {
+    "query": "https://api.crossref.org/works/10.1177/02783649231224053",
+    "locator": "https://journals.sagepub.com/doi/10.1177/02783649231224053",
+    "guide_title": "Rapid locomotion via reinforcement learning",
+    "response_sha256": "cedb5d2c4d8459e0be9339850a547b9e085452164b17fb9e917a943ab27d5c83",
+    "match": "exact DOI or normalized title"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=SocNavBench%3A+A+Grounded+Simulation+Testing+Framework+for+Evaluating+Social+Navigation&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2103.00047",
+    "guide_title": "SocNavBench: A Grounded Simulation Testing Framework for Evaluating Social Navigation",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  },
+  {
+    "query": "https://api.crossref.org/works?query.title=X-ICP%3A+Localizability-Aware+LiDAR+Registration+for+Robust+Localization+in+Extreme+Environments&rows=4&select=title%2CDOI%2Cauthor%2Cpublished%2Ctype%2Ccontainer-title",
+    "locator": "https://arxiv.org/abs/2211.16335",
+    "guide_title": "X-ICP: Localizability-Aware LiDAR Registration for Robust Localization in Extreme Environments",
+    "lookup_error": "HTTP Error 429: Too Many Requests"
+  }
+]

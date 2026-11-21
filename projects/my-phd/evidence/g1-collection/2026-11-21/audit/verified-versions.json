@@ -1,0 +1,68 @@
+{
+  "verified_at_utc": "2026-11-21T04:12:16.251410+00:00",
+  "pairs": [
+    {
+      "preprint_doi": "10.21203/rs.3.rs-9865039/v1",
+      "journal_doi": "10.1038/s41598-026-65823-8",
+      "canonical_doi": "10.1038/s41598-026-65823-8",
+      "relationship": "is-preprint-of",
+      "evidence": "Reciprocal Crossref is-preprint-of and has-preprint DOI relations. Author lists and normalized titles match. Count the work once; preserve both DOIs and dates.",
+      "records": [
+        {
+          "doi": "10.21203/rs.3.rs-9865039/v1",
+          "title": "Fault- and Saturation-Aware Quadrotor Tracking via MRAC with an RL-Inspired Adaptive Reference Governor",
+          "authors": [
+            "Sobhan Toulabi",
+            "Seyyede Marzieh Mousavi",
+            "Farhad Fani Saberi"
+          ],
+          "type": "posted-content",
+          "date": [
+            2026,
+            6,
+            22
+          ],
+          "publisher_url": "https://www.researchsquare.com/article/rs-9865039/v1",
+          "metadata_url": "https://api.crossref.org/works/10.21203/rs.3.rs-9865039/v1",
+          "metadata_sha256": "534dbb0bce92cba233d8a5c32e97a35c38220c572a3f2579dbb23cdfe9e5c34e",
+          "relation": {
+            "is-preprint-of": [
+              {
+                "id-type": "doi",
+                "id": "10.1038/s41598-026-65823-8",
+                "asserted-by": "subject"
+              }
+            ]
+          }
+        },
+        {
+          "doi": "10.1038/s41598-026-65823-8",
+          "title": "Fault- and saturation-aware quadrotor tracking via MRAC with an RL-inspired adaptive reference governor",
+          "authors": [
+            "Sobhan Toulabi",
+            "Seyyede Marzieh Mousavi",
+            "Farhad Fani Saberi"
+          ],
+          "type": "journal-article",
+          "date": [
+            2026,
+            8,
+            8
+          ],
+          "publisher_url": "https://www.nature.com/articles/s41598-026-65823-8",
+          "metadata_url": "https://api.crossref.org/works/10.1038/s41598-026-65823-8",
+          "metadata_sha256": "ff1c9f53a9574eb95bf1c5f7523f42c00c43fdef75239427e43f94edb840df23",
+          "relation": {
+            "has-preprint": [
+              {
+                "id-type": "doi",
+                "id": "10.21203/rs.3.rs-9865039/v1",
+                "asserted-by": "object"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

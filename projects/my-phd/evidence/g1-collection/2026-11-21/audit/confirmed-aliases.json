@@ -1,0 +1,1047 @@
+{
+  "snapshot_sha256": "37a95c4f87d3ebf91baa6dd3a81524d0bbc18a5587a23a1d04837a8c4264b9b0",
+  "utc": "2026-11-21T04:19:35.766682+00:00",
+  "method": "All 11 normalized-title pairs in the 15,927-row snapshot. Crossref and arXiv/PMLR title/author checks for each member, with venue or author evidence for version relationships. can_merge means count as one research work while preserving version-specific identifiers, venue and evidence. Ambiguous distinct artifacts left apart. Pages and experimental results cannot be transferred across versions by title.",
+  "pairs": [
+    {
+      "pair_index": 1,
+      "title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+      "can_merge": true,
+      "classification": "preprint_to_journal",
+      "preferred_url": "https://doi.org/10.1109/tvt.2025.3546857",
+      "preferred_member_index": 1,
+      "explanation": "预印本给出了该 IEEE 期刊 DOI；两位作者和题名相同。",
+      "sources": [
+        "https://arxiv.org/abs/2402.09382",
+        "https://arxiv.org/abs/2402.09382",
+        "https://api.crossref.org/works/10.1109/tvt.2025.3546857"
+      ],
+      "members": [
+        {
+          "catalog_doi": "",
+          "catalog_arxiv_id": "2402.09382",
+          "catalog_url": "https://arxiv.org/abs/2402.09382",
+          "catalog_type": "preprint",
+          "checked_url": "https://arxiv.org/abs/2402.09382",
+          "sha256": "82bc51c69dace25b6a12b07db761cf60038310a189a5c149e4f68f7c2820a97c",
+          "checked_utc": "2026-11-21T04:17:59.229042+00:00",
+          "observed": {
+            "title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+            "authors": [
+              "Ballotta, Luca",
+              "Talak, Rajat"
+            ],
+            "venue": [],
+            "date": [
+              "2024/02/14"
+            ],
+            "doi": [
+              "10.1109/TVT.2025.3546857"
+            ],
+            "meta": {
+              "citation_doi": [
+                "10.1109/TVT.2025.3546857"
+              ],
+              "citation_arxiv_id": [
+                "2402.09382"
+              ]
+            }
+          },
+          "catalog_title": "Safe Distributed Control of Multi-Robot Systems with Communication Delays",
+          "catalog_year": ""
+        },
+        {
+          "catalog_doi": "10.1109/tvt.2025.3546857",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/tvt.2025.3546857",
+          "catalog_type": "journal-article",
+          "checked_url": "https://api.crossref.org/works/10.1109/tvt.2025.3546857",
+          "sha256": "2da1492f300be227ac16231802f14769d8fb928b8c3a587f4e4fcdadb05c96d9",
+          "checked_utc": "2026-11-21T04:17:59.428485+00:00",
+          "observed": {
+            "title": "Safe Distributed Control of Multi-Robot Systems With Communication Delays",
+            "authors": [
+              "Luca Ballotta",
+              "Rajat Talak"
+            ],
+            "type": "journal-article",
+            "event": null,
+            "venue": [
+              "IEEE Transactions on Vehicular Technology"
+            ],
+            "pages": "10137-10150",
+            "date": {
+              "date-parts": [
+                [
+                  2025,
+                  7
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/tvt.2025.3546857"
+          },
+          "catalog_title": "Safe Distributed Control of Multi-Robot Systems With Communication Delays",
+          "catalog_year": "2025"
+        }
+      ]
+    },
+    {
+      "pair_index": 2,
+      "title": "ARCH: Hierarchical Hybrid Learning for Long-Horizon Contact-Rich Robotic Assembly",
+      "can_merge": true,
+      "classification": "preprint_to_proceedings",
+      "preferred_url": "https://proceedings.mlr.press/v305/sun25b.html",
+      "preferred_member_index": 0,
+      "explanation": "arXiv 明示 CoRL 2025，PMLR 版本的 11 位作者和题名逐项对应。",
+      "sources": [
+        "https://arxiv.org/abs/2409.16451",
+        "https://proceedings.mlr.press/v305/sun25b.html",
+        "https://proceedings.mlr.press/v305/sun25b.html",
+        "https://arxiv.org/abs/2409.16451"
+      ],
+      "members": [
+        {
+          "catalog_doi": "",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://proceedings.mlr.press/v305/sun25b.html",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://proceedings.mlr.press/v305/sun25b.html",
+          "sha256": "0b2b9e5db903c2e6a4f504ad027ffd7e99138685a138a8ba660de20174efc54b",
+          "checked_utc": "2026-11-21T04:17:59.358141+00:00",
+          "observed": {
+            "title": "ARCH: Hierarchical Hybrid Learning for Long-Horizon Contact-Rich Robotic Assembly",
+            "authors": [
+              "Jiankai Sun",
+              "Aidan Curtis",
+              "Yang You",
+              "Yan Xu",
+              "Michael Koehle",
+              "Qianzhong Chen",
+              "Suning Huang",
+              "Leonidas Guibas",
+              "Sachin Chitta",
+              "Mac Schwager",
+              "Hui Li"
+            ],
+            "venue": [
+              "Conference on Robot Learning"
+            ],
+            "date": [
+              "2025/10/07"
+            ],
+            "doi": null,
+            "meta": {}
+          },
+          "catalog_title": "ARCH: Hierarchical Hybrid Learning for Long-Horizon Contact-Rich Robotic Assembly",
+          "catalog_year": "2025"
+        },
+        {
+          "catalog_doi": "10.48550/arxiv.2409.16451",
+          "catalog_arxiv_id": "2409.16451",
+          "catalog_url": "https://doi.org/10.48550/arxiv.2409.16451",
+          "catalog_type": "preprint",
+          "checked_url": "https://arxiv.org/abs/2409.16451",
+          "sha256": "0132465e403a96eaa0f0c68c2d8dbd3027b1b0c533a233dfced0950b527364f8",
+          "checked_utc": "2026-11-21T04:17:59.263043+00:00",
+          "observed": {
+            "title": "ARCH: Hierarchical Hybrid Learning for Long-Horizon Contact-Rich Robotic Assembly",
+            "authors": [
+              "Sun, Jiankai",
+              "Curtis, Aidan",
+              "You, Yang",
+              "Xu, Yan",
+              "Koehle, Michael",
+              "Chen, Qianzhong",
+              "Huang, Suning",
+              "Guibas, Leonidas",
+              "Chitta, Sachin",
+              "Schwager, Mac",
+              "Li, Hui"
+            ],
+            "venue": [],
+            "date": [
+              "2024/09/24"
+            ],
+            "doi": null,
+            "meta": {
+              "citation_arxiv_id": [
+                "2409.16451"
+              ]
+            }
+          },
+          "catalog_title": "ARCH: Hierarchical Hybrid Learning for Long-Horizon Contact-Rich Robotic Assembly",
+          "catalog_year": "2024"
+        }
+      ]
+    },
+    {
+      "pair_index": 3,
+      "title": "Humanoid robot HRP-4 - Humanoid robotics platform with lightweight and slim body -",
+      "can_merge": false,
+      "classification": "inconsistent_identifier",
+      "preferred_url": null,
+      "preferred_member_index": null,
+      "explanation": "候选一 DOI 在 Crossref 属于另一篇视觉跟踪论文，作者为 Luo、Kao、Wu。HRP-4 应使用候选二的 DOI。不能把错误 DOI 写成 HRP-4 的别名。",
+      "sources": [
+        "https://api.crossref.org/works/10.1109/iros.2011.6048074",
+        "https://api.crossref.org/works/10.1109/iros.2011.6094465"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.1109/iros.2011.6048074",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/iros.2011.6048074",
+          "catalog_type": "conference-paper",
+          "checked_url": "https://api.crossref.org/works/10.1109/iros.2011.6048074",
+          "sha256": "2465ee2acc9a767e5424f850174aeae545d028c65c4792be451477bee6cb43ff",
+          "checked_utc": "2026-11-21T04:17:59.685235+00:00",
+          "observed": {
+            "title": "Hybrid discriminative visual object tracking with confidence fusion for robotics applications",
+            "authors": [
+              "Ren C. Luo",
+              "Ching-Chung Kao",
+              "Yen-Chang Wu"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "2011 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2011)",
+              "location": "San Francisco, CA",
+              "start": {
+                "date-parts": [
+                  [
+                    2011,
+                    9,
+                    25
+                  ]
+                ]
+              },
+              "end": {
+                "date-parts": [
+                  [
+                    2011,
+                    9,
+                    30
+                  ]
+                ]
+              }
+            },
+            "venue": [
+              "2011 IEEE/RSJ International Conference on Intelligent Robots and Systems"
+            ],
+            "pages": "2965-2970",
+            "date": {
+              "date-parts": [
+                [
+                  2011,
+                  9
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/iros.2011.6094891"
+          },
+          "catalog_title": "Humanoid robot HRP-4 - Humanoid robotics platform with lightweight and slim body -",
+          "catalog_year": "2011"
+        },
+        {
+          "catalog_doi": "10.1109/iros.2011.6094465",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/iros.2011.6094465",
+          "catalog_type": "conference-paper",
+          "checked_url": "https://api.crossref.org/works/10.1109/iros.2011.6094465",
+          "sha256": "bcb0aa59264e05f892dad80858d9c426d539801c5809727f740f0f8e752b7767",
+          "checked_utc": "2026-11-21T04:17:59.620210+00:00",
+          "observed": {
+            "title": "Humanoid robot HRP-4 - Humanoid robotics platform with lightweight and slim body",
+            "authors": [
+              "K. Kaneko",
+              "F. Kanehiro",
+              "M. Morisawa",
+              "K. Akachi",
+              "G. Miyamori",
+              "A. Hayashi",
+              "N. Kanehira"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "2011 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS 2011)",
+              "location": "San Francisco, CA",
+              "start": {
+                "date-parts": [
+                  [
+                    2011,
+                    9,
+                    25
+                  ]
+                ]
+              },
+              "end": {
+                "date-parts": [
+                  [
+                    2011,
+                    9,
+                    30
+                  ]
+                ]
+              }
+            },
+            "venue": [
+              "2011 IEEE/RSJ International Conference on Intelligent Robots and Systems"
+            ],
+            "pages": "4400-4407",
+            "date": {
+              "date-parts": [
+                [
+                  2011,
+                  9
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/iros.2011.6094465"
+          },
+          "catalog_title": "Humanoid robot HRP-4 - Humanoid robotics platform with lightweight and slim body",
+          "catalog_year": "2011"
+        }
+      ],
+      "quarantine_catalog_url": "https://doi.org/10.1109/iros.2011.6048074",
+      "correct_hrp4_doi": "10.1109/iros.2011.6094465"
+    },
+    {
+      "pair_index": 4,
+      "title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+      "can_merge": true,
+      "classification": "extended_abstract_to_full_paper",
+      "preferred_url": "https://arxiv.org/abs/2005.07371",
+      "preferred_member_index": 0,
+      "explanation": "作者明确标注 AAMAS 2020 的三页稿为短版；arXiv v2 对应 AAAI 2021 长文，不能按两个独立研究计数。短稿不得为长文补充细节作证。",
+      "sources": [
+        "https://jiaoyangli.me/publications/",
+        "https://www.ifaamas.org/Proceedings/aamas2020/pdfs/p1898.pdf",
+        "https://ojs.aaai.org/index.php/AAAI/article/view/17344",
+        "https://arxiv.org/abs/2005.07371",
+        "https://arxiv.org/abs/2005.07371",
+        "https://api.crossref.org/works/10.65109/pckl2695"
+      ],
+      "members": [
+        {
+          "catalog_doi": "",
+          "catalog_arxiv_id": "2005.07371",
+          "catalog_url": "https://arxiv.org/abs/2005.07371",
+          "catalog_type": "preprint",
+          "checked_url": "https://arxiv.org/abs/2005.07371",
+          "sha256": "5f98b1d54d421ae6cdf877fd0b0ed4f74e2e095da7537e9a7f86d03582fe6602",
+          "checked_utc": "2026-11-21T04:17:59.531997+00:00",
+          "observed": {
+            "title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+            "authors": [
+              "Li, Jiaoyang",
+              "Tinka, Andrew",
+              "Kiesel, Scott",
+              "Durham, Joseph W.",
+              "Kumar, T. K. Satish",
+              "Koenig, Sven"
+            ],
+            "venue": [],
+            "date": [
+              "2020/05/15"
+            ],
+            "doi": null,
+            "meta": {
+              "citation_arxiv_id": [
+                "2005.07371"
+              ]
+            }
+          },
+          "catalog_title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+          "catalog_year": ""
+        },
+        {
+          "catalog_doi": "10.65109/pckl2695",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.65109/pckl2695",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://api.crossref.org/works/10.65109/pckl2695",
+          "sha256": "6f67bad1fd71762563082739e0895b3c4730aa2b0847fc3d3981e9f48cecaa21",
+          "checked_utc": "2026-11-21T04:17:59.598394+00:00",
+          "observed": {
+            "title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+            "authors": [
+              "Jiaoyang Li",
+              "Andrew Tinka",
+              "Scott Kiesel",
+              "Joseph W. Durham",
+              "T. K. Satish Kumar",
+              "Sven Koenig"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "Proceedings of the Third International Joint Conference on Autonomous Agents and Multiagent Systems - Volume 1",
+              "location": "New York, New York",
+              "acronym": "AAMAS '04"
+            },
+            "venue": [
+              "International Joint Conference on Autonomous Agents and Multiagent Systems",
+              "Proceedings of the Third International Joint Conference on Autonomous Agents and Multiagent Systems - Volume 1"
+            ],
+            "pages": "1898-1900",
+            "date": {
+              "date-parts": [
+                [
+                  2020,
+                  5,
+                  5
+                ]
+              ]
+            },
+            "relation": {},
+            "description": " Multi-Agent Path Finding (MAPF) is the problem of moving a team of agents from their start locations to their goal locations without collisions. We study the lifelong variant of MAPF where agents are constantly engaged with new goal locations, such as in warehouses. We propose a new framework for solving lifelong MAPF by decomposing the problem in",
+            "doi": "10.65109/pckl2695"
+          },
+          "catalog_title": "Lifelong Multi-Agent Path Finding in Large-Scale Warehouses",
+          "catalog_year": "2020"
+        }
+      ],
+      "published_full_doi": "10.1609/aaai.v35i13.17344",
+      "published_full_url": "https://doi.org/10.1609/aaai.v35i13.17344"
+    },
+    {
+      "pair_index": 5,
+      "title": "Project 5.17 Communication-Constrained Multi-Robot Coordination",
+      "can_merge": false,
+      "classification": "related_material_ambiguous",
+      "preferred_url": null,
+      "preferred_member_index": null,
+      "explanation": "两份项目材料同题，分别署名 1 人及 3 人。机构活动存在海报与演讲录制等多种载体；缺逐项明确版本标识，保留两记录。",
+      "sources": [
+        "https://arc.engin.umich.edu/2020review/",
+        "https://api.crossref.org/works/10.26226/morressier.608c2248dc2fa1af562471c7",
+        "https://api.crossref.org/works/10.26226/morressier.608c2248dc2fa1af562471f0"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.26226/morressier.608c2248dc2fa1af562471c7",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.26226/morressier.608c2248dc2fa1af562471c7",
+          "catalog_type": "posted-content",
+          "checked_url": "https://api.crossref.org/works/10.26226/morressier.608c2248dc2fa1af562471c7",
+          "sha256": "d2421496192bb517182bd0ab3ea15bed67f41495306aa30448f48aa0d938dace",
+          "checked_utc": "2026-11-21T04:17:59.821194+00:00",
+          "observed": {
+            "title": "Project 5.17\nCommunication-Constrained Multi-Robot Coordination",
+            "authors": [
+              "Maximilian Krogius"
+            ],
+            "type": "posted-content",
+            "event": null,
+            "venue": [],
+            "pages": null,
+            "date": {
+              "date-parts": [
+                [
+                  2021,
+                  5,
+                  10
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.26226/morressier.608c2248dc2fa1af562471c7"
+          },
+          "catalog_title": "Project 5.17 Communication-Constrained Multi-Robot Coordination",
+          "catalog_year": "2021"
+        },
+        {
+          "catalog_doi": "10.26226/morressier.608c2248dc2fa1af562471f0",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.26226/morressier.608c2248dc2fa1af562471f0",
+          "catalog_type": "posted-content",
+          "checked_url": "https://api.crossref.org/works/10.26226/morressier.608c2248dc2fa1af562471f0",
+          "sha256": "7b6377af5531d15e1f24c9347c93ecbd7d2afc68aa90c4668ff87145d491a823",
+          "checked_utc": "2026-11-21T04:17:59.871383+00:00",
+          "observed": {
+            "title": "Project 5.17: Communication-Constrained Multi-Robot Coordination",
+            "authors": [
+              "Maximilian Krogius",
+              "Acshi Haggenmiller",
+              "Edwin Olson"
+            ],
+            "type": "posted-content",
+            "event": null,
+            "venue": [],
+            "pages": null,
+            "date": {
+              "date-parts": [
+                [
+                  2021,
+                  5,
+                  7
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.26226/morressier.608c2248dc2fa1af562471f0"
+          },
+          "catalog_title": "Project 5.17: Communication-Constrained Multi-Robot Coordination",
+          "catalog_year": "2021"
+        }
+      ]
+    },
+    {
+      "pair_index": 6,
+      "title": "Robotic jamming-free and precise assembly for peg-in-hole operation by multi-DOF force-controlled parallel end-effector",
+      "can_merge": true,
+      "classification": "preprint_to_journal",
+      "preferred_url": "https://doi.org/10.1016/j.rcim.2025.103083",
+      "preferred_member_index": 0,
+      "explanation": "SSRN posted-content 和期刊版的题名、五位作者顺序完全对应；保留 SSRN DOI 为预印本版本标记。",
+      "sources": [
+        "https://api.crossref.org/works/10.1016/j.rcim.2025.103083",
+        "https://api.crossref.org/works/10.2139/ssrn.5186899"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.1016/j.rcim.2025.103083",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1016/j.rcim.2025.103083",
+          "catalog_type": "journal-article",
+          "checked_url": "https://api.crossref.org/works/10.1016/j.rcim.2025.103083",
+          "sha256": "9742d9e38464d920bf535e489b2cb42341f6cff772a8a0e11e749ae8b6ce5b57",
+          "checked_utc": "2026-11-21T04:17:59.811823+00:00",
+          "observed": {
+            "title": "Robotic jamming-free and precise assembly for peg-in-hole operation by multi-DOF force-controlled parallel end-effector",
+            "authors": [
+              "Qixiang Zhao",
+              "Hailemichael Yilma Hailegebrial",
+              "Wei Wang",
+              "Ke Wen",
+              "Lianyu Zheng"
+            ],
+            "type": "journal-article",
+            "event": null,
+            "venue": [
+              "Robotics and Computer-Integrated Manufacturing"
+            ],
+            "pages": "103083",
+            "date": {
+              "date-parts": [
+                [
+                  2026,
+                  2
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1016/j.rcim.2025.103083"
+          },
+          "catalog_title": "Robotic jamming-free and precise assembly for peg-in-hole operation by multi-DOF force-controlled parallel end-effector",
+          "catalog_year": "2026"
+        },
+        {
+          "catalog_doi": "10.2139/ssrn.5186899",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.2139/ssrn.5186899",
+          "catalog_type": "posted-content",
+          "checked_url": "https://api.crossref.org/works/10.2139/ssrn.5186899",
+          "sha256": "3304d73cd805778f96d2a8d1c46410f8c3969c429988340f382d87d5897bbfc2",
+          "checked_utc": "2026-11-21T04:17:59.974198+00:00",
+          "observed": {
+            "title": "Robotic Jamming-Free and Precise Assembly for Peg-in-Hole Operation by Multi-Dof Force-Controlled Parallel End-Effector",
+            "authors": [
+              "Qixiang Zhao",
+              "Hailemichael  Yilma Hailegebrial",
+              "Wei Wang",
+              "Ke Wen",
+              "Lianyu Zheng"
+            ],
+            "type": "posted-content",
+            "event": null,
+            "venue": [],
+            "pages": null,
+            "date": {
+              "date-parts": [
+                [
+                  2025
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.2139/ssrn.5186899"
+          },
+          "catalog_title": "Robotic Jamming-Free and Precise Assembly for Peg-in-Hole Operation by Multi-Dof Force-Controlled Parallel End-Effector",
+          "catalog_year": "2025"
+        }
+      ]
+    },
+    {
+      "pair_index": 7,
+      "title": "Semi-Autonomous Robot Teleoperation With Obstacle Avoidance via Model Predictive Control",
+      "can_merge": true,
+      "classification": "journal_and_conference_presentation",
+      "preferred_url": "https://doi.org/10.1109/lra.2019.2917707",
+      "preferred_member_index": 0,
+      "explanation": "四位作者和标题相同，合著者研究团队注明 RA-L 论文被选在 RSS 2019 展示；保留两个发布 DOI 和载体。",
+      "sources": [
+        "https://sites.google.com/view/rcllab/publications",
+        "https://tasbolat.com/publications/",
+        "https://roboticsproceedings.org/rss15/p81.html",
+        "https://api.crossref.org/works/10.1109/lra.2019.2917707",
+        "https://api.crossref.org/works/10.15607/rss.2019.xv.081"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.1109/lra.2019.2917707",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/lra.2019.2917707",
+          "catalog_type": "article",
+          "checked_url": "https://api.crossref.org/works/10.1109/lra.2019.2917707",
+          "sha256": "7b261df9add0144bb72e5c32087fa9e8e383580b47a6d73358acedee4b3699a3",
+          "checked_utc": "2026-11-21T04:18:00.150043+00:00",
+          "observed": {
+            "title": "Semi-Autonomous Robot Teleoperation With Obstacle Avoidance via Model Predictive Control",
+            "authors": [
+              "Matteo Rubagotti",
+              "Tasbolat Taunyazov",
+              "Bukeikhan Omarali",
+              "Almas Shintemirov"
+            ],
+            "type": "journal-article",
+            "event": null,
+            "venue": [
+              "IEEE Robotics and Automation Letters"
+            ],
+            "pages": "2746-2753",
+            "date": {
+              "date-parts": [
+                [
+                  2019,
+                  7
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/lra.2019.2917707"
+          },
+          "catalog_title": "Semi-Autonomous Robot Teleoperation With Obstacle Avoidance via Model Predictive Control",
+          "catalog_year": "2019"
+        },
+        {
+          "catalog_doi": "10.15607/rss.2019.xv.081",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://www.roboticsproceedings.org/rss15/p81.html",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://api.crossref.org/works/10.15607/rss.2019.xv.081",
+          "sha256": "0b0442246a0647c33e3e94606b2cf4cbd4d1a9d80f98c5eb3f7e4a7fbcd9f86f",
+          "checked_utc": "2026-11-21T04:18:00.131656+00:00",
+          "observed": {
+            "title": "Semi-Autonomous Robot Teleoperation with Obstacle Avoidance Via Model Predictive Control",
+            "authors": [
+              "Matteo Rubagotti",
+              "Tasbolat Taunyazov",
+              "Bukeikhan Omarali",
+              "Almas Shintemirov"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "Robotics: Science and Systems 2019",
+              "acronym": "RSS2019"
+            },
+            "venue": [
+              "Robotics: Science and Systems XV"
+            ],
+            "pages": null,
+            "date": {
+              "date-parts": [
+                [
+                  2019,
+                  6,
+                  22
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.15607/rss.2019.xv.081"
+          },
+          "catalog_title": "Semi-Autonomous Robot Teleoperation with Obstacle Avoidance Via Model Predictive Control",
+          "catalog_year": "2019"
+        }
+      ]
+    },
+    {
+      "pair_index": 8,
+      "title": "Shear-based Grasp Control for Multi-fingered Underactuated Tactile Robotic Hands",
+      "can_merge": true,
+      "classification": "preprint_to_journal",
+      "preferred_url": "https://doi.org/10.1109/tro.2025.3563046",
+      "preferred_member_index": 1,
+      "explanation": "arXiv 明示 IEEE Transactions on Robotics 专刊接收；期刊、六位作者及题名（连字符变体）相符。",
+      "sources": [
+        "https://arxiv.org/abs/2503.17501",
+        "https://arxiv.org/abs/2503.17501",
+        "https://api.crossref.org/works/10.1109/tro.2025.3563046"
+      ],
+      "members": [
+        {
+          "catalog_doi": "",
+          "catalog_arxiv_id": "2503.17501",
+          "catalog_url": "https://arxiv.org/abs/2503.17501v1",
+          "catalog_type": "preprint",
+          "checked_url": "https://arxiv.org/abs/2503.17501",
+          "sha256": "bac44f755abd18b49c3f447cfe97a5ab21ebe5743b907f83d0519029cc286759",
+          "checked_utc": "2026-11-21T04:18:00.054024+00:00",
+          "observed": {
+            "title": "Shear-based Grasp Control for Multi-fingered Underactuated Tactile Robotic Hands",
+            "authors": [
+              "Ford, Christopher J.",
+              "Li, Haoran",
+              "Catalano, Manuel G.",
+              "Bianchi, Matteo",
+              "Psomopoulou, Efi",
+              "Lepora, Nathan F."
+            ],
+            "venue": [],
+            "date": [
+              "2025/03/21"
+            ],
+            "doi": null,
+            "meta": {
+              "citation_arxiv_id": [
+                "2503.17501"
+              ]
+            }
+          },
+          "catalog_title": "Shear-based Grasp Control for Multi-fingered Underactuated Tactile Robotic Hands",
+          "catalog_year": "2025"
+        },
+        {
+          "catalog_doi": "10.1109/tro.2025.3563046",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/tro.2025.3563046",
+          "catalog_type": "journal-article",
+          "checked_url": "https://api.crossref.org/works/10.1109/tro.2025.3563046",
+          "sha256": "e306ec569fd1bd638746817613b40d3285a3b0251a97bb604b63ea5a1076ba8d",
+          "checked_utc": "2026-11-21T04:18:00.289400+00:00",
+          "observed": {
+            "title": "Shear-Based Grasp Control for Multifingered Underactuated Tactile Robotic Hands",
+            "authors": [
+              "Christopher J. Ford",
+              "Haoran Li",
+              "Manuel G. Catalano",
+              "Matteo Bianchi",
+              "Efi Psomopoulou",
+              "Nathan F. Lepora"
+            ],
+            "type": "journal-article",
+            "event": null,
+            "venue": [
+              "IEEE Transactions on Robotics"
+            ],
+            "pages": "3113-3128",
+            "date": {
+              "date-parts": [
+                [
+                  2025
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/tro.2025.3563046"
+          },
+          "catalog_title": "Shear-Based Grasp Control for Multifingered Underactuated Tactile Robotic Hands",
+          "catalog_year": "2025"
+        }
+      ]
+    },
+    {
+      "pair_index": 9,
+      "title": "Teleoperation with virtual force feedback",
+      "can_merge": false,
+      "classification": "same_title_author_different_venues_unresolved",
+      "preferred_url": null,
+      "preferred_member_index": null,
+      "explanation": "同一作者、同题，分别是 Springer Experimental Robotics III 第366–375页和 SPIE Telemanipulator Technology 第32–39页；缺明确重印/版本声明，保留来源。",
+      "sources": [
+        "https://link.springer.com/book/10.1007/BFb0027579?page=2",
+        "https://api.crossref.org/works/10.1007/bfb0027608",
+        "https://api.crossref.org/works/10.1117/12.164927"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.1007/bfb0027608",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1007/bfb0027608",
+          "catalog_type": "book-chapter",
+          "checked_url": "https://api.crossref.org/works/10.1007/bfb0027608",
+          "sha256": "a048a77167c4ff7a2fa88c4abe741db1808c2f70d36cb26aacef20a255a304b5",
+          "checked_utc": "2026-11-21T04:18:00.316190+00:00",
+          "observed": {
+            "title": "Teleoperation with virtual force feedback",
+            "authors": [
+              "Robert J. Anderson"
+            ],
+            "type": "book-chapter",
+            "event": null,
+            "venue": [
+              "Lecture Notes in Control and Information Sciences",
+              "Experimental Robotics III"
+            ],
+            "pages": "366-375",
+            "date": {
+              "date-parts": [
+                [
+                  1994
+                ]
+              ]
+            },
+            "relation": {
+              "is-part-of": [
+                {
+                  "id-type": "doi",
+                  "id": "https://doi.org/10.1007/bfb0027579",
+                  "asserted-by": "object"
+                }
+              ]
+            },
+            "description": "",
+            "doi": "10.1007/bfb0027608"
+          },
+          "catalog_title": "Teleoperation with virtual force feedback",
+          "catalog_year": "1994"
+        },
+        {
+          "catalog_doi": "10.1117/12.164927",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1117/12.164927",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://api.crossref.org/works/10.1117/12.164927",
+          "sha256": "551c9bd7aedf03e0651ca78f5e150ec67e2aa732b8014323e187fa28f4018687",
+          "checked_utc": "2026-11-21T04:18:00.428095+00:00",
+          "observed": {
+            "title": "&lt;title&gt;Teleoperation with virtual force feedback&lt;/title&gt;",
+            "authors": [
+              "Robert J. Anderson"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "Optical Tools for Manufacturing and Advanced Automation",
+              "location": "Boston, MA"
+            },
+            "venue": [
+              "SPIE Proceedings",
+              "Telemanipulator Technology and Space Telerobotics"
+            ],
+            "pages": "32-39",
+            "date": {
+              "date-parts": [
+                [
+                  1993,
+                  12,
+                  21
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1117/12.164927"
+          },
+          "catalog_title": "<title>Teleoperation with virtual force feedback</title>",
+          "catalog_year": "1993"
+        }
+      ]
+    },
+    {
+      "pair_index": 10,
+      "title": "Towards Robotic Assembly by Predicting Robust, Precise and Task-oriented Grasps",
+      "can_merge": true,
+      "classification": "preprint_to_proceedings",
+      "preferred_url": "https://proceedings.mlr.press/v155/zhao21c.html",
+      "preferred_member_index": 0,
+      "explanation": "arXiv 明示 CoRL 2020 获接收，PMLR 155 的三位作者、标题和会议一致。",
+      "sources": [
+        "https://arxiv.org/abs/2011.02462",
+        "https://proceedings.mlr.press/v155/zhao21c.html",
+        "https://proceedings.mlr.press/v155/zhao21c.html",
+        "https://arxiv.org/abs/2011.02462"
+      ],
+      "members": [
+        {
+          "catalog_doi": "",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://proceedings.mlr.press/v155/zhao21c.html",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://proceedings.mlr.press/v155/zhao21c.html",
+          "sha256": "d80ef9390ad5ce46046d20a6f360c9835a49853a1726c24634e2ba2eb9f58f35",
+          "checked_utc": "2026-11-21T04:18:00.432601+00:00",
+          "observed": {
+            "title": "Towards Robotic Assembly by Predicting Robust, Precise and Task-oriented Grasps",
+            "authors": [
+              "Jialiang Zhao",
+              "Daniel Troniak",
+              "Oliver Kroemer"
+            ],
+            "venue": [
+              "Conference on Robot Learning"
+            ],
+            "date": [
+              "2021/10/04"
+            ],
+            "doi": null,
+            "meta": {}
+          },
+          "catalog_title": "Towards Robotic Assembly by Predicting Robust, Precise and Task-oriented Grasps",
+          "catalog_year": "2021"
+        },
+        {
+          "catalog_doi": "10.48550/arxiv.2011.02462",
+          "catalog_arxiv_id": "2011.02462",
+          "catalog_url": "https://doi.org/10.48550/arxiv.2011.02462",
+          "catalog_type": "preprint",
+          "checked_url": "https://arxiv.org/abs/2011.02462",
+          "sha256": "3274efede1ee794dcaa72c51c5705b52410bce5ebdcd3ba3c5f3f263a0ee3f70",
+          "checked_utc": "2026-11-21T04:18:00.548799+00:00",
+          "observed": {
+            "title": "Towards Robotic Assembly by Predicting Robust, Precise and Task-oriented Grasps",
+            "authors": [
+              "Zhao, Jialiang",
+              "Troniak, Daniel",
+              "Kroemer, Oliver"
+            ],
+            "venue": [],
+            "date": [
+              "2020/11/04"
+            ],
+            "doi": null,
+            "meta": {
+              "citation_arxiv_id": [
+                "2011.02462"
+              ]
+            }
+          },
+          "catalog_title": "Towards Robotic Assembly by Predicting Robust, Precise and Task-oriented Grasps",
+          "catalog_year": "2020"
+        }
+      ]
+    },
+    {
+      "pair_index": 11,
+      "title": "Virtual Reality Tele-Operation System for Mobile Robot Manipulation",
+      "can_merge": false,
+      "classification": "different_works",
+      "preferred_url": null,
+      "preferred_member_index": null,
+      "explanation": "不同作者团队和出版物；不能凭去标点和大小写后的题名将二者合并。",
+      "sources": [
+        "https://api.crossref.org/works/10.1109/icietdw61607.2024.10940008",
+        "https://api.crossref.org/works/10.3390/robotics12060163"
+      ],
+      "members": [
+        {
+          "catalog_doi": "10.1109/icietdw61607.2024.10940008",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.1109/icietdw61607.2024.10940008",
+          "catalog_type": "proceedings-article",
+          "checked_url": "https://api.crossref.org/works/10.1109/icietdw61607.2024.10940008",
+          "sha256": "515796fe22b795d79a3a088fb2ee58e85742096fc9118a37ce1c78d1e6c11f63",
+          "checked_utc": "2026-11-21T04:18:02.558176+00:00",
+          "observed": {
+            "title": "Virtual Reality Tele-Operation System for Mobile Robot Manipulation",
+            "authors": [
+              "Rahul Dattangire",
+              "Divya Biradar"
+            ],
+            "type": "proceedings-article",
+            "event": {
+              "name": "2024 International Conference on Integration of Emerging Technologies for the Digital World (ICIETDW)",
+              "start": {
+                "date-parts": [
+                  [
+                    2024,
+                    9,
+                    13
+                  ]
+                ]
+              },
+              "location": "Chennai, India",
+              "end": {
+                "date-parts": [
+                  [
+                    2024,
+                    9,
+                    14
+                  ]
+                ]
+              }
+            },
+            "venue": [
+              "2024 International Conference on Integration of Emerging Technologies for the Digital World (ICIETDW)"
+            ],
+            "pages": "1-6",
+            "date": {
+              "date-parts": [
+                [
+                  2024,
+                  9,
+                  13
+                ]
+              ]
+            },
+            "relation": {},
+            "description": "",
+            "doi": "10.1109/icietdw61607.2024.10940008"
+          },
+          "catalog_title": "Virtual Reality Tele-Operation System for Mobile Robot Manipulation",
+          "catalog_year": "2024"
+        },
+        {
+          "catalog_doi": "10.3390/robotics12060163",
+          "catalog_arxiv_id": "",
+          "catalog_url": "https://doi.org/10.3390/robotics12060163",
+          "catalog_type": "journal-article",
+          "checked_url": "https://api.crossref.org/works/10.3390/robotics12060163",
+          "sha256": "2fa8263e161b7368bd3a236d97a261d32979961cf7aaa4f02c4f968ce15eb42b",
+          "checked_utc": "2026-11-21T04:18:00.772572+00:00",
+          "observed": {
+            "title": "Virtual Reality Teleoperation System for Mobile Robot Manipulation",
+            "authors": [
+              "Bryan R. Galarza",
+              "Paulina Ayala",
+              "Santiago Manzano",
+              "Marcelo V. Garcia"
+            ],
+            "type": "journal-article",
+            "event": null,
+            "venue": [
+              "Robotics"
+            ],
+            "pages": "163",
+            "date": {
+              "date-parts": [
+                [
+                  2023,
+                  11,
+                  29
+                ]
+              ]
+            },
+            "relation": {},
+            "description": " Over the past few years, the industry has experienced significant growth, leading to what is now known as Industry 4.0. This advancement has been characterized by the automation of robots. Industries have embraced mobile robots to enhance efficiency in specific manufacturing tasks, aiming for optimal results and reducing human errors. Moreover, ro",
+            "doi": "10.3390/robotics12060163"
+          },
+          "catalog_title": "Virtual Reality Teleoperation System for Mobile Robot Manipulation",
+          "catalog_year": "2023"
+        }
+      ]
+    }
+  ]
+}

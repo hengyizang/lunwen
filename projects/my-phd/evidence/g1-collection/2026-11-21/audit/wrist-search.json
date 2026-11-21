@@ -1,0 +1,574 @@
+{
+  "last_updated_UTC": "2026-11-21T04:07:01.470859+00:00",
+  "unique_records": 379,
+  "retrieved_events": 4600,
+  "pre_dedup_accepted": 1126,
+  "doi_records": 374,
+  "types": {
+    "B:FT_metrology_adjacent_application_unverified": 149,
+    "D:robot_contact_assembly_task_context": 138,
+    "A:robot_or_wrist_FT_error_or_calibration": 73,
+    "C:robot_wrench_measurement_context": 19
+  },
+  "dedup": "Union of identical normalized title, DOI, or URL; preserve all query labels. Distinct preprint titles can remain.",
+  "rules": {
+    "sensor": "(?:force (?:and |or )?torque|torque (?:and |or )?force|(?:six|6|multi|three) (?:axis|axial|component|dimension\\w*) (?:force|load)|(?:wrist|wrench|force torque|6d force|six axis force) (?:mounted |based |strain gauge )?(?:force |torque )?(?:sensor|sensing|transducer)|\\bforce sensors?|\\bload cells?|\\bwrench sens\\w*)",
+    "error_or_calibration": "\\b(?:bias\\w*|drift\\w*|zero|offset\\w*|thermal|temperature|creep|hysteresis|gravity|inertial|payload|decoupl\\w*|cross ?talk|crosstalk|cross coupl\\w*|compensat\\w*|calibrat\\w*|in situ|insitu|uncertaint\\w*|repeatability|misalignment)\\b",
+    "robot": "\\b(?:robot\\w*|manipulator\\w*|wrist|end effector|humanoid|cobot|peg in hole)\\b",
+    "assembly": "peg in hole|(?:assembl\\w*|insert\\w*|contact state|contact model)\\b",
+    "contact": "(?:\\bforce\\b|wrench|\\bcontact\\b|jamming|compliance|impedance|misalignment)"
+  },
+  "labels": {
+    "A": "Title explicitly combines wrist/robot with force or wrench sensing and sensor error, compensation or calibration.",
+    "B": "Title matches instrument metrology; robotic applicability unverified.",
+    "C": "Adjacent robotic wrench measurement, characterization or validation.",
+    "D": "Robot or robotics venue with assembly/insertion plus contact/force/mechanical response terms. Does not imply sensor bias tests."
+  },
+  "limitations": [
+    "Public metadata only, no quality appraisal or full-text extraction. Ranking and English-title search limit completeness. Generic force/load cells and application contexts may require manual exclusion.",
+    "Published years up to 2026; date cutoff passed explicitly in API queries. Scores are search topics, not evidence of change in robot task performance."
+  ],
+  "errors": 0,
+  "log": [
+    {
+      "source": "Crossref",
+      "query": "wrist mounted force torque sensor bias gravity compensation",
+      "url": "https://api.crossref.org/works?query.title=wrist+mounted+force+torque+sensor+bias+gravity+compensation&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 31,
+      "total_reported": 1096421,
+      "offset": 0,
+      "response_sha256": "71d5ff31c9ff8a7cf8918d425610a431d11fc9b32198f22a65fcaeb5ea59b2e5"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" robot calibration",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+robot+calibration&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 30,
+      "total_reported": 2933,
+      "page": 1,
+      "response_sha256": "d11fe3244441ff521ab4022e1b4b848c1bd983a11b58b0e37f5d419d4753799c"
+    },
+    {
+      "source": "Crossref",
+      "query": "wrist mounted force torque sensor bias gravity compensation",
+      "url": "https://api.crossref.org/works?query.title=wrist+mounted+force+torque+sensor+bias+gravity+compensation&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 10,
+      "total_reported": 1096421,
+      "offset": 100,
+      "response_sha256": "4307823044ebbb97084061324c64baf479244d8a9ee79be24d262fab6868d3c1"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" robot calibration",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+robot+calibration&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 19,
+      "total_reported": 2933,
+      "page": 2,
+      "response_sha256": "7a33fad82f3eed719bb5fc38f67432f498e9354b3f9d40106198ff606f507dce"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot wrist force torque sensor zero drift compensation",
+      "url": "https://api.crossref.org/works?query.title=robot+wrist+force+torque+sensor+zero+drift+compensation&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 35,
+      "total_reported": 1230559,
+      "offset": 0,
+      "response_sha256": "d73116b5c32db759316daf43b7fb5faa915c967beb4161f56f8c50f4d3bf4940"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" temperature drift",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+temperature+drift&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 13,
+      "total_reported": 601,
+      "page": 1,
+      "response_sha256": "1954567bf41982016251aeb90e7a08638108aba067c1823b210a827cacd91436"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" temperature drift",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+temperature+drift&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 1,
+      "total_reported": 601,
+      "page": 2,
+      "response_sha256": "8f33946e940f668b80a98a4ec7c69a72f0d04dc627ae6b1b07192332d0817fa5"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot wrist force torque sensor zero drift compensation",
+      "url": "https://api.crossref.org/works?query.title=robot+wrist+force+torque+sensor+zero+drift+compensation&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 16,
+      "total_reported": 1230559,
+      "offset": 100,
+      "response_sha256": "7c24ab7cca88b320238a0951641af482df77a20e0fc1c867df3b633fb35bbc38"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" gravity compensation",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+gravity+compensation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 15,
+      "total_reported": 1368,
+      "page": 1,
+      "response_sha256": "8b57bf41164d1d054c4e36f7856e60e4d636d90a686995e9221aa5a6be195b39"
+    },
+    {
+      "source": "Crossref",
+      "query": "six axis force torque sensor temperature compensation drift",
+      "url": "https://api.crossref.org/works?query.title=six+axis+force+torque+sensor+temperature+compensation+drift&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 24,
+      "total_reported": 2095754,
+      "offset": 0,
+      "response_sha256": "e3711249961b221635c2889e530b6fa7e49b4c9c87f1516446c82e450a798e48"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "\"force torque sensor\" gravity compensation",
+      "url": "https://api.openalex.org/works?search=%22force+torque+sensor%22+gravity+compensation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 3,
+      "total_reported": 1368,
+      "page": 2,
+      "response_sha256": "b811ae752100d4bb0435f1aa983932302703b5ffe85db5bc7bdef04cafff7565"
+    },
+    {
+      "source": "Crossref",
+      "query": "six axis force torque sensor temperature compensation drift",
+      "url": "https://api.crossref.org/works?query.title=six+axis+force+torque+sensor+temperature+compensation+drift&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 30,
+      "total_reported": 2095754,
+      "offset": 100,
+      "response_sha256": "f00407b573e55cf5bff3686da35668f9802048ab14f8120f4904945ce0ed6b0f"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "wrist force torque sensor bias estimation",
+      "url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias+estimation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 7,
+      "total_reported": 2486,
+      "page": 1,
+      "response_sha256": "685d96d05a06c854f48f5931a31f672736c9066c278b61c3159534499b4edfa1"
+    },
+    {
+      "source": "Crossref",
+      "query": "six-axis force torque sensor online insitu calibration robot",
+      "url": "https://api.crossref.org/works?query.title=six-axis+force+torque+sensor+online+insitu+calibration+robot&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 43,
+      "total_reported": 1717102,
+      "offset": 0,
+      "response_sha256": "8f75391269c386d7c0202d00daac914a40cf9b6d24906e2ffd300602bf035ce7"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "wrist force torque sensor bias estimation",
+      "url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias+estimation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 3,
+      "total_reported": 2486,
+      "page": 2,
+      "response_sha256": "ad56cdfdc6018ff3c5afdc37467d8e2c36c4bb2de5f7ba39d536ee647996c7a6"
+    },
+    {
+      "source": "Crossref",
+      "query": "six-axis force torque sensor online insitu calibration robot",
+      "url": "https://api.crossref.org/works?query.title=six-axis+force+torque+sensor+online+insitu+calibration+robot&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 34,
+      "total_reported": 1717102,
+      "offset": 100,
+      "response_sha256": "2bd08f0f3a9e3eb2104edbf2c4fe95fbeb753ee6add2ed597d783677a837a7e8"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "six axis force torque sensor in situ calibration",
+      "url": "https://api.openalex.org/works?search=six+axis+force+torque+sensor+in+situ+calibration&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 11,
+      "total_reported": 2643,
+      "page": 1,
+      "response_sha256": "5b9984561532226a7fcf4ab2ef7df28ac072e7966051e7a02e9c09461f0700c8"
+    },
+    {
+      "source": "Crossref",
+      "query": "multiaxis force torque sensor thermal drift strain gauge compensation",
+      "url": "https://api.crossref.org/works?query.title=multiaxis+force+torque+sensor+thermal+drift+strain+gauge+compensation&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 20,
+      "total_reported": 1939752,
+      "offset": 0,
+      "response_sha256": "115b599245b2783b1fc2d710c7a534d558d8d3287acb1d30281e12cf8a096ac8"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "six axis force torque sensor in situ calibration",
+      "url": "https://api.openalex.org/works?search=six+axis+force+torque+sensor+in+situ+calibration&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 1,
+      "total_reported": 2643,
+      "page": 2,
+      "response_sha256": "43bc682f8ec959efd22040e9492fb4f980ac8fcc05b7ff9647ca4ed5ebe72271"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "force torque sensor dynamics compensation end effector",
+      "url": "https://api.openalex.org/works?search=force+torque+sensor+dynamics+compensation+end+effector&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 13,
+      "total_reported": 15100,
+      "page": 1,
+      "response_sha256": "543e40a752d915a2468c754c8023869991c306ccfaca55cb0535096f7b89a488"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "force torque sensor dynamics compensation end effector",
+      "url": "https://api.openalex.org/works?search=force+torque+sensor+dynamics+compensation+end+effector&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 3,
+      "total_reported": 15100,
+      "page": 2,
+      "response_sha256": "dac64ff47839e37b9279f6fdaf06812ef32d1fbb1628a5cae541abf9f11ee5cf"
+    },
+    {
+      "source": "Crossref",
+      "query": "multiaxis force torque sensor thermal drift strain gauge compensation",
+      "url": "https://api.crossref.org/works?query.title=multiaxis+force+torque+sensor+thermal+drift+strain+gauge+compensation&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 9,
+      "total_reported": 1939752,
+      "offset": 100,
+      "response_sha256": "a2e68993ec831f2d2f777926b05ee176987af0742bd53fc14fb0d4716803d79c"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "contact assembly wrench sensing calibration robotic insertion",
+      "url": "https://api.openalex.org/works?search=contact+assembly+wrench+sensing+calibration+robotic+insertion&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 5,
+      "total_reported": 256,
+      "page": 1,
+      "response_sha256": "6b658ab579bd081791f9322063a487d281eb2b81fe56c485fa84ec59c6de02aa"
+    },
+    {
+      "source": "Crossref",
+      "query": "wrist force torque dynamic compensation modeling inertial effect robot",
+      "url": "https://api.crossref.org/works?query.title=wrist+force+torque+dynamic+compensation+modeling+inertial+effect+robot&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 27,
+      "total_reported": 5361709,
+      "offset": 0,
+      "response_sha256": "784cdb8bde3b843a921a0086a905b4dc636434d487ddf54050c9bf4d0f87bcd9"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "contact assembly wrench sensing calibration robotic insertion",
+      "url": "https://api.openalex.org/works?search=contact+assembly+wrench+sensing+calibration+robotic+insertion&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 0,
+      "total_reported": 256,
+      "page": 2,
+      "response_sha256": "aa06c257cb34230159e2bcf777197da7ef8fb76c16f4c6a0556cc4413ecc76ab"
+    },
+    {
+      "source": "Crossref",
+      "query": "wrist force torque dynamic compensation modeling inertial effect robot",
+      "url": "https://api.crossref.org/works?query.title=wrist+force+torque+dynamic+compensation+modeling+inertial+effect+robot&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 9,
+      "total_reported": 5361709,
+      "offset": 100,
+      "response_sha256": "14a1d0e004abbf963943632998c38d552e7285be88d76cd5a3d1e42bbcda65ee"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "force torque sensor strain gauge thermal compensation",
+      "url": "https://api.openalex.org/works?search=force+torque+sensor+strain+gauge+thermal+compensation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=1",
+      "returned": 50,
+      "accepted": 5,
+      "total_reported": 1665,
+      "page": 1,
+      "response_sha256": "91fa0573b79cec05c6301731b7a7ec6a52390cd83e119e0cfc8ab33769f5104e"
+    },
+    {
+      "source": "OpenAlex",
+      "query": "force torque sensor strain gauge thermal compensation",
+      "url": "https://api.openalex.org/works?search=force+torque+sensor+strain+gauge+thermal+compensation&filter=to_publication_date%3A2026-11-21&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype&per_page=50&page=2",
+      "returned": 50,
+      "accepted": 0,
+      "total_reported": 1665,
+      "page": 2,
+      "response_sha256": "185c476e89da2a861b0878a905554c1db0091e0d0a7106f3776c6ba20d152efe"
+    },
+    {
+      "source": "Crossref",
+      "query": "bias estimation force torque sensors humanoid robot in situ temperature",
+      "url": "https://api.crossref.org/works?query.title=bias+estimation+force+torque+sensors+humanoid+robot+in+situ+temperature&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 23,
+      "total_reported": 2573611,
+      "offset": 0,
+      "response_sha256": "aea87a4358f43de4518364d93d8eef2b838cedc62443d465c85d117fb138ba0a"
+    },
+    {
+      "source": "Crossref",
+      "query": "bias estimation force torque sensors humanoid robot in situ temperature",
+      "url": "https://api.crossref.org/works?query.title=bias+estimation+force+torque+sensors+humanoid+robot+in+situ+temperature&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 7,
+      "total_reported": 2573611,
+      "offset": 100,
+      "response_sha256": "c1ec2e192996e27e75c35f2f6682ea613d9b3e4ec68f36be296ff52b6f058021"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulator force torque sensor offset drift tool gravity compensation",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulator+force+torque+sensor+offset+drift+tool+gravity+compensation&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 24,
+      "total_reported": 1599185,
+      "offset": 0,
+      "response_sha256": "a85c7483405a8797b054b07f2ae23576e0e656efaaa0dcb569f0a4b99809289b"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot manipulator force torque sensor offset drift tool gravity compensation",
+      "url": "https://api.crossref.org/works?query.title=robot+manipulator+force+torque+sensor+offset+drift+tool+gravity+compensation&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 17,
+      "total_reported": 1599185,
+      "offset": 100,
+      "response_sha256": "29f14ed02609fab4ce86d8306f781321dfc40278d636e4fb715f34bb47baff2a"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensor payload identification robot tool external wrench calibration",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensor+payload+identification+robot+tool+external+wrench+calibration&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 41,
+      "total_reported": 2320848,
+      "offset": 0,
+      "response_sha256": "d00d17ed525669ed9dedd56af17d937e4be36ff29a2fc3c4f9b73f872f3d5c8f"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensor payload identification robot tool external wrench calibration",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensor+payload+identification+robot+tool+external+wrench+calibration&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 27,
+      "total_reported": 2320848,
+      "offset": 100,
+      "response_sha256": "711ca4d63921eb5a18056d35d21c61beaaae1c2a17e669fd6f7cb0642591158d"
+    },
+    {
+      "source": "Crossref",
+      "query": "sensor drift compensation robot contact assembly insertion force control",
+      "url": "https://api.crossref.org/works?query.title=sensor+drift+compensation+robot+contact+assembly+insertion+force+control&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 24,
+      "total_reported": 3406973,
+      "offset": 0,
+      "response_sha256": "df08ab8862590aefd0282c24c71c7c9e7d6019ec387524dfd007a33c9fc3937a"
+    },
+    {
+      "source": "Crossref",
+      "query": "sensor drift compensation robot contact assembly insertion force control",
+      "url": "https://api.crossref.org/works?query.title=sensor+drift+compensation+robot+contact+assembly+insertion+force+control&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 15,
+      "total_reported": 3406973,
+      "offset": 100,
+      "response_sha256": "c3da442ebcd1d8184f085aeb1fa712821abaf8005766b6877adfe6c6ed098249"
+    },
+    {
+      "source": "Crossref",
+      "query": "robotic assembly insertion peg in hole six axis force torque sensor",
+      "url": "https://api.crossref.org/works?query.title=robotic+assembly+insertion+peg+in+hole+six+axis+force+torque+sensor&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 28,
+      "total_reported": 1518551,
+      "offset": 0,
+      "response_sha256": "66027a2bf5a1ab4af858d39dcbed1bea1125bfab2ab771923878ad245cac1bec"
+    },
+    {
+      "source": "Crossref",
+      "query": "robotic assembly insertion peg in hole six axis force torque sensor",
+      "url": "https://api.crossref.org/works?query.title=robotic+assembly+insertion+peg+in+hole+six+axis+force+torque+sensor&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 29,
+      "total_reported": 1518551,
+      "offset": 100,
+      "response_sha256": "d1e7a9739fcd3340afb0297bc39a27351fb8fea387fe9e4ba03247a79d133012"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensors hysteresis decoupling multi axis calibration six component",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensors+hysteresis+decoupling+multi+axis+calibration+six+component&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 51,
+      "total_reported": 2290316,
+      "offset": 0,
+      "response_sha256": "1b48740520c434d4d764c9e48965b24f96f90d91f1814e85cb695725007f2f5d"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensors hysteresis decoupling multi axis calibration six component",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensors+hysteresis+decoupling+multi+axis+calibration+six+component&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 36,
+      "total_reported": 2290316,
+      "offset": 100,
+      "response_sha256": "7cc3d86fdb6eddb4d22a18a2db4e30090671f694fd96f666ff1397b88f59387f"
+    },
+    {
+      "source": "Crossref",
+      "query": "dynamic identification force torque sensor tool inertia manipulator",
+      "url": "https://api.crossref.org/works?query.title=dynamic+identification+force+torque+sensor+tool+inertia+manipulator&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 13,
+      "total_reported": 2634566,
+      "offset": 0,
+      "response_sha256": "74edfc7e3a05bc548cf43f5c21a1e28aac05012ebf4a21989ad040bab636faa2"
+    },
+    {
+      "source": "Crossref",
+      "query": "dynamic identification force torque sensor tool inertia manipulator",
+      "url": "https://api.crossref.org/works?query.title=dynamic+identification+force+torque+sensor+tool+inertia+manipulator&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 9,
+      "total_reported": 2634566,
+      "offset": 100,
+      "response_sha256": "6029258c28efdf9f71b4aafa51ca22f8a88f827da735933f59f309d21c8dd896"
+    },
+    {
+      "source": "Crossref",
+      "query": "long-term drift robot force torque sensor strain gauge zero drift",
+      "url": "https://api.crossref.org/works?query.title=long-term+drift+robot+force+torque+sensor+strain+gauge+zero+drift&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 5,
+      "total_reported": 2536707,
+      "offset": 0,
+      "response_sha256": "0e003efffc484744e502c93dac1f68def3772cab8da9863e6573ca68c37c7239"
+    },
+    {
+      "source": "Crossref",
+      "query": "long-term drift robot force torque sensor strain gauge zero drift",
+      "url": "https://api.crossref.org/works?query.title=long-term+drift+robot+force+torque+sensor+strain+gauge+zero+drift&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 5,
+      "total_reported": 2536707,
+      "offset": 100,
+      "response_sha256": "d928b7e74e383b24b41e47e170fca05d277e5bf466e328db1e01aa1f101962b2"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensor calibration dataset robot temperature",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensor+calibration+dataset+robot+temperature&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 50,
+      "total_reported": 2051235,
+      "offset": 0,
+      "response_sha256": "aeda30887d63b8ba08f99ceef5f9ca671cbbb4687201a258228a83705f9045f7"
+    },
+    {
+      "source": "Crossref",
+      "query": "force torque sensor calibration dataset robot temperature",
+      "url": "https://api.crossref.org/works?query.title=force+torque+sensor+calibration+dataset+robot+temperature&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 34,
+      "total_reported": 2051235,
+      "offset": 100,
+      "response_sha256": "3b0298526bd018d048b6516e1bf699d4bbfb53c8f7c48db1006ccc777cdf85dd"
+    },
+    {
+      "source": "Crossref",
+      "query": "self calibration force torque sensor robot online accelerometer",
+      "url": "https://api.crossref.org/works?query.title=self+calibration+force+torque+sensor+robot+online+accelerometer&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 50,
+      "total_reported": 2543884,
+      "offset": 0,
+      "response_sha256": "14380114842bc701dd5c0498ffb3d7694735e18f9774b929f42147e9edb90408"
+    },
+    {
+      "source": "Crossref",
+      "query": "self calibration force torque sensor robot online accelerometer",
+      "url": "https://api.crossref.org/works?query.title=self+calibration+force+torque+sensor+robot+online+accelerometer&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 33,
+      "total_reported": 2543884,
+      "offset": 100,
+      "response_sha256": "e98a606dca2e1e6cd4e08286ed343401f4e105f66fbb5b4b7c5dc9f29fc1df51"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot assembly contact detection contact state estimation wrench sensor",
+      "url": "https://api.crossref.org/works?query.title=robot+assembly+contact+detection+contact+state+estimation+wrench+sensor&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 25,
+      "total_reported": 4238229,
+      "offset": 0,
+      "response_sha256": "bc36938ccdd03eeab0405cab5741e65b23abc2540a5223359f07c76469660c7c"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot assembly contact detection contact state estimation wrench sensor",
+      "url": "https://api.crossref.org/works?query.title=robot+assembly+contact+detection+contact+state+estimation+wrench+sensor&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 13,
+      "total_reported": 4238229,
+      "offset": 100,
+      "response_sha256": "48dfd435b4d2025ee4ff623e5156a63349e76d21e39aa64194290f4413c9325c"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot force control assembly force feedback misalignment jamming peg hole",
+      "url": "https://api.crossref.org/works?query.title=robot+force+control+assembly+force+feedback+misalignment+jamming+peg+hole&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 55,
+      "total_reported": 2881402,
+      "offset": 0,
+      "response_sha256": "a7649056303d7b4d7eb2f4df6b1958aa3839b8755c1e4b7fa61dd7edd4b60515"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot force control assembly force feedback misalignment jamming peg hole",
+      "url": "https://api.crossref.org/works?query.title=robot+force+control+assembly+force+feedback+misalignment+jamming+peg+hole&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 28,
+      "total_reported": 2881402,
+      "offset": 100,
+      "response_sha256": "6f1c9e8198ca6167fd9c666f8c9e7fdd42bf7601c9052bf3d369eaedc37bdef7"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot multi-axis force torque sensor uncertainty calibration creep hysteresis",
+      "url": "https://api.crossref.org/works?query.title=robot+multi-axis+force+torque+sensor+uncertainty+calibration+creep+hysteresis&rows=100&offset=0&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 36,
+      "total_reported": 2597084,
+      "offset": 0,
+      "response_sha256": "f1c077b2e8e5fc4df2795513e5aa1f7392bf0316f1a787e76b3575abda401f8e"
+    },
+    {
+      "source": "Crossref",
+      "query": "robot multi-axis force torque sensor uncertainty calibration creep hysteresis",
+      "url": "https://api.crossref.org/works?query.title=robot+multi-axis+force+torque+sensor+uncertainty+calibration+creep+hysteresis&rows=100&offset=100&sort=score&filter=until-pub-date%3A2026-11-21&select=DOI%2Ctitle%2Cauthor%2CURL%2Cpublished%2Ctype%2Ccontainer-title",
+      "returned": 100,
+      "accepted": 31,
+      "total_reported": 2597084,
+      "offset": 100,
+      "response_sha256": "b745190a668de474046269c10eaa432692dac1e46d9029a9542446765b5b7748"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# G1 机器人与自主控制证据目录
+
+[2026-11-21 首批检索与核验](2026-11-21/README.md) 覆盖腕部力／力矩校准与接触装配（R1）、执行器受限条件下的动力学辨识与控制（R2），以及多机器人通信和异步定位（R5）。相邻领域用于比较已有方法和检验选题边界。
+
+- [重点原始研究与可核查结果](2026-11-21/reading-guide.csv)
+- [数据发布、获取方式及使用限制](2026-11-21/datasets.csv)
+- [已下载核验并清洗的实测数据汇总](2026-11-21/data/README.md)
+- [可下载的文献总表](https://raw.githubusercontent.com/hengyizang/lunwen/refs/heads/cloud-state/my-phd/projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv)
