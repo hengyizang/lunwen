@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-k7igab-replication-data-for-ear",
+  "dataset_name": "Replication Data for: Early attentional processing and cortical remapping strategies of tactile stimuli in adults with an early and late-onset visual impairment.",
+  "doi": "10.7910/dvn/k7igab",
+  "landing_url": "https://doi.org/10.7910/DVN/K7IGAB",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/K7IGAB",
+  "access_date": "2026-11-21",
+  "round_number": 13,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "S39_LB.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/7674076",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/K7IGAB/18c64128a3c-c901e2bca917?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27S39_LB.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T083032Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=38186eb2f2352daa50d71b5fde382b70b3376196d124a11895256d04ef670d9f",
+      "http_status": 200,
+      "bytes": 825,
+      "publisher_checksum": "md5:12a5fbdc88b1f4ada4013c6f52b22a31",
+      "verified_md5": "12a5fbdc88b1f4ada4013c6f52b22a31",
+      "verified_sha256": "e3205034d9b376b20379309182e41ac94fefa5b2ce265895a3a4bd4f128ef93d"
+    },
+    {
+      "file": "S2_control.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/7673986",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/K7IGAB/18c6325fc95-b495a7ebf4e2?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27S2_control.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T083034Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3e0a0acc7f9d71ceffe5d6d74f1ffe3df9c71fcd58f0a777dbf3ba35d82f9e64",
+      "http_status": 200,
+      "bytes": 839,
+      "publisher_checksum": "md5:d58a60bc2b415b5c002dd439b1167af2",
+      "verified_md5": "d58a60bc2b415b5c002dd439b1167af2",
+      "verified_sha256": "69dd588becb29f87029b147e67e490bd49c04e80d3d3e3fa96cc50b96ff90a9b"
+    },
+    {
+      "file": "S21_EB.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/7674060",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/K7IGAB/18c640f3d95-01a0329e520a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27S21_EB.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T083036Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=a19dba278d3c34f0601439570d55b71c59a3e097a006448951b6580641d2b6dc",
+      "http_status": 200,
+      "bytes": 866,
+      "publisher_checksum": "md5:643c2f1971dcbf394a331a346b359cfa",
+      "verified_md5": "643c2f1971dcbf394a331a346b359cfa",
+      "verified_sha256": "c244d8822959d10a4fcc91ca60c94d9611cd4caec18c09331b18be3035b30ce6"
+    },
+    {
+      "file": "S35_control.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/7673982",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/K7IGAB/18c6327e4c5-9754c9ae6245?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27S35_control.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T083038Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=f4517e2a0001944611321e15900a2be3637a913716f64bda6132a6b4d984efd9",
+      "http_status": 200,
+      "bytes": 912,
+      "publisher_checksum": "md5:0d286f9a11a3ea5e64d9d56021035f6b",
+      "verified_md5": "0d286f9a11a3ea5e64d9d56021035f6b",
+      "verified_sha256": "a587c1166093bed66bb6627fb925ebe2a0c392e8a67d26b22e185f31d39b32b2"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-k7igab-replication-data-for-ear",
+  "raw_total_bytes": 3442,
+  "raw_total_rows": 183,
+  "duplicate_rows_removed": 12,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-k7igab-replication-data-for-ear-cleaned.csv",
+  "cleaned_csv_sha256": "eac789a30bcdd6cd2e71826498aafd15ce978a662402581ae38a7eb73ae802b3",
+  "cleaned_rows": 14,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "S39_LB.txt": {
+      "-": 0,
+      ".00": 20,
+      "8": 45,
+      "6625": 50
+    },
+    "S2_control.txt": {
+      "-0.": 1,
+      "547": 21,
+      "3": 45,
+      "875": 54
+    },
+    "S21_EB.txt": {
+      "0.": 0,
+      "Unnamed: 1": 10,
+      "4": 30,
+      "8": 51,
+      "81": 57,
+      "5": 57
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

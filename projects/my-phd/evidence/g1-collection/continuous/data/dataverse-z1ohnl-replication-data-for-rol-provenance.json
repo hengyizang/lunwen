@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-z1ohnl-replication-data-for-rol",
+  "dataset_name": "Replication Data for: Role of single chemical heterogeneities in generating anisotropic tactile sensitivity and soft sliding friction phenomena",
+  "doi": "10.7910/dvn/z1ohnl",
+  "landing_url": "https://doi.org/10.7910/DVN/Z1OHNL",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/Z1OHNL",
+  "access_date": "2026-11-21",
+  "round_number": 13,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "splitC4-C6_5mms_100g_run1.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14445044",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/Z1OHNL/1a1e489b519-73b4b309da38?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27splitC4-C6_5mms_100g_run1.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082940Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=f3a5b6b31a75847e3aac7032e8cd3481d6b4303d43c4c7e6e067dc9f19ce8089",
+      "http_status": 200,
+      "bytes": 369980,
+      "publisher_checksum": "dataverse_original_md5:f7c44c9dda13103dcc005c6b6c8cbe52",
+      "verified_md5": "2340a81e9f7b14f57c5e2057454bef0d",
+      "verified_sha256": "ff5918e2ede4b30581b3816acce5084b14899f0c36aca931a6e7d3e16c7125f5"
+    },
+    {
+      "file": "splitC4-C6_25mms_25g_run3.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14444976",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/Z1OHNL/1a1e489ba16-68a6b58c9989?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27splitC4-C6_25mms_25g_run3.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082942Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d55e9f51c651fd54250a97d80e5ce760fb61245ccfb029d41ee59bf8f2c8aec1",
+      "http_status": 200,
+      "bytes": 371710,
+      "publisher_checksum": "dataverse_original_md5:1f07961e6bc5146fb76e206a7f816cb4",
+      "verified_md5": "173ab0e70f2ab0c5d634efb99f24625c",
+      "verified_sha256": "87fa3b75c3fb5bf5d0e6e319a1483b0ad343b5246b400111b59aaf34d470357d"
+    },
+    {
+      "file": "splitC6-C4_45mms_0g_run3.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14444912",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/Z1OHNL/1a1e489cd84-5c2398ea29ee?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27splitC6-C4_45mms_0g_run3.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082945Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3f558663014a3c80390f38922f3afa87356bdde5a84aca202bf0de1ce736a434",
+      "http_status": 200,
+      "bytes": 375519,
+      "publisher_checksum": "dataverse_original_md5:aeb7d1494a368a5cb83575a51c722b02",
+      "verified_md5": "bdda4b7bf4bae5e65ccc3c9e65e78871",
+      "verified_sha256": "a5984b9c70e44e1637bef45e7cd4d4572890f987e786586606ddc5a3ead095cd"
+    },
+    {
+      "file": "splitC4-C6_25mms_75g_run1.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14444994",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/Z1OHNL/1a1e489ba5a-7bd5d5925b75?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27splitC4-C6_25mms_75g_run1.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082947Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=7d0dc32ba6903c6b609975ee119fc13e49b2547f823cb7ea5585d84ba7227457",
+      "http_status": 200,
+      "bytes": 377944,
+      "publisher_checksum": "dataverse_original_md5:9b72db8b7481119823ad4c0fa0c92870",
+      "verified_md5": "0d324ee1d3df44168619fbef4b2c7bc3",
+      "verified_sha256": "2da66aaa037c9a56f66859d8054bfea742d4633936df150f605b8894d33bc1a2"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-z1ohnl-replication-data-for-rol",
+  "raw_total_bytes": 1495153,
+  "raw_total_rows": 39834,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv",
+  "cleaned_csv_sha256": "78602ab094d6a2631d80c31b6412fa589ba13de68d9ce900c81c98ec1c74010f",
+  "cleaned_rows": 12,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "splitC4-C6_5mms_100g_run1.tab": {
+      "Index": 0,
+      "DMM-1 Time (s)": 0,
+      "DMM-1 Voltage (V)": 0
+    },
+    "splitC4-C6_25mms_25g_run3.tab": {
+      "Index": 0,
+      "DMM-1 Time (s)": 0,
+      "DMM-1 Voltage (V)": 0
+    },
+    "splitC6-C4_45mms_0g_run3.tab": {
+      "Index": 0,
+      "DMM-1 Time (s)": 0,
+      "DMM-1 Voltage (V)": 0
+    },
+    "splitC4-C6_25mms_75g_run1.tab": {
+      "Index": 0,
+      "DMM-1 Time (s)": 0,
+      "DMM-1 Voltage (V)": 0
+    }
+  },
+  "time_monotonicity": {
+    "splitC4-C6_5mms_100g_run1.tab": {
+      "column": "DMM-1 Time (s)",
+      "numeric_samples": 9877,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0010985879999996229,
+      "median_step": 0.0011339479999996627,
+      "max_step": 0.004621312000001154
+    },
+    "splitC4-C6_25mms_25g_run3.tab": {
+      "column": "DMM-1 Time (s)",
+      "numeric_samples": 9964,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0010989270000001383,
+      "median_step": 0.0011340480000001651,
+      "max_step": 0.004620773000000078
+    },
+    "splitC6-C4_45mms_0g_run3.tab": {
+      "column": "DMM-1 Time (s)",
+      "numeric_samples": 9892,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0010984880000002306,
+      "median_step": 0.0011343470000007017,
+      "max_step": 0.004620851999999509
+    },
+    "splitC4-C6_25mms_75g_run1.tab": {
+      "column": "DMM-1 Time (s)",
+      "numeric_samples": 10101,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0010987680000003053,
+      "median_step": 0.0011340280000005087,
+      "max_step": 0.00461975300000006
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

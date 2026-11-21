@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：12
-- **最近更新时间 (UTC)**：2026-11-21T08:24:12Z
-- **累计净新增文献** (`literature-new.csv`)：1209 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：826 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1089 条
-- **累计已完成确定性清洗数据集**：16 个
+- **已完成轮次**：13
+- **最近更新时间 (UTC)**：2026-11-21T08:29:10Z
+- **累计净新增文献** (`literature-new.csv`)：1268 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1142 条
+- **累计已完成确定性清洗数据集**：19 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 18 | 47 |
-| `R2_Aerial_Actuator` | 75 | 37 |
+| `R1_Force_Contact` | 57 | 47 |
+| `R2_Aerial_Actuator` | 77 | 37 |
 | `R5_MultiRobot_Comm` | 89 | 32 |
-| `Robotics_Embodied` | 340 | 266 |
-| `Mechanical_Physics_AI` | 376 | 339 |
-| `Mechatronics_PHM_Control` | 304 | 265 |
-| `Smart_Manufacturing` | 193 | 152 |
-| `Smart_Factory_DigitalTwin` | 134 | 61 |
+| `Robotics_Embodied` | 380 | 266 |
+| `Mechanical_Physics_AI` | 389 | 370 |
+| `Mechatronics_PHM_Control` | 313 | 274 |
+| `Smart_Manufacturing` | 195 | 198 |
+| `Smart_Factory_DigitalTwin` | 134 | 62 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 48 | 0 |
+| `Adjacent` | 54 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -62,6 +62,9 @@
 | `dataverse-wrctu4-soil-hydraulic-parameter` | Soil hydraulic parameters for "Analyzing dual porosity in soil hydr... | 10.7910/dvn/wrctu4 | `cleaned_rows` | 211 | `4310d567b54e` | [CSV](data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv) · [JSON](data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json) · [PY](data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py) |
 | `dataverse-ckliy1-perception-and-acoustic` | Perception and acoustic data with R scripts | 10.7910/dvn/ckliy1 | `summary_table` | 77 | `408482190050` | [CSV](data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv) · [JSON](data/dataverse-ckliy1-perception-and-acoustic-provenance.json) · [PY](data/derive_dataverse_ckliy1_perception_and_acoustic.py) |
 | `dataverse-myrxr8-autonomous-integrated-sy` | Autonomous Integrated Systems in Archaeology | 10.7910/dvn/myrxr8 | `summary_table` | 9 | `5749db2a529a` | [CSV](data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv) · [JSON](data/dataverse-myrxr8-autonomous-integrated-sy-provenance.json) · [PY](data/derive_dataverse_myrxr8_autonomous_integrated_sy.py) |
+| `dataverse-z1ohnl-replication-data-for-rol` | Replication Data for: Role of single chemical heterogeneities in ge... | 10.7910/dvn/z1ohnl | `summary_table` | 12 | `ff5918e2ede4` | [CSV](data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv) · [JSON](data/dataverse-z1ohnl-replication-data-for-rol-provenance.json) · [PY](data/derive_dataverse_z1ohnl_replication_data_for_rol.py) |
+| `dataverse-ekpfj2-replication-data-for-art` | Replication Data for: Artificial tactile and proprioceptive feedbac... | 10.7910/dvn/ekpfj2 | `cleaned_rows` | 14 | `24d19e803082` | [CSV](data/dataverse-ekpfj2-replication-data-for-art-cleaned.csv) · [JSON](data/dataverse-ekpfj2-replication-data-for-art-provenance.json) · [PY](data/derive_dataverse_ekpfj2_replication_data_for_art.py) |
+| `dataverse-k7igab-replication-data-for-ear` | Replication Data for: Early attentional processing and cortical rem... | 10.7910/dvn/k7igab | `summary_table` | 14 | `e3205034d9b3` | [CSV](data/dataverse-k7igab-replication-data-for-ear-cleaned.csv) · [JSON](data/dataverse-k7igab-replication-data-for-ear-provenance.json) · [PY](data/derive_dataverse_k7igab_replication_data_for_ear.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -79,3 +82,4 @@
 | 10 | 2026-11-21T08:15:25Z | Broad Engineering R10: Smart_Manufacturing | +106 | +75 | +0 | [round-10-audit.json](rounds/round-10-audit.json) |
 | 11 | 2026-11-21T08:19:12Z | Broad Engineering R11: Smart_Manufacturing / Smart_Factory_DigitalTwin | +148 | +38 | +1 | [round-11-audit.json](rounds/round-11-audit.json) |
 | 12 | 2026-11-21T08:24:12Z | Broad Engineering R12: Smart_Factory_DigitalTwin / R1_Force_Contact | +91 | +59 | +0 | [round-12-audit.json](rounds/round-12-audit.json) |
+| 13 | 2026-11-21T08:29:10Z | Broad Engineering R13: R1_Force_Contact (2026) | +59 | +46 | +3 | [round-13-audit.json](rounds/round-13-audit.json) |

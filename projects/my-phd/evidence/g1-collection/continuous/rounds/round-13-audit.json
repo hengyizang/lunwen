@@ -1,0 +1,328 @@
+{
+  "schema_version": "1.0",
+  "round": 13,
+  "completed_at": "2026-11-21T08:29:10Z",
+  "batch_label": "Broad Engineering R13: R1_Force_Contact (2026)",
+  "base_head_sha": "308ff986868d2104d5aedc1ded7ae691e3900d2b",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 110,
+    "duplicates_skipped": 51,
+    "net_new": 59,
+    "new_reading_queue": 53,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t082910z-arxiv-e2e28db0db",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Arobotic+AND+all%3Acontact+AND+all%3Awrench+AND+all%3Agravity+AND+all%3Acompensation%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "1feaeba274233e9846da483ffc4ebf933b804eb05177668a4f2e4b07991a98bd",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t082911z-crossref-fa66435088",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+contact+wrench+gravity+compensation&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "35d362814556704a55745f3afc1f6a519f3960bf0ae5cafcd68524f502795394",
+        "normalized_results_sha256": "231876416936fb7c69bb8db91523bc7346e642bd1dcc200d0b8ab7560e8e1a61"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t082913z-openalex-8d920b96f9",
+        "request_url": "https://api.openalex.org/works?search=robotic+contact+wrench+gravity+compensation&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "67e79c75513bab53129dd5f7df6024321c0b8fe2e79242296ef5d389d99aa5c9",
+        "normalized_results_sha256": "dd3211cac73d4f513d5e634939e15bba03680a572eea8f6f2efe05728eee2281"
+      },
+      {
+        "provider": "arxiv",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t082914z-arxiv-22477f39a1",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Asix-axis+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Adrift+AND+all%3Acalibration%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "148ef52d9d830aff08ab627e866aaae6da1ac89f7868d41461ed31b46657cb26",
+        "normalized_results_sha256": "e9bf8a9aacff423afaab247bd7c2e3ea5970e631163042b93b7c295c2d074563"
+      },
+      {
+        "provider": "crossref",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t082916z-crossref-45a6c0ce96",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=six-axis+force+torque+drift+calibration&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "328c4de59f239d91eb8e0320e7cdde2064face3151f261f3fa82ea353e91fbc3",
+        "normalized_results_sha256": "55af4f7ca083dc00eccf40cdd29d44e8716ccf754c44e2b652cd5a4c463e26d3"
+      },
+      {
+        "provider": "openalex",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t082918z-openalex-230edca1c7",
+        "request_url": "https://api.openalex.org/works?search=six-axis+force+torque+drift+calibration&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "2025a704a3cecb52e1cddf3e82c10eb3fc701885e508212ba15a750870d732dd",
+        "normalized_results_sha256": "aa532162025823817c7ef3e97a55ae37b862d0d531aa7259a51c6c9dc7edc0f6"
+      },
+      {
+        "provider": "arxiv",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t082920z-arxiv-119a661c61",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Atactile+AND+all%3Aslip+AND+all%3Adetection+AND+all%3Arobotic+AND+all%3Agrasping%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 6,
+        "response_sha256": "0f12b6162cb3481e6ed25d41d52e15e11ecb54748b9841ef14aff156ead12bc7",
+        "normalized_results_sha256": "3ae3b3036622166507596e54d8ad169b7240203d763b8b03b4b6e033d9396bba"
+      },
+      {
+        "provider": "crossref",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t082921z-crossref-96defe3dc2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=tactile+slip+detection+robotic+grasping&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "da10ab66cd9c984dd7a98035cca6ecd041ba1f4f9a7e282e17889888b15b3859",
+        "normalized_results_sha256": "8d607c01968dd6ceac1a4556ac8eb704a08ed73d2532e2c22d5b380ad79008b3"
+      },
+      {
+        "provider": "openalex",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t082922z-openalex-0e0ea4207f",
+        "request_url": "https://api.openalex.org/works?search=tactile+slip+detection+robotic+grasping&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "372c16abb416fc79ee1f391fa199dd34620056ef057029c7831178001516fce7",
+        "normalized_results_sha256": "af1c73e18119be00e3af81b11261a605f70ecbd97d7b39e90b3c68893f065011"
+      },
+      {
+        "provider": "arxiv",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t082924z-arxiv-2731a620c2",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Acompliant+AND+all%3Acontact-rich+AND+all%3Aassembly+AND+all%3Aresidual+AND+all%3Alearning%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "69a00809890e0e2ee6dd0ed06f1066ef945b50f8e5e9cb51499e378fe9a76466",
+        "normalized_results_sha256": "24b0e91a931c020913485007f7e70bdeaf38c190a4a184b4eb23f516fb74c53d"
+      },
+      {
+        "provider": "crossref",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t082926z-crossref-3c8f595d16",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=compliant+contact-rich+assembly+residual+learning&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "4c05b6ab6a8284b41b39140b383abcdc5830844b24dcb75de0c7efeaeeedbcb1",
+        "normalized_results_sha256": "a0af862ab103f4cdef295cfab61d2a9d5e1188f5bc6044105b52a346ea68310d"
+      },
+      {
+        "provider": "openalex",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t082927z-openalex-3f5a28f770",
+        "request_url": "https://api.openalex.org/works?search=compliant+contact-rich+assembly+residual+learning&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "7386d25ed3d8d2602097da8d66fd5ac615794e6b16e1120aaa1b1e5cfd683653",
+        "normalized_results_sha256": "5471d9b522ca22229f059002090f4b41c350e2b1f4265759e25ae6bc1d13c13c"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/machines13080659",
+        "receipt_id": "20261121t082929z-opencitations-28bd3b46ba",
+        "result_count": 1,
+        "response_sha256": "81c0e6ba6680b368d8aa64076bd42163d96601557450552a630a16b9857a88a2"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s25030664",
+        "receipt_id": "20261121t082930z-opencitations-873ffd7326",
+        "result_count": 5,
+        "response_sha256": "c3b6fd8535f46690cd09b8e0d2b2ffcd79b9d8b8d26e75db21337522b5129a95"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 247,
+    "off_topic_filtered": 121,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 80,
+    "net_new": 46,
+    "provider_statuses": [
+      {
+        "query": "tool wear",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tool wear",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "tool wear",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tool wear",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tool wear",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "additive manufacturing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "additive manufacturing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "melt pool",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "finite element",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "finite element",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "finite element",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 13,
+    "cleaned": [
+      {
+        "slug": "dataverse-z1ohnl-replication-data-for-rol",
+        "key": "dataverse:10.7910/dvn/z1ohnl",
+        "dataset_name": "Replication Data for: Role of single chemical heterogeneities in generating anisotropic tactile sensitivity and soft sliding friction phenomena",
+        "doi": "10.7910/dvn/z1ohnl",
+        "landing_url": "https://doi.org/10.7910/DVN/Z1OHNL",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-z1ohnl-replication-data-for-rol-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_z1ohnl_replication_data_for_rol.py",
+        "cleaned_rows": 12,
+        "raw_total_rows": 39834,
+        "verified_sha256": "ff5918e2ede4b30581b3816acce5084b14899f0c36aca931a6e7d3e16c7125f5"
+      },
+      {
+        "slug": "dataverse-ekpfj2-replication-data-for-art",
+        "key": "dataverse:10.7910/dvn/ekpfj2",
+        "dataset_name": "Replication Data for: Artificial tactile and proprioceptive feedback improves performance and confidence on object identification tasks",
+        "doi": "10.7910/dvn/ekpfj2",
+        "landing_url": "https://doi.org/10.7910/DVN/EKPFJ2",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ekpfj2-replication-data-for-art-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ekpfj2-replication-data-for-art-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ekpfj2_replication_data_for_art.py",
+        "cleaned_rows": 14,
+        "raw_total_rows": 37,
+        "verified_sha256": "24d19e8030829576d7fda8a4e0fa38474b677c11308ff41f233c2e2abc199d6a"
+      },
+      {
+        "slug": "dataverse-k7igab-replication-data-for-ear",
+        "key": "dataverse:10.7910/dvn/k7igab",
+        "dataset_name": "Replication Data for: Early attentional processing and cortical remapping strategies of tactile stimuli in adults with an early and late-onset visual impairment.",
+        "doi": "10.7910/dvn/k7igab",
+        "landing_url": "https://doi.org/10.7910/DVN/K7IGAB",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-k7igab-replication-data-for-ear-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-k7igab-replication-data-for-ear-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_k7igab_replication_data_for_ear.py",
+        "cleaned_rows": 14,
+        "raw_total_rows": 183,
+        "verified_sha256": "e3205034d9b376b20379309182e41ac94fefa5b2ce265895a3a4bd4f128ef93d"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "url": "https://doi.org/10.7910/DVN/M6JXED",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

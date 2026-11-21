@@ -1,0 +1,15 @@
+source_file,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,SensoryFeedbackOptions:,R
+FoamBlockData.tab,,,HEIGHT:,,SMALL,,,MEDIUM,,,,,LARGE,,,,,No feedback was provided
+FoamBlockData.tab,,,,,,,,,,,,,,,,,Press.,Feedback from the fingertips conveying pressure information was provided
+FoamBlockData.tab,,,,,,,,,,,,,,,,,Std. Prop.,Feedback about hand position (opening) was provided
+FoamBlockData.tab,,,,,,,,,,,,,,,,,"Press., Std. Prop.",Both pressure and standard proprioceptive information was conveyed
+FoamBlockData.tab,,,,,,,,,,,,,,,,,,
+FoamBlockData.tab,,Squishiability,,,A,,,,B,,,,C,,,,,
+FoamBlockData.tab,,,,,,,,,,,,,,,,,Protocol:,"Either a row or a column of blocks were selected.  Blocks from that set were provided in radom order, 5 times each, for a total of 15 observation.s  Subject was blindfolded and had white noise played into noise-cancelling headphones.  Block was positioned in the hand during open grasp.  Subject was tapped on the sholder to signal him to close his hand.  Subject told researcher if block was small/medium/large or soft/medium/hard.  "
+FoamBlockData.tab,,HARD,,,,,,,,,,,,,,,,
+FoamBlockData.tab,,,,,,,,,,,,,,,,,Scoring:,"1 - correct, 0 - incorrect"
+FoamBlockData.tab,,,,,,,,,,,,,,,,,Chance: ,0.3333333
+FoamBlockData.tab,,,,,D,,,,E,,,,F,,,,,
+FoamBlockData.tab,,MEDIUM,,,,,,,,,,,,,,,,
+FoamBlockData.tab,,,,,G,,,,H,,,,I,,,,,
+FoamBlockData.tab,,SOFT,,,,,,,,,,,,,,,,
