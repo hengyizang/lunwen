@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：23
-- **最近更新时间 (UTC)**：2026-11-21T09:19:02Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2303 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1130 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2016 条
-- **累计已完成确定性清洗数据集**：48 个
+- **已完成轮次**：24
+- **最近更新时间 (UTC)**：2026-11-21T09:24:11Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2460 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1183 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2138 条
+- **累计已完成确定性清洗数据集**：49 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 123 | 48 |
-| `R2_Aerial_Actuator` | 344 | 43 |
+| `R1_Force_Contact` | 124 | 48 |
+| `R2_Aerial_Actuator` | 364 | 44 |
 | `R5_MultiRobot_Comm` | 240 | 36 |
-| `Robotics_Embodied` | 921 | 273 |
-| `Mechanical_Physics_AI` | 565 | 551 |
-| `Mechatronics_PHM_Control` | 484 | 322 |
-| `Smart_Manufacturing` | 218 | 273 |
-| `Smart_Factory_DigitalTwin` | 148 | 63 |
+| `Robotics_Embodied` | 1032 | 276 |
+| `Mechanical_Physics_AI` | 592 | 585 |
+| `Mechatronics_PHM_Control` | 554 | 357 |
+| `Smart_Manufacturing` | 221 | 280 |
+| `Smart_Factory_DigitalTwin` | 150 | 65 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 173 | 0 |
+| `Adjacent` | 204 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,7 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-kkejzf-the-event-related-potent` | The event-related potential of tactile stimulus recognition and bra... | 10.7910/dvn/kkejzf | `cleaned_rows` | 57 | `a587c1166093` | [CSV](data/dataverse-kkejzf-the-event-related-potent-cleaned.csv) · [JSON](data/dataverse-kkejzf-the-event-related-potent-provenance.json) · [PY](data/derive_dataverse_kkejzf_the_event_related_potent.py) |
 | `figshare-35081113-hrc-architecture-3-1-raw` | HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publi... | 10.6084/m9.figshare.35081113 | `summary_table` | 34 | `4a56e090f3e5` | [CSV](data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv) · [JSON](data/figshare-35081113-hrc-architecture-3-1-raw-provenance.json) · [PY](data/derive_figshare_35081113_hrc_architecture_3_1_raw.py) |
 | `figshare-31558270-laser-powder-bed-fusion` | Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-... | 10.6084/m9.figshare.31558270.v2 | `summary_table` | 22 | `c6feed0cde5b` | [CSV](data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv) · [JSON](data/figshare-31558270-laser-powder-bed-fusion-provenance.json) · [PY](data/derive_figshare_31558270_laser_powder_bed_fusion.py) |
 | `figshare-34748238-temporal-information-con` | Temporal Information Continuity in Industrial Supervisory Robotics:... | 10.6084/m9.figshare.34748238.v1 | `summary_table` | 61 | `5a3d5977d938` | [CSV](data/figshare-34748238-temporal-information-con-cleaned.csv) · [JSON](data/figshare-34748238-temporal-information-con-provenance.json) · [PY](data/derive_figshare_34748238_temporal_information_con.py) |
@@ -71,6 +70,7 @@
 | `dataverse-a9lpy7-urbaning-v2x` | UrbanIng-V2X | 10.7910/dvn/a9lpy7 | `summary_table` | 25 | `a659594d5e30` | [CSV](data/dataverse-a9lpy7-urbaning-v2x-cleaned.csv) · [JSON](data/dataverse-a9lpy7-urbaning-v2x-provenance.json) · [PY](data/derive_dataverse_a9lpy7_urbaning_v2x.py) |
 | `dataverse-m6jxed-open-ended-creative-and` | Open-Ended Creative and Tactile Activity in Adult Practice: A Surve... | 10.7910/dvn/m6jxed | `summary_table` | 29 | `a01a6467f93c` | [CSV](data/dataverse-m6jxed-open-ended-creative-and-cleaned.csv) · [JSON](data/dataverse-m6jxed-open-ended-creative-and-provenance.json) · [PY](data/derive_dataverse_m6jxed_open_ended_creative_and.py) |
 | `dataverse-ckmbcg-replication-data-for-fee` | Replication Data for: Feedback and Education Improve Human Detectio... | 10.7910/dvn/ckmbcg | `summary_table` | 166 | `f7f3adef2265` | [CSV](data/dataverse-ckmbcg-replication-data-for-fee-cleaned.csv) · [JSON](data/dataverse-ckmbcg-replication-data-for-fee-provenance.json) · [PY](data/derive_dataverse_ckmbcg_replication_data_for_fee.py) |
+| `figshare-35071237-supplementary-file-1-phy` | Supplementary file 1_Physiological digital twins require cross-syst... | 10.3389/fphys.2026.1947699.s001 | `summary_table` | 22 | `7560dcee2b21` | [CSV](data/figshare-35071237-supplementary-file-1-phy-cleaned.csv) · [JSON](data/figshare-35071237-supplementary-file-1-phy-provenance.json) · [PY](data/derive_figshare_35071237_supplementary_file_1_phy.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -99,3 +99,4 @@
 | 21 | 2026-11-21T09:08:59Z | Broad Engineering R21: R2_Aerial_Actuator / R5_MultiRobot_Comm | +134 | +47 | +3 | [round-21-audit.json](rounds/round-21-audit.json) |
 | 22 | 2026-11-21T09:14:08Z | Broad Engineering R22: R5_MultiRobot_Comm / Robotics_Embodied | +106 | +83 | +3 | [round-22-audit.json](rounds/round-22-audit.json) |
 | 23 | 2026-11-21T09:19:02Z | Broad Engineering R23: Robotics_Embodied | +202 | +40 | +3 | [round-23-audit.json](rounds/round-23-audit.json) |
+| 24 | 2026-11-21T09:24:11Z | Broad Engineering R24: Robotics_Embodied | +157 | +53 | +1 | [round-24-audit.json](rounds/round-24-audit.json) |

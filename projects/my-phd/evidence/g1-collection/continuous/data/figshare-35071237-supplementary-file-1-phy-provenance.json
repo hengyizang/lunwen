@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-35071237-supplementary-file-1-phy",
+  "dataset_name": "Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip",
+  "doi": "10.3389/fphys.2026.1947699.s001",
+  "landing_url": "https://frontiersin.figshare.com/articles/dataset/Supplementary_file_1_Physiological_digital_twins_require_cross-system_observation_contracts_zip/35071237",
+  "source_api_url": "https://api.figshare.com/v2/articles/35071237",
+  "access_date": "2026-11-21",
+  "round_number": 24,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip",
+      "download_url": "https://ndownloader.figshare.com/files/71680828",
+      "final_url": "https://s3-eu-west-1.amazonaws.com/pstorage-frontiersin-54389059089340853/71680828/Supplementaryfile1_Physiologicaldigitaltwinsrequirecrosssystemobservationcontracts.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAINCDM4RBVVB6WR3Q/20261121/eu-west-1/s3/aws4_request&X-Amz-Date=20261121T092518Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=e5d74aaff35018e612714deb1a1f4a6fb221cc26ed0eac8121b49d0ceb3020e9",
+      "http_status": 200,
+      "bytes": 7923,
+      "publisher_checksum": "md5:5cb67e8e8146cea18a9aeceeb5791c67",
+      "verified_md5": "5cb67e8e8146cea18a9aeceeb5791c67",
+      "verified_sha256": "7560dcee2b2169bcc05c28a251c1e6cb8a5e7c54fb3c28a3ee8e5b1d559629b3"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-35071237-supplementary-file-1-phy",
+  "raw_total_bytes": 7923,
+  "raw_total_rows": 24,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-35071237-supplementary-file-1-phy-cleaned.csv",
+  "cleaned_csv_sha256": "66284cc82ae8eb36ed2f3d7ade8627a50dc4a1067e92e56d2a225fbc6b7fd75d",
+  "cleaned_rows": 22,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv": {
+      "scenario": 0,
+      "proxy_output_id": 0,
+      "proxy_status": 0,
+      "reasons": 0,
+      "physiological_DO2_output_id": 0,
+      "DO2_status": 0,
+      "evidence_type": 0
+    },
+    "Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv": {
+      "elapsed_h": 0,
+      "flow_L_min": 0,
+      "flow_itemid": 0,
+      "SpO2_percent": 0,
+      "Hb_g_dL": 0,
+      "SpO2_age_min": 0,
+      "Hb_age_h": 0,
+      "flow_store_lag_min": 0,
+      "proxy_output_id": 0,
+      "proxy_status": 0,
+      "proxy_index_mL_min": 5,
+      "physiological_DO2_output_id": 0,
+      "reasons": 0,
+      "physiological_DO2_status": 0,
+      "DO2_reason": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

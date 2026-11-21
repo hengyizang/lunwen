@@ -1,0 +1,289 @@
+{
+  "schema_version": "1.0",
+  "round": 24,
+  "completed_at": "2026-11-21T09:24:11Z",
+  "batch_label": "Broad Engineering R24: Robotics_Embodied",
+  "base_head_sha": "b67acf662be373d632fb1045b77efcbbccdc5bb8",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 178,
+    "duplicates_skipped": 21,
+    "net_new": 157,
+    "new_reading_queue": 122,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "visual servoing robotic arm",
+        "receipt_id": "20261121t092411z-arxiv-e974c97414",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Avisual+AND+all%3Aservoing+AND+all%3Arobotic+AND+all%3Aarm&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "90f1efe7231409638cb4b20349c34932942f2eb739e36e991c3bbac5adfec2d9",
+        "normalized_results_sha256": "8e6d7a4cdad94460a89c11c77c573d8655956828bd659806d17ff4527989c3d8"
+      },
+      {
+        "provider": "openalex",
+        "query": "visual servoing robotic arm",
+        "receipt_id": "20261121t092411z-openalex-71ac48d2fd",
+        "request_url": "https://api.openalex.org/works?search=visual+servoing+robotic+arm&per-page=12",
+        "result_count": 12,
+        "response_sha256": "03f92ee115767e5be87cc2bea8d1e901b874663ee7e27ec030fdd759a59f4918",
+        "normalized_results_sha256": "ec119bd67bf4ffdca6e01f99fcc5e574ca1646dfef6b34effcfd5d4da191653c"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "visual servoing robotic arm",
+        "receipt_id": "20261121t092413z-europe-pmc-1f2acdd0ce",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=visual+servoing+robotic+arm&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a0fcbb7288f195cc93a3071b2fd96905fa70a28cb9cbbc9092fab5b39ce5c70e",
+        "normalized_results_sha256": "bb42d6d5389ca893772f11bd99f599f2875e5c2103df6cdf568804d06dbaf4ff"
+      },
+      {
+        "provider": "arxiv",
+        "query": "hand-eye calibration robotic vision",
+        "receipt_id": "20261121t092419z-arxiv-8c13ea0d15",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Ahand-eye+AND+all%3Acalibration+AND+all%3Arobotic+AND+all%3Avision&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "cf1385cd1a3c0b6eff0b2aea37b55112a9b4cf528c9cf5044bb5bf9ea52ad6bb",
+        "normalized_results_sha256": "c190dc7c287ecaf71abb15e2214f57a8da7e4f09d8168a887d4f09685362bc3c"
+      },
+      {
+        "provider": "openalex",
+        "query": "hand-eye calibration robotic vision",
+        "receipt_id": "20261121t092420z-openalex-9c7ffe406a",
+        "request_url": "https://api.openalex.org/works?search=hand-eye+calibration+robotic+vision&per-page=12",
+        "result_count": 12,
+        "response_sha256": "faa747086cc6227643ec926a995d32f191b319a3a6d8db2ee86f15247333385d",
+        "normalized_results_sha256": "70e0a07aeb834f525b6f5efe2370a27d816c8f5d1e75884cb334d222247bb55d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "hand-eye calibration robotic vision",
+        "receipt_id": "20261121t092422z-europe-pmc-9984e31cf0",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=hand-eye+calibration+robotic+vision&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "e0c73985d587ea96e0c9399f7643d54839eb47d545af4d71ad9e4fe30d65c76f",
+        "normalized_results_sha256": "2de450c0cc9300e5f2dac690b26b4f54cad846115d1849125e26574438623ad3"
+      },
+      {
+        "provider": "arxiv",
+        "query": "underwater AUV thruster control",
+        "receipt_id": "20261121t092432z-arxiv-c8c63e8bb9",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aunderwater+AND+all%3AAUV+AND+all%3Athruster+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 10,
+        "response_sha256": "ab0f4c6d6dc519dfdda71f16ecccd881c3e43dfeab933de82084666234e8a83d",
+        "normalized_results_sha256": "1d6c79ec789fd09e3973643c9a7cbb2712263045d0f1d94cc89c2dbf14b01c83"
+      },
+      {
+        "provider": "openalex",
+        "query": "underwater AUV thruster control",
+        "receipt_id": "20261121t092432z-openalex-419bcd1157",
+        "request_url": "https://api.openalex.org/works?search=underwater+AUV+thruster+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "71182887f18c9ff33ace0984a1b745f0e0668c0f262c785e3a2e4a9c9b042867",
+        "normalized_results_sha256": "691ed9382d9cfb42fc8043120e326c20f64992263b4b720dce381863b1606d07"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "underwater AUV thruster control",
+        "receipt_id": "20261121t092434z-europe-pmc-72bf99cb91",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=underwater+AUV+thruster+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "4337e79a83f3561cb9adb331856e7aca0842a6dcccec3a4cb021e6984ffe6326",
+        "normalized_results_sha256": "5f76fed61fab49488877cbde0ac9a4f6fe9873838dbc9638cd5c2bc756545721"
+      },
+      {
+        "provider": "arxiv",
+        "query": "cable-driven parallel robot control",
+        "receipt_id": "20261121t092442z-arxiv-43731cfd78",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acable-driven+AND+all%3Aparallel+AND+all%3Arobot+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "040964f202faf599ea194eb7537516c84e50c6f35f5224ed770fc142db898ccb",
+        "normalized_results_sha256": "c234264827636098e911817bac36994aa388604baffa9bfaded09b95c83d1f00"
+      },
+      {
+        "provider": "openalex",
+        "query": "cable-driven parallel robot control",
+        "receipt_id": "20261121t092443z-openalex-9d1e4301a0",
+        "request_url": "https://api.openalex.org/works?search=cable-driven+parallel+robot+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "f0070aa841e3582c557fbac6283d0f4082e54cd8aeb89048686938e83b03c86b",
+        "normalized_results_sha256": "8842b54a9350585338d504c5c533012055cfdd3e77ab39d3f9289ff4b087e8d7"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "cable-driven parallel robot control",
+        "receipt_id": "20261121t092445z-europe-pmc-b08edd6cc0",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=cable-driven+parallel+robot+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "f4409451753c3d092849152d358d20d2a2b0d6768958600da0b8d54e493bb31f",
+        "normalized_results_sha256": "3e14695c850045c6e8a96ae3a8381bcb73dc6cda201bc53f469b3ea3b2b34a1d"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/lra.2022.3183799",
+        "receipt_id": "20261121t092447z-opencitations-afd26502e9",
+        "result_count": 21,
+        "response_sha256": "db06f41c8205ce60bbb2729ac104e22917606530134acb8301f114db04ce2c58"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1155/2022/5552166",
+        "receipt_id": "20261121t092448z-opencitations-57dfb5b8d6",
+        "result_count": 15,
+        "response_sha256": "c7b9455eb6cb5b52d92789a3a34840d55c8b1473f47d0d5eae87714163532a8e"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 147,
+    "off_topic_filtered": 65,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 29,
+    "net_new": 53,
+    "provider_statuses": [
+      {
+        "query": "spindle vibration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "spindle vibration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "spindle vibration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "spindle vibration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "spindle vibration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "spindle thermal error",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "spindle thermal error",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "spindle thermal error",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "spindle thermal error",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "spindle thermal error",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "induction motor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "induction motor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "induction motor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "induction motor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "induction motor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "servo drive",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "servo drive",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "servo drive",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "servo drive",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "servo drive",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-35071237-supplementary-file-1-phy",
+        "key": "figshare:35071237",
+        "dataset_name": "Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip",
+        "doi": "10.3389/fphys.2026.1947699.s001",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Supplementary_file_1_Physiological_digital_twins_require_cross-system_observation_contracts_zip/35071237",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35071237-supplementary-file-1-phy-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-35071237-supplementary-file-1-phy-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35071237_supplementary_file_1_phy.py",
+        "cleaned_rows": 22,
+        "raw_total_rows": 24,
+        "verified_sha256": "7560dcee2b2169bcc05c28a251c1e6cb8a5e7c54fb3c28a3ee8e5b1d559629b3"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -1,0 +1,23 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,scenario,categorical_or_text,6,6,0,6,,,,,,,"{""original_record"": 1, ""delete_Hb"": 1, ""expire_Hb"": 1}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,proxy_output_id,categorical_or_text,6,6,0,1,,,,,,,"{""o_proxy"": 6}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,proxy_status,categorical_or_text,6,6,0,2,,,,,,,"{""block"": 5, ""degrade"": 1}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,reasons,categorical_or_text,6,6,0,6,,,,,,,"{""SpO2_proxy;sensor_quality_unknown"": 1, ""missing_or_unusable_Hb"": 1, ""stale_Hb_input"": 1}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,physiological_DO2_output_id,categorical_or_text,6,6,0,1,,,,,,,"{""o_DO2"": 6}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,DO2_status,categorical_or_text,6,6,0,1,,,,,,,"{""block"": 6}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::counterfactual_trace.csv,evidence_type,categorical_or_text,6,6,0,2,,,,,,,"{""injected"": 5, ""observed"": 1}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,elapsed_h,numeric,18,18,0,18,0,2.25,6.5,6.75463,10.75,15,4.97054
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,flow_L_min,numeric,18,18,0,14,3.3,4.45,4.8,4.71667,5.075,6.2,0.661771
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,flow_itemid,numeric,18,18,0,1,224842,224842,224842,224842,224842,224842,0
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,SpO2_percent,numeric,18,18,0,5,95,97,98,98.1667,100,100,1.75734
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,Hb_g_dL,numeric,18,18,0,2,8.9,8.9,10.3,9.83333,10.3,10.3,0.6791
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,SpO2_age_min,numeric,18,18,0,1,0,0,0,0,0,0,0
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,Hb_age_h,numeric,18,18,0,18,0.2,2.32083,3.875,4.5213,6.3,10.55,2.99781
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,flow_store_lag_min,numeric,18,18,0,16,0,6.25,11,10.6111,14,22,6.18479
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,proxy_output_id,categorical_or_text,18,18,0,1,,,,,,,"{""o_proxy"": 18}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,proxy_status,categorical_or_text,18,18,0,2,,,,,,,"{""degrade"": 13, ""block"": 5}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,proxy_index_mL_min,numeric,18,13,5,12,455.466,537.624,572.687,575.307,607.288,745.308,75.7428
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,physiological_DO2_output_id,categorical_or_text,18,18,0,1,,,,,,,"{""o_DO2"": 18}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,reasons,categorical_or_text,18,18,0,2,,,,,,,"{""SpO2_proxy;sensor_quality_unknown"": 13, ""stale_Hb_input"": 5}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,physiological_DO2_status,categorical_or_text,18,18,0,1,,,,,,,"{""block"": 18}"
+Supplementary file 1_Physiological digital twins require cross-system observation contracts.zip::record_replay.csv,DO2_reason,categorical_or_text,18,18,0,1,,,,,,,"{""no_validated_state_model_or_arterial_saturation_anchor"": 18}"
