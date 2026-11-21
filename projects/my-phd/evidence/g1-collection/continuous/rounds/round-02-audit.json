@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0",
+  "round": 2,
+  "completed_at": "2026-11-21T07:37:17Z",
+  "batch_label": "R1 Contact Assembly & Tactile + AAAI 2025 Robotics + Short Dataset Queries",
+  "base_head_sha": "99ec7521099a4e77f3af22ba1c02cd2b4a24f645",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 73,
+    "duplicates_skipped": 21,
+    "net_new": 52,
+    "new_reading_queue": 39,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "peg-in-hole force torque payload estimation",
+        "receipt_id": "20261121t073717z-arxiv-7a577675be",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apeg-in-hole+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Apayload+AND+all%3Aestimation&start=0&max_results=10",
+        "result_count": 0,
+        "response_sha256": "8a9bb0946036f9656b2801d545f1eeac0e22abbcea4573742548deeb7555a1e0",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "peg-in-hole force torque payload estimation",
+        "receipt_id": "20261121t073724z-crossref-f760a3b45b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=peg-in-hole+force+torque+payload+estimation&rows=10",
+        "result_count": 10,
+        "response_sha256": "5c25e531d316ab66a99b4b3a41b42dfdf304ea9bc0f57666a7c52f643a322037",
+        "normalized_results_sha256": "74c94ec3b98d0f451e0a2f2343add7d12eb9b30ef0516bf9a42b3cd5e770944a"
+      },
+      {
+        "provider": "openalex",
+        "query": "peg-in-hole force torque payload estimation",
+        "receipt_id": "20261121t073725z-openalex-cf76a29304",
+        "request_url": "https://api.openalex.org/works?search=peg-in-hole+force+torque+payload+estimation&per-page=10",
+        "result_count": 10,
+        "response_sha256": "eca21a29ac5a942b81548679a383566b67114c3fb2ab22092f45bbbd40c99341",
+        "normalized_results_sha256": "b7f7e6328abf168dc59612a4717ca1858632695798e1d5ac5a30855428171516"
+      },
+      {
+        "provider": "arxiv",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t073727z-arxiv-50c13ef54d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Acontact+AND+all%3Awrench+AND+all%3Agravity+AND+all%3Acompensation&start=0&max_results=10",
+        "result_count": 0,
+        "response_sha256": "439060e2acc591462852334aa882d35caf4f767f5a8774c2d9f2f31fcfca712e",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t073728z-crossref-39fa114d3c",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+contact+wrench+gravity+compensation&rows=10",
+        "result_count": 10,
+        "response_sha256": "acecebed99e8e26813b5ffb317db6dbc409c79cce71a78532748b53d50fef949",
+        "normalized_results_sha256": "5b2a182d0b4745d989d6d53c48bce6cc909c6e9dfdb52303a15773b40e73ae94"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t073730z-openalex-308a5474d9",
+        "request_url": "https://api.openalex.org/works?search=robotic+contact+wrench+gravity+compensation&per-page=10",
+        "result_count": 10,
+        "response_sha256": "2af5550587e64eadde43e154cafaafb6e40fd77cccfa1d279dbeca821420a169",
+        "normalized_results_sha256": "1e75dfc30cbcf4645fe9ad857b668a550d495a693145f5bbe3a4d6e89e0c573d"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t073731z-arxiv-73470ef649",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amultirotor+AND+all%3Arotor+AND+all%3Afailure+AND+all%3Acontrol+AND+all%3Aallocation&start=0&max_results=10",
+        "result_count": 1,
+        "response_sha256": "a5a61b83e0beb6c51f2f8a768d4867af0e6bacb38d74db68f449ae83c9177f1e",
+        "normalized_results_sha256": "b3271ec8708d175633ce49682b5fb6034c61c3f9e83564af9b3e6f9b0fc583b6"
+      },
+      {
+        "provider": "crossref",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t073732z-crossref-17eb50c0ca",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multirotor+rotor+failure+control+allocation&rows=10",
+        "result_count": 10,
+        "response_sha256": "d5b1771ad51a988d2b18c7294ac37806729fb65bf77963f18f69240e7f613b79",
+        "normalized_results_sha256": "24239906a3e3b4e07684b4d9d5a80c137e9aa71904b08315dcb0ba62ca8aceb5"
+      },
+      {
+        "provider": "openalex",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t073733z-openalex-50623a4268",
+        "request_url": "https://api.openalex.org/works?search=multirotor+rotor+failure+control+allocation&per-page=10",
+        "result_count": 10,
+        "response_sha256": "6ed9dd671a3fd73395e21932845496e3f502fd510b3d115ab82a83af324cd890",
+        "normalized_results_sha256": "735bc6911a11a0c843ab22e04e79d0775198d789ec4858cb641dff1d7f2df811"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.measurement.2023.112827",
+        "receipt_id": "20261121t073735z-opencitations-02210198e8",
+        "result_count": 12,
+        "response_sha256": "e2da1f891227f0afe3291136f9fdadb34bb6c8e450eaadddae730679723bede0"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "dblp",
+        "query": "{'venue': 'conf/aaai', 'year': 2025, 'offset': 0, 'limit': 25, 'transport': 'search'}",
+        "error": "DBLP search failed: provider returned invalid UTF-8 JSON: Expecting value: line 1 column 1 (char 0)"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 159,
+    "off_topic_filtered": 45,
+    "round1_noise_pruned": 26,
+    "duplicates_skipped": 29,
+    "net_new": 85,
+    "provider_statuses": [
+      {
+        "query": "robot force torque",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "robot assembly",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 15,
+    "cleaned": [
+      {
+        "slug": "figshare-31990188-multi-sensor-dataset-of",
+        "key": "figshare:31990188",
+        "dataset_name": "Multi-sensor dataset of a tendon-driven continuum robot in dynamic motion",
+        "doi": "10.6084/m9.figshare.31990188.v3",
+        "landing_url": "https://figshare.com/articles/dataset/Dataset_Dynamic_Continuum_Robot/31990188",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31990188-multi-sensor-dataset-of-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-31990188-multi-sensor-dataset-of-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31990188_multi_sensor_dataset_of.py",
+        "cleaned_rows": 16,
+        "raw_total_rows": 15226,
+        "verified_sha256": "4e491bf194dacaa4db8ef944437ecde05ebb182063322e04f0345696a69e11c9"
+      },
+      {
+        "slug": "figshare-32221713-quip-experimental-design",
+        "key": "figshare:32221713",
+        "dataset_name": "QuIP: Experimental Design for Expensive Simulators with Many Qualitative Factors via Integer Programming",
+        "doi": "10.6084/m9.figshare.32221713.v2",
+        "landing_url": "https://tandf.figshare.com/articles/dataset/QuIP_Experimental_design_for_expensive_simulators_with_many_Qualitative_factors_via_Integer_Programming/32221713",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32221713-quip-experimental-design-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32221713-quip-experimental-design-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32221713_quip_experimental_design.py",
+        "cleaned_rows": 42,
+        "raw_total_rows": 316,
+        "verified_sha256": "bf8eb4a184c2fedf2e24288b3b38f0a2d551aa254cd7d01671a38e8b4314b7b4"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data Sheet 1_Taylor-free exact-trigonometric dynamic modeling and PSO-tuned adaptive super-twisting control of a two-section spatial continuum robot: a simulation study.zip",
+        "url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_Taylor-free_exact-trigonometric_dynamic_modeling_and_PSO-tuned_adaptive_super-twisting_control_of_a_two-section_spatial_continuum_robot_a_simulation_study_zip/35002606",
+        "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\Lenovo\\\\.gemini\\\\antigravity\\\\scratch\\\\lunwen-g1-auto\\\\raw-staging\\\\figshare-35002606-data-sheet-1-taylor-free\\\\Data Sheet 1_Taylor-free exact-trigonometric dynamic modeling and PSO-tuned adaptive super-twisting control of a two-section spatial continuum robot: .zip'"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

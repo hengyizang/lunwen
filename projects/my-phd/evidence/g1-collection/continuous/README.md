@@ -6,12 +6,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：1
-- **最近更新时间 (UTC)**：2026-11-21T07:31:26Z
-- **累计净新增文献** (`literature-new.csv`)：36 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：34 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：32 条
-- **累计已完成确定性清洗数据集**：0 个
+- **已完成轮次**：2
+- **最近更新时间 (UTC)**：2026-11-21T07:37:17Z
+- **累计净新增文献** (`literature-new.csv`)：88 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：93 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：71 条
+- **累计已完成确定性清洗数据集**：2 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 主要索引文件
@@ -25,9 +25,12 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
+| `figshare-31990188-multi-sensor-dataset-of` | Multi-sensor dataset of a tendon-driven continuum robot in dynamic... | 10.6084/m9.figshare.31990188.v3 | `summary_table` | 16 | `4e491bf194da` | [CSV](data/figshare-31990188-multi-sensor-dataset-of-cleaned.csv) · [JSON](data/figshare-31990188-multi-sensor-dataset-of-provenance.json) · [PY](data/derive_figshare_31990188_multi_sensor_dataset_of.py) |
+| `figshare-32221713-quip-experimental-design` | QuIP: Experimental Design for Expensive Simulators with Many Qualit... | 10.6084/m9.figshare.32221713.v2 | `summary_table` | 42 | `bf8eb4a184c2` | [CSV](data/figshare-32221713-quip-experimental-design-cleaned.csv) · [JSON](data/figshare-32221713-quip-experimental-design-provenance.json) · [PY](data/derive_figshare_32221713_quip_experimental_design.py) |
 
 ## 最近轮次记录
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
 | 1 | 2026-11-21T07:31:26Z | R1/R2/R5 Gap Search + ICRA 2025 | +36 | +34 | +0 | [round-01-audit.json](rounds/round-01-audit.json) |
+| 2 | 2026-11-21T07:37:17Z | R1 Contact Assembly & Tactile + AAAI 2025 Robotics + Short Dataset Queries | +52 | +85 | +2 | [round-02-audit.json](rounds/round-02-audit.json) |

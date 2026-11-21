@@ -1,0 +1,17 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+code.zip::motor_only.csv,timestamp,numeric,4357,4357,0,4357,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,0.599225
+code.zip::motor_only.csv,home_angle_rad,numeric,4357,4357,0,3296,-1.57321,-1.38933,-0.876631,-0.862279,-0.373846,0.000381476,0.537106
+code.zip::motor_only.csv,angle_deg,numeric,4357,4357,0,3296,-90.138,-79.603,-50.2272,-49.4049,-21.4198,0.0218569,30.7739
+code.zip::motor_only.csv,velocity,numeric,4357,4357,0,754,-1.17967,-0.990158,-0.929732,-0.789135,-0.849165,0.148775,0.352703
+code.zip::motor_positions.csv,timestamp,numeric,2001,2001,0,2001,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,0.288032
+code.zip::motor_positions.csv,angle_rad,numeric,2001,2001,0,304,0.435836,0.636492,0.640307,0.624456,0.640688,0.641451,0.0435489
+code.zip::motor_positions.csv,angle_deg,numeric,2001,2001,0,304,24.9716,36.4683,36.6869,35.7787,36.7087,36.7524,2.49517
+code.zip::NOVELmotor_positions.csv,timestamp,numeric,4029,4029,0,4029,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,1.76134e+09,0.577286
+code.zip::NOVELmotor_positions.csv,angle_rad,numeric,4029,4029,0,705,-1.55394,0.191691,0.192073,0.0491957,0.192454,0.208858,0.393487
+code.zip::NOVELmotor_positions.csv,angle_deg,numeric,4029,4029,0,705,-89.0342,10.9831,11.005,2.81871,11.0268,11.9667,22.5451
+code.zip::dataMark10_2_.csv,timestamp,numeric,659,659,0,659,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,0.583809
+code.zip::dataMark10_2_.csv,tension (N),numeric,659,659,0,326,-10.44,-6.42,-2.14,-3.36534,0.14,0.44,3.70047
+code.zip::motor_only_1degrotation.csv,timestamp,numeric,4180,4180,0,4180,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,1.7616e+09,0.580916
+code.zip::motor_only_1degrotation.csv,home_angle_rad,numeric,4180,4180,0,45,0.000381476,0.0164034,0.0167849,0.0157737,0.0167849,0.0171664,0.00320245
+code.zip::motor_only_1degrotation.csv,angle_deg,numeric,4180,4180,0,45,0.0218569,0.939848,0.961705,0.903769,0.961705,0.983562,0.183487
+code.zip::motor_only_1degrotation.csv,velocity,numeric,4180,4180,0,349,-0.142367,-0.0260929,0.00320439,0.00752868,0.0343328,0.307164,0.0523559

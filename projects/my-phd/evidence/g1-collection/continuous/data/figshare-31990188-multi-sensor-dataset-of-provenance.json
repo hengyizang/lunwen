@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-31990188-multi-sensor-dataset-of",
+  "dataset_name": "Multi-sensor dataset of a tendon-driven continuum robot in dynamic motion",
+  "doi": "10.6084/m9.figshare.31990188.v3",
+  "landing_url": "https://figshare.com/articles/dataset/Dataset_Dynamic_Continuum_Robot/31990188",
+  "source_api_url": "https://api.figshare.com/v2/articles/31990188",
+  "access_date": "2026-11-21",
+  "round_number": 2,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "code.zip",
+      "download_url": "https://ndownloader.figshare.com/files/69262969",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69262969/code.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T073743Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22code.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=0ef981367729c2a76a357dfd1cfc315789e1eb2fb87a29acba10e8e8fd895ffb",
+      "http_status": 200,
+      "bytes": 503252,
+      "publisher_checksum": "md5:c964b50486ba1d88adef08c678e589c8",
+      "verified_md5": "c964b50486ba1d88adef08c678e589c8",
+      "verified_sha256": "4e491bf194dacaa4db8ef944437ecde05ebb182063322e04f0345696a69e11c9"
+    },
+    {
+      "file": "custom_components.zip",
+      "download_url": "https://ndownloader.figshare.com/files/65558259",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/65558259/custom_components.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T073745Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22custom_components.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=fba64b5f16c1b2a8f330f420745d416e01d4f5519eb73b3aad5513df218b9296",
+      "http_status": 200,
+      "bytes": 1222960,
+      "publisher_checksum": "md5:e386856880fdb9ae9289874031f99fd2",
+      "verified_md5": "e386856880fdb9ae9289874031f99fd2",
+      "verified_sha256": "3754d03f013f465de187b0cba849fb95406d0f81ec3cfb87d940e65747e6974d"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-31990188-multi-sensor-dataset-of",
+  "raw_total_bytes": 1726212,
+  "raw_total_rows": 15226,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-31990188-multi-sensor-dataset-of-cleaned.csv",
+  "cleaned_csv_sha256": "365e4566ae8e11f902e6f2fe5bf188aa2741f0b84aebe6baa21fbba09c051758",
+  "cleaned_rows": 16,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "code.zip::motor_only.csv": {
+      "timestamp": 0,
+      "home_angle_rad": 0,
+      "angle_deg": 0,
+      "velocity": 0
+    },
+    "code.zip::motor_positions.csv": {
+      "timestamp": 0,
+      "angle_rad": 0,
+      "angle_deg": 0
+    },
+    "code.zip::NOVELmotor_positions.csv": {
+      "timestamp": 0,
+      "angle_rad": 0,
+      "angle_deg": 0
+    },
+    "code.zip::dataMark10_2_.csv": {
+      "timestamp": 0,
+      "tension (N)": 0
+    },
+    "code.zip::motor_only_1degrotation.csv": {
+      "timestamp": 0,
+      "home_angle_rad": 0,
+      "angle_deg": 0,
+      "velocity": 0
+    }
+  },
+  "time_monotonicity": {
+    "code.zip::motor_only.csv": {
+      "column": "timestamp",
+      "numeric_samples": 4357,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 7.319450378417969e-05,
+      "median_step": 0.00046944618225097656,
+      "max_step": 0.00201416015625
+    },
+    "code.zip::motor_positions.csv": {
+      "column": "timestamp",
+      "numeric_samples": 2001,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0004324913024902344,
+      "median_step": 0.00048542022705078125,
+      "max_step": 0.0010983943939208984
+    },
+    "code.zip::NOVELmotor_positions.csv": {
+      "column": "timestamp",
+      "numeric_samples": 4029,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0004124641418457031,
+      "median_step": 0.00048613548278808594,
+      "max_step": 0.0011911392211914062
+    },
+    "code.zip::dataMark10_2_.csv": {
+      "column": "timestamp",
+      "numeric_samples": 659,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.002501964569091797,
+      "median_step": 0.0029565095901489258,
+      "max_step": 0.005510091781616211
+    },
+    "code.zip::motor_only_1degrotation.csv": {
+      "column": "timestamp",
+      "numeric_samples": 4180,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0001571178436279297,
+      "median_step": 0.0004737377166748047,
+      "max_step": 0.0012524127960205078
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5 checksum (when provided) and record SHA-256.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
