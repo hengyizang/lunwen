@@ -1,0 +1,314 @@
+{
+  "schema_version": "1.0",
+  "round": 37,
+  "completed_at": "2026-11-21T10:29:02Z",
+  "batch_label": "Broad Engineering R37: Robotics_Embodied",
+  "base_head_sha": "bdedc66c618a266d75384c02cbefa0dee9b7e6d1",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 149,
+    "duplicates_skipped": 74,
+    "net_new": 75,
+    "new_reading_queue": 68,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "diffusion policy robotic manipulation",
+        "receipt_id": "20261121t102902z-arxiv-389bedb2a4",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Adiffusion+AND+all%3Apolicy+AND+all%3Arobotic+AND+all%3Amanipulation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "079db09d21d42f598818b97fe6f39a41151c50b725d9facf3091e67df991338a",
+        "normalized_results_sha256": "a0ed73af2c974cbf04f477df5b736ed9c67d1fc9e90dbffaa299a9011bb4f270"
+      },
+      {
+        "provider": "crossref",
+        "query": "diffusion policy robotic manipulation",
+        "receipt_id": "20261121t102903z-crossref-e587b4e0a2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=diffusion+policy+robotic+manipulation&rows=12",
+        "result_count": 12,
+        "response_sha256": "f3bded341388f2d8433e9eec4b6403bbd57edd30f4f8f50acc0310bd66eadbda",
+        "normalized_results_sha256": "d48918149e91407ab586ad0a76bdc50282717732f8c13e049060e5a76fc76663"
+      },
+      {
+        "provider": "openalex",
+        "query": "diffusion policy robotic manipulation",
+        "receipt_id": "20261121t102904z-openalex-98b6813d9c",
+        "request_url": "https://api.openalex.org/works?search=diffusion+policy+robotic+manipulation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "28a65f05f2c4354b39fdba25ad1c6f22b2fee9e7199e14403727fe86857e3ef6",
+        "normalized_results_sha256": "6d6da9933c3147e407259594ddfbb144cc3424bb10b84404a17d6543168f5672"
+      },
+      {
+        "provider": "arxiv",
+        "query": "whole-body control quadruped robot",
+        "receipt_id": "20261121t102906z-arxiv-8e88d420a0",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awhole-body+AND+all%3Acontrol+AND+all%3Aquadruped+AND+all%3Arobot&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "b146163977e6af0c56386a7d82dbfca4f1264f8da5fa2df7012dc4f2a3594391",
+        "normalized_results_sha256": "82837fe9b53b25464ef69e8863e4d977783e76e3884475212f374b6f4067e236"
+      },
+      {
+        "provider": "crossref",
+        "query": "whole-body control quadruped robot",
+        "receipt_id": "20261121t102907z-crossref-22c098130e",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=whole-body+control+quadruped+robot&rows=12",
+        "result_count": 12,
+        "response_sha256": "7d633c37197e36e5de678096a1d2b60af85e54b0502378f02a410cfa5419cdca",
+        "normalized_results_sha256": "92f34e7ef9e7e43ec9b9a0b964ff43cd186d2e2dfad85f922de8e799dabe6353"
+      },
+      {
+        "provider": "openalex",
+        "query": "whole-body control quadruped robot",
+        "receipt_id": "20261121t102909z-openalex-68b26c24df",
+        "request_url": "https://api.openalex.org/works?search=whole-body+control+quadruped+robot&per-page=12",
+        "result_count": 12,
+        "response_sha256": "25e1bc98092a8e93394d4ffe9c07a55227fd7dd76c97a258f58069e38d5ab946",
+        "normalized_results_sha256": "e37e2f2e84f851901a093b858896154f48fde730f829c588d82d365674d73301"
+      },
+      {
+        "provider": "arxiv",
+        "query": "mobile manipulation foundation model",
+        "receipt_id": "20261121t102910z-arxiv-7d7ba35440",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amobile+AND+all%3Amanipulation+AND+all%3Afoundation+AND+all%3Amodel&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "c8bfa9614ceec5f372f3db9544c3b45609c062789646f4ec05f7d5e885409581",
+        "normalized_results_sha256": "fd3def1ab58cde1f213d311099c593fa855244fe2cd50b1ed8d10ef1d73f4d7f"
+      },
+      {
+        "provider": "crossref",
+        "query": "mobile manipulation foundation model",
+        "receipt_id": "20261121t102912z-crossref-9d89ea3ee2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=mobile+manipulation+foundation+model&rows=12",
+        "result_count": 11,
+        "response_sha256": "fc2ce21138dda8069cef289b5e0f14c24967421309721a6c8de36ec1ad222df9",
+        "normalized_results_sha256": "74276641dad3a65d79ff13bf5ba9596b99fec68ffbd7af1566e3aa0f133815b6"
+      },
+      {
+        "provider": "openalex",
+        "query": "mobile manipulation foundation model",
+        "receipt_id": "20261121t102913z-openalex-ac0869b579",
+        "request_url": "https://api.openalex.org/works?search=mobile+manipulation+foundation+model&per-page=12",
+        "result_count": 12,
+        "response_sha256": "818f406eb3ff478b9e2597e493b7cdb4c8b8f075fa2fb59a5dd137c9ad038474",
+        "normalized_results_sha256": "8fe1025e66333d6f7d498c96b5787aa8de3c2ae901109b8217d43072dcf2a1a4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "dexterous hand in-hand manipulation",
+        "receipt_id": "20261121t102915z-arxiv-00fbfae98a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Adexterous+AND+all%3Ahand+AND+all%3Ain-hand+AND+all%3Amanipulation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "d7d4b3944a22af5ecfaa78d3a86c389fce957a719454f4a20c3e40cfd61ae5f4",
+        "normalized_results_sha256": "468aeb79f93fc7cd634d0ee24934732fb04513226a095c825f108ec811bc5d2b"
+      },
+      {
+        "provider": "crossref",
+        "query": "dexterous hand in-hand manipulation",
+        "receipt_id": "20261121t102916z-crossref-428186f113",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=dexterous+hand+in-hand+manipulation&rows=12",
+        "result_count": 11,
+        "response_sha256": "95fa5c5232a913a7ca1cebfc4d0e35187ae487ce179b0c3e95f884101917bee1",
+        "normalized_results_sha256": "dfeb1c17f864ba8dce4b3fceb3be085d6612ed7ca122c13ec09534a16caa2f7b"
+      },
+      {
+        "provider": "openalex",
+        "query": "dexterous hand in-hand manipulation",
+        "receipt_id": "20261121t102918z-openalex-8f28b40aa8",
+        "request_url": "https://api.openalex.org/works?search=dexterous+hand+in-hand+manipulation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "f0dd60beda84efe6eb2558f92bed00729f070b358220fafffe59e59ac2c12418",
+        "normalized_results_sha256": "c1e97443b25d420765a0da5032f5aee9c6f89798578c2b54a49cfa91364ffe85"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.2139/ssrn.4850829",
+        "receipt_id": "20261121t102919z-opencitations-7d4c449759",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/app14010450",
+        "receipt_id": "20261121t102920z-opencitations-dc80b6f3d8",
+        "result_count": 7,
+        "response_sha256": "2fbf6e43cfb8fb7130e5d7e0c9e3ce90a2ca888eea3718209da7d7a46a1c86df"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 136,
+    "off_topic_filtered": 82,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 24,
+    "net_new": 30,
+    "provider_statuses": [
+      {
+        "query": "shape memory alloy",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "shape memory alloy",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "shape memory alloy",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "shape memory alloy",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "shape memory alloy",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "soft gripper",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "soft gripper",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "soft gripper",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "soft gripper",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "soft gripper",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "visuotactile sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "visuotactile sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "visuotactile sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "visuotactile sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "visuotactile sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "six-axis wrench",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "six-axis wrench",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "six-axis wrench",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "six-axis wrench",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "six-axis wrench",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-lznnl1-characteristics-of-the-s",
+        "key": "dataverse:10.7910/dvn/lznnl1",
+        "dataset_name": "Characteristics of the Specific Fuel Consumption for Jet Engines",
+        "doi": "10.7910/dvn/lznnl1",
+        "landing_url": "https://doi.org/10.7910/DVN/LZNNL1",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-lznnl1-characteristics-of-the-s-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-lznnl1-characteristics-of-the-s-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_lznnl1_characteristics_of_the_s.py",
+        "cleaned_rows": 386,
+        "raw_total_rows": 387,
+        "verified_sha256": "a6a3c87d20b1066f3e7e854e0cea561c1600ee2dafa6486bf482735b88511df5"
+      },
+      {
+        "slug": "dataverse-brzhhg-comparison-of-urethral-s",
+        "key": "dataverse:10.7910/dvn/brzhhg",
+        "dataset_name": "Comparison of urethral sling surgery and vaginal non-ablative erbium: YAG laser treatment in Japanese patients with stress urinary incontinence: A case-matching analysis",
+        "doi": "10.7910/dvn/brzhhg",
+        "landing_url": "https://doi.org/10.7910/DVN/BRZHHG",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-brzhhg-comparison-of-urethral-s-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-brzhhg-comparison-of-urethral-s-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_brzhhg_comparison_of_urethral_s.py",
+        "cleaned_rows": 334,
+        "raw_total_rows": 338,
+        "verified_sha256": "70ce2b39da4986023e8602d46f935131d69bc0aec2fc1025715a85b251ae2533"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

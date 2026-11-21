@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-lznnl1-characteristics-of-the-s",
+  "dataset_name": "Characteristics of the Specific Fuel Consumption for Jet Engines",
+  "doi": "10.7910/dvn/lznnl1",
+  "landing_url": "https://doi.org/10.7910/DVN/LZNNL1",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/LZNNL1",
+  "access_date": "2026-11-21",
+  "round_number": 37,
+  "observed_license_metadata": "unknown_optional_metadata",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "TSFC_over_T.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3346370",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/LZNNL1/168673c1f0f-415a0b6d535b?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27TSFC_over_T.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T102929Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ac689a3d8d08be83f7af2a636417c4bafed752458a0489eb7037c476b8b6a733",
+      "http_status": 200,
+      "bytes": 55043,
+      "publisher_checksum": "dataverse_original_md5:005af4272ec05fda2f2b22a6b40b555b",
+      "verified_md5": "da912e834c00d5d58c5a5d501bf2f7ce",
+      "verified_sha256": "a6a3c87d20b1066f3e7e854e0cea561c1600ee2dafa6486bf482735b88511df5"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-lznnl1-characteristics-of-the-s",
+  "raw_total_bytes": 55043,
+  "raw_total_rows": 387,
+  "duplicate_rows_removed": 1,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-lznnl1-characteristics-of-the-s-cleaned.csv",
+  "cleaned_csv_sha256": "a74cee4e7edc45d354550652b76d4f0658fb63b69d7d18c72c8cf0d947673be5",
+  "cleaned_rows": 386,
+  "cleaned_cols": 12,
+  "null_counts_by_file": {
+    "TSFC_over_T.tab": {
+      "GenerationofaFunctionTSFC,rel=f(T,rel)": 4,
+      "B": 5,
+      "C": 384,
+      "D": 2,
+      "E": 3,
+      "F": 384,
+      "G": 342,
+      "H": 343,
+      "I": 386,
+      "J": 3,
+      "K": 3
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
