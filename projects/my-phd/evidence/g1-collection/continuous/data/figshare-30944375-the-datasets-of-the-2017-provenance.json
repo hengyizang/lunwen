@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-30944375-the-datasets-of-the-2017",
+  "dataset_name": "the datasets of the 2017 Changdao swarm in eastern China",
+  "doi": "10.6084/m9.figshare.30944375.v1",
+  "landing_url": "https://figshare.com/articles/dataset/the_datasets_of_the_2017_Changdao_swarm_in_eastern_China/30944375",
+  "source_api_url": "https://api.figshare.com/v2/articles/30944375",
+  "access_date": "2026-11-21",
+  "round_number": 32,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Supplementary Data3-Focal mechanism Catalog.txt",
+      "download_url": "https://ndownloader.figshare.com/files/60593765",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/60593765/SupplementaryData3FocalmechanismCatalog.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100448Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Supplementary%2520Data3-Focal%2520mechanism%2520Catalog.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=6f7d81ed4cf998e0d506437f577b94add823d041f199a2c4cf8150ffbcc00827",
+      "http_status": 200,
+      "bytes": 11526,
+      "publisher_checksum": "md5:32c644819627971eb5f7be080cdc76da",
+      "verified_md5": "32c644819627971eb5f7be080cdc76da",
+      "verified_sha256": "136c8c0214d42fb08cb2f06fe74fd87347bc94d2a9c8c1119b5ef59833c48f37"
+    },
+    {
+      "file": "Supplementary Data2-Relocation Catalog.txt",
+      "download_url": "https://ndownloader.figshare.com/files/60593762",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/60593762/SupplementaryData2RelocationCatalog.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100451Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Supplementary%2520Data2-Relocation%2520Catalog.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=4783d8c49d0bb6bd9c6ac02fc2f062d8970228f5c22ff3744adc9aa140cc83ef",
+      "http_status": 200,
+      "bytes": 113567,
+      "publisher_checksum": "md5:4a18e8d00c1957c23997ab8f53074577",
+      "verified_md5": "4a18e8d00c1957c23997ab8f53074577",
+      "verified_sha256": "a72de136009f23a2f371a0bd8af80ba2427abe5878b50bc1b7eec1cdff297913"
+    },
+    {
+      "file": "Supplementary Data1-Detected Catalog.txt",
+      "download_url": "https://ndownloader.figshare.com/files/60593759",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/60593759/SupplementaryData1DetectedCatalog.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100454Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Supplementary%2520Data1-Detected%2520Catalog.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=04e442de82d042b060202d3ec44120464b129e48cef4688396032abc888fabdb",
+      "http_status": 200,
+      "bytes": 399438,
+      "publisher_checksum": "md5:40c883b1b91c150832b38b672f45d21f",
+      "verified_md5": "40c883b1b91c150832b38b672f45d21f",
+      "verified_sha256": "a39c76db9776a18bca21f251e95801359a6ae3a2cd8fac71f3af632954bd3e20"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-30944375-the-datasets-of-the-2017",
+  "raw_total_bytes": 524531,
+  "raw_total_rows": 11411,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-30944375-the-datasets-of-the-2017-cleaned.csv",
+  "cleaned_csv_sha256": "20188c90f6bd516571f463e7ad27e263c8d8083c421d498103077ee4cf1adf09",
+  "cleaned_rows": 8,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Supplementary Data1-Detected Catalog.txt": {
+      "#year": 0,
+      "month": 0,
+      "day": 0,
+      "hour": 0,
+      "minute": 0,
+      "second": 0,
+      "msecond": 0,
+      "magnitude": 11411
+    }
+  },
+  "time_monotonicity": {
+    "Supplementary Data1-Detected Catalog.txt": {
+      "column": "second",
+      "numeric_samples": 11411,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -988.0,
+      "median_step": 0.0,
+      "max_step": 992.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

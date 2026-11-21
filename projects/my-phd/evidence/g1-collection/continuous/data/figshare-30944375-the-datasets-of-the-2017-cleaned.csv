@@ -1,0 +1,9 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Supplementary Data1-Detected Catalog.txt,#year,numeric,11411,11411,0,4,2,3,3,3.42547,4,5,0.680089
+Supplementary Data1-Detected Catalog.txt,month,numeric,11411,11411,0,31,1,9,17,16.8097,24,31,8.50684
+Supplementary Data1-Detected Catalog.txt,day,numeric,11411,11411,0,24,0,3,10,10.8504,18,23,7.67602
+Supplementary Data1-Detected Catalog.txt,hour,numeric,11411,11411,0,60,0,14,30,29.4584,44,59,17.3224
+Supplementary Data1-Detected Catalog.txt,minute,numeric,11411,11411,0,60,0,14,29,29.4318,44,59,17.3614
+Supplementary Data1-Detected Catalog.txt,second,numeric,11411,11411,0,244,0,220,477,479.533,730,992,294.143
+Supplementary Data1-Detected Catalog.txt,msecond,numeric,11411,11411,0,9350,0.084736,0.749661,0.965463,1.01363,1.21542,4.5,0.398302
+Supplementary Data1-Detected Catalog.txt,magnitude,categorical_or_text,11411,0,11411,0,,,,,,,{}

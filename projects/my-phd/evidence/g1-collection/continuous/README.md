@@ -7,26 +7,26 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：31
-- **最近更新时间 (UTC)**：2026-11-21T09:59:10Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：3383 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1539 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2899 条
-- **累计已完成确定性清洗数据集**：66 个
+- **已完成轮次**：32
+- **最近更新时间 (UTC)**：2026-11-21T10:04:00Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：3403 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1571 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2919 条
+- **累计已完成确定性清洗数据集**：69 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 128 | 57 |
+| `R1_Force_Contact` | 140 | 57 |
 | `R2_Aerial_Actuator` | 387 | 83 |
-| `R5_MultiRobot_Comm` | 244 | 76 |
-| `Robotics_Embodied` | 1056 | 463 |
-| `Mechanical_Physics_AI` | 966 | 674 |
-| `Mechatronics_PHM_Control` | 769 | 492 |
-| `Smart_Manufacturing` | 491 | 285 |
-| `Smart_Factory_DigitalTwin` | 201 | 69 |
+| `R5_MultiRobot_Comm` | 244 | 77 |
+| `Robotics_Embodied` | 1061 | 464 |
+| `Mechanical_Physics_AI` | 970 | 689 |
+| `Mechatronics_PHM_Control` | 770 | 509 |
+| `Smart_Manufacturing` | 491 | 286 |
+| `Smart_Factory_DigitalTwin` | 201 | 71 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 306 | 0 |
 | `R2` | 37 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-zyqvlr-replication-data-for-dif` | Replication Data for: Differences in thermal tolerance and locomoti... | 10.7910/dvn/zyqvlr | `summary_table` | 23 | `b90d59c6e0ac` | [CSV](data/dataverse-zyqvlr-replication-data-for-dif-cleaned.csv) · [JSON](data/dataverse-zyqvlr-replication-data-for-dif-provenance.json) · [PY](data/derive_dataverse_zyqvlr_replication_data_for_dif.py) |
-| `figshare-35049556-data-for-a-four-level-ex` | Data for "A four-level executable validation protocol for evaluatin... | 10.6084/m9.figshare.35049556.v1 | `summary_table` | 35 | `4899442117fd` | [CSV](data/figshare-35049556-data-for-a-four-level-ex-cleaned.csv) · [JSON](data/figshare-35049556-data-for-a-four-level-ex-provenance.json) · [PY](data/derive_figshare_35049556_data_for_a_four_level_ex.py) |
-| `figshare-34163973-combined-effects-of-fibe` | Combined effects of fiber length and content on the mechanical and... | 10.6084/m9.figshare.34163973.v1 | `summary_table` | 148 | `bafee8d3ce90` | [CSV](data/figshare-34163973-combined-effects-of-fibe-cleaned.csv) · [JSON](data/figshare-34163973-combined-effects-of-fibe-provenance.json) · [PY](data/derive_figshare_34163973_combined_effects_of_fibe.py) |
 | `figshare-32625708-dynamic-flexible-job-sho` | Dynamic flexible job shop scheduling under worker constraints with... | 10.6084/m9.figshare.32625708.v1 | `summary_table` | 130 | `c69c4879f96b` | [CSV](data/figshare-32625708-dynamic-flexible-job-sho-cleaned.csv) · [JSON](data/figshare-32625708-dynamic-flexible-job-sho-provenance.json) · [PY](data/derive_figshare_32625708_dynamic_flexible_job_sho.py) |
 | `dataverse-a9lpy7-urbaning-v2x` | UrbanIng-V2X | 10.7910/dvn/a9lpy7 | `summary_table` | 25 | `a659594d5e30` | [CSV](data/dataverse-a9lpy7-urbaning-v2x-cleaned.csv) · [JSON](data/dataverse-a9lpy7-urbaning-v2x-provenance.json) · [PY](data/derive_dataverse_a9lpy7_urbaning_v2x.py) |
 | `dataverse-m6jxed-open-ended-creative-and` | Open-Ended Creative and Tactile Activity in Adult Practice: A Surve... | 10.7910/dvn/m6jxed | `summary_table` | 29 | `a01a6467f93c` | [CSV](data/dataverse-m6jxed-open-ended-creative-and-cleaned.csv) · [JSON](data/dataverse-m6jxed-open-ended-creative-and-provenance.json) · [PY](data/derive_dataverse_m6jxed_open_ended_creative_and.py) |
@@ -71,12 +68,14 @@
 | `dataverse-qblawv-the-scent-of-the-swarm-f` | The scent of the swarm: first experimental evidence for olfactory r... | 10.7910/dvn/qblawv | `summary_table` | 21 | `c03b06209bce` | [CSV](data/dataverse-qblawv-the-scent-of-the-swarm-f-cleaned.csv) · [JSON](data/dataverse-qblawv-the-scent-of-the-swarm-f-provenance.json) · [PY](data/derive_dataverse_qblawv_the_scent_of_the_swarm_f.py) |
 | `dataverse-8cse6u-drone-telemetry-record-d` | Drone Telemetry Record Data | 10.7910/dvn/8cse6u | `summary_table` | 35 | `2fc41b3c7af0` | [CSV](data/dataverse-8cse6u-drone-telemetry-record-d-cleaned.csv) · [JSON](data/dataverse-8cse6u-drone-telemetry-record-d-provenance.json) · [PY](data/derive_dataverse_8cse6u_drone_telemetry_record_d.py) |
 | `dataverse-prdwpp-consumer-perception-of-u` | Consumer Perception of Using Drones for Medicine and Health Supplie... | 10.7910/dvn/prdwpp | `summary_table` | 86 | `d0bf90905505` | [CSV](data/dataverse-prdwpp-consumer-perception-of-u-cleaned.csv) · [JSON](data/dataverse-prdwpp-consumer-perception-of-u-provenance.json) · [PY](data/derive_dataverse_prdwpp_consumer_perception_of_u.py) |
+| `figshare-30944375-the-datasets-of-the-2017` | the datasets of the 2017 Changdao swarm in eastern China | 10.6084/m9.figshare.30944375.v1 | `summary_table` | 8 | `136c8c0214d4` | [CSV](data/figshare-30944375-the-datasets-of-the-2017-cleaned.csv) · [JSON](data/figshare-30944375-the-datasets-of-the-2017-provenance.json) · [PY](data/derive_figshare_30944375_the_datasets_of_the_2017.py) |
+| `figshare-31158421-data-set-for-fabrication` | Data set for "Fabrication and Wear Analysis of AA2024 Aluminium Hyb... | 10.6084/m9.figshare.31158421.v1 | `summary_table` | 6 | `ce1d3a0f8aac` | [CSV](data/figshare-31158421-data-set-for-fabrication-cleaned.csv) · [JSON](data/figshare-31158421-data-set-for-fabrication-provenance.json) · [PY](data/derive_figshare_31158421_data_set_for_fabrication.py) |
+| `figshare-34066695-data-sheet-1-artificial` | Data Sheet 1_Artificial intelligence-assisted design and CFD re-opt... | 10.3389/fenrg.2026.1956543.s001 | `cleaned_rows` | 8 | `4f9ab8a6081d` | [CSV](data/figshare-34066695-data-sheet-1-artificial-cleaned.csv) · [JSON](data/figshare-34066695-data-sheet-1-artificial-provenance.json) · [PY](data/derive_figshare_34066695_data_sheet_1_artificial.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
 | 8 | 2026-11-21T08:04:25Z | Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control | +144 | +84 | +0 | [round-08-audit.json](rounds/round-08-audit.json) |
 | 9 | 2026-11-21T08:09:11Z | Broad Engineering R9: Mechatronics_PHM_Control | +97 | +42 | +1 | [round-09-audit.json](rounds/round-09-audit.json) |
 | 10 | 2026-11-21T08:15:25Z | Broad Engineering R10: Smart_Manufacturing | +106 | +75 | +0 | [round-10-audit.json](rounds/round-10-audit.json) |
@@ -101,3 +100,4 @@
 | 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
 | 30 | 2026-11-21T09:54:02Z | Broad Engineering R30: Smart_Manufacturing / Smart_Factory_DigitalTwin | +180 | +54 | +3 | [round-30-audit.json](rounds/round-30-audit.json) |
 | 31 | 2026-11-21T09:59:10Z | Broad Engineering R31: Smart_Factory_DigitalTwin / R1_Force_Contact | +54 | +32 | +3 | [round-31-audit.json](rounds/round-31-audit.json) |
+| 32 | 2026-11-21T10:04:00Z | Broad Engineering R32: R1_Force_Contact (2026) | +20 | +32 | +3 | [round-32-audit.json](rounds/round-32-audit.json) |

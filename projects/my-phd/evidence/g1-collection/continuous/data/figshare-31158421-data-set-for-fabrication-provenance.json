@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-31158421-data-set-for-fabrication",
+  "dataset_name": "Data set for \"Fabrication and Wear Analysis of AA2024 Aluminium Hybrid Composites",
+  "doi": "10.6084/m9.figshare.31158421.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_set_for_Fabrication_and_Wear_Analysis_of_AA2024_Aluminium_Hybrid_Composites/31158421",
+  "source_api_url": "https://api.figshare.com/v2/articles/31158421",
+  "access_date": "2026-11-21",
+  "round_number": 32,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "XRD A2.txt",
+      "download_url": "https://ndownloader.figshare.com/files/61400677",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/61400677/XRDA2.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100525Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22XRD%2520A2.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=177dbe2b74c1d0f954fd297a1fffb524fd3868a6aff25570c8fc291e5b5b9a18",
+      "http_status": 200,
+      "bytes": 35877,
+      "publisher_checksum": "md5:06abab8d42c463d5f3e2a65efa175363",
+      "verified_md5": "06abab8d42c463d5f3e2a65efa175363",
+      "verified_sha256": "ce1d3a0f8aacc2d2bfe68cd0c39b2a79683ebb688ce7522a955b74ac31ba5a96"
+    },
+    {
+      "file": "XRD A3.txt",
+      "download_url": "https://ndownloader.figshare.com/files/61400680",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/61400680/XRDA3.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100527Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22XRD%2520A3.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=2dbcd2d234d2a6c71857f1b81128f894abf54f65436550c563be86a6e876d0f4",
+      "http_status": 200,
+      "bytes": 35889,
+      "publisher_checksum": "md5:df66e8df77f1a590fc98ce5d582cd855",
+      "verified_md5": "df66e8df77f1a590fc98ce5d582cd855",
+      "verified_sha256": "a222abe6bc59788b2314634cf2e2660fed9acd5963da52e25b769e62e37c3aa2"
+    },
+    {
+      "file": "XRD A4.txt",
+      "download_url": "https://ndownloader.figshare.com/files/61400683",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/61400683/XRDA4.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T100530Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22XRD%2520A4.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=4435fd837e2801c80631d649c6223019218ee8f36d2452c94fab96a5ab894b8d",
+      "http_status": 200,
+      "bytes": 35966,
+      "publisher_checksum": "md5:e373cd0ad6963edda2fa58eb04a60ee9",
+      "verified_md5": "e373cd0ad6963edda2fa58eb04a60ee9",
+      "verified_sha256": "6a89b83db1ad92bdb3ecc4b984c091a70b48c46a4699bbf9db078489babd68fd"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-31158421-data-set-for-fabrication",
+  "raw_total_bytes": 107732,
+  "raw_total_rows": 7995,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-31158421-data-set-for-fabrication-cleaned.csv",
+  "cleaned_csv_sha256": "25b717574f3bcc0443ec8a0be6e45323f0a46d7e7d5b1ca0185d870cc183d280",
+  "cleaned_rows": 6,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "XRD A2.txt": {
+      "10.02873": 0,
+      "415": 0
+    },
+    "XRD A3.txt": {
+      "10.02973": 0,
+      "419": 0
+    },
+    "XRD A4.txt": {
+      "10.02983": 0,
+      "436": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

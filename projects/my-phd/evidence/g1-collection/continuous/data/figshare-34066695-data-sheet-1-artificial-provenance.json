@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34066695-data-sheet-1-artificial",
+  "dataset_name": "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption in LaNi5 metal-hydride reactors.zip",
+  "doi": "10.3389/fenrg.2026.1956543.s001",
+  "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_Artificial_intelligence-assisted_design_and_CFD_re-optimization_of_graded_hybrid_metal_foams_for_faster_hydrogen_desorption_in_LaNi5_metal-hydride_reactors_zip/34066695",
+  "source_api_url": "https://api.figshare.com/v2/articles/34066695",
+  "access_date": "2026-11-21",
+  "round_number": 32,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption.zip",
+      "download_url": "https://ndownloader.figshare.com/files/69645888",
+      "final_url": "https://s3-eu-west-1.amazonaws.com/pstorage-frontiersin-54389059089340853/69645888/DataSheet1_ArtificialintelligenceassisteddesignandCFDreoptimizationofgradedhybridmetalfoamsforfasterhydrogendesorptioninLaNi5meta.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAINCDM4RBVVB6WR3Q/20261121/eu-west-1/s3/aws4_request&X-Amz-Date=20261121T100535Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=b97fa8af073e2506897c41e99d111131b5b5c0b20feb1e1cf5ec9243d81babf0",
+      "http_status": 200,
+      "bytes": 3814937,
+      "publisher_checksum": "md5:b84041ffbfa7337c2f2df78a68d27055",
+      "verified_md5": "b84041ffbfa7337c2f2df78a68d27055",
+      "verified_sha256": "4f9ab8a6081de8ef5ad2b494e0b835021a3f1360150a04d8dd22925533a35ccf"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34066695-data-sheet-1-artificial",
+  "raw_total_bytes": 3814937,
+  "raw_total_rows": 8,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34066695-data-sheet-1-artificial-cleaned.csv",
+  "cleaned_csv_sha256": "15330f6906cb763379d0cb50b964bfe1a8a15679fa8389de3dc99fcd3cb96444",
+  "cleaned_rows": 8,
+  "cleaned_cols": 9,
+  "null_counts_by_file": {
+    "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption.zip::settings_extended_bounds.json": {
+      "epsWall": 0,
+      "epsCore": 0,
+      "fCuWall": 0,
+      "fCuCore": 0,
+      "hEarly": 0,
+      "pEarlyBar": 0,
+      "switchTimeMin": 0,
+      "wallZoneFraction": 0
+    },
+    "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption.zip::settings_original_bounds.json": {
+      "epsWall": 0,
+      "epsCore": 0,
+      "fCuWall": 0,
+      "fCuCore": 0,
+      "hEarly": 0,
+      "pEarlyBar": 0,
+      "switchTimeMin": 0,
+      "wallZoneFraction": 0
+    }
+  },
+  "time_monotonicity": {
+    "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption.zip::settings_extended_bounds.json": {
+      "column": "switchTimeMin",
+      "numeric_samples": 4,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -1.25,
+      "median_step": 0.25,
+      "max_step": 0.75
+    },
+    "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption.zip::settings_original_bounds.json": {
+      "column": "switchTimeMin",
+      "numeric_samples": 4,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -0.5,
+      "median_step": -0.5,
+      "max_step": 2.23
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

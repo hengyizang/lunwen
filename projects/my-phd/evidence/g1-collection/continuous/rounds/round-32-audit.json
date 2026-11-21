@@ -1,0 +1,353 @@
+{
+  "schema_version": "1.0",
+  "round": 32,
+  "completed_at": "2026-11-21T10:04:00Z",
+  "batch_label": "Broad Engineering R32: R1_Force_Contact (2026)",
+  "base_head_sha": "3e487a1cbf8aca8ebb34f18be775cd220c57c3c2",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 140,
+    "duplicates_skipped": 120,
+    "net_new": 20,
+    "new_reading_queue": 20,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t100400z-openalex-189e7a9fbd",
+        "request_url": "https://api.openalex.org/works?search=robotic+contact+wrench+gravity+compensation&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "695c3b907d4b4e8c72d9383c18a117977b69e7cbfda90e24d46bf3d6c410824e",
+        "normalized_results_sha256": "dd3211cac73d4f513d5e634939e15bba03680a572eea8f6f2efe05728eee2281"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t100401z-crossref-dea00f3bd2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+contact+wrench+gravity+compensation&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "5f54f50641e743988db5ab5a5c81457b0b8724fa3f0a7253645b47cde0a91ddf",
+        "normalized_results_sha256": "231876416936fb7c69bb8db91523bc7346e642bd1dcc200d0b8ab7560e8e1a61"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t100403z-europe-pmc-09b05c2bcd",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+contact+wrench+gravity+compensation&pageSize=12&format=json",
+        "result_count": 8,
+        "response_sha256": "7fda7bdce6ac281f56d3b7101aaeb7dc2879c6d8c3087a222783c68f9907a1fc",
+        "normalized_results_sha256": "89acef2759bde2ef31aea6b611200ba01c7441e951b864575c3f677493912cc7"
+      },
+      {
+        "provider": "hal",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t100405z-hal-ccbeb57151",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=robotic+contact+wrench+gravity+compensation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "9f9a21c03b43afe3e8524f1745a990403f942fa211d8405f436b3ca4f6708c12",
+        "normalized_results_sha256": "c2fe766396c4c55e2da2ca4b083ff62c25753dfdd27f3035efe7ca48fbab6add"
+      },
+      {
+        "provider": "openalex",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t100406z-openalex-f5fd7bffdf",
+        "request_url": "https://api.openalex.org/works?search=six-axis+force+torque+drift+calibration&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "147213bbdf3c11118c07e78a0c5654429152ef817b3ff4d56aa127c97253e3a5",
+        "normalized_results_sha256": "aa532162025823817c7ef3e97a55ae37b862d0d531aa7259a51c6c9dc7edc0f6"
+      },
+      {
+        "provider": "crossref",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t100407z-crossref-9b70e2ad15",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=six-axis+force+torque+drift+calibration&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "af56448266cc2dc08d6779434b847647b9fd18f9337f20abffd4e1fe467b8b66",
+        "normalized_results_sha256": "55af4f7ca083dc00eccf40cdd29d44e8716ccf754c44e2b652cd5a4c463e26d3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t100409z-europe-pmc-bcbf63aeb9",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=six-axis+force+torque+drift+calibration&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "865d0f80a1e4c6917c8155664492a313ed9b30a8583962e91ffb7fb0df822977",
+        "normalized_results_sha256": "f51ae94c807d5a4ec1e90249c05089a027a2fa613bc78b0079d3a5c675842259"
+      },
+      {
+        "provider": "hal",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t100418z-hal-8d5800b2b3",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=six-axis+force+torque+drift+calibration&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "5943be2067eba6b59c4d97ed998574905d452657db3870d87e127fd4b215e5f0"
+      },
+      {
+        "provider": "openalex",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t100419z-openalex-4a6bf0f517",
+        "request_url": "https://api.openalex.org/works?search=tactile+slip+detection+robotic+grasping&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "da540d6e820a8723099dbd2f87212125888873827f7d069af10d7588b1727842",
+        "normalized_results_sha256": "af1c73e18119be00e3af81b11261a605f70ecbd97d7b39e90b3c68893f065011"
+      },
+      {
+        "provider": "crossref",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t100421z-crossref-3fbcc19cfa",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=tactile+slip+detection+robotic+grasping&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "a5060e22c0f9ff46fc827085ed2687efa4d74c2a5896213292a2173003145cbd",
+        "normalized_results_sha256": "8d607c01968dd6ceac1a4556ac8eb704a08ed73d2532e2c22d5b380ad79008b3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t100422z-europe-pmc-96b6e9f311",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=tactile+slip+detection+robotic+grasping&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "699f5df1547b80e134e6b5574cac99a7537a20e38e997f1573e4ca8454d27c35",
+        "normalized_results_sha256": "10f6b5d6e6dbbab9a697c5b216d02b30d8e32c99f697ffc4c66762605fc682a7"
+      },
+      {
+        "provider": "hal",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t100424z-hal-59d7691aef",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=tactile+slip+detection+robotic+grasping&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "7303e83e292732d71cfc2223301d28ddb8caf9e1d99f0812a8264001429fa108",
+        "normalized_results_sha256": "bce0a8f0f007315c2eb21af4c2ec9e21333e64bd25e487a7312b6c89ddee38bf"
+      },
+      {
+        "provider": "openalex",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t100426z-openalex-870d42b861",
+        "request_url": "https://api.openalex.org/works?search=compliant+contact-rich+assembly+residual+learning&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "3e464e8143a77c102071b4340cee8e7fe06e6f32e9b3a8cc65c17ea7b4f33a5e",
+        "normalized_results_sha256": "5471d9b522ca22229f059002090f4b41c350e2b1f4265759e25ae6bc1d13c13c"
+      },
+      {
+        "provider": "crossref",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t100428z-crossref-c05d179c56",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=compliant+contact-rich+assembly+residual+learning&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "45c656c1836ccbbab8c2022d9f4b3c834ab64431ef90fa96a46943200ac2f7e4",
+        "normalized_results_sha256": "a0af862ab103f4cdef295cfab61d2a9d5e1188f5bc6044105b52a346ea68310d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t100429z-europe-pmc-675e239038",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=compliant+contact-rich+assembly+residual+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "7fcd14bfe510cfc06833d0546999446b1bc4c450f219e274332f5c98fdde2797",
+        "normalized_results_sha256": "40357068d211a23fecc8fb3a5b6976c1088e466631ad5bd77adef66885b2c5e3"
+      },
+      {
+        "provider": "hal",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t100438z-hal-a6c5d85bf8",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=compliant+contact-rich+assembly+residual+learning&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "5943be2067eba6b59c4d97ed998574905d452657db3870d87e127fd4b215e5f0"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/978-981-97-8043-3_39",
+        "receipt_id": "20261121t100440z-opencitations-efacc97b49",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/indin64977.2025.11279680",
+        "receipt_id": "20261121t100441z-opencitations-d4de1c095c",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 167,
+    "off_topic_filtered": 116,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 19,
+    "net_new": 32,
+    "provider_statuses": [
+      {
+        "query": "pump cavitation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pump cavitation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pump cavitation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pump cavitation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "pump cavitation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "compressor fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "compressor fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "compressor fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "compressor fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "compressor fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "valve fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "valve fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "valve fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "valve fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "valve fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rolling mill",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rolling mill",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rolling mill",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rolling mill",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rolling mill",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 13,
+    "cleaned": [
+      {
+        "slug": "figshare-30944375-the-datasets-of-the-2017",
+        "key": "figshare:30944375",
+        "dataset_name": "the datasets of the 2017 Changdao swarm in eastern China",
+        "doi": "10.6084/m9.figshare.30944375.v1",
+        "landing_url": "https://figshare.com/articles/dataset/the_datasets_of_the_2017_Changdao_swarm_in_eastern_China/30944375",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-30944375-the-datasets-of-the-2017-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-30944375-the-datasets-of-the-2017-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_30944375_the_datasets_of_the_2017.py",
+        "cleaned_rows": 8,
+        "raw_total_rows": 11411,
+        "verified_sha256": "136c8c0214d42fb08cb2f06fe74fd87347bc94d2a9c8c1119b5ef59833c48f37"
+      },
+      {
+        "slug": "figshare-31158421-data-set-for-fabrication",
+        "key": "figshare:31158421",
+        "dataset_name": "Data set for \"Fabrication and Wear Analysis of AA2024 Aluminium Hybrid Composites",
+        "doi": "10.6084/m9.figshare.31158421.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_set_for_Fabrication_and_Wear_Analysis_of_AA2024_Aluminium_Hybrid_Composites/31158421",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31158421-data-set-for-fabrication-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-31158421-data-set-for-fabrication-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31158421_data_set_for_fabrication.py",
+        "cleaned_rows": 6,
+        "raw_total_rows": 7995,
+        "verified_sha256": "ce1d3a0f8aacc2d2bfe68cd0c39b2a79683ebb688ce7522a955b74ac31ba5a96"
+      },
+      {
+        "slug": "figshare-34066695-data-sheet-1-artificial",
+        "key": "figshare:34066695",
+        "dataset_name": "Data Sheet 1_Artificial intelligence-assisted design and CFD re-optimization of graded hybrid metal foams for faster hydrogen desorption in LaNi5 metal-hydride reactors.zip",
+        "doi": "10.3389/fenrg.2026.1956543.s001",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_Artificial_intelligence-assisted_design_and_CFD_re-optimization_of_graded_hybrid_metal_foams_for_faster_hydrogen_desorption_in_LaNi5_metal-hydride_reactors_zip/34066695",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34066695-data-sheet-1-artificial-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34066695-data-sheet-1-artificial-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34066695_data_sheet_1_artificial.py",
+        "cleaned_rows": 8,
+        "raw_total_rows": 8,
+        "verified_sha256": "4f9ab8a6081de8ef5ad2b494e0b835021a3f1360150a04d8dd22925533a35ccf"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
