@@ -1,0 +1,319 @@
+{
+  "schema_version": "1.0",
+  "round": 45,
+  "completed_at": "2026-11-21T12:11:35Z",
+  "batch_label": "Broad Engineering R45: Smart_Manufacturing",
+  "base_head_sha": "257c497cf1d756683b8a20dfb0a7c58c29109cfb",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 113,
+    "duplicates_skipped": 9,
+    "net_new": 104,
+    "new_reading_queue": 96,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "electron beam melting defect",
+        "receipt_id": "20261121t121135z-arxiv-595dfc830f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aelectron+AND+all%3Abeam+AND+all%3Amelting+AND+all%3Adefect&start=0&max_results=12",
+        "result_count": 7,
+        "response_sha256": "3d68de674f4b072113b29db1803c65e10fe7c4d371080bc4cc6bb838b737d94a",
+        "normalized_results_sha256": "be3121b876181b2bddac2ecbdaabf6765ce4fc859cbf0119360cc4387c874c9b"
+      },
+      {
+        "provider": "openalex",
+        "query": "electron beam melting defect",
+        "receipt_id": "20261121t121137z-openalex-69b303cfe6",
+        "request_url": "https://api.openalex.org/works?search=electron+beam+melting+defect&per-page=12",
+        "result_count": 12,
+        "response_sha256": "19ebedcb94e5b854b66e2ca53342dd4325d3fc39693890f9522af1e5bab96900",
+        "normalized_results_sha256": "f0cf56d55057ec6c54823d527c328f69db4f11edb5f4d45a31383b271e5235de"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "electron beam melting defect",
+        "receipt_id": "20261121t121139z-europe-pmc-dfd7aa0748",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=electron+beam+melting+defect&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "3fe527bcdd15cc55360ca948268304cf97c824a57bbe9c395085b4db6faf8fdd",
+        "normalized_results_sha256": "1267e25a1ca4782cdd076d8cda57f162b322339d5779c5b49c9269e56c35ed08"
+      },
+      {
+        "provider": "arxiv",
+        "query": "composite autoclave cure optimization",
+        "receipt_id": "20261121t121143z-arxiv-79fea641ed",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acomposite+AND+all%3Aautoclave+AND+all%3Acure+AND+all%3Aoptimization&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "b8123c5b769c8b5daf546d02945052957bb3ee36e98b0890f56c83234144f0b3",
+        "normalized_results_sha256": "3a6619d2eae8171fbba855d1cc0f315ce922d75f419d09462f0aa478a40f3997"
+      },
+      {
+        "provider": "openalex",
+        "query": "composite autoclave cure optimization",
+        "receipt_id": "20261121t121144z-openalex-6c05d60212",
+        "request_url": "https://api.openalex.org/works?search=composite+autoclave+cure+optimization&per-page=12",
+        "result_count": 12,
+        "response_sha256": "ff242911be71e8f2a6b069443a94c03e8c285b17cc9d87d8c4a894d7568f0f80",
+        "normalized_results_sha256": "c07ec763d052e9845ea74bac80915d8e737549d8091f0efd0ddf021f6cd0038e"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "composite autoclave cure optimization",
+        "receipt_id": "20261121t121147z-europe-pmc-9d280356f3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=composite+autoclave+cure+optimization&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "5f3817f796208772d9614e643427ccf04f8915806a9c4360c2129e5fa8b72e2d",
+        "normalized_results_sha256": "f9f682bf8229ce4aaab1e4bfd020cf0de3cf48675a19ed2dc585a18330f9e02c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "machining distortion residual stress",
+        "receipt_id": "20261121t121149z-arxiv-47f758a17f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amachining+AND+all%3Adistortion+AND+all%3Aresidual+AND+all%3Astress&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "071377a01c968e35737de64373b63c9d1624d289be561951fb11bff7347c7e44",
+        "normalized_results_sha256": "ce223a28b8899b30b17c138b6712c6f2b87d4ae81c354bd3dcb56f30f7710345"
+      },
+      {
+        "provider": "openalex",
+        "query": "machining distortion residual stress",
+        "receipt_id": "20261121t121151z-openalex-4b07a2b9a3",
+        "request_url": "https://api.openalex.org/works?search=machining+distortion+residual+stress&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e1fff2635acef0e3fd708186eb2f34b83f63af89e78d49cba7a8338b1f62ff0e",
+        "normalized_results_sha256": "0f2ec08e6665e901895ef620897ae39bf1610a9dcb8f55e734ecd017f386425c"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "machining distortion residual stress",
+        "receipt_id": "20261121t121154z-europe-pmc-6af9faa83b",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=machining+distortion+residual+stress&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1ca67697fc1a30c5b47fc51d7edfed15f363c4951d1b37895961a43b62c30e66",
+        "normalized_results_sha256": "af9fc0c4164e637e5f1c9e9ba6855e232104c0d50b8566a5d4926353d1df94a1"
+      },
+      {
+        "provider": "arxiv",
+        "query": "surface roughness vision inspection",
+        "receipt_id": "20261121t121158z-arxiv-2fd48f07f7",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Asurface+AND+all%3Aroughness+AND+all%3Avision+AND+all%3Ainspection&start=0&max_results=12",
+        "result_count": 6,
+        "response_sha256": "78377f124548514c5ff4445d5fc649897259a07458541ebacab3a66ce820014c",
+        "normalized_results_sha256": "4814d7a02725e44317f1c73549004205afeae5f71abc49d23f99f6e40c08fec5"
+      },
+      {
+        "provider": "openalex",
+        "query": "surface roughness vision inspection",
+        "receipt_id": "20261121t121159z-openalex-a84726f0f2",
+        "request_url": "https://api.openalex.org/works?search=surface+roughness+vision+inspection&per-page=12",
+        "result_count": 12,
+        "response_sha256": "23c43c7d7a4172301cb87e523f952cc9e853170c771acd8ea57ee288b080b772",
+        "normalized_results_sha256": "3f47fcbc1d50c0188694e2facd03009708c1a8dacc758f0d393acd4cf9b61d5e"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "surface roughness vision inspection",
+        "receipt_id": "20261121t121202z-europe-pmc-fe7e393625",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=surface+roughness+vision+inspection&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "6c31d1edda642e3d27edae3328772f612d8b83d28c3a5c974296a824aeafd140",
+        "normalized_results_sha256": "584729ab3c8405d8ef06f092e7388d23df06644a8ef9f4591c0cc092506ff5a1"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/mi17080956",
+        "receipt_id": "20261121t121213z-opencitations-dfbb54a78e",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1038/s41598-025-33493-7",
+        "receipt_id": "20261121t121215z-opencitations-e9fcbaa641",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 138,
+    "off_topic_filtered": 107,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 18,
+    "net_new": 13,
+    "provider_statuses": [
+      {
+        "query": "job shop scheduling sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "job shop scheduling sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "job shop scheduling sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "job shop scheduling sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "digital twin sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "digital twin sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "human-robot collaboration sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "human-robot collaboration sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "human-robot collaboration sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "human-robot collaboration sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "surface defect sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "surface defect sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface defect sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-4saz4x-the-effect-of-vibration",
+        "key": "dataverse:10.7910/dvn/4saz4x",
+        "dataset_name": "The effect of vibration cycle ergometry on pulmonary VO2 kinetics, isokinetic knee torque, and lower extremity explosive power",
+        "doi": "10.7910/dvn/4saz4x",
+        "landing_url": "https://doi.org/10.7910/DVN/4SAZ4X",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-4saz4x-the-effect-of-vibration-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-4saz4x-the-effect-of-vibration-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_4saz4x_the_effect_of_vibration.py",
+        "cleaned_rows": 35,
+        "raw_total_rows": 37,
+        "verified_sha256": "ce5db73af5fad6efdcbcd4cd46ad2022f9b5de9a0e4660c81e3ce2f20f6be4cf"
+      },
+      {
+        "slug": "dataverse-lpnslg-tensile-test-and-finite",
+        "key": "dataverse:10.7910/dvn/lpnslg",
+        "dataset_name": "Tensile Test and Finite Element Optimization of the Triple-pipe Rebar Connector datas",
+        "doi": "10.7910/dvn/lpnslg",
+        "landing_url": "https://doi.org/10.7910/DVN/LPNSLG",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-lpnslg-tensile-test-and-finite-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-lpnslg-tensile-test-and-finite-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_lpnslg_tensile_test_and_finite.py",
+        "cleaned_rows": 8,
+        "raw_total_rows": 40,
+        "verified_sha256": "af22dc85042b2425e84d67ad00a235176e611729575d3089e956cd3956661520"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-1g3ssb-multi-sensor-based-power\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Expt_3.tab: f16dec591ac709ffce5ed7d82ce87db76c86744b84d76a32087457068e1e40be != fa922de59b6813263e8e926123b56cd969a99e7d37baf817094308875786cb7c\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

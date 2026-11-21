@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-lpnslg-tensile-test-and-finite",
+  "dataset_name": "Tensile Test and Finite Element Optimization of the Triple-pipe Rebar Connector datas",
+  "doi": "10.7910/dvn/lpnslg",
+  "landing_url": "https://doi.org/10.7910/DVN/LPNSLG",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/LPNSLG",
+  "access_date": "2026-11-21",
+  "round_number": 45,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Connector load-strain curves.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12136738",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/LPNSLG/199c780fc06-363a01e0ff76?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Connector%2520load-strain%2520curves.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T121331Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=11a8f61ea74d31a97c763a31cc943ecbdf8c764482439121cf126fc90463c9ff",
+      "http_status": 200,
+      "bytes": 381,
+      "publisher_checksum": "md5:5143aeb2e963035f031eb62f22696e55",
+      "verified_md5": "5143aeb2e963035f031eb62f22696e55",
+      "verified_sha256": "af22dc85042b2425e84d67ad00a235176e611729575d3089e956cd3956661520"
+    },
+    {
+      "file": "Connector load-displacement curves.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/12136740",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/LPNSLG/199c780f98d-3492f8566797?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Connector%2520load-displacement%2520curves.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T121333Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=a0790b8e78f55d6e23cdc8d006f909e22993ee250118eef6aca3d5f26fd02514",
+      "http_status": 200,
+      "bytes": 1094,
+      "publisher_checksum": "md5:b719cae63cdf21b3e3c90b194ddf93d5",
+      "verified_md5": "b719cae63cdf21b3e3c90b194ddf93d5",
+      "verified_sha256": "daa0c74584cf78cf6d34eb7c50a48f42e274e0df1be54ba15058aa39f3564ce7"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-lpnslg-tensile-test-and-finite",
+  "raw_total_bytes": 1475,
+  "raw_total_rows": 40,
+  "duplicate_rows_removed": 2,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-lpnslg-tensile-test-and-finite-cleaned.csv",
+  "cleaned_csv_sha256": "0d8df315f2ccbed07e9358d28ec67aa79bfa8806b2fadb83e8c1029278d12e16",
+  "cleaned_rows": 8,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Connector load-strain curves.txt": {
+      "0": 0,
+      "0.1": 0,
+      "3": 0,
+      "0.2": 0,
+      "10": 0,
+      "0.3": 0
+    },
+    "Connector load-displacement curves.txt": {
+      "gro": 0,
+      "p1": 24
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
