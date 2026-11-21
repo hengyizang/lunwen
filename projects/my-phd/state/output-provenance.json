@@ -36,6 +36,24 @@
       "run_id": "20261108t101618z-crossref-f4ed1f2dee",
       "sha256": "182ca1f52079d5b90d9dad92659938a184c29558dd2ef14aa775154bf034eb8b"
     },
+    "evidence/literature/assets/d9d09fac27b93e39416bb7c8/latest.json": {
+      "family": "other",
+      "model": "scripts/literature_assets.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-21T04:06:06+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "f59ac747d9523adc805af05f448b3f1264f45b7cf12b25c30778aee06df8c370"
+    },
+    "evidence/literature/assets/d9d09fac27b93e39416bb7c8/receipts/f59ac747d9523adc805af05f448b3f1264f45b7cf12b25c30778aee06df8c370.json": {
+      "family": "other",
+      "model": "scripts/literature_assets.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-21T04:06:06+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "f59ac747d9523adc805af05f448b3f1264f45b7cf12b25c30778aee06df8c370"
+    },
     "evidence/literature/normalized/20261101t080436z-crossref-19bb06bbf0.json": {
       "family": "other",
       "model": "scripts/literature_evidence.py",
@@ -767,5 +785,5 @@
     }
   },
   "schema_version": "1.0",
-  "updated_at": "2026-11-08T11:18:10+00:00"
+  "updated_at": "2026-11-21T04:06:06+00:00"
 }

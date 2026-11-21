@@ -1,0 +1,112 @@
+{
+  "acquired_at": "2026-11-21T04:06:06.349467+00:00",
+  "arxiv_id": "2403.01068v1",
+  "authors": [
+    "Nadeau, Philippe",
+    "Garcia, Miguel Rogel",
+    "Wise, Emmett",
+    "Kelly, Jonathan"
+  ],
+  "downloads": [
+    {
+      "acquired_at": "2026-11-21T04:06:06.530719+00:00",
+      "bytes": 41343,
+      "content_type": "text/html; charset=utf-8",
+      "final_url": "https://arxiv.org/abs/2403.01068v1",
+      "http_status": 200,
+      "kind": "html",
+      "page_metadata": {
+        "authors": [
+          "Nadeau, Philippe",
+          "Garcia, Miguel Rogel",
+          "Wise, Emmett",
+          "Kelly, Jonathan"
+        ],
+        "pdf_candidates": [
+          "https://arxiv.org/pdf/2403.01068",
+          "https://arxiv.org/pdf/2403.01068v1"
+        ],
+        "publication_date": null,
+        "publication_date_basis": null,
+        "source_type": "project_page",
+        "title": "Automated Continuous Force-Torque Sensor Bias Estimation"
+      },
+      "path": "data/raw/literature/sources/1db914119c1149c8307410cb6b9c512443c682455d04cbac459c5c1ca98e8526.html",
+      "sha256": "1db914119c1149c8307410cb6b9c512443c682455d04cbac459c5c1ca98e8526",
+      "source_url": "https://arxiv.org/abs/2403.01068v1",
+      "text_path": "data/raw/literature/sources/1db914119c1149c8307410cb6b9c512443c682455d04cbac459c5c1ca98e8526.txt",
+      "text_sha256": "8f99f0e2d8d4c9cbafa5e8f8b71f9604d44c0dc37cf24c477f1b55effd9be751"
+    },
+    {
+      "acquired_at": "2026-11-21T04:06:06.785550+00:00",
+      "bytes": 431629,
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2403.01068",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2.pdf",
+      "sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+      "source_url": "https://arxiv.org/pdf/2403.01068"
+    },
+    {
+      "acquired_at": "2026-11-21T04:06:06.895100+00:00",
+      "bytes": 431629,
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2403.01068v1",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2.pdf",
+      "sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+      "source_url": "https://arxiv.org/pdf/2403.01068v1"
+    }
+  ],
+  "execution": {
+    "mode": "cloud",
+    "receipt_id": "44864371507"
+  },
+  "failures": [],
+  "final_url": "https://arxiv.org/abs/2403.01068v1",
+  "local_pdf": "data/raw/literature/sources/c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2.pdf",
+  "original_input": "https://arxiv.org/abs/2403.01068v1",
+  "pdf_status": "acquired",
+  "pdfs": [
+    {
+      "acquired_at": "2026-11-21T04:06:06.785550+00:00",
+      "bytes": 431629,
+      "content_type": "application/pdf",
+      "final_url": "https://arxiv.org/pdf/2403.01068",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2.pdf",
+      "permissions": {
+        "human_review": "required",
+        "license": "unknown",
+        "permission_evidence_url": null,
+        "public_access_is_not_reuse_permission": true,
+        "reuse_permission": "unknown"
+      },
+      "sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+      "source_pdf_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+      "source_url": "https://arxiv.org/pdf/2403.01068",
+      "version": "v1"
+    }
+  ],
+  "permissions": {
+    "human_review": "required",
+    "license": "unknown",
+    "permission_evidence_url": null,
+    "public_access_is_not_reuse_permission": true,
+    "reuse_permission": "unknown"
+  },
+  "publication_date": null,
+  "publication_date_basis": null,
+  "schema_version": 1,
+  "scientific_support_status": "unreviewed_source",
+  "source_pdf_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+  "source_type": "arxiv",
+  "source_url": "https://arxiv.org/abs/2403.01068v1",
+  "status": "acquired",
+  "title": "Automated Continuous Force-Torque Sensor Bias Estimation",
+  "version": "v1",
+  "version_basis": "explicit acquired PDF URL"
+}
