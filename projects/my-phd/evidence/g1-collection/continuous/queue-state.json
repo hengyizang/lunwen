@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 8,
-  "total_new_literature": 767,
-  "total_new_datasets": 612,
-  "total_new_reading_queue": 686,
+  "round_number": 9,
+  "total_new_literature": 864,
+  "total_new_datasets": 654,
+  "total_new_reading_queue": 779,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -18,7 +18,8 @@
     "figshare:35055502",
     "figshare:33578671",
     "dataverse:10.7910/dvn/gddmsa",
-    "dataverse:10.7910/dvn/wrctu4"
+    "dataverse:10.7910/dvn/wrctu4",
+    "dataverse:10.7910/dvn/ckliy1"
   ],
   "cleaned_datasets_meta": [
     {
@@ -216,6 +217,20 @@
       "cleaned_rows": 211,
       "raw_total_rows": 211,
       "verified_sha256": "4310d567b54edcc92e45371f70da7faec470113e4752ed267aaa915a42c5d4c6"
+    },
+    {
+      "slug": "dataverse-ckliy1-perception-and-acoustic",
+      "key": "dataverse:10.7910/dvn/ckliy1",
+      "dataset_name": "Perception and acoustic data with R scripts",
+      "doi": "10.7910/dvn/ckliy1",
+      "landing_url": "https://doi.org/10.7910/DVN/CKLIY1",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ckliy1-perception-and-acoustic-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ckliy1_perception_and_acoustic.py",
+      "cleaned_rows": 77,
+      "raw_total_rows": 31860,
+      "verified_sha256": "4084821900503a9e9d08ab1d317b8e70abd90a59215d60ab673e914430ca941a"
     }
   ],
   "snowballed_dois": [
@@ -226,9 +241,11 @@
     "10.1016/j.measurement.2024.115140",
     "10.1016/j.measurement.2024.115365",
     "10.1016/j.tws.2024.112745",
+    "10.1109/lcsys.2025.3610637",
     "10.1109/lra.2025.3609669",
     "10.1109/robosoft60065.2024.10521997",
     "10.1109/robosoft63089.2025.11020810",
+    "10.1109/tase.2025.3634193",
     "10.3390/s24165441",
     "10.3390/s26041129",
     "10.5194/ms-15-531-2024"
@@ -305,35 +322,44 @@
       "net_new_datasets": 84,
       "cleaned_count": 0,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 9,
+      "completed_at": "2026-11-21T08:09:11Z",
+      "batch_label": "Broad Engineering R9: Mechatronics_PHM_Control",
+      "net_new_literature": 97,
+      "net_new_datasets": 42,
+      "cleaned_count": 1,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:04:25Z",
+  "updated_at": "2026-11-21T08:09:11Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 38,
+    "Adjacent": 39,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 73,
-    "Mechanical_Physics_AI": 291,
-    "Mechatronics_PHM_Control": 165,
-    "Robotics_Embodied": 246,
-    "R5_MultiRobot_Comm": 87,
+    "R2_Aerial_Actuator": 75,
+    "Mechanical_Physics_AI": 312,
+    "Mechatronics_PHM_Control": 253,
+    "Robotics_Embodied": 264,
+    "R5_MultiRobot_Comm": 88,
     "R1_Force_Contact": 1,
     "Smart_Manufacturing": 18,
-    "Smart_Factory_DigitalTwin": 10
+    "Smart_Factory_DigitalTwin": 12
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 279,
-    "Mechatronics_PHM_Control": 164,
-    "Smart_Manufacturing": 70,
-    "Robotics_Embodied": 165,
-    "R5_MultiRobot_Comm": 16,
-    "Smart_Factory_DigitalTwin": 59,
-    "R2_Aerial_Actuator": 32,
+    "Mechanical_Physics_AI": 299,
+    "Mechatronics_PHM_Control": 192,
+    "Smart_Manufacturing": 80,
+    "Robotics_Embodied": 170,
+    "R5_MultiRobot_Comm": 17,
+    "Smart_Factory_DigitalTwin": 60,
+    "R2_Aerial_Actuator": 34,
     "R1_Force_Contact": 7
   }
 }

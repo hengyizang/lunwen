@@ -1,0 +1,295 @@
+{
+  "schema_version": "1.0",
+  "round": 9,
+  "completed_at": "2026-11-21T08:09:11Z",
+  "batch_label": "Broad Engineering R9: Mechatronics_PHM_Control",
+  "base_head_sha": "f81fa308a12197373ef1b246fef34f404c06791f",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 105,
+    "duplicates_skipped": 8,
+    "net_new": 97,
+    "new_reading_queue": 93,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "PMSM motor control reinforcement learning",
+        "receipt_id": "20261121t080911z-arxiv-3e76560811",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3APMSM+AND+all%3Amotor+AND+all%3Acontrol+AND+all%3Areinforcement+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "78d0d1801eb20d066bbce953a774889f652eb731c326b37950d01cf73b740f5f",
+        "normalized_results_sha256": "9dda5e0ec5e77cf1caf209ce48d221356dac3f1174165a1cdab63196021fbb99"
+      },
+      {
+        "provider": "openalex",
+        "query": "PMSM motor control reinforcement learning",
+        "receipt_id": "20261121t080912z-openalex-6cfa10beb2",
+        "request_url": "https://api.openalex.org/works?search=PMSM+motor+control+reinforcement+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "7bf53b53f4bb7a98bf31d60da90d6f5a0242a2d2dc5d429d0bc595217b5e0989",
+        "normalized_results_sha256": "7a4d1373879de801d17a0f9875b7d8a103f7bd03d150667f09e7dcd866df3cb5"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "PMSM motor control reinforcement learning",
+        "receipt_id": "20261121t080913z-europe-pmc-d06a00cf2b",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PMSM+motor+control+reinforcement+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "bd54b93e45cbddcf812a68e38c9a72391361226d2422697e77aa88dfaf91a732",
+        "normalized_results_sha256": "c448d14f676826954a8928288d71003027717ac589eab2e7684c49d22f340b41"
+      },
+      {
+        "provider": "arxiv",
+        "query": "hydraulic actuator adaptive neural control",
+        "receipt_id": "20261121t080915z-arxiv-97a0ace8a9",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Ahydraulic+AND+all%3Aactuator+AND+all%3Aadaptive+AND+all%3Aneural+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "82d6f60cbe5963ac9ff0405fcde502f3e1b5c62a3b66cc01014014e4b4f47a2b",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "hydraulic actuator adaptive neural control",
+        "receipt_id": "20261121t080916z-openalex-aadfbe8820",
+        "request_url": "https://api.openalex.org/works?search=hydraulic+actuator+adaptive+neural+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "528a06ccb643bb22bcaf05903d0bd2e06cd777562ab848c5ae7bf39e53e62213",
+        "normalized_results_sha256": "429e1370cec70870c2ca62a0745faae712095a1f4ea89663f1f361f19d476af4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "hydraulic actuator adaptive neural control",
+        "receipt_id": "20261121t080918z-europe-pmc-48d9d2e918",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=hydraulic+actuator+adaptive+neural+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a5e29e9f8b1f7e43477290911ddfba1a5eee56e48d48f00b3486b17cdf75c32d",
+        "normalized_results_sha256": "cd801efe725c46545ed738a701c8e1362cc691528bc99abb901771c9c506e8dc"
+      },
+      {
+        "provider": "arxiv",
+        "query": "IMU calibration neural inertial odometry",
+        "receipt_id": "20261121t080919z-arxiv-0f6ce74afd",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3AIMU+AND+all%3Acalibration+AND+all%3Aneural+AND+all%3Ainertial+AND+all%3Aodometry&start=0&max_results=12",
+        "result_count": 5,
+        "response_sha256": "5225a1e88b032f287e19d31c477ac583ddbf2312e6e1e58fb365c3aab76481ef",
+        "normalized_results_sha256": "ba2f47e7cc869ab834ab6a27da22ff6e7e6a69fbbeae31c06058e5f9e250436f"
+      },
+      {
+        "provider": "openalex",
+        "query": "IMU calibration neural inertial odometry",
+        "receipt_id": "20261121t080920z-openalex-308133de39",
+        "request_url": "https://api.openalex.org/works?search=IMU+calibration+neural+inertial+odometry&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e7c7c73c341f6ef8c2dff69c238654fc298e43858f0023eb8da62edf338f5014",
+        "normalized_results_sha256": "d9bf1375cd9c7f2d0c990bedc37bac86fbe6b52ff1cee94a7f786467cc0bf063"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "IMU calibration neural inertial odometry",
+        "receipt_id": "20261121t080922z-europe-pmc-e13776c41e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=IMU+calibration+neural+inertial+odometry&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "7d3cfa6140f241ada48154f8926dcac740ccef196e91ba0aa115dc3dd70d0e13",
+        "normalized_results_sha256": "2b0cbcd9f0ee596e389de2dbf315b3b097affd6a7c7b0d21325c6bf40be179d4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "gearbox fault prognostics deep learning",
+        "receipt_id": "20261121t080926z-arxiv-635f1eacf7",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Agearbox+AND+all%3Afault+AND+all%3Aprognostics+AND+all%3Adeep+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "cfab723bdfefda1f55f0fc3f97ac3ffe88bd2e8cae9883e4b0b88f5c7081f040",
+        "normalized_results_sha256": "533dcd4fbcaed7bfe3d1f361c64deb56272adac5457a263b6f4968ef06f65cf5"
+      },
+      {
+        "provider": "openalex",
+        "query": "gearbox fault prognostics deep learning",
+        "receipt_id": "20261121t080927z-openalex-1b64c68e7c",
+        "request_url": "https://api.openalex.org/works?search=gearbox+fault+prognostics+deep+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "07c93bcfed520d97ae71b9faf3bc285b1129b5c9d7dee998e104d22d4a6ce26f",
+        "normalized_results_sha256": "7090bc8a01d31f94862c025a94dfe6e4991678758ce2f0710171935de309ff63"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "gearbox fault prognostics deep learning",
+        "receipt_id": "20261121t080929z-europe-pmc-8a11eaad62",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=gearbox+fault+prognostics+deep+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "4edf5527a468b5b8c75d3232c1130d1166e1c073605b2c9765c1f7199059f535",
+        "normalized_results_sha256": "48b8d6fa6ad4d95c638574e7782fd65e392511655b17bbad500146c04d154a51"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/tase.2025.3634193",
+        "receipt_id": "20261121t080934z-opencitations-412de2c054",
+        "result_count": 1,
+        "response_sha256": "ec6e3364f4f428db22b7c8c38456792099be7d83aa84e5a61c56b97e0485500a"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/lcsys.2025.3610637",
+        "receipt_id": "20261121t080935z-opencitations-513c5176ea",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 190,
+    "off_topic_filtered": 127,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 21,
+    "net_new": 42,
+    "provider_statuses": [
+      {
+        "query": "cooperative slam",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "cooperative slam",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cooperative slam",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cooperative slam",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "cooperative slam",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "battery manufacturing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery manufacturing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "battery manufacturing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery manufacturing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery manufacturing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "remaining useful life",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "remaining useful life",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rotating machinery",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-ckliy1-perception-and-acoustic",
+        "key": "dataverse:10.7910/dvn/ckliy1",
+        "dataset_name": "Perception and acoustic data with R scripts",
+        "doi": "10.7910/dvn/ckliy1",
+        "landing_url": "https://doi.org/10.7910/DVN/CKLIY1",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ckliy1-perception-and-acoustic-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ckliy1_perception_and_acoustic.py",
+        "cleaned_rows": 77,
+        "raw_total_rows": 31860,
+        "verified_sha256": "4084821900503a9e9d08ab1d317b8e70abd90a59215d60ab673e914430ca941a"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

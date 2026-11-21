@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：8
-- **最近更新时间 (UTC)**：2026-11-21T08:04:25Z
-- **累计净新增文献** (`literature-new.csv`)：767 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：612 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：686 条
-- **累计已完成确定性清洗数据集**：14 个
+- **已完成轮次**：9
+- **最近更新时间 (UTC)**：2026-11-21T08:09:11Z
+- **累计净新增文献** (`literature-new.csv`)：864 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：654 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：779 条
+- **累计已完成确定性清洗数据集**：15 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,15 +20,15 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 1 | 7 |
-| `R2_Aerial_Actuator` | 73 | 32 |
-| `R5_MultiRobot_Comm` | 87 | 16 |
-| `Robotics_Embodied` | 246 | 165 |
-| `Mechanical_Physics_AI` | 291 | 279 |
-| `Mechatronics_PHM_Control` | 165 | 164 |
-| `Smart_Manufacturing` | 18 | 70 |
-| `Smart_Factory_DigitalTwin` | 10 | 59 |
+| `R2_Aerial_Actuator` | 75 | 34 |
+| `R5_MultiRobot_Comm` | 88 | 17 |
+| `Robotics_Embodied` | 264 | 170 |
+| `Mechanical_Physics_AI` | 312 | 299 |
+| `Mechatronics_PHM_Control` | 253 | 192 |
+| `Smart_Manufacturing` | 18 | 80 |
+| `Smart_Factory_DigitalTwin` | 12 | 60 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 38 | 0 |
+| `Adjacent` | 39 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -60,6 +60,7 @@
 | `figshare-33578671-source-data-for-tecobot` | Source data for TeCoBot, A Tensegrity-based modular Continuum robot | 10.6084/m9.figshare.33578671.v2 | `summary_table` | 11 | `db4cd6087b1a` | [CSV](data/figshare-33578671-source-data-for-tecobot-cleaned.csv) · [JSON](data/figshare-33578671-source-data-for-tecobot-provenance.json) · [PY](data/derive_figshare_33578671_source_data_for_tecobot.py) |
 | `dataverse-gddmsa-enlarging-error-detectio` | Enlarging Error Detection Threshold of IMU-based Hand Tracking in V... | 10.7910/dvn/gddmsa | `summary_table` | 30 | `5bcde499216d` | [CSV](data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv) · [JSON](data/dataverse-gddmsa-enlarging-error-detectio-provenance.json) · [PY](data/derive_dataverse_gddmsa_enlarging_error_detectio.py) |
 | `dataverse-wrctu4-soil-hydraulic-parameter` | Soil hydraulic parameters for "Analyzing dual porosity in soil hydr... | 10.7910/dvn/wrctu4 | `cleaned_rows` | 211 | `4310d567b54e` | [CSV](data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv) · [JSON](data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json) · [PY](data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py) |
+| `dataverse-ckliy1-perception-and-acoustic` | Perception and acoustic data with R scripts | 10.7910/dvn/ckliy1 | `summary_table` | 77 | `408482190050` | [CSV](data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv) · [JSON](data/dataverse-ckliy1-perception-and-acoustic-provenance.json) · [PY](data/derive_dataverse_ckliy1_perception_and_acoustic.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -73,3 +74,4 @@
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
 | 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
 | 8 | 2026-11-21T08:04:25Z | Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control | +144 | +84 | +0 | [round-08-audit.json](rounds/round-08-audit.json) |
+| 9 | 2026-11-21T08:09:11Z | Broad Engineering R9: Mechatronics_PHM_Control | +97 | +42 | +1 | [round-09-audit.json](rounds/round-09-audit.json) |
