@@ -1,0 +1,62 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Telemetry_Platform_Testbed.zip::requirements.txt,numpy>=2.0,categorical_or_text,5,5,0,5,,,,,,,"{""pandas>=2.2"": 1, ""scipy>=1.13"": 1, ""statsmodels>=0.14"": 1}"
+Telemetry_Platform_Testbed.zip::requirements.txt,<3,categorical_or_text,5,5,0,4,,,,,,,"{""<2"": 2, ""<3"": 1, ""<0.15"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,#,categorical_or_text,2,1,1,1,,,,,,,"{""Use"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,Exact,categorical_or_text,2,1,1,1,,,,,,,"{""Python"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,environment,categorical_or_text,2,1,1,1,,,,,,,"{""3.12.3"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,recorded,categorical_or_text,2,1,1,1,,,,,,,"{""for"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,by,categorical_or_text,2,1,1,1,,,,,,,"{""the"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,the,categorical_or_text,2,1,1,1,,,,,,,"{""closest"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,accepted,categorical_or_text,2,1,1,1,,,,,,,"{""numerical"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,v1.0.0,categorical_or_text,2,1,1,1,,,,,,,"{""and"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,statistical,categorical_or_text,2,1,1,1,,,,,,,"{""figure"": 1}"
+Telemetry_Platform_Testbed.zip::requirements_lock.txt,run.,categorical_or_text,2,1,1,1,,,,,,,"{""reproduction."": 1}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,run_id,categorical_or_text,2118,2118,0,1740,,,,,,,"{""crit_adaptive_bounded_r75_o5_repeated_reconnect_rep1"": 3, ""crit_adaptive_bounded_r75_o5_repeated_reconnect_rep2"": 3, ""crit_adaptive_bounded_r75_o5_repeated..."
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,scenario_id,categorical_or_text,2118,2118,0,58,,,,,,,"{""crit_adaptive_bounded_r75_o5_repeated_reconnect"": 90, ""crit_fixed_window_r75_o5_repeated_reconnect"": 90, ""crit_sequence_gap_based_r75_o5_repeated_reconnect..."
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,repetition,numeric,2118,2118,0,30,1,8,15.5,15.5146,23,30,8.65676
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,batch_id,categorical_or_text,2118,2118,0,7,,,,,,,"{""batch_rep06_10"": 354, ""batch_rep11_15"": 354, ""batch_rep21_25"": 354}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_policy,categorical_or_text,2118,2118,0,6,,,,,,,"{""adaptive-bounded"": 454, ""fixed-window"": 454, ""sequence-gap-based"": 453}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,network_profile,categorical_or_text,2118,2118,0,7,,,,,,,"{""none"": 1398, ""repeated_reconnect"": 270, ""bandwidth"": 90}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,nominal_rate_hz,numeric,2118,2118,0,3,25,75,75,80.3942,75,150,40.2314
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,planned_outage_s,numeric,2118,2118,0,4,3,3,5,7.29178,10,30,6.23192
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,cut_repeat_count,numeric,2118,2118,0,2,1,1,1,1.25496,1,3,0.667175
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,recovery_episode_id,categorical_or_text,2118,2118,0,2118,,,,,,,"{""crit_adaptive_bounded_r150_o10_none_rep1-outage-1"": 1, ""crit_adaptive_bounded_r150_o10_none_rep2-outage-1"": 1, ""crit_adaptive_bounded_r150_o10_none_rep3-ou..."
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,episode_index,numeric,2118,2118,0,3,1,1,1,1.22096,1,3,0.507194
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,planned_by_matrix,numeric,2118,2118,0,2,0,1,1,0.906516,1,1,0.291179
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,episode_classification,categorical_or_text,2118,2118,0,3,,,,,,,"{""planned_complete"": 1920, ""incidental_incomplete"": 113, ""incidental_complete"": 85}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,analysis_eligible,numeric,2118,2118,0,2,0,1,1,0.906516,1,1,0.291179
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_request_id,categorical_or_text,2118,1740,378,1740,,,,,,,"{""crit_adaptive_bounded_r150_o10_none_rep1-replay-1"": 1, ""crit_adaptive_bounded_r150_o10_none_rep2-replay-1"": 1, ""crit_adaptive_bounded_r150_o10_none_rep3-re..."
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,ws_close_ui_monotonic_ms,numeric,2118,2118,0,1655,50160.8,50215.5,50243.4,57577.4,50276.3,113538,18393.1
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,reconnect_open_ui_monotonic_ms,numeric,2118,2005,113,1535,51165.7,51219,51246.4,55467.4,51276.4,113292,13240.9
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,reconnect_latency_ms,numeric,2118,2005,113,310,1002,1004.9,1005.8,1005.84,1006.6,1029.7,1.816
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,history_request_ui_monotonic_ms,numeric,2118,1740,378,1583,53153.4,53269.8,55261.3,59586.9,60235.6,80271.2,8296.91
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,history_loaded_ui_monotonic_ms,numeric,2118,1740,378,1606,53172.8,53315.3,55355.2,59649,60299.6,80454.6,8309.67
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,request_to_loaded_ms,numeric,2118,1740,378,1105,10.9,42.475,55.3,62.0865,71.2,211.2,33.0703
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,close_to_loaded_ms,numeric,2118,1740,378,1539,2955.5,3056.88,5058.75,7554.18,10028.9,30212.8,6677.21
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,outage_observed_ms,numeric,2118,2118,0,589,0,2993,4990,6404.42,9965,32792,6952.37
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_query_mode,categorical_or_text,2118,1740,378,3,,,,,,,"{""seq_range"": 900, ""last"": 630, ""timestamp_range"": 210}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,requested_limit,numeric,2118,1740,378,185,74,343,375,840.085,1500,3027,840.162
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,requested_first_seq,numeric,2118,1740,378,145,0,0,1201,1930.14,3793,7591,2348.27
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,requested_last_seq,numeric,2118,1740,378,105,0,0,1339,2434.66,4169,9089,2741.99
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,requested_since_utc_ns,numeric,2118,1740,378,211,0,0,0,2.15427e+17,0,1.78509e+18,5.81649e+17
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,requested_until_utc_ns,numeric,2118,1740,378,211,0,0,0,2.15427e+17,0,1.78509e+18,5.81649e+17
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,returned_count,numeric,2118,2118,0,138,0,224,375,670.733,750,3027,803.055
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,request_fulfillment_ratio,numeric,2118,2118,0,61,0.474684,1,1,0.980778,1,1,0.0610052
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_rows,numeric,2118,2118,0,138,0,224,375,670.733,750,3027,803.055
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_unique_samples,numeric,2118,2118,0,138,0,224,375,670.733,750,3027,803.055
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_seq_min,numeric,2118,1740,378,232,1139,2480.5,3793,3924.87,4693.25,7606,2045.86
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_seq_max,numeric,2118,1740,378,126,1338,4019,4170,4740.31,5969,9095,2192.35
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_duplicate_count,numeric,2118,2118,0,48,0,0,0,11.7361,1,742,54.7907
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,replay_out_of_order_count,numeric,2118,2118,0,1,0,0,0,0,0,0,0
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,median_replay_staleness_ms,categorical_or_text,2118,0,2118,0,,,,,,,{}
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,p95_replay_staleness_ms,categorical_or_text,2118,0,2118,0,,,,,,,{}
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_id_count,numeric,2118,2118,0,2,0,1,1,0.82153,1,1,0.382999
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_first_seq_min,numeric,2118,1740,378,177,1128,1266,3793,3815.26,4693,7605,2137.96
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_last_seq_max,numeric,2118,1740,378,119,1337,4019,4169,4739.81,5969,9094,2192.36
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_recovered_count_max,numeric,2118,1740,378,101,74,250,375,802.031,1498.25,3027,811.573
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_remaining_count_last,numeric,2118,1740,378,104,0,0,0,123.522,1,2667,499.23
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,gap_status_last,categorical_or_text,2118,1740,378,2,,,,,,,"{""recovered"": 1255, ""partially_recovered"": 485}"
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,history_request_present,numeric,2118,2118,0,2,0,1,1,0.82153,1,1,0.382999
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,history_loaded_present,numeric,2118,2118,0,2,0,1,1,0.82153,1,1,0.382999
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,reconnect_open_present,numeric,2118,2118,0,2,0,1,1,0.946648,1,1,0.224788
+Telemetry_Platform_Testbed.zip::connection_episode_audit.csv,episode_complete,numeric,2118,2118,0,2,0,1,1,0.946648,1,1,0.224788

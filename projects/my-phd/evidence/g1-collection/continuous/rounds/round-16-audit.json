@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0",
+  "round": 16,
+  "completed_at": "2026-11-21T08:44:12Z",
+  "batch_label": "Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026)",
+  "base_head_sha": "e4ecb2a31e888c9db28d6ac9f31e73a37a301609",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 124,
+    "duplicates_skipped": 54,
+    "net_new": 70,
+    "new_reading_queue": 70,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t084412z-arxiv-fa85cf47ca",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Adecentralized+AND+all%3Amulti-robot+AND+all%3ASLAM+AND+all%3Acommunication%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 2,
+        "response_sha256": "78ad9d1b3f36cd87a05916285b2564cc3c90f9dc762d0ece87e82ba41c7602ec",
+        "normalized_results_sha256": "5644a91576a33cf43678d04584c74f608afea0aa63426ae3a31cd4a5f59b1cb6"
+      },
+      {
+        "provider": "crossref",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t084412z-crossref-ac4904094f",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=decentralized+multi-robot+SLAM+communication&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "708848455bb7f06462bc20dfa976fb7894e8a18b5e03b74f0f221e6e26d1d305",
+        "normalized_results_sha256": "e8c36f26cf4cafbd46b563e42ffa06955660a8dc2984d8557e07075de4072148"
+      },
+      {
+        "provider": "openalex",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t084414z-openalex-645d666a20",
+        "request_url": "https://api.openalex.org/works?search=decentralized+multi-robot+SLAM+communication&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "8e00b51dffb539851dcf702906827a3ede53ea8654a1a28cdacb64364e6295e0",
+        "normalized_results_sha256": "7afa3b244d2e1b914752f51424371a962def0fd33466290e4df6858cac3ecf26"
+      },
+      {
+        "provider": "arxiv",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t084415z-arxiv-b7b00e3f1b",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3AV2X+AND+all%3Acooperative+AND+all%3Aperception+AND+all%3Alatency+AND+all%3Aestimation%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 2,
+        "response_sha256": "b74321c48beddde12732c58a643a6ae5dee274ba726d6d7d6b2d134eb0607eb7",
+        "normalized_results_sha256": "c0036953db80906284bd87d89f3c70c7fefe2fef670405b774b52b05327f8477"
+      },
+      {
+        "provider": "crossref",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t084416z-crossref-64a3628ac2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=V2X+cooperative+perception+latency+estimation&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "8a4bc1bfd2a0c26fb3a3c8bea46595248d9eb0d1261d6b8d205bacdaf0c6cc07",
+        "normalized_results_sha256": "5cd1280c9500c96094636598a817571bac2ef5e0d67cd66e374f79c8ab63cb60"
+      },
+      {
+        "provider": "openalex",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t084418z-openalex-fdc318963e",
+        "request_url": "https://api.openalex.org/works?search=V2X+cooperative+perception+latency+estimation&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "d30e3febe2ac36fecba88054c383f263f8d3d916ade7da2933b1611709bf97ab",
+        "normalized_results_sha256": "ef9ee9f2d4023d99f882d87b5ae0ae65cfa301dc6ee26ab2bac2faf81bcf4254"
+      },
+      {
+        "provider": "arxiv",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t084420z-arxiv-1ad7fe3f43",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Asim-to-real+AND+all%3Alegged+AND+all%3Arobot+AND+all%3Areinforcement+AND+all%3Alearning%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "930435e857d781d12ea58f85f03cbc91940f188903c9ca118328ef5363f873f2",
+        "normalized_results_sha256": "7f73c4a07681b4da6e3c982bd0fba094d1df71a11c3d6adefb4edd35c137f2e5"
+      },
+      {
+        "provider": "crossref",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t084421z-crossref-8e7d901de1",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=sim-to-real+legged+robot+reinforcement+learning&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "beb62e71faac14141ce062206b84848e92d27201b1178b091fd2a6ce13bab4e1",
+        "normalized_results_sha256": "c2641e6831af4f9fd1c2d3bc9047981226cad618e818ac45b20045a6f25a3b17"
+      },
+      {
+        "provider": "openalex",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t084422z-openalex-fa66d7baf3",
+        "request_url": "https://api.openalex.org/works?search=sim-to-real+legged+robot+reinforcement+learning&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "f9e4f1d75fbefa18742124681b5786c438801175844344eef22a3d1916119180",
+        "normalized_results_sha256": "066c2de1df4aa358175c3d72d34ff6bcac07909cd505131fd8ae3527a55d7054"
+      },
+      {
+        "provider": "arxiv",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t084424z-arxiv-b839e44079",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Ahumanoid+AND+all%3Awhole-body+AND+all%3Aloco-manipulation+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "4064e644f2e56de77a6a3012d2b6811631a94489e3926c2e35195dba14c83088",
+        "normalized_results_sha256": "596aaee3125f2d15898fa1eb510e53c92b2f8eee06b264a79640f2b4f3eff915"
+      },
+      {
+        "provider": "crossref",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t084425z-crossref-e686b7144f",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=humanoid+whole-body+loco-manipulation+control&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "b02ca91e5e21d8a60a8ae79b9f2cc5567c303f89d1453bc8b3a748746ccf7522",
+        "normalized_results_sha256": "52fa06430e92e1cf2cec32f3214600335fcf50678c804f6737415567513f04a2"
+      },
+      {
+        "provider": "openalex",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t084426z-openalex-1de6e35eb5",
+        "request_url": "https://api.openalex.org/works?search=humanoid+whole-body+loco-manipulation+control&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "59073dc447aa64197f39a4d5cbb27d28c0e518f725dd072e069b94cfb9af9bb1",
+        "normalized_results_sha256": "fc37149d0b8bc072f8a91fa52fee4e97e67abb0d5f760dbd32a054d21e8facf2"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1038/s41598-026-46655-y",
+        "receipt_id": "20261121t084427z-opencitations-08d232e125",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s26030881",
+        "receipt_id": "20261121t084429z-opencitations-367e564fa1",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 224,
+    "off_topic_filtered": 75,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 149,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "humanoid locomotion",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 11
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "job shop scheduling",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "digital twin",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "digital twin",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      }
+    ],
+    "probed_for_cleaning": 6,
+    "cleaned": [
+      {
+        "slug": "figshare-35081113-hrc-architecture-3-1-raw",
+        "key": "figshare:35081113",
+        "dataset_name": "HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publicly Pre-Registered Release-3.1 Evaluation",
+        "doi": "10.6084/m9.figshare.35081113",
+        "landing_url": "https://figshare.com/articles/dataset/HRC-Architecture_3_1_Raw_Hash-Manifested_Run_Records_of_the_Publicly_Pre-Registered_Release-3_1_Evaluation/35081113",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-35081113-hrc-architecture-3-1-raw-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35081113_hrc_architecture_3_1_raw.py",
+        "cleaned_rows": 34,
+        "raw_total_rows": 56058,
+        "verified_sha256": "4a56e090f3e534df7e315ab822fc7fc0eab0e329903b4b65292f8b9ab2006399"
+      },
+      {
+        "slug": "figshare-31558270-laser-powder-bed-fusion",
+        "key": "figshare:31558270",
+        "dataset_name": "Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-Based Nanocomposites: Microstructure Evolution, Mechanical, and Tribological Properties Raw Data",
+        "doi": "10.6084/m9.figshare.31558270.v2",
+        "landing_url": "https://figshare.com/articles/dataset/_b_Laser_Powder_Bed_Fusion_of_Carbon_Nanotube_CNT_-Reinforced_Nickel-Based_Nanocomposites_Microstructure_Evolution_Mechanical_and_Tribological_Properties_b_b_Raw_Data_b_/31558270",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-31558270-laser-powder-bed-fusion-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31558270_laser_powder_bed_fusion.py",
+        "cleaned_rows": 22,
+        "raw_total_rows": 76813,
+        "verified_sha256": "c6feed0cde5b2a8f51f900119eb07c3f388c0e7508dca442c2b0698ed44ac1a6"
+      },
+      {
+        "slug": "figshare-34748238-temporal-information-con",
+        "key": "figshare:34748238",
+        "dataset_name": "Temporal Information Continuity in Industrial Supervisory Robotics: Experimental Data and Reproducibility Package",
+        "doi": "10.6084/m9.figshare.34748238.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Temporal_Information_Continuity_in_Industrial_Supervisory_Robotics_Experimental_Data_and_Reproducibility_Package/34748238",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34748238-temporal-information-con-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34748238-temporal-information-con-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34748238_temporal_information_con.py",
+        "cleaned_rows": 61,
+        "raw_total_rows": 2130,
+        "verified_sha256": "5a3d5977d938423772335ee6b3f19f6e9e0ade2efe535b1c1d6df0fb0be9d04d"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+        "url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

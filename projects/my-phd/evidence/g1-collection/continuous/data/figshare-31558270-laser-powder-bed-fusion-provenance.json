@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-31558270-laser-powder-bed-fusion",
+  "dataset_name": "Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-Based Nanocomposites: Microstructure Evolution, Mechanical, and Tribological Properties Raw Data",
+  "doi": "10.6084/m9.figshare.31558270.v2",
+  "landing_url": "https://figshare.com/articles/dataset/_b_Laser_Powder_Bed_Fusion_of_Carbon_Nanotube_CNT_-Reinforced_Nickel-Based_Nanocomposites_Microstructure_Evolution_Mechanical_and_Tribological_Properties_b_b_Raw_Data_b_/31558270",
+  "source_api_url": "https://api.figshare.com/v2/articles/31558270",
+  "access_date": "2026-11-21",
+  "round_number": 16,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "friction coefficient-1.csv",
+      "download_url": "https://ndownloader.figshare.com/files/62492968",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/62492968/frictioncoefficient1.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084454Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22friction%2520coefficient-1.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=67da4ce67babf6c4031a77361c244b1ba2c9936153a7af6ee5736b8ff13289c9",
+      "http_status": 200,
+      "bytes": 2167116,
+      "publisher_checksum": "md5:5a06ecaf7006bfbeee7e3e442ed69e3d",
+      "verified_md5": "5a06ecaf7006bfbeee7e3e442ed69e3d",
+      "verified_sha256": "c6feed0cde5b2a8f51f900119eb07c3f388c0e7508dca442c2b0698ed44ac1a6"
+    },
+    {
+      "file": "friction coefficient-2.csv",
+      "download_url": "https://ndownloader.figshare.com/files/62492971",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/62492971/frictioncoefficient2.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084456Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22friction%2520coefficient-2.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=362c7459c1a94f1aff1d1329ab1824f8b0e7aacfa8bc9798264644a83ea3ae33",
+      "http_status": 200,
+      "bytes": 2176319,
+      "publisher_checksum": "md5:ab8142049fa8ad55e7b10a139b85cc92",
+      "verified_md5": "ab8142049fa8ad55e7b10a139b85cc92",
+      "verified_sha256": "dde9c8a9fc326b4341c2c1f8968042695ba8c593bbeb0a29daef0fb03dc61bd9"
+    },
+    {
+      "file": "Raman spectroscopy-2.txt",
+      "download_url": "https://ndownloader.figshare.com/files/62492983",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/62492983/Ramanspectroscopy2.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084458Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Raman%2520spectroscopy-2.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=8b2b6fc6059f7fbfbe893feeccdf47b81bbf049a6f89b83e6a69734ada9bb369",
+      "http_status": 200,
+      "bytes": 57475,
+      "publisher_checksum": "md5:98273a699d0273ef965b0f5bdcbdbd8a",
+      "verified_md5": "98273a699d0273ef965b0f5bdcbdbd8a",
+      "verified_sha256": "9e7f2fd4be1e4a913b18199cd6b66273162d05eed80f4c1bf4f94f0ed6c4c75d"
+    },
+    {
+      "file": "Raman spectroscopy-1.txt",
+      "download_url": "https://ndownloader.figshare.com/files/62492980",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/62492980/Ramanspectroscopy1.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084500Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Raman%2520spectroscopy-1.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=90761f36c8ec5ddcc898644f649e2d414755a0829321597cec660e89cfb6cac1",
+      "http_status": 200,
+      "bytes": 61851,
+      "publisher_checksum": "md5:1419054b953f984293ee8bd73ec9c2d3",
+      "verified_md5": "1419054b953f984293ee8bd73ec9c2d3",
+      "verified_sha256": "f2c810d7a3a862dd81b3a8d572c78a4ba1ce99967b7783d165f7118219661987"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-31558270-laser-powder-bed-fusion",
+  "raw_total_bytes": 4462761,
+  "raw_total_rows": 76813,
+  "duplicate_rows_removed": 1,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv",
+  "cleaned_csv_sha256": "a6c35617c585444cc190a2c72aac4a66df0531298790c0110190057e0b603226",
+  "cleaned_rows": 22,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "friction coefficient-1.csv": {
+      "Recipe": 1,
+      "UpperSample": 4,
+      "LowerSample": 4,
+      "OtherInfo": 4,
+      "Averaging": 3,
+      "LogFrequency": 3,
+      "Type": 3,
+      "Radius": 3
+    },
+    "friction coefficient-2.csv": {
+      "Recipe": 2,
+      "UpperSample": 2,
+      "LowerSample": 2,
+      "OtherInfo": 1,
+      "Averaging": 1,
+      "LogFrequency": 1,
+      "Type": 1,
+      "Radius": 36004
+    },
+    "Raman spectroscopy-2.txt": {
+      "#Wave": 0,
+      "Unnamed: 1": 0,
+      "#Intensity": 2401
+    },
+    "Raman spectroscopy-1.txt": {
+      "#Wave": 0,
+      "Unnamed: 1": 0,
+      "#Intensity": 2401
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

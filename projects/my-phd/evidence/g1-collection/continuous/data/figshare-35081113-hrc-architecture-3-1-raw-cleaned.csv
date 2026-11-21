@@ -1,0 +1,35 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+INVENTORY.csv,run_id,categorical_or_text,768,768,0,768,,,,,,,"{""2026-11-03T03-15-46.322Z_calibration_cal_S1"": 1, ""2026-11-03T03-26-55.915Z_calibration_cal_S2"": 1, ""2026-11-03T03-38-01.063Z_calibration_cal_S3"": 1}"
+INVENTORY.csv,experiment,categorical_or_text,768,759,9,8,,,,,,,"{""tuning"": 250, ""ablation"": 210, ""baseline_compare"": 150}"
+INVENTORY.csv,variant,categorical_or_text,768,759,9,759,,,,,,,"{""cal_S1"": 1, ""cal_S2"": 1, ""cal_S3"": 1}"
+INVENTORY.csv,status,categorical_or_text,768,768,0,3,,,,,,,"{""complete"": 759, ""interrupted (excluded)"": 7, ""closed (not in INDEX.csv)"": 2}"
+INVENTORY.csv,start_utc,categorical_or_text,768,759,9,759,,,,,,,"{""2026-11-03T03:15:46.322Z"": 1, ""2026-11-03T03:26:55.915Z"": 1, ""2026-11-03T03:38:01.063Z"": 1}"
+INVENTORY.csv,cycles,numeric,768,759,9,22,10000,10000,60000,90164.4,60000,360000,102581
+INVENTORY.csv,manifest_sha256,categorical_or_text,768,761,7,761,,,,,,,"{""04d680bd2b7c2638add8197596e95b717f9401060742ef04d7d52827a004f656"": 1, ""e5d553493679a82af2d842db4bc43f68b638df5b052f71211b348fdbb6b341ca"": 1, ""160155810d1d8..."
+INVENTORY.csv,archive,categorical_or_text,768,768,0,10,,,,,,,"{""runs_tuning.tar.gz"": 250, ""runs_ablation.tar.gz"": 210, ""runs_baseline_compare.tar.gz"": 150}"
+INDEX.csv,run_id,categorical_or_text,759,759,0,759,,,,,,,"{""2026-11-03T03-15-46.322Z_calibration_cal_S1"": 1, ""2026-11-03T03-26-55.915Z_calibration_cal_S2"": 1, ""2026-11-03T03-38-01.063Z_calibration_cal_S3"": 1}"
+INDEX.csv,experiment,categorical_or_text,759,759,0,8,,,,,,,"{""tuning"": 250, ""ablation"": 210, ""baseline_compare"": 150}"
+INDEX.csv,variant,categorical_or_text,759,759,0,759,,,,,,,"{""cal_S1"": 1, ""cal_S2"": 1, ""cal_S3"": 1}"
+INDEX.csv,status,categorical_or_text,759,759,0,1,,,,,,,"{""complete"": 759}"
+INDEX.csv,start_utc,categorical_or_text,759,759,0,759,,,,,,,"{""2026-11-03T03:15:46.322Z"": 1, ""2026-11-03T03:26:55.915Z"": 1, ""2026-11-03T03:38:01.063Z"": 1}"
+INDEX.csv,cycles,numeric,759,759,0,22,10000,10000,60000,90164.4,60000,360000,102581
+INDEX.csv,manifest_sha256,categorical_or_text,759,759,0,759,,,,,,,"{""04d680bd2b7c2638add8197596e95b717f9401060742ef04d7d52827a004f656"": 1, ""e5d553493679a82af2d842db4bc43f68b638df5b052f71211b348fdbb6b341ca"": 1, ""160155810d1d8..."
+INDEX.csv,backups,categorical_or_text,759,759,0,1,,,,,,,"{""/mnt/e/hrc_backup_A/r31: 6 verified, 0 mismatched; /mnt/c/hrc_backup_B/r31: 6 verified, 0 mismatched; "": 759}"
+stop_check_compare.csv,v_r,numeric,26999,26999,0,25018,8e-06,0.02579,0.065763,0.107989,0.142323,1.10979,0.115303
+stop_check_compare.csv,path_max,numeric,26999,26999,0,17307,1e-06,0.0027355,0.007749,0.0179232,0.0198805,0.280772,0.0259385
+stop_check_compare.csv,disp_max,numeric,26999,26999,0,17243,1e-06,0.0027255,0.007694,0.0176459,0.019668,0.270733,0.0254002
+stop_check_compare.csv,S_eq3,numeric,26999,26999,0,17826,1e-06,0.002856,0.008378,0.0211971,0.022672,0.624159,0.0327273
+stop_check_compare.csv,t_stop,numeric,26999,26999,0,336,0,0.013,0.037,0.0609009,0.08,0.399,0.0670828
+stop_check_compare.csv,T_eq3,numeric,26999,26999,0,24698,6e-06,0.0214915,0.054802,0.0899907,0.118602,0.924824,0.0960856
+stop_samples_compare.csv,3.141590,numeric,27130,27130,0,26428,2.55748,2.92843,3.17437,3.14453,3.33867,3.65872,0.279279
+stop_samples_compare.csv,-1.900000,numeric,27130,27130,0,26233,-1.98654,-1.85715,-1.60414,-1.591,-1.32865,-1.0357,0.256725
+stop_samples_compare.csv,1.900000,numeric,27130,27130,0,24998,1.70036,1.73277,1.81678,1.83599,1.88767,2.29539,0.122627
+stop_samples_compare.csv,-1.570000,numeric,27130,27130,0,25840,-1.99977,-1.94867,-1.76928,-1.76898,-1.59828,-1.49818,0.168851
+stop_samples_compare.csv,-1.570000.1,numeric,27130,27130,0,3422,-1.57927,-1.57,-1.57,-1.57,-1.57,-1.56498,0.000730608
+stop_samples_compare.csv,0.000000,numeric,27130,27130,0,1,-0,0,0,0,0,-0,0
+stop_samples_compare.csv,0.675000,numeric,27130,27130,0,26107,-0.682797,-0.0709905,-0.007969,0.00345585,0.0647313,1,0.181274
+stop_samples_compare.csv,0.975000,numeric,27130,27130,0,26376,-1,-0.0910118,0.00248,0.0145676,0.088515,1,0.262896
+stop_samples_compare.csv,-0.300000,numeric,27130,27130,0,25304,-0.423257,-0.047712,-0.004421,-0.000373517,0.0376838,1.2,0.111737
+stop_samples_compare.csv,-0.645000,numeric,27130,27130,0,25861,-0.647544,-0.0505382,-0.004506,-0.0081108,0.0558522,0.63969,0.163791
+stop_samples_compare.csv,0.000000.1,numeric,27130,27130,0,3713,-0.066143,0,0,2.1658e-05,0,0.024379,0.00169157
+stop_samples_compare.csv,0.000000.2,numeric,27130,27130,0,1,0,0,0,0,0,0,0

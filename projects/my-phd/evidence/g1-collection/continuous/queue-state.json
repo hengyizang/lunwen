@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 15,
-  "total_new_literature": 1405,
+  "round_number": 16,
+  "total_new_literature": 1475,
   "total_new_datasets": 872,
-  "total_new_reading_queue": 1275,
+  "total_new_reading_queue": 1345,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -28,7 +28,10 @@
     "figshare:34476945",
     "figshare:34845711",
     "dataverse:10.7910/dvn/ueurvw",
-    "dataverse:10.7910/dvn/kkejzf"
+    "dataverse:10.7910/dvn/kkejzf",
+    "figshare:35081113",
+    "figshare:31558270",
+    "figshare:34748238"
   ],
   "cleaned_datasets_meta": [
     {
@@ -366,6 +369,48 @@
       "cleaned_rows": 57,
       "raw_total_rows": 61,
       "verified_sha256": "a587c1166093bed66bb6627fb925ebe2a0c392e8a67d26b22e185f31d39b32b2"
+    },
+    {
+      "slug": "figshare-35081113-hrc-architecture-3-1-raw",
+      "key": "figshare:35081113",
+      "dataset_name": "HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publicly Pre-Registered Release-3.1 Evaluation",
+      "doi": "10.6084/m9.figshare.35081113",
+      "landing_url": "https://figshare.com/articles/dataset/HRC-Architecture_3_1_Raw_Hash-Manifested_Run_Records_of_the_Publicly_Pre-Registered_Release-3_1_Evaluation/35081113",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-35081113-hrc-architecture-3-1-raw-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35081113_hrc_architecture_3_1_raw.py",
+      "cleaned_rows": 34,
+      "raw_total_rows": 56058,
+      "verified_sha256": "4a56e090f3e534df7e315ab822fc7fc0eab0e329903b4b65292f8b9ab2006399"
+    },
+    {
+      "slug": "figshare-31558270-laser-powder-bed-fusion",
+      "key": "figshare:31558270",
+      "dataset_name": "Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-Based Nanocomposites: Microstructure Evolution, Mechanical, and Tribological Properties Raw Data",
+      "doi": "10.6084/m9.figshare.31558270.v2",
+      "landing_url": "https://figshare.com/articles/dataset/_b_Laser_Powder_Bed_Fusion_of_Carbon_Nanotube_CNT_-Reinforced_Nickel-Based_Nanocomposites_Microstructure_Evolution_Mechanical_and_Tribological_Properties_b_b_Raw_Data_b_/31558270",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-31558270-laser-powder-bed-fusion-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31558270_laser_powder_bed_fusion.py",
+      "cleaned_rows": 22,
+      "raw_total_rows": 76813,
+      "verified_sha256": "c6feed0cde5b2a8f51f900119eb07c3f388c0e7508dca442c2b0698ed44ac1a6"
+    },
+    {
+      "slug": "figshare-34748238-temporal-information-con",
+      "key": "figshare:34748238",
+      "dataset_name": "Temporal Information Continuity in Industrial Supervisory Robotics: Experimental Data and Reproducibility Package",
+      "doi": "10.6084/m9.figshare.34748238.v1",
+      "landing_url": "https://figshare.com/articles/dataset/Temporal_Information_Continuity_in_Industrial_Supervisory_Robotics_Experimental_Data_and_Reproducibility_Package/34748238",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34748238-temporal-information-con-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-34748238-temporal-information-con-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34748238_temporal_information_con.py",
+      "cleaned_rows": 61,
+      "raw_total_rows": 2130,
+      "verified_sha256": "5a3d5977d938423772335ee6b3f19f6e9e0ade2efe535b1c1d6df0fb0be9d04d"
     }
   ],
   "snowballed_dois": [
@@ -380,6 +425,7 @@
     "10.1016/j.measurement.2025.119183",
     "10.1016/j.mex.2024.103027",
     "10.1016/j.tws.2024.112745",
+    "10.1038/s41598-026-46655-y",
     "10.1038/s41598-026-47975-9",
     "10.1109/auteee67053.2025.11322247",
     "10.1109/icuas69441.2026.11598692",
@@ -393,6 +439,7 @@
     "10.3390/machines13080659",
     "10.3390/s24165441",
     "10.3390/s25030664",
+    "10.3390/s26030881",
     "10.3390/s26041129",
     "10.3390/sym15091776",
     "10.5194/ms-15-531-2024"
@@ -532,9 +579,18 @@
       "net_new_datasets": 0,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 16,
+      "completed_at": "2026-11-21T08:44:12Z",
+      "batch_label": "Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026)",
+      "net_new_literature": 70,
+      "net_new_datasets": 0,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:39:11Z",
+  "updated_at": "2026-11-21T08:44:12Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -542,13 +598,13 @@
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 169,
-    "Mechanical_Physics_AI": 413,
-    "Mechatronics_PHM_Control": 353,
-    "Robotics_Embodied": 423,
-    "R5_MultiRobot_Comm": 116,
-    "R1_Force_Contact": 64,
-    "Smart_Manufacturing": 196,
-    "Smart_Factory_DigitalTwin": 139
+    "Mechanical_Physics_AI": 419,
+    "Mechatronics_PHM_Control": 371,
+    "Robotics_Embodied": 480,
+    "R5_MultiRobot_Comm": 147,
+    "R1_Force_Contact": 67,
+    "Smart_Manufacturing": 197,
+    "Smart_Factory_DigitalTwin": 140
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
@@ -619,6 +675,7 @@
     "figshare:31834864",
     "figshare:31897729",
     "figshare:31897891",
+    "figshare:32013315",
     "figshare:32059514",
     "figshare:32285758",
     "figshare:32297061",
@@ -631,6 +688,7 @@
     "figshare:33160262",
     "figshare:33160286",
     "figshare:33163973",
+    "figshare:33938336",
     "figshare:34215494",
     "figshare:34476954",
     "figshare:34723707",

@@ -1,0 +1,23 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+friction coefficient-1.csv,Recipe,numeric,36006,36005,1,5,2,2,2,2,2,2,0
+friction coefficient-1.csv,UpperSample,numeric,36006,36002,4,36002,0.129,900.129,1800.13,1800.13,2700.13,3600.13,1039.27
+friction coefficient-1.csv,LowerSample,numeric,36006,36002,4,2,2,2,2,2,2,2,0
+friction coefficient-1.csv,OtherInfo,numeric,36006,36002,4,19163,44.1229,48.054,49.5461,49.9752,51.9479,55.5666,2.11088
+friction coefficient-1.csv,Averaging,numeric,36006,36003,3,28634,-31.8314,-13.1188,0.765803,0.619827,14.3428,100,13.9727
+friction coefficient-1.csv,LogFrequency,numeric,36006,36003,3,35034,0.0626803,0.236831,0.274414,0.29993,0.283302,1000,5.26926
+friction coefficient-1.csv,Type,numeric,36006,36003,3,940,-49.3155,-49.3051,-49.3027,-49.3026,-49.3003,-49.2657,0.00382447
+friction coefficient-1.csv,Radius,numeric,36006,36003,3,942,1,2.19904,2.2015,2.20135,2.20392,2.21347,0.00740915
+friction coefficient-2.csv,Recipe,numeric,36004,36002,2,36002,0.121,900.121,1800.12,1800.12,2700.12,3600.12,1039.27
+friction coefficient-2.csv,UpperSample,numeric,36004,36002,2,2,2,2,2,2,2,2,0
+friction coefficient-2.csv,LowerSample,numeric,36004,36002,2,15698,27.4362,29.0677,30.109,29.9957,30.8855,32.5326,0.911024
+friction coefficient-2.csv,OtherInfo,numeric,36004,36003,1,28224,-20.607,-7.93613,0.462825,0.386771,8.69106,100,8.32037
+friction coefficient-2.csv,Averaging,numeric,36004,36003,1,35412,0.00145499,0.258775,0.276187,0.286809,0.298452,1000,5.26986
+friction coefficient-2.csv,LogFrequency,numeric,36004,36003,1,599,-51.5038,-51.4992,-51.498,-51.4979,-51.4968,-51.4795,0.0019865
+friction coefficient-2.csv,Type,numeric,36004,36003,1,595,1,1.81083,1.81202,1.81193,1.81323,1.81748,0.00472028
+friction coefficient-2.csv,Radius,categorical_or_text,36004,0,36004,0,,,,,,,{}
+Raman spectroscopy-2.txt,#Wave,numeric,2401,2401,0,2401,501.588,1542.49,2460.81,2391.48,3275.67,4002.35,1007.84
+Raman spectroscopy-2.txt,Unnamed: 1,numeric,2401,2401,0,2401,83.6262,206.505,288.773,368.414,393.208,3646.53,305.618
+Raman spectroscopy-2.txt,#Intensity,categorical_or_text,2401,0,2401,0,,,,,,,{}
+Raman spectroscopy-1.txt,#Wave,numeric,2401,2401,0,2401,501.588,1542.49,2460.81,2391.48,3275.67,4002.35,1007.84
+Raman spectroscopy-1.txt,Unnamed: 1,numeric,2401,2401,0,2400,7039.46,19906.8,25063.2,22739.2,28323.5,29688.7,7145.27
+Raman spectroscopy-1.txt,#Intensity,categorical_or_text,2401,0,2401,0,,,,,,,{}

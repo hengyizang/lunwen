@@ -7,26 +7,26 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：15
-- **最近更新时间 (UTC)**：2026-11-21T08:39:11Z
-- **累计净新增文献** (`literature-new.csv`)：1405 条（已与基线 15,910 条去重）
+- **已完成轮次**：16
+- **最近更新时间 (UTC)**：2026-11-21T08:44:12Z
+- **累计净新增文献** (`literature-new.csv`)：1475 条（已与基线 15,910 条去重）
 - **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1275 条
-- **累计已完成确定性清洗数据集**：24 个
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1345 条
+- **累计已完成确定性清洗数据集**：27 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 64 | 47 |
+| `R1_Force_Contact` | 67 | 47 |
 | `R2_Aerial_Actuator` | 169 | 37 |
-| `R5_MultiRobot_Comm` | 116 | 32 |
-| `Robotics_Embodied` | 423 | 266 |
-| `Mechanical_Physics_AI` | 413 | 370 |
-| `Mechatronics_PHM_Control` | 353 | 274 |
-| `Smart_Manufacturing` | 196 | 198 |
-| `Smart_Factory_DigitalTwin` | 139 | 62 |
+| `R5_MultiRobot_Comm` | 147 | 32 |
+| `Robotics_Embodied` | 480 | 266 |
+| `Mechanical_Physics_AI` | 419 | 370 |
+| `Mechatronics_PHM_Control` | 371 | 274 |
+| `Smart_Manufacturing` | 197 | 198 |
+| `Smart_Factory_DigitalTwin` | 140 | 62 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 54 | 0 |
 | `R2` | 37 | 0 |
@@ -46,8 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-31990188-multi-sensor-dataset-of` | Multi-sensor dataset of a tendon-driven continuum robot in dynamic... | 10.6084/m9.figshare.31990188.v3 | `summary_table` | 16 | `4e491bf194da` | [CSV](data/figshare-31990188-multi-sensor-dataset-of-cleaned.csv) · [JSON](data/figshare-31990188-multi-sensor-dataset-of-provenance.json) · [PY](data/derive_figshare_31990188_multi_sensor_dataset_of.py) |
-| `figshare-32221713-quip-experimental-design` | QuIP: Experimental Design for Expensive Simulators with Many Qualit... | 10.6084/m9.figshare.32221713.v2 | `summary_table` | 42 | `bf8eb4a184c2` | [CSV](data/figshare-32221713-quip-experimental-design-cleaned.csv) · [JSON](data/figshare-32221713-quip-experimental-design-provenance.json) · [PY](data/derive_figshare_32221713_quip_experimental_design.py) |
 | `dataverse-cc355j-experiment-dataset-for-t` | Experiment dataset for the journal - "A Robot for Overground Physic... | 10.7910/dvn/cc355j | `summary_table` | 44 | `416df3a23bd6` | [CSV](data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv) · [JSON](data/dataverse-cc355j-experiment-dataset-for-t-provenance.json) · [PY](data/derive_dataverse_cc355j_experiment_dataset_for_t.py) |
 | `dataverse-idxscu-replication-data-for-old` | Replication Data for: Older Adults' Acceptance of a Robot for Partn... | 10.7910/dvn/idxscu | `summary_table` | 27 | `c473e00f7672` | [CSV](data/dataverse-idxscu-replication-data-for-old-cleaned.csv) · [JSON](data/dataverse-idxscu-replication-data-for-old-provenance.json) · [PY](data/derive_dataverse_idxscu_replication_data_for_old.py) |
 | `dataverse-r0ozel-when-travel-meets-robots` | When travel meets robots: The role of embedding trust | 10.7910/dvn/r0ozel | `cleaned_rows` | 402 | `5dfc576eab09` | [CSV](data/dataverse-r0ozel-when-travel-meets-robots-cleaned.csv) · [JSON](data/dataverse-r0ozel-when-travel-meets-robots-provenance.json) · [PY](data/derive_dataverse_r0ozel_when_travel_meets_robots.py) |
@@ -70,6 +68,9 @@
 | `figshare-34845711-hrc-architecture-3-x-raw` | HRC-Architecture 3.x: Raw, Hash-Manifested Run Records of the Pre-R... | 10.6084/m9.figshare.34845711.v1 | `summary_table` | 20 | `e20d46fa75ac` | [CSV](data/figshare-34845711-hrc-architecture-3-x-raw-cleaned.csv) · [JSON](data/figshare-34845711-hrc-architecture-3-x-raw-provenance.json) · [PY](data/derive_figshare_34845711_hrc_architecture_3_x_raw.py) |
 | `dataverse-ueurvw-replication-data-for-mod` | Replication Data for: Modernising tactile acuity assessment; clinim... | 10.7910/dvn/ueurvw | `summary_table` | 150 | `8c989a7068b7` | [CSV](data/dataverse-ueurvw-replication-data-for-mod-cleaned.csv) · [JSON](data/dataverse-ueurvw-replication-data-for-mod-provenance.json) · [PY](data/derive_dataverse_ueurvw_replication_data_for_mod.py) |
 | `dataverse-kkejzf-the-event-related-potent` | The event-related potential of tactile stimulus recognition and bra... | 10.7910/dvn/kkejzf | `cleaned_rows` | 57 | `a587c1166093` | [CSV](data/dataverse-kkejzf-the-event-related-potent-cleaned.csv) · [JSON](data/dataverse-kkejzf-the-event-related-potent-provenance.json) · [PY](data/derive_dataverse_kkejzf_the_event_related_potent.py) |
+| `figshare-35081113-hrc-architecture-3-1-raw` | HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publi... | 10.6084/m9.figshare.35081113 | `summary_table` | 34 | `4a56e090f3e5` | [CSV](data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv) · [JSON](data/figshare-35081113-hrc-architecture-3-1-raw-provenance.json) · [PY](data/derive_figshare_35081113_hrc_architecture_3_1_raw.py) |
+| `figshare-31558270-laser-powder-bed-fusion` | Laser Powder Bed Fusion of Carbon Nanotube (CNT)-Reinforced Nickel-... | 10.6084/m9.figshare.31558270.v2 | `summary_table` | 22 | `c6feed0cde5b` | [CSV](data/figshare-31558270-laser-powder-bed-fusion-cleaned.csv) · [JSON](data/figshare-31558270-laser-powder-bed-fusion-provenance.json) · [PY](data/derive_figshare_31558270_laser_powder_bed_fusion.py) |
+| `figshare-34748238-temporal-information-con` | Temporal Information Continuity in Industrial Supervisory Robotics:... | 10.6084/m9.figshare.34748238.v1 | `summary_table` | 61 | `5a3d5977d938` | [CSV](data/figshare-34748238-temporal-information-con-cleaned.csv) · [JSON](data/figshare-34748238-temporal-information-con-provenance.json) · [PY](data/derive_figshare_34748238_temporal_information_con.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -90,3 +91,4 @@
 | 13 | 2026-11-21T08:29:10Z | Broad Engineering R13: R1_Force_Contact (2026) | +59 | +46 | +3 | [round-13-audit.json](rounds/round-13-audit.json) |
 | 14 | 2026-11-21T08:34:04Z | Broad Engineering R14: R2_Aerial_Actuator (2026) | +85 | +0 | +3 | [round-14-audit.json](rounds/round-14-audit.json) |
 | 15 | 2026-11-21T08:39:11Z | Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026) | +52 | +0 | +2 | [round-15-audit.json](rounds/round-15-audit.json) |
+| 16 | 2026-11-21T08:44:12Z | Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026) | +70 | +0 | +3 | [round-16-audit.json](rounds/round-16-audit.json) |

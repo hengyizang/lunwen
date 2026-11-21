@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-35081113-hrc-architecture-3-1-raw",
+  "dataset_name": "HRC-Architecture 3.1: Raw, Hash-Manifested Run Records of the Publicly Pre-Registered Release-3.1 Evaluation",
+  "doi": "10.6084/m9.figshare.35081113",
+  "landing_url": "https://figshare.com/articles/dataset/HRC-Architecture_3_1_Raw_Hash-Manifested_Run_Records_of_the_Publicly_Pre-Registered_Release-3_1_Evaluation/35081113",
+  "source_api_url": "https://api.figshare.com/v2/articles/35081113",
+  "access_date": "2026-11-21",
+  "round_number": 16,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "INVENTORY.csv",
+      "download_url": "https://ndownloader.figshare.com/files/71714695",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71714695/INVENTORY.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084441Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22INVENTORY.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=d1bcf0ee4a78647b25fa6f8e43c8e1c27d38183b44d1b044a4e7f45387d4fdca",
+      "http_status": 200,
+      "bytes": 156201,
+      "publisher_checksum": "md5:a9d59e0a4e964b60da4307f47d40c590",
+      "verified_md5": "a9d59e0a4e964b60da4307f47d40c590",
+      "verified_sha256": "4a56e090f3e534df7e315ab822fc7fc0eab0e329903b4b65292f8b9ab2006399"
+    },
+    {
+      "file": "INDEX.csv",
+      "download_url": "https://ndownloader.figshare.com/files/71714698",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71714698/INDEX.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084442Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22INDEX.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=d504ba5ce5ddb6b1533be90c5325d1173e82114ebda9887b0eb5b3eeef4a24db",
+      "http_status": 200,
+      "bytes": 217129,
+      "publisher_checksum": "md5:8a3884a52c92d4302e6003aa744b449d",
+      "verified_md5": "8a3884a52c92d4302e6003aa744b449d",
+      "verified_sha256": "49e30282fb4b7c30b19a569f11493bf06f01700bc0607112a35a0e052caf1e1a"
+    },
+    {
+      "file": "stop_check_compare.csv",
+      "download_url": "https://ndownloader.figshare.com/files/71714749",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71714749/stop_check_compare.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084444Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22stop_check_compare.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=19f5b3026a9aa9fd759928b99151b9164f898cfbb14ed437e255964eebee8984",
+      "http_status": 200,
+      "bytes": 1472405,
+      "publisher_checksum": "md5:6965122a6a547b2929ba0646db418932",
+      "verified_md5": "6965122a6a547b2929ba0646db418932",
+      "verified_sha256": "2ea8655bd660b58f2d028462a3e549af4711168c486bdd6d37a360bf497a1ed8"
+    },
+    {
+      "file": "stop_samples_compare.csv",
+      "download_url": "https://ndownloader.figshare.com/files/71714758",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71714758/stop_samples_compare.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T084446Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22stop_samples_compare.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=cb643d9d0c4ea9c0999abf505c93fc38d55a8f1dbded1aa0757ac8ac570e8f98",
+      "http_status": 200,
+      "bytes": 3103178,
+      "publisher_checksum": "md5:95cea32e5eac3e1c17d62fb4adfb4cbb",
+      "verified_md5": "95cea32e5eac3e1c17d62fb4adfb4cbb",
+      "verified_sha256": "a605a68d5124a7419ef9ecd377a640c74e2132753cbfc8e04bdbf481255ff4bf"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-35081113-hrc-architecture-3-1-raw",
+  "raw_total_bytes": 4948913,
+  "raw_total_rows": 56058,
+  "duplicate_rows_removed": 402,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-35081113-hrc-architecture-3-1-raw-cleaned.csv",
+  "cleaned_csv_sha256": "35d787f79359491f449f834d6c2389e931561498f959f0fdd2c19f5f7057b0e0",
+  "cleaned_rows": 34,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "INVENTORY.csv": {
+      "run_id": 0,
+      "experiment": 9,
+      "variant": 9,
+      "status": 0,
+      "start_utc": 9,
+      "cycles": 9,
+      "manifest_sha256": 7,
+      "archive": 0
+    },
+    "INDEX.csv": {
+      "run_id": 0,
+      "experiment": 0,
+      "variant": 0,
+      "status": 0,
+      "start_utc": 0,
+      "cycles": 0,
+      "manifest_sha256": 0,
+      "backups": 0
+    },
+    "stop_check_compare.csv": {
+      "v_r": 0,
+      "path_max": 0,
+      "disp_max": 0,
+      "S_eq3": 0,
+      "t_stop": 0,
+      "T_eq3": 0
+    },
+    "stop_samples_compare.csv": {
+      "3.141590": 0,
+      "-1.900000": 0,
+      "1.900000": 0,
+      "-1.570000": 0,
+      "-1.570000.1": 0,
+      "0.000000": 0,
+      "0.675000": 0,
+      "0.975000": 0,
+      "-0.300000": 0,
+      "-0.645000": 0,
+      "0.000000.1": 0,
+      "0.000000.2": 0
+    }
+  },
+  "time_monotonicity": {
+    "stop_check_compare.csv": {
+      "column": "t_stop",
+      "numeric_samples": 26999,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -0.395,
+      "median_step": -0.006,
+      "max_step": 0.393
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
