@@ -1,0 +1,51 @@
+source_file,question,answer,difficulty,category
+QAPairs.zip::Busstop01_000017_qa.json,What is the weather now?,Rainy.,Easy,E1
+QAPairs.zip::Busstop01_000017_qa.json,Is there any bus stop in the area?,"Yes, there is a bus stop.",Easy,E2
+QAPairs.zip::Busstop01_000017_qa.json,How many poles are visible around me?,There are 4 poles.,Easy,E3
+QAPairs.zip::Busstop01_000017_qa.json,What is the current action?,Moving forward.,Easy,E1
+QAPairs.zip::Busstop01_000017_qa.json,What is the color of the buildings' facades?,The building facades are a mix of beige and dark gray.,Easy,E4
+QAPairs.zip::Busstop01_000017_qa.json,Where are the sidewalks located according to my current position?,Sidewalks are located at your 12 o'clock about 47 meters away.,Middle,M1
+QAPairs.zip::Busstop01_000017_qa.json,Can you describe the current environment?,"The environment consists of sidewalks, buildings, and poles under rainy weather with the presence of high obstacles.",Middle,M2
+QAPairs.zip::Busstop01_000017_qa.json,Which view provides the most navigational information?,"The walker view shows closer distance static elements, such as poles and sidewalks, placing them in a more navigationally valuable context than the abstract aerial view.",Middle,M3
+QAPairs.zip::Busstop01_000017_qa.json,Is the current scenario safe?,"The current scenario poses a moderate risk due to rainy weather, the presence of high obstacles, and potential traffic at the bus stop.",Hard,H1
+QAPairs.zip::Busstop01_000017_qa.json,"Which landmarks in this scene would be most valuable for a visually impaired pedestrian's navigation, and why?","The bus stop at 47 meters is valuable for its fixed location and shelter, and the poles around offer consistent tactile guidance. These landmarks offer moderate navigational assistance.",Hard,H2
+QAPairs.zip::Busstop01_000024_qa.json,What is the weather now?,Rainy.,Easy,E1
+QAPairs.zip::Busstop01_000024_qa.json,What is the current action?,Forward.,Easy,E1
+QAPairs.zip::Busstop01_000024_qa.json,Is there any garbage bin present?,"Yes, there is a garbage bin present.",Easy,E2
+QAPairs.zip::Busstop01_000024_qa.json,How many poles are visible?,5.,Easy,E3
+QAPairs.zip::Busstop01_000024_qa.json,What is the color of the motorcycle?,The motorcycle is red.,Easy,E4
+QAPairs.zip::Busstop01_000024_qa.json,What is the relative position of the nearest building to the sidewalk?,The building is at your 2 o'clock around 41 meters.,Middle,M1
+QAPairs.zip::Busstop01_000024_qa.json,Describe the scene around the bus stop.,The bus stop is located at the sidewalk at 3 o'clock with a bench nearby and a garbage bin marking the location nearby.,Middle,M2
+QAPairs.zip::Busstop01_000024_qa.json,Which view provides better information about environment obstacles?,The dog view provides more information with closer perspective to the road where high obstacles are present.,Middle,M3
+QAPairs.zip::Busstop01_000024_qa.json,Is the current scenario safe?,The current scenario is rated as high-risk due to the rainy weather and the presence of high obstacles. These conditions significantly increase the chance of slipping and collision.,Hard,H1
+QAPairs.zip::Busstop01_000024_qa.json,Which landmarks in this scene would be most valuable for navigation?,The bus stop at your 3 o'clock is the most valuable due to its fixed structure and distinctive shelter. The garbage bin nearby adds additional tactile navigation support.,Hard,H2
+QAPairs.zip::Busstop01_000043_qa.json,What is the weather now?,Rainy.,Easy,E1
+QAPairs.zip::Busstop01_000043_qa.json,Is there any high obstacles in the scene?,"Yes, there are high obstacles present.",Easy,E2
+QAPairs.zip::Busstop01_000043_qa.json,How many poles are visible?,6,Easy,E3
+QAPairs.zip::Busstop01_000043_qa.json,What is the color of the building to my 2 o'clock?,The building is made of stone with a grayish color.,Easy,E4
+QAPairs.zip::Busstop01_000043_qa.json,Where is the bus stop according to my position?,The bus stop is 8 meters far at your 2 o'clock.,Middle,M1
+QAPairs.zip::Busstop01_000043_qa.json,Can you describe my surrounding environment?,You are walking towards a bus station. There are high obstacles and poles along the path.,Middle,M2
+QAPairs.zip::Busstop01_000043_qa.json,Which view gives more information about the obstacles in the environment?,"The walker view provides the most detailed information about high obstacles, while the drone view is useful for general navigation.",Middle,M3
+QAPairs.zip::Busstop01_000043_qa.json,Is the current scenario safe?,The current scenario is moderate-risk due to rainy weather and the presence of high obstacles. Such weather can make surfaces slippery and obstacles more challenging to navigate.,Hard,H1
+QAPairs.zip::Busstop01_000043_qa.json,"Which landmarks in this scene would be most valuable for a blind pedestrian's navigation, and why?",The poles at 5 o'clock offer fixed positional reference. The bus stop at 2 o'clock serves as a significant landmark with its structured shelter.,Hard,H2
+QAPairs.zip::Busstop01_000047_qa.json,What is the weather now?,Rainy.,Easy,E1
+QAPairs.zip::Busstop01_000047_qa.json,Is there any benches in the scene?,"Yes, there is a bench visible.",Easy,E2
+QAPairs.zip::Busstop01_000047_qa.json,How many poles are there?,There are 3 poles.,Easy,E3
+QAPairs.zip::Busstop01_000047_qa.json,What color is the bus stop?,The bus stop is primarily grey with some green elements.,Easy,E4
+QAPairs.zip::Busstop01_000047_qa.json,How far is the nearest building according to the walker view?,The nearest building is around 42 meters at your 2 o'clock.,Middle,M1
+QAPairs.zip::Busstop01_000047_qa.json,Describe the surrounding environment.,The environment includes a street with a visible bus stop at 11 o'clock and high buildings surrounding the area. Various sidewalk paths stretch out in multiple directions.,Middle,M2
+QAPairs.zip::Busstop01_000047_qa.json,Which view gives more information about static obstacles?,The drone view provides comprehensive information about the static obstacles due to its overhead perspective showing the sidewalk and surrounding buildings.,Middle,M3
+QAPairs.zip::Busstop01_000047_qa.json,Is the current scenario safe?,"The current scenario is moderately risky due to rainy weather and the presence of high obstacles. The rainy conditions can cause slipperiness and impaired vision, increasing the danger of obstacles.",Hard,H1
+QAPairs.zip::Busstop01_000047_qa.json,"Which landmarks in this scene would be most valuable for a blind pedestrian's navigation, and why?","The bus stop at 11 o'clock serves as a valuable landmark due to its distinctive structure and fixed position. The poles scattered around offer additional touchpoints for navigation, although they are less reliable for precise orientation.",Hard,H2
+QAPairs.zip::Busstop01_000047_qa.json,Does the scene contain any corner cases for the blind?,"Yes, the scene contains 'High Obstacles'.",Easy,E2
+QAPairs.zip::Busstop01_000047_qa.json,What is the current action?,Forward.,Easy,E1
+QAPairs.zip::Busstop01_000047_qa.json,Where is the nearby garbage bin located?,"The garbage bin is located at your 3 o'clock, around 10 meters away.",Middle,M1
+QAPairs.zip::Busstop01_000054_qa.json,What is the weather now?,Rainy.,Easy,E1
+QAPairs.zip::Busstop01_000054_qa.json,Is there any benches in the scene?,No.,Easy,E2
+QAPairs.zip::Busstop01_000054_qa.json,How many poles are visible in the scene?,There are 5 poles visible.,Easy,E3
+QAPairs.zip::Busstop01_000054_qa.json,What does the surface of the road look like?,The road surface appears smooth and paved.,Easy,E4
+QAPairs.zip::Busstop01_000054_qa.json,What is the relative position of the sidewalk to the closest building?,The closest building is located at your 3 o'clock around 44 meters.,Middle,M1
+QAPairs.zip::Busstop01_000054_qa.json,Describe my surrounding.,"You are walking towards a bus station in rainy weather, with poles and static elements around. A building is at your 3 o'clock around 44 meters, and high obstacles are present.",Middle,M2
+QAPairs.zip::Busstop01_000054_qa.json,Which view provides more details about the high obstacles?,"The dog view provides a closer perspective to the ground, highlighting the size and proximity of high obstacles compared to other views.",Middle,M3
+QAPairs.zip::Busstop01_000054_qa.json,Is the current scenario safe?,"The current scenario is rated generally as moderate-risk due to the rainy weather and presence of high obstacles, which can cause potential hazards.",Hard,H1
+QAPairs.zip::Busstop01_000054_qa.json,"Which landmarks in this scene would be most valuable for a blind pedestrian's navigation, and why?","The pole at your 8 o'clock around 48 meters provides a fixed reference point, while the bus stop offers auditory cues from possible waiting passengers. Overall, these elements assist with spatial orientation.",Hard,H2

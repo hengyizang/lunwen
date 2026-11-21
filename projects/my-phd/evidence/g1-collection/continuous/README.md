@@ -7,26 +7,26 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：18
-- **最近更新时间 (UTC)**：2026-11-21T08:54:12Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1603 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1472 条
-- **累计已完成确定性清洗数据集**：33 个
+- **已完成轮次**：19
+- **最近更新时间 (UTC)**：2026-11-21T08:59:01Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1702 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：915 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1570 条
+- **累计已完成确定性清洗数据集**：36 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 68 | 47 |
-| `R2_Aerial_Actuator` | 170 | 37 |
-| `R5_MultiRobot_Comm` | 148 | 32 |
-| `Robotics_Embodied` | 528 | 266 |
-| `Mechanical_Physics_AI` | 501 | 370 |
-| `Mechatronics_PHM_Control` | 399 | 274 |
-| `Smart_Manufacturing` | 200 | 198 |
-| `Smart_Factory_DigitalTwin` | 140 | 62 |
+| `R1_Force_Contact` | 108 | 47 |
+| `R2_Aerial_Actuator` | 172 | 37 |
+| `R5_MultiRobot_Comm` | 149 | 32 |
+| `Robotics_Embodied` | 621 | 270 |
+| `Mechanical_Physics_AI` | 516 | 387 |
+| `Mechatronics_PHM_Control` | 411 | 281 |
+| `Smart_Manufacturing` | 206 | 235 |
+| `Smart_Factory_DigitalTwin` | 143 | 63 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 54 | 0 |
 | `R2` | 37 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-ifhd40-replication-data-for-qua` | Replication Data for: Quantum Optimization and Reinforcement Learni... | 10.7910/dvn/ifhd40 | `summary_table` | 13 | `127ac1e02665` | [CSV](data/dataverse-ifhd40-replication-data-for-qua-cleaned.csv) · [JSON](data/dataverse-ifhd40-replication-data-for-qua-provenance.json) · [PY](data/derive_dataverse_ifhd40_replication_data_for_qua.py) |
-| `dataverse-ud54yb-moon-wreckers-planetary` | Moon Wreckers Planetary Rover Driving Status Anomaly Detection Dataset | 10.7910/dvn/ud54yb | `summary_table` | 84 | `a86c89f00174` | [CSV](data/dataverse-ud54yb-moon-wreckers-planetary-cleaned.csv) · [JSON](data/dataverse-ud54yb-moon-wreckers-planetary-provenance.json) · [PY](data/derive_dataverse_ud54yb_moon_wreckers_planetary.py) |
-| `figshare-35055502-processed-data-supportin` | Processed data supporting “Complex Damage Identification of Jacket... | 10.6084/m9.figshare.35055502.v1 | `summary_table` | 37 | `d46a127a1fb7` | [CSV](data/figshare-35055502-processed-data-supportin-cleaned.csv) · [JSON](data/figshare-35055502-processed-data-supportin-provenance.json) · [PY](data/derive_figshare_35055502_processed_data_supportin.py) |
 | `figshare-33578671-source-data-for-tecobot` | Source data for TeCoBot, A Tensegrity-based modular Continuum robot | 10.6084/m9.figshare.33578671.v2 | `summary_table` | 11 | `db4cd6087b1a` | [CSV](data/figshare-33578671-source-data-for-tecobot-cleaned.csv) · [JSON](data/figshare-33578671-source-data-for-tecobot-provenance.json) · [PY](data/derive_figshare_33578671_source_data_for_tecobot.py) |
 | `dataverse-gddmsa-enlarging-error-detectio` | Enlarging Error Detection Threshold of IMU-based Hand Tracking in V... | 10.7910/dvn/gddmsa | `summary_table` | 30 | `5bcde499216d` | [CSV](data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv) · [JSON](data/dataverse-gddmsa-enlarging-error-detectio-provenance.json) · [PY](data/derive_dataverse_gddmsa_enlarging_error_detectio.py) |
 | `dataverse-wrctu4-soil-hydraulic-parameter` | Soil hydraulic parameters for "Analyzing dual porosity in soil hydr... | 10.7910/dvn/wrctu4 | `cleaned_rows` | 211 | `4310d567b54e` | [CSV](data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv) · [JSON](data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json) · [PY](data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py) |
@@ -71,6 +68,9 @@
 | `figshare-34691808-dataset-of-assessing-the` | Dataset of Assessing the Role of Robotic Process Automation in Buil... | 10.6084/m9.figshare.34691808.v1 | `cleaned_rows` | 146 | `398717537b87` | [CSV](data/figshare-34691808-dataset-of-assessing-the-cleaned.csv) · [JSON](data/figshare-34691808-dataset-of-assessing-the-provenance.json) · [PY](data/derive_figshare_34691808_dataset_of_assessing_the.py) |
 | `figshare-35038195-data-sheet-2-multimodal` | Data Sheet 2_Multimodal nondestructive evaluation for structural as... | 10.3389/fmech.2026.2040645.s001 | `summary_table` | 29 | `8d960eeec025` | [CSV](data/figshare-35038195-data-sheet-2-multimodal-cleaned.csv) · [JSON](data/figshare-35038195-data-sheet-2-multimodal-provenance.json) · [PY](data/derive_figshare_35038195_data_sheet_2_multimodal.py) |
 | `figshare-33322635-e-t-simulation-dataset` | E-T simulation dataset | 10.6084/m9.figshare.33322635.v1 | `cleaned_rows` | 377 | `a503fccc71a6` | [CSV](data/figshare-33322635-e-t-simulation-dataset-cleaned.csv) · [JSON](data/figshare-33322635-e-t-simulation-dataset-provenance.json) · [PY](data/derive_figshare_33322635_e_t_simulation_dataset.py) |
+| `dataverse-kkdxdk-mmwalk-dataset` | mmWalk Dataset | 10.7910/dvn/kkdxdk | `cleaned_rows` | 50 | `82d91d6cf851` | [CSV](data/dataverse-kkdxdk-mmwalk-dataset-cleaned.csv) · [JSON](data/dataverse-kkdxdk-mmwalk-dataset-provenance.json) · [PY](data/derive_dataverse_kkdxdk_mmwalk_dataset.py) |
+| `dataverse-lccllw-multisensegolf-a-multimo` | MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Mo... | 10.7910/dvn/lccllw | `summary_table` | 42 | `026fcf22978f` | [CSV](data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv) · [JSON](data/dataverse-lccllw-multisensegolf-a-multimo-provenance.json) · [PY](data/derive_dataverse_lccllw_multisensegolf_a_multimo.py) |
+| `dataverse-qgkeuw-dataset-for-influence-of` | Dataset for Influence of Visual and Haptic Feedback on the Detectio... | 10.7910/dvn/qgkeuw | `summary_table` | 150 | `5a748c1b718e` | [CSV](data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv) · [JSON](data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json) · [PY](data/derive_dataverse_qgkeuw_dataset_for_influence_of.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -94,3 +94,4 @@
 | 16 | 2026-11-21T08:44:12Z | Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026) | +70 | +0 | +3 | [round-16-audit.json](rounds/round-16-audit.json) |
 | 17 | 2026-11-21T08:49:03Z | Broad Engineering R17: Robotics_Embodied (2026) | +48 | +0 | +3 | [round-17-audit.json](rounds/round-17-audit.json) |
 | 18 | 2026-11-21T08:54:12Z | Broad Engineering R18: Mechanical_Physics_AI (2026) | +80 | +0 | +3 | [round-18-audit.json](rounds/round-18-audit.json) |
+| 19 | 2026-11-21T08:59:01Z | Broad Engineering R19: R1_Force_Contact | +99 | +43 | +3 | [round-19-audit.json](rounds/round-19-audit.json) |

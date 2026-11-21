@@ -1,0 +1,43 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Documentation.zip::Annotation Data.csv,﻿Participant Number,numeric,1557,1557,0,24,1,8,17,14.7585,21,24,7.15685
+Documentation.zip::Annotation Data.csv,Swing Number,numeric,1557,1557,0,108,1,17,34,39.4091,56,108,28.0152
+Documentation.zip::Annotation Data.csv,Swing Start Time (s),numeric,1557,1557,0,1557,1.75816e+09,1.75869e+09,1.76119e+09,1.76064e+09,1.76165e+09,1.76312e+09,1.75853e+06
+Documentation.zip::Annotation Data.csv,Swing End Time (s),numeric,1557,1557,0,1557,1.75816e+09,1.75869e+09,1.76119e+09,1.76064e+09,1.76165e+09,1.76312e+09,1.75853e+06
+Documentation.zip::Annotation Data.csv,FPV Impact Frame,numeric,1557,1557,0,63,11,40,44,45.5076,50,94,9.0337
+Documentation.zip::Annotation Data.csv,FPV Impact Timestamp (s),numeric,1557,1557,0,1185,1.75816e+09,1.75852e+09,1.76119e+09,1.76047e+09,1.76165e+09,1.76312e+09,1.84583e+06
+Documentation.zip::Annotation Data.csv,Front-View Impact Frame,numeric,1557,1557,0,95,17,61.75,68,71.3169,78,142,15.0526
+Documentation.zip::Annotation Data.csv,Front-View Impact Timestamp (s),numeric,1557,1557,0,1541,1.75816e+09,1.75869e+09,1.76119e+09,1.76064e+09,1.76165e+09,1.76312e+09,1.76776e+06
+Documentation.zip::Annotation Data.csv,Timestamp Offset (s),numeric,1557,1557,0,180,-0.54,0.06,0.87,0.699848,1.07,2.41,0.665648
+Documentation.zip::Annotation Data.csv,Total Distance (m),numeric,1557,1557,0,1364,1.85,96.55,123.03,126.464,137.04,12857,370.947
+Documentation.zip::Annotation Data.csv,Carry Distance (m),numeric,1557,1557,0,1364,1.22,83.475,112.13,102.569,125.505,165.97,33.7365
+Documentation.zip::Annotation Data.csv,Ball Speed (m/s),numeric,1557,1557,0,427,4.51,34,41.6,39.1977,44.9,69.1,8.89723
+Documentation.zip::Annotation Data.csv,Club Speed (m/s),numeric,1557,1557,0,387,6.2,26.6,31.5,30.1607,34.245,47,6.52023
+Documentation.zip::Annotation Data.csv,Launch Angle (deg),numeric,1557,1557,0,259,0.6,18.3,22,22.4944,24.2,2208,56.8995
+Documentation.zip::Annotation Data.csv,Horizontal Launch Angle (deg),categorical_or_text,1557,1557,0,236,,,,,,,"{""-"": 66, ""R 0.0"": 38, ""R 0.6"": 33}"
+Documentation.zip::Annotation Data.csv,Clubface Angle (deg),numeric,1557,1557,0,234,-15.3,-1.1,0.5,1.3304,2.3,42.9,5.25333
+Documentation.zip::Annotation Data.csv,Backspin (rpm),numeric,1557,1557,0,1185,34.27,4273.75,5020.5,5235.16,6437,9277,1381.15
+Documentation.zip::Annotation Data.csv,Sidespin (rpm),numeric,1557,1557,0,703,-825,-132,3,9.75443,129,1207,250.162
+Documentation.zip::Annotation Data.csv,Lateral Distance (m),categorical_or_text,1557,1557,0,412,,,,,,,"{""-"": 67, ""L 0.2"": 16, ""R 2.4"": 15}"
+Documentation.zip::Participant Metadata.csv,﻿Participant Number,categorical_or_text,24,24,0,24,,,,,,,"{""P01"": 1, ""P02"": 1, ""P03"": 1}"
+Documentation.zip::Participant Metadata.csv,Age,numeric,24,24,0,14,20,30.75,42.5,41.8333,55.5,64,14.7521
+Documentation.zip::Participant Metadata.csv,Gender,categorical_or_text,24,24,0,2,,,,,,,"{""Male"": 14, ""Female"": 10}"
+Documentation.zip::Participant Metadata.csv,Height (cm),numeric,24,24,0,17,150,165,170.5,170.833,177,188,9.70731
+Documentation.zip::Participant Metadata.csv,Body Mass (kg),numeric,24,24,0,17,47,62.25,69,69.4167,80,89,11.5153
+Documentation.zip::Participant Metadata.csv,Shoe Size (mm),numeric,24,24,0,10,225,243.75,255,254.583,265,280,15.5281
+Documentation.zip::Participant Metadata.csv,Swing Handedness,categorical_or_text,24,24,0,1,,,,,,,"{""Right"": 24}"
+Documentation.zip::Participant Metadata.csv,Hand Dominance,categorical_or_text,24,24,0,2,,,,,,,"{""Right"": 20, ""Left"": 4}"
+Documentation.zip::Participant Metadata.csv,Years of Golfing Experience,categorical_or_text,24,24,0,5,,,,,,,"{""More than 10 years"": 10, ""3 to 5 years"": 5, ""1 to 6 months"": 4}"
+Documentation.zip::Participant Metadata.csv,Lesson-Taking Experience,categorical_or_text,24,24,0,7,,,,,,,"{""1 to 6 months"": 11, ""1 to 3 years"": 4, ""No prior experience"": 2}"
+Documentation.zip::Participant Metadata.csv,Professional License (Yes or No),categorical_or_text,24,24,0,2,,,,,,,"{""No"": 16, ""Yes"": 8}"
+Documentation.zip::Participant Metadata.csv,License Type,categorical_or_text,24,24,0,6,,,,,,,"{""-"": 16, ""USGTF Teaching Professional"": 4, ""KTPGA Teaching Professional"": 1}"
+Documentation.zip::Participant Metadata.csv,Self-Reported Expertise Level (7-Likert),numeric,24,24,0,7,1,2,4,3.91667,5,7,1.76725
+Documentation.zip::Participant Metadata.csv,Whether to Consent to Data Disclosure?,categorical_or_text,24,24,0,1,,,,,,,"{""Agree"": 24}"
+Documentation.zip::Survey Data.csv,﻿Participant Number,categorical_or_text,72,72,0,24,,,,,,,"{""P01"": 3, ""P02"": 3, ""P03"": 3}"
+Documentation.zip::Survey Data.csv,Sensor Name,categorical_or_text,72,72,0,3,,,,,,,"{""Perception Neruon Studio"": 24, ""Insole-Type \r\nPressure Sensor"": 24, ""Pupil Invisible"": 24}"
+Documentation.zip::Survey Data.csv,Comfort Rating Scale - Emotion,numeric,72,72,0,10,1,1,2,2.38194,3.5,7,1.37762
+Documentation.zip::Survey Data.csv,Comfort Rating Scale -Attachment,numeric,72,72,0,13,1,2,3.5,3.70139,5,7,1.79526
+Documentation.zip::Survey Data.csv,Comfort Rating Scale - Harm,numeric,72,72,0,9,1,1,1,1.51389,1.5,6.5,1.00692
+Documentation.zip::Survey Data.csv,Comfort Rating Scale - Perceived Change,numeric,72,72,0,13,1,2,3,3.42361,5,7,1.91116
+Documentation.zip::Survey Data.csv,Comfort Rating Scale - Movement,numeric,72,72,0,13,1,1.875,3,3.41667,5,7,1.94466
+Documentation.zip::Survey Data.csv,Comfort Rating Scale - Anxiety,numeric,72,72,0,6,1,1,1,1.59722,2,7,1.15867
+Documentation.zip::Survey Data.csv,Sensor Discomfort Feedback,categorical_or_text,72,72,0,55,,,,,,,"{""There was no notable discomfort."": 18, ""The straps caused clothing to twist and ride up, which felt uncomfortable."": 1, ""The insole surface felt slippery,..."

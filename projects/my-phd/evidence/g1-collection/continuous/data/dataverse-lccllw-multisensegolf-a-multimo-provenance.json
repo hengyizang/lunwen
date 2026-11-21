@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-lccllw-multisensegolf-a-multimo",
+  "dataset_name": "MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Motion and Shot Performance Analysis",
+  "doi": "10.7910/dvn/lccllw",
+  "landing_url": "https://doi.org/10.7910/DVN/LCCLLW",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/LCCLLW",
+  "access_date": "2026-11-21",
+  "round_number": 19,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Documentation.zip",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14305379",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/LCCLLW/1a1025a418c-61edf93ab286?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Documentation.zip&response-content-type=application%2Fzip&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T090023Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=923c406488a5e6d6a7247b6033b106a3dedcb2a63a640e0d95549db8beba2968",
+      "http_status": 200,
+      "bytes": 84726,
+      "publisher_checksum": "md5:74b642c86ee469fe3085a008dd0dbe75",
+      "verified_md5": "74b642c86ee469fe3085a008dd0dbe75",
+      "verified_sha256": "026fcf22978ff9c42e01a02d70778967fca47a40effa4fa4c1f1e18bfad92e7b"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-lccllw-multisensegolf-a-multimo",
+  "raw_total_bytes": 84726,
+  "raw_total_rows": 1653,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv",
+  "cleaned_csv_sha256": "b11bf998481a06f6a127cc3697ec23ef061512507a3c0dcc02dbfd96ff68edfc",
+  "cleaned_rows": 42,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Documentation.zip::Annotation Data.csv": {
+      "﻿Participant Number": 0,
+      "Swing Number": 0,
+      "Swing Start Time (s)": 0,
+      "Swing End Time (s)": 0,
+      "FPV Impact Frame": 0,
+      "FPV Impact Timestamp (s)": 0,
+      "Front-View Impact Frame": 0,
+      "Front-View Impact Timestamp (s)": 0,
+      "Timestamp Offset (s)": 0,
+      "Total Distance (m)": 0,
+      "Carry Distance (m)": 0,
+      "Ball Speed (m/s)": 0,
+      "Club Speed (m/s)": 0,
+      "Launch Angle (deg)": 0,
+      "Horizontal Launch Angle (deg)": 0,
+      "Clubface Angle (deg)": 0,
+      "Backspin (rpm)": 0,
+      "Sidespin (rpm)": 0,
+      "Lateral Distance (m)": 0
+    },
+    "Documentation.zip::Participant Metadata.csv": {
+      "﻿Participant Number": 0,
+      "Age": 0,
+      "Gender": 0,
+      "Height (cm)": 0,
+      "Body Mass (kg)": 0,
+      "Shoe Size (mm)": 0,
+      "Swing Handedness": 0,
+      "Hand Dominance": 0,
+      "Years of Golfing Experience": 0,
+      "Lesson-Taking Experience": 0,
+      "Professional License (Yes or No)": 0,
+      "License Type": 0,
+      "Self-Reported Expertise Level (7-Likert)": 0,
+      "Whether to Consent to Data Disclosure?": 0
+    },
+    "Documentation.zip::Survey Data.csv": {
+      "﻿Participant Number": 0,
+      "Sensor Name": 0,
+      "Comfort Rating Scale - Emotion": 0,
+      "Comfort Rating Scale -Attachment": 0,
+      "Comfort Rating Scale - Harm": 0,
+      "Comfort Rating Scale - Perceived Change": 0,
+      "Comfort Rating Scale - Movement": 0,
+      "Comfort Rating Scale - Anxiety": 0,
+      "Sensor Discomfort Feedback": 0
+    }
+  },
+  "time_monotonicity": {
+    "Documentation.zip::Annotation Data.csv": {
+      "column": "Swing Start Time (s)",
+      "numeric_samples": 1557,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -4135583.106229067,
+      "median_step": 19.837783694267273,
+      "max_step": 3400385.6971650124
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

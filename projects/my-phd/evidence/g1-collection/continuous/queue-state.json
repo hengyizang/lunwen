@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 18,
-  "total_new_literature": 1603,
-  "total_new_datasets": 872,
-  "total_new_reading_queue": 1472,
+  "round_number": 19,
+  "total_new_literature": 1702,
+  "total_new_datasets": 915,
+  "total_new_reading_queue": 1570,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -37,7 +37,10 @@
     "dataverse:10.7910/dvn/sgjlza",
     "figshare:34691808",
     "figshare:35038195",
-    "figshare:33322635"
+    "figshare:33322635",
+    "dataverse:10.7910/dvn/kkdxdk",
+    "dataverse:10.7910/dvn/lccllw",
+    "dataverse:10.7910/dvn/qgkeuw"
   ],
   "cleaned_datasets_meta": [
     {
@@ -501,6 +504,48 @@
       "cleaned_rows": 377,
       "raw_total_rows": 377,
       "verified_sha256": "a503fccc71a600f74d31bd076d5dc64e68498b32f28002905192c46b5e534de4"
+    },
+    {
+      "slug": "dataverse-kkdxdk-mmwalk-dataset",
+      "key": "dataverse:10.7910/dvn/kkdxdk",
+      "dataset_name": "mmWalk Dataset",
+      "doi": "10.7910/dvn/kkdxdk",
+      "landing_url": "https://doi.org/10.7910/DVN/KKDXDK",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-kkdxdk-mmwalk-dataset-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-kkdxdk-mmwalk-dataset-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_kkdxdk_mmwalk_dataset.py",
+      "cleaned_rows": 50,
+      "raw_total_rows": 50,
+      "verified_sha256": "82d91d6cf85179c2eb91ec3adc016561b8610edc58ac235a0d1a3ba4c8f68f47"
+    },
+    {
+      "slug": "dataverse-lccllw-multisensegolf-a-multimo",
+      "key": "dataverse:10.7910/dvn/lccllw",
+      "dataset_name": "MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Motion and Shot Performance Analysis",
+      "doi": "10.7910/dvn/lccllw",
+      "landing_url": "https://doi.org/10.7910/DVN/LCCLLW",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-lccllw-multisensegolf-a-multimo-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_lccllw_multisensegolf_a_multimo.py",
+      "cleaned_rows": 42,
+      "raw_total_rows": 1653,
+      "verified_sha256": "026fcf22978ff9c42e01a02d70778967fca47a40effa4fa4c1f1e18bfad92e7b"
+    },
+    {
+      "slug": "dataverse-qgkeuw-dataset-for-influence-of",
+      "key": "dataverse:10.7910/dvn/qgkeuw",
+      "dataset_name": "Dataset for Influence of Visual and Haptic Feedback on the Detection of Threshold Forces in a Surgical Grasping Task",
+      "doi": "10.7910/dvn/qgkeuw",
+      "landing_url": "https://doi.org/10.7910/DVN/QGKEUW",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qgkeuw_dataset_for_influence_of.py",
+      "cleaned_rows": 150,
+      "raw_total_rows": 255,
+      "verified_sha256": "5a748c1b718ead1777ea54852cf024f378f427169a7dc001f10e705ca905ae23"
     }
   ],
   "snowballed_dois": [
@@ -527,8 +572,10 @@
     "10.1109/tase.2025.3634193",
     "10.18178/ijmerr.15.1.65-79",
     "10.2139/ssrn.7447982",
+    "10.3390/jfmk11040391",
     "10.3390/machines12090658",
     "10.3390/machines13080659",
+    "10.3390/polym18212627",
     "10.3390/s24165441",
     "10.3390/s25030664",
     "10.3390/s26030881",
@@ -700,34 +747,43 @@
       "net_new_datasets": 0,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 19,
+      "completed_at": "2026-11-21T08:59:01Z",
+      "batch_label": "Broad Engineering R19: R1_Force_Contact",
+      "net_new_literature": 99,
+      "net_new_datasets": 43,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:54:12Z",
+  "updated_at": "2026-11-21T08:59:01Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
     "Adjacent": 54,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 170,
-    "Mechanical_Physics_AI": 501,
-    "Mechatronics_PHM_Control": 399,
-    "Robotics_Embodied": 528,
-    "R5_MultiRobot_Comm": 148,
-    "R1_Force_Contact": 68,
-    "Smart_Manufacturing": 200,
-    "Smart_Factory_DigitalTwin": 140
+    "R2_Aerial_Actuator": 172,
+    "Mechanical_Physics_AI": 516,
+    "Mechatronics_PHM_Control": 411,
+    "Robotics_Embodied": 621,
+    "R5_MultiRobot_Comm": 149,
+    "R1_Force_Contact": 108,
+    "Smart_Manufacturing": 206,
+    "Smart_Factory_DigitalTwin": 143
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 370,
-    "Mechatronics_PHM_Control": 274,
-    "Smart_Manufacturing": 198,
-    "Robotics_Embodied": 266,
+    "Mechanical_Physics_AI": 387,
+    "Mechatronics_PHM_Control": 281,
+    "Smart_Manufacturing": 235,
+    "Robotics_Embodied": 270,
     "R5_MultiRobot_Comm": 32,
-    "Smart_Factory_DigitalTwin": 62,
+    "Smart_Factory_DigitalTwin": 63,
     "R2_Aerial_Actuator": 37,
     "R1_Force_Contact": 47
   },
@@ -745,6 +801,7 @@
     "dataverse:10.7910/dvn/hne12j",
     "dataverse:10.7910/dvn/hxc8hk",
     "dataverse:10.7910/dvn/iaxsrd",
+    "dataverse:10.7910/dvn/iw4v4y",
     "dataverse:10.7910/dvn/jtysfc",
     "dataverse:10.7910/dvn/kmdino",
     "dataverse:10.7910/dvn/knkwmj",

@@ -1,0 +1,368 @@
+{
+  "schema_version": "1.0",
+  "round": 19,
+  "completed_at": "2026-11-21T08:59:01Z",
+  "batch_label": "Broad Engineering R19: R1_Force_Contact",
+  "base_head_sha": "9354a05b89824e4fc8d2343b874e9a546022c742",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 144,
+    "duplicates_skipped": 45,
+    "net_new": 99,
+    "new_reading_queue": 98,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "robotic impedance admittance control",
+        "receipt_id": "20261121t085901z-arxiv-2f8c4c8cfe",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Aimpedance+AND+all%3Aadmittance+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "cf3efb36c39f4090e890fd3f30de0947ae7ff0c557ab827f83302f9d0e69dc0c",
+        "normalized_results_sha256": "757396d4279f95c482968474641f0a800154fd8b7113dbbb88a825de4008ba2c"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic impedance admittance control",
+        "receipt_id": "20261121t085903z-crossref-23b80ecbb7",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+impedance+admittance+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "cb2b1c8778e1c5846e6310557dab07055526a227600b8734e643091efb45def2",
+        "normalized_results_sha256": "7824edac69e5a61dda9295d1c77fe6ec27bb01d787b72ef50c6fbc6fd496433b"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic impedance admittance control",
+        "receipt_id": "20261121t085904z-openalex-ec67b8b1ca",
+        "request_url": "https://api.openalex.org/works?search=robotic+impedance+admittance+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "c6761fac47adbfb51bc605b02eab7af7e3bb9dd303f47b519caf2b3d90afd2d9",
+        "normalized_results_sha256": "d7376d5587da949f00de6ba9404700e7720fdabdbee45c95d7174460374fdcd6"
+      },
+      {
+        "provider": "arxiv",
+        "query": "tactile force estimation manipulation",
+        "receipt_id": "20261121t085906z-arxiv-76a46b86ba",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atactile+AND+all%3Aforce+AND+all%3Aestimation+AND+all%3Amanipulation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "0df718cda7c42c1e2941790532e703f7d296e12ffa1d399714770b8fc96781e0",
+        "normalized_results_sha256": "074a3d84fc7ee62890ae5c0d5f487eb1e165840d63e471f5e58b49c2b7b0b948"
+      },
+      {
+        "provider": "crossref",
+        "query": "tactile force estimation manipulation",
+        "receipt_id": "20261121t085909z-crossref-348e075da3",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=tactile+force+estimation+manipulation&rows=12",
+        "result_count": 12,
+        "response_sha256": "ff9323344d5e0eef63a8cdd2a9cb55c5185ccd6a81a36e0d0a5e78a6357ee494",
+        "normalized_results_sha256": "d5905ea3b4174b0bdf0b829925835622c6cf6001c2de78db82a9b65263c9748f"
+      },
+      {
+        "provider": "openalex",
+        "query": "tactile force estimation manipulation",
+        "receipt_id": "20261121t085910z-openalex-24b83cf7bc",
+        "request_url": "https://api.openalex.org/works?search=tactile+force+estimation+manipulation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "7cd3e1509733e3c8115d4b3e910b0d35dbcb2b33a125a2717990bbded536796f",
+        "normalized_results_sha256": "9cc61ae937fc9673ed7d6ee1977021bc77e18dc1e22f6ebe244beefc3f616f64"
+      },
+      {
+        "provider": "arxiv",
+        "query": "force controlled robotic polishing",
+        "receipt_id": "20261121t085911z-arxiv-fb34c9b143",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aforce+AND+all%3Acontrolled+AND+all%3Arobotic+AND+all%3Apolishing&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "16d0e4e60bd90dfb133e9c8c68275f0a01fc4a089925c282d92412b0185fc15e",
+        "normalized_results_sha256": "d2498cc36795fed56dbf539a2022c21b3f379542a6eb95b5769b39f51b942911"
+      },
+      {
+        "provider": "crossref",
+        "query": "force controlled robotic polishing",
+        "receipt_id": "20261121t085912z-crossref-a7cf2a3af8",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=force+controlled+robotic+polishing&rows=12",
+        "result_count": 12,
+        "response_sha256": "74ec47b2b774cc31a3b3fed684137966fd21df66aaf96166dd06e093064b9003",
+        "normalized_results_sha256": "3fbb45d48d6210fc56bd2e8e1ffb457eb68ebe539458ec11c46e1b5ad1adff62"
+      },
+      {
+        "provider": "openalex",
+        "query": "force controlled robotic polishing",
+        "receipt_id": "20261121t085913z-openalex-4703324496",
+        "request_url": "https://api.openalex.org/works?search=force+controlled+robotic+polishing&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d2d404e03a063a22a5c5590656e4b02b96ad0e8cb693ec325595c59c75700a5e",
+        "normalized_results_sha256": "a66c36fb7bee1e28728c112bd50d3f59d4439871499c9d848250bf85e7d2068a"
+      },
+      {
+        "provider": "arxiv",
+        "query": "visuotactile sensor robotic grasping",
+        "receipt_id": "20261121t085915z-arxiv-6f9c8865de",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Avisuotactile+AND+all%3Asensor+AND+all%3Arobotic+AND+all%3Agrasping&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "d61261de10afac40db20063def656fc6d14b46fea16b6202cbc829c453d9fa80",
+        "normalized_results_sha256": "90aabbd0ecdf09657696378ea80f7c1cb85f23e72406870b4c547a0e2bf62dab"
+      },
+      {
+        "provider": "crossref",
+        "query": "visuotactile sensor robotic grasping",
+        "receipt_id": "20261121t085917z-crossref-adbfa48a4b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=visuotactile+sensor+robotic+grasping&rows=12",
+        "result_count": 12,
+        "response_sha256": "538815ee3c5c54015e8256f6e2d60299a5dcb73079fb054e0aab3e6893e71289",
+        "normalized_results_sha256": "a0737338d0bf36cfa7e02999ae84b13529d31f7af150f52374b31f931b65342d"
+      },
+      {
+        "provider": "openalex",
+        "query": "visuotactile sensor robotic grasping",
+        "receipt_id": "20261121t085918z-openalex-cc4c5dd4d7",
+        "request_url": "https://api.openalex.org/works?search=visuotactile+sensor+robotic+grasping&per-page=12",
+        "result_count": 12,
+        "response_sha256": "07052e3a74fe8269a39cdaba5a7fee9bfccbc8d706e755dafb9ac4f80af7f895",
+        "normalized_results_sha256": "1e0f1dd91a3026aff4b3894ec1dcb8d350cf76436d00adb052204f5b6b60b92e"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/polym18212627",
+        "receipt_id": "20261121t085919z-opencitations-c08af4f066",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/jfmk11040391",
+        "receipt_id": "20261121t085921z-opencitations-2a42493334",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 140,
+    "off_topic_filtered": 84,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 13,
+    "net_new": 43,
+    "provider_statuses": [
+      {
+        "query": "cnc turning",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "cnc turning",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cnc turning",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc turning",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc turning",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cylindrical grinding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "cylindrical grinding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cylindrical grinding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cylindrical grinding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "cylindrical grinding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "electrical discharge machining",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "electrical discharge machining",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "electrical discharge machining",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "electrical discharge machining",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "electrical discharge machining",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "sheet metal stamping",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "sheet metal stamping",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "sheet metal stamping",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "sheet metal stamping",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "sheet metal stamping",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 14,
+    "cleaned": [
+      {
+        "slug": "dataverse-kkdxdk-mmwalk-dataset",
+        "key": "dataverse:10.7910/dvn/kkdxdk",
+        "dataset_name": "mmWalk Dataset",
+        "doi": "10.7910/dvn/kkdxdk",
+        "landing_url": "https://doi.org/10.7910/DVN/KKDXDK",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-kkdxdk-mmwalk-dataset-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-kkdxdk-mmwalk-dataset-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_kkdxdk_mmwalk_dataset.py",
+        "cleaned_rows": 50,
+        "raw_total_rows": 50,
+        "verified_sha256": "82d91d6cf85179c2eb91ec3adc016561b8610edc58ac235a0d1a3ba4c8f68f47"
+      },
+      {
+        "slug": "dataverse-lccllw-multisensegolf-a-multimo",
+        "key": "dataverse:10.7910/dvn/lccllw",
+        "dataset_name": "MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Motion and Shot Performance Analysis",
+        "doi": "10.7910/dvn/lccllw",
+        "landing_url": "https://doi.org/10.7910/DVN/LCCLLW",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-lccllw-multisensegolf-a-multimo-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_lccllw_multisensegolf_a_multimo.py",
+        "cleaned_rows": 42,
+        "raw_total_rows": 1653,
+        "verified_sha256": "026fcf22978ff9c42e01a02d70778967fca47a40effa4fa4c1f1e18bfad92e7b"
+      },
+      {
+        "slug": "dataverse-qgkeuw-dataset-for-influence-of",
+        "key": "dataverse:10.7910/dvn/qgkeuw",
+        "dataset_name": "Dataset for Influence of Visual and Haptic Feedback on the Detection of Threshold Forces in a Surgical Grasping Task",
+        "doi": "10.7910/dvn/qgkeuw",
+        "landing_url": "https://doi.org/10.7910/DVN/QGKEUW",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qgkeuw_dataset_for_influence_of.py",
+        "cleaned_rows": 150,
+        "raw_total_rows": 255,
+        "verified_sha256": "5a748c1b718ead1777ea54852cf024f378f427169a7dc001f10e705ca905ae23"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "url": "https://doi.org/10.7910/DVN/M6JXED",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+        "url": "https://doi.org/10.7910/DVN/CKMBCG",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
