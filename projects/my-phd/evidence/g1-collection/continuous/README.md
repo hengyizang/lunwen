@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：48
-- **最近更新时间 (UTC)**：2026-11-21T12:24:05Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5356 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1950 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：4410 条
-- **累计已完成确定性清洗数据集**：105 个
+- **已完成轮次**：49
+- **最近更新时间 (UTC)**：2026-11-21T12:29:10Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5461 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1965 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：4484 条
+- **累计已完成确定性清洗数据集**：108 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,15 +20,15 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 174 | 99 |
-| `R2_Aerial_Actuator` | 428 | 119 |
-| `R5_MultiRobot_Comm` | 264 | 96 |
-| `Robotics_Embodied` | 1488 | 600 |
-| `Mechanical_Physics_AI` | 1501 | 892 |
-| `Mechatronics_PHM_Control` | 1300 | 671 |
-| `Smart_Manufacturing` | 733 | 405 |
-| `Smart_Factory_DigitalTwin` | 436 | 88 |
+| `R2_Aerial_Actuator` | 455 | 119 |
+| `R5_MultiRobot_Comm` | 304 | 97 |
+| `Robotics_Embodied` | 1537 | 615 |
+| `Mechanical_Physics_AI` | 1505 | 892 |
+| `Mechatronics_PHM_Control` | 1309 | 675 |
+| `Smart_Manufacturing` | 734 | 420 |
+| `Smart_Factory_DigitalTwin` | 437 | 88 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 665 | 0 |
+| `Adjacent` | 695 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-34013343-code-and-data-for-a-unif` | Code and data for "A Unified Receding-Horizon Controller for Safe M... | 10.6084/m9.figshare.34013343.v2 | `summary_table` | 100 | `b2dc655e5a34` | [CSV](data/figshare-34013343-code-and-data-for-a-unif-cleaned.csv) · [JSON](data/figshare-34013343-code-and-data-for-a-unif-provenance.json) · [PY](data/derive_figshare_34013343_code_and_data_for_a_unif.py) |
-| `figshare-27988055-experimental-data-for-mm` | Experimental Data for MMAM Gripper | 10.6084/m9.figshare.27988055.v4 | `summary_table` | 10 | `e3012d302b20` | [CSV](data/figshare-27988055-experimental-data-for-mm-cleaned.csv) · [JSON](data/figshare-27988055-experimental-data-for-mm-provenance.json) · [PY](data/derive_figshare_27988055_experimental_data_for_mm.py) |
-| `dataverse-25880-annual-behavioral-tracki` | Annual Behavioral Tracking Survey (FSW & High Risk MSM)-I (2008) (B... | 10.7910/dvn/25880 | `summary_table` | 890 | `4e2b18c6ac70` | [CSV](data/dataverse-25880-annual-behavioral-tracki-cleaned.csv) · [JSON](data/dataverse-25880-annual-behavioral-tracki-provenance.json) · [PY](data/derive_dataverse_25880_annual_behavioral_tracki.py) |
 | `dataverse-25901-annual-behavioral-tracki` | Annual Behavioral Tracking Survey (FSW & High risk MSM)-II -2011 (B... | 10.7910/dvn/25901 | `summary_table` | 1054 | `da8e9bebe528` | [CSV](data/dataverse-25901-annual-behavioral-tracki-cleaned.csv) · [JSON](data/dataverse-25901-annual-behavioral-tracki-provenance.json) · [PY](data/derive_dataverse_25901_annual_behavioral_tracki.py) |
 | `dataverse-ombstn-a-sound-dataset-of-vario` | A Sound Dataset of Various Discrete Manufacturing Operations on Rea... | 10.7910/dvn/ombstn | `cleaned_rows` | 40 | `f7a279a1337b` | [CSV](data/dataverse-ombstn-a-sound-dataset-of-vario-cleaned.csv) · [JSON](data/dataverse-ombstn-a-sound-dataset-of-vario-provenance.json) · [PY](data/derive_dataverse_ombstn_a_sound_dataset_of_vario.py) |
 | `figshare-32308917-dataset-for-laser-weldin` | Dataset for Laser Welding Deformation Prediction of TC4 Titanium Al... | 10.6084/m9.figshare.32308917.v1 | `summary_table` | 63 | `8202e327786d` | [CSV](data/figshare-32308917-dataset-for-laser-weldin-cleaned.csv) · [JSON](data/figshare-32308917-dataset-for-laser-weldin-provenance.json) · [PY](data/derive_figshare_32308917_dataset_for_laser_weldin.py) |
@@ -71,12 +68,14 @@
 | `figshare-31646617-selective-laser-melting` | Selective laser melting, Ti-6Al-4V, Additive manufacturing, Tensile... | 10.6084/m9.figshare.31646617.v1 | `cleaned_rows` | 129 | `bd1cf54731ed` | [CSV](data/figshare-31646617-selective-laser-melting-cleaned.csv) · [JSON](data/figshare-31646617-selective-laser-melting-provenance.json) · [PY](data/derive_figshare_31646617_selective_laser_melting.py) |
 | `figshare-34808832-data-for-piam-a-physics` | Data for: PiAM — A physics-informed adaptive multi-fidelity framewo... | 10.6084/m9.figshare.34808832.v1 | `summary_table` | 42 | `a01434913d7a` | [CSV](data/figshare-34808832-data-for-piam-a-physics-cleaned.csv) · [JSON](data/figshare-34808832-data-for-piam-a-physics-provenance.json) · [PY](data/derive_figshare_34808832_data_for_piam_a_physics.py) |
 | `figshare-32789034-observation-of-twofold-d` | Observation of twofold degenerate acoustic Landau levels and pseudo... | 10.6084/m9.figshare.32789034.v2 | `summary_table` | 16 | `838fcd254e07` | [CSV](data/figshare-32789034-observation-of-twofold-d-cleaned.csv) · [JSON](data/figshare-32789034-observation-of-twofold-d-provenance.json) · [PY](data/derive_figshare_32789034_observation_of_twofold_d.py) |
+| `dataverse-2svlhs-analysis-of-the-hydrogeo` | Analysis of the Hydrogeological Conditions Affecting Fault Response... | 10.7910/dvn/2svlhs | `cleaned_rows` | 48 | `7cbd9189013d` | [CSV](data/dataverse-2svlhs-analysis-of-the-hydrogeo-cleaned.csv) · [JSON](data/dataverse-2svlhs-analysis-of-the-hydrogeo-provenance.json) · [PY](data/derive_dataverse_2svlhs_analysis_of_the_hydrogeo.py) |
+| `dataverse-hfcsqz-cfd-tool-vspaero-actuato` | CFD Tool VSPAERO: Actuator Disk and Flow Visualization | 10.7910/dvn/hfcsqz | `summary_table` | 1012 | `643a2d22f71a` | [CSV](data/dataverse-hfcsqz-cfd-tool-vspaero-actuato-cleaned.csv) · [JSON](data/dataverse-hfcsqz-cfd-tool-vspaero-actuato-provenance.json) · [PY](data/derive_dataverse_hfcsqz_cfd_tool_vspaero_actuato.py) |
+| `dataverse-4qhuwx-replication-data-for-hea` | Replication Data for: Heating and Current-Drive Actuator Systems fo... | 10.7910/dvn/4qhuwx | `summary_table` | 15 | `060dbe697f9e` | [CSV](data/dataverse-4qhuwx-replication-data-for-hea-cleaned.csv) · [JSON](data/dataverse-4qhuwx-replication-data-for-hea-provenance.json) · [PY](data/derive_dataverse_4qhuwx_replication_data_for_hea.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 24 | 2026-11-21T09:24:11Z | Broad Engineering R24: Robotics_Embodied | +157 | +53 | +1 | [round-24-audit.json](rounds/round-24-audit.json) |
 | 25 | 2026-11-21T09:29:02Z | Broad Engineering R25: Mechanical_Physics_AI | +117 | +72 | +3 | [round-25-audit.json](rounds/round-25-audit.json) |
 | 26 | 2026-11-21T09:34:02Z | Broad Engineering R26: Mechanical_Physics_AI | +202 | +62 | +2 | [round-26-audit.json](rounds/round-26-audit.json) |
 | 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
@@ -101,3 +100,4 @@
 | 46 | 2026-11-21T12:14:14Z | Broad Engineering R46: Smart_Factory_DigitalTwin | +115 | +10 | +3 | [round-46-audit.json](rounds/round-46-audit.json) |
 | 47 | 2026-11-21T12:19:05Z | Broad Engineering R47: Smart_Factory_DigitalTwin | +358 | +6 | +2 | [round-47-audit.json](rounds/round-47-audit.json) |
 | 48 | 2026-11-21T12:24:05Z | Broad Engineering R48: R1_Force_Contact / R2_Aerial_Actuator | +174 | +7 | +3 | [round-48-audit.json](rounds/round-48-audit.json) |
+| 49 | 2026-11-21T12:29:10Z | Broad Engineering R49: R2_Aerial_Actuator / R5_MultiRobot_Comm | +105 | +15 | +3 | [round-49-audit.json](rounds/round-49-audit.json) |

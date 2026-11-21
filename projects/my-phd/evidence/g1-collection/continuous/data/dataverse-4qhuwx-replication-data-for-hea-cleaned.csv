@@ -1,0 +1,16 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+figures_index.csv,fi,categorical_or_text,11,11,0,11,,,,,,,"{""fig5_port_budget.pdf"": 1, ""fig9_arch.pdf"": 1, ""fig2_cd_efficiency.pdf"": 1}"
+figures_index.csv,e,categorical_or_text,11,3,8,3,,,,,,,"{""erance.pdf"": 1, ""e.pdf"": 1, ""edger.pdf"": 1}"
+key_values.csv,symbol,categorical_or_text,15,15,0,13,,,,,,,"{""omega_ce"": 2, ""f_t"": 2, ""kappa"": 1}"
+key_values.csv,value,numeric,15,15,0,14,-0.3,0.35,0.8,13.1349,2.5,180,46.179
+key_values.csv,unit,categorical_or_text,15,2,13,2,,,,,,,"{""×13.34"": 1, ""eq"": 1}"
+key_values.csv,provenance,categorical_or_text,15,15,0,1,,,,,,,"{""verbatim from arXiv LaTeX source"": 15}"
+verification.csv,serial,categorical_or_text,14,14,0,14,,,,,,,"{""BR-L1-A1"": 1, ""BR-L1-A11"": 1, ""BR-L1-A12"": 1}"
+verification.csv,machine,categorical_or_text,14,14,0,3,,,,,,,"{""breeder"": 10, ""shared"": 3, ""burner"": 1}"
+verification.csv,domain,categorical_or_text,14,14,0,11,,,,,,,"{""transport"": 2, ""equilibrium"": 2, ""neoclassical"": 2}"
+verification.csv,title,categorical_or_text,14,14,0,14,,,,,,,"{""Breeder 0-D power & particle balance (config 22021)"": 1, ""Flux-driven integrated transport / profile prediction (TGYRO)"": 1, ""Free-boundary equilibrium + i..."
+verification.csv,verdict,categorical_or_text,14,14,0,2,,,,,,,"{""reproduced"": 12, ""revised"": 2}"
+verification.csv,validator_url,categorical_or_text,14,14,0,14,,,,,,,"{""https://www.kronosfusionenergy.com/Physics_Validation_Simulation/gate/BR-L1-A1.html"": 1, ""https://www.kronosfusionenergy.com/Physics_Validation_Simulation/..."
+anchors.json,symbol,categorical_or_text,15,15,0,13,,,,,,,"{""omega_ce"": 2, ""f_t"": 2, ""kappa"": 1}"
+anchors.json,value,numeric,15,15,0,14,-0.3,0.35,0.8,13.1349,2.5,180,46.179
+anchors.json,unit,categorical_or_text,15,15,0,3,,,,,,,"{"""": 13, ""×13.34"": 1, ""eq"": 1}"

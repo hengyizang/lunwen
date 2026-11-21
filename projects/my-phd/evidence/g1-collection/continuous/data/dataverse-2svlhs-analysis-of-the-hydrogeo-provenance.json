@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-2svlhs-analysis-of-the-hydrogeo",
+  "dataset_name": "Analysis of the Hydrogeological Conditions Affecting Fault Response to Nearby Hydraulic Fracturing",
+  "doi": "10.7910/dvn/2svlhs",
+  "landing_url": "https://doi.org/10.7910/DVN/2SVLHS",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/2SVLHS",
+  "access_date": "2026-11-21",
+  "round_number": 49,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Seismic Sequences' Data (Bao and Eaton, 2016).tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5342889",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/2SVLHS/17cbe385809-4298d80321b4?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Seismic%2520Sequences%2527%2520Data%2520%2528Bao%2520and%2520Eaton%252C%25202016%2529.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T123621Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=9d7c6e54646a7501c9b054e1e3c69a0daacab644e64c1de7e52a5750428701b0",
+      "http_status": 200,
+      "bytes": 4228,
+      "publisher_checksum": "dataverse_original_md5:cb1ebb9b41e93753bc5d279c91995542",
+      "verified_md5": "f1eb8c4195943dcb5f96414ab347d61b",
+      "verified_sha256": "7cbd9189013d9a52aba8d227a19e2af6a4b4cc5a884462d5284ab8a80f23c9ed"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-2svlhs-analysis-of-the-hydrogeo",
+  "raw_total_bytes": 4228,
+  "raw_total_rows": 48,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-2svlhs-analysis-of-the-hydrogeo-cleaned.csv",
+  "cleaned_csv_sha256": "bdd061e01bae6fc56d75710a7473b944e7db8cfdab6493f6ac57c1a85b8dddfb",
+  "cleaned_rows": 48,
+  "cleaned_cols": 15,
+  "null_counts_by_file": {
+    "Seismic Sequences' Data (Bao and Eaton, 2016).tab": {
+      "Year": 0,
+      "Month": 0,
+      "Day": 0,
+      "Hour": 0,
+      "Minute": 0,
+      "Second": 0,
+      "Magnitude(Mw)": 0,
+      "Latitude": 10,
+      "Longitude": 10,
+      "Depth(km)": 10,
+      "RMS(s)": 10,
+      "DLAT(o)": 10,
+      "DLON(o)": 10,
+      "DZ(km)": 10
+    }
+  },
+  "time_monotonicity": {
+    "Seismic Sequences' Data (Bao and Eaton, 2016).tab": {
+      "column": "Second",
+      "numeric_samples": 48,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -52.423,
+      "median_step": 0.2879999999999967,
+      "max_step": 54.897
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

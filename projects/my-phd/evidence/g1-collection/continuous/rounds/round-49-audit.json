@@ -1,0 +1,326 @@
+{
+  "schema_version": "1.0",
+  "round": 49,
+  "completed_at": "2026-11-21T12:29:10Z",
+  "batch_label": "Broad Engineering R49: R2_Aerial_Actuator / R5_MultiRobot_Comm",
+  "base_head_sha": "fd043375f24e3f431ced4965188d6687a2f5da38",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 131,
+    "duplicates_skipped": 26,
+    "net_new": 105,
+    "new_reading_queue": 74,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "multirotor wind disturbance rejection",
+        "receipt_id": "20261121t122910z-arxiv-784cf15a91",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amultirotor+AND+all%3Awind+AND+all%3Adisturbance+AND+all%3Arejection&start=0&max_results=12",
+        "result_count": 5,
+        "response_sha256": "21bdc17ac7eb609f0016c555704828982ff43fdfd712b4ad5a89e7188e91fc18",
+        "normalized_results_sha256": "1aeddf5954d011a98e675e189144c4890426da13affd64af7d95cc772e618b79"
+      },
+      {
+        "provider": "crossref",
+        "query": "multirotor wind disturbance rejection",
+        "receipt_id": "20261121t122911z-crossref-bc18eec295",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multirotor+wind+disturbance+rejection&rows=12",
+        "result_count": 12,
+        "response_sha256": "6764f650e9807c34a9e0f389bad947c5b2db8305b6b28d0ad1b2f787761ccffa",
+        "normalized_results_sha256": "c3015afe302b95cce642e484db6df4542aadc961deb6d93579349a599a077a59"
+      },
+      {
+        "provider": "arxiv",
+        "query": "tilt-rotor uav trajectory tracking",
+        "receipt_id": "20261121t123214z-arxiv-f4524c63f6",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atilt-rotor+AND+all%3Auav+AND+all%3Atrajectory+AND+all%3Atracking&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "3d17ac0362705505fa0a6a9176a2fac59235ab72a906921dc66671499a8aa1a4",
+        "normalized_results_sha256": "f801489f2342224849ee1aa07dd39d9cb664e09eedca103bf7d38954760cea1f"
+      },
+      {
+        "provider": "crossref",
+        "query": "tilt-rotor uav trajectory tracking",
+        "receipt_id": "20261121t123216z-crossref-b0c68ea2e5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=tilt-rotor+uav+trajectory+tracking&rows=12",
+        "result_count": 12,
+        "response_sha256": "28bd80d67fdfa88004279fba5eeafe87ad6b9a5cceab14f5759580a77aedf654",
+        "normalized_results_sha256": "025f096ea1223dc67a8481674b3465f3f99967f7f69f0115b03c65ac0c11445b"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot slam loop closure",
+        "receipt_id": "20261121t123457z-arxiv-aa5403d934",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amulti-robot+AND+all%3Aslam+AND+all%3Aloop+AND+all%3Aclosure&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "1ef76d8e59dcddf18173820577f37a4d52e8da536844e1dbfef92f340d59ec01",
+        "normalized_results_sha256": "f77bcff6f768565e504c7aa290e4d9219c77b274a812c9c3cf2ece5ebf9eaf22"
+      },
+      {
+        "provider": "crossref",
+        "query": "multi-robot slam loop closure",
+        "receipt_id": "20261121t123459z-crossref-9adc5e1860",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multi-robot+slam+loop+closure&rows=12",
+        "result_count": 12,
+        "response_sha256": "e2b9e628f9afd32faea0cc820d23cfb7f06a77ca058f44db0b99bbc17b05ec11",
+        "normalized_results_sha256": "ff10c16c8b880c0569b7bec88e2a679a4f18b2b3f0277f3fe75256541fa6c1b0"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot slam loop closure",
+        "receipt_id": "20261121t123500z-openalex-d7ab88666c",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+slam+loop+closure&per-page=12",
+        "result_count": 12,
+        "response_sha256": "c3cf17821c3d300a4aa41deb123fb21d4fca9690ee3bbe27103f972ea6b70d9f",
+        "normalized_results_sha256": "4c1045e72548e142d592947f35a505bdb6a490f22a309a295517781f44638ae1"
+      },
+      {
+        "provider": "arxiv",
+        "query": "swarm robotics consensus delay",
+        "receipt_id": "20261121t123503z-arxiv-e9971bc04f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aswarm+AND+all%3Arobotics+AND+all%3Aconsensus+AND+all%3Adelay&start=0&max_results=12",
+        "result_count": 6,
+        "response_sha256": "8e30e1278cd80f4d1f032f56286c56b673fe002eb3c36b6fe575009354d8b3f6",
+        "normalized_results_sha256": "5894637b184a5184dd083e9835fe57c2f87a5e952f31a9720664fd02060af948"
+      },
+      {
+        "provider": "crossref",
+        "query": "swarm robotics consensus delay",
+        "receipt_id": "20261121t123504z-crossref-bebd380617",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=swarm+robotics+consensus+delay&rows=12",
+        "result_count": 12,
+        "response_sha256": "2bdf9e28fe058cb4fcc873a9c19862b25ecfafd9dcd057127c95cc09ac61739d",
+        "normalized_results_sha256": "10b26d0f3054edcea4f284575b5ecd799c7d1b2a53c3d1657053b48a51e5f8e9"
+      },
+      {
+        "provider": "openalex",
+        "query": "swarm robotics consensus delay",
+        "receipt_id": "20261121t123505z-openalex-3df1899fdf",
+        "request_url": "https://api.openalex.org/works?search=swarm+robotics+consensus+delay&per-page=12",
+        "result_count": 12,
+        "response_sha256": "dc9ec7908a089d443e46a70ba0fedfea79212cbe38669d8d0d64c2fd208c1181",
+        "normalized_results_sha256": "334a53433971952abe9bdc41e0d585a1e9099dc59ac6074b93ee36291abaa0ed"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.2196/58504",
+        "receipt_id": "20261121t123546z-opencitations-390cc1e7cb",
+        "result_count": 33,
+        "response_sha256": "268698ebbfb60909fe4b200a7be0227e3f761f3be81ba10fef398f8e519629ea"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.2196/preprints.58504",
+        "receipt_id": "20261121t123547z-opencitations-d041202538",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "openalex",
+        "query": "multirotor wind disturbance rejection",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=multirotor+wind+disturbance+rejection&per-page=12: HTTP Error 503: Service Unavailable"
+      },
+      {
+        "provider": "openalex",
+        "query": "tilt-rotor uav trajectory tracking",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=tilt-rotor+uav+trajectory+tracking&per-page=12: HTTP Error 429: Too Many Requests"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 138,
+    "off_topic_filtered": 71,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 52,
+    "net_new": 15,
+    "provider_statuses": [
+      {
+        "query": "autonomous driving sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "autonomous driving sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "robotic gripper sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "robotic gripper sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic gripper sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "peg insertion sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "peg insertion sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "peg insertion sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "peg insertion sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "peg insertion sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "industrial robot sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "industrial robot sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      }
+    ],
+    "probed_for_cleaning": 11,
+    "cleaned": [
+      {
+        "slug": "dataverse-2svlhs-analysis-of-the-hydrogeo",
+        "key": "dataverse:10.7910/dvn/2svlhs",
+        "dataset_name": "Analysis of the Hydrogeological Conditions Affecting Fault Response to Nearby Hydraulic Fracturing",
+        "doi": "10.7910/dvn/2svlhs",
+        "landing_url": "https://doi.org/10.7910/DVN/2SVLHS",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-2svlhs-analysis-of-the-hydrogeo-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-2svlhs-analysis-of-the-hydrogeo-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_2svlhs_analysis_of_the_hydrogeo.py",
+        "cleaned_rows": 48,
+        "raw_total_rows": 48,
+        "verified_sha256": "7cbd9189013d9a52aba8d227a19e2af6a4b4cc5a884462d5284ab8a80f23c9ed"
+      },
+      {
+        "slug": "dataverse-hfcsqz-cfd-tool-vspaero-actuato",
+        "key": "dataverse:10.7910/dvn/hfcsqz",
+        "dataset_name": "CFD Tool VSPAERO: Actuator Disk and Flow Visualization",
+        "doi": "10.7910/dvn/hfcsqz",
+        "landing_url": "https://doi.org/10.7910/DVN/HFCSQZ",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-hfcsqz-cfd-tool-vspaero-actuato-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-hfcsqz-cfd-tool-vspaero-actuato-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_hfcsqz_cfd_tool_vspaero_actuato.py",
+        "cleaned_rows": 1012,
+        "raw_total_rows": 636,
+        "verified_sha256": "643a2d22f71af551cdbef9d61e101ef17b8375bbb05616a3985b8d1e5f259af4"
+      },
+      {
+        "slug": "dataverse-4qhuwx-replication-data-for-hea",
+        "key": "dataverse:10.7910/dvn/4qhuwx",
+        "dataset_name": "Replication Data for: Heating and Current-Drive Actuator Systems for a Compact Spherical-Tokamak Breeder: An NBI/ECH/ICRF/LHCD Mix Optimized for Solenoid-Free Sustainment",
+        "doi": "10.7910/dvn/4qhuwx",
+        "landing_url": "https://doi.org/10.7910/DVN/4QHUWX",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-4qhuwx-replication-data-for-hea-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-4qhuwx-replication-data-for-hea-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_4qhuwx_replication_data_for_hea.py",
+        "cleaned_rows": 15,
+        "raw_total_rows": 55,
+        "verified_sha256": "060dbe697f9ed3f602dbcc71e65111bc5e99e016647a95418aec4e6aab9b7a23"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-1g3ssb-multi-sensor-based-power\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Expt_3.tab: f16dec591ac709ffce5ed7d82ce87db76c86744b84d76a32087457068e1e40be != fa922de59b6813263e8e926123b56cd969a99e7d37baf817094308875786cb7c\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

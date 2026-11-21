@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-4qhuwx-replication-data-for-hea",
+  "dataset_name": "Replication Data for: Heating and Current-Drive Actuator Systems for a Compact Spherical-Tokamak Breeder: An NBI/ECH/ICRF/LHCD Mix Optimized for Solenoid-Free Sustainment",
+  "doi": "10.7910/dvn/4qhuwx",
+  "landing_url": "https://doi.org/10.7910/DVN/4QHUWX",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/4QHUWX",
+  "access_date": "2026-11-21",
+  "round_number": 49,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "figures_index.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14291543",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4QHUWX/1a0e86e0693-f40d36539861?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27figures_index.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T123646Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3e83b0c572c249cdc95b4e77a7b92124f541aa95828c7a965a312828f664cc5a",
+      "http_status": 200,
+      "bytes": 260,
+      "publisher_checksum": "md5:54a029763e7ce8871b6e0608395e0b56",
+      "verified_md5": "54a029763e7ce8871b6e0608395e0b56",
+      "verified_sha256": "060dbe697f9ed3f602dbcc71e65111bc5e99e016647a95418aec4e6aab9b7a23"
+    },
+    {
+      "file": "key_values.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14291531",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4QHUWX/1a0e86dce13-e975cd815d61?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27key_values.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T123647Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=c5bd4dc09c8abc9aa3854e14fe2a198345f6f55e51baddc441219decc22e8fd8",
+      "http_status": 200,
+      "bytes": 716,
+      "publisher_checksum": "md5:914ead799300449b54877d762d21de54",
+      "verified_md5": "914ead799300449b54877d762d21de54",
+      "verified_sha256": "e0fd8e60ad109654ef8b738674c1cfc4182ae02e4bc98cd5f0ef1360252b2376"
+    },
+    {
+      "file": "verification.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14291532",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4QHUWX/1a0e86dd257-a5ea41dc6386?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27verification.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T123649Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=98548de3413819a2be1f71fa35e159f8cae006671ca466f4e51d51e4ff9ee3d6",
+      "http_status": 200,
+      "bytes": 2499,
+      "publisher_checksum": "md5:c2e3f8ce3effda64b24b582aa58c7ba5",
+      "verified_md5": "c2e3f8ce3effda64b24b582aa58c7ba5",
+      "verified_sha256": "9246196011249a8b90e00058c2b4c12e9f84ebae83219cacc70fb609630b790b"
+    },
+    {
+      "file": "anchors.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14291529",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4QHUWX/1a0e86dc583-1d123c7d3742?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27anchors.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T123651Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=bf2509a77d87120ac6667877816f27eac86641d877bebcc450d7d923f833b0ca",
+      "http_status": 200,
+      "bytes": 6316,
+      "publisher_checksum": "md5:169d0e0313dda1a06830f73c9ea8c39e",
+      "verified_md5": "169d0e0313dda1a06830f73c9ea8c39e",
+      "verified_sha256": "13aa7c1a61b5227922a4d78916f2fb5aec0da7714ae5f93194cc8f131105313d"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-4qhuwx-replication-data-for-hea",
+  "raw_total_bytes": 9791,
+  "raw_total_rows": 55,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-4qhuwx-replication-data-for-hea-cleaned.csv",
+  "cleaned_csv_sha256": "4c5871ba2f6e54a07552ffe1cbbc076bf8e48b72e00cfbcb4f5220d2bcbf5f51",
+  "cleaned_rows": 15,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "figures_index.csv": {
+      "fi": 0,
+      "e": 8
+    },
+    "key_values.csv": {
+      "symbol": 0,
+      "value": 0,
+      "unit": 13,
+      "provenance": 0
+    },
+    "verification.csv": {
+      "serial": 0,
+      "machine": 0,
+      "domain": 0,
+      "title": 0,
+      "verdict": 0,
+      "validator_url": 0
+    },
+    "anchors.json": {
+      "symbol": 0,
+      "value": 0,
+      "unit": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
