@@ -1,0 +1,345 @@
+{
+  "schema_version": "1.0",
+  "round": 50,
+  "completed_at": "2026-11-21T12:39:13Z",
+  "batch_label": "Broad Engineering R50: R1_Force_Contact (2025)",
+  "base_head_sha": "294e7875c71f0c3d9b1b1abc20969ca3f7fdc9a3",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 104,
+    "duplicates_skipped": 52,
+    "net_new": 52,
+    "new_reading_queue": 48,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t123913z-openalex-8a6cd43cc6",
+        "request_url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "1fb346b317a5fe88c3a3236bb1d3b5174b243401cd44506b45e82241c077bea0",
+        "normalized_results_sha256": "cc29503365f4315ada1905c2939333c5f11b299a625b977996e5aadbc8eacecb"
+      },
+      {
+        "provider": "crossref",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t123918z-crossref-c4a2e5c314",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=wrist+force+torque+sensor+bias&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "9da147946003718c428081dd3c80cba40d0f2510435710937769ebac2f30cde4",
+        "normalized_results_sha256": "5b83d55c3594b8aa45760ec832026ffbda59e30259b0cc3211db0abc32db4503"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t123920z-europe-pmc-ec1a1fadae",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=wrist+force+torque+sensor+bias&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "685f73f9cf21be270dee2c90064372dc5b97ccc2f07d11e756d49d1fbbb9f514",
+        "normalized_results_sha256": "bdf4c8c24f8932611a2ff449d2a7227e04dc70775f32ef34658fff1b4934a2c9"
+      },
+      {
+        "provider": "hal",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t123926z-hal-456aff68b9",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=wrist+force+torque+sensor+bias&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "55b0e8c106d9c97a7082f341d53259cdfc9b0971fdbe80e4dffb3bca26746db2"
+      },
+      {
+        "provider": "openalex",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t123928z-openalex-d0dd93770f",
+        "request_url": "https://api.openalex.org/works?search=peg-in-hole+force+torque+estimation&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "cae28f374111721a0a6ff50b10924f416bf83948c6e73a47051faa7e3c8f9802",
+        "normalized_results_sha256": "143fc0062827da31d1bbf7ff82c41f7df41bb9412d653eb96f452b397bcd4ddc"
+      },
+      {
+        "provider": "crossref",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t123931z-crossref-7f5b37e9a3",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=peg-in-hole+force+torque+estimation&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "b34a295a320cf4ef126a8a9570e25bbe3177532e379a8a2fcedc43cd26f47afd",
+        "normalized_results_sha256": "e43a13457b48a6f35f0152861f323550898ffe1206faf6a26340e0dd3b733cfe"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t123932z-europe-pmc-2dc9373125",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=peg-in-hole+force+torque+estimation&pageSize=12&format=json",
+        "result_count": 2,
+        "response_sha256": "ba15bd4a318c8771fb9c4a76248091ef0c903db1cc12f6d5db315e5ae24964f6",
+        "normalized_results_sha256": "67fc91995b7893e834d0cc7b9914e8fad79f72bda1ac9a5a8be9ab958ab746d7"
+      },
+      {
+        "provider": "hal",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t123940z-hal-9f34dd1373",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=peg-in-hole+force+torque+estimation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "55b0e8c106d9c97a7082f341d53259cdfc9b0971fdbe80e4dffb3bca26746db2"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t123942z-openalex-8b7728cfec",
+        "request_url": "https://api.openalex.org/works?search=robotic+contact+wrench+gravity+compensation&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "124d733a7cf0ae957142fd06d082ccd84a23c6fb6a614169f152827ec357fdb7",
+        "normalized_results_sha256": "a6698e75e6e79e9ea9bc928509954f1bcfe8792e290a330f790072043728f142"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t124001z-crossref-abf6be2720",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+contact+wrench+gravity+compensation&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "3193c930f73b8af4d1f2d1bc20597a7753724c1eeb48232c27595c35f03d8475",
+        "normalized_results_sha256": "bc00f6a98720ea6d4bf54e6ea5053260acfa5e43a5e43e4011a829388a76b9de"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t124003z-europe-pmc-554f6bc446",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+contact+wrench+gravity+compensation&pageSize=12&format=json",
+        "result_count": 2,
+        "response_sha256": "4af8e52c0b3c30c0b6cd04d5b3d42ad7347c3ac4be91f82e8e33940ccdd3108a",
+        "normalized_results_sha256": "26ba05e6e69d481cf7546b4139498038989b416a42066573e8be612e936d5bbe"
+      },
+      {
+        "provider": "hal",
+        "query": "robotic contact wrench gravity compensation",
+        "receipt_id": "20261121t124005z-hal-377fab5599",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=robotic+contact+wrench+gravity+compensation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "eaf8e418694abcba3d72bdd92fdefdd92492060c79d94004a793edc594e83134",
+        "normalized_results_sha256": "fbe8487211404768f685bbd4e4b2ba26d49bc2ff8323b873d2f86da15158ce5b"
+      },
+      {
+        "provider": "openalex",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t124006z-openalex-c7b425b502",
+        "request_url": "https://api.openalex.org/works?search=six-axis+force+torque+drift+calibration&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "8d47bdb969ac797c3d490a0eb9db6cdfabaf76537f3b7c2b100b687b05022bac",
+        "normalized_results_sha256": "29208b96a35ce46bc3fb0d31b3fc6d24a490c04eec7928862f2e427623d705ee"
+      },
+      {
+        "provider": "crossref",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t124049z-crossref-b1704de9ff",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=six-axis+force+torque+drift+calibration&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "ff3a3b4caf9a3a60b6bb374f26108e747348e0060b2c2894206d3d2dcd911371",
+        "normalized_results_sha256": "33f81265da917c2ca4970325f5698272805b7a32a2e8ceabd2f224ac45a60b9f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t124050z-europe-pmc-42e89ff061",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=six-axis+force+torque+drift+calibration&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "842ea550e9a64ef34ebc79a94b9837ac70792d1df77b2ca82f199131e1eb77a5",
+        "normalized_results_sha256": "a05f42baae5f15e93fb2ca04dd371409b5d4fec8ffcc7ba0fa139b3cb9883ff8"
+      },
+      {
+        "provider": "hal",
+        "query": "six-axis force torque drift calibration",
+        "receipt_id": "20261121t124052z-hal-4b38547b43",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=six-axis+force+torque+drift+calibration&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "55b0e8c106d9c97a7082f341d53259cdfc9b0971fdbe80e4dffb3bca26746db2"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.4018/979-8-3373-2028-1.ch002",
+        "receipt_id": "20261121t124054z-opencitations-4bc9ff66d6",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3389/fdgth.2025.1573727",
+        "receipt_id": "20261121t124055z-opencitations-d887e31479",
+        "result_count": 3,
+        "response_sha256": "79dc3ad76d3731d3d50b9b7dfe957d308e9354e1bf4e9d6208a975ba69d0577c"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 83,
+    "off_topic_filtered": 55,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 22,
+    "net_new": 6,
+    "provider_statuses": [
+      {
+        "query": "wind turbine bearing sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "wind turbine bearing sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "wind turbine bearing sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine bearing sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "wind turbine bearing sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "laser welding sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "laser welding sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "laser welding sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser welding sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "laser welding sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc turning sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cnc turning sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc turning sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc turning sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cnc turning sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cylindrical grinding sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cylindrical grinding sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cylindrical grinding sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cylindrical grinding sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "cylindrical grinding sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-24204510-data-of-rapid-phase-curr",
+        "key": "figshare:24204510",
+        "dataset_name": "Data of Rapid Phase Current Sampling in a Permanent Magnet Synchronous Motor Servo System Utilizing FMC Bus",
+        "doi": "10.6084/m9.figshare.24204510.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_of_Rapid_Phase_Current_Sampling_in_a_Permanent_Magnet_Synchronous_Motor_Servo_System_Utilizing_FMC_Bus/24204510",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-24204510-data-of-rapid-phase-curr-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-24204510-data-of-rapid-phase-curr-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_24204510_data_of_rapid_phase_curr.py",
+        "cleaned_rows": 13,
+        "raw_total_rows": 206015,
+        "verified_sha256": "d9ca7c67f8633acd4a85b9d4d0ef509c841582f5fdf66da95ec30ad052d42c7a"
+      },
+      {
+        "slug": "figshare-32065938-custom-machining-gantry",
+        "key": "figshare:32065938",
+        "dataset_name": "Custom Machining Gantry for Hybrid Additive Manufacturing Vibration Data and GD&T Analysis",
+        "doi": "10.6084/m9.figshare.32065938.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Custom_Machining_Gantry_for_Hybrid_Additive_Manufacturing_Vibration_Data_and_GD_T_Analysis/32065938",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32065938-custom-machining-gantry-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32065938-custom-machining-gantry-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32065938_custom_machining_gantry.py",
+        "cleaned_rows": 16,
+        "raw_total_rows": 32772,
+        "verified_sha256": "f667d7ae26ae68494406d55b2ab6101517a413c50ef5b46dc2163bb2fa642c60"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "cannot insert source_file, already exists"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

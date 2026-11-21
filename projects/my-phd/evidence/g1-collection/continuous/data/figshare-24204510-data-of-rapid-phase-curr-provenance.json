@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-24204510-data-of-rapid-phase-curr",
+  "dataset_name": "Data of Rapid Phase Current Sampling in a Permanent Magnet Synchronous Motor Servo System Utilizing FMC Bus",
+  "doi": "10.6084/m9.figshare.24204510.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_of_Rapid_Phase_Current_Sampling_in_a_Permanent_Magnet_Synchronous_Motor_Servo_System_Utilizing_FMC_Bus/24204510",
+  "source_api_url": "https://api.figshare.com/v2/articles/24204510",
+  "access_date": "2026-11-21",
+  "round_number": 50,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "cobot_data.zip",
+      "download_url": "https://ndownloader.figshare.com/files/42478851",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/42478851/cobot_data.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T124123Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22cobot_data.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=09beb424e6483edf03a950ecb7ea6ffce7e427e4e89ed955b61925972de6c1bc",
+      "http_status": 200,
+      "bytes": 2257668,
+      "publisher_checksum": "md5:cf4283f758c99c16d968e7d38388e636",
+      "verified_md5": "cf4283f758c99c16d968e7d38388e636",
+      "verified_sha256": "d9ca7c67f8633acd4a85b9d4d0ef509c841582f5fdf66da95ec30ad052d42c7a"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-24204510-data-of-rapid-phase-curr",
+  "raw_total_bytes": 2257668,
+  "raw_total_rows": 206015,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-24204510-data-of-rapid-phase-curr-cleaned.csv",
+  "cleaned_csv_sha256": "7e609482d2451a12e787312b3d640a0c1e85f55b52ae55d321a06562ac223ed2",
+  "cleaned_rows": 13,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "cobot_data.zip::curFreqResTest_125208_200k_h743_20000hz_0.1a.csv": {
+      "0": 0,
+      "-0.0025270760525017977": 0,
+      "0.1": 0
+    },
+    "cobot_data.zip::curFreqResTest_233123_100kHz_h743_12500hz_0.1a.csv": {
+      "0": 0,
+      "-4.426003943081014e-05": 0,
+      "0.1": 0
+    },
+    "cobot_data.zip::curFreqResTest_233523_20kHz_h743_2500hz_0.1a.csv": {
+      "0": 0,
+      "-0.0031589651480317116": 0,
+      "0.1": 0
+    },
+    "cobot_data.zip::CurrentLoopResponseTime_FPGAADC.csv": {
+      "Time[s]": 0,
+      "BUSY": 0
+    },
+    "cobot_data.zip::CurrentLoopResponseTime_FPGAADC_withoutCurrentLoop.csv": {
+      "Time[s]": 0,
+      "BUSY": 0
+    }
+  },
+  "time_monotonicity": {
+    "cobot_data.zip::CurrentLoopResponseTime_FPGAADC.csv": {
+      "column": "Time[s]",
+      "numeric_samples": 100009,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 4.999999969612645e-08,
+      "median_step": 6.270000000030418e-06,
+      "max_step": 4.999000000016629e-05
+    },
+    "cobot_data.zip::CurrentLoopResponseTime_FPGAADC_withoutCurrentLoop.csv": {
+      "column": "Time[s]",
+      "numeric_samples": 100009,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 3.999999975690116e-08,
+      "median_step": 6.6024999999941825e-06,
+      "max_step": 5.0070000000346226e-05
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

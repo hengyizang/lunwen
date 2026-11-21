@@ -1,0 +1,14 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+cobot_data.zip::curFreqResTest_125208_200k_h743_20000hz_0.1a.csv,0,numeric,1999,1999,0,1999,50,25025,50000,50000,74975,99950,28860.3
+cobot_data.zip::curFreqResTest_125208_200k_h743_20000hz_0.1a.csv,-0.0025270760525017977,numeric,1999,1999,0,1999,-0.100431,-0.052083,0.00273865,3.76297e-05,0.0519293,0.102768,0.0545896
+cobot_data.zip::curFreqResTest_125208_200k_h743_20000hz_0.1a.csv,0.1,numeric,1999,1999,0,1537,-0.0951116,-0.0587839,8.17166e-08,1.15279e-09,0.0587839,0.0951117,0.0707461
+cobot_data.zip::curFreqResTest_233123_100kHz_h743_12500hz_0.1a.csv,0,numeric,1999,1999,0,1999,50,25025,50000,50000,74975,99950,28860.3
+cobot_data.zip::curFreqResTest_233123_100kHz_h743_12500hz_0.1a.csv,-4.426003943081014e-05,numeric,1999,1999,0,1999,-0.101234,-0.0562625,-0.000526815,-8.20429e-07,0.0583051,0.102286,0.0580491
+cobot_data.zip::curFreqResTest_233123_100kHz_h743_12500hz_0.1a.csv,0.1,numeric,1999,1999,0,887,-0.1,-0.0707107,5.1358e-08,1.05342e-08,0.0707107,0.1,0.0707461
+cobot_data.zip::curFreqResTest_233523_20kHz_h743_2500hz_0.1a.csv,0,numeric,1999,1999,0,1999,50,25025,50000,50000,74975,99950,28860.3
+cobot_data.zip::curFreqResTest_233523_20kHz_h743_2500hz_0.1a.csv,-0.0031589651480317116,numeric,1999,1999,0,1998,-0.0932302,-0.0625021,-0.000263681,6.04238e-05,0.0623181,0.0937942,0.0626113
+cobot_data.zip::curFreqResTest_233523_20kHz_h743_2500hz_0.1a.csv,0.1,numeric,1999,1999,0,887,-0.1,-0.0707107,5.1358e-08,1.05342e-08,0.0707107,0.1,0.0707461
+cobot_data.zip::CurrentLoopResponseTime_FPGAADC.csv,Time[s],numeric,100009,100009,0,100009,-0.125002,0.499963,1.12497,1.12498,1.74997,2.37497,0.721702
+cobot_data.zip::CurrentLoopResponseTime_FPGAADC.csv,BUSY,numeric,100009,100009,0,2,0,0,0,0.499995,1,1,0.500002
+cobot_data.zip::CurrentLoopResponseTime_FPGAADC_withoutCurrentLoop.csv,Time[s],numeric,100009,100009,0,100009,-0.125002,0.499961,1.12496,1.12497,1.74996,2.37496,0.7217
+cobot_data.zip::CurrentLoopResponseTime_FPGAADC_withoutCurrentLoop.csv,BUSY,numeric,100009,100009,0,2,0,0,0,0.499995,1,1,0.500002
