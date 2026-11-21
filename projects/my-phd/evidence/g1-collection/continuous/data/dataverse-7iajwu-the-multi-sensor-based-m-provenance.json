@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-7iajwu-the-multi-sensor-based-m",
+  "dataset_name": "The multi sensor-based machining signal fusion to compare the relative efficacy of machine learning based tool wear models",
+  "doi": "10.7910/dvn/7iajwu",
+  "landing_url": "https://doi.org/10.7910/DVN/7IAJWU",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/7IAJWU",
+  "access_date": "2026-11-21",
+  "round_number": 29,
+  "observed_license_metadata": "CC BY-NC 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "T5_Tool_wear_values_for_all_Experiments.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/6497925",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/7IAJWU/1834476ff85-ddb39221b5c3?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27T5_Tool_wear_values_for_all_Experiments.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095037Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d6f1a8e3c45a920d79fb7c981415251afa3d10d3590e8dc11254674e832408ca",
+      "http_status": 200,
+      "bytes": 213,
+      "publisher_checksum": "dataverse_original_md5:92e40ad3411ec5d3725ffc9bcb609252",
+      "verified_md5": "66a3d3f4efb9f8b77729a03c8970420a",
+      "verified_sha256": "6e2423c31e6756f367ddb57f01c00742519950235e8616411ce304c2306e6430"
+    },
+    {
+      "file": "T8_Tool_wear_values_for_all_Experiments.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/6498077",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/7IAJWU/18344771147-e39af9a6abc8?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27T8_Tool_wear_values_for_all_Experiments.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095038Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=f1f06350bbcaba4235cf2db66b23a0f231d984f75d510945eec087244c1401c9",
+      "http_status": 200,
+      "bytes": 215,
+      "publisher_checksum": "dataverse_original_md5:3f54ef3dcdbe49845d12e6e350706ae0",
+      "verified_md5": "70948cf1d485ce8571675b5acd252215",
+      "verified_sha256": "afe418f53a3bac71e5212121c893b0f40c1300bd2c3623fdcf69493494250e8d"
+    },
+    {
+      "file": "T7_Tool_wear_values_for_all_Experiments.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/6498084",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/7IAJWU/18344770cec-11f8a276dd66?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27T7_Tool_wear_values_for_all_Experiments.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095040Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=19e39249f05772bfad9adae2557798327edd6724c371e3844740754c8734e19e",
+      "http_status": 200,
+      "bytes": 216,
+      "publisher_checksum": "dataverse_original_md5:0bac0f95bedc5469f34bfc2cf5dba7ed",
+      "verified_md5": "af725fab1558ecc08aade7d8346bcfcf",
+      "verified_sha256": "beeab1a100fb0f4bfd1801ff0398df4eaecbb4a5afafcd261add6bc495334763"
+    },
+    {
+      "file": "T6_Tool_wear_values_for_all_Experiments.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/6498090",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/7IAJWU/183447707ef-7b3a126a4b2e?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27T6_Tool_wear_values_for_all_Experiments.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095041Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=e46630f2c2f00e4f26ac01b8588100d1a2b8a154b395ec614c1345acd8a905c4",
+      "http_status": 200,
+      "bytes": 217,
+      "publisher_checksum": "dataverse_original_md5:88bf77d984433f9193c6689e353f6dc2",
+      "verified_md5": "82ef68450e3987568d773c7d925c8306",
+      "verified_sha256": "736b4aff7ab10590fca76e8240a564bcf8de1359f7eb5eff6ea3fdc80ca40fdf"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-7iajwu-the-multi-sensor-based-m",
+  "raw_total_bytes": 861,
+  "raw_total_rows": 48,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-7iajwu-the-multi-sensor-based-m-cleaned.csv",
+  "cleaned_csv_sha256": "9a7860df0926bf239b7cfc7abbb7f5aff9c80a706fa33d7ba950a9e74272af99",
+  "cleaned_rows": 48,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "T5_Tool_wear_values_for_all_Experiments.tab": {
+      "#": 0,
+      "Tool Wear in (�m)": 0
+    },
+    "T8_Tool_wear_values_for_all_Experiments.tab": {
+      "#": 0,
+      "Tool Wear in (�m)": 0
+    },
+    "T7_Tool_wear_values_for_all_Experiments.tab": {
+      "#": 0,
+      "Tool Wear in (�m)": 0
+    },
+    "T6_Tool_wear_values_for_all_Experiments.tab": {
+      "#": 0,
+      "Tool Wear in (�m)": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

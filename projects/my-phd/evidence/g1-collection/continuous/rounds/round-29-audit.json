@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0",
+  "round": 29,
+  "completed_at": "2026-11-21T09:49:01Z",
+  "batch_label": "Broad Engineering R29: Smart_Manufacturing",
+  "base_head_sha": "ea827e899b5744d874c2c7c849b299f5f7f3ebcc",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 171,
+    "duplicates_skipped": 16,
+    "net_new": 155,
+    "new_reading_queue": 142,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "wire arc additive manufacturing",
+        "receipt_id": "20261121t094901z-openalex-f5ff9701db",
+        "request_url": "https://api.openalex.org/works?search=wire+arc+additive+manufacturing&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2ec0b3ac1bf09a6af7313dc47b14d1288edc9928532df35c8ced8c65648520c2",
+        "normalized_results_sha256": "cd3332b33d5ce68c3c0721dbdc43570d9dd1820c9d6f3ea87d707c469f91fbe6"
+      },
+      {
+        "provider": "crossref",
+        "query": "wire arc additive manufacturing",
+        "receipt_id": "20261121t094903z-crossref-f3ab1475ca",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=wire+arc+additive+manufacturing&rows=12",
+        "result_count": 12,
+        "response_sha256": "9cb8a82ae4654a60e6aff108ca39051722c4063dc114125027171200e6f45f36",
+        "normalized_results_sha256": "152378972b4a1a5f9bafa0aecc082bcacf7e35ac49448298883d79072664085f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "wire arc additive manufacturing",
+        "receipt_id": "20261121t094904z-europe-pmc-f8a1c38c6e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=wire+arc+additive+manufacturing&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "96f68dc85ae0efa747573dec06257367d578240cefec50574d95d78126ef73e0",
+        "normalized_results_sha256": "eb931ec5b876aa7f0b31ffd2d4bad5c7ed55b6701afa9455b7d426ec0643b8d0"
+      },
+      {
+        "provider": "hal",
+        "query": "wire arc additive manufacturing",
+        "receipt_id": "20261121t094915z-hal-32e5cee582",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=wire+arc+additive+manufacturing&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "06bb81383953e56b14a153cb81f4834e88c77293e7ec3d4045dfb5f0efaafe38",
+        "normalized_results_sha256": "441135c76215fa47814fb69a04901e7861d4d34c0905ddf6db26655b8372e73b"
+      },
+      {
+        "provider": "openalex",
+        "query": "directed energy deposition melt",
+        "receipt_id": "20261121t094917z-openalex-fd1d6ae26f",
+        "request_url": "https://api.openalex.org/works?search=directed+energy+deposition+melt&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d8ab22ce992935c91e0292251904bba3a0da9f7b687ed1a3dc6dc9ee345e6d62",
+        "normalized_results_sha256": "d958c603e9f4cec64155fa9aefa2c0b3c362970e5cb49fad78a1bfc829114d91"
+      },
+      {
+        "provider": "crossref",
+        "query": "directed energy deposition melt",
+        "receipt_id": "20261121t094919z-crossref-dd6d6696e3",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=directed+energy+deposition+melt&rows=12",
+        "result_count": 12,
+        "response_sha256": "a64a9fc53e9a809bd399ceb7a58d5ad829f316d1c1d2623ab4fcc5990ec90afe",
+        "normalized_results_sha256": "3a81969739a37573d7fafa11cd198578b9f19decb60daa530198fbb50229800a"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "directed energy deposition melt",
+        "receipt_id": "20261121t094920z-europe-pmc-6df5b565ea",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=directed+energy+deposition+melt&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "9fe5e2af3b7178bf45a88ba5e7aa2f2557f82efd2aa72343aec30045d0f5fcc2",
+        "normalized_results_sha256": "8e1911b34ba134ff067c0096eaeef3bbbca8bc79a5abf18256f0ac928fc0da84"
+      },
+      {
+        "provider": "hal",
+        "query": "directed energy deposition melt",
+        "receipt_id": "20261121t094928z-hal-03f1e2ffc5",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=directed+energy+deposition+melt&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "bf14d7aa8f793a8ec892988cb84e8fe2824b48db130e5d8723f6eb8edd55557d",
+        "normalized_results_sha256": "b50583a03aa6b2e081d2ba52b48a8c4b96c128bf76b768e1a56e695a20e03d8d"
+      },
+      {
+        "provider": "openalex",
+        "query": "CNC turning surface roughness",
+        "receipt_id": "20261121t094930z-openalex-76b157f574",
+        "request_url": "https://api.openalex.org/works?search=CNC+turning+surface+roughness&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e241122b4e75139937b4f030647a4a402d41a4f7a84d5bacc663ac0e9b32019f",
+        "normalized_results_sha256": "efb39f0db48b170c701fc5780b53c23779850938bda4c8ade21b3cb2a45bc200"
+      },
+      {
+        "provider": "crossref",
+        "query": "CNC turning surface roughness",
+        "receipt_id": "20261121t094931z-crossref-49659609c2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=CNC+turning+surface+roughness&rows=12",
+        "result_count": 12,
+        "response_sha256": "a2277169e7b3d446a6ee3d451e834d7465e077b264f5ec19c69d752850a1b33f",
+        "normalized_results_sha256": "df1ad8d59a4f557ac4e452ebc2ecc29f1d94895f432b9bda6fcb726d747f6ffa"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "CNC turning surface roughness",
+        "receipt_id": "20261121t094932z-europe-pmc-c2e3ec444e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=CNC+turning+surface+roughness&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "31f14e2446bf24e0e100ebd72f2602129a68c81b3e0c320e92d625f2c3da27a3",
+        "normalized_results_sha256": "1e65b4855f89c6adacd578dbb7f9ccfdfedd907c22a81b0f90df430720b8766f"
+      },
+      {
+        "provider": "hal",
+        "query": "CNC turning surface roughness",
+        "receipt_id": "20261121t094940z-hal-f376a3f415",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=CNC+turning+surface+roughness&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "df2ccb9532d493845d6d53046b2d37bb8614e4e375846ca58179dc537d21ec64",
+        "normalized_results_sha256": "e190233e814a31329e63121b62a913d291522341da2dec38268238a49d1268ec"
+      },
+      {
+        "provider": "openalex",
+        "query": "ultrasonic spot welding monitoring",
+        "receipt_id": "20261121t094941z-openalex-8960ffa9d9",
+        "request_url": "https://api.openalex.org/works?search=ultrasonic+spot+welding+monitoring&per-page=12",
+        "result_count": 12,
+        "response_sha256": "075388766a2ab6e9ba283376df648497324d40226a413ec83dc7acb8bf380742",
+        "normalized_results_sha256": "165eede40d831e3f318cd88f99b7963e338e16a154a98f13c4a06ee7bd8a8a36"
+      },
+      {
+        "provider": "crossref",
+        "query": "ultrasonic spot welding monitoring",
+        "receipt_id": "20261121t094943z-crossref-31db3aa8f5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=ultrasonic+spot+welding+monitoring&rows=12",
+        "result_count": 12,
+        "response_sha256": "00ce3e494340e2217e67dba1f16ba954b9903d9398db1291201b2a0331c1ad33",
+        "normalized_results_sha256": "7dfc39765bb3ad3db501ecb4c66719cb3f8f7885a875cc689b20e1c020acd7fd"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "ultrasonic spot welding monitoring",
+        "receipt_id": "20261121t094944z-europe-pmc-f10fbb3984",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=ultrasonic+spot+welding+monitoring&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1d35af056cb9fd8da706db5277f644fe3a2e0e700822c16716fe65eaa2e79026",
+        "normalized_results_sha256": "0da80fb95190e8424a10bea51e8ebe9756f65a522cf2f12aacfeb75b40ed14c6"
+      },
+      {
+        "provider": "hal",
+        "query": "ultrasonic spot welding monitoring",
+        "receipt_id": "20261121t094958z-hal-6df414c6fc",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=ultrasonic+spot+welding+monitoring&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 2,
+        "response_sha256": "efa1e7d5247925232ab19b0a94d8659a1a7390b4475fee3f1eee2b43e1419e6a",
+        "normalized_results_sha256": "fa11b7a411e65e61d9741afdf5a937ea2aaf7e29bd7cea5d10abcba573805d5e"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/app16041783",
+        "receipt_id": "20261121t094959z-opencitations-2035a091c7",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.bmt.2025.100121",
+        "receipt_id": "20261121t095001z-opencitations-8c75159998",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 162,
+    "off_topic_filtered": 86,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 37,
+    "net_new": 39,
+    "provider_statuses": [
+      {
+        "query": "visual servoing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "visual servoing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "visual servoing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "visual servoing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "visual servoing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "lidar odometry",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lidar odometry",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "lidar odometry",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lidar odometry",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "lidar odometry",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "radar odometry",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "radar odometry",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "radar odometry",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "radar odometry",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "radar odometry",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hand-eye calibration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hand-eye calibration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hand-eye calibration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hand-eye calibration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hand-eye calibration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 11,
+    "cleaned": [
+      {
+        "slug": "dataverse-xtpysv-light-detection-and-rang",
+        "key": "dataverse:10.7910/dvn/xtpysv",
+        "dataset_name": "Light detection and ranging (lidar) point clouds collected from unmanned aircraft systems",
+        "doi": "10.7910/dvn/xtpysv",
+        "landing_url": "https://doi.org/10.7910/DVN/XTPYSV",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-xtpysv-light-detection-and-rang-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-xtpysv-light-detection-and-rang-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_xtpysv_light_detection_and_rang.py",
+        "cleaned_rows": 39,
+        "raw_total_rows": 11117,
+        "verified_sha256": "0be07b5056c70937857c15e292402f341833a987379c919a0f9d9ec6f606e01a"
+      },
+      {
+        "slug": "dataverse-4zoizl-replication-data-for-win",
+        "key": "dataverse:10.7910/dvn/4zoizl",
+        "dataset_name": "Replication Data for: Wing wear reduces bumblebee flight performance in a dynamic obstacle course",
+        "doi": "10.7910/dvn/4zoizl",
+        "landing_url": "https://doi.org/10.7910/DVN/4ZOIZL",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-4zoizl-replication-data-for-win-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-4zoizl-replication-data-for-win-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_4zoizl_replication_data_for_win.py",
+        "cleaned_rows": 16,
+        "raw_total_rows": 2003,
+        "verified_sha256": "3ece0c7ef9f46f0e0bdfa3f1c034e5fafc60ef8e68d3e6043a9206c032273a4e"
+      },
+      {
+        "slug": "dataverse-7iajwu-the-multi-sensor-based-m",
+        "key": "dataverse:10.7910/dvn/7iajwu",
+        "dataset_name": "The multi sensor-based machining signal fusion to compare the relative efficacy of machine learning based tool wear models",
+        "doi": "10.7910/dvn/7iajwu",
+        "landing_url": "https://doi.org/10.7910/DVN/7IAJWU",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-7iajwu-the-multi-sensor-based-m-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-7iajwu-the-multi-sensor-based-m-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_7iajwu_the_multi_sensor_based_m.py",
+        "cleaned_rows": 48,
+        "raw_total_rows": 48,
+        "verified_sha256": "6e2423c31e6756f367ddb57f01c00742519950235e8616411ce304c2306e6430"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

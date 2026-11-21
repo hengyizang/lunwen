@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-4zoizl-replication-data-for-win",
+  "dataset_name": "Replication Data for: Wing wear reduces bumblebee flight performance in a dynamic obstacle course",
+  "doi": "10.7910/dvn/4zoizl",
+  "landing_url": "https://doi.org/10.7910/DVN/4ZOIZL",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/4ZOIZL",
+  "access_date": "2026-11-21",
+  "round_number": 29,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "SYM_trial45.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/2801628",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4ZOIZL/153fdbc46b3-46c69c9694ec?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27SYM_trial45.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095024Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=c44e6ad38c0d42e15ed0c7c44a5767d88996a599f3adba4b56d2422cbab412aa",
+      "http_status": 200,
+      "bytes": 23627,
+      "publisher_checksum": "dataverse_original_md5:c54e18db20bb869ebb26444b88878f17",
+      "verified_md5": "89d6873aeac95e344ce9faf8eecd553b",
+      "verified_sha256": "3ece0c7ef9f46f0e0bdfa3f1c034e5fafc60ef8e68d3e6043a9206c032273a4e"
+    },
+    {
+      "file": "SYM_trial10.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/2801622",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4ZOIZL/153fdbbdb52-41a928ee8d97?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27SYM_trial10.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095026Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=11ba5b88d09559860581292f9555cd11c8f6e35f757236982a3edecdec30e9b7",
+      "http_status": 200,
+      "bytes": 25491,
+      "publisher_checksum": "dataverse_original_md5:7ca0a7d4271109b9289d899d5221265e",
+      "verified_md5": "603abd9d04dfb3f34b5b002e94c9213a",
+      "verified_sha256": "63658796ee7ce2a6d0eb5544721e5d85d6c3df45afb50c2fcd34a6cc2f061ec2"
+    },
+    {
+      "file": "SYM_trial12.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/2801630",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4ZOIZL/153fdbbe057-13853c4709e0?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27SYM_trial12.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095028Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=4259f4e878003969b41cd2c06a15d88d861436d90ac169698b82120e2d6148c9",
+      "http_status": 200,
+      "bytes": 25974,
+      "publisher_checksum": "dataverse_original_md5:ff74830dbdba1d2805333f5a53261c6c",
+      "verified_md5": "2ed55b819e9532eff8fb3a786f7b9ac2",
+      "verified_sha256": "c9dc6d4bd4616bd36f748844d81e69752a1782565e0ddfca2253aff15e8a24f5"
+    },
+    {
+      "file": "SYM_trial46.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/2801632",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/4ZOIZL/153fdbc4a42-97e6489b713c?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27SYM_trial46.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T095029Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=385b2a3dad4a2c3f717cd28b9096aefae5e2ce847aca93c0106d9a1af064f69c",
+      "http_status": 200,
+      "bytes": 30554,
+      "publisher_checksum": "dataverse_original_md5:3fc6818dbc3b0bd70d116a6af5343d3b",
+      "verified_md5": "b1f98a19604f731d152af7c5630e9295",
+      "verified_sha256": "aef16a3e28717673014a97f6c8b72c139130026dda55d4b84a3e035a12ad95e3"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-4zoizl-replication-data-for-win",
+  "raw_total_bytes": 105646,
+  "raw_total_rows": 2003,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-4zoizl-replication-data-for-win-cleaned.csv",
+  "cleaned_csv_sha256": "8a9e73ff3a0f1972a0cbf87507aaf143c4fb2b58703f8ed93248fe01aa7164e9",
+  "cleaned_rows": 16,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "SYM_trial45.tab": {
+      "pt1_X": 0,
+      "pt1_Y": 0,
+      "pt1_Z": 0,
+      "include_frame": 0
+    },
+    "SYM_trial10.tab": {
+      "pt1_X": 0,
+      "pt1_Y": 0,
+      "pt1_Z": 0,
+      "include_frame": 0
+    },
+    "SYM_trial12.tab": {
+      "pt1_X": 0,
+      "pt1_Y": 0,
+      "pt1_Z": 0,
+      "include_frame": 0
+    },
+    "SYM_trial46.tab": {
+      "pt1_X": 0,
+      "pt1_Y": 0,
+      "pt1_Z": 0,
+      "include_frame": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

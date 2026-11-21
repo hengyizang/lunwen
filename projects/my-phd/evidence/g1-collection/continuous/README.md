@@ -7,25 +7,25 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：28
-- **最近更新时间 (UTC)**：2026-11-21T09:44:03Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2994 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1414 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2595 条
-- **累计已完成确定性清洗数据集**：57 个
+- **已完成轮次**：29
+- **最近更新时间 (UTC)**：2026-11-21T09:49:01Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：3149 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1453 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2737 条
+- **累计已完成确定性清洗数据集**：60 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 124 | 56 |
-| `R2_Aerial_Actuator` | 387 | 49 |
-| `R5_MultiRobot_Comm` | 242 | 41 |
-| `Robotics_Embodied` | 1040 | 442 |
-| `Mechanical_Physics_AI` | 912 | 635 |
-| `Mechatronics_PHM_Control` | 746 | 430 |
-| `Smart_Manufacturing` | 251 | 283 |
+| `R1_Force_Contact` | 124 | 57 |
+| `R2_Aerial_Actuator` | 387 | 50 |
+| `R5_MultiRobot_Comm` | 242 | 45 |
+| `Robotics_Embodied` | 1044 | 458 |
+| `Mechanical_Physics_AI` | 934 | 648 |
+| `Mechatronics_PHM_Control` | 755 | 469 |
+| `Smart_Manufacturing` | 399 | 284 |
 | `Smart_Factory_DigitalTwin` | 155 | 69 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 246 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-33322635-e-t-simulation-dataset` | E-T simulation dataset | 10.6084/m9.figshare.33322635.v1 | `cleaned_rows` | 377 | `a503fccc71a6` | [CSV](data/figshare-33322635-e-t-simulation-dataset-cleaned.csv) · [JSON](data/figshare-33322635-e-t-simulation-dataset-provenance.json) · [PY](data/derive_figshare_33322635_e_t_simulation_dataset.py) |
-| `dataverse-kkdxdk-mmwalk-dataset` | mmWalk Dataset | 10.7910/dvn/kkdxdk | `cleaned_rows` | 50 | `82d91d6cf851` | [CSV](data/dataverse-kkdxdk-mmwalk-dataset-cleaned.csv) · [JSON](data/dataverse-kkdxdk-mmwalk-dataset-provenance.json) · [PY](data/derive_dataverse_kkdxdk_mmwalk_dataset.py) |
-| `dataverse-lccllw-multisensegolf-a-multimo` | MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Mo... | 10.7910/dvn/lccllw | `summary_table` | 42 | `026fcf22978f` | [CSV](data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv) · [JSON](data/dataverse-lccllw-multisensegolf-a-multimo-provenance.json) · [PY](data/derive_dataverse_lccllw_multisensegolf_a_multimo.py) |
 | `dataverse-qgkeuw-dataset-for-influence-of` | Dataset for Influence of Visual and Haptic Feedback on the Detectio... | 10.7910/dvn/qgkeuw | `summary_table` | 150 | `5a748c1b718e` | [CSV](data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv) · [JSON](data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json) · [PY](data/derive_dataverse_qgkeuw_dataset_for_influence_of.py) |
 | `figshare-32025606-snu-planetary-gearbox-da` | SNU Planetary Gearbox Dataset | 10.6084/m9.figshare.32025606.v5 | `cleaned_rows` | 28 | `e4e0dcbb38b8` | [CSV](data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv) · [JSON](data/figshare-32025606-snu-planetary-gearbox-da-provenance.json) · [PY](data/derive_figshare_32025606_snu_planetary_gearbox_da.py) |
 | `figshare-34002057-clustering-enhanced-mcnn` | Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under M... | 10.6084/m9.figshare.34002057.v2 | `summary_table` | 20 | `3ae2b31aaf2d` | [CSV](data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv) · [JSON](data/figshare-34002057-clustering-enhanced-mcnn-provenance.json) · [PY](data/derive_figshare_34002057_clustering_enhanced_mcnn.py) |
@@ -71,12 +68,14 @@
 | `dataverse-xeaypq-slide-block-to-target` | slide_block_to_target | 10.7910/dvn/xeaypq | `summary_table` | 2 | `7d93310b0f77` | [CSV](data/dataverse-xeaypq-slide-block-to-target-cleaned.csv) · [JSON](data/dataverse-xeaypq-slide-block-to-target-provenance.json) · [PY](data/derive_dataverse_xeaypq_slide_block_to_target.py) |
 | `dataverse-0iwofy-replication-data-for-dig` | Replication Data for Digital annexation: How geodata, training corp... | 10.7910/dvn/0iwofy | `summary_table` | 31 | `82250b703876` | [CSV](data/dataverse-0iwofy-replication-data-for-dig-cleaned.csv) · [JSON](data/dataverse-0iwofy-replication-data-for-dig-provenance.json) · [PY](data/derive_dataverse_0iwofy_replication_data_for_dig.py) |
 | `dataverse-kb7auc-replication-data-for-a-w` | Replication Data for: A Wearable Wireless Sensor Network for Human... | 10.7910/dvn/kb7auc | `summary_table` | 64 | `f6438da5d84b` | [CSV](data/dataverse-kb7auc-replication-data-for-a-w-cleaned.csv) · [JSON](data/dataverse-kb7auc-replication-data-for-a-w-provenance.json) · [PY](data/derive_dataverse_kb7auc_replication_data_for_a_w.py) |
+| `dataverse-xtpysv-light-detection-and-rang` | Light detection and ranging (lidar) point clouds collected from unm... | 10.7910/dvn/xtpysv | `summary_table` | 39 | `0be07b5056c7` | [CSV](data/dataverse-xtpysv-light-detection-and-rang-cleaned.csv) · [JSON](data/dataverse-xtpysv-light-detection-and-rang-provenance.json) · [PY](data/derive_dataverse_xtpysv_light_detection_and_rang.py) |
+| `dataverse-4zoizl-replication-data-for-win` | Replication Data for: Wing wear reduces bumblebee flight performanc... | 10.7910/dvn/4zoizl | `summary_table` | 16 | `3ece0c7ef9f4` | [CSV](data/dataverse-4zoizl-replication-data-for-win-cleaned.csv) · [JSON](data/dataverse-4zoizl-replication-data-for-win-provenance.json) · [PY](data/derive_dataverse_4zoizl_replication_data_for_win.py) |
+| `dataverse-7iajwu-the-multi-sensor-based-m` | The multi sensor-based machining signal fusion to compare the relat... | 10.7910/dvn/7iajwu | `cleaned_rows` | 48 | `6e2423c31e67` | [CSV](data/dataverse-7iajwu-the-multi-sensor-based-m-cleaned.csv) · [JSON](data/dataverse-7iajwu-the-multi-sensor-based-m-provenance.json) · [PY](data/derive_dataverse_7iajwu_the_multi_sensor_based_m.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 4 | 2026-11-21T07:45:57Z | Broad Engineering R4: R5_MultiRobot_Comm | +93 | +92 | +2 | [round-04-audit.json](rounds/round-04-audit.json) |
 | 5 | 2026-11-21T07:49:14Z | Broad Engineering R5: Robotics_Embodied | +118 | +112 | +3 | [round-05-audit.json](rounds/round-05-audit.json) |
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
 | 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
@@ -101,3 +100,4 @@
 | 26 | 2026-11-21T09:34:02Z | Broad Engineering R26: Mechanical_Physics_AI | +202 | +62 | +2 | [round-26-audit.json](rounds/round-26-audit.json) |
 | 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
 | 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
+| 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
