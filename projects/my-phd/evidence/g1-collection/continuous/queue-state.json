@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 17,
-  "total_new_literature": 1523,
+  "round_number": 18,
+  "total_new_literature": 1603,
   "total_new_datasets": 872,
-  "total_new_reading_queue": 1393,
+  "total_new_reading_queue": 1472,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -34,7 +34,10 @@
     "figshare:34748238",
     "dataverse:10.7910/dvn/j6ktrs",
     "dataverse:10.7910/dvn/qhfhyc",
-    "dataverse:10.7910/dvn/sgjlza"
+    "dataverse:10.7910/dvn/sgjlza",
+    "figshare:34691808",
+    "figshare:35038195",
+    "figshare:33322635"
   ],
   "cleaned_datasets_meta": [
     {
@@ -456,6 +459,48 @@
       "cleaned_rows": 358,
       "raw_total_rows": 358,
       "verified_sha256": "55f52591a1d071e1978bd3535a19a4edd4d84ec81078b35dd053142803eed2cb"
+    },
+    {
+      "slug": "figshare-34691808-dataset-of-assessing-the",
+      "key": "figshare:34691808",
+      "dataset_name": "Dataset of Assessing the Role of Robotic Process Automation in Building Resilience in Supply Chains and Sustainable Growth",
+      "doi": "10.6084/m9.figshare.34691808.v1",
+      "landing_url": "https://figshare.com/articles/dataset/Dataset_of_Assessing_the_Role_of_Robotic_Process_Automation_in_Building_Resilience_in_Supply_Chains_and_Sustainable_Growth/34691808",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34691808-dataset-of-assessing-the-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-34691808-dataset-of-assessing-the-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34691808_dataset_of_assessing_the.py",
+      "cleaned_rows": 146,
+      "raw_total_rows": 146,
+      "verified_sha256": "398717537b871f0c47293a366312537ca1fab96c22f3b67bfb4c7bd033fd761c"
+    },
+    {
+      "slug": "figshare-35038195-data-sheet-2-multimodal",
+      "key": "figshare:35038195",
+      "dataset_name": "Data Sheet 2_Multimodal nondestructive evaluation for structural assessment of composite wind turbine blades.zip",
+      "doi": "10.3389/fmech.2026.2040645.s001",
+      "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_2_Multimodal_nondestructive_evaluation_for_structural_assessment_of_composite_wind_turbine_blades_zip/35038195",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35038195-data-sheet-2-multimodal-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-35038195-data-sheet-2-multimodal-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35038195_data_sheet_2_multimodal.py",
+      "cleaned_rows": 29,
+      "raw_total_rows": 359,
+      "verified_sha256": "8d960eeec025d2fbc28e17dd985a2915349ff90d2ae00ce8c4e3c150faabbbc1"
+    },
+    {
+      "slug": "figshare-33322635-e-t-simulation-dataset",
+      "key": "figshare:33322635",
+      "dataset_name": "E-T simulation dataset",
+      "doi": "10.6084/m9.figshare.33322635.v1",
+      "landing_url": "https://figshare.com/articles/dataset/E-T_simulation_dataset/33322635",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-33322635-e-t-simulation-dataset-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-33322635-e-t-simulation-dataset-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_33322635_e_t_simulation_dataset.py",
+      "cleaned_rows": 377,
+      "raw_total_rows": 377,
+      "verified_sha256": "a503fccc71a600f74d31bd076d5dc64e68498b32f28002905192c46b5e534de4"
     }
   ],
   "snowballed_dois": [
@@ -480,6 +525,8 @@
     "10.1109/robosoft60065.2024.10521997",
     "10.1109/robosoft63089.2025.11020810",
     "10.1109/tase.2025.3634193",
+    "10.18178/ijmerr.15.1.65-79",
+    "10.2139/ssrn.7447982",
     "10.3390/machines12090658",
     "10.3390/machines13080659",
     "10.3390/s24165441",
@@ -644,9 +691,18 @@
       "net_new_datasets": 0,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 18,
+      "completed_at": "2026-11-21T08:54:12Z",
+      "batch_label": "Broad Engineering R18: Mechanical_Physics_AI (2026)",
+      "net_new_literature": 80,
+      "net_new_datasets": 0,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:49:03Z",
+  "updated_at": "2026-11-21T08:54:12Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -654,12 +710,12 @@
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 170,
-    "Mechanical_Physics_AI": 425,
-    "Mechatronics_PHM_Control": 387,
+    "Mechanical_Physics_AI": 501,
+    "Mechatronics_PHM_Control": 399,
     "Robotics_Embodied": 528,
-    "R5_MultiRobot_Comm": 147,
+    "R5_MultiRobot_Comm": 148,
     "R1_Force_Contact": 68,
-    "Smart_Manufacturing": 198,
+    "Smart_Manufacturing": 200,
     "Smart_Factory_DigitalTwin": 140
   },
   "domain_counts_datasets": {
@@ -746,25 +802,39 @@
     "figshare:33160262",
     "figshare:33160286",
     "figshare:33163973",
+    "figshare:33196569",
+    "figshare:33335799",
     "figshare:33938336",
+    "figshare:34001730",
     "figshare:34215494",
     "figshare:34476954",
     "figshare:34723707",
     "figshare:34781844",
+    "figshare:34812915",
     "figshare:34883283",
     "figshare:34890892",
+    "figshare:34891273",
     "figshare:34921179",
     "figshare:34921191",
     "figshare:34921197",
     "figshare:34921200",
+    "figshare:34921548",
+    "figshare:34979800",
     "figshare:34981615",
     "figshare:34981618",
     "figshare:34981621",
     "figshare:34981624",
+    "figshare:34991773",
     "figshare:35002606",
     "figshare:35024770",
     "figshare:35036950",
+    "figshare:35037139",
+    "figshare:35038192",
     "figshare:35044672",
-    "figshare:35047093"
+    "figshare:35045617",
+    "figshare:35047093",
+    "figshare:35076112",
+    "figshare:35078402",
+    "figshare:35078405"
   ]
 }

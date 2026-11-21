@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0",
+  "round": 18,
+  "completed_at": "2026-11-21T08:54:12Z",
+  "batch_label": "Broad Engineering R18: Mechanical_Physics_AI (2026)",
+  "base_head_sha": "0339da2e2c6031e1d9d8d52daa04d93b4d27677c",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 131,
+    "duplicates_skipped": 51,
+    "net_new": 80,
+    "new_reading_queue": 79,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t085412z-arxiv-646c2a1535",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aphysics-informed+AND+all%3Aneural+AND+all%3Anetwork+AND+all%3Asolid+AND+all%3Amechanics%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "f4f96d718f685409a20f25d79a18ebdfcaefde956c6360f26a00d2daefdb0a39",
+        "normalized_results_sha256": "eca27144054592f031a6e387691bc504b04fd61a91187c25fbbd3f9752210030"
+      },
+      {
+        "provider": "openalex",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t085413z-openalex-e816c50b70",
+        "request_url": "https://api.openalex.org/works?search=physics-informed+neural+network+solid+mechanics&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "4410c5ac4a206d2299046cda991a153c160d4f07b349a2cf4f08f7f2e9ccd88e",
+        "normalized_results_sha256": "30821277243bcc148415a32ff00b4788debe857e647cacd986bd1d0d93326eb9"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "physics-informed neural network solid mechanics",
+        "receipt_id": "20261121t085414z-europe-pmc-e623969bc4",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=physics-informed+neural+network+solid+mechanics&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "8bd94ade3da5803a2d84d16e60a4f0030c59240289570825ef96e0a56d898095",
+        "normalized_results_sha256": "445d44bb1ed4a71d2889c6de70fef272ee35d9a16f5846eab51fc68fe3ae6d49"
+      },
+      {
+        "provider": "arxiv",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t085416z-arxiv-b35270b53d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aneural+AND+all%3Aoperator+AND+all%3Afinite+AND+all%3Aelement+AND+all%3Asurrogate%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "1a441cec6fe129a2f111f7501f12f984a15d9525d395dfa389fdfa8ec7b160fb",
+        "normalized_results_sha256": "3395c945fc5ff8d69b71ac631cc1b9475f276c4de9833a665cab7465b5ab37c7"
+      },
+      {
+        "provider": "openalex",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t085417z-openalex-50d064d975",
+        "request_url": "https://api.openalex.org/works?search=neural+operator+finite+element+surrogate&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "32f52a4d5587c5ee9bd4e91d0029bf5893f89d6960195355b19c7474a3ad2f15",
+        "normalized_results_sha256": "11993157f2b086fcd4abbdc35c3f6d242f304c8ee9c6fda01372ca59d4e866c2"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "neural operator finite element surrogate",
+        "receipt_id": "20261121t085418z-europe-pmc-fa89859b8f",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=neural+operator+finite+element+surrogate&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "6be5642ec159f4341809dd6a307a37d4381b12141e73505932612499d2704fd3",
+        "normalized_results_sha256": "1706ccad7e7629e641f6ec4fd9264329d248d994843bc16698091f681e2fe1cf"
+      },
+      {
+        "provider": "arxiv",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t085424z-arxiv-9b0876e943",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Atopology+AND+all%3Aoptimization+AND+all%3Adeep+AND+all%3Alearning+AND+all%3Amechanics%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "9503791d272dec8115cdbb465a9a320f8c2804aaf0d9efad00ff18c2048d4e36",
+        "normalized_results_sha256": "5549b797f65c05f112fb8d606c73f477eaeee566394e4a509d57ab7560f8c269"
+      },
+      {
+        "provider": "openalex",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t085424z-openalex-4063455ad4",
+        "request_url": "https://api.openalex.org/works?search=topology+optimization+deep+learning+mechanics&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "4f992cb480faf1ac8a172f72559a8cd5bed14133b8012d4f28728cebf2170ec5",
+        "normalized_results_sha256": "4a11633c9f782e1626b2f11e521aca0b82c17b47981999e6636e5e168092f2a3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t085426z-europe-pmc-fd72f0a106",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=topology+optimization+deep+learning+mechanics&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "7d6d4c6c7e1b15e07d0d6c938fef02936e6d41306eb33078dcf018f7092bbb1d",
+        "normalized_results_sha256": "c08ae8e8acd61be9981a8b51cfd52f918b003c1aa1a1e1f130bbb4b24c65dca2"
+      },
+      {
+        "provider": "arxiv",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t085434z-arxiv-d95bda5edb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Afatigue+AND+all%3Alife+AND+all%3Aprediction+AND+all%3Amachine+AND+all%3Alearning%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "e221d63e478d5aa81478f01fc65b147e77a19aa05b1ccb439ed9464dcf2cfa29",
+        "normalized_results_sha256": "a48c31cec744f731d5c7a95a8cc6e0af74b65e92ee3d1a849b35d7a69e1a8135"
+      },
+      {
+        "provider": "openalex",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t085435z-openalex-b119be3da3",
+        "request_url": "https://api.openalex.org/works?search=fatigue+life+prediction+machine+learning&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "191bd2dbeb7c436169befa01b32404475689a2f2482f7d5b7048515d94a52c9d",
+        "normalized_results_sha256": "7fe2c05fc330e7f2665985e73218e58157518d71439cdc76f006fe0bf83c4a8d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t085436z-europe-pmc-4adcd4dfcb",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=fatigue+life+prediction+machine+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1bf4cd79c5b1c334fdaf38d5179488a21d04e746021e8641a7a6002719c36518",
+        "normalized_results_sha256": "30133e0dde9ea2ca1008361ecc240c9afa0eebb654616341aaf90d996b69ff40"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.2139/ssrn.7447982",
+        "receipt_id": "20261121t085438z-opencitations-11bdd3c110",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.18178/ijmerr.15.1.65-79",
+        "receipt_id": "20261121t085439z-opencitations-b1f2dc5944",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 184,
+    "off_topic_filtered": 79,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 105,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "chatter detection",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "chatter detection",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "chatter detection",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "chatter detection",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "tribology wear",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tribology wear",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tribology wear",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cfd surrogate",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      }
+    ],
+    "probed_for_cleaning": 18,
+    "cleaned": [
+      {
+        "slug": "figshare-34691808-dataset-of-assessing-the",
+        "key": "figshare:34691808",
+        "dataset_name": "Dataset of Assessing the Role of Robotic Process Automation in Building Resilience in Supply Chains and Sustainable Growth",
+        "doi": "10.6084/m9.figshare.34691808.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Dataset_of_Assessing_the_Role_of_Robotic_Process_Automation_in_Building_Resilience_in_Supply_Chains_and_Sustainable_Growth/34691808",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34691808-dataset-of-assessing-the-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34691808-dataset-of-assessing-the-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34691808_dataset_of_assessing_the.py",
+        "cleaned_rows": 146,
+        "raw_total_rows": 146,
+        "verified_sha256": "398717537b871f0c47293a366312537ca1fab96c22f3b67bfb4c7bd033fd761c"
+      },
+      {
+        "slug": "figshare-35038195-data-sheet-2-multimodal",
+        "key": "figshare:35038195",
+        "dataset_name": "Data Sheet 2_Multimodal nondestructive evaluation for structural assessment of composite wind turbine blades.zip",
+        "doi": "10.3389/fmech.2026.2040645.s001",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_2_Multimodal_nondestructive_evaluation_for_structural_assessment_of_composite_wind_turbine_blades_zip/35038195",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35038195-data-sheet-2-multimodal-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-35038195-data-sheet-2-multimodal-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35038195_data_sheet_2_multimodal.py",
+        "cleaned_rows": 29,
+        "raw_total_rows": 359,
+        "verified_sha256": "8d960eeec025d2fbc28e17dd985a2915349ff90d2ae00ce8c4e3c150faabbbc1"
+      },
+      {
+        "slug": "figshare-33322635-e-t-simulation-dataset",
+        "key": "figshare:33322635",
+        "dataset_name": "E-T simulation dataset",
+        "doi": "10.6084/m9.figshare.33322635.v1",
+        "landing_url": "https://figshare.com/articles/dataset/E-T_simulation_dataset/33322635",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-33322635-e-t-simulation-dataset-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-33322635-e-t-simulation-dataset-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_33322635_e_t_simulation_dataset.py",
+        "cleaned_rows": 377,
+        "raw_total_rows": 377,
+        "verified_sha256": "a503fccc71a600f74d31bd076d5dc64e68498b32f28002905192c46b5e534de4"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+        "url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
