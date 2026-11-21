@@ -1,0 +1,123 @@
+{
+  "title": "Operating ITS-G5 DSRC over Licensed and Unlicensed Bands: A City-Scale Performance Evaluation",
+  "landing": "https://doi.org/10.5523/bris.eupowp7h3jl525yxhm3521f57",
+  "doi": "10.5523/bris.eupowp7h3jl525yxhm3521f57",
+  "authors": [
+    "Robert Piechocki",
+    "Ioannis Mavromatis",
+    "Andrea Tassi"
+  ],
+  "release": "Bristol University, issued 28 March 2019. Four publicly indexed trial days 11, 13, 15 and 18 February 2019.",
+  "checked_utc": "2026-11-21",
+  "rights": "Publicly downloadable from the University of Bristol. No dataset license specified in the DataCite rightsList, source readme or Bristol Pure dataset display checked. The separate MATLAB reference-code repository declares GPLv3. This catalog supplies independently computed aggregates, source URLs and digests. No raw location, packet payload or device address is redistributed.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5523/bris.eupowp7h3jl525yxhm3521f57",
+      "Operating ITS-G5 DSRC over Licensed and Unlicensed Bands: A City-Scale Performance Evaluation",
+      "A Dataset of Full-Stack ITS-G5 DSRC Communications over Licensed and Unlicensed Bands Using a Large-Scale Urban Testbed",
+      "1903.10289",
+      "10.1016/j.dib.2019.104368",
+      "1904.00464",
+      "v2x-dev/ITS-G5_trials"
+    ],
+    "matches": [],
+    "paths": 1030,
+    "archive_members": 301,
+    "early_catalogue": true,
+    "method": "NFKD/casefold alphanumeric matching of DOI, title and aliases over all evidence files, expanded gzip and tar members, and the early baseline."
+  },
+  "queries": [
+    "DataCite titles.title:(ITS-G5); followed the arXiv:1903.10289 data article to its dataset DOI, source data index and authors’ MATLAB code.",
+    "Additional discovery searches at DataCite for vehicular communications, ITS-G5 field measurements and DSRC packet datasets, GitHub repository search for ITS G5 dataset and USDOT Socrata catalog for basic safety message; narrowing criterion was actual transmit/receive traces at distinct mobile endpoints."
+  ],
+  "registry": {
+    "url": "https://api.datacite.org/dois/10.5523/bris.eupowp7h3jl525yxhm3521f57",
+    "bytes": 8783,
+    "sha256": "603d51ccd33f2d2a44ca5eacd1083b49bbcc2a616cb438211186543ff8985f1c"
+  },
+  "repository": {
+    "url": "https://research-information.bris.ac.uk/en/datasets/operating-its-g5-dsrc-over-licensed-and-unlicensed-bands-a-city-s/",
+    "bytes": 28008,
+    "sha256": "033f70ec68822a9e0949793fb78b0bb0820732bc308d37858d405f8e906c8f22"
+  },
+  "readme": {
+    "url": "https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/readme.txt",
+    "bytes": 14223,
+    "sha256": "ffdfb43153758b91646cb249f6668c45014d34d6a8a9c6ba8d97a6ab5eec7231"
+  },
+  "directories": [
+    {
+      "url": "https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/importedData/11022019/",
+      "bytes": 9849,
+      "sha256": "d9e68c783638515dc8834027754eb21252784aa42b51d3cee9f8d4baf6409994"
+    },
+    {
+      "url": "https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/importedData/13022019/",
+      "bytes": 9846,
+      "sha256": "6605e5c54b3b063689670ac6821d36114a032ced06fd823932eafec0ab1809ad"
+    },
+    {
+      "url": "https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/importedData/15022019/",
+      "bytes": 8694,
+      "sha256": "f01ace1bec51eb0958fd0dfb476902f7d291ff9ed0cfa33f5002db5b24839f39"
+    },
+    {
+      "url": "https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/importedData/18022019/",
+      "bytes": 9843,
+      "sha256": "310fa2e3a8da5f1989d82422837fd8105742e6e4de4c630b27e0252753778473"
+    }
+  ],
+  "data_files": "The directory and exact filename construct each URL as https://data.bris.ac.uk/datasets/eupowp7h3jl525yxhm3521f57/importedData/{day}/{file}. All 186 complete files are individually sized and hashed in bristol-files.csv. Each sampled raw source URL and corresponding first-262144-byte SHA-256 is in bristol-raw-prefixes.csv.",
+  "paper": {
+    "doi": "10.1016/j.dib.2019.104368",
+    "version": "arXiv:1903.10289v4",
+    "text": {
+      "url": "https://arxiv.org/pdf/1903.10289v4",
+      "bytes": 10235052,
+      "sha256": "68a0a8424480030b6de761ede19f2b1d1d26fef46cef809337e931ba8ec5710b"
+    },
+    "locator": "Tables 1–3 and experimental design, especially writer-side timestamp definition and added sequence number; V2V evaluation description pp. 9–10. Table 2 distinguishes power label from carrier frequency."
+  },
+  "reference_code": {
+    "vehicle_map": {
+      "url": "https://github.com/v2x-dev/ITS-G5_trials/blob/c6e570575c40e43c2d59d7160580abe9a020ff5a/macAddresses/macAddresses.mat",
+      "bytes": 414,
+      "sha256": "3a138b4df49b802f9221cf939280e273e44143b884714d54399d364503879098"
+    },
+    "author_parser": {
+      "url": "https://github.com/v2x-dev/ITS-G5_trials/blob/c6e570575c40e43c2d59d7160580abe9a020ff5a/%2Bsrc/%2BtrialsProcessing/importfileTCPDumpLP.m",
+      "bytes": 4413,
+      "sha256": "0c6788b51584cc94bbd3000c1629d603aa42d8a2912b8b8a69268c53f674f3d7"
+    },
+    "pairing": {
+      "url": "https://github.com/v2x-dev/ITS-G5_trials/blob/c6e570575c40e43c2d59d7160580abe9a020ff5a/v2vInteractions/v2vInteractions.m",
+      "bytes": 6287,
+      "sha256": "ef6a90ff836bc7272be9e984e6b18f772fc916e587ffc3e29262c67470893b30"
+    }
+  },
+  "scope": "Two instrumented cars, four fixed sites, different radio configurations per trial day. All 62 TxCAM, 62 RxCAM and 62 tcpDump MATLAB results were decoded from the MCOS table subsystem. Receiver addresses and on-air source addresses were interpreted with the authors’ fixed hardware map. For sender-to-receiver pairing we analyze the vehicle-to-vehicle links where a sender and peer vehicle session were both available. Day 15 afternoon lacks a second vehicle session. RSUs contribute coverage counts only.",
+  "matching": "Group by date, morning/afternoon and HP/LP radio, then match the recorded source MAC and unique local sender sequence. All 15,947,015 transmitted rows in the 28 directed comparisons have a unique finite sequence within their sender session. Separate row counts from distinct sender-sequence counts for repeated capture entries. Each of the two receiver representations may omit events. Application timestamps are separately logged values and should not be substituted for actual radio arrival. The capture hardware/OS and vehicle-side transmitter clocks have no independently validated absolute offset in this comparison. Aggregate time diagnostics are grouped by link.",
+  "findings": [
+    "Across all 186 MATLAB files there are 83,320,086 TX, 10,728,021 application RX and 10,626,852 packet-capture rows. In the 28 matched directed V2V sessions, 915,544 distinct sent sequences appeared in both receiver representations, 666 only in the application table and 23,442 only in the packet table. 15,007,363 sent sequences were absent from both peer tables. These counts include times with no radio contact.",
+    "The capture table contains 939,455 rows matchable by source and sequence. 938,985 have sender/receiver encapsulated coordinates within one 10^-7-degree unit on each axis. Capture time minus sender-side timestamp is negative on 12,230 rows. The two opposite links on 15 February LP morning have median differences −101.708 and +108.538 ms. Their signs constrain clock interpretation. Offset, propagation and processing are unresolved.",
+    "Only five of the 916,210 matched receive-application rows have an exact millisecond timestamp equal to the sender record. A join requiring equal timestamps would miss nearly all matches. A missing sender timestamp in one 13 February HP afternoon file is excluded from the co-logging duration check and is recorded separately.",
+    "In each of the 30 raw application log prefixes every complete transmit record has a different StationID, while the physical source hardware is fixed within that trial file. Per-prefix StationID distinct counts sum to 15,419. A stable-StationID assumption would fragment transmitter time series. Raw source fragments cover the beginning of each session, a deterministic integrity sample."
+  ],
+  "prefix_check": {
+    "TxCAM_raw_complete_rows": 15419,
+    "TxCAM_same_seq_time_coords_and_source_in_mat": 15419,
+    "RxCAM_raw_complete_rows": 16365,
+    "RxCAM_same_seq_time_coords_and_source_in_mat": 16365,
+    "distinct_station_ids_in_raw_tx_prefix": 15419,
+    "capture_complete_frames": 46924,
+    "capture_geo_data_frames": 46902,
+    "capture_same_device_and_microsecond_in_mat": 23316
+  },
+  "prefix_scope": "First 256 KiB of every one of the 30 vehicle radio/session text files and every corresponding PCAP; 60 verified HTTP-206 ranges. Radiotap/802.11 no-DS data with GeoNetworking EtherType is identified directly. Exact capture-time plus radio-address presence in the derived table is a representation-consistency check; not all such raw frames necessarily contain successfully decoded CAMs. Location or device records are not included in the derivatives.",
+  "limits": "Vehicle session denominators include geographic separation, inactive receiver periods and recording/processing dropout. Restricting to time within the peer’s first and last finite TX record is only a co-logging proxy. The reported masked totals do not establish PHY loss. Repeated broadcasts, both directions, daily route and device configuration are not independent experimental subjects. No wheel command or timing of physical actuation.",
+  "reproduce": [
+    "Download the 186 files from the four importedData day directories, preserving folder names, and the pinned macAddresses.mat. Run python derive_bristol.py importedData macAddresses.mat OUT.",
+    "Run python derive_bristol_prefixes.py importedData PREFIX_CACHE OUT --fetch. This independently downloads only the identified raw byte ranges. Both scripts require Python, NumPy and SciPy."
+  ]
+}

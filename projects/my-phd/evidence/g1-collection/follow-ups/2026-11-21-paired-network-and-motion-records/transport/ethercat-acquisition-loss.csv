@@ -1,0 +1,3 @@
+run,total_segments,total_rows,ring_drops,row_assembler_discard_messages,row_assembler_discarded_segments,discarded_share
+measure_Scan004_ThroughputBench,397840000,19745,0,144,2920000,0.00733963
+measure_Scan005_ThroughputBench,399240000,19905,0,56,1120000,0.00280533

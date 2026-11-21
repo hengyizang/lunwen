@@ -1,0 +1,93 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "Command log and analysis code for low-cost robot teleoperation over consumer 4G (MyCobot 280 Pi)",
+  "landing": "https://doi.org/10.5281/zenodo.23689905",
+  "doi": "10.5281/zenodo.23689905",
+  "concept_doi": "10.5281/zenodo.23681891",
+  "version": "1.1",
+  "creation": "2026-10-27T11:51:30.172308+00:00",
+  "publication_date": "2026-10-27",
+  "authors": [
+    "Mohd Zaki, Muhammad Haffez",
+    "Mardi, Noor Azizi"
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/23689905",
+    "bytes": 6102,
+    "sha256": "208683dc71f7b326be8e34f7e1fcf9c1cad4449b3b358109b510ac30481be2e0"
+  },
+  "files": [
+    {
+      "key": "LICENSE.txt",
+      "url": "https://zenodo.org/api/records/23689905/files/LICENSE.txt/content",
+      "bytes": 452,
+      "sha256": "32c3d24495be722447b3227665e37293b2cd35d183f800d520e885272f4a99ef",
+      "verified_publisher_md5": "md5:fde68567ad9fb34b83965de4c1ca7159"
+    },
+    {
+      "key": "outputs.zip",
+      "url": "https://zenodo.org/api/records/23689905/files/outputs.zip/content",
+      "bytes": 118377,
+      "sha256": "b2e7b9ded999fa80cd470619efb935a95cdded3c3171779ebb3d535dcf468e2e",
+      "verified_publisher_md5": "md5:77a956b5b2ba862f8e73b6125a1d6d60"
+    },
+    {
+      "key": "data_pergerakan_robot.csv",
+      "url": "https://zenodo.org/api/records/23689905/files/data_pergerakan_robot.csv/content",
+      "bytes": 236136,
+      "sha256": "49c004158c25faca83d3dbe14fa25e86a12303470014d92a0734db928a1e7baf",
+      "verified_publisher_md5": "md5:da246ad5ce143785f5d196ea20ba48aa"
+    },
+    {
+      "key": "analysis.py",
+      "url": "https://zenodo.org/api/records/23689905/files/analysis.py/content",
+      "bytes": 11037,
+      "sha256": "73aecb82b160182442330d7f2ed15e74f6490446a4ebcf7916a04e4838efe436",
+      "verified_publisher_md5": "md5:dadd5e0f29d074d410c31411e8e97aab"
+    },
+    {
+      "key": "README.md",
+      "url": "https://zenodo.org/api/records/23689905/files/README.md/content",
+      "bytes": 4171,
+      "sha256": "b1e351842c3e0df890b7ea7a5fec2f4cbd0933b68f4fbd5552c2abb8062a8c24",
+      "verified_publisher_md5": "md5:87ca6e997da867213021f93c08c2fb58"
+    }
+  ],
+  "rights": "CC BY 4.0 (record metadata and archive LICENSE). Credit Muhammad Haffez Mohd Zaki and Noor Azizi Mardi. Only independently derived summaries and reader archived.",
+  "history": {
+    "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "tracked_evidence_paths": 1030,
+    "additional_tar_members": 301,
+    "early_index_checked": true,
+    "keys": [
+      "10.5281/zenodo.23689905",
+      "10.5281/zenodo.23681891",
+      "10.5281/zenodo.23681892",
+      "Command log and analysis code for low-cost robot teleoperation over consumer 4G",
+      "data_pergerakan_robot.csv",
+      "Bounding the command emission rate in low-cost robot teleoperation over consumer 4G",
+      "Muhammad Haffez Mohd Zaki and Noor Azizi Mardi"
+    ],
+    "matches": []
+  },
+  "queries": [
+    {
+      "query": "teleoperation AND latency",
+      "service": "DataCite public API",
+      "url": "https://api.datacite.org/dois?query=teleoperation+AND+latency&resource-type-id=dataset&page%5Bsize%5D=70",
+      "result_sha256": "dc4837729b18cf1eb5eba50653d332a9b557d43b1391132edb213ef771e386df"
+    }
+  ],
+  "evidence": "Read original server CSV, publisher analysis, README, licence and results ZIP. The accompanying article is described by the depositors as under review. No paper result is asserted.",
+  "previous_version": {
+    "url": "https://zenodo.org/api/records/23681892",
+    "bytes": 6085,
+    "sha256": "93e949c9f41a4d6df221a9922c25edcb170088728a8ebf8165d8d6370fba840b"
+  },
+  "version_note": "The V1.0 and V1.1 records have identical original CSV bytes by their published MD5; their analysis scripts differ. Count one log.",
+  "instrumentation": "Browser Date.now() measures the interval from command request to its response. The recorded server timestamp is the arrival of a subsequent browser log request. Its server wall-clock zone is unspecified. Angles are commands, and the all-six code records only J1/J2 angles. No arm encoders, packet capture, per-command motor-start events, actual drive current or mechanical completion times are in this log.",
+  "coverage": "4,485 records over 12 server calendar dates; 242 have zero RTT, including 33 from two all-zero voice submodes. All strictly positive RTT records are included (4,243). Modes with no positive measurements have empty quantiles.",
+  "method": "For each positive RTT d and server time S (millisecond of day), define finish proxy C=S and emission proxy E=S-d. Within a server date count pairs with E_j-E_i>B and C_i-C_j>B, j thus reconstructed to send later but receive a reply earlier. Unknown residual time u of the follow-up log request offsets both E and C for that command by minus u. The count at B is guaranteed to stay reversed only under the hypothetical condition 0<=u<=B ms for every command. All B are sensitivity parameters, not measured bounds.",
+  "findings": "12,039 reversed pairs across dates at B=0 ms. At 25 ms there are 11,993; at 100 ms there are 11,676 involving 1,147 distinct later-emitted rows; 11,420 of those pairs occur on 2026-06-05. The browser and application timing does not identify any individual radio-packet reordering, per-direction queue or physical robot lag.",
+  "reproduce": "python derive_mycobot.py data_pergerakan_robot.csv OUT (Python 3 plus NumPy)."
+}

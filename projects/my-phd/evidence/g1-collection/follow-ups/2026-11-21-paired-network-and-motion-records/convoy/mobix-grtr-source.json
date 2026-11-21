@@ -1,0 +1,123 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "GR-TR, Vehicles Platooning, See What I See",
+  "authors": [
+    "5G-MOBIX"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.7348870",
+  "doi": "10.5281/zenodo.7348870",
+  "concept_doi": "10.5281/zenodo.7348869",
+  "version": "Zenodo fixed release 7348870, published 2022-11-22",
+  "rights": "CC BY 4.0 per Zenodo. Credit 5G-MOBIX. Only new quality and comparison statistics, source identifiers and an independent reader are included.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.7348870",
+      "10.5281/zenodo.7348869",
+      "GR-TR, Vehicles Platooning, See What I See",
+      "zenodo.org/records/7348870"
+    ]
+  },
+  "query": {
+    "catalogue": {
+      "url": "https://api.datacite.org/dois?query=%28titles.title%3Aplatooning+OR+titles.title%3A%22adaptive+cruise+control%22+OR+titles.title%3A%22vehicle+platoon%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "bytes": 495412,
+      "sha256": "d73122915d8eb27b953efbc4d01fc33c865f18a25f52b9dd67de62778a6be481"
+    },
+    "followup": "Followed Vehicles Platooning data-release titles to the three site-specific records; reviewed the grant description, trial XML, quality reports and all measurement archives. German, Chinese and Greek–Turkish releases share a project and have different sites, scenarios and file structures."
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/7348870",
+    "bytes": 12219,
+    "sha256": "c8a4d40680554631c325539dea9e3c2a88df3d6e623f469fa0ddb49013fcd943"
+  },
+  "fixed_files": [
+    {
+      "filename": "707-1657473289089_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 37386,
+      "md5": "md5:bf6428708d54936074723348413f8524",
+      "url": "https://zenodo.org/api/records/7348870/files/707-1657473289089_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "714-1657474199851_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 28073,
+      "md5": "md5:770e42fa4672fc88e1c1a28c60245e31",
+      "url": "https://zenodo.org/api/records/7348870/files/714-1657474199851_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "718-1657474692762_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 11329,
+      "md5": "md5:7060ae6a89485f1a06e05b6ef96d8268",
+      "url": "https://zenodo.org/api/records/7348870/files/718-1657474692762_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "713-1657474065128_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 27476,
+      "md5": "md5:57c49a60f82165b004d2e7aa8ccdfb3c",
+      "url": "https://zenodo.org/api/records/7348870/files/713-1657474065128_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "709-1657473549598_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 35706,
+      "md5": "md5:c6fa43f8de9a01fc3642610d08b96c5c",
+      "url": "https://zenodo.org/api/records/7348870/files/709-1657473549598_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "712-1657473929923_GR-TR_Vehicles_Platooning_US0_HR_SIWS_DC_11.1.zip",
+      "bytes": 36849,
+      "md5": "md5:3883ada74baac4a28227cfb37576f8b8",
+      "url": "https://zenodo.org/api/records/7348870/files/712-1657473929923_GR-TR_Vehicles_Platooning_US0_HR_SIWS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "710-1657473683225_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 36003,
+      "md5": "md5:c8fc419a5aca83f311a5940548e8bd35",
+      "url": "https://zenodo.org/api/records/7348870/files/710-1657473683225_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "711-1657473808812_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 33235,
+      "md5": "md5:483e949d76aa7ea0a92b6c2fc67599d0",
+      "url": "https://zenodo.org/api/records/7348870/files/711-1657473808812_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "800-1658583190643_GR-TR_Vehicles_Platooning_US0_HR_SWIS_Public_11.1.zip",
+      "bytes": 558606,
+      "md5": "md5:0ccc7d56e930338bc425e4b5599af1a9",
+      "url": "https://zenodo.org/api/records/7348870/files/800-1658583190643_GR-TR_Vehicles_Platooning_US0_HR_SWIS_Public_11.1.zip/content"
+    },
+    {
+      "filename": "708-1657473436939_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 40322,
+      "md5": "md5:b38f7918741c9f86566c81055c2d2adb",
+      "url": "https://zenodo.org/api/records/7348870/files/708-1657473436939_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "717-1657474580924_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 11240,
+      "md5": "md5:cf722be715c2656d282d06748c92df8a",
+      "url": "https://zenodo.org/api/records/7348870/files/717-1657474580924_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "716-1657474451049_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 13928,
+      "md5": "md5:13bf982b7b91244e5ca323f087a32a20",
+      "url": "https://zenodo.org/api/records/7348870/files/716-1657474451049_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    },
+    {
+      "filename": "715-1657474315644_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip",
+      "bytes": 14635,
+      "md5": "md5:08c32948f3c35e4a2b6d15397a3aa843",
+      "url": "https://zenodo.org/api/records/7348870/files/715-1657474315644_GR-TR_Vehicles_Platooning_US0_HR_SWIS_DC_11.1.zip/content"
+    }
+  ],
+  "evidence": "All published ZIPs have matching registry byte lengths and MD5; all embedded measurement CSV/XLSX files processed using their actual headers and contents. Experiment scenarios in the registry describe the use case. Vehicle commands, motor actuation or a guaranteed sensed close-loop response are not exposed by these network aggregates.",
+  "results": [
+    "13 ZIPs include 27 XLSX occurrences but only 23 distinct byte payloads. In 11 nominal up/down pairs with both files, all 5,373 paired row positions agree on the complete stored (timestamp, messagesTx, messagesRx) tuple. Two such pairs have one additional tail row on one side, and Public case 4 supplies only an uplink. Source row order is preserved; no alignment by sparsely populated or repeated timestamps is assumed.",
+    "Across distinct workbooks, 11,237 rows have both counters; 3,236 report more received than sent. 25 of the 27 workbook occurrences have only UL in the flowdirection column, including nominal downlink filenames. Endpoint names and filenames provide separate context. Shared count traces across two links preclude treating them as independent endpoint confirmations.",
+    "The source labels include video rate and e2elatency. Exact units and cross-clock calibration for reported latency are not confirmed from the workbooks; no conversion to physical control lag. Public route workbook 800 repeats four byte-identical workbook payloads also packaged individually."
+  ],
+  "primary_table": "mobix-grtr-endpoint-pairs.csv",
+  "archive_table": "mobix-archive-audit.csv",
+  "reproduction": "For the three site records 7348877, 7348882 and 7348870 save the API metadata as ROOT/RECORD.json and each files[].links.self resource as ROOT/RECORD/files[].key. Run python derive_mobix.py ROOT OUT using Python 3.11+ and openpyxl. Full-file and logger-row repetition are treated separately."
+}

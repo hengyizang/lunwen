@@ -1,0 +1,58 @@
+{
+  "checked_utc": "2026-11-21",
+  "gate": "G1",
+  "question": "R5 cooperative observations, asynchronous sampling and inter-node timing",
+  "title": "PoC 3 - Synchronized USV Hydrophone Dataset for Ocean Noise Pollution Monitoring (Trials 1 & 2)",
+  "doi": "10.5281/zenodo.20379242",
+  "concept_doi": "10.5281/zenodo.20379241",
+  "landing": "https://doi.org/10.5281/zenodo.20379242",
+  "creators": [
+    "Ingeniarius, Lda"
+  ],
+  "released": "2026-05-25",
+  "registry": {
+    "url": "https://zenodo.org/api/records/20379242",
+    "bytes": 12362,
+    "sha256": "254588375b994c73db3bd91657a59fa6734c5f30f6dbc37f3b0ed92fd9e63c8e"
+  },
+  "files": {
+    "2026_03_04_datasets.zip": {
+      "url": "https://zenodo.org/api/records/20379242/files/2026_03_04_datasets.zip/content",
+      "bytes": 97103598,
+      "sha256": "3697b7df7415fc7de9843ebfcb5c89281c71a464e9842783914c32249087bda4",
+      "verified_publisher_checksum": "md5:bace5bae0c8c3f698e67e2e90fff34ba"
+    },
+    "2026_04_20_datasets.zip": {
+      "url": "https://zenodo.org/api/records/20379242/files/2026_04_20_datasets.zip/content",
+      "bytes": 302639502,
+      "sha256": "440f8d7173d0841c234e3c4ff93d024dcb30b16e4abab61196f6dac9f96d6a6e",
+      "verified_publisher_checksum": "md5:318be1fea519338679a0710b10acf85a"
+    }
+  },
+  "version": "Zenodo fixed record 20379242 (no depositor version string).",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.20379241",
+      "10.5281/zenodo.20379242",
+      "Synchronized USV Hydrophone Dataset for Ocean Noise Pollution Monitoring",
+      "PoC 3 - Synchronized USV Hydrophone Dataset for Ocean Noise Pollution Monitoring (Trials 1 & 2)"
+    ],
+    "matches": [],
+    "tracked_evidence_files": 1030,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  },
+  "rights": "CC BY 4.0 per Zenodo; credit Ingeniarius, Lda / OpenSwarm European Project. Derived clock and file-coverage summaries only, no coordinates, audio recordings, images or videos redistributed.",
+  "queries": [
+    "marine cooperative positioning acoustic dataset one way travel time experimentally acoustic modems vehicle two marine robots data DOI underwater cooperative navigation",
+    "OpenSwarm synchronized USV hydrophone SmartMesh → Zenodo experiment archives and published ROS interface definitions."
+  ],
+  "evidence": "Both full publisher-checksummed experimental ZIP files. Read all 10 CSV telemetry members, headers of all 10 WAV companions, and recoverable complete message records in the 8 named MCAP members. Three stationary sensing buoys and a mobile four-metre engine-noise source vessel, across two dates. External video archives were not needed for the clock/coverage comparison.",
+  "endpoint_definitions": "Group by trial and physical usv folder/filename. Treat string utc_time values as shared numeric SmartMesh labels where present and unique within a vehicle. The source specifies nominal 2 Hz service; direct counts here require identical recorded labels and do not assume these integers are Unix epoch times. Request neither interpolation nor nearest-neighbour association. MCAP log/publish nanoseconds and the string timestamp within StreamData are kept separate; GPSRAW.fix_type 6 is the source-defined RTK-fixed code.",
+  "counts": "14,295 CSV rows, including 46 with missing utc_time. On April usv3, 130 rows have repeated numeric labels within that vehicle. Across available complete MCAP records, 12,873 RMS messages and 18,375 GPS messages were decoded. All 12,873 RMS messages match a CSV row by payload timestamp, node ID, UTC label and nav status. This check concerns these four metadata fields. The three incomplete April MCAPs are counted through complete chunks; the April usv4 MCAP member is zero bytes. Its two separate CSV logs each contain one row. March has four complete bags.",
+  "integrity": "ZIP archive hashes match the publisher for both dates, so the following observations concern the archived members. April usv1 and usv3 stop within top-level chunk records; April usv2 stops within a message index. April usv1 CSV has a trailing 861-byte null-only line, which is excluded. WAV frame counts are header declarations, not verification of every sound sample.",
+  "time_comparison": "USV1 and USV2 both use embedded node_id=1. They share 1,740 unique labels in March and 3,418 in April. Median local payload timestamp of USV2 minus USV1 at that label is +1,499.717324 ms and +13.388851 ms respectively. At none of those matches are local timestamps exactly equal. Receiver/host timestamp discrepancy includes logger and system offsets; the labels do not identify a packet sent by one boat to the other. Cross-node hardware sampling skew and command-to-motion latency remain unobserved.",
+  "reproduction": "Fetch both experiment ZIPs. Run python derive_openswarm.py DATA OUT with Python 3.11+, mcap, NumPy and pandas. Reads fixed hashes before parsing; outputs 8 trial/vehicle rows, 10 file rows and 12 within-trial vehicle-pair comparisons. Physical identity is preserved even when mote IDs repeat."
+}

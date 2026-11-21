@@ -17,3 +17,4 @@
 - [R5 多机器人无线交易、时钟与实物控制响应](follow-ups/2026-11-21-radio-clocks-and-control-response/README.md)
 - [R2 执行器限幅前后的命令与传动误差](follow-ups/2026-11-21-actuator-limits-and-transmission-error/README.md)
 - [R1 螺纹装配就位、夹紧力与独立力矩参照](follow-ups/2026-11-21-fastener-seating-and-torque-references/README.md)
+- [R5 双端通信记录、时钟与实测编队响应](follow-ups/2026-11-21-paired-network-and-motion-records/README.md)

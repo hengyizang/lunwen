@@ -1,0 +1,9 @@
+trial,vehicle,mcap_files,mcap_bytes,mcap_complete_footer,mcap_ending,csv_rows,mcap_rms_messages,gps_messages,exact_payload_matches,csv_without_sync_tick,mcap_rms_without_sync_tick,gps_fix_type_6,csv_zero_coordinates,unique_sync_ticks,csv_records_with_repeated_tick,mcap_rms_unique_nav_headers,median_mcap_log_minus_payload_ms,median_mcap_publish_minus_payload_ms,median_mcap_log_minus_publish_ms
+2026_03_04,usv1,1,110548800,1,footer,1753,1711,4288,1711,0,0,3509,3,1753,0,1711,8.900098,8.561061,0.320391
+2026_03_04,usv2,1,108582366,1,footer,1742,1687,845,1687,0,0,842,4,1742,0,844,6.2606,5.972955,0.275011
+2026_03_04,usv3,1,107784435,1,footer,1733,1673,1675,1673,0,0,1475,4,1733,0,1618,5.248731,4.989076,0.254511
+2026_03_04,usv4,1,75580498,1,footer,1185,1173,1188,1173,0,0,1188,0,1185,0,1141,5.487417,5.220493,0.266856
+2026_04_20,usv1,1,197324800,0,partial_EndOfFile,3418,3042,7588,3042,0,0,7586,0,3418,0,3042,7.926937,7.615044,0.295583
+2026_04_20,usv2,1,204939264,0,partial_error,3525,3185,1569,3185,0,0,466,4,3525,0,1569,5.530266,5.247624,0.275905
+2026_04_20,usv3,1,26849280,0,partial_EndOfFile,937,402,1222,402,46,27,0,1,761,130,374,5.459585,5.208272,0.255429
+2026_04_20,usv4,1,0,0,empty_member,2,0,0,0,0,0,0,1,2,0,0,,,

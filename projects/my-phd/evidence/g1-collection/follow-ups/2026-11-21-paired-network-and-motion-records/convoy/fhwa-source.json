@@ -1,0 +1,109 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "Test Data of Proof-of-Concept Vehicle Platooning Based on Cooperative Adaptive Cruise Control (CACC)",
+  "authors": [
+    "U.S. Department of Transportation Intelligent Transportation Systems Joint Program Office",
+    "Federal Highway Administration and Volpe National Transportation Systems Center"
+  ],
+  "landing": "https://doi.org/10.21949/1504510",
+  "doi": "10.21949/1504510",
+  "rights": "Dataset license listed by data.transportation.gov as Creative Commons Attribution–ShareAlike 3.0 Unported, https://creativecommons.org/licenses/by-sa/3.0/. Credit the U.S. DOT ITS Joint Program Office, FHWA and the Volpe Center. All fhwa-*.csv derived tables are offered under the same CC BY-SA 3.0 license. Report and data documentation remain at their respective sources.",
+  "version": {
+    "socrata_id": "wpek-zziu",
+    "dataset_rows_updated_unix": 1528910308,
+    "publication_date_unix": 1529346760,
+    "retrieval_date": "2026-11-21",
+    "bulk_order": "The bulk export byte digest pins the response acquired on this date. Rows are grouped by run and sorted by numerical elapsed bin for analysis; a later export can reorder the same observations."
+  },
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.21949/1504510",
+      "wpek-zziu",
+      "Test Data of Proof-of-Concept Vehicle Platooning Based on Cooperative Adaptive Cruise Control (CACC)",
+      "CACC_Platooning_Data_Elements.xlsx"
+    ]
+  },
+  "search": [
+    {
+      "url": "https://api.us.socrata.com/api/catalog/v1?search_context=data.transportation.gov&q=platooning&limit=100",
+      "bytes": 140929,
+      "sha256": "aca53fb43d876ee9877dcaa892dfade491dafb7b7eea018aa48ea74fb8225db1"
+    },
+    {
+      "url": "https://api.datacite.org/dois?query=titles.title%3A%22Test+Data+of+Proof-of-Concept+Vehicle+Platooning+Based+on+Cooperative+Adaptive+Cruise+Control%22&page%5Bsize%5D=12",
+      "bytes": 1674,
+      "sha256": "31b36377a4607379bd7db80cc0e3cee30f79493df7a6bb7c14d5b8828350668d"
+    }
+  ],
+  "registry": {
+    "url": "https://data.transportation.gov/api/views/wpek-zziu.json",
+    "bytes": 735484,
+    "sha256": "a65cb373a6705a77023938e3b9b639bfdf4b0c617f7665188de873cd13ce8d91"
+  },
+  "bulk": {
+    "url": "https://data.transportation.gov/api/views/wpek-zziu/rows.csv?accessType=DOWNLOAD",
+    "bytes": 1204993696,
+    "sha256": "c02212897489d3443bcba4ad7929fd1c152366712c2517437db886d5cf780ec2"
+  },
+  "run_counts": {
+    "url": "https://data.transportation.gov/resource/wpek-zziu.json?%24select=run%2C+count%28%2A%29+as+n%2Cmin%28elapsed_time_s%29+as+t0%2Cmax%28elapsed_time_s%29+as+t1&%24group=run&%24order=run&%24limit=200",
+    "bytes": 3202,
+    "sha256": "67b25a43bbac120e5146ee5bb0415eb079a901767c9a348dab45b948f01cbaf4"
+  },
+  "data_dictionary": [
+    {
+      "url": "https://data.transportation.gov/api/views/wpek-zziu/files/b156e3ed-13ce-4068-b2ea-437dead18644",
+      "bytes": 18387,
+      "sha256": "909bd00713215f5958b78fc3362784f6c041bc56a635dba5dcb3751707a3f8d9"
+    },
+    {
+      "url": "https://data.transportation.gov/api/views/wpek-zziu/files/9d5d50cc-895f-4d85-812c-0ae07321febe",
+      "bytes": 12634,
+      "sha256": "7712b4574d3e29aa8fb59b47659141fa9dfb46c9bc9ea8965c907559d5e109a6"
+    }
+  ],
+  "report": {
+    "title": "Test and Evaluation of Vehicle Platooning Proof-of-Concept Based on Cooperative Adaptive Cruise Control",
+    "authors": "Tim A. Tiernan, Nicholas Richardson, Philip Azeredo, Wassim G. Najm, Taylor Lochrane",
+    "archive_id": "ROSA P dot/1038; DOT-VNTSC-FHWA-17-13, April 2017",
+    "file": {
+      "url": "https://rosap.ntl.bts.gov/view/dot/1038/dot_1038_DS1.pdf",
+      "bytes": 3444858,
+      "sha256": "bdf8d6f2133513944e6c8f176ff87aba2f8539b1e977eed85e74ff6224efba20"
+    },
+    "locators": "Table 12 pp. 44–45, section 4.3.2 and footnote 7, section 4.3.4 and Appendix C pp. 91–102."
+  },
+  "analysis": [
+    "The federal report describes asynchronous CAN, ADMAS and radio logs being rounded to the nearest 20 Hz grid, ties discarded and slow fields left blank. The 1 Hz brake light can be held. CSV columns have different source instruments and original rates. Compare elapsed ticks within a run, count exact duplicates across all 478 parsed fields and exclude all surviving distinct rows in ambiguous within-run bins. One-row run labels are retained for coverage only.",
+    "Compare ADMAS and PRISM Speed Of Service (SOS, seconds in Appendix C) as paired nonmissing fields for each source-column colour prefix and vehicle suffix. Time Of Observation (TOO) is a separate epoch-seconds field on each endpoint. Counts at similar times or on two instrument layers do not produce a packet emission denominator. The report uses the sending observation for BSM binning. PRISM and ADMAS have different observation points.",
+    "On identical bins compare speed_CACC(t) with velocity_fwd_PINPOINT(t) or velocity_fwd_PINPOINT(t-16s), both m/s. No interpolation. Specific −16 s comparison motivated by report footnote 7. An independent Socrata extraction of the three selected speed/time columns was used to cross-check the direction in runs 50–53 and 69–72. All-field conflict screening can retain fewer bins than a four-column query.",
+    "In the eight five-car comparisons identified in Table 12 and the performance figures, use the black lead car and the ordered follower list as published. Compare PinPoint forward-speed crossings at 52.5 mph (23.4696 m/s). Arm down/up criteria after 5 s above 25 or below 21 m/s. Require 0.4 s past the midpoint and break sequences on gaps >0.15 s. Use first leader downward crossing and first later upward crossing, and a unique same-direction follower candidate within ±15 s. This is a speed-transition timing measurement on the published time grid. Authors used acceleration thresholding in §4.3.4. Neither method isolates radio transport or actuator dynamics.",
+    "The source flags a mapping problem for group position and distance and a scaling issue for injected torque. The XLSX gives m/s² for average ADMAS acceleration while Appendix C gives g. No unit conversion or causal motor-latency estimate uses these fields."
+  ],
+  "coverage_desc": "Complete 1,204,993,696-byte 478-column CSV and both documentation attachments read, with independent per-run query; aggregate comparisons use no raw coordinates or vehicle traces in the published package.",
+  "reproduction": "Download the exact bulk URL from bulk.url as full.csv (optionally gzip locally), and query run_counts.url as run-list.json. Run python derive_fhwa.py full.csv run-list.json OUT using Python 3.11+, NumPy and pandas. Allow scratch space for compressed per-run records.",
+  "results": {
+    "source_rows": 524792,
+    "run_labels": 72,
+    "single_row_run_labels": 9,
+    "excess_identical_rows": 0,
+    "ambiguous_bins": 1157,
+    "unambiguous_retained_rows": 506215,
+    "logger_fields": {
+      "paired_sos": 4458043,
+      "paired_negative_prism": 2214963,
+      "paired_negative_admas": 0,
+      "paired_opposite_sign": 2214963,
+      "admas_equal_too_nonzero_sos": 3966350,
+      "prism_equal_too_nonzero_sos": 4318663,
+      "admas_too_with_fractional_seconds": 0,
+      "prism_too_with_fractional_seconds": 0
+    },
+    "physical_motion": {
+      "candidate_rows": 64,
+      "unique_pairs": 32,
+      "scope": "See per-run, per-position and direction numbers in fhwa-paired-motion.csv."
+    }
+  }
+}

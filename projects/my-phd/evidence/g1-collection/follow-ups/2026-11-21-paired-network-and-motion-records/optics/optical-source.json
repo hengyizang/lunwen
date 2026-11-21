@@ -1,0 +1,204 @@
+{
+  "title": "Measuring motion-to-photon latency for sensorimotor experiments with virtual reality systems",
+  "landing": "https://osf.io/emh5z/",
+  "authors": [
+    "Matthew Warburton",
+    "Mark Mon-Williams",
+    "Faisal Mushtaq",
+    "J. Ryan Morehead"
+  ],
+  "accessed_utc": "2026-11-21",
+  "scope": "R5 physical hand-controller motion to visible pixel response, a measurement-method neighbor to robot operator feedback. High-speed footage sees the physical movement and HMD output in the same camera clock. Seven HMD/refresh-rate conditions, four headsets, ten recordings per condition.",
+  "rights": "Public OSF project. Its node_license field was null on inspection. Original data and code remain at the source; only independently computed numerical summaries, file identities and a new reader are distributed. Article CC BY 4.0, separately from the data files.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "osf.io/emh5z",
+      "10.3758/s13428-022-01983-5",
+      "10.1101/2022.06.24.497509",
+      "Measuring motion-to-photon latency for sensorimotor experiments with virtual reality systems"
+    ],
+    "related_work": "Journal and bioRxiv versions of the paper are one work. This OSF file release is separately checked as available empirical data."
+  },
+  "queries": [
+    "Measuring motion-to-photon latency for sensorimotor experiments with virtual reality systems",
+    "Followed the published Data availability paragraph to OSF emh5z. Inspected project metadata, versioned input/output files, code and the measurement protocol."
+  ],
+  "registry": {
+    "url": "https://api.osf.io/v2/nodes/emh5z/",
+    "sha256": "c9d7f74292260327d19c5e64a42b262908288693a89d41fd832504a86d790a6f",
+    "obtained_node_date_modified": "2022-09-27T15:41:31.564738",
+    "node_license": null
+  },
+  "project_file_listing": "https://api.osf.io/v2/nodes/emh5z/files/osfstorage/",
+  "version": "OSF file-level versions and publisher-provided SHA-256 values are recorded in files. Original movies were not required or downloaded for these computations.",
+  "paper": {
+    "doi": "10.3758/s13428-022-01983-5",
+    "source": "https://link.springer.com/content/pdf/10.3758/s13428-022-01983-5.pdf",
+    "sha256": "36583811e79822ea7950d870d8eef3234c5f7a54a203804381490499578bd97e",
+    "preprint": "10.1101/2022.06.24.497509",
+    "locator": "Figures 2, 5 and 6; Methodology, 240 fps smartphone, camera-rate check and onset/continuous instruction."
+  },
+  "files": [
+    {
+      "path": "/latency_script/latency.R",
+      "version": 2,
+      "url": "https://osf.io/download/8mx7d/?version=2",
+      "bytes": 42322,
+      "sha256": "c7b59e7bb3fa5889ce503e9fd22da87a68668af7d99299db662c34918a914a2b",
+      "id": "6138d6d6079a0a00bd021dcd"
+    },
+    {
+      "path": "/summary_script/summary.R",
+      "version": 1,
+      "url": "https://osf.io/download/9vsau/?version=1",
+      "bytes": 24020,
+      "sha256": "9a8345452883307a3abb4bec8ea94a5e4c89727478e5576f6c1d801f58cbc4bf",
+      "id": "6138db4c079a0a00b901e2c1"
+    },
+    {
+      "path": "/video_to_csv/video_to_csv.py",
+      "version": 1,
+      "url": "https://osf.io/download/mf5vn/?version=1",
+      "bytes": 17143,
+      "sha256": "b8924954b06609c6721de2f30075aadf70337cd54135b3ec5e4324007a250402",
+      "id": "6138d8ce3d2d6a00ada02d2c"
+    },
+    {
+      "path": "/latency_script/input_data/Index_80.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/6138d7063d2d6a00afa0678b/?version=1",
+      "bytes": 2008016,
+      "sha256": "78254cf0a15dc8dbfb2ad1266b6d9f9d3751cb5f44f0197dde5623a7b1a86a05",
+      "id": "6138d7063d2d6a00afa0678b"
+    },
+    {
+      "path": "/latency_script/input_data/Index_120.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/kewgc/?version=1",
+      "bytes": 2506655,
+      "sha256": "e3bc1ef3b027f5539a79aedfc5962a22ddecfdd7ee506b44f17c4e760f2fdb85",
+      "id": "6138d706079a0a00b501b897"
+    },
+    {
+      "path": "/latency_script/input_data/Rift S_80.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/y7tbk/?version=1",
+      "bytes": 1881298,
+      "sha256": "b6a5fea130a68b4a96d4b32b3eb4a0d2430f48762724ac8163386bbd5b76b872",
+      "id": "6138d7073d2d6a00afa06796"
+    },
+    {
+      "path": "/latency_script/input_data/Index_144.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/hgf6t/?version=1",
+      "bytes": 2857968,
+      "sha256": "2db8386cc962beafe67eff1b9707279907ae85459837a84a3523256614583a4a",
+      "id": "6138d708079a0a00bd021ed5"
+    },
+    {
+      "path": "/latency_script/input_data/Index_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/s4wua/?version=1",
+      "bytes": 2288301,
+      "sha256": "8ae1a71d915bb70c91ac067b13063c57bc07d66e3af75d16396db1370f4760bd",
+      "id": "6138d7083d2d6a00afa0679d"
+    },
+    {
+      "path": "/latency_script/input_data/Vive_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/w6dzt/?version=1",
+      "bytes": 2351280,
+      "sha256": "5f48ffa9775c7f16a19625b2e18530294b098384ff5f3e2f993e3e08a82ebc61",
+      "id": "6138d715079a0a00b801c782"
+    },
+    {
+      "path": "/latency_script/input_data/Rift_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/e5wa4/?version=1",
+      "bytes": 2180977,
+      "sha256": "cb6df55b9c3f76f347fea9cc689de31b732d4d30d7da2f5cb7a4494aa2ff106c",
+      "id": "6138d715079a0a00b501b8a2"
+    },
+    {
+      "path": "/latency_script/output_data/Index_80.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/9yfes/?version=1",
+      "bytes": 5084010,
+      "sha256": "60b54e62185a3570545a112c303045b693f2ac0786d7d90d038d931fbe7696dd",
+      "id": "6138d7253d2d6a00aea048f1"
+    },
+    {
+      "path": "/latency_script/output_data/Index_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/6138d72628b37600c17ccb02/?version=1",
+      "bytes": 5348211,
+      "sha256": "588047d982bed3f9f561e0ade312bcae2be67b22a70d7c1e81860b79546297b7",
+      "id": "6138d72628b37600c17ccb02"
+    },
+    {
+      "path": "/latency_script/output_data/Index_120.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/xdkm8/?version=1",
+      "bytes": 5957652,
+      "sha256": "81c017444b745bb02e6bb46f2ab584515ef4d54bac12deddd7a21c3e32d33597",
+      "id": "6138d72f079a0a00bd021f87"
+    },
+    {
+      "path": "/latency_script/output_data/Rift S_80.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/rx6tj/?version=1",
+      "bytes": 4676122,
+      "sha256": "c9fffc6ff7c81266c26eef38b7ca95f3f5e0a19f5570e39538e2d086af1b4453",
+      "id": "6138d7313d2d6a00aca010bb"
+    },
+    {
+      "path": "/latency_script/output_data/Index_144.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/mj5qp/?version=1",
+      "bytes": 6734349,
+      "sha256": "ee15aedf70e1273d5238ac429d07ab9664872fa18f668161795770e3d33cc0f3",
+      "id": "6138d736079a0a00bd021fae"
+    },
+    {
+      "path": "/latency_script/output_data/Rift_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/8qwzy/?version=1",
+      "bytes": 5312281,
+      "sha256": "648ba69046990f1a5c20218b39acbab5b9411de4996ef52b92044c231d10695a",
+      "id": "6138d7383d2d6a00aca010c5"
+    },
+    {
+      "path": "/latency_script/output_data/Vive_90.Rds",
+      "version": 1,
+      "url": "https://osf.io/download/8ehw6/?version=1",
+      "bytes": 5455722,
+      "sha256": "bfdd1f12ff66b4c9a3c122bb3a1b4b11fba99e0310d605ecdf219c73f40dc5f9",
+      "id": "6138d73a28b37600c17ccb56"
+    },
+    {
+      "path": "/latency_script/real_onset_validation/Results.txt",
+      "version": 1,
+      "url": "https://osf.io/download/nd8eh/?version=1",
+      "bytes": 189,
+      "sha256": "3eea38b6c0b20b30d48c2fa580d76112c561f7917e70cbd21e44c3e6df281050",
+      "id": "613a11fe3d2d6a0134a015d6"
+    }
+  ],
+  "method": [
+    "Read all 14 input/output RDS objects and matched camera and Unity tables within each recording. The camera describes controller position and color-coded display status; the Unity table records application position samples and rendering colors. Video frame boundaries differ from engine frame boundaries.",
+    "The released sudden endpoint uses the first motion onset, while continuous timing uses the midpoint crossing at normalized displacement 0.5. The authors use a fuzzy match within 25 camera frames; skipped intervals can yield undefined estimates. For every finite event we independently subtracted its two released physical/display frame indices and checked the stored difference exactly.",
+    "For paired comparisons, matched the physical midpoint frame to the immediately preceding physical movement onset in the overall camera-frame series, checked uniqueness of the crossing and matched the resulting frame to the onset table. The published ordinal IDs also agreed for every retained pair. Means in the separate endpoint table additionally reproduce the published within-setting, within-endpoint strict three-sample-SD filter (sd uses n−1). Frame differences use the nominal 1000/240 ms conversion; the paper measured 239.90 fps in its validation."
+  ],
+  "findings": [
+    "2,107,500 camera-frame records and 964,993 application records in 70 video runs. There are 183 missing camera x positions and 28,662 frames marked ambiguous in at least one display-eye field. These flags refer to different observables.",
+    "There are 2,786 onset rows and 2,785 midpoint rows. Among 2,784 movements with both finite estimates, onset lag was greater in 2,761, equal in 9, smaller in 14. This is a within-recording comparison of endpoints using shared hardware, with repeated observations.",
+    "Oculus Rift at 90 Hz has 399 finite onset estimates with a 20.83 ms median and 398 midpoint estimates with zero median. The midpoint has 77 strictly negative values before filtering. Display prediction and the selected physical event are relevant to the sign.",
+    "Of 5,571 endpoint records, 5,570 have a finite frame difference; a further 21 are omitted by the strict three-SD filter."
+  ],
+  "limits": [
+    "The input files contain extracted camera traces and synchronization colors, not raw optical movies. We did not independently relabel images. The published matching and interpolation were not reimplemented from pixels.",
+    "End-to-end visual response depends on HMD settings and the motion definition. It cannot independently separate network transit, sampling, controller processing and display scanout, and does not measure a robot drive or mechanical actuator response."
+  ],
+  "reproduce": "Download both sets of seven version-pinned RDS files named in files, preserving latency_script/input_data/ and latency_script/output_data/ under ROOT. Run python derive_optical.py ROOT OUT (numpy, pandas, rdata). The public source uses nominal 240 fps and labels onset and midpoint series sudden and continuous."
+}

@@ -1,0 +1,71 @@
+{
+  "title": "DETERMINISTIC6G COTS 5G latency measurements",
+  "landing": "https://doi.org/10.5281/zenodo.10390211",
+  "doi": "10.5281/zenodo.10390211",
+  "concept_doi": "10.5281/zenodo.10390210",
+  "version": "v1",
+  "published": "2023-12-15",
+  "authors": [
+    "Mostafavi, Seyed Samie",
+    "Sharma, Gourav Prateek"
+  ],
+  "rights": "CC BY 4.0 as registered in Zenodo. Credit the listed creators. Only newly calculated summaries, source identifiers, and independent reading code are included.",
+  "accessed_utc": "2026-11-21",
+  "registry": {
+    "url": "https://zenodo.org/api/records/10390211",
+    "bytes": 5719,
+    "sha256": "ed434470710fac6495b7f088dba9cd766ae9414f9226961e1edd95004f69fa56"
+  },
+  "file_evidence": [
+    {
+      "name": "COTS5G measurements.zip",
+      "url": "https://zenodo.org/api/records/10390211/files/COTS5G%20measurements.zip/content",
+      "bytes": 541015900,
+      "sha256": "4189189ac65dca2d5c396002bb2952137c0d192a62e0d1fc7c2d3a54a2607ec0",
+      "verified_publisher_md5": "026ce71e0367ccbcf47fbc14ab970f1b"
+    }
+  ],
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.10390211",
+      "10.5281/zenodo.10390210",
+      "DETERMINISTIC6G COTS 5G latency measurements",
+      "COTS5G measurement campaign.xlsx",
+      "2307.10648",
+      "Data-Driven Latency Probability Prediction for Wireless Networks: Focusing on Tail Probabilities"
+    ],
+    "matched": [],
+    "evidence_paths": 1030,
+    "extra_tar_members": 301,
+    "early_catalogue": true
+  },
+  "queries": [
+    "DataCite dataset query: \"5G\" AND \"one-way delay\". Screened DETERMINISTIC6G COTS 5G latency measurements. Checked the original Zenodo ZIP, every Parquet round, the workbook and its declared supplementary preprint."
+  ],
+  "measurement": "Stationary industrial-network testbed, commercial 5G in band 78 with TDD and 40 MHz, one-way UDP probes using irtt. This is adjacent communication-layer evidence for asynchronous control; there are no robot actuator or controller-consumption measurements.",
+  "methods": [
+    "Within each round, sorted the stored seqno index and checked coverage, endpoints and delay availability. Converted the stored receive wall epoch (double) to integer nanoseconds before subtracting integer client wall time. delay.send is in ns. The archived receive-wall representation near 1.69e18 ns has 256 ns IEEE binary64 spacing.",
+    "For observed arrivals, tested stale sequence relative to the maximum seqno of every strictly earlier receive-wall time; ties do not produce inversions. Summaries retain each round and group by the 18 observed campaign folders. Packet thresholds use measured delay strictly greater than 10 ms."
+  ],
+  "results": [
+    "118 unique Parquet rounds with 18,064,683 rows (18 industrial-control sessions). All per-round sequence IDs start at zero, with continuous observed ranges and no duplicates. All rows contain the literal string true in lost. Of these, 18,064,680 have both the server reception timestamp and stored forward delay; the remaining three lack them. Thus interpreting the literal field as forward packet loss would conflict with the independently present timestamp columns. The exporter/loss-flag meaning is unresolved.",
+    "All 18,064,680 finite forward delays are nonnegative. 435,803 exceed 10 ms. Rounding-aware reconstruction agrees with the published one-way delay within 256 ns across all available rows; no observed receive timestamps tie or invert sequence order within an individual round.",
+    "Of 32 industrial-control campaign rows, 28 have Done (case-insensitive); 18 have files in this ZIP. Only matched rows are counted. Some other workbook sheets describe further experiments whose packet files are absent here."
+  ],
+  "limits": [
+    "Zenodo reports PTP synchronisation below 200 ns but supplies no timestamped per-packet external clock calibration. The 256 ns difference bounds storage/reconstruction discrepancy, not absolute clock accuracy. Coverage of a sequence range and a finite receive timestamp do not measure control use or mechanical actuation. Three unresolved receive timestamps are retained.",
+    "Related arXiv v1 is dated 20 July 2023, while filenames in this archive indicate August 2023 measurements. The paper describes a 4-million-uplink-sample COTS campaign; it is methodological context, not confirmation that this later 18-million-row deposit contains the exact paper trials."
+  ],
+  "related_paper": {
+    "arxiv": "2307.10648v1",
+    "title": "Data-Driven Latency Probability Prediction for Wireless Networks: Focusing on Tail Probabilities",
+    "full_text": {
+      "url": "https://arxiv.org/pdf/2307.10648",
+      "bytes": 2727105,
+      "sha256": "2ea42b89805e67218544be8219c4489a4bb34e79344d94f7c05687ca1fe1d0f6"
+    },
+    "location": "Section IV measurement setup and COTS 5G campaign description, printed pp. 3–4."
+  },
+  "reproduce": "Python 3, PyArrow, NumPy, pandas and OpenPyXL: python derive_cellular.py \"COTS5G measurements.zip\" OUT"
+}

@@ -1,0 +1,6 @@
+run,node,ackermann_rows,motor_command_rows,source_transitions,motor_transitions,unique_transition_pairs,source_changes_with_multiple_compatible_targets,target_candidates_with_multiple_sources,paired_motor_earlier_in_recorder_time,paired_recorder_difference_ms_p50,paired_recorder_difference_ms_p95
+0_8_m_s,F110_1,38632,76456,4003,4427,2853,677,147,226,0.125432,7.314457
+0_8_m_s,F110_2,127842,127950,127835,127943,127757,0,0,16150,0.048835,3.240217
+3_0_m_s,F110_1,22816,23095,22454,22723,22169,0,0,5138,0.018344,5.716034
+3_0_m_s,F110_2,23363,23414,21738,21781,20904,0,0,14087,-0.045379,7.747272
+3_0_m_s,F110_3,23676,23701,20497,20510,20481,0,0,15785,-0.06932,2.065262

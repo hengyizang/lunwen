@@ -1,0 +1,140 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "CN, Vehicles Platooning, Cloud-assisted platooning",
+  "authors": [
+    "5G-MOBIX"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.7348882",
+  "doi": "10.5281/zenodo.7348882",
+  "concept_doi": "10.5281/zenodo.7348881",
+  "version": "Zenodo fixed release 7348882, published 2022-11-22",
+  "rights": "CC BY 4.0 per Zenodo. Credit 5G-MOBIX. Only new quality and comparison statistics, source identifiers and an independent reader are included.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.7348882",
+      "10.5281/zenodo.7348881",
+      "CN, Vehicles Platooning, Cloud-assisted platooning",
+      "zenodo.org/records/7348882"
+    ]
+  },
+  "query": {
+    "catalogue": {
+      "url": "https://api.datacite.org/dois?query=%28titles.title%3Aplatooning+OR+titles.title%3A%22adaptive+cruise+control%22+OR+titles.title%3A%22vehicle+platoon%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "bytes": 495412,
+      "sha256": "d73122915d8eb27b953efbc4d01fc33c865f18a25f52b9dd67de62778a6be481"
+    },
+    "followup": "Followed Vehicles Platooning data-release titles to the three site-specific records; reviewed the grant description, trial XML, quality reports and all measurement archives. German, Chinese and Greek–Turkish releases share a project and have different sites, scenarios and file structures."
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/7348882",
+    "bytes": 10453,
+    "sha256": "57021bb29877c7e4249ea05a898a1ce6d3c3ea63540bc5286565db0443689552"
+  },
+  "fixed_files": [
+    {
+      "filename": "1399-1661655018533_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2637,
+      "md5": "md5:704ba1a662a469f81d20a684e749baa8",
+      "url": "https://zenodo.org/api/records/7348882/files/1399-1661655018533_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    },
+    {
+      "filename": "1395-1661654802098_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip",
+      "bytes": 3675,
+      "md5": "md5:146ac6d4772247c2f0383473d96db8eb",
+      "url": "https://zenodo.org/api/records/7348882/files/1395-1661654802098_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip/content"
+    },
+    {
+      "filename": "1414-1661655778445_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip",
+      "bytes": 2599,
+      "md5": "md5:6311f6a6c952bd7bda9c5c8718a8187a",
+      "url": "https://zenodo.org/api/records/7348882/files/1414-1661655778445_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip/content"
+    },
+    {
+      "filename": "1393-1661654644304_CN_Vehicles_Platooning_US0_20220828_CN_2.1.zip",
+      "bytes": 2642,
+      "md5": "md5:1acdd1c87578a6432524a1ac43328dfc",
+      "url": "https://zenodo.org/api/records/7348882/files/1393-1661654644304_CN_Vehicles_Platooning_US0_20220828_CN_2.1.zip/content"
+    },
+    {
+      "filename": "1404-1661655307151_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2668,
+      "md5": "md5:ffa841a1d7bf52008b22b3ebb311229e",
+      "url": "https://zenodo.org/api/records/7348882/files/1404-1661655307151_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    },
+    {
+      "filename": "1408-1661655475861_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip",
+      "bytes": 2635,
+      "md5": "md5:d43f0843bb01c3825953b78fb0aa537d",
+      "url": "https://zenodo.org/api/records/7348882/files/1408-1661655475861_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip/content"
+    },
+    {
+      "filename": "1411-1661655639035_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip",
+      "bytes": 2601,
+      "md5": "md5:2695b40bc82b9470c5110c2f4dd0d69a",
+      "url": "https://zenodo.org/api/records/7348882/files/1411-1661655639035_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip/content"
+    },
+    {
+      "filename": "1416-1661655868550_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip",
+      "bytes": 2615,
+      "md5": "md5:f82a682d3cb36414e65bbd68e7835454",
+      "url": "https://zenodo.org/api/records/7348882/files/1416-1661655868550_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip/content"
+    },
+    {
+      "filename": "1398-1661654941584_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip",
+      "bytes": 3769,
+      "md5": "md5:3a1180973d4522cf40df462d9bceaf59",
+      "url": "https://zenodo.org/api/records/7348882/files/1398-1661654941584_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip/content"
+    },
+    {
+      "filename": "1406-1661655382847_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2648,
+      "md5": "md5:03c2d3b861209aa496af39b75cbc4d71",
+      "url": "https://zenodo.org/api/records/7348882/files/1406-1661655382847_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    },
+    {
+      "filename": "1394-1661654720469_CN_Vehicles_Platooning_US0_20220828_CN_2.1.zip",
+      "bytes": 3708,
+      "md5": "md5:122c1b55f86edc5158299bc8bf8c0196",
+      "url": "https://zenodo.org/api/records/7348882/files/1394-1661654720469_CN_Vehicles_Platooning_US0_20220828_CN_2.1.zip/content"
+    },
+    {
+      "filename": "1409-1661655575010_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip",
+      "bytes": 2655,
+      "md5": "md5:57c92ce0587465ed92e90eb9525ba00e",
+      "url": "https://zenodo.org/api/records/7348882/files/1409-1661655575010_CN_Vehicles_Platooning_US0_20220828_CN2.3.zip/content"
+    },
+    {
+      "filename": "1400-1661655090845_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2633,
+      "md5": "md5:a1049c134c719e34730e689ef6d6157d",
+      "url": "https://zenodo.org/api/records/7348882/files/1400-1661655090845_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    },
+    {
+      "filename": "1403-1661655237410_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2609,
+      "md5": "md5:f3cf42f8cf0ad851da80e640d1365435",
+      "url": "https://zenodo.org/api/records/7348882/files/1403-1661655237410_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    },
+    {
+      "filename": "1397-1661654876944_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip",
+      "bytes": 3678,
+      "md5": "md5:79df6d4c6ad2c094b9070a4950b6b8cd",
+      "url": "https://zenodo.org/api/records/7348882/files/1397-1661654876944_CN_Vehicles_Platooning_US0_20220828_CN2.1.zip/content"
+    },
+    {
+      "filename": "1401-1661655172676_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip",
+      "bytes": 2631,
+      "md5": "md5:e5964d7bc57d6e9c4250ab8a5bd5ce02",
+      "url": "https://zenodo.org/api/records/7348882/files/1401-1661655172676_CN_Vehicles_Platooning_US0_20220828_CN2.2.zip/content"
+    }
+  ],
+  "evidence": "All published ZIPs have matching registry byte lengths and MD5; all embedded measurement CSV/XLSX files processed using their actual headers and contents. Experiment scenarios in the registry describe the use case. Vehicle commands, motor actuation or a guaranteed sensed close-loop response are not exposed by these network aggregates.",
+  "results": [
+    "16 ZIPs, each containing a network aggregation file; 3,946 rows total. Five members contain two columns both named senderstationid and their recorded sender values disagree in all 1,196 rows; the destination remains explicit. Only four files provide explicit pairwise interval boundaries (1,000 rows).",
+    "The last columns record Transfer and Bandwidth. 3,928/3,946 rows lie within one reported bandwidth unit of 8.192 times the transfer value; this is an internal numeric relationship, not an independent clock reference. Neither a packet sequence nor a receiver delivery time is in those tables. Do not pool rows as physical trips; adjacent files sometimes continue the previous relative interval."
+  ],
+  "primary_table": "mobix-cn-windows.csv",
+  "archive_table": "mobix-archive-audit.csv",
+  "reproduction": "For the three site records 7348877, 7348882 and 7348870 save the API metadata as ROOT/RECORD.json and each files[].links.self resource as ROOT/RECORD/files[].key. Run python derive_mobix.py ROOT OUT using Python 3.11+ and openpyxl. Full-file and logger-row repetition are treated separately."
+}

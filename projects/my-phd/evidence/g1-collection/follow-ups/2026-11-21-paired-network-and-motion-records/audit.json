@@ -1,0 +1,500 @@
+{
+  "accessed_utc": "2026-11-21",
+  "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+  "gate": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "prior_rounds": 55,
+  "prior_followups": 10,
+  "tracked_evidence_paths_screened": 1030,
+  "additional_tar_members": 301,
+  "early_catalog_screened": true,
+  "run_check": "At start, the state ref matched the fixed parent, previous follow-up was published and no queued or running GitHub Actions workflows were returned. The existing hourly automation is enabled.",
+  "dataset_families": 20,
+  "new_dataset_families": 19,
+  "upgraded_dataset_families": 1,
+  "per_release_history": {
+    "convoy/fhwa": {
+      "keys": [
+        "10.21949/1504510",
+        "wpek-zziu",
+        "Test Data of Proof-of-Concept Vehicle Platooning Based on Cooperative Adaptive Cruise Control (CACC)",
+        "CACC_Platooning_Data_Elements.xlsx"
+      ],
+      "prior_files": []
+    },
+    "convoy/mobix-de": {
+      "keys": [
+        "10.5281/zenodo.7348877",
+        "10.5281/zenodo.7348876",
+        "DE, Vehicles Platooning, eRSU-assisted platooning",
+        "zenodo.org/records/7348877"
+      ],
+      "prior_files": []
+    },
+    "convoy/mobix-grtr": {
+      "keys": [
+        "10.5281/zenodo.7348870",
+        "10.5281/zenodo.7348869",
+        "GR-TR, Vehicles Platooning, See What I See",
+        "zenodo.org/records/7348870"
+      ],
+      "prior_files": []
+    },
+    "convoy/mobix-cn": {
+      "keys": [
+        "10.5281/zenodo.7348882",
+        "10.5281/zenodo.7348881",
+        "CN, Vehicles Platooning, Cloud-assisted platooning",
+        "zenodo.org/records/7348882"
+      ],
+      "prior_files": []
+    },
+    "v2x/bristol": {
+      "keys": [
+        "10.5523/bris.eupowp7h3jl525yxhm3521f57",
+        "Operating ITS-G5 DSRC over Licensed and Unlicensed Bands: A City-Scale Performance Evaluation",
+        "A Dataset of Full-Stack ITS-G5 DSRC Communications over Licensed and Unlicensed Bands Using a Large-Scale Urban Testbed",
+        "1903.10289",
+        "10.1016/j.dib.2019.104368",
+        "1904.00464",
+        "v2x-dev/ITS-G5_trials"
+      ],
+      "prior_files": []
+    },
+    "v2x/platoon": {
+      "keys": [
+        "10.5281/zenodo.13710763",
+        "10.5281/zenodo.13710762",
+        "F1/10 Platooning with ETSI ITS-G5 communication using ROS 2"
+      ],
+      "prior_files": []
+    },
+    "transport/unico": {
+      "keys": [
+        "10.34810/data1072",
+        "Experimental datasets of UNICO 5G TIMING project",
+        "Scenario2_collector_capture",
+        "D435camera_capture",
+        "Gonzalez Laura Torrego Raul Ruiz Marc"
+      ],
+      "prior_files": []
+    },
+    "transport/cellular": {
+      "keys": [
+        "10.5281/zenodo.10390211",
+        "10.5281/zenodo.10390210",
+        "DETERMINISTIC6G COTS 5G latency measurements",
+        "COTS5G measurement campaign.xlsx",
+        "2307.10648",
+        "Data-Driven Latency Probability Prediction for Wireless Networks: Focusing on Tail Probabilities"
+      ],
+      "prior_files": []
+    },
+    "transport/ethercat": {
+      "keys": [
+        "10.5281/zenodo.23652951",
+        "10.5281/zenodo.21057279",
+        "10.5281/zenodo.21057280",
+        "10.5281/zenodo.21547904",
+        "10.5281/zenodo.23635698",
+        "LUM_TII_raw_jitter_data.zip",
+        "Software-Defined Stochastic Resilience: A Lock-Free Host Architecture Replacing FPGA/RTOS for 1 GB/s Laser-Ultrasonic Imaging on COTS Windows",
+        "Nguyen Dinh Tuan Nguyen Tien Minh Khoi Vu Nguyen Minh Hung"
+      ],
+      "prior_files": []
+    },
+    "cooperative/bern": {
+      "keys": [
+        "10.5281/zenodo.23434390",
+        "10.5281/zenodo.20184208",
+        "10.5281/zenodo.20277908",
+        "10.5281/zenodo.20116379",
+        "10.5281/zenodo.16476264",
+        "10.5281/zenodo.16358093",
+        "10.5281/zenodo.15119292",
+        "10.5281/zenodo.14029378",
+        "10.5281/zenodo.14029377",
+        "twr-cloud.inf.unibe.ch",
+        "TWR-CLOUD-Bern",
+        "Two-Way-Ranging-based Cooperative Localization with an Open UWB Dataset from Bern-University (TWR-CLOUD-Bern)"
+      ],
+      "prior_files": []
+    },
+    "cooperative/openswarm": {
+      "keys": [
+        "10.5281/zenodo.20379241",
+        "10.5281/zenodo.20379242",
+        "Synchronized USV Hydrophone Dataset for Ocean Noise Pollution Monitoring",
+        "PoC 3 - Synchronized USV Hydrophone Dataset for Ocean Noise Pollution Monitoring (Trials 1 & 2)"
+      ],
+      "prior_files": []
+    },
+    "cooperative/crazyflie": {
+      "keys": [
+        "shushuai3/multi-robot-localization",
+        "9d7b45979cc21ea11def44e7bc51613e7599a768",
+        "2003.05853",
+        "10.1109/LRA.2025.3597039",
+        "An autonomous swarm of micro flying robots with range-based relative localization",
+        "Onboard Ranging-based Relative Localization and Stability for Lightweight Aerial Swarms"
+      ],
+      "prior_files": []
+    },
+    "haptic/bilateral": {
+      "keys": [
+        "10.4121/uuid:85ca44c4-a4ec-4d64-bb97-b225914ed6fa",
+        "98212126-fc8e-4253-9bb2-a8c607c95adf",
+        "Human hammering with an elastic hammer through a 1-DOF teleoperator with different feedback types",
+        "OneDofHashtrudi"
+      ],
+      "prior_files": []
+    },
+    "haptic/icub": {
+      "keys": [
+        "10.5281/zenodo.5596856",
+        "10.5281/zenodo.4906335",
+        "10.5281/zenodo.4906336",
+        "10.5281/zenodo.5913573",
+        "AndyData-lab-onePersonTeleoperatingICub",
+        "AndyData-lab-prescientTeleopICub"
+      ],
+      "prior_files": []
+    },
+    "haptic/mycobot": {
+      "keys": [
+        "10.5281/zenodo.23689905",
+        "10.5281/zenodo.23681891",
+        "10.5281/zenodo.23681892",
+        "Command log and analysis code for low-cost robot teleoperation over consumer 4G",
+        "data_pergerakan_robot.csv",
+        "Bounding the command emission rate in low-cost robot teleoperation over consumer 4G",
+        "Muhammad Haffez Mohd Zaki and Noor Azizi Mardi"
+      ],
+      "prior_files": []
+    },
+    "haptic/oslo": {
+      "keys": [
+        "10.5281/zenodo.20734951",
+        "10.5281/zenodo.20734950",
+        "Background Data for: Impact of Latency on Task Performance and User Experience in Teleoperated Object Manipulation",
+        "latency_teleoperation_user_study_data.tsv"
+      ],
+      "prior_files": []
+    },
+    "clocks/flocklab": {
+      "keys": [
+        "10.5281/zenodo.3731498",
+        "10.5281/zenodo.3354717",
+        "Wireless Link Quality Estimation on FlockLab and Beyond",
+        "10.1145/3359427.3361907",
+        "2019-07_FlockLab_dpp-cc430.csv"
+      ],
+      "prior_files": []
+    },
+    "clocks/roboloc": {
+      "keys": [
+        "10.5281/zenodo.15989282",
+        "10.5281/zenodo.15857196",
+        "RoboLoc-G: Multisensor Localization Dataset from a Robotic Gantry System",
+        "RoboLoc-G"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/README.md",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/README.md",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-frame-derive.py",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-frame-derived.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-provenance.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv"
+      ]
+    },
+    "optics/optical": {
+      "keys": [
+        "osf.io/emh5z",
+        "10.3758/s13428-022-01983-5",
+        "10.1101/2022.06.24.497509",
+        "Measuring motion-to-photon latency for sensorimotor experiments with virtual reality systems"
+      ],
+      "prior_files": []
+    },
+    "fingerprint/esp32": {
+      "keys": [
+        "10.5281/zenodo.10883013",
+        "10.5281/zenodo.10883012",
+        "10.21227/2mbb-yt66",
+        "ESP32C3 WiFi FTM RSSI Indoor Localization",
+        "ESP32C3_WiFi_FTM_RSSI.zip",
+        "10.1109/ACCESS.2022.3201645",
+        "Wi-Fi and Bluetooth Contact Tracing Without User Intervention"
+      ],
+      "prior_files": []
+    }
+  },
+  "bibliographic_records": 130,
+  "new_bibliographic_records": 125,
+  "bibliographic_evidence": {
+    "new bibliography record / author abstract": 63,
+    "new bibliography record / full text": 55,
+    "historical / author abstract": 3,
+    "new bibliography record / bibliographic screening": 7,
+    "historical / full text": 2
+  },
+  "citation_relations": 228,
+  "citation_evidence": {
+    "verified reference": 228
+  },
+  "independently_recomputed_tables": {
+    "clocks/flocklab-link-coverage.csv": {
+      "rows": 2571,
+      "sha256": "3293a6fd290c88748944731895f458170eb28989388bbc32324faf3a4393a3ad"
+    },
+    "clocks/flocklab-raw-containers.csv": {
+      "rows": 2,
+      "sha256": "1f3c0b954b83f4889b71cbfa32fc78691b45d409d1521809e67d04d804f24974"
+    },
+    "clocks/flocklab-serial-pairing.csv": {
+      "rows": 153,
+      "sha256": "b62e626f65d31588b9f4c2e333c6a9129ecd1512b90834631d2794d630563919"
+    },
+    "clocks/flocklab-strobe-gpio.csv": {
+      "rows": 108,
+      "sha256": "573dec7c4dbe8a334770d747a9b788d2086b3fed378e11e70c176b53c98c83ab"
+    },
+    "clocks/roboloc-gantry-ranging.csv": {
+      "rows": 72,
+      "sha256": "9802224786517aacad2b1f72ddc7eb7423a5b69583722af6eeda4a0211d2cb60"
+    },
+    "clocks/roboloc-mcap-clocks.csv": {
+      "rows": 16,
+      "sha256": "ef0b42f76a8f027c0b8025e9258d5cba64a2f6fabe25005b76afad5e06316f9b"
+    },
+    "clocks/roboloc-optical-time-shift.csv": {
+      "rows": 24,
+      "sha256": "798c164b25d8bf1852b9ec555f36d8265511cddcc6a10566a8e371d52d9e0336"
+    },
+    "convoy/fhwa-logger-comparison.csv": {
+      "rows": 1440,
+      "sha256": "e34ae87d0e8272a8f65332a8c07c7587e5202dae11ec95801c65529e3fc4962f"
+    },
+    "convoy/fhwa-paired-motion.csv": {
+      "rows": 64,
+      "sha256": "d72dab66e167583fcd79b03b767d0225facfff8b9edc173b058846a475519d64"
+    },
+    "convoy/fhwa-run-coverage.csv": {
+      "rows": 72,
+      "sha256": "7d96bc7e25e09ed2509ace89dc1a8e9f853395db3b18ef79ce59337249277ff8"
+    },
+    "convoy/fhwa-vehicle-channels.csv": {
+      "rows": 360,
+      "sha256": "91e591d40d9cc5f540e1d42ff6898f3f8dc4e3e39bf4cbde82a83fecb05b7b6a"
+    },
+    "convoy/mobix-archive-audit.csv": {
+      "rows": 91,
+      "sha256": "2e285c68883d8b7a331e83976f24dbf047cebe9ee149825458395b3d0b47ec11"
+    },
+    "convoy/mobix-cn-windows.csv": {
+      "rows": 16,
+      "sha256": "c8e1c0250ab048d578ad25d1300dae0d7ac8d9d13ecccae729304537bcc85578"
+    },
+    "convoy/mobix-de-files.csv": {
+      "rows": 130,
+      "sha256": "dc84ba52e15b80c787ef6b0337482a9cbf4bf8eee029f02f689bda7a179be6ef"
+    },
+    "convoy/mobix-grtr-endpoint-pairs.csv": {
+      "rows": 12,
+      "sha256": "5f7a43cad26dd2f2ad49b6184690e5038352bec3f9b5ecb377c805300233ee95"
+    },
+    "convoy/mobix-grtr-workbooks.csv": {
+      "rows": 27,
+      "sha256": "9a65ef1d14dde2b9d9948bc62ad92b4bd571150fdccdaa6b10593a43b6f99129"
+    },
+    "cooperative/bern-role-condition.csv": {
+      "rows": 168,
+      "sha256": "cfa88029fbb9f83d7d1b53d94fc524d8b050b44ccfffc7fa2859580694d3ed67"
+    },
+    "cooperative/bern-time-association.csv": {
+      "rows": 48,
+      "sha256": "b2debfbbe43ddabacb7052969e74643d253f430af513fc10815753644e895546"
+    },
+    "cooperative/crazyflie-cross-file-overlap.csv": {
+      "rows": 21,
+      "sha256": "8fa147e8468c964ed619abdc28db09d752bc248a871901bf0c20f023251fcade"
+    },
+    "cooperative/crazyflie-direction-pairs.csv": {
+      "rows": 30,
+      "sha256": "a35773cf764c23a4775b0423a54bc9c35fc5b1961fb7100f36061cc3c7d31a46"
+    },
+    "cooperative/crazyflie-flights.csv": {
+      "rows": 7,
+      "sha256": "a1c98c243461552224786b77065f6ba58c70f4161d6456af39fabc258265b087"
+    },
+    "cooperative/crazyflie-frequency-files.csv": {
+      "rows": 6,
+      "sha256": "295a393b89f2cf18aa7ad69eb573aa0c4d69587e14e6fb818cf7e9604296fd21"
+    },
+    "cooperative/crazyflie-range-check.csv": {
+      "rows": 60,
+      "sha256": "291e0d066bc28cdd30ea0e199ef177bd63a2dfc412fbb6e2ced67ec15f4b3418"
+    },
+    "cooperative/openswarm-cross-station.csv": {
+      "rows": 12,
+      "sha256": "5536eec14a0c55ed2c3ac2023cb000e84b487d1235bdc81e9093e4a5fc81c382"
+    },
+    "cooperative/openswarm-recordings.csv": {
+      "rows": 10,
+      "sha256": "4391c3e019fe230c0004eeb296db45e49f52b6da709211a97ea8425fbd115a96"
+    },
+    "cooperative/openswarm-stations.csv": {
+      "rows": 8,
+      "sha256": "c4790a266602afb0eb56af2756720b42b016659979b9c2abcd341614d9ad5520"
+    },
+    "fingerprint/esp32-files.csv": {
+      "rows": 7,
+      "sha256": "05f78f5ebe4347939cb5e52e2b65d1202c6fd3c7ed40449f29c0b075a0c73db2"
+    },
+    "fingerprint/esp32-heldout-locations.csv": {
+      "rows": 82,
+      "sha256": "930435adec57fed9dc20fd178821f3d0786f68e1d645fa9051ede7621220a898"
+    },
+    "fingerprint/esp32-position-blocks.csv": {
+      "rows": 257,
+      "sha256": "2745e486cca10ce40b4949c2ccaee03834b844dfd3ff2c46a4e468047aa08de8"
+    },
+    "haptic/bilateral-motion-windows.csv": {
+      "rows": 364,
+      "sha256": "cb704f2a809e08b826db7320e38353eebaeee44bba0c46a6dd26b304e074abc8"
+    },
+    "haptic/bilateral-optical-reference.csv": {
+      "rows": 48,
+      "sha256": "7e21fcc2fa09efb957320841f67e88a977b28d0dd3e98036852bad6945aba44a"
+    },
+    "haptic/bilateral-recordings.csv": {
+      "rows": 14,
+      "sha256": "93ebf06c2daab5e189e120a3a544bc2be5d311cdcad66378b8e577308035c9ce"
+    },
+    "haptic/icub-earlier-split-bundles.csv": {
+      "rows": 98,
+      "sha256": "f7034ec63096e9590e1b1445e642a477f66b025f3cbe88d6af9c9efe170d3eed"
+    },
+    "haptic/icub-first-two-indexes.csv": {
+      "rows": 4,
+      "sha256": "937d5c0c1261c76fd500f5bd209330e260ebab40a0cb14245f135766376e93cf"
+    },
+    "haptic/icub-human-retargeted-shapes.csv": {
+      "rows": 98,
+      "sha256": "a370d712eca314eaeeac2495c4b0ad6805fb5c130c94e24d604c32e826884521"
+    },
+    "haptic/icub-reference-comparisons.csv": {
+      "rows": 820,
+      "sha256": "98db3ab91f1e69ba9cb1d778a0377b2b079b49f009e33b304fd27b3671585fe6"
+    },
+    "haptic/icub-version-matches.csv": {
+      "rows": 384,
+      "sha256": "134a48f9d150b614a671bc3dcfc9910548dc9c4e3604bee01971452377a6af5d"
+    },
+    "haptic/mycobot-order-sensitivity.csv": {
+      "rows": 60,
+      "sha256": "4bf1b02fd42c4b2ec627d072b9856605c68e4ce6542a6cf30097f902db5f7c8e"
+    },
+    "haptic/mycobot-rtt-modes.csv": {
+      "rows": 8,
+      "sha256": "dc0667b17e6bc3299369aef8e0486c28d6639c27b5d2747aee98e143b5e2625b"
+    },
+    "haptic/oslo-condition-outcomes.csv": {
+      "rows": 20,
+      "sha256": "4b9e1b7c610a144dba23ee531b8b562003f8788eccdfefd7c2c9d85ac9cad494"
+    },
+    "haptic/oslo-paired-outcomes.csv": {
+      "rows": 16,
+      "sha256": "ca05a1c26d7fbb4f5c0e666277a59fc2a0d0859eb9228c7637c270c13d9ebffb"
+    },
+    "optics/optical-endpoint-lags.csv": {
+      "rows": 14,
+      "sha256": "cab64d5d1cb9d938baa5e7f42cdda88308eed40248d4d3300dd9357d871f4e6f"
+    },
+    "optics/optical-paired-events.csv": {
+      "rows": 70,
+      "sha256": "dc358b9ffc252d0a04abbde77afb8443e7f3e483e129e1df121d4b43aa038567"
+    },
+    "optics/optical-video-coverage.csv": {
+      "rows": 70,
+      "sha256": "a9a4a368a4117d31dd506514fd7bbd4ef017ef8305f22fb763f5ec61db35f7fb"
+    },
+    "transport/cellular-rounds.csv": {
+      "rows": 118,
+      "sha256": "540f0f935301aa37cc81b9a9770f33821fc4b958354c64aeaa0cd41d2c97bd9b"
+    },
+    "transport/cellular-sessions.csv": {
+      "rows": 18,
+      "sha256": "962db842215790331196261084e086ac1f29ed771e402888f574fdbacd4b4c21"
+    },
+    "transport/cellular-workbook-coverage.csv": {
+      "rows": 32,
+      "sha256": "54e830a29536439e0e5abf37d8e4fa712d99accff3af0e6790f8319be505e9e0"
+    },
+    "transport/ethercat-acquisition-loss.csv": {
+      "rows": 2,
+      "sha256": "242319a65f91d104350d3e9068e9ba6887b052e8fde32bbb248281678c674d5b"
+    },
+    "transport/ethercat-drive-cycles.csv": {
+      "rows": 16,
+      "sha256": "8a1f265e9e1573ddc31a74735b7d8c8b6838b305654a2efda89a7e6fed003f31"
+    },
+    "transport/ethercat-motion-windows.csv": {
+      "rows": 45,
+      "sha256": "b2d56f72b258065ed97c1b5d2eba4c896779616d28a62730c00a8bbad80f1f78"
+    },
+    "transport/ethercat-pipeline-stages.csv": {
+      "rows": 6,
+      "sha256": "b52977440409869c896e6883aba9732b6073b3fe6a895a8711624753927d774d"
+    },
+    "transport/unico-capture-intervals.csv": {
+      "rows": 10,
+      "sha256": "f314c3939108108c2a952d5486b6e1610f982f3068392973967e9f638181135f"
+    },
+    "transport/unico-wifi-scenarios.csv": {
+      "rows": 3,
+      "sha256": "0caaad63f28dd9cb951b6786cf8b7a4ac1906e42e2c9cbf9f98b3ce086b9a72c"
+    },
+    "v2x/bristol-files.csv": {
+      "rows": 186,
+      "sha256": "fe6c3add0366612e913cc12d71434eee742001bcea03dff96f26b5fe69a0c7f7"
+    },
+    "v2x/bristol-raw-prefixes.csv": {
+      "rows": 30,
+      "sha256": "27dda7f281b1ab4a5883eb40887f8d6be49b21480317805b1e154755ce6564a4"
+    },
+    "v2x/bristol-v2v-links.csv": {
+      "rows": 28,
+      "sha256": "00597583bc8afa174a641e1123357fc67e89d54dce92bce866879c09caaad619"
+    },
+    "v2x/platoon-broadcasts.csv": {
+      "rows": 15,
+      "sha256": "0c50fc796697441c1b38cd614204530731c4a4036b11ad2774249eb2cdb89497"
+    },
+    "v2x/platoon-control-uses.csv": {
+      "rows": 5,
+      "sha256": "b42acf5b2edaf240c9b9bcc2291fd26d7f540605498a5b37a3bd2b295b30a61a"
+    },
+    "v2x/platoon-forwarding.csv": {
+      "rows": 5,
+      "sha256": "42e52d206863c3d39036a23403de24faa51f83a40960214b36b31cdc99eb5618"
+    },
+    "v2x/platoon-motion.csv": {
+      "rows": 15,
+      "sha256": "3f6f27709f192a6d24156fd05a68a2f52beff67916c11551e914aefaf8830cdb"
+    },
+    "v2x/platoon-motor-conversions.csv": {
+      "rows": 5,
+      "sha256": "9efa6ba8babd6917f0332b3b0e69b24b93740bb2bfcec2cfc401a3f54c6c33ff"
+    },
+    "v2x/platoon-topics.csv": {
+      "rows": 123,
+      "sha256": "1c7ee8a9b5f2bae2f0042bc6221a0b363b7aabedd43f50294fb254f289873c3b"
+    }
+  },
+  "interpretation": "Distinct releases, related studies and method papers are indexed separately. Cross-site releases of the 5G-MOBIX project share a parent programme. Exact file versions and permissions are recorded per source. Timing summaries refer to the specified acquisition, network or motion endpoint."
+}

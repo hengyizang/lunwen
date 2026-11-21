@@ -1,0 +1,11 @@
+trial,vehicle,csv,csv_rows,audio_columns,null_padding_bytes,tick_present,embedded_node_values,wav_channels,wav_rate_hz,wav_header_frames
+2026_03_04,usv1,datasets_2026_03_04/usv1_mote_1_rms_log_2026_03_04-11_09_06.csv,1753,8000,0,1753,1,2,16000,14022000
+2026_03_04,usv2,datasets_2026_03_04/usv2_mote_1_rms_log_2026_03_04-11_09_07.csv,1742,8000,0,1742,1,2,16000,13920000
+2026_03_04,usv3,datasets_2026_03_04/usv3_mote_2_rms_log_2026_03_04-11_09_08.csv,1733,8000,0,1733,2,2,16000,13858000
+2026_03_04,usv4,datasets_2026_03_04/usv4_mote_3_rms_log_2026_03_04-11_13_34.csv,1185,8000,0,1185,3,2,16000,9482000
+2026_04_20,usv1,datasets/usv1/usv1_mote_1_rms_log_2026_04_20-15_25_24.csv,3418,8000,861,3418,1,2,16000,27580000
+2026_04_20,usv2,datasets/usv2/usv2_mote_1_rms_log_2026_04_20-15_25_24.csv,3525,8000,0,3525,1,2,16000,28180000
+2026_04_20,usv3,datasets/usv3/usv3_mote_2_rms_log_2026_04_20-15_25_27.csv,891,8000,0,891,2,2,16000,9206000
+2026_04_20,usv3,datasets/usv3/usv3_mote_None_rms_log_2026_04_20-15_35_09.csv,46,8000,0,0,None,2,16000,19088000
+2026_04_20,usv4,datasets/usv4/usv4_mote_3_rms_log_2026_04_20-15_25_26.csv,1,8000,0,1,3,2,16000,1856000
+2026_04_20,usv4,datasets/usv4/usv4_mote_3_rms_log_2026_04_20-15_27_28.csv,1,8000,0,1,3,2,16000,26132000

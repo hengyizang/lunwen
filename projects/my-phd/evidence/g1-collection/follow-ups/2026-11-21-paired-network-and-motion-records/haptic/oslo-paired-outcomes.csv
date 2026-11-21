@@ -1,0 +1,17 @@
+scope,task,injected_delay_ms,unique_baseline_condition_pairs,median_paired_change_native_units,worse_than_baseline,equal_to_baseline,better_than_baseline
+all_recorded,JTHFT,50,47,3.54736,27,0,20
+all_recorded,JTHFT,100,47,8.7908,32,0,15
+all_recorded,JTHFT,150,47,6.42257,33,0,14
+all_recorded,JTHFT,200,47,12.56221,37,0,10
+all_recorded,BBT,50,48,0.0,16,18,14
+all_recorded,BBT,100,48,-0.5,24,11,13
+all_recorded,BBT,150,48,-1.0,28,10,10
+all_recorded,BBT,200,48,-2.0,37,8,3
+paper_exclusions,JTHFT,50,45,3.61241,27,0,18
+paper_exclusions,JTHFT,100,45,9.84945,32,0,13
+paper_exclusions,JTHFT,150,45,6.42257,32,0,13
+paper_exclusions,JTHFT,200,45,12.85207,37,0,8
+paper_exclusions,BBT,50,45,0.0,15,16,14
+paper_exclusions,BBT,100,45,0.0,22,10,13
+paper_exclusions,BBT,150,45,-1.0,26,9,10
+paper_exclusions,BBT,200,45,-2.0,35,7,3

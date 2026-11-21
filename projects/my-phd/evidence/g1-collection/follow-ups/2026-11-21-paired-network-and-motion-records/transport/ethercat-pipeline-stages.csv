@@ -1,0 +1,7 @@
+run,stage,measured_rows,median_us,p99_us,max_us
+Scan029,t01_us,15881,1908.1,7930.34,23844.1
+Scan029,t12_us,15881,1.1,2.1,57.5
+Scan029,t23_us,15881,291519.0,613232.8,963499.0
+Scan029,pub_to_tex_us,962,77835.65,158410.93,226458.0
+Scan029,tex_to_present_us,962,15.1,32.812,177.6
+Scan029,pub_to_present_us,962,77850.8,158422.54,226471.0

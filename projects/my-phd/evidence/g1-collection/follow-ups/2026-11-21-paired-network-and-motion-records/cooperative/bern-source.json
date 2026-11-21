@@ -1,0 +1,115 @@
+{
+  "checked_utc": "2026-11-21",
+  "gate": "G1",
+  "question": "R5 cooperative observations, asynchronous sampling and inter-node timing",
+  "title": "Two-Way-Ranging-based Cooperative Localization with an Open UWB Dataset from Bern-University (TWR-CLOUD-Bern)",
+  "doi": "10.5281/zenodo.23434390",
+  "concept_doi": "10.5281/zenodo.14029377",
+  "landing": "https://doi.org/10.5281/zenodo.23434390",
+  "creators": [
+    "Xenakis, Dimitrios",
+    "Di Maio, Antonio",
+    "Braun, Torsten"
+  ],
+  "released": "2026-10-17",
+  "registry": {
+    "url": "https://zenodo.org/api/records/23434390",
+    "bytes": 12972,
+    "sha256": "9ec72c2bbf6b0388ed808cb5bf8038a985b717d4ee86e7ecfcb9a7c6ce312a2d"
+  },
+  "files": {
+    "Rangings at Pollers (Stats).pkl": {
+      "url": "https://zenodo.org/api/records/23434390/files/Rangings%20at%20Pollers%20(Stats).pkl/content",
+      "bytes": 32494166,
+      "sha256": "fa848403f34d5f594e0677e2492230942b5674873c5eb96948954a7da04bfd99",
+      "verified_publisher_checksum": "md5:c629fa45d189f84ec10aabc081c1eba8"
+    },
+    "Rangings at Responders (Stats).pkl": {
+      "url": "https://zenodo.org/api/records/23434390/files/Rangings%20at%20Responders%20(Stats).pkl/content",
+      "bytes": 32464787,
+      "sha256": "faa9e67f06584811e12bc50fd328fbac1b7e95e756f59bae681a842a035c49bd",
+      "verified_publisher_checksum": "md5:55e08618bed2aa2fa407684502c750d3"
+    },
+    "Rangings at Pollers.pkl": {
+      "url": "https://zenodo.org/api/records/23434390/files/Rangings%20at%20Pollers.pkl/content",
+      "bytes": 227243010,
+      "sha256": "55189d1ae900bbb836806715d15c1425b0a19c0c3c3ceff9238387388af3228e",
+      "verified_publisher_checksum": "md5:dcc92def1601dbd032827256a084ff66"
+    },
+    "reproduce_twr_cloud_bern_release.py": {
+      "url": "https://zenodo.org/api/records/23434390/files/reproduce_twr_cloud_bern_release.py/content",
+      "bytes": 53416,
+      "sha256": "f6c332cf8d5f02e3c4e3c479a03bbce15dbc93d3f3e280da4f617ab227349378",
+      "verified_publisher_checksum": "md5:6c8a87bd4e04616a6b32e10e6fb1e0a7"
+    },
+    "TWR-CLOUD-Bern corrections.pdf": {
+      "url": "https://zenodo.org/api/records/23434390/files/TWR-CLOUD-Bern%20corrections.pdf/content",
+      "bytes": 429325,
+      "sha256": "0c23d7afadb256333b6d4a430294de2783b6bc1d7939e3042b8c1e084e755a1a",
+      "verified_publisher_checksum": "md5:ccfcb5cda4a453893225df5a67f2d775"
+    },
+    "Rangings at Responders.pkl": {
+      "url": "https://zenodo.org/api/records/23434390/files/Rangings%20at%20Responders.pkl/content",
+      "bytes": 259142946,
+      "sha256": "65c077bb1aa9b8793d9b206a406ecfd574047ad345fbafdbf93cfcdfad26fa21",
+      "verified_publisher_checksum": "md5:d5d71fe55c758c2a87d7efd812357c5b"
+    }
+  },
+  "version": "6; corrected positions in training scans 5, 6 and 7. Concept DOI groups earlier versions including v5 (10.5281/zenodo.20277908).",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.23434390",
+      "10.5281/zenodo.20184208",
+      "10.5281/zenodo.20277908",
+      "10.5281/zenodo.20116379",
+      "10.5281/zenodo.16476264",
+      "10.5281/zenodo.16358093",
+      "10.5281/zenodo.15119292",
+      "10.5281/zenodo.14029378",
+      "10.5281/zenodo.14029377",
+      "twr-cloud.inf.unibe.ch",
+      "TWR-CLOUD-Bern",
+      "Two-Way-Ranging-based Cooperative Localization with an Open UWB Dataset from Bern-University (TWR-CLOUD-Bern)"
+    ],
+    "matches": [],
+    "tracked_evidence_files": 1030,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  },
+  "rights": "MIT License per fixed Zenodo release. Credit Dimitrios Xenakis, Antonio Di Maio and Torsten Braun. Source tables linked; new aggregates and an independent reader are included.",
+  "queries": [
+    "multi robot UWB time synchronization ranging timestamp raw packets cooperative localization dataset sender receiver open data mobile robots vicon",
+    "TWR-CLOUD-Bern project metadata → June/October release chain in DataCite → authoritative v6 tables, deterministic builder, methodology, role documentation and correction note."
+  ],
+  "methodology": {
+    "url": "https://twr-cloud.inf.unibe.ch/methodology.html",
+    "bytes": 15325,
+    "sha256": "ab263e29b7e1ca9870995c18695541acc2cbc172b387ee3a2771dd2c58b0d128"
+  },
+  "field_dictionary": {
+    "url": "https://twr-cloud.inf.unibe.ch/dataset.html",
+    "bytes": 20845,
+    "sha256": "6cddfdd733031afe73ea569cb2de3b0635ee615299f3a557cd5f877e097c1560"
+  },
+  "evidence": "Four complete experimental tables, role-specific protocol documentation, release-builder source and v6 training correction note. Static multi-node DS-TWR measurements; 40 physical nodes in 12 surveyed deployments. Scans 1–11 are training and scan 12 is held out. Each scan has seven listening periods (ms).",
+  "acquisition": "Polling node initiates the exchange. Responder has an estimate following message 3; it sends the estimate in message 4. Poller and responder tables record separate logs. The release builder omits zero-valued failed range records and calculates ToF in ns from the logged distance using 299702547 m/s. The stored Timestamp is a local logging/Unix time in ns. No explicit exchange ID, independent per-radio hardware transmit/receive stamps or control actuation stamp in these tables.",
+  "counter_test": "The 331,554 poller statistics rows report 2,324,029 successes and 42,301,794 attempts; the 331,254 responder statistics rows give 2,640,077 successes and 416,157,861 listening attempts. These are different denominators. In 259,505 responder rows No Valid TX1 exceeds Responding Attempts. The success and failure counters cannot be treated as mutually exclusive outcomes in every 1 s window. Captured nonzero measurement rows are fewer than the success counters at both roles.",
+  "pairing": {
+    "rows_poller": 1862603,
+    "rows_responder": 2124073,
+    "method": "Same scan, listening period, physical ordered poller/responder identifiers and bit-identical stored ToF value. In a ±window about each logger stamp, require exactly one candidate at both ends. The table also counts matching timestamps ignoring ToF with preserved and reversed role IDs as sensitivity checks.",
+    "unique_at_window_ms": {
+      "0": 18,
+      "1": 143132,
+      "10": 825317,
+      "100": 1704592
+    },
+    "exact_stamp_same_directed_link_ignoring_tof": 18,
+    "exact_stamp_reverse_direction_ignoring_tof": 0,
+    "interpretation": "The online dictionary describes a timestamp match and a subset. Exact logged timestamps with consistent link and range yield only 18 pairs. At ±100 ms, 829,716 mutually unique candidates have the poller record earlier than the responder record. Candidate count changes with tolerance; relative logger ordering cannot be assumed to measure packet travel time."
+  },
+  "geometry": "Directly recomputed Euclidean separation for all measurements from the provided surveyed coordinate labels. Independent recomputation of the responder mean absolute ranging mismatch rounds to 56.40 cm, matching the updated note. The reference distance is derived from the same coordinate catalogue. The v6 note documents altered training position labels; it reports the radio measurements unchanged.",
+  "reproduction": "Fetch the four named .pkl files from the registry. Run python derive_bern.py DATA OUT with Python 3.11+, pandas 2.2 and NumPy. The reader checks the exact expected SHA-256 before allowing the small, fixed set of pickle globals used by these files. Output has 168 role/condition rows and 48 scan/window rows."
+}

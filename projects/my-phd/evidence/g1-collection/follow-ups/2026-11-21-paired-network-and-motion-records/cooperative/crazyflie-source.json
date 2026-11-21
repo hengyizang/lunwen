@@ -1,0 +1,134 @@
+{
+  "checked_utc": "2026-11-21",
+  "gate": "G1",
+  "question": "R5 cooperative observations, asynchronous sampling and inter-node timing",
+  "title": "Relative localization of a swarm flying robots: released Crazyflie indoor range and OptiTrack recordings",
+  "landing": "https://github.com/shushuai3/multi-robot-localization/tree/9d7b45979cc21ea11def44e7bc51613e7599a768",
+  "version": "Repository commit 9d7b45979cc21ea11def44e7bc51613e7599a768 (2021-06-05 UTC)",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "shushuai3/multi-robot-localization",
+      "9d7b45979cc21ea11def44e7bc51613e7599a768",
+      "2003.05853",
+      "10.1109/LRA.2025.3597039",
+      "An autonomous swarm of micro flying robots with range-based relative localization",
+      "Onboard Ranging-based Relative Localization and Stability for Lightweight Aerial Swarms"
+    ],
+    "matches": [],
+    "tracked_evidence_files": 1030,
+    "additional_tar_members": 301,
+    "early_baseline_checked": true,
+    "method": "Normalized identifiers and titles by casefolding, NFKD and alphanumeric projection, including prior tar/gzip members; also checked the early source index."
+  },
+  "creators": [
+    "Shushuai Li (repository author)"
+  ],
+  "rights": "Repository root has MIT License, Copyright (c) 2020 Shushuai Li; the license refers to software and associated documentation. No separate dataset-specific license identified. This folder shares independent aggregates only and points to the original CSVs.",
+  "queries": [
+    "real multirobot localization UWB dataset two mobile robots odometry range no anchors public data csv github two wheeled robots OptiTrack range UWB relative",
+    "Followed repository links to arXiv, compared v1 and v3 versions and the later journal DOI; checked complete dataset tree, realData.readDataTolist and fixed data files."
+  ],
+  "registry": {
+    "url": "https://api.github.com/repos/shushuai3/multi-robot-localization/git/trees/9d7b45979cc21ea11def44e7bc51613e7599a768?recursive=1",
+    "bytes": 10415,
+    "sha256": "b54697b9590848a82a03758de945d2bb14df4da7b20b842c1c23f4d432c0eed0"
+  },
+  "files": {
+    "LICENSE": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/LICENSE",
+      "bytes": 1068,
+      "sha256": "5183395e6870d9a48ab4904f0df35fde5e54dd38595b6034bf3a684dbb236efa",
+      "git_blob_sha1": "5f85eecfd6a8fb79fe8acacf2a37fd28494dd47b"
+    },
+    "README.md": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/README.md",
+      "bytes": 2582,
+      "sha256": "96e969a7aba6a02a76add84764a3c903a5ebe3b7b2d545e957f0f493a42af406",
+      "git_blob_sha1": "36d1dcdb0ee6141d1d68e5c7434e5b9bc4ade7cf"
+    },
+    "dataCreate.py": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataCreate.py",
+      "bytes": 9179,
+      "sha256": "96e6c8d28a593e5db11578e40c165bc1a7ada60632b4c043605798473c723428",
+      "git_blob_sha1": "462b203d6641fef46d034fb35996642cc9087e05"
+    },
+    "dataset/dat01.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat01.csv",
+      "bytes": 12174571,
+      "sha256": "0333ecf942749421a69b7749756afb23757786de93254e2783b58268d12d30e0",
+      "git_blob_sha1": "4952170e7b3d91a99130ad20730a7b863542a499"
+    },
+    "dataset/dat01old.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat01old.csv",
+      "bytes": 10857947,
+      "sha256": "b9c529cd96e506da83a8da527915a0a202e96e2ce1f791479104edbd27569331",
+      "git_blob_sha1": "a891c36ed2c35e16fa2cf1db3e60f0a8c6f0af56"
+    },
+    "dataset/dat02.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat02.csv",
+      "bytes": 9774607,
+      "sha256": "77b04b8100a5d9893de8d07412d5e4f81a0f68879dca86291b9e3f9dcf14b3cf",
+      "git_blob_sha1": "8bb5602dac5fb55e04e49830d4c2dd537c1fe73d"
+    },
+    "dataset/dat02old.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat02old.csv",
+      "bytes": 7285809,
+      "sha256": "db1af34c2ec90bc2d034811ebd5627510757cdc8b655838de770617d62934d86",
+      "git_blob_sha1": "42992e87520143a9cf141e2002917a11cb7a9eb1"
+    },
+    "dataset/dat03.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat03.csv",
+      "bytes": 10134875,
+      "sha256": "2e57db3c0db55f7ae3af65036ba0c23f08f88b34920eb1f5f9659f8d2cae8984",
+      "git_blob_sha1": "717eb982b340dc5c6723bf1200705d7a0322034e"
+    },
+    "dataset/dat03old.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat03old.csv",
+      "bytes": 16240903,
+      "sha256": "7f472323403906bbd8bac163ef6b11f8ebd2002b009ce249cdc7ac15b5ac8ab7",
+      "git_blob_sha1": "b0c094cfc2d2879212e68f4b9873613c4bf36898"
+    },
+    "dataset/dat04old.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/dat04old.csv",
+      "bytes": 16104237,
+      "sha256": "e2a5d04919e639dec4a039b2c427d7c1da40bea1d20d80095b39fe94fedd2c7d",
+      "git_blob_sha1": "e63c6286b0739d2cf0aa2f471a05ea143355e419"
+    },
+    "dataset/freq_5robots.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/freq_5robots.csv",
+      "bytes": 287886,
+      "sha256": "e227981a3ab584adef8b9156de884328844a410e9ea719266c635eff93933551",
+      "git_blob_sha1": "13bea896a9215ad86093f1d89686fda59f9a6428"
+    },
+    "dataset/freq_6robots.csv": {
+      "url": "https://raw.githubusercontent.com/shushuai3/multi-robot-localization/9d7b45979cc21ea11def44e7bc51613e7599a768/dataset/freq_6robots.csv",
+      "bytes": 286981,
+      "sha256": "9f2382f75de31e7eb94d1ee04944068018a6c5d58435ea72fd7efd535b85d3c9",
+      "git_blob_sha1": "10e72312c7ee892686a37c5527429a7dad633a6d"
+    }
+  },
+  "publication_versions": {
+    "v1": {
+      "url": "https://arxiv.org/pdf/2003.05853v1",
+      "bytes": 5531629,
+      "sha256": "728cab5554d2d49a7c1fe04f6570f9e24503741a3152d4c123175111dba0e830"
+    },
+    "v3": {
+      "url": "https://arxiv.org/pdf/2003.05853v3",
+      "bytes": 7197343,
+      "sha256": "e34544e56915d767a3bf22dcbf26a71bceb66e8e0643483a3257dda967058f09"
+    },
+    "journal": {
+      "url": "https://api.crossref.org/works/10.1109/lra.2025.3597039",
+      "bytes": 6457,
+      "sha256": "c41d9d075de1dfc9a29c99bc64e1e6770af5852faf91295f772ca0695d676a20"
+    },
+    "distinction": "The fixed public checkout dates to 2021. arXiv v1 is the 2020 four-author “An autonomous swarm of micro flying robots with range-based relative localization”; v3 changed both title and author list. The 2025 journal paper is “Onboard Ranging-Based Relative Localization and Stability for Lightweight Aerial Swarms,” DOI 10.1109/LRA.2025.3597039. Associated preprint versions are linked rather than counted as independent experiments."
+  },
+  "evidence": "The fixed repository contains seven 81-column files labelled as real-world flight with three or four Crazyflies and independent OptiTrack measurements. Two further 3-column rate-related CSVs have no explicit time column or written direction mapping; only value-change counts per column are reported for these.",
+  "cleaning": "Retained the seven files as distinct recordings, without treating them as statistically independent. No two files contain any bit-identical 6-position tuple combining the first two vehicles at times when both optical quaternions have norms within [0.95,1.05]. This check cannot rule out time-shifted or transformed resampling. A single flight row has a nonfinite field. Only positive finite radio readings and valid per-pair optical samples enter error summaries. The number of active vehicles comes from the README, avoiding unused/dummy link fields.",
+  "methods": "Source code converts the stored range by dividing by 1,000 to metres despite a README metre heading. All three optical coordinates are used in the Euclidean separation. Code uses bias 0.048r+0.6508 m, whereas arXiv v1 Sec. V-B describes 0.072r+0.62 m (r in metres). The script compares the two bias terms alone; no outlier filter is applied. The repository implementation of columnSmoothFilter returns each original value on both branches. 60 file/directed-link raw median absolute discrepancies span 0.7000–0.8769 m, and the code bias adjustment gives 0.0372–0.1247 m. Calibration ground truth in the paper uses OptiTrack; these are descriptive checks, not held-out accuracy.",
+  "timing": "The seven logs have 94,657 rows. Of 406,628 positive valid same-row bidirectional pair observations, 229,749 report different reciprocal values. On 398,303 consecutive 9–11 ms positive pair intervals, only the forward value changed on 58,642, only the reverse on 50,789, both on 34,950 and neither on 253,922. This measures stored value changes. Repeated equal-valued updates, acquisition times, network direction delays and delivery rates cannot be recovered from a shared sample tick. For dat03old and dat04old, respectively 356 and 828 adjacent tick gaps fall outside the 9–11 ms band.",
+  "reproduction": "Use the nine CSV members in dataset/ at the pinned repository commit. Run python derive_crazyflie.py REPOSITORY_ROOT OUT (Python 3, NumPy and pandas). Source SHA-256 and Git blob IDs are listed above."
+}

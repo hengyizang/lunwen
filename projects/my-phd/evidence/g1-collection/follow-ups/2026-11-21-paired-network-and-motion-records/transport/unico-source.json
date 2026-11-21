@@ -1,0 +1,218 @@
+{
+  "title": "Experimental datasets of UNICO 5G TIMING project",
+  "landing": "https://doi.org/10.34810/data1072",
+  "doi": "10.34810/data1072",
+  "version": "Dataverse 1.0",
+  "released": "2024-12-18T12:48:27Z",
+  "accessed_utc": "2026-11-21",
+  "authors": [
+    "Laura Gonzalez",
+    "Raul Torrego",
+    "Marc Ruiz Ramirez",
+    "Luis Velasco Esteban"
+  ],
+  "rights": "Dataset under CC BY 4.0 per version manifest, credit the four original depositors. Newly computed summaries and an independent reader are included; no packet payloads or raw dissections redistributed.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.34810/data1072",
+      "Experimental datasets of UNICO 5G TIMING project",
+      "Scenario2_collector_capture",
+      "D435camera_capture",
+      "Gonzalez Laura Torrego Raul Ruiz Marc"
+    ],
+    "matched": [],
+    "evidence_paths": 1030,
+    "extra_tar_members": 301,
+    "early_catalogue": true
+  },
+  "registry": {
+    "url": "https://dataverse.csuc.cat/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.34810/data1072",
+    "bytes": 28802,
+    "sha256": "94dbff36d9357873a75e0eb249f936b2e2dec84462d30e9d1d268eecb1097162"
+  },
+  "files": [
+    {
+      "file": "Scenario1_generator_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187363?format=original",
+      "original_bytes": 857952,
+      "verified_dataverse_md5": "0de3b1a9a9c4789bac88145cdf6d8244",
+      "sha256": "9f2dd527d1b6f3d8f50c4d8769fb1e111b229a7f3978976e77b8c70fdf7d2d8d"
+    },
+    {
+      "file": "dataset1_description.docx",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187366",
+      "original_bytes": 1958837,
+      "verified_dataverse_md5": "9013c0455e2b80e2e25911752f53a405",
+      "sha256": "db5c9fe4aa2e233d85b1ae4c13c0315552e5b71aa1676d8521d03e01b5e667c8"
+    },
+    {
+      "file": "dataset2_description.docx",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187373",
+      "original_bytes": 755105,
+      "verified_dataverse_md5": "55fa052aa49c5610c430aa066222bbbf",
+      "sha256": "5be10d9ffa18a2bc00e58ed49293de02a812dc48ada8711116f63ddbd5c1b859"
+    },
+    {
+      "file": "Readme.txt",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187370",
+      "original_bytes": 7456,
+      "verified_dataverse_md5": "5b644269569a03717d5ec9d6a8bd7900",
+      "sha256": "a1f7370d83993509ffa8f27d554b444e61787c58664bd6a52c8a8e0f4fe07344"
+    },
+    {
+      "file": "laserHokuyo_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187371?format=original",
+      "original_bytes": 27354,
+      "verified_dataverse_md5": "3b927f32cade0de88aa7ea5af31c7ea0",
+      "sha256": "231ab69d2b2e2b2a7a3044eee09ad2b681978e06c3e52a9dcb1af1b8c474b8f8"
+    },
+    {
+      "file": "easybot1_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187357?format=original",
+      "original_bytes": 4502735,
+      "verified_dataverse_md5": "9a1e30127c9d97d70bf30f240f7c97ff",
+      "sha256": "c27c4987212f4b9d562e19dd1f5580e58d8e745ada7fb30df48af82acd1271cb"
+    },
+    {
+      "file": "Scenario3_collector_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187365?format=original",
+      "original_bytes": 90854,
+      "verified_dataverse_md5": "915056b897386f84d22151ea97a20f98",
+      "sha256": "e654532bdce1a3835610dacdc4d395cbbb0987ab7115d3537dc8d725d36c4a30"
+    },
+    {
+      "file": "Scenario2_collector_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187378?format=original",
+      "original_bytes": 90896,
+      "verified_dataverse_md5": "675e6708f68000905d49795be73b9e43",
+      "sha256": "6be5ada0a7f565ccf7595cd6cc8be5645158a900ce3853291018e8964df6b0be"
+    },
+    {
+      "file": "easybot2152_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187362?format=original",
+      "original_bytes": 4739339,
+      "verified_dataverse_md5": "4524c5563efa9a53f5492dc4eea76f41",
+      "sha256": "5aeb8141daa0fedd363a0a89195da230a9274eb04474bdb7898f3098074ef89e"
+    },
+    {
+      "file": "Scenario3_generator_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187359?format=original",
+      "original_bytes": 94473,
+      "verified_dataverse_md5": "2f61dbe46a6c68a2f773b8191de4af54",
+      "sha256": "dc4ad1996204eda0b8b8bc654ad47961eb219ea5936838c310468145c04f4184"
+    },
+    {
+      "file": "laserHokuyo_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187368?format=original",
+      "original_bytes": 127655,
+      "verified_dataverse_md5": "e0c5eab9aefed9821457bfc1e2db564d",
+      "sha256": "2c71878db627c43fd3b1cd1a802c929f02ec938a2f81591c936f8f54cc1e95c1"
+    },
+    {
+      "file": "D435camera_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187358?format=original",
+      "original_bytes": 12534005,
+      "verified_dataverse_md5": "d484803555ef3db4e90f2351fa5c504d",
+      "sha256": "2040f325a4c8390210b05309a10dcebefb0d2d6107664aa86d0ebe6732d4091d"
+    },
+    {
+      "file": "Scenario1_collector_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187372?format=original",
+      "original_bytes": 232045,
+      "verified_dataverse_md5": "d8b3bfd1ba932cfe0fb324f15faf3a88",
+      "sha256": "d30f9f0c60bec83853665da80947848c6642176e0cbef10fc7a2b5c2b46e4af3"
+    },
+    {
+      "file": "Scenario2_generator_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187377?format=original",
+      "original_bytes": 233846,
+      "verified_dataverse_md5": "2a8463c16b19003bbb50f6a6ef021739",
+      "sha256": "4e756a31e27f8a2fffe432e91d4ae8da31f4ffe478081c2ef8f138d86b0a1843"
+    },
+    {
+      "file": "Scenario1_generator_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187367?format=original",
+      "original_bytes": 234277,
+      "verified_dataverse_md5": "cd53cc222b8afafcc54c00f2f186fa6c",
+      "sha256": "fcf043c346d03adc27b4da8b00f120414805be75027ce8b53161144112c79f1f"
+    },
+    {
+      "file": "easybot1_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187376?format=original",
+      "original_bytes": 39861994,
+      "verified_dataverse_md5": "b47a0461c9ec08169f70231b85a45d82",
+      "sha256": "e8a33e645a4fec81d28c2bc5d68ee870dce919d82103508a4bd426c1c52c6d37"
+    },
+    {
+      "file": "easybot2152_analysis.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187361?format=original",
+      "original_bytes": 546630,
+      "verified_dataverse_md5": "ac5ebbe8b05578be683b6f5b2d46bf58",
+      "sha256": "c40cb2879c5d7197fc967122d035bab01a63fcdefa251147121d5e2f6ddd0506"
+    },
+    {
+      "file": "Scenario2_collector_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187356?format=original",
+      "original_bytes": 854950,
+      "verified_dataverse_md5": "66d8f81fe4ab1466874cea883bd6b246",
+      "sha256": "bbc6c17926416a61ab348ab13cceb12ac5cf4c901f55a857bdc51f03680e4635"
+    },
+    {
+      "file": "Scenario1_collector_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187375?format=original",
+      "original_bytes": 857952,
+      "verified_dataverse_md5": "4e178f2df79bfdbacd28c7fbc7542b69",
+      "sha256": "caeaaa5e72de121b055d9cfba48a2a8364a7b98c1a7ee2cf6d86101cba07853d"
+    },
+    {
+      "file": "Scenario2_generator_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187374?format=original",
+      "original_bytes": 857952,
+      "verified_dataverse_md5": "23cc6b3b3187048ede0cfbee1a5889f3",
+      "sha256": "340a0082b7bad63bb1d97f80082f122d2455d8bb5e1643d0ab7979e8006533a1"
+    },
+    {
+      "file": "D435camera_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187369?format=original",
+      "original_bytes": 558000289,
+      "verified_dataverse_md5": "01973510a6126e1de6f789f196fa725d",
+      "sha256": "d5797e8d4a6dc63501a804be3257ca8faadf4f21efa61fc9ae4d52bc5b0ae606"
+    },
+    {
+      "file": "Scenario3_collector_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187360?format=original",
+      "original_bytes": 857958,
+      "verified_dataverse_md5": "94e90ed1bf28040c9f1b3a875d6a0d14",
+      "sha256": "882c052b92f7a11a1987ed10ca6d590c93db8e74fe0096288d130905e59b9600"
+    },
+    {
+      "file": "Scenario3_generator_capture.csv",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/187364?format=original",
+      "original_bytes": 857958,
+      "verified_dataverse_md5": "2e7e5176250bf0848703f713398576b0",
+      "sha256": "69aa7fa799cb7a9928e00f958245ee53b75403593659d9fe5eaf6c93b230f0e0"
+    }
+  ],
+  "queries": [
+    "DataCite \"time-sensitive networking\" and \"time sensitive networking\" AND (latency OR jitter OR measurement), filtered to datasets. Followed the UNICO 5G TIMING Dataverse DOI to both the AGV traffic measurements and WiFi-TSN scenario records; checked the v1.0 release, source documentation, and every original file.",
+    "Historical near neighbour DOI 10.34810/data1885 has 20 receiver reports for Turin devices. This separate data1072 release has different authors/experiments, Easybot captures and three generator/collector replay pairs. The UNICO synthetic data release 10.34810/data1950 was excluded.",
+    "Additional lead for the exact two-robot application: NIST DOI 10.18434/mds2-2811; associated paper 10.1109/IECON49645.2022.9968494. Data.gov record links https://data.nist.gov/od/ds/mds2-2811/IECON_2022_measurements.zip (metadata reports 51.6 MB). The file endpoint timed out and is not included among verified datasets in this analysis.",
+    "Negative search result: Zenodo 10.5281/zenodo.16605304 calls its release data for TWT scheduling. All members of the 51,200-byte TAR are source code, configuration, README or bibliography; no pointwise timing observations were found, so file-level data claims were excluded."
+  ],
+  "methods": [
+    "Downloaded the 20 original CSVs using format=original and three supporting documents. Publisher MD5, original byte length and new SHA-256 checked for each. The Dataverse default tabular representation reserializes the originals; only original-byte hashes are claimed.",
+    "Times in original captures are seconds relative to the local recording. Converted each to integer microseconds at the file precision, then differenced adjacent observations in file order. In each replay trace, compared every interval to its paired analysis CSV to within 0.51 us. The scenario summaries also transcribe the printed min and max in dataset2_description.docx, Table 1. P99 uses linear empirical interpolation. No row-to-row pairing is imposed when row counts differ."
+  ],
+  "results": [
+    "Six generator/collector traces cover three separate physical Wi-Fi traffic replays. Generator packet counts are 10,000 in each, collector counts 10,000 / 9,965 / 10,000. The asynchronous scheduled case is short by 35 observations relative to its generator count. Nine collector intervals exceed 15 ms in that case (maximum 71.002 ms). Its locally renumbered collector packet IDs run from 1 through 9,965 without gaps. The sender and collector have no unambiguous shared per-packet identity.",
+    "The full unfiltered collector intervals have maxima 12.672 / 71.002 / 10.082 ms. The printed Table 1 instead gives 11.00 / 10.09 / 10.03 ms; the precomputed source analysis columns reproduce the capture extrema. The calculation keeps the occasional CLTP-dissection record in scenarios 1 and 2 at each endpoint; the aggregate count shortfall remains 35 if only UDP rows are retained.",
+    "The four separate AGV/sensor traces have easybot1 444,195, easybot2152 53,855, D435camera 2,949,885, laserHokuyo 995 capture rows. Easybot1 and Easybot2152 release 444,195 and 53,855 filtered CAN-to-UDP receptions versus separate analysis-file counts of 444,188 and 53,848 interval observations, so global positional alignment of those representations is unsupported.",
+    "For D435 the source narrative describes UDP camera forwarding and its summary table lists 1,048,570 packets. The original capture CSV instead has 2,949,885 rows, including 2,949,865 labeled TCP, and its separate analysis CSV has 1,048,572 intervals. Treat the narrative and analysis counts as different from the full capture. The file is included as its own bench trace; these discrepancies prevent transferring its frequency/protocol to the AGV controller."
+  ],
+  "limits": [
+    "dataset2_description.docx: scenario 1 best effort, scenario 2 scheduled Wi-Fi with an asynchronous generator, scenario 3 generator synchronized to the TSN schedule via PTP. Every endpoint capture begins at local time zero; the clock phase and common absolute origin needed to subtract timestamps are absent. Comparison of counts does not isolate radio loss versus capture omission, or identify the sequence of any missing packets.",
+    "dataset1_description.docx: Easybot1 follows magnetic tape, Easybot2152 is operated by gamepad. The CAN-to-UDP traffic represents internal-variable changes. Hokuyo is mounted on the vehicle but logged independently, and D435 is a separate lab setup. The six Wi-Fi traces use traffic shaped to the AGV profile on a bench; they are not simultaneous with the four vehicle/sensor captures. No recorded drive-consumption timestamp."
+  ],
+  "reproduce": "Download files using the listed URLs; retain original CSV filenames (gzip optional). Run python derive_unico.py INPUT OUT with NumPy and pandas. See unico-wifi-scenarios.csv for cross-end totals and full extrema versus the document."
+}

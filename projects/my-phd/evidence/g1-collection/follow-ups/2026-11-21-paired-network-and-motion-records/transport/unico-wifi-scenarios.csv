@@ -1,0 +1,4 @@
+scenario,generator_packets,collector_packets,captured_count_shortfall,generator_first_time_us,collector_first_time_us,collector_min_ms,collector_max_ms,description_table1_min_ms,description_table1_max_ms,collector_gaps_gt_15ms
+Scenario1,10000,10000,0,0,0,7.987,12.672,8.99,11.0,0
+Scenario2,10000,9965,35,0,0,9.906,71.002,9.96,10.09,9
+Scenario3,10000,10000,0,0,0,9.929,10.082,9.98,10.03,0

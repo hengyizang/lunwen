@@ -1,0 +1,417 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "DE, Vehicles Platooning, eRSU-assisted platooning",
+  "authors": [
+    "5G-MOBIX"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.7348877",
+  "doi": "10.5281/zenodo.7348877",
+  "concept_doi": "10.5281/zenodo.7348876",
+  "version": "Zenodo fixed release 7348877, published 2022-11-22",
+  "rights": "CC BY 4.0 per Zenodo. Credit 5G-MOBIX. Only new quality and comparison statistics, source identifiers and an independent reader are included.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.7348877",
+      "10.5281/zenodo.7348876",
+      "DE, Vehicles Platooning, eRSU-assisted platooning",
+      "zenodo.org/records/7348877"
+    ]
+  },
+  "query": {
+    "catalogue": {
+      "url": "https://api.datacite.org/dois?query=%28titles.title%3Aplatooning+OR+titles.title%3A%22adaptive+cruise+control%22+OR+titles.title%3A%22vehicle+platoon%22%29+AND+types.resourceTypeGeneral%3ADataset&page%5Bsize%5D=100",
+      "bytes": 495412,
+      "sha256": "d73122915d8eb27b953efbc4d01fc33c865f18a25f52b9dd67de62778a6be481"
+    },
+    "followup": "Followed Vehicles Platooning data-release titles to the three site-specific records; reviewed the grant description, trial XML, quality reports and all measurement archives. German, Chinese and Greek–Turkish releases share a project and have different sites, scenarios and file structures."
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/7348877",
+    "bytes": 26152,
+    "sha256": "ab54777dbfeb2d6d76eae01b895d20135d4c46044b1da475eaf4032d4a8d75dc"
+  },
+  "fixed_files": [
+    {
+      "filename": "852-1659352496936_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 10427,
+      "md5": "md5:61fe6e64adfffbcda12b392cfcd883ad",
+      "url": "https://zenodo.org/api/records/7348877/files/852-1659352496936_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "819-1658847244881_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 11870,
+      "md5": "md5:b59953c4067bdaed61f29d98fc9ef2fb",
+      "url": "https://zenodo.org/api/records/7348877/files/819-1658847244881_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1026-1660650228383_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 28272,
+      "md5": "md5:c9ae5af31e426699d42b9ad81ddb00b2",
+      "url": "https://zenodo.org/api/records/7348877/files/1026-1660650228383_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1334-1661112951735_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 19887,
+      "md5": "md5:45a924bd6954b6eb703c58c97baf1d83",
+      "url": "https://zenodo.org/api/records/7348877/files/1334-1661112951735_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1335-1661115450359_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 19613,
+      "md5": "md5:c10259b4e653edd1676a32234beeee45",
+      "url": "https://zenodo.org/api/records/7348877/files/1335-1661115450359_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "841-1658934607827_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15430,
+      "md5": "md5:2664948a4134a3944466c6e3d3aef5f8",
+      "url": "https://zenodo.org/api/records/7348877/files/841-1658934607827_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1341-1661120554505_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 18643,
+      "md5": "md5:c06d4a4aa0511b7f2c2276aa9e33c12d",
+      "url": "https://zenodo.org/api/records/7348877/files/1341-1661120554505_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "822-1658917934544_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 24691,
+      "md5": "md5:7a6b72ed4e340595611f9a53d398b189",
+      "url": "https://zenodo.org/api/records/7348877/files/822-1658917934544_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "856-1659353957595_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 13744,
+      "md5": "md5:863e9b9d7b4cae40f8d83be56c8f5907",
+      "url": "https://zenodo.org/api/records/7348877/files/856-1659353957595_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "840-1658933414717_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15431,
+      "md5": "md5:0a8b4a68b2d5f19a848e89d46bbf9d6b",
+      "url": "https://zenodo.org/api/records/7348877/files/840-1658933414717_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "824-1658918416958_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 26108,
+      "md5": "md5:2cfb58134b1d028ef19d6511c1cacc46",
+      "url": "https://zenodo.org/api/records/7348877/files/824-1658918416958_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1342-1661121636513_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 12374,
+      "md5": "md5:c6daa863d61ab93a6431b4320c9c82b7",
+      "url": "https://zenodo.org/api/records/7348877/files/1342-1661121636513_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "818-1658846955685_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 12049,
+      "md5": "md5:48d5e01bd6bab0b92d519813922be67d",
+      "url": "https://zenodo.org/api/records/7348877/files/818-1658846955685_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "809-1658840483192_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 21529,
+      "md5": "md5:2e37c25287f28db8c3053fdc23b97843",
+      "url": "https://zenodo.org/api/records/7348877/files/809-1658840483192_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "810-1658840824875_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 18502,
+      "md5": "md5:a79eb57f2970acf11d5baa9839c39b13",
+      "url": "https://zenodo.org/api/records/7348877/files/810-1658840824875_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "817-1658846700033_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 19117,
+      "md5": "md5:bc0ec6fb44cdaab4d613dfa9e931b4f4",
+      "url": "https://zenodo.org/api/records/7348877/files/817-1658846700033_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1343-1661122080637_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 21577,
+      "md5": "md5:cc2e30326bb115993b9bfa35f580b01b",
+      "url": "https://zenodo.org/api/records/7348877/files/1343-1661122080637_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "851-1659352235444_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15590,
+      "md5": "md5:62a64b069cc675411dc25f99d672571a",
+      "url": "https://zenodo.org/api/records/7348877/files/851-1659352235444_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "862-1659372601525_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 10209,
+      "md5": "md5:40874c80fc0cf761517c2bead3dc0061",
+      "url": "https://zenodo.org/api/records/7348877/files/862-1659372601525_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "837-1658932531153_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15426,
+      "md5": "md5:229ee2d3fd6546cb84aa53aa19bfc92c",
+      "url": "https://zenodo.org/api/records/7348877/files/837-1658932531153_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1344-1661127073404_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 18195,
+      "md5": "md5:d019214f3926b6874c4c0da28ec4375e",
+      "url": "https://zenodo.org/api/records/7348877/files/1344-1661127073404_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "858-1659368214439_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 7809,
+      "md5": "md5:71a7f68d0cca868b9b5b1b39d59f8e72",
+      "url": "https://zenodo.org/api/records/7348877/files/858-1659368214439_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "816-1658846193782_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 13397,
+      "md5": "md5:e4fd8e634c2eadd6d3a770e0db8e0f58",
+      "url": "https://zenodo.org/api/records/7348877/files/816-1658846193782_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "823-1658918215123_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 17747,
+      "md5": "md5:286e1a3aad7429d50949a82570e35dad",
+      "url": "https://zenodo.org/api/records/7348877/files/823-1658918215123_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "820-1658847525302_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 10378,
+      "md5": "md5:8b6a7cbd64081b9febc3b3ab34bf3e6a",
+      "url": "https://zenodo.org/api/records/7348877/files/820-1658847525302_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "807-1658839807539_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 20380,
+      "md5": "md5:bdf70d82b7ca1ca3c9ff6a4530509bb5",
+      "url": "https://zenodo.org/api/records/7348877/files/807-1658839807539_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "808-1658840101759_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 21366,
+      "md5": "md5:047f8b61753309fc142f5134e5e420a2",
+      "url": "https://zenodo.org/api/records/7348877/files/808-1658840101759_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "813-1658844924698_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 34622,
+      "md5": "md5:deb695bfb1121d26c7f9497290d43e2a",
+      "url": "https://zenodo.org/api/records/7348877/files/813-1658844924698_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "806-1658838520517_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 20142,
+      "md5": "md5:44aa53e28dd4e91c6ca2d85431303341",
+      "url": "https://zenodo.org/api/records/7348877/files/806-1658838520517_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "825-1658918703594_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 19929,
+      "md5": "md5:b5b645b209e5b29f41859ab3007c503a",
+      "url": "https://zenodo.org/api/records/7348877/files/825-1658918703594_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "826-1658918905755_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 23987,
+      "md5": "md5:df347071d5bd3a2f885c272fa794730c",
+      "url": "https://zenodo.org/api/records/7348877/files/826-1658918905755_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1338-1661117865520_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 40539,
+      "md5": "md5:9e4deb49a29756fb16f7e40fe98cba53",
+      "url": "https://zenodo.org/api/records/7348877/files/1338-1661117865520_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "805-1658838099174_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 14218,
+      "md5": "md5:c35130721a26ce87c7e7cf0e2c41d567",
+      "url": "https://zenodo.org/api/records/7348877/files/805-1658838099174_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "1345-1661127669431_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 12231,
+      "md5": "md5:ad5608f0fe5506f9a66d8b66ff120dba",
+      "url": "https://zenodo.org/api/records/7348877/files/1345-1661127669431_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "815-1658845838725_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 14523,
+      "md5": "md5:a4a4670f27ea78fbdbb50f366d5d9860",
+      "url": "https://zenodo.org/api/records/7348877/files/815-1658845838725_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1346-1661127958314_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 13521,
+      "md5": "md5:1aa5ee40031a882487a1d053481374c2",
+      "url": "https://zenodo.org/api/records/7348877/files/1346-1661127958314_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "859-1659371857704_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 13330,
+      "md5": "md5:935b441b02da665e9c95c1ed658a9d55",
+      "url": "https://zenodo.org/api/records/7348877/files/859-1659371857704_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "812-1658841429105_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 19942,
+      "md5": "md5:acc374c2381cbcfe866637944db93b3b",
+      "url": "https://zenodo.org/api/records/7348877/files/812-1658841429105_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "804-1658835755570_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 39735,
+      "md5": "md5:59d4a04a02298e4955695268939e1ceb",
+      "url": "https://zenodo.org/api/records/7348877/files/804-1658835755570_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "803-1658835043673_DE_Vehicles_Platooning_US0_Full_PC5_DE-_1.1.zip",
+      "bytes": 27612,
+      "md5": "md5:abedc6748a81e11be298d2446df2dc12",
+      "url": "https://zenodo.org/api/records/7348877/files/803-1658835043673_DE_Vehicles_Platooning_US0_Full_PC5_DE-_1.1.zip/content"
+    },
+    {
+      "filename": "838-1658932981550_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15432,
+      "md5": "md5:f5f0bf3152f56f58bfc803442754435a",
+      "url": "https://zenodo.org/api/records/7348877/files/838-1658932981550_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "896-1659519548642_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 42362,
+      "md5": "md5:17403692d1a1b9296b3f166d81f644be",
+      "url": "https://zenodo.org/api/records/7348877/files/896-1659519548642_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "829-1658920148939_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 19621,
+      "md5": "md5:ce0af63111c9904cf58318b7459821d1",
+      "url": "https://zenodo.org/api/records/7348877/files/829-1658920148939_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "853-1659352751221_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 10229,
+      "md5": "md5:8eff14e0fe200b5eb4674acfa92502d9",
+      "url": "https://zenodo.org/api/records/7348877/files/853-1659352751221_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "830-1658920339276_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 18200,
+      "md5": "md5:2339d19c777f5cb477fea18dc3c5399f",
+      "url": "https://zenodo.org/api/records/7348877/files/830-1658920339276_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1337-1661116513548_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 14522,
+      "md5": "md5:18237fb8520d05c41aacc3a122f9cee9",
+      "url": "https://zenodo.org/api/records/7348877/files/1337-1661116513548_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1339-1661118083261_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 40539,
+      "md5": "md5:73492de79d4df42f2046f74e036ae917",
+      "url": "https://zenodo.org/api/records/7348877/files/1339-1661118083261_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1340-1661119816322_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 23310,
+      "md5": "md5:11919b02a19050b4fcfabf5add34eab5",
+      "url": "https://zenodo.org/api/records/7348877/files/1340-1661119816322_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "811-1658841075021_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 23630,
+      "md5": "md5:3a9691f149b825b9ad31013e47500cff",
+      "url": "https://zenodo.org/api/records/7348877/files/811-1658841075021_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "854-1659353034930_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 36556,
+      "md5": "md5:c68cd2738fce9978791da618da1f5fd4",
+      "url": "https://zenodo.org/api/records/7348877/files/854-1659353034930_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "836-1658931895579_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 24610,
+      "md5": "md5:a5cf6ed247339061555f5788dd404296",
+      "url": "https://zenodo.org/api/records/7348877/files/836-1658931895579_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "828-1658919594829_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 35009,
+      "md5": "md5:ad3cb9cc612d3214822ce4dcfcaf7331",
+      "url": "https://zenodo.org/api/records/7348877/files/828-1658919594829_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "1336-1661115923019_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 15207,
+      "md5": "md5:9ee0b9adfc8d7ddf79b8888c6a29b557",
+      "url": "https://zenodo.org/api/records/7348877/files/1336-1661115923019_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "855-1659353750993_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 19469,
+      "md5": "md5:b0c6dfb05df1e8609f7c0a5b203aaf8d",
+      "url": "https://zenodo.org/api/records/7348877/files/855-1659353750993_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "814-1658845311497_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 17166,
+      "md5": "md5:54c3d9475b372e81c658e859898ee479",
+      "url": "https://zenodo.org/api/records/7348877/files/814-1658845311497_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "861-1659372370966_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 8368,
+      "md5": "md5:3105b0bade58e0ccc8933af842703529",
+      "url": "https://zenodo.org/api/records/7348877/files/861-1659372370966_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "827-1658919395380_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip",
+      "bytes": 15297,
+      "md5": "md5:02518a376a5c6f7ef1736666505274c7",
+      "url": "https://zenodo.org/api/records/7348877/files/827-1658919395380_DE_Vehicles_Platooning_US0_Hybrid_DE-1.3.zip/content"
+    },
+    {
+      "filename": "802-1658835029402_DE_Vehicles_Platooning_US0_Full_PC5_DE-_1.1.zip",
+      "bytes": 27612,
+      "md5": "md5:aa2b75a29028e5f84d40fa8c302a3da1",
+      "url": "https://zenodo.org/api/records/7348877/files/802-1658835029402_DE_Vehicles_Platooning_US0_Full_PC5_DE-_1.1.zip/content"
+    },
+    {
+      "filename": "801-1658834328659_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip",
+      "bytes": 55110,
+      "md5": "md5:658db02ce4d358c236efcec61a508785",
+      "url": "https://zenodo.org/api/records/7348877/files/801-1658834328659_DE_Vehicles_Platooning_US0_Full_PC5_DE-1.1.zip/content"
+    },
+    {
+      "filename": "1358-1661427435856_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 22670,
+      "md5": "md5:7661f3048e0346e5079e2e46261076a3",
+      "url": "https://zenodo.org/api/records/7348877/files/1358-1661427435856_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "860-1659372080979_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 13533,
+      "md5": "md5:c392a306b2967b0b11f5d8c385ae2e17",
+      "url": "https://zenodo.org/api/records/7348877/files/860-1659372080979_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    },
+    {
+      "filename": "1372-1661511425473_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip",
+      "bytes": 9668,
+      "md5": "md5:058140afa2844e390e3b9d3f9314b2dc",
+      "url": "https://zenodo.org/api/records/7348877/files/1372-1661511425473_DE_Vehicles_Platooning_US0_Uu_DE-1.2.zip/content"
+    }
+  ],
+  "evidence": "All published ZIPs have matching registry byte lengths and MD5; all embedded measurement CSV/XLSX files processed using their actual headers and contents. Experiment scenarios in the registry describe the use case. Vehicle commands, motor actuation or a guaranteed sensed close-loop response are not exposed by these network aggregates.",
+  "results": [
+    "62 ZIPs, 130 CSV member occurrences, 94 unique SHA-256 payloads. Of the 62 XML records two declare QC_ERROR, three have end earlier than start. The per-file table includes all versions and marks rows with mismatched widths or nonnumeric time.",
+    "After removing byte-identical members, in the application files 131,324 rows are readable; collapsing identical complete trimmed text rows separately within each distinct file leaves 43,960. There are 3,221 within-file timestamp/endpoint/protocol/direction/radio/message keys with conflicting (tx,rx,latency) tuples. Separate distinct network file payloads contain 63,307 data lines failing the declared schema width or timestamp. No attempt made to repair shifts caused by a missing column.",
+    "Neither row multiplicity nor warning-free parsing establishes independent transmissions. Released observation-level counters and aggregate latency lack individual message IDs and application-to-servo timing. Some headerless application/access/event files were parsed only with a template verified in headed files, flagged individually."
+  ],
+  "primary_table": "mobix-de-files.csv",
+  "archive_table": "mobix-archive-audit.csv",
+  "reproduction": "For the three site records 7348877, 7348882 and 7348870 save the API metadata as ROOT/RECORD.json and each files[].links.self resource as ROOT/RECORD/files[].key. Run python derive_mobix.py ROOT OUT using Python 3.11+ and openpyxl. Full-file and logger-row repetition are treated separately."
+}

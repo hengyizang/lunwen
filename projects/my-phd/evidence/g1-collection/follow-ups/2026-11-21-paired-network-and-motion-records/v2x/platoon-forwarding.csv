@@ -1,0 +1,6 @@
+run,receiver,source_name,filtered_topic_registered,global_rows_from_source,filtered_rows,distinct_filtered_payloads,filtered_with_one_identical_decoded_global,identical_serialized_bytes,filtered_earlier_in_recorder_time,global_to_filtered_recorder_ms_p50,global_to_filtered_recorder_ms_p95,global_to_filtered_recorder_ms_min,global_to_filtered_recorder_ms_max
+0_8_m_s,F110_1,,0,0,0,0,0,0,0,,,,
+0_8_m_s,F110_2,,1,0,0,0,0,0,0,,,,
+3_0_m_s,F110_1,,1,0,0,0,0,0,0,,,,
+3_0_m_s,F110_2,1,1,2849,2853,2853,2848,2848,150,5.522025,23.468742,-333.737754,232.482857
+3_0_m_s,F110_3,2,1,2923,2915,2915,2915,2915,21,4.763809,41.716604,-223.286418,280.105946

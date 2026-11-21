@@ -1,0 +1,9 @@
+mode,records,zero_rtt,positive_rtt,median_positive_rtt_ms,p95_positive_rtt_ms
+AI,476,0,476,492.0,3155.25
+AI_lengan,2016,80,1936,405.0,17629.5
+AI_mesin,474,0,474,158.0,23380.0
+AI_suara,29,18,11,229.0,600.5
+AI_suara_ai,14,14,0,,
+AI_suara_biasa,19,19,0,,
+AI_tangan,1239,111,1128,209.0,31886.05
+Manual,218,0,218,360.5,2296.95

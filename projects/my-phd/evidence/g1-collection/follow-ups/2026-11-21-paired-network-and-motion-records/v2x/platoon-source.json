@@ -1,0 +1,192 @@
+{
+  "title": "F1/10 Platooning with ETSI ITS-G5 communication using ROS 2",
+  "landing": "https://doi.org/10.5281/zenodo.13710763",
+  "doi": "10.5281/zenodo.13710763",
+  "concept": "10.5281/zenodo.13710762",
+  "authors": [
+    "Teper, Harun",
+    "Krieger, Cedrik",
+    "Priyanta, Irfan Fachrudin",
+    "Freytag, Julia",
+    "Schulte, Philipp",
+    "Roidl, Moritz",
+    "Wietfeld, Christian",
+    "Chen, Jian-Jia"
+  ],
+  "release": "2024-09-06",
+  "checked_utc": "2026-11-21",
+  "rights": "CC BY 4.0 per Zenodo. Credit Harun Teper, Cedrik Krieger, Irfan Fachrudin Priyanta, Julia Freytag, Philipp Schulte, Moritz Roidl, Christian Wietfeld and Jian-Jia Chen. Only independently derived counts, timing statistics and our own reader included.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.13710763",
+      "10.5281/zenodo.13710762",
+      "F1/10 Platooning with ETSI ITS-G5 communication using ROS 2"
+    ],
+    "matches": [],
+    "paths": 1030,
+    "archive_members": 301,
+    "early_catalogue": true,
+    "method": "NFKD/casefold alphanumeric matching of DOI, title and aliases over all evidence files, expanded gzip and tar members, and the early baseline.",
+    "paper_and_framework_keys": [
+      "2207.05544",
+      "10.1109/GCWkshps58843.2023.10464605",
+      "10.1109/SysCon61195.2024.10553459",
+      "Integration of Scaled Real-world Testbeds with Digital Twins for Future AI-Enabled 6G Networks",
+      "HarunTeper/AuNa"
+    ],
+    "paper_and_framework_matches": []
+  },
+  "queries": [
+    "DataCite titles.title:(ITS-G5), then followed the fixed Zenodo record, README, dataset references to physical experiments, and contemporary AuNa versions and VESC schema.",
+    "Examined /cam, the namespaced cam_filtered and cam_debug channels, command conversion, motor-controller telemetry and observed Vicon translation in both bags."
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/13710763",
+    "bytes": 5971,
+    "sha256": "4defd9ecec4b54047f452d4e9fa7655f7f3eae5931e7fd5a424633c0b0619cc0"
+  },
+  "readme": {
+    "url": "https://zenodo.org/api/records/13710763/files/README.md/content",
+    "bytes": 1133,
+    "sha256": "79ee59340251f0b88ed21d7e04dc6e8ce0a222153ef3a02ee768538439ad13c1"
+  },
+  "archive": {
+    "url": "https://zenodo.org/api/records/13710763/files/Dataset.zip/content",
+    "sha256": "117635a0fda4c5fe4f821b6dffa36a5f9a7b1a083713f1bd5373c7640472a00c",
+    "md5": "5e04eb06c197e948b658993170a8bbc6",
+    "bytes": 1911736691,
+    "members": [
+      {
+        "name": "3_0_m_s/",
+        "method": 0,
+        "size": 0,
+        "crc": 0,
+        "offset": 0
+      },
+      {
+        "name": "3_0_m_s/metadata.yaml",
+        "method": 0,
+        "size": 30391,
+        "crc": 1586181885,
+        "offset": 70,
+        "sha256": "5fde3ae4771967ffeeabfcb133bd87f9c2f616995bd03cd25a69f4d1122cb6dd"
+      },
+      {
+        "name": "3_0_m_s/rosbag2_2023_07_14-18_42_32_0.db3",
+        "method": 0,
+        "size": 297132032,
+        "crc": 304934859,
+        "offset": 30568,
+        "sha256": "4424c851a86b26fca16138d063511b6bfd074375d67181d4156d24d99cb78502"
+      },
+      {
+        "name": "0_8_m_s/",
+        "method": 0,
+        "size": 0,
+        "crc": 0,
+        "offset": 297162727
+      },
+      {
+        "name": "0_8_m_s/metadata.yaml",
+        "method": 0,
+        "size": 28058,
+        "crc": 2856581870,
+        "offset": 297162797,
+        "sha256": "3392f23f423e3bb9e36ddf0870814dc2b8f2b5b16e7fe3b68f7831d7943f4e2b"
+      },
+      {
+        "name": "0_8_m_s/rosbag2_2023_08_01-15_54_40_0.db3",
+        "method": 0,
+        "size": 1614544896,
+        "crc": 3678567915,
+        "offset": 297190962,
+        "sha256": "91846b27ba91392054626a472f09318e84a5980f8d1860ab44e9901f87be8fd7"
+      }
+    ]
+  },
+  "verification": "Entire ZIP bytes and files accounted for with validated HTTP Range responses and reconstructed checksum. Whole-archive MD5 agrees with Zenodo, all four non-directory ZIP member CRCs agree. Direct scan of both SQLite databases, including topics with zero messages. A recorder observation is distinct from an on-device callback, radio frame or executed mechanical action.",
+  "linked_papers": [
+    {
+      "doi": "10.1109/GCWkshps58843.2023.10464605",
+      "title": "Integration of Scaled Real-world Testbeds with Digital Twins for Future AI-Enabled 6G Networks",
+      "scope": "Metadata and author abstract"
+    },
+    {
+      "doi": "10.1109/SysCon61195.2024.10553459",
+      "title": "Is It Running? Unveiling 6G-Driven System-of-Systems Testbeds using Visual Metaphors",
+      "scope": "Metadata and author abstract"
+    },
+    {
+      "arxiv": "2207.05544",
+      "fulltext": {
+        "url": "https://arxiv.org/pdf/2207.05544",
+        "bytes": 1312802,
+        "sha256": "f17d22599d54735e26e2e58e8ff6352f832b89d1af5baff97fe6d79941aa71c7"
+      },
+      "scope": "AuNa design and simulated-platooning background. Zenodo and the actual bags establish evidence for these physical runs."
+    }
+  ],
+  "software": {
+    "note": "Repository history for the respective bag dates, selected by published commit dates. The bag contains no deployed binary hash proving the exact commit. Both contemporary branches define the same ROS message. The checked code shows forwarding via ROS and controller timer state transformations.",
+    "july": [
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/41b4840510d8ea6e707d9fd0166765e55cc88c21/src/auna_comm/src/cam_communication/cam_communication.cpp",
+        "bytes": 4504,
+        "sha256": "cc36e45d5025f2e3a9ef6e2aa64d626797404e90005edebf3b3ac5ccb5ed79e3"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/41b4840510d8ea6e707d9fd0166765e55cc88c21/src/auna_cacc/src/cacc_controller/cacc_controller.cpp",
+        "bytes": 25214,
+        "sha256": "ac03b7923fa941e8c460c6c9eda4937fe24b0a9027afb976ac3439401ca9cf10"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/41b4840510d8ea6e707d9fd0166765e55cc88c21/src/auna_its_msgs/msg/CAM.msg",
+        "bytes": 211,
+        "sha256": "027b7f73661fc05b94d11d8450a990009a3acb11c6c6b14501d852598dced82f"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/41b4840510d8ea6e707d9fd0166765e55cc88c21/src/auna_physical/config/vesc.config.yaml",
+        "bytes": 882,
+        "sha256": "fe6f16693e7b8161ba7362e8f0a8f071ab578236ffe206f52801100bdf80956a"
+      }
+    ],
+    "august": [
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/b2d0885c1a8b088f8ca0bbd69a911bd4974196ad/src/auna_comm/src/cam_communication/cam_communication.cpp",
+        "bytes": 4505,
+        "sha256": "52102453fd1dcf6d536bd987606ad3cef18613ea7beb0e509e9becd76a49e71f"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/b2d0885c1a8b088f8ca0bbd69a911bd4974196ad/src/auna_cacc/src/cacc_controller/cacc_controller.cpp",
+        "bytes": 25214,
+        "sha256": "ac03b7923fa941e8c460c6c9eda4937fe24b0a9027afb976ac3439401ca9cf10"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/b2d0885c1a8b088f8ca0bbd69a911bd4974196ad/src/auna_its_msgs/msg/CAM.msg",
+        "bytes": 211,
+        "sha256": "027b7f73661fc05b94d11d8450a990009a3acb11c6c6b14501d852598dced82f"
+      },
+      {
+        "url": "https://github.com/HarunTeper/AuNa/blob/b2d0885c1a8b088f8ca0bbd69a911bd4974196ad/src/auna_physical/config/vesc.config.yaml",
+        "bytes": 882,
+        "sha256": "fe6f16693e7b8161ba7362e8f0a8f071ab578236ffe206f52801100bdf80956a"
+      }
+    ],
+    "vesc": {
+      "url": "https://raw.githubusercontent.com/f1tenth/vesc/153998df8545fe1781b975df88e411b4e71d4bfe/vesc_msgs/msg/VescState.msg",
+      "bytes": 1535,
+      "sha256": "07ac060cd7fa48be578e87f70132c9048c7af5df743f258ddb2af29e31fefc33"
+    }
+  },
+  "design": "Two physical scaled-track bags, nominal 0.8 and 3.0 m/s. The global CAM is a ROS2 topic, with header stamp, source robot string, generation-reason label and continuous kinematics. The namespaced forwarder selects a predecessor. The readme describes three robots in the setup; the low-speed archive actually contains only F110_1 and F110_2 vehicle namespaces and a separately named cable_robot_platform pose. Bag-level message totals are 8,699,132 and 1,812,038.",
+  "pairing": "Match filtered messages to one global message by all decoded CAM fields including original stamp, sender, frame ID and kinematics, and check the SHA-256 of the serialized bytes independently. For control debug, try unique exact x,y,v within the corresponding filtered stream. External motor-path check reads Ackermann speed (m/s), command eRPM, VESC electrical RPM, and Vicon body XY in meters. Convert speed to electrical rpm with the historical configuration gain 4614 and zero offset. Accept consecutive changes above 0.001 eRPM whose old and new values both agree within 0.001 eRPM and whose recorder timestamps differ at most 100 ms; retain unique matches in both directions. These are identifiable numeric transitions, distinct from unique source events across processes.",
+  "findings": [
+    "In the 3 m/s run, 5,763 of 5,768 filtered rows match a unique global broadcast, all 5,763 byte-identical. 171 filtered rows were recorded before the matching global sample. The F110_2 and F110_3 median recorder differences were 5.522 and 4.764 ms. F110_1 registered an empty filtered topic. The low-speed bag contains 6,402 global broadcasts only from robot 2; its F110_2 filtered topic is empty. Global ROS monitoring cannot establish actual radio transmit or receive counts.",
+    "The 3 m/s follower state debug records (23,713 and 23,615) have zero exact x,y,v triples matching the filtered predecessor messages. AuNa can replace CAM positions with route waypoints before publishing debug state. The debug message lacks the original source sequence and stamp. The apparent absence of identical triples does not estimate controller-use probability.",
+    "There are 194,164 unique paired changes from Ackermann target to motor speed command; 51,386 motor commands arrived earlier than the corresponding Ackermann message at the recorder. These are software-to-software events on the observed record clock.",
+    "For each of the three series per vehicle, within their common recorder interval find the first change sustained over 150 ms, resetting over any spacing >100 ms. Thresholds are 200 electrical rpm for both motor streams and 0.02 m from initial 250 ms median XY for Vicon. The two initially stationary followers on the 3 m/s run reached the feedback magnitude threshold 115.421 and 183.560 ms after command threshold, and the tracked-displacement threshold 257.810 and 262.453 ms after command. Starts already moving remain visible via initial magnitudes. No unique individual CAM-to-motion causality is established."
+  ],
+  "limits": "Two physical runs, different contents, trial durations, configurations and operating regimes. Sender header clocks, recorder arrival and VESC acquisition times have different semantics. Message-level buffering, potential unsynchronized clocks and absence of a radio capture prevent decomposition into radio, application, controller and mechanical latencies. Displacement threshold includes elapsed travel and mocap delay. No controlled per-message actuation timestamp.",
+  "reproduce": "Download Dataset.zip from the fixed Zenodo file, extract it preserving the 0_8_m_s and 3_0_m_s subdirectories, and run python derive_platoon.py EXTRACTED_DATASET OUT with Python and NumPy."
+}

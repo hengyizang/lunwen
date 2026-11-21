@@ -1,0 +1,5 @@
+folder,first_release_csv,middle_release_csv,same_relative_path,same_path_length_crc32,different_length_or_crc32
+compensated,500,820,500,440,60
+prediction,2000,3280,1780,1540,240
+training,270,270,270,270,0
+validation,155,220,150,120,30

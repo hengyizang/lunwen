@@ -1,0 +1,135 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "AndyData-lab-prescientTeleopICub",
+  "landing": "https://doi.org/10.5281/zenodo.5913573",
+  "doi": "10.5281/zenodo.5913573",
+  "concept_doi": "10.5281/zenodo.4906335",
+  "version": "1.0",
+  "creation": "2022-01-28T12:28:38.244351+00:00",
+  "publication_date": "2021-06-07",
+  "authors": [
+    "Penco Luigi",
+    "Jean-Baptiste Mouret",
+    "Serena Ivaldi"
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/5913573",
+    "bytes": 4940,
+    "sha256": "cac986f96202e4a04e1ab526ee0cf9d3503b55f865613617398012cbcd472e54"
+  },
+  "files": [
+    {
+      "key": "AndyData-lab-prescientTeleopICub.zip",
+      "url": "https://zenodo.org/api/records/5913573/files/AndyData-lab-prescientTeleopICub.zip/content",
+      "bytes": 90859410,
+      "sha256": "d6d40c53f6894f6a3053f95dc949c84a53bb28a1e1b1e6cee8e274c845b510ec",
+      "verified_publisher_md5": "md5:9720c38fd81733eab4852a36122f2bdf"
+    }
+  ],
+  "rights": "Zenodo CC BY 4.0. Attribute Luigi Penco, Jean-Baptiste Mouret and Serena Ivaldi. Only newly derived summaries and source references are included.",
+  "history": {
+    "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "tracked_evidence_paths": 1030,
+    "additional_tar_members": 301,
+    "early_index_checked": true,
+    "keys": [
+      "10.5281/zenodo.5596856",
+      "10.5281/zenodo.4906335",
+      "10.5281/zenodo.4906336",
+      "10.5281/zenodo.5913573",
+      "AndyData-lab-onePersonTeleoperatingICub",
+      "AndyData-lab-prescientTeleopICub"
+    ],
+    "matches": []
+  },
+  "related_paper_history": {
+    "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "tracked_evidence_paths": 1030,
+    "additional_tar_members": 301,
+    "early_index_checked": true,
+    "keys": [
+      "Prescient whole-body teleoperation of humanoid robots",
+      "Prescient teleoperation of humanoid robots",
+      "10.1109/HUMANOIDS57100.2023.10375166",
+      "2107.01281"
+    ],
+    "matches": []
+  },
+  "queries": [
+    {
+      "query": "teleoperation AND delay",
+      "service": "DataCite public API",
+      "url": "https://api.datacite.org/dois?query=teleoperation+AND+delay&resource-type-id=dataset&page%5Bsize%5D=70",
+      "result_sha256": "88379d540dcf5fdf84c8afa7a41287fc91b19c9d49f67f5cafa52bcd33693288"
+    }
+  ],
+  "version_graph": "All three numbered records use the same concept DOI and display 1.0 despite different archive checksums. Cite numeric Zenodo record IDs for reproducibility. The study’s early preprint cites 4906336 and its expanded version cites 5913573. The previous 5596856 deposit retains the explicit prediction and compensation tables. These versions count as one data family.",
+  "middle_release": {
+    "title": "AndyData-lab-onePersonTeleoperatingICub",
+    "landing": "https://doi.org/10.5281/zenodo.5596856",
+    "doi": "10.5281/zenodo.5596856",
+    "concept_doi": "10.5281/zenodo.4906335",
+    "version": "1.0",
+    "creation": "2021-10-26T15:58:40.775153+00:00",
+    "publication_date": "2021-06-07",
+    "authors": [
+      "Penco Luigi",
+      "Jean-Baptiste Mouret",
+      "Serena Ivaldi"
+    ],
+    "registry": {
+      "url": "https://zenodo.org/api/records/5596856",
+      "bytes": 5039,
+      "sha256": "52b7d7ddcb8172155ee3181116ff808f3cc6e5a8b6e37597d8bef039cc68e9d5"
+    },
+    "files": [
+      {
+        "key": "AnDy-lab-onePersonTeleoperatingICub.zip",
+        "url": "https://zenodo.org/api/records/5596856/files/AnDy-lab-onePersonTeleoperatingICub.zip/content",
+        "bytes": 349415566,
+        "sha256": "df5c6867f613d4a78a5db550c9e70cc71f0e18f50d5c329d85ae4b2f7077dcfb",
+        "verified_publisher_md5": "md5:52ef3c835eae9a0409dec873d9847a8b"
+      }
+    ]
+  },
+  "initial_release": {
+    "registry": {
+      "url": "https://zenodo.org/api/records/4906336",
+      "bytes": 5039,
+      "sha256": "9594d9673d6cb0a1fff191bb1c116885e0646b2f5dc47ef110a7fa00129e7637"
+    },
+    "original_zip_url": "https://zenodo.org/api/records/4906336/files/AnDy-lab-onePersonTeleoperatingICub.zip/content",
+    "original_zip_bytes": 291917438,
+    "publisher_md5_full_archive_unchecked": "md5:25bc3fc859bbdd83b622d9836c831723",
+    "checked_from_offset": 291442632,
+    "directory_plus_end_records_bytes": 474806,
+    "directory_plus_end_records_sha256": "e51e74067f29e91cafd54443f908e5cfaf961abcb5ed5afc695909a281243067",
+    "access": "Retrieved entire ZIP directory and ending records with HTTP 206 and confirmed entry sizes and CRC32 against middle release for like-named paths; earliest archive payloads were not downloaded."
+  },
+  "paper": {
+    "early_preprint": {
+      "url": "https://arxiv.org/pdf/2107.01281v1",
+      "bytes": 36401804,
+      "sha256": "071a76fa16a19afcd3423483bd562b807e87bd13832d8cd381c4ad36541d60d3"
+    },
+    "expanded_preprint": {
+      "url": "https://arxiv.org/pdf/2107.01281v3",
+      "bytes": 17559756,
+      "sha256": "350fffb3aa3f8ad97047874cf83416f02e027822eba63f68290558ebc7c75584"
+    },
+    "locators": "Expanded preprint Fig. 2, Table 1 and Data and materials availability cover Multiple Tasks, trajectory references, and the specific latest data record. Early preprint availability refers to 4906336. Related 2023 Humanoids item by these authors: 10.1109/HUMANOIDS57100.2023.10375166; this receipt uses the explicit preprint versions.",
+    "related_conference_index": {
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/humanoids57100.2023.10375166",
+      "bytes": 19762,
+      "sha256": "a088b4c9fb70a0b0fef9a8bdd07a7c5f9d6506ceecaad0dc1f0dbe14e601cc53"
+    }
+  },
+  "evidence": "Verified publisher MD5 and read numeric data in the complete middle and latest ZIPs. Middle ZIP: 4,590 CSVs comprising 270 training,220 validation,3,280 prediction and 820 compensation files. Latest: 384 CSVs across 3 scenario folders, 620,457 table rows. The archive READMEs distinguish Xsens-recorded operator motion and human motion retargeted to generate references for the robot. The 250 Hz named by the latest README describes reference trajectories in this specific release. Files lack per-packet IDs, observed receive times and measured joint encoder response.",
+  "findings": [
+    "In the middle release the 54 training and 44 validation bundles have 5 files each. Four validation bundles repeat all five file payloads from training (same SHA-256 for each member). Four other validation bundles in PlaceBoxD repeat one another. Together the 98 declared bundles represent 91 distinct full byte bundles. The joint and retargeted-joint rows always match; body segments and retargeted-body-segment rows always match, but native joint/body-segment lengths differ in all 98 cases. Two validation body-segment CSVs have 159 columns vs 161 in the other 96.",
+    "820 (task, trial, channel) keys cover 41 trial labels across 20 channels. Each of the four prediction configurations uses exactly the same second-column sequence per key (936,063 observations per configuration). The compensation file has the identical observed reference for 680 of 820 keys; do not align entire matrices by row without checking. Its first (compensated-reference) column has 135,187 leading zero rows summed over channels. No absent-data semantics are inferred from zeros.",
+    "File-entry and cross-version comparisons are separate from the earlier train/validation duplicate check. Exactly one of 384 latest numeric CSVs matches an entire earlier file byte for byte. It matches two copies of the same BottleTable center-of-mass trace. Distinct file bytes or lengths cannot establish independent experiments. Do not attribute the older split duplication to the latest published scenario splits."
+  ],
+  "methods": "Two-column middle files: column 1 is the prediction or compensated reference as applicable; column 2 is observed undelayed reference. RMSE is descriptive, in each channel’s native units, with no pooled angular/linear metric. Row identity is checked by complete ordered little-endian float64 values. Cross-version comparisons use unmodified source bytes and ordered numeric arrays with equal shapes. Whole early split bundles require five fixed-order file SHA-256 values to match. Earliest ZIP directory-only agreements use relative path, file length and CRC32 and are explicitly distinguished from complete file-byte comparisons.",
+  "reproduce": "python derive_icub.py ZENODO_5596856.zip OUT ; python derive_icub_versions.py ZENODO_5596856.zip ZENODO_5913573.zip OUT --first ZENODO_4906336.zip (Python 3, NumPy). The --first comparison uses only the original directory and can run on a sparse local representation with the fixed suffix at the original offset."
+}

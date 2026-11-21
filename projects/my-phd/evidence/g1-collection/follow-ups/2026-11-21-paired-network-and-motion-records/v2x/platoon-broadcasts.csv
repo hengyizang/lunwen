@@ -1,0 +1,16 @@
+run,broadcast_robot,frame_id,global_rows,distinct_payloads,distinct_header_stamps
+0_8_m_s,2,heading,3273,3273,3273
+0_8_m_s,2,position,2876,2876,2876
+0_8_m_s,2,speed,253,253,253
+3_0_m_s,1,heading,934,934,934
+3_0_m_s,1,position,1520,1520,1520
+3_0_m_s,1,speed,385,385,385
+3_0_m_s,1,timeout,10,10,10
+3_0_m_s,2,heading,917,917,917
+3_0_m_s,2,position,1343,1343,1343
+3_0_m_s,2,speed,653,653,653
+3_0_m_s,2,timeout,10,10,10
+3_0_m_s,3,heading,992,992,992
+3_0_m_s,3,position,1183,1183,1183
+3_0_m_s,3,speed,754,754,754
+3_0_m_s,3,timeout,11,11,11

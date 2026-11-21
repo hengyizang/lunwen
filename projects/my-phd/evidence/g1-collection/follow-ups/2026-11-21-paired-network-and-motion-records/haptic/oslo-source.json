@@ -1,0 +1,97 @@
+{
+  "checked_utc": "2026-11-21",
+  "title": "Background Data for: Impact of Latency on Task Performance and User Experience in Teleoperated Object Manipulation",
+  "landing": "https://doi.org/10.5281/zenodo.20734951",
+  "doi": "10.5281/zenodo.20734951",
+  "concept_doi": "10.5281/zenodo.20734950",
+  "version": "1.0",
+  "creation": "2026-06-19T11:25:45.015013+00:00",
+  "publication_date": "2026-06-19",
+  "authors": [
+    "Tilleman, Myrthe Erica Jeanne",
+    "Kousias, Konstantinos",
+    "Alay, Ozgu",
+    "Griwodz, Carsten",
+    "Torresen, Jim"
+  ],
+  "registry": {
+    "url": "https://zenodo.org/api/records/20734951",
+    "bytes": 8489,
+    "sha256": "286e33a07eed0816b5f2655ea1525bb7b9e75e9c7171f396f51e16821bdd5057"
+  },
+  "files": [
+    {
+      "key": "latency_teleoperation_user_study_data.tsv",
+      "url": "https://zenodo.org/api/records/20734951/files/latency_teleoperation_user_study_data.tsv/content",
+      "bytes": 33535,
+      "sha256": "d33818da5f6f40bbf67e967251ecd4d2007e37c40ee0a86b66c5591229521528",
+      "verified_publisher_md5": "md5:939775be3e1e39451455e84def3310a9"
+    },
+    {
+      "key": "user_questionnaire.pdf",
+      "url": "https://zenodo.org/api/records/20734951/files/user_questionnaire.pdf/content",
+      "bytes": 478098,
+      "sha256": "af6fcaf27fc0ed2a83025fcb1f02a0e3d76b3045c2e846cf1a0e052c4eba3baf",
+      "verified_publisher_md5": "md5:502c38a75cc470e3179b5ec840936516"
+    },
+    {
+      "key": "README.md",
+      "url": "https://zenodo.org/api/records/20734951/files/README.md/content",
+      "bytes": 13145,
+      "sha256": "2ae04858dfe4b8139982efd4a9228162bbdc917bf01a16efb6113e40f79c1a5c",
+      "verified_publisher_md5": "md5:8b7473a376f7e54b6ffc8bd501a04998"
+    }
+  ],
+  "rights": "CC BY 4.0 per Zenodo and readme. Credit Myrthe E. J. Tilleman, Konstantinos Kousias, Ozgu Alay, Carsten Griwodz and Jim Torresen. Derived tables contain only aggregated outcome counts and paired changes.",
+  "history": {
+    "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "tracked_evidence_paths": 1030,
+    "additional_tar_members": 301,
+    "early_index_checked": true,
+    "keys": [
+      "10.5281/zenodo.20734951",
+      "10.5281/zenodo.20734950",
+      "Background Data for: Impact of Latency on Task Performance and User Experience in Teleoperated Object Manipulation",
+      "latency_teleoperation_user_study_data.tsv"
+    ],
+    "matches": []
+  },
+  "related_paper_history": {
+    "parent_commit": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "tracked_evidence_paths": 1030,
+    "additional_tar_members": 301,
+    "early_index_checked": true,
+    "keys": [
+      "Impact of Latency on Task Performance and User Experience in Teleoperated Object Manipulation",
+      "10.1109/RO-MAN72286.2026.11714563",
+      "Tilleman Kousias Alay Griwodz Torresen"
+    ],
+    "matches": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+    ]
+  },
+  "queries": [
+    {
+      "query": "teleoperation AND latency",
+      "service": "DataCite public API",
+      "url": "https://api.datacite.org/dois?query=teleoperation+AND+latency&resource-type-id=dataset&page%5Bsize%5D=70",
+      "result_sha256": "dc4837729b18cf1eb5eba50653d332a9b557d43b1391132edb213ef771e386df"
+    }
+  ],
+  "related_paper": {
+    "doi": "10.1109/RO-MAN72286.2026.11714563",
+    "crossref": {
+      "url": "https://api.crossref.org/works/10.1109/RO-MAN72286.2026.11714563",
+      "bytes": 4651,
+      "sha256": "79f9e4f32d53e91402a5c34f02fdebbc5b13805979734da0bb5286951f90f872"
+    },
+    "evidence": "Data release and methods README read; final article was not verified as free full text."
+  },
+  "physical_task": "Co-located UR10e and Shadow hand driven by a tracked glove, immediate visual feedback of real arm. Five command execution conditions (0,50,100,150,200 ms) were programmed. The release has per-completed-task outcomes, how many restarts occurred, and questionnaires. It does not have physical per-command actuation timestamps, independent end-to-end delay measurements, failed-trial durations or trajectories.",
+  "coverage": "Study planned 49 people; one calibration abort generated no rows. All 480 released rows over 48 distinct people checked. One person had repeated baseline in JTHFT and no 150-ms entry. Paper exclusion set from README leaves 450 rows and 45 people. Across all rows 139 restarts occur over 100 eventual completions; all reason counts can be reconciled (68 hardware,69 participant,2 other).",
+  "method": "Separate JTHFT successful completion time in seconds from BBT block count in a fixed minute. Compute changes within person relative to 0 ms and require exactly one row for each member of a pair. Run once on all recorded data, then repeat after the authors’ four stated exclusions (2,7,10,32; no rows from 32). Outcomes are conditioned on successful completion; counts of restarts are kept. No participant-level values are published here.",
+  "findings": "Using 45 paper-analysis participants, 200 ms vs baseline has median within-person change +12.85207 s in JTHFT (37 slower, 8 faster), and −2 blocks/min in BBT (35 lower,7 same,3 higher). The BBT median change at 50 and 100 ms is 0 blocks/min. Hardware disruptions and repeats prevent inference about all-attempt completion times.",
+  "reproduce": "python derive_oslo.py latency_teleoperation_user_study_data.tsv OUT (Python 3 plus NumPy)."
+}

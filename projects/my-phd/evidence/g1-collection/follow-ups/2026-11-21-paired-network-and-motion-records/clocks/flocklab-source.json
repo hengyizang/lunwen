@@ -1,0 +1,208 @@
+{
+  "title": "Wireless Link Quality Estimation on FlockLab - and Beyond",
+  "doi": "10.5281/zenodo.3731498",
+  "concept_doi": "10.5281/zenodo.3354717",
+  "landing": "https://doi.org/10.5281/zenodo.3731498",
+  "authors": [
+    "Romain Jacob",
+    "Reto Da Forno",
+    "Roman Trüb",
+    "Andreas Biri",
+    "Lothar Thiele"
+  ],
+  "accessed_utc": "2026-11-21",
+  "release_date": "2020-03-27",
+  "version": "v1.4.1",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.3731498",
+      "10.5281/zenodo.3354717",
+      "Wireless Link Quality Estimation on FlockLab and Beyond",
+      "10.1145/3359427.3361907",
+      "2019-07_FlockLab_dpp-cc430.csv"
+    ],
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "prior_paths": 1030,
+    "additional_archive_members": 301,
+    "early_index_checked": true,
+    "matching_paths": []
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/3731498",
+    "bytes": 19990,
+    "sha256": "d3761e7f81f4edc4f4e6b2bfef849d2bc52bd43500e9dbdd901dc81187d2d84c"
+  },
+  "rights": "CC BY 4.0 per Zenodo metadata. Attribute the named depositors. Only new summaries, references and independent readers are included; original archives remain available at source.",
+  "file_evidence": [
+    {
+      "filename": "2019-07_preprocessed_all.zip",
+      "registry_md5": "md5:5f9867bedae77ab05c71b9c67981532c",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-07_preprocessed_all.zip/content",
+      "bytes": 13660728,
+      "sha256": "bb1f4d2f7a58c70b2a83c43d10ff24e100bcead0fd1684c650dffc83573b7298"
+    },
+    {
+      "filename": "2019-08_preprocessed_all.zip",
+      "registry_md5": "md5:b1a9e3156f1be671f78cac448fb36f6f",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-08_preprocessed_all.zip/content",
+      "bytes": 16617554,
+      "sha256": "4b718212b4c8bb4116292dd196ab10ac06e05b9f85667e80afd725fd2aed6b25"
+    },
+    {
+      "filename": "2019-09_preprocessed_all.zip",
+      "registry_md5": "md5:fd838457ebcec2a6cd362fbe3bfec869",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-09_preprocessed_all.zip/content",
+      "bytes": 19486095,
+      "sha256": "d2fdb72bf515b1e3aa3b74c63e6fff403506ee80b08a5267aa2a8e7e30c58bee"
+    },
+    {
+      "filename": "2019-10_preprocessed_all.zip",
+      "registry_md5": "md5:defb4cc4bdc40e145caaccfcdaf58750",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-10_preprocessed_all.zip/content",
+      "bytes": 4332269,
+      "sha256": "33ab7b3ade093e5203ede956f695ff1cb2314876f3f5bff4ca7a93d1ad40208b"
+    },
+    {
+      "filename": "2019-11_preprocessed_all.zip",
+      "registry_md5": "md5:2d944f6df09e22bab2e333675f0b217d",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-11_preprocessed_all.zip/content",
+      "bytes": 2819619,
+      "sha256": "6f6c2a75e1f20c61adc8e3b704b655079fa1d6cf3ae5ed0bb55e7e065300ec71"
+    },
+    {
+      "filename": "2019-12_preprocessed_all.zip",
+      "registry_md5": "md5:150a215edaf2909d0707377b37fd40d4",
+      "url": "https://zenodo.org/api/records/3731498/files/2019-12_preprocessed_all.zip/content",
+      "bytes": 2820597,
+      "sha256": "ac2eea03abcb8ccfc68827c62856d4d5fed3eef83dcd392d72c12c9918e1fb82"
+    },
+    {
+      "filename": "2020-01_preprocessed_all.zip",
+      "registry_md5": "md5:5799126d43d45c8b544f6b0b8715b84f",
+      "url": "https://zenodo.org/api/records/3731498/files/2020-01_preprocessed_all.zip/content",
+      "bytes": 1177174,
+      "sha256": "9857fe31ec57297513ad14b887b5fe764b8225f8b06324815e8b6e4e03c6b523"
+    },
+    {
+      "filename": "2020-02_preprocessed_all.zip",
+      "registry_md5": "md5:98639117ff460b2233306946413d4d08",
+      "url": "https://zenodo.org/api/records/3731498/files/2020-02_preprocessed_all.zip/content",
+      "bytes": 2223004,
+      "sha256": "6ad2e5b6423e86c087e67cdf839a92a091afd2fc8451dbb5d67329807236ad46"
+    },
+    {
+      "filename": "2020-03_preprocessed_all.zip",
+      "registry_md5": "md5:c04770fde553caac5a68bfe1c777dd73",
+      "url": "https://zenodo.org/api/records/3731498/files/2020-03_preprocessed_all.zip/content",
+      "bytes": 651790,
+      "sha256": "7933d4d7ce7a057add0a3e606b770323887f1c52aeb06e0b383aadbf5127ec4e"
+    },
+    {
+      "filename": "2020-03_raw_dpp-cc430.zip",
+      "registry_md5": "md5:d4183c09eb22667c66b71376cddfc7ee",
+      "url": "https://zenodo.org/api/records/3731498/files/2020-03_raw_dpp-cc430.zip/content",
+      "bytes": 28460491,
+      "sha256": "9a9e4f0fee320d6dbe1339a9954ba466afe4f5342a876c1f00976b6528719c88"
+    },
+    {
+      "filename": "2020-03_raw_sky.zip",
+      "registry_md5": "md5:f53c66f9f4d77ac7323209443332a6c6",
+      "url": "https://zenodo.org/api/records/3731498/files/2020-03_raw_sky.zip/content",
+      "bytes": 75033653,
+      "sha256": "35434013dc78a0b9c7bfa9f612889443c3fe99278e0de29b7654926b745532ba"
+    },
+    {
+      "filename": "abstract.pdf",
+      "registry_md5": "md5:69d0f6423fcf8fb4e0e517545057685a",
+      "url": "https://zenodo.org/api/records/3731498/files/abstract.pdf/content",
+      "bytes": 491140,
+      "sha256": "7f938fb10c6d55697b8b73ecf4d42c9899fe70f470cab16e05213607df074fdb"
+    },
+    {
+      "filename": "flocklab_link_quality.py",
+      "registry_md5": "md5:eda77c7f747b245b96a0d240c45d5101",
+      "url": "https://zenodo.org/api/records/3731498/files/flocklab_link_quality.py/content",
+      "bytes": 18440,
+      "sha256": "70466a4de859609ef9b8cb0e632eb15b7333b7b00109ce852303e37052e72c71"
+    },
+    {
+      "filename": "firmware.zip",
+      "registry_md5": "md5:1bd4fb4e2f2c4325c4ed7eccc8c9f4cf",
+      "url": "https://zenodo.org/api/records/3731498/files/firmware.zip/content",
+      "bytes": 154516,
+      "sha256": "7f3357fb2689b68716d70ce00de75c4e5a1a6626fd70c7f6c0b2885fadf43e04"
+    }
+  ],
+  "queries": [
+    "Zenodo query \"FlockLab\" AND synchronization and DataCite equivalent. Followed the data-collection conference paper, supplementary Python exporter, Baloo source and files in v1.4.1.",
+    "Also checked Zenodo 18602955, whose only registered file is a 528-byte description despite a reference to synchronization logs. No timing-series result computed for it. Zenodo 18082689 and 13785088 each contain only an article PDF in their record."
+  ],
+  "companion_paper": {
+    "doi": "10.1145/3359427.3361907",
+    "title": "Dataset: Wireless Link Quality Estimation on FlockLab – and Beyond",
+    "locator": "Sections 2–3, Table 1 and Figures 1–2 of abstract.pdf; final release covers more dates than the early paper.",
+    "crossref": {
+      "url": "https://api.crossref.org/works/10.1145/3359427.3361907",
+      "bytes": 6587,
+      "sha256": "c2346d76eb1afd82de9a57a15e3a76ca6e036a11709feb493808aec0a5dbf607"
+    }
+  },
+  "exporter": "In the supplied flocklab_link_quality.py, lines 71–84 create one temporary file per day, lines 225–242 append a record and lines 283–305 append accumulated content to the full CSV and use an unanchored regex for failed source IDs. Some earlier trials occur repeatedly; some rows have fewer fields than the header. Each missing reception count and mask remains missing.",
+  "coverage": {
+    "processed_months": 9,
+    "processed_tables": 18,
+    "test_platform_ids": 2571,
+    "test_platform_ids_with_identifiable_endpoints": 2570,
+    "source_rows": 8267775,
+    "distinct_rows_including_truncated": 1696283,
+    "duplicate_rows_within_test_and_platform": 6571492,
+    "raw_records_without_identifiable_endpoints": 57531,
+    "distinct_directed_slots": 1672924,
+    "distinct_slots_with_one_consistent_mask": 1552955,
+    "distinct_versions_with_disagreeing_count_and_mask": 27560,
+    "accepted_mask_positions": 155295500,
+    "accepted_ones": 53846220,
+    "reciprocal_pairs_compared": 760593,
+    "reciprocal_pairs_with_absolute_difference_ge50_out_of_100": 16568
+  },
+  "mask_method": "Key is platform, test ID, sender and receiver; de-duplicate identical row variants within a test. For the slotted bit analysis require exactly 100 binary characters and a matching published total. Keep a consistent mask once even if a blank variant also exists and count these cases separately. Strobe positions are opportunities for the same scheduled sender, not independent or necessarily physically transmitted packets. Peer-to-peer direction comparisons are from separate slots. All-missed slots and absent data stay distinct.",
+  "archive_check": "Two files named for March were downloaded in full. The DPP archive contains 36 March tests. The Sky archive contains solely 2020-02_raw_sky.zip which itself contains solely 2019-11_raw_sky.zip, with identical MD5s to those two registered files; the latter holds 117 November trials. For that file compare against the November processed table. No March Sky waveform inferred.",
+  "serial_check": {
+    "actual_raw_trials": 153,
+    "trials_in_processed_month_table": 140,
+    "raw_and_clean_masks_compared": 78232,
+    "all_100_mask_bits_agree": 78232,
+    "and_sender_logs_Strobing": 78189,
+    "most_distinct_reports_sharing_one_receiver_serial_timestamp": 26
+  },
+  "gpio_mask_check": {
+    "runs": 36,
+    "eligible_links": 10468,
+    "full_mask_agreement": 9407,
+    "mixed_bit_links": 4873,
+    "mixed_mask_agreement": 3812,
+    "trial_median_rx_minus_tx_range_us": [
+      64.8,
+      64.9
+    ]
+  },
+  "gpio_method": "Decode physical observers’ INT1 transitions at the recorded 0.1 µs precision. For the actual 36 March CC430 files, select a TX slot only if its node self-reported Strobing, had exactly 100 pulses 350–410 µs wide with 550–900 µs successive rise intervals. Pair each TX fall with short positive receiver pulses of width at most 60 µs and report distinct or ambiguous candidates in ±100, ±150 and ±250 µs windows. A pin is used for both TX and successful RX; pulse morphology and sender log are needed to distinguish roles. Delays use positions where both serial bits and GPIO show a reception. These are board/firmware/observer edge differences; the data do not isolate propagation latency or absolute inter-node clock offsets. Applied only to CC430, not to the Sky board. Public Baloo describes these GPIO mappings; a byte-identical firmware source build for the recorded dirty 2019 image is unestablished.",
+  "firmware_reference": [
+    {
+      "url": "https://github.com/ETHZ-TEC/Baloo/blob/95f89f6c1163e40513af69fcf056b53e5f99caef/examples/baloo-link-quality-test/project-conf.h",
+      "bytes": 5779,
+      "sha256": "9246ece140b07c70db5bf929eaedeceda35f1cc1f6d811aabe745b885ce2199e"
+    },
+    {
+      "url": "https://github.com/ETHZ-TEC/Baloo/blob/95f89f6c1163e40513af69fcf056b53e5f99caef/examples/baloo-link-quality-test/baloo-link-quality-test.c",
+      "bytes": 19806,
+      "sha256": "3b06cef2420a5cd060faa0f786b66ab7e9f73785f9f2ebfb89c70b46243cb586"
+    },
+    {
+      "url": "https://github.com/ETHZ-TEC/Baloo/blob/95f89f6c1163e40513af69fcf056b53e5f99caef/arch/cpu/cc430/strobing.c",
+      "bytes": 12389,
+      "sha256": "44cd72ebbfa2568d11440a3af08eae809074538ca19cf7426c1620fbb5b7b555"
+    }
+  ],
+  "reproduce": "Download 3731498.json via the registry URL, all 9 monthly *_preprocessed_all.zip and the two 2020-03_raw_*.zip to RAW. Run python derive_flocklab.py RAW OUT and python derive_flock_gpio.py RAW OUT using Python 3 standard library. Hashes and exact filenames appear above."
+}

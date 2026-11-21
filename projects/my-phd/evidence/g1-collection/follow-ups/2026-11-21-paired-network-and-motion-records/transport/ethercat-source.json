@@ -1,0 +1,91 @@
+{
+  "title": "Reproducibility dataset and analysis code",
+  "landing": "https://doi.org/10.5281/zenodo.23652951",
+  "doi": "10.5281/zenodo.23652951",
+  "concept_doi": "10.5281/zenodo.21057279",
+  "version": "v4",
+  "published": "2026-10-26",
+  "authors": [
+    "Nguyen Dinh, Tuan",
+    "Nguyen, Tien Minh Khoi",
+    "Vu, Nguyen Minh Hung",
+    "mondal, Sudip",
+    "Choi, Jaeyeop",
+    "Ahn, Jae Sung",
+    "Oh, Junghwan",
+    "Doan, Vu Hoang Minh",
+    "Le, Thanh Dat"
+  ],
+  "rights": "CC BY 4.0 as registered in Zenodo. Credit the listed creators. Only newly calculated summaries, source identifiers, and independent reading code are included.",
+  "accessed_utc": "2026-11-21",
+  "registry": {
+    "url": "https://zenodo.org/api/records/23652951",
+    "bytes": 6656,
+    "sha256": "ba12195db2af1c40fc7ea34a2120c88347b49268ce83544ce0037ef069518bb1"
+  },
+  "file_evidence": [
+    {
+      "name": "LUM_TII_raw_jitter_data.zip",
+      "url": "https://zenodo.org/api/records/23652951/files/LUM_TII_raw_jitter_data.zip/content",
+      "bytes": 478658190,
+      "sha256": "1a69090d83fce86f39e47fcb064c9366d72894e436be577f890bc55424865330",
+      "verified_publisher_md5": "09ff662a07d2b236d2965041294e4b00"
+    },
+    {
+      "name": "LUM_TII_motion_logs.zip",
+      "url": "https://zenodo.org/api/records/23652951/files/LUM_TII_motion_logs.zip/content",
+      "listed_bytes": 3476308532,
+      "checked": "ZIP end records and central directory, local member headers and 45 complete-record ranges, all checked at exact HTTP 206 offsets. The full archive MD5 was not verified.",
+      "range_evidence": "ethercat-motion-windows.csv",
+      "full_archive_publisher_md5": "28402949523c093fc3d582c33d1d75e0",
+      "central_directory_sha256": "f25ae0bfc15e2c124ba22887e7912d5c23f324f80a7ad32469b7423fba61b332",
+      "complete_motion_record_bytes": 11796480
+    },
+    {
+      "name": "LUM_TII_reproducibility.zip",
+      "url": "https://zenodo.org/api/records/23652951/files/LUM_TII_reproducibility.zip/content",
+      "bytes": 11069848,
+      "sha256": "cb9b39ea56581bb21feecef956d7ecadc8fc4c9b3b75d766ee7c712d3df7c1bf",
+      "verified_publisher_md5": "055f3217f1997ffd7541e17e7a230442"
+    }
+  ],
+  "research_scope": "R5: EtherCAT working counter, host cycle timing and downstream acquisition layers during a laser-ultrasonic scanning experiment.",
+  "history": {
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "keys": [
+      "10.5281/zenodo.23652951",
+      "10.5281/zenodo.21057279",
+      "10.5281/zenodo.21057280",
+      "10.5281/zenodo.21547904",
+      "10.5281/zenodo.23635698",
+      "LUM_TII_raw_jitter_data.zip",
+      "Software-Defined Stochastic Resilience: A Lock-Free Host Architecture Replacing FPGA/RTOS for 1 GB/s Laser-Ultrasonic Imaging on COTS Windows",
+      "Nguyen Dinh Tuan Nguyen Tien Minh Khoi Vu Nguyen Minh Hung"
+    ],
+    "matched": [],
+    "evidence_paths": 1030,
+    "extra_tar_members": 301,
+    "early_catalogue": true
+  },
+  "queries": [
+    "DataCite dataset query: \"EtherCAT\" AND (jitter OR latency). Followed the Zenodo version family to v4; inspected README.md, KNOWN_ISSUES.md, code/analyze_phase3.py and the recorded summaries and raw binary records."
+  ],
+  "versions": "The release contains a manuscript title and submission identifier in README.md. Publication or acceptance status of the associated manuscript is unverified. The five separate motion experiments were audited by deterministic index windows. Their published export layout differs from the jitter archive.",
+  "methods": [
+    "Read every run_0001.bin in the raw jitter ZIP plus its JSON. Applied the published 64-byte layout and nominal 10 MHz QPC scale. The 16 runs include preliminary, baseline and other stress/core conditions. Cycles from the same hardware are repeated observations. Expected working counter (WKC) is 12, as documented in the metadata. Calculated one-cycle host intervals on adjacent cycle IDs with positive stamps; previous and current WKC comparisons are shown separately.",
+    "Read both endurance summaries plus original log.txt lines reporting row-level excess. Ring drops and row-assembler discards refer to different boundaries. Scan029 pipeline CSV contains a data block and a separate summary; used only the original per-stage data rows for the six reported channels.",
+    "In each stored motion ZIP member, read nine non-overlapping 4,096-cycle windows spaced evenly from the first possible window to the last; used the exported on-disk layout documented in motion_logs/RECORD_FORMAT.md, distinct from the scheduling-jitter record layout. Verified the per-member byte count against nCyclesWritten. For each locally contiguous 26-cycle span with increasing DC timestamps and net target movement, compared the unshifted and lag-26 target deviation from the same encoder observation. The shift of 26 cycles was fixed in the source document in advance."
+  ],
+  "findings": [
+    "26,844,950 raw cycles. 26,844,933 adjacent, positive host intervals can be evaluated. The 46,020 observations with WKC unequal to 12 all have a nonzero drop_delta and repeat the preceding encoder position. A constant encoder reading in such rows cannot establish a stationary shaft. actVel and cmpFireCount are zero throughout, although 19,546,226 eligible pairs change encoder position.",
+    "11,317 intervals exceed 5 ms. Only two end on a row with WKC unequal to 12 and 48 start on such a row. This contrasts a slow logged host cycle with an unexpected EtherCAT working counter; neither directly timestamps drive use or motion onset.",
+    "Two endurance runs record zero ring drops and 4,040,000 segments discarded by the row assembler among 797,080,000 total segments (0.507%); 200 messages identify those discards. In Scan029 the 15,881 pipeline samples and 962 rendering samples do not form a joined sensor-to-screen event trace. Its latency_summary.csv describes a convolution of two independently measured distributions.",
+    "The five motion trials contain 54,317,305 archived 64-byte records across all members. In a deterministic sample of 184,320 records, 144,221 comparisons met the motion and continuity rule. Shifting the target back by 26 cycles reduced absolute target-to-encoder error in 144,195 of these. All 26 counterexamples came from one nominal 500 mm/s trial. Encoder feedback and commanded motion are in the same drive log. The offset measures tracking alignment under these motions, without an independent measurement of drive application delay."
+  ],
+  "limits": [
+    "The clean baseline metadata and the supplied measurement notes disagree on synthetic stress. Labels of 700 mm/s are settings, not encoder speed measurements. Number of fieldbus frames sent and peer arrival time are not recovered from a host cycle index or WKC. Overlapping runs, timelines and source aliases are not treated as independent systems.",
+    "One index discontinuity and one nonpositive clock observation affect interval eligibility. Repeated encoder values, including on bad-WKC rows, support an observation-level association, not a claim about physical motion or causation.",
+    "The distributed-clock timestamps in the separate motion archive have 100 ns tick units per RECORD_FORMAT.md. The in-memory deviation field used by the authors for jitter was omitted in that export. The nine windows per session are a coverage sample; sampling outside these windows and optical end-to-end confirmation are unresolved."
+  ],
+  "reproduce": "Python 3.11+ and NumPy: python derive_ethercat.py LUM_TII_raw_jitter_data.zip LUM_TII_reproducibility.zip OUT For the five motion logs: python derive_ethercat_motion.py LUM_TII_reproducibility.zip CACHE OUT --fetch; subsequent runs can repeat without --fetch."
+}

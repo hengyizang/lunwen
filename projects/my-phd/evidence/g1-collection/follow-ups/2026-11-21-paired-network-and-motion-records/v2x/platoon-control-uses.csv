@@ -1,0 +1,6 @@
+run,receiver,source_name,debug_rows,unique_filtered_frames_represented,debug_rows_exact_unique_x_y_v,debug_rows_ambiguous_x_y_v,debug_rows_no_same_x_y_v,uses_per_identified_frame_median,uses_per_identified_frame_max,first_debug_before_filtered_at_recorder,first_debug_minus_filtered_recorder_ms_p50,first_debug_minus_filtered_recorder_ms_p95,first_debug_minus_origin_header_ms_p50
+0_8_m_s,F110_1,,0,0,0,0,0,,,0,,,
+0_8_m_s,F110_2,,127661,0,0,0,127661,,,0,,,
+3_0_m_s,F110_1,,23115,0,0,0,23115,,,0,,,
+3_0_m_s,F110_2,1,23713,0,0,0,23713,,,0,,,
+3_0_m_s,F110_3,2,23615,0,0,0,23615,,,0,,,

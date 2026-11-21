@@ -1,0 +1,228 @@
+{
+  "title": "ESP32C3 WiFi FTM RSSI Indoor Localization",
+  "doi": "10.5281/zenodo.10883013",
+  "concept_doi": "10.5281/zenodo.10883012",
+  "landing": "https://doi.org/10.5281/zenodo.10883013",
+  "authors": [
+    "Yuen, Brosnan",
+    "Bie, Yifeng",
+    "Cairns, Duncan",
+    "Harper, Geoffrey",
+    "Xu, Jason",
+    "Dong, Xiaodai",
+    "Lu, Tao"
+  ],
+  "rights": "CC BY 4.0 per Zenodo (https://creativecommons.org/licenses/by/4.0/). Credit Brosnan Yuen, Yifeng Bie, Duncan Cairns, Geoffrey Harper, Jason Xu, Xiaodai Dong and Tao Lu. Only independent aggregate tables, digests and reader code reproduced.",
+  "version": "Fixed Zenodo record 10883013, 2024-03-26",
+  "retrieved_utc": "2026-11-21",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.10883013",
+      "10.5281/zenodo.10883012",
+      "10.21227/2mbb-yt66",
+      "ESP32C3 WiFi FTM RSSI Indoor Localization",
+      "ESP32C3_WiFi_FTM_RSSI.zip",
+      "10.1109/ACCESS.2022.3201645",
+      "Wi-Fi and Bluetooth Contact Tracing Without User Intervention"
+    ],
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "prior_paths": 1030,
+    "additional_archive_members": 301,
+    "early_index_checked": true,
+    "matching_paths": []
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/10883013",
+    "bytes": 5877,
+    "sha256": "8972ac54183656fc1a19df4c71c63ae8ae472dce9d1e9195f85533efd5b35185"
+  },
+  "archive": {
+    "url": "https://zenodo.org/api/records/10883013/files/ESP32C3_WiFi_FTM_RSSI.zip/content",
+    "bytes": 4345880,
+    "sha256": "2adef79565470a623d32867196899191dc8c1b946fd5ba94a67baae5afdf8783",
+    "verified_md5": "md5:799c2a0a7ed147a9d07fd57aad8560dd",
+    "members": [
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/DatasetB.pdf",
+        "uncompressed_bytes": 334286,
+        "crc32": "a6ef55ab",
+        "sha256": "3055b04786d90ed56add6e8a5168eaecd55bdc5a957a16ff4bb1f100eba09b29"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/ECS1BiLSTMFTM.pdf",
+        "uncompressed_bytes": 110728,
+        "crc32": "c6d090e7",
+        "sha256": "8272b6cb654e435f12435585183ae54a4a071bde0da100255034bfd8286831a8"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/TEST_DATASET.csv",
+        "uncompressed_bytes": 2609963,
+        "crc32": "297a991b",
+        "sha256": "6cf798a29aceac35b1262a8858267fa557c1dad9ab0a348204aefd4067c7f6b3"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/TRAIN_DATASET.csv",
+        "uncompressed_bytes": 10019363,
+        "crc32": "61d90a31",
+        "sha256": "2a94930a180ffff3e705f0fc3ca7d41ef97b626459eb678a22e803757f85707a"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/map.pgm",
+        "uncompressed_bytes": 185605,
+        "crc32": "4df7015c",
+        "sha256": "0dfb21ca06ce405fdb237743221acb916561cc67ce0d3b9ec90a0ba4bd9d34ba"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/map.yaml",
+        "uncompressed_bytes": 123,
+        "crc32": "b39d6e17",
+        "sha256": "d2be9d509f0d420af0f7c6c42b0485aa94dd1507e3c21a8c9bbe6e43da30d729"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/ECS1stFloor/readme.md",
+        "uncompressed_bytes": 585,
+        "crc32": "386e56a2",
+        "sha256": "51f67e471e4f71587fcbfdeb17466d9d67d6bfc3a357fed5a3a62e7aced87598"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay1/TRAIN_DATASET.csv",
+        "uncompressed_bytes": 4196675,
+        "crc32": "83888173",
+        "sha256": "c52257b60c719422a48467179d1accb4e1351056c6cc655df4947e56314a716f"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay1/map.pgm",
+        "uncompressed_bytes": 281439,
+        "crc32": "31117560",
+        "sha256": "2eeafc6e43fd2b37be1fecbebfa280a4031b07d632e13519fb025e04ff7cebab"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay1/map.yaml",
+        "uncompressed_bytes": 133,
+        "crc32": "1660db07",
+        "sha256": "12aeeb613948fb942e99d5cee4440014dd6f3eca0549911346a2b1ceb5e36428"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay1/readme.md",
+        "uncompressed_bytes": 433,
+        "crc32": "90a0c3e9",
+        "sha256": "cb1ef9c248421853c867231bc46558f90f93c632d3a60adc99bcf03e871a57eb"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/EOW3BiLSTMFTM.pdf",
+        "uncompressed_bytes": 133013,
+        "crc32": "c97bdf71",
+        "sha256": "692ca36a91760748ca5648b8cf45976c1e18ab1d9a8f8a57ab2b863540b41f07"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/TEST_DATASET.csv",
+        "uncompressed_bytes": 5928964,
+        "crc32": "6182e7de",
+        "sha256": "55f0919f70739a9fa4b10f2e637dc87e97bda55a0e8395baae065f7354132a52"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/TRAIN_DATASET.csv",
+        "uncompressed_bytes": 7289221,
+        "crc32": "64f7561c",
+        "sha256": "6988b74653e27eacc4b0d976e35e45aad80c837c3fa7e8b4011943056b82587e"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/map.pgm",
+        "uncompressed_bytes": 287055,
+        "crc32": "0fe77f92",
+        "sha256": "ec92a6dd1d1c12d95197f6f19d46c40c5b8fbbf332a32ee2f7f0706b5cd4aa2b"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/map.yaml",
+        "uncompressed_bytes": 123,
+        "crc32": "423fc955",
+        "sha256": "fdcafbad77cdee4b65ec26c0757c7d4dc9e060081c9026b25bb102d63c9b5605"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW3rdFloorDay2/readme.md",
+        "uncompressed_bytes": 585,
+        "crc32": "386e56a2",
+        "sha256": "51f67e471e4f71587fcbfdeb17466d9d67d6bfc3a357fed5a3a62e7aced87598"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/EOW5WifiFTM.pdf",
+        "uncompressed_bytes": 84484,
+        "crc32": "3bf2dc4b",
+        "sha256": "e61f1d62e7945f2cb08a07f0fb7fe084be9df1ff4f22bf24201bc5d45ca7342f"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/TEST_DATASET.csv",
+        "uncompressed_bytes": 5508588,
+        "crc32": "4f74d9a6",
+        "sha256": "9fa2a95deb54469ceaff3ff92dab99027bffc75d47c86b0541a1f91ed9876c32"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/TRAIN_DATASET.csv",
+        "uncompressed_bytes": 5399019,
+        "crc32": "defca01c",
+        "sha256": "b0c8b3e38b672cc03e7f80e9cc8343f230a87e195f5214e243533a68cb77525f"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/map.pgm",
+        "uncompressed_bytes": 190335,
+        "crc32": "4c7471db",
+        "sha256": "845b659a36f72843de48af3298e3bf8c5146303fe5385eece9e890b31a65557d"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/map.yaml",
+        "uncompressed_bytes": 133,
+        "crc32": "18689057",
+        "sha256": "c3387a98eacfb4f6ba7543361cc0ea1fd433c1496cca08304d59a80a8e91fc85"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/EOW5thFloor/readme.md",
+        "uncompressed_bytes": 585,
+        "crc32": "386e56a2",
+        "sha256": "51f67e471e4f71587fcbfdeb17466d9d67d6bfc3a357fed5a3a62e7aced87598"
+      },
+      {
+        "path": "ESP32C3_WiFi_FTM_RSSI/README.md",
+        "uncompressed_bytes": 1251,
+        "crc32": "f21117f0",
+        "sha256": "7348fe44228fca1028c38ee05dfc5c8a48302256dc62f0ae56b0a1b7648f38a9"
+      }
+    ]
+  },
+  "sibling_registration": {
+    "doi": "10.21227/2mbb-yt66",
+    "metadata": {
+      "url": "https://api.datacite.org/dois/10.21227/2mbb-yt66",
+      "bytes": 7424,
+      "sha256": "2d320b17e463f967bf1bafa3b55fd73aa067c0a6780e763268b8a5a56f24ecff"
+    },
+    "scope": "Same title and named creators in IEEE DataPort; treated as a related registration, not a second experiment. Payload equivalence not checked."
+  },
+  "queries": [
+    "\"Wi-Fi FTM\"",
+    "Opened Zenodo record and checked the IEEE DataPort DOI returned by DataCite. Inspected the archive, README, methods for the location labels, and dataset illustration.",
+    "Exact associated paper title search via Crossref; DOI 10.1109/ACCESS.2022.3201645. IEEE link served HTML rather than PDF and the historical Figshare file URL for the TechRxiv preprint returned 404 in this retrieval. Quantitative claims above use the deposited source files."
+  ],
+  "query_urls": [
+    "https://zenodo.org/api/records?q=%22Wi-Fi+FTM%22&size=18",
+    "https://api.datacite.org/dois?query=%22Wi-Fi+FTM%22&page%5Bsize%5D=20&resource-type-id=dataset"
+  ],
+  "article": {
+    "title": "Wi-Fi and Bluetooth Contact Tracing Without User Intervention",
+    "doi": "10.1109/ACCESS.2022.3201645",
+    "metadata": {
+      "url": "https://api.crossref.org/works/10.1109/ACCESS.2022.3201645",
+      "bytes": 9098,
+      "sha256": "1e0fbc737711c465df655500fad365c62bd5b1b4eaad6d967f6531c474afcee3"
+    },
+    "preprint": "10.36227/techrxiv.19424219",
+    "level": "publisher metadata, linked by the data deposit"
+  },
+  "evidence": "Full data-file validation: all seven headerless numeric tables across four campaign folders, all four per-folder field descriptions, and archive-level documentation. Router-side eight AP FTM features; six files also have RSSI, and EOW3rdFloorDay1 includes a training file only. Authors describe Chrony on routers, LiDAR/RGB-D location reference and position-local relative time.",
+  "findings": [
+    "207,541 rows comprise 257 distinct-position blocks across the seven source files. Every one of the 250 within-file position transitions resets relative time backwards. Across the 207,284 within-position adjacent pairs, 155,516 times advance exactly 10 ms and 38,370 exactly 20 ms. In 67 pairs all eight FTM features repeat. This is a processed table without per-AP event clocks, matched packet IDs or sender denominators: local-grid frequency cannot be used as the physical packet delivery rate.",
+    "Three campaign folders supply train and test, covering 14+35+33=82 test positions. One of the 35 Day 2 EOW3 test coordinates also occurs in training at the two-decimal precision supplied. The other two matched spatial splits have zero exact coincidences. Repetition of a rounded coordinate does not establish session identity.",
+    "For each position, use the per-channel median FTM. Normalize feature differences by each channel’s interquartile range across training positions. Use the nearest training fingerprint to predict the test location (one vote per held-out position). Median physical location errors were 2.067 m ECS1, 0.764 m EOW3 Day2, 1.231 m EOW5. Median nearest available training coordinate distances were 0.704, 0.455 and 0.711 m, respectively. These are descriptive geometry/fingerprint checks under the original folder split, not reproduction of the paper’s BiLSTM."
+  ],
+  "limitations": "Source describes RTT values in nanoseconds but files lack per-transaction timestamps or independent calibration and no passive client-side observations were supplied. Retain values in their source numeric scale. Only router-side measured, processed feature vectors available. Evaluation uses x,y in matched maps, no cross-floor coordinate comparison. The numbers of positions are summed per file and are not counts of distinct subjects or globally distinct coordinates. No individual identities used.",
+  "reproduce": "python derive_esp_fingerprints.py ESP32C3_WiFi_FTM_RSSI.zip OUT (Python, NumPy)."
+}

@@ -1,0 +1,16 @@
+run,node,series,rows,common_rows,common_duration_s,median_recorder_step_ms,threshold,units,first_250ms_median_magnitude,max_magnitude,first_sustained_threshold_after_common_start_ms
+0_8_m_s,F110_1,cmd,76456,76456,513.764981,0.164461,200,electrical rpm magnitude,0.0,9228.0,7547.320976
+0_8_m_s,F110_1,feedback,122934,22902,513.764981,13.402429,200,electrical rpm magnitude,0.0,9766.0,7680.742771
+0_8_m_s,F110_1,pose,340922,70993,513.764981,6.522156,0.02,m displacement from first 250 ms median,0.000173,10.359608,7857.544745
+0_8_m_s,F110_2,cmd,127950,127949,2559.109201,19.602236,200,electrical rpm magnitude,3530.494554,4970.935347,0.0
+0_8_m_s,F110_2,feedback,127952,127945,2559.109201,19.588847,200,electrical rpm magnitude,3629.0,5019.0,20.283574
+0_8_m_s,F110_2,pose,340902,340890,2559.109201,6.818734,0.02,m displacement from first 250 ms median,0.055082,16.036787,141.393057
+3_0_m_s,F110_1,cmd,23095,23095,462.435197,19.752934,200,electrical rpm magnitude,13842.0,13842.0,0.0
+3_0_m_s,F110_1,feedback,23736,23122,462.435197,19.895864,200,electrical rpm magnitude,863.0,14853.0,79.590078
+3_0_m_s,F110_1,pose,75957,73854,462.435197,5.405839,0.02,m displacement from first 250 ms median,0.000791,10.206728,259.147593
+3_0_m_s,F110_2,cmd,23414,23407,474.582569,19.640836,200,electrical rpm magnitude,0.0,13842.0,3905.40229
+3_0_m_s,F110_2,feedback,23733,23730,474.582569,19.823034,200,electrical rpm magnitude,0.0,14308.0,4020.823022
+3_0_m_s,F110_2,pose,75949,75945,474.582569,5.413204,0.02,m displacement from first 250 ms median,6.2e-05,10.227361,4163.212224
+3_0_m_s,F110_3,cmd,23701,23689,474.409983,19.648698,200,electrical rpm magnitude,0.0,13842.0,4151.281577
+3_0_m_s,F110_3,feedback,23693,23693,474.409983,19.564533,200,electrical rpm magnitude,0.0,17183.0,4334.841824
+3_0_m_s,F110_3,pose,75962,75922,474.409983,5.42844,0.02,m displacement from first 250 ms median,0.00022,10.733299,4413.734434

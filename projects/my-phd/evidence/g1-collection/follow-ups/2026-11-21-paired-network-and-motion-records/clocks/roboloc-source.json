@@ -1,0 +1,97 @@
+{
+  "title": "RoboLoc-G: Multisensor Localization Dataset from a Robotic Gantry System",
+  "doi": "10.5281/zenodo.15989282",
+  "concept_doi": "10.5281/zenodo.15857196",
+  "landing": "https://doi.org/10.5281/zenodo.15989282",
+  "authors": [
+    "Domínguez-Bolaño, Tomás",
+    "Carro Lagoa, Ángel",
+    "Barral Vales, Valentín",
+    "Escudero, Carlos J.",
+    "García-Naya, José A."
+  ],
+  "accessed_utc": "2026-11-21",
+  "release_date": "2025-07",
+  "version": "fixed Zenodo record 15989282",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.15989282",
+      "10.5281/zenodo.15857196",
+      "RoboLoc-G: Multisensor Localization Dataset from a Robotic Gantry System",
+      "RoboLoc-G"
+    ],
+    "parent": "41312c5532e6fe02bc5b0cd925d23f2a9b3bc4cb",
+    "prior_paths": 1030,
+    "additional_archive_members": 301,
+    "early_index_checked": true,
+    "matching_paths": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/README.md",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/README.md",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-frame-derive.py",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-frame-derived.json",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-provenance.json",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+      "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv"
+    ]
+  },
+  "registry": {
+    "url": "https://zenodo.org/api/records/15989282",
+    "bytes": 45328,
+    "sha256": "ce7e3d4fbb9c1055fed933606cc2c3017673452eab4372178781810c123957c1"
+  },
+  "rights": "CC BY 4.0 per Zenodo metadata. Attribute the named depositors. Only new summaries, references and independent readers are included; original archives remain available at source.",
+  "file_evidence": [
+    {
+      "filename": "RoboLoc-G.pdf",
+      "registry_md5": "md5:e55673e6a976932a92fe9dd4262f3194",
+      "url": "https://zenodo.org/api/records/15989282/files/RoboLoc-G.pdf/content",
+      "bytes": 842657,
+      "sha256": "8318f1fe3a68674e8388cbf667623c6adfd81fab1f263e06c02598451e8256f5"
+    },
+    {
+      "filename": "GROUND_TRUTH.zip",
+      "registry_md5": "md5:73436d35986a42d33844e2e5e5587edd",
+      "url": "https://zenodo.org/api/records/15989282/files/GROUND_TRUTH.zip/content",
+      "bytes": 1084609,
+      "sha256": "d020ecff8776b7fa19c26b45bcef2752c88b6dc13078c0add65ed95174144ba2"
+    },
+    {
+      "filename": "GANTRY_MEASUREMENTS.zip",
+      "registry_md5": "md5:5ceb8fdc3752f16db985c2ea80392989",
+      "url": "https://zenodo.org/api/records/15989282/files/GANTRY_MEASUREMENTS.zip/content",
+      "bytes": 115890,
+      "sha256": "343b3ca0d8725a041a7be73cacc42e15e325fc35c36967547916d3d7cef78db0"
+    },
+    {
+      "filename": "OPTITRACK_MEASUREMENTS_CSV.zip",
+      "registry_md5": "md5:b7ffcdf6e31a7f6573a6fb066cf3c315",
+      "url": "https://zenodo.org/api/records/15989282/files/OPTITRACK_MEASUREMENTS_CSV.zip/content",
+      "bytes": 76147858,
+      "sha256": "6689b7634e94b4cf7c35c1f997384d93139b1819cd435c58381d2cdf9114b61c"
+    },
+    {
+      "filename": "SENSORS_MEASUREMENTS_CSV.zip",
+      "registry_md5": "md5:849cbc1fab3ff1ba6a36c34325575d06",
+      "url": "https://zenodo.org/api/records/15989282/files/SENSORS_MEASUREMENTS_CSV.zip/content",
+      "bytes": 39518189,
+      "sha256": "c2a2db71091cce0192c97d38a7b9967b43bde6306c56521a56b59716a1c62c93"
+    },
+    {
+      "filename": "SENSORS_MEASUREMENTS_ROS2BAGS.zip",
+      "registry_md5": "md5:7fcf18c22f1ef59223eb20ee5526857a",
+      "url": "https://zenodo.org/api/records/15989282/files/SENSORS_MEASUREMENTS_ROS2BAGS.zip/content",
+      "bytes": 31013727,
+      "sha256": "5ac2ec1ae7e532d231d71caa6c3762248f9f03150e2e4015d5b59b962df4c2d0"
+    }
+  ],
+  "queries": [
+    "Zenodo / DataCite query \"Wi-Fi FTM\" and following the prior G1 FTM frame derivative; obtained additional independent gantry, motion capture and original ROS2 archives from fixed record 15989282.",
+    "Archive data manual: RoboLoc-G.pdf pp. 3–4 for anchor/tag geometry, p. 6 for generated ground truth and Chrony time shift, pp. 7–9 for ROS2 topics and units."
+  ],
+  "evidence_grade": "Upgrade to an existing fixed release. Complete primary files with separate optical/gantry streams and MCAP records. Historical G1 already checked within-frame timestamp double differences; those frames are not counted as new data.",
+  "clock": "All 8 mobile-tag MCAPs were parsed using uncompressed MCAP chunk/channel/message records and little-endian CDR. Matched all physical FTM frames (anchor, estimates, num_frames, array order, RSSI, RTT and t1–t4) as well as UWB anchor/tag/range/sequence to numeric CSV. CSV timestamp matches the MCAP log_time for every session. None occurs in the publish_time set of the same take and topic. The MCAP separation reflects recording/publication metadata, not the time of transmission over the radio, nor packet travel time to an actuator.",
+  "geometry": "Source lists UWB anchor IDs directly; FTM session anchor suffixes are always +1 compared with the four documented suffixes and matched on that explicit assumption. The latter comparison is conditional. Interpolate the gantry-derived tag position at each CSV/MCAP log time; never extrapolate. Endpoints originate from the gantry movement log and calibrated rigid tag offsets. The two ground-truth ZIP tables use two coordinate frames derived from the same gantry motion. One zigzag3 timestamp 1751474938.2291045 s has two distinct positions roughly 142 mm apart; reject that sample and its adjacent interpolation intervals. CSV row alignment to the original gantry export was confirmed within 0.3 microseconds and 1e-9 mm of coordinate serialization rounding.",
+  "unit_check": "RoboLoc-G.pdf calls UWB range metres. Actual CDR range and numeric CSV are integers 1011–6340. Kept the literal interpretation as a counterexample and explicitly tested a millimetre scale against the independently recorded gantry motion: bracketed take/anchor RMSE for the metre interpretation was about 2979–4223 m, and 0.035–0.320 m after division by 1000. The upload omits a per-packet ISO-traceable reference. Recorded FTM dist_est is in metres. The frames.rtt unit label is already covered by previous G1.",
+  "optical": "Read actual 120 Hz OptiTrack Grua rigid-body XYZ in its own frame from the 8 Motive exports. Added relative frame time to local capture start (Europe/Madrid; daypart from Take Name), then independently interpolated the gantry-derived Grua in the published optical coordinate frame. Applied shifts -16, 0 and +16 ms on the same finite support for a fair comparison. Six of seven moving takes improve Euclidean RMSE with +16 ms versus zero, while zigzag1 increases from 7.694 to 7.788 mm; the stationary take cannot identify a shift. Optical calibration and tag offsets share sources with the published alignment. These residuals combine spatial calibration, motion and timing.",
+  "reproduce": "Download the five ZIP files above to RAW. Run python derive_roboloc.py RAW OUT with Python 3.9+, NumPy and Europe/Madrid zoneinfo. Retains negative publish-to-log intervals if observed."
+}

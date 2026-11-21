@@ -1,0 +1,131 @@
+upload,case,run,member,sha256,kind,header,source_nonempty_lines_after_header,numeric_rows,quarantined_lines,unique_complete_rows,distinct_observation_keys,keys_with_disagreeing_counts_or_latency,missing_or_negative_counts,rx_greater_than_tx,negative_latency
+1026,DE-1.2,TC01,accessaggr_3501_20220608T164705.csv,00473586a601670cdecac9710d96fdf35119027777ea28ab767ae428671d0361,access,inferred from matching headed file,242,242,0,,,,,,
+1026,DE-1.2,TC01,applicationaggr_3501_20220608T164705.csv,dc4bc4e7b5d566a659a0b7b57d68416a967da3dc19e17bca915ae2f2095cb722,application,inferred from matching headed file,6669,6669,0,2678,892,162,0,0,0
+1026,DE-1.2,TC01,handoverevent_3501_20220608T164705.csv,83363344eb89f9028be427818b4d9e60b147116f822947c674e3f641a845cc04,handover,published,1,1,0,,,,,,
+1334,DE-1.2,TC02,accessaggr_3501_20220608T164706.csv,3dcd749a64321074817e24c83a5a97cb7c99bf634e9cfab60ea77f658d64d0ba,access,inferred from matching headed file,241,241,0,,,,,,
+1334,DE-1.2,TC02,applicationaggr_3501_20220608T164706.csv,9165a41a7b5619453de537445371c33694662149ad8702162a284f1bc0ebae9e,application,published,3788,3788,0,1689,506,94,0,0,0
+1334,DE-1.2,TC02,handoverevent_3501_20220608T164706.csv,d54e32a7669c6c6c9fe5b85c0a1193fe0b67f97e31c8b273e913b049bd84c067,handover,published,1,1,0,,,,,,
+1335,DE-1.2,TC2,accesssggr_3501_20220608T155209.csv,495bc178c277fd04eb8a31ae94f928a7320bfe71c009fbed56e75b04a7bd4918,access,published,199,199,0,,,,,,
+1335,DE-1.2,TC2,applicationaggr_3501_20220608T155209.csv,01534a5d01cb7322840e2245358dac91069e9bc9d102aad8f04315c0f776ecb6,application,published,4129,4129,0,1520,543,106,0,0,0
+1335,DE-1.2,TC2,handoverevent_3501_20220608T155209.csv,b2e85506aa23206b1cfcd8685df7e4cd0aa66f8db84f912a4a577273bd72a3a3,handover,published,1,1,0,,,,,,
+1336,DE-1.2,TC03,accessaggr_3501_20220608T165411.csv,0c8937004639db6f303ce24897fdb8db2fcbe7802602e01f53569068b59ced28,access,published,240,240,0,,,,,,
+1336,DE-1.2,TC03,applicationaggr_3501_20220608T165411.csv,d0f2ecf25c286c8b882dff00b7944ee2cac1a81445760928f4e1942234aaa485,application,published,2371,2371,0,1004,331,65,0,0,0
+1336,DE-1.2,TC03,handoverevent_3501_20220608T165411.csv,1ac7af5b79f0101016a29ca99ba47389d3773c5e46492e9438715923d0129417,handover,published,1,1,0,,,,,,
+1337,DE-1.2,TC04,accessaggr_3501_20220608T170013.csv,b5e5853dd11226ecc8c62dca96b1615c2e916babdd13e9b675a20cac933fa754,access,published,240,240,0,,,,,,
+1337,DE-1.2,TC04,applicationaggr_3501_20220608T170013.csv,d4675d9fd95a1b22df38fcd7c26c10c00bcc2eb9c21b1ad5c3c1821a8d6e0997,application,published,2113,2113,0,879,325,85,0,0,0
+1337,DE-1.2,TC04,handoverevent_3501_20220608T170013.csv,08efb7dd12e4e54b7c389e5abe73382b6126ddc52802c73ce2186991f87ae962,handover,published,1,1,0,,,,,,
+1338,DE-1.2,TC05,accessaggr_3501_20220608T170013.csv,97a1d9e4795f2775432d7e81bb1882863a07ec438d6863fc4ead409ecba8a36c,access,published,242,242,0,,,,,,
+1338,DE-1.2,TC05,applicationaggr_3501_20220608T170013.csv,b0c630abee78054c25e6fdd11c2f5b8a7797232b0a886fb183bee6ad7e469f11,application,published,12712,12712,0,2675,1730,309,0,0,0
+1338,DE-1.2,TC05,handoverevent_3501_20220608T170013.csv,520c47ff2b9866ce178bdc1742ed52d70398fe03a8d4e9fd4caa28ffebe2e8e2,handover,published,1,1,0,,,,,,
+1339,DE-1.2,TC05,accessaggr_3501_20220608T170558.csv,97a1d9e4795f2775432d7e81bb1882863a07ec438d6863fc4ead409ecba8a36c,access,published,242,242,0,,,,,,
+1339,DE-1.2,TC05,applicationaggr_3501_20220608T170558.csv,b0c630abee78054c25e6fdd11c2f5b8a7797232b0a886fb183bee6ad7e469f11,application,published,12712,12712,0,2675,1730,309,0,0,0
+1339,DE-1.2,TC05,handoverevent_3501_20220608T170558.csv,520c47ff2b9866ce178bdc1742ed52d70398fe03a8d4e9fd4caa28ffebe2e8e2,handover,published,1,1,0,,,,,,
+1340,DE-1.2,TC06,accessaggr_3501_20220608T171731.csv,b77c238ee319fd545e64e9d0ff9bef266c524f5d19c8b5c8553cc8b019b86718,access,published,222,222,0,,,,,,
+1340,DE-1.2,TC06,applicationaggr_3501_20220608T171731.csv,320a75f372be659a9495811e6919c6307301091c1a2d0954cff248ab7178b445,application,published,5321,5321,0,1875,696,128,0,0,0
+1340,DE-1.2,TC06,handoverevent_3501_20220608T171731.csv,bf306ce0b0805d47729507c1c83702ad1bfb990dc8856b35c27a64c1df973662,handover,published,1,1,0,,,,,,
+1341,DE-1.2,TC07,accessaggr_3501_20220608T172310.csv,46b0d33aeccb165f99005f4eca6d4916597616e89639e48f9164135d59a483db,access,published,241,241,0,,,,,,
+1341,DE-1.2,TC07,applicationaggr_3501_20220608T172310.csv,6fb4c0107c365da0297c83feb35640f56bb2244a90909fe0a6a37ebe4c846f39,application,published,3566,3566,0,1332,439,86,0,0,0
+1341,DE-1.2,TC07,handoverevent_3501_20220608T172310.csv,46fc12489299fc564deed735f0e4f60e21fa2f863b7ab3b227161dcac5cdb56e,handover,published,1,1,0,,,,,,
+1342,DE-1.2,TC08,accessaggr_3501_20220608T173125.csv,051f6dc2a157274606193a0f45fc9e688bfbcb0dae5e4258088b7feb183bebe9,access,inferred from matching headed file,242,242,0,,,,,,
+1342,DE-1.2,TC08,applicationaggr_3501_20220608T173125.csv,92721ba43e020e277ae7894ef892979668bfebfc62d7c26dbcdd9d4024d579e7,application,published,1414,1414,0,715,194,46,0,0,0
+1342,DE-1.2,TC08,handoverevent_3501_20220608T173125.csv,506190aacabb5aad2ff1ff987c82bf9b78658adb0d4b940e964ac4e1b371d581,handover,published,1,1,0,,,,,,
+1343,DE-1.2,TC09,accessaggr_3501_20220608T173618.csv,6ccc76a3ee4436c50cbaa24bca3568b113a03b55cea617427cfd2b1850a919fe,access,inferred from matching headed file,242,242,0,,,,,,
+1343,DE-1.2,TC09,applicationagg_3501_20220608T173618.csv,f5691bf073951c7c2bf19ad7adca36b3f8ed2aee13c7e3283c273e09af8bd5f3,application,inferred from matching headed file,582,582,0,318,57,53,0,0,0
+1343,DE-1.2,TC09,applicationaggr_3501_20220608T173618.csv,dff0e97640342298fcbdca2f07b5ef873c37e22ffa13f764afbd035c6164ca84,application,published,3035,3035,0,1504,407,74,0,0,0
+1343,DE-1.2,TC09,handoverevent_3501_20220608T173618.csv,17bd1bfe455c060d8abe9b7d4cc809e58fba3cbaeeb39517a678466486570ba6,handover,published,1,1,0,,,,,,
+1344,DE-1.2,TC10,accessaggr_3501_20220608T174211.csv,98249830403b253f20280a17bc6f7f623d64b0a38835bd43d16b0f04f3e34c4e,access,inferred from matching headed file,242,242,0,,,,,,
+1344,DE-1.2,TC10,applicationaggr_3501_20220608T174211.csv,2aab7a0714ab016095835b35db25bdb41ac6d642bad4a7c725fb19892aed0a20,application,published,3142,3142,0,1422,415,81,0,0,0
+1344,DE-1.2,TC10,handoverevent_3501_20220608T174211.csv,65fe45dbe46480b6c371a22c96419331acb61fdcc31992bb3dca1751c7fbeca9,handover,published,1,1,0,,,,,,
+1345,DE-1.2,TC11,accessaggr_3501_20220608T175125.csv,efe3f97941387d7eed122dfaa7347920fcd176f5d0de38fae114077b7d308251,access,inferred from matching headed file,192,192,0,,,,,,
+1345,DE-1.2,TC11,applicationaggr_3501_20220608T175125.csv,1d8a3b2fae775df2f4ba924241de2cf5561cc68965f8d81a63513ec4a651a769,application,published,1814,1814,0,731,225,47,0,0,0
+1345,DE-1.2,TC11,handoverevent_3501_20220608T175125.csv,2b1c758bf31395c9bdd7270afe68ee399678657373b54885d082c244c41c0d82,handover,published,1,1,0,,,,,,
+1346,DE-1.2,TC12,accessaggr_3501_20220608T175623.csv,13c31619fcc11f9f7678ea4f9d040710c326d7743ad35886cba0ed8bd0700789,access,inferred from matching headed file,163,163,0,,,,,,
+1346,DE-1.2,TC12,applicationaggr_3501_20220608T175623.csv,e2a8a7e2d506d1de32ce9ce754d11fe6cbf4b632b37e6fa951ee609240474cba,application,published,2043,2043,0,1069,281,52,0,0,0
+1346,DE-1.2,TC12,handoverevent_3501_20220608T175623.csv,6d65e7899ef2fcfd00cbb5601e9162fe67a6bf2be1e13c8da4e7a6b9f00d4268,handover,published,1,1,0,,,,,,
+1358,DE-1.2,TC12,accessaggr_3501_20220608T175623.csv,018ea35fabc5db6f32893b5ab1263717f7f2bcc5e88e13eacb64162876d9c422,access,published,163,163,0,,,,,,
+1358,DE-1.2,TC12,applicationaggr_3501_20220608T175623.csv,a644209e58b3623ccc763e0ac65f41218312c658a2c635a3395c2bcf231cae27,application,published,4084,4084,0,1068,280,52,0,0,0
+1358,DE-1.2,TC12,handoverevent_3501_20220608T175623.csv,8e0921865fda3ae0267f3d4cb3e93b083fb004546775117562466f78026be137,handover,published,1,1,0,,,,,,
+1372,DE-1.2,TC01,accessaggr_3501_20220608T164705.csv,ee7872f143d75ee349049c4f18bf434bb896b3eeb9db0f79b53cba68a45281f5,access,inferred from matching headed file,239,239,0,,,,,,
+1372,DE-1.2,TC01,applicationaggr_3501_20220608T164705.csv,68b02182cf8a04a81d4eb94fd513055b66062521c16332b823e4b76da6585fec,application,inferred from matching headed file,893,893,0,328,74,70,0,0,0
+1372,DE-1.2,TC01,handoverevent_3501_20220608T164705.csv,12b2971770a6928afcafacf79489caf639146a7635c9df50de90591e3e7cacb8,handover,inferred from matching headed file,1,1,0,,,,,,
+801,DE-1.1,TC1,networkaggr.csv,b03532bca54b563cd66f23b4262bf01550b9e78aabc53bff5a9b416d3e1c74fa,network,published,15021,0,15021,0,0,0,0,0,0
+802,DE- 1.1,TC2,networkaggr.csv,a577813887a435f1262f45843092e55a58c3cd8c3a220ad77fddea6aab51c710,network,published,7330,0,7330,0,0,0,0,0,0
+803,DE- 1.1,TC2,networkaggr.csv,a577813887a435f1262f45843092e55a58c3cd8c3a220ad77fddea6aab51c710,network,published,7330,0,7330,0,0,0,0,0,0
+804,DE-1.3,TCF1,applicationaggr.csv,9aafc077aaa16eb731cd7d1688f20040d18fc8c073441328d6bfc08d4d921154,application,published,6579,6578,1,862,400,84,0,0,0
+804,DE-1.3,TCF1,networkaggr.csv,e4476badb73de4387fb329cdc4c881ed6a83734e90bc4267814230349ab14a69,network,published,9348,9348,0,1669,1221,414,0,0,0
+805,DE-1.1,TC3,networkaggr.csv,e320c7eb44ee2d41d399466edd9c8a3534eda50461d70f136965b023f61d858a,network,published,3535,0,3535,0,0,0,0,0,0
+806,DE-1.1,TC4,networkaggr.csv,9c247b2df59d514ea7d12d18ddb6e3f610dba760ae2f8a6a15d0f92135641619,network,published,5098,0,5098,0,0,0,0,0,0
+807,DE-1.1,TC5,networkaggr.csv,cdf20f18b82945858e0c53fd8429fbd5b8bc5fb1212d072251b41b20ed825df2,network,published,5255,0,5255,0,0,0,0,0,0
+808,DE-1.1,TC6,networkaggr.csv,fafc52a28f4eb9bf944cd6740742dcd3bd1845a112cb2711889d209d90e9f220,network,published,5611,0,5611,0,0,0,0,0,0
+809,DE-1.1,TC7,networkaggr.csv,6db7a25f079eb716cce675b60208291b6bcf64c595670312a43dbfd0f88ba468,network,published,5661,0,5661,0,0,0,0,0,0
+810,DE-1.1,TC8,networkaggr.csv,e805b9b9ff0657ed449414fff2d1bea206be936951e3965ddc23fa9312a8f4c6,network,published,4306,0,4306,0,0,0,0,0,0
+811,DE-1.1,TC9,networkaggr.csv,cf75c65f7852204d8898e298a6ed76852a637fd5021be637ddc7ab8f2cf75656,network,published,6538,0,6538,0,0,0,0,0,0
+812,DE-1.1,TC10,networkaggr.csv,9193887a72ee6e2f648d096236668b92b078931d423be127d13571c790b85a3b,network,published,4952,0,4952,0,0,0,0,0,0
+813,DE-1.3,TCF3,applicationaggr.csv,ca3a773d6fc064085052b2d9d7517a9b83ac74462b66b33ab363c31b610b30fa,application,published,9928,9928,0,1782,1194,256,0,0,0
+813,DE-1.3,TCF3,networkaggr.csv,c329b88859ff6c4536dcace242f7a6b2be0f2c229ca7974626580aeacfbc98db,network,published,3259,3259,0,881,611,264,0,0,0
+814,DE-1.3,TCF4,applicationaggr.csv,0567f5bf3adc1baaede3c2b9530b95bb832c50bbdb117cd54a6b2be63f36350f,application,published,2760,2760,0,869,349,75,0,0,0
+814,DE-1.3,TCF4,networkaggr.csv,93a9444d6b2907b17e6dadb5bc707c7b25af27983036d0e8b210aaa39885a35b,network,published,2203,2203,0,741,560,168,0,0,0
+815,DE-1.3,TCM3,applicationaggr.csv,f4c7b89daea65aa441a0ea0cf01f9b96ac2d562911ba16bb96c17d5048ab5210,application,published,1534,1534,0,443,180,29,0,0,0
+815,DE-1.3,TCM3,networkaggr.csv,af0d8cfabab3d20984ee52b469eca31df0bfd0e1caa050f3c00bf5b44ebe5392,network,published,3011,3011,0,811,606,191,0,0,0
+816,DE-1.3,TCM5,applicationaggr.csv,9ac848fad736d9478a851d56820d1d3e9b0d4079b39d3cdb93f33765bf35201d,application,published,1885,1885,0,900,240,43,0,0,0
+816,DE-1.3,TCM5,networkaggr.csv,9968b67c42d24716b658d3074748d97835283c17fcba8505dd0e700e954389ec,network,published,589,589,0,516,420,93,0,0,0
+817,DE-1.3,TCM7,applicationaggr.csv,68d49dc7db5c00dd870a686c51300773349e8acbf3ec2e1efe011951cec438e4,application,published,4679,4679,0,758,497,89,0,0,0
+817,DE-1.3,TCM7,networkaggr.csv,b3be35bccf4f1b4c69292b59c7a523e13cc556cfcc818fab50bbe6152427d4fa,network,published,1725,1725,0,613,425,179,0,0,0
+818,DE-1.3,TCM12,applicationaggr.csv,f67d2fa49217a369182c390ebdea9dc95a8042f08179738a9896695d31249c92,application,published,757,757,0,382,97,20,0,0,0
+818,DE-1.3,TCM12,networkaggr.csv,b67f76c63f13a24dfb9f6da22b35f873e71e886d78c78c04ace48322287dbdd6,network,published,2237,2237,0,760,505,243,0,0,0
+819,DE-1.3,TCM13,applicationaggr.csv,683fb8d2ff56b67e113856e6aab453726f1f157d649b95f448c6d9e41fb2dd88,application,published,750,750,0,184,98,20,0,0,0
+819,DE-1.3,TCM13,networkaggr.csv,6e4e8a61f5ff492550d6c26baf456f087edd0b09196b5507314bdecb1c021190,network,published,3124,3124,0,750,557,176,0,0,0
+820,DE-1.3,TCM15,applicationaggr.csv,99bfe3ab0bb98b0d274dbc058da1a7e7c116c851f5b1a0e10a7a984d3f2214d0,application,published,536,536,0,282,73,16,0,0,0
+820,DE-1.3,TCM15,networkaggr.csv,195112cb677b846d45abdf3f9a2b6204db32914428e40049409251cb841901ab,network,published,2160,2160,0,568,452,108,0,0,0
+822,DE-1.3,TCT11,applicationaggr.csv,e911cb2ce54a8648834ef8d2779ed72159cd044355aafb3214cbceadfbf8f570,application,published,4637,4637,0,1883,604,111,0,0,0
+822,DE-1.3,TCT11,networkaggr.csv,b9c524621b505da1bb53355209dd04abfcab1ebbe9b1ed695398cbda4d35e442,network,published,687,687,0,486,486,0,0,0,0
+823,DE-1.3,TCT13,applicationaggr.csv,d28beea59025531c97ee24573e3bb4bdee1b0249820e70926ef923a80fc4e519,application,published,2862,2862,0,1250,382,75,0,0,0
+823,DE-1.3,TCT13,networkaggr.csv,05a4a3d709a61c681f1c1d96397a1909128160ddb19e641f2830cd77a44a253a,network,published,452,452,0,407,407,0,0,0,0
+824,DE-1.3,TCT14,applicationaggr.csv,e6be28af02cb7f6405a4bffa6bf7104fe87d5dcdf949d14f33ffeb474e43b322,application,published,4617,4617,0,1668,606,109,0,0,0
+824,DE-1.3,TCT14,networkaggr.csv,1ed58ed7a76554ff4754a5138d830ef903727538ace6b235b2303a8fce077aee,network,published,3378,3378,0,775,630,130,0,0,0
+825,DE-1.3,TCT15,applicationaggr.csv,18ef1ce3967733085959e8bd16dae273ac93577ac555913cdc71cf91bcdf7468,application,published,2427,2427,0,1132,311,49,0,0,0
+825,DE-1.3,TCT15,networkaggr.csv,a84f05dc06533c6591868e87bc845dc1032a280f03fe7dda43e23042f81b2519,network,published,3431,3431,0,768,581,161,0,0,1
+826,DE-1.3,TCT6,applicationaggr.csv,752da4d43819f0b67a57bca6628008fc2a1655d159bfdd78e3d40cd64415b1cb,application,published,4329,4329,0,1175,534,104,0,0,0
+826,DE-1.3,TCT6,networkaggr.csv,3266c60609c2384cd56d8e291f662f9d66253e39a9545c5b5146acf497261469,network,published,3889,3889,0,868,647,203,0,0,0
+827,DE-1.3,TCT5,applicationaggr.csv,42dd7a5c00b382394d88e6168c8f1ab899b27c053ac5ad836bbbe333864aec34,application,published,2823,2823,0,1162,370,73,0,0,0
+827,DE-1.3,TCT5,networkaggr.csv,bebb70a1ab47873fec5df1189bfb489e07dcb8e43ab8cbbe9767e864ff09db6b,network,published,344,344,0,344,344,0,0,0,0
+828,DE-1.3,TCT10,applicationaggr.csv,741f7c14bf772ed3922c85a5e0ca30c4d5a92fa28524ebc4c7c80848b83542bc,application,published,8814,8814,0,2478,1093,218,0,0,0
+828,DE-1.3,TCT10,networkaggr.csv,a9fb868268e3a9574c9163522e83a4ec632ff9ee8c7a7689c1db3f0255bd3118,network,published,2915,2915,0,575,434,130,0,0,0
+829,DE-1.3,TCT16,applicationaggr.csv,7a5559080cc0a65e964882589e1666fb7800a1ffd0ce6ef1e6f95681eaa72f12,application,published,2387,2387,0,1129,314,59,0,0,0
+829,DE-1.3,TCT16,networkaggr.csv,285271dc16d35d2efc2e71bcf86f84aeca3ede349660066934dc7537c59d56b3,network,published,3473,3473,0,736,579,140,0,0,1
+830,DE-1.3,TCT23,applicationaggr.csv,5170646ad28ed1051cf3787f1fc55f8127c6b4e38128686cc749aabb3b63d284,application,published,2632,2632,0,1066,346,67,0,0,0
+830,DE-1.3,TCT23,networkaggr.csv,48a9a15a143209e0a18a70be92c330993730f512bc1e1531a2aa8d0a0034a73c,network,published,2366,2366,0,622,520,91,0,0,0
+836,DE-1.2,TC01,applicationaggr.csv,5a495fd7ba7d7d6c1ef5dd9b13425ef7a0ba3a3a390623188677774c121a2725,application,published,6670,6669,1,2678,892,162,0,0,0
+836,DE-1.2,TC01,handoverevent.csv,83363344eb89f9028be427818b4d9e60b147116f822947c674e3f641a845cc04,handover,published,1,1,0,,,,,,
+837,DE-1.2,TC02,applicationaggr.csv,9165a41a7b5619453de537445371c33694662149ad8702162a284f1bc0ebae9e,application,published,3788,3788,0,1689,506,94,0,0,0
+837,DE-1.2,TC02,handoverevent.csv,d54e32a7669c6c6c9fe5b85c0a1193fe0b67f97e31c8b273e913b049bd84c067,handover,published,1,1,0,,,,,,
+838,DE-1.2,TC02,applicationaggr.csv,9165a41a7b5619453de537445371c33694662149ad8702162a284f1bc0ebae9e,application,published,3788,3788,0,1689,506,94,0,0,0
+838,DE-1.2,TC02,handoverevent.csv,d54e32a7669c6c6c9fe5b85c0a1193fe0b67f97e31c8b273e913b049bd84c067,handover,published,1,1,0,,,,,,
+840,DE-1.2,TC02,applicationaggr.csv,9165a41a7b5619453de537445371c33694662149ad8702162a284f1bc0ebae9e,application,published,3788,3788,0,1689,506,94,0,0,0
+840,DE-1.2,TC02,handoverevent.csv,d54e32a7669c6c6c9fe5b85c0a1193fe0b67f97e31c8b273e913b049bd84c067,handover,published,1,1,0,,,,,,
+841,DE-1.2,TC02,applicationaggr.csv,9165a41a7b5619453de537445371c33694662149ad8702162a284f1bc0ebae9e,application,published,3788,3788,0,1689,506,94,0,0,0
+841,DE-1.2,TC02,handoverevent.csv,d54e32a7669c6c6c9fe5b85c0a1193fe0b67f97e31c8b273e913b049bd84c067,handover,published,1,1,0,,,,,,
+851,DE-1.2,TC2,applicationaggr.csv,01534a5d01cb7322840e2245358dac91069e9bc9d102aad8f04315c0f776ecb6,application,published,4129,4129,0,1520,543,106,0,0,0
+851,DE-1.2,TC2,handoverevent.csv,b2e85506aa23206b1cfcd8685df7e4cd0aa66f8db84f912a4a577273bd72a3a3,handover,published,1,1,0,,,,,,
+852,DE-1.2,TC03,applicationaggr.csv,d0f2ecf25c286c8b882dff00b7944ee2cac1a81445760928f4e1942234aaa485,application,published,2371,2371,0,1004,331,65,0,0,0
+852,DE-1.2,TC03,handoverevent.csv,1ac7af5b79f0101016a29ca99ba47389d3773c5e46492e9438715923d0129417,handover,published,1,1,0,,,,,,
+853,DE-1.2,TC04,applicationaggr.csv,d4675d9fd95a1b22df38fcd7c26c10c00bcc2eb9c21b1ad5c3c1821a8d6e0997,application,published,2113,2113,0,879,325,85,0,0,0
+853,DE-1.2,TC04,handoverevent.csv,08efb7dd12e4e54b7c389e5abe73382b6126ddc52802c73ce2186991f87ae962,handover,published,1,1,0,,,,,,
+854,DE-1.2,TC05,applicationaggr.csv,b0c630abee78054c25e6fdd11c2f5b8a7797232b0a886fb183bee6ad7e469f11,application,published,12712,12712,0,2675,1730,309,0,0,0
+854,DE-1.2,TC05,handoverevent.csv,520c47ff2b9866ce178bdc1742ed52d70398fe03a8d4e9fd4caa28ffebe2e8e2,handover,published,1,1,0,,,,,,
+855,DE-1.2,TC06,applicationaggr.csv,320a75f372be659a9495811e6919c6307301091c1a2d0954cff248ab7178b445,application,published,5321,5321,0,1875,696,128,0,0,0
+855,DE-1.2,TC06,handoverevent.csv,bf306ce0b0805d47729507c1c83702ad1bfb990dc8856b35c27a64c1df973662,handover,published,1,1,0,,,,,,
+856,DE-1.2,TC07,applicationaggr.csv,6fb4c0107c365da0297c83feb35640f56bb2244a90909fe0a6a37ebe4c846f39,application,published,3566,3566,0,1332,439,86,0,0,0
+856,DE-1.2,TC07,handoverevent.csv,46fc12489299fc564deed735f0e4f60e21fa2f863b7ab3b227161dcac5cdb56e,handover,published,1,1,0,,,,,,
+858,DE-1.2,TC08,applicationaggr.csv,92721ba43e020e277ae7894ef892979668bfebfc62d7c26dbcdd9d4024d579e7,application,published,1414,1414,0,715,194,46,0,0,0
+858,DE-1.2,TC08,handoverevent.csv,506190aacabb5aad2ff1ff987c82bf9b78658adb0d4b940e964ac4e1b371d581,handover,published,1,1,0,,,,,,
+859,DE-1.2,TC09,applicationaggr.csv,dff0e97640342298fcbdca2f07b5ef873c37e22ffa13f764afbd035c6164ca84,application,published,3035,3035,0,1504,407,74,0,0,0
+859,DE-1.2,TC09,handoverevent.csv,17bd1bfe455c060d8abe9b7d4cc809e58fba3cbaeeb39517a678466486570ba6,handover,published,1,1,0,,,,,,
+860,DE-1.2,TC10,applicationaggr.csv,2aab7a0714ab016095835b35db25bdb41ac6d642bad4a7c725fb19892aed0a20,application,published,3142,3142,0,1422,415,81,0,0,0
+860,DE-1.2,TC10,handoverevent.csv,65fe45dbe46480b6c371a22c96419331acb61fdcc31992bb3dca1751c7fbeca9,handover,published,1,1,0,,,,,,
+861,DE-1.2,TC11,applicationaggr.csv,1d8a3b2fae775df2f4ba924241de2cf5561cc68965f8d81a63513ec4a651a769,application,published,1814,1814,0,731,225,47,0,0,0
+861,DE-1.2,TC11,handoverevent.csv,2b1c758bf31395c9bdd7270afe68ee399678657373b54885d082c244c41c0d82,handover,published,1,1,0,,,,,,
+862,DE-1.2,TC12,applicationaggr.csv,48411051a279a2c7813bc5473576642df158145613bfefb4d6f0121ef86df905,application,published,2044,2044,0,1070,281,52,0,0,0
+862,DE-1.2,TC12,handoverevent.csv,6d65e7899ef2fcfd00cbb5601e9162fe67a6bf2be1e13c8da4e7a6b9f00d4268,handover,published,1,1,0,,,,,,
+896,DE-1.2,TC01,applicationaggr_3501.csv,5a495fd7ba7d7d6c1ef5dd9b13425ef7a0ba3a3a390623188677774c121a2725,application,published,6670,6669,1,2678,892,162,0,0,0
+896,DE-1.2,TC01,handoverevent_3501.csv,83363344eb89f9028be427818b4d9e60b147116f822947c674e3f641a845cc04,handover,published,1,1,0,,,,,,

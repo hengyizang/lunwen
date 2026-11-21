@@ -1,0 +1,15 @@
+member,source_sha256,rows,nominal_dt_ms,ntp_dt_p01_ms,ntp_dt_p99_ms,ntp_sync_nonzero,delay_on_rows,force_on_rows,slave_on_nonzero_rows,both_optical_markers_visible_rows,disjoint_complete_windows,eligible_windows,eligible_r_ge_0p8,selected_at_search_edge,median_lag_ms_r_ge_0p8
+OneDofHashtrudi-subject1-groupA-DL.mat,3264e80fe0e48044ca78954afb379b16f54f780b5c5d5e0f94d196e14a863ffb,105693,1,0.9799004,1.021862,0,105693,105693,1,100643,21,21,21,0,32.0
+OneDofHashtrudi-subject1-groupA-FF.mat,f39d9d0cac8b63451f1ec63dd22a8617a9c7291808ee8cc6c4b7fe35e1aae6ad,326247,1,0.980854,1.019001,0,0,326247,1,235159,65,53,53,0,0.0
+OneDofHashtrudi-subject2-groupB-DL.mat,52ccc89c713f3f9f4cc3114e8c86213088633344dc8df6d6dc744548296f9291,143444,1,0.9799004,1.0201931,0,143444,143444,1,135688,28,26,26,0,25.0
+OneDofHashtrudi-subject2-groupB-FF.mat,417ebe9dc9382fe999e92597c34dd0bbacf6adb54dc09749fe8284ca3a16030c,134664,1,0.9789467,1.0211468,0,0,134664,1,130039,26,23,23,0,0.0
+OneDofHashtrudi-subject3-groupC-DL.mat,265da50c3a9fe9f0b51601a673d8c63700e5a702cfef81fc454df4a3e66e5f60,108122,1,0.9789467,1.0209084,0,108122,108122,1,106133,21,20,20,0,24.0
+OneDofHashtrudi-subject3-groupC-FF.mat,0bb4d58fa323898d9830af37ab66f14e73ba406c200db17594f7495f4fe6717b,118518,1,0.9789467,1.0221004,0,0,118518,1,112604,23,21,21,0,0.0
+OneDofHashtrudi-subject4-groupD-DL.mat,2f1a265bc0526fd0763e7a3c521082510613c6dd71c9af955a215dff8daff090,186845,1,0.9818077,1.019001,0,186845,186845,1,114140,37,31,31,0,26.0
+OneDofHashtrudi-subject4-groupD-FF.mat,b54dcf596ddb508a094e3f95e50fa95f657ccff13307649df76d60823e5f072e,116213,1,0.9789467,1.0211468,0,0,116213,1,112021,23,23,23,0,0.0
+OneDofHashtrudiDelay-Identification-masterclamped-slavestimulated.mat,d4ceda6934be835a4139899bb6a3ccd7f4edc405bd758524c80e268e00a6695c,100001,1,0.9870529,1.0130405,100001,100001,100001,1,0,20,5,0,0,
+OneDofHashtrudiDelay-Identification-slavefree-masterstimulated.mat,ec28b579db9fcd198b411a0642a37502aa2667a1e59a58d562a0a6da4d131585,100001,1,0.9846687,1.0159016,100001,100001,100001,1,0,20,20,15,0,-3.0
+OneDofHashtrudiFull-Identification-masterclamped-slavestimulated.mat,d76110a0dbae007a616725e57958713449073194bfd88b5ef01f53982b158dcd,100001,1,0.9877682,1.0147095,100001,0,100001,1,0,20,5,5,0,-1.0
+OneDofHashtrudiFull-Identification-slavefree-masterstimulated.mat,06ad1c88591c07bbfeb8e87b8f1de257b814ab2cd93ebc1c323c25cfe33d1d0d,100001,1,0.9841919,1.0163784,100001,0,100001,1,0,20,20,20,0,0.0
+OneDofHashtrudiNoForce-Identification-masterclamped-slavestimulated.mat,aa7bded7520495037ce6dfc2c80a04e16705c7c9f290149a07ef3afc376d8503,100001,1,0.9877682,1.013279,100001,0,0,1,0,20,0,0,0,
+OneDofHashtrudiNoForce-Identification-slavefree-masterstimulated.mat,80bcd4a54375cc9c7061fd180ecdc8d8eaa373963a75779efd517e464ca9049b,100001,1,0.9870529,1.0139942,100001,0,0,1,0,20,20,20,0,0.0
