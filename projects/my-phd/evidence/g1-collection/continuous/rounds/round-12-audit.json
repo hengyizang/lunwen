@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "round": 12,
+  "completed_at": "2026-11-21T08:24:12Z",
+  "batch_label": "Broad Engineering R12: Smart_Factory_DigitalTwin / R1_Force_Contact",
+  "base_head_sha": "0f7f07bf8355611cfd8b3b2a351ea3d5e86f8470",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 129,
+    "duplicates_skipped": 38,
+    "net_new": 91,
+    "new_reading_queue": 76,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "human-robot collaboration assembly safety",
+        "receipt_id": "20261121t082412z-arxiv-3711ee1830",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Ahuman-robot+AND+all%3Acollaboration+AND+all%3Aassembly+AND+all%3Asafety&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "a616b850aa2f176b77ba4987a90e6a3cf3a31c0b93df0e49f9233a0d75c5fa8f",
+        "normalized_results_sha256": "e43e5e9e3072e9037fad37812eb2304791350f0ff5480b55fe763447c1670915"
+      },
+      {
+        "provider": "openalex",
+        "query": "human-robot collaboration assembly safety",
+        "receipt_id": "20261121t082413z-openalex-7379d09cb8",
+        "request_url": "https://api.openalex.org/works?search=human-robot+collaboration+assembly+safety&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6da233e5d9b31fccb1aa7d321e85585ac30f84d5b0d1b683827bf1b32aa17b0b",
+        "normalized_results_sha256": "21314c64b8bae7f78bde0167ccee8e9d54d77b519b6c3c24dd87365d546fcbed"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "human-robot collaboration assembly safety",
+        "receipt_id": "20261121t082414z-europe-pmc-d47a7d2953",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=human-robot+collaboration+assembly+safety&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "e42d6dba5c7bf01ce417bf924ef00f867fb541277788218d46884e6f5b786b90",
+        "normalized_results_sha256": "cf978f0fb9f4c9bcc5af235262a84a808673a25c0def4c617be8d9a06538917f"
+      },
+      {
+        "provider": "arxiv",
+        "query": "predictive maintenance smart factory twin",
+        "receipt_id": "20261121t082422z-arxiv-5fb1a2dc56",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apredictive+AND+all%3Amaintenance+AND+all%3Asmart+AND+all%3Afactory+AND+all%3Atwin&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "95297f3ec34ca084e1a4f66cf7b25d80c36018201841d03a992b1ee08876ba61",
+        "normalized_results_sha256": "74501815f89db446d0efc150644f43abd876e94ead5847c5b227b4b7a0e21530"
+      },
+      {
+        "provider": "openalex",
+        "query": "predictive maintenance smart factory twin",
+        "receipt_id": "20261121t082423z-openalex-f27c5da775",
+        "request_url": "https://api.openalex.org/works?search=predictive+maintenance+smart+factory+twin&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6426db3595ee183223d4a7c149056b608f8bdc94083d107b012647ac9ba3ea1e",
+        "normalized_results_sha256": "774838924607c92d1b8ba7c96535fc0271c872983e526a06c5685db71d42196d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "predictive maintenance smart factory twin",
+        "receipt_id": "20261121t082425z-europe-pmc-8f8a428420",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=predictive+maintenance+smart+factory+twin&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "96ab221380327937d5ea95871c8262efdea7b304bac5e1e781afabed1c2fe3d1",
+        "normalized_results_sha256": "ea1856be3f68a858f482fc5a1f09ce4ecd764525d1f61d59fb61c997ab40a44e"
+      },
+      {
+        "provider": "arxiv",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t082430z-arxiv-c089407508",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awrist+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Asensor+AND+all%3Abias&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "3b3ed3ef9c76c23fa546c2872420e1ee04e6ea5b8443538f979ed78c860a0396",
+        "normalized_results_sha256": "9660307011627f352a46b665e18f112f19869c68c1dcbb5dec95abc65c1bd690"
+      },
+      {
+        "provider": "openalex",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t082431z-openalex-6cb0e12c1c",
+        "request_url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d882f81781e66f8577adac726ccade3fdaaa3442f22102cf4b6a457e9a570393",
+        "normalized_results_sha256": "42be6d18d0a733148ef8fe2b9a49d1627b80530fef32756d47e1de96b2dfa12a"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t082433z-europe-pmc-f914f12750",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=wrist+force+torque+sensor+bias&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "458dcf03af28fea2bfd72144127ee2adbb5fd751117328cd4039746d38fe4bcd",
+        "normalized_results_sha256": "03c1d04c7e45e38ddd16e5b2349c0cba2d7203695e03a92fbe7358df8dc06600"
+      },
+      {
+        "provider": "arxiv",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t082435z-arxiv-6d86fa60ee",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Apeg-in-hole+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Aestimation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "75c53f8212db7f4a05248463ad8c8cbd3fb108ffc9d11b688c2996dbccd5a518",
+        "normalized_results_sha256": "b94912bfb3129aecd20cca340ecfb5202eaf9fdc11b898433f15e1af5138c552"
+      },
+      {
+        "provider": "openalex",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t082436z-openalex-96056a1909",
+        "request_url": "https://api.openalex.org/works?search=peg-in-hole+force+torque+estimation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "ee3c2d7dbf190df91353e8561608b674af61953f299c7602dd3655b6abb5f1c0",
+        "normalized_results_sha256": "ea90730fabd377ff66765a8adc7093327aa695d2d574400da170eed29ce60212"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "peg-in-hole force torque estimation",
+        "receipt_id": "20261121t082438z-europe-pmc-93f1e66527",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=peg-in-hole+force+torque+estimation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "6b7c751d5e4df802dbb66daaf0e65fb4f123850e11db660653d3b3f345c53c19",
+        "normalized_results_sha256": "64a225b857a623ff88d3c921040810e674475545f93d6ae9c0775cfd05081db5"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.mex.2024.103027",
+        "receipt_id": "20261121t082441z-opencitations-67ee6113db",
+        "result_count": 5,
+        "response_sha256": "43a4f33c5922b3313ed3b7c5d162359448b5c47aff69568605ce768268952cde"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/machines12090658",
+        "receipt_id": "20261121t082443z-opencitations-bb78a0ce02",
+        "result_count": 1,
+        "response_sha256": "2bd08653d2080f71f0e143ccbeedd3e9972e19b2c67802e8fb932612dc984dd1"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 199,
+    "off_topic_filtered": 69,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 71,
+    "net_new": 59,
+    "provider_statuses": [
+      {
+        "query": "robot assembly",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "multi-robot uwb",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tactile manipulation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tactile manipulation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "tactile manipulation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tactile manipulation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tactile manipulation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "bearing fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "bearing fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

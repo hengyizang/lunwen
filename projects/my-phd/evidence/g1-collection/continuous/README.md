@@ -7,11 +7,11 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：11
-- **最近更新时间 (UTC)**：2026-11-21T08:19:12Z
-- **累计净新增文献** (`literature-new.csv`)：1118 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：767 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1013 条
+- **已完成轮次**：12
+- **最近更新时间 (UTC)**：2026-11-21T08:24:12Z
+- **累计净新增文献** (`literature-new.csv`)：1209 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：826 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1089 条
 - **累计已完成确定性清洗数据集**：16 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
@@ -19,16 +19,16 @@
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 1 | 10 |
-| `R2_Aerial_Actuator` | 75 | 36 |
-| `R5_MultiRobot_Comm` | 89 | 17 |
-| `Robotics_Embodied` | 290 | 226 |
-| `Mechanical_Physics_AI` | 366 | 326 |
-| `Mechatronics_PHM_Control` | 286 | 235 |
-| `Smart_Manufacturing` | 187 | 151 |
-| `Smart_Factory_DigitalTwin` | 90 | 61 |
+| `R1_Force_Contact` | 18 | 47 |
+| `R2_Aerial_Actuator` | 75 | 37 |
+| `R5_MultiRobot_Comm` | 89 | 32 |
+| `Robotics_Embodied` | 340 | 266 |
+| `Mechanical_Physics_AI` | 376 | 339 |
+| `Mechatronics_PHM_Control` | 304 | 265 |
+| `Smart_Manufacturing` | 193 | 152 |
+| `Smart_Factory_DigitalTwin` | 134 | 61 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 43 | 0 |
+| `Adjacent` | 48 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -78,3 +78,4 @@
 | 9 | 2026-11-21T08:09:11Z | Broad Engineering R9: Mechatronics_PHM_Control | +97 | +42 | +1 | [round-09-audit.json](rounds/round-09-audit.json) |
 | 10 | 2026-11-21T08:15:25Z | Broad Engineering R10: Smart_Manufacturing | +106 | +75 | +0 | [round-10-audit.json](rounds/round-10-audit.json) |
 | 11 | 2026-11-21T08:19:12Z | Broad Engineering R11: Smart_Manufacturing / Smart_Factory_DigitalTwin | +148 | +38 | +1 | [round-11-audit.json](rounds/round-11-audit.json) |
+| 12 | 2026-11-21T08:24:12Z | Broad Engineering R12: Smart_Factory_DigitalTwin / R1_Force_Contact | +91 | +59 | +0 | [round-12-audit.json](rounds/round-12-audit.json) |
