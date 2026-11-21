@@ -1,0 +1,25 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+CLoon4_02-body_xyzres.csv,p,categorical_or_text,188,188,0,188,,,,,,,"{""NaN,NaN,NaN"": 1, ""0.950332,NaN,NaN"": 1, ""1.221224,NaN,NaN"": 1}"
+CLoon4_02-body_xyzres.csv,1_dl,categorical_or_text,188,0,188,0,,,,,,,{}
+CLoon4_02-body_xyzres.csv,res,categorical_or_text,188,0,188,0,,,,,,,{}
+CLoon4_04-eye_xyzres.csv,p,categorical_or_text,65,65,0,65,,,,,,,"{""NaN,NaN,NaN"": 1, ""0.806365,NaN,NaN"": 1, ""1.063786,NaN,NaN"": 1}"
+CLoon4_04-eye_xyzres.csv,1_dl,categorical_or_text,65,0,65,0,,,,,,,{}
+CLoon4_04-eye_xyzres.csv,res,categorical_or_text,65,0,65,0,,,,,,,{}
+CLoon4_04-body_xyzres.csv,p,categorical_or_text,226,226,0,226,,,,,,,"{""NaN,NaN,NaN"": 1, ""0.516522,NaN,NaN"": 1, ""0.446005,NaN,NaN"": 1}"
+CLoon4_04-body_xyzres.csv,1_dl,categorical_or_text,226,0,226,0,,,,,,,{}
+CLoon4_04-body_xyzres.csv,res,categorical_or_text,226,0,226,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,pt1_X,numeric,144,143,1,143,0.289838,0.305081,0.312439,0.318922,0.332029,0.369539,0.0210778
+CLoon2_05-Rfoot_xyzpts.csv,pt1_Y,numeric,144,143,1,143,0.003851,0.116889,0.235619,0.227684,0.345957,0.419119,0.126666
+CLoon2_05-Rfoot_xyzpts.csv,pt1_Z,numeric,144,143,1,140,0.056753,0.059693,0.065654,0.0679982,0.0782655,0.084502,0.00892974
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 3,numeric,144,100,44,99,0.23856,0.265163,0.28469,0.277886,0.291413,0.307539,0.0195077
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 4,numeric,144,100,44,100,0.117479,0.22955,0.339863,0.304582,0.3834,0.398624,0.0904839
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 5,numeric,144,100,44,100,0.000205,0.0264493,0.0610995,0.0505451,0.0722113,0.083342,0.0272624
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 6,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 7,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 8,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 9,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 10,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 11,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 12,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 13,categorical_or_text,144,0,144,0,,,,,,,{}
+CLoon2_05-Rfoot_xyzpts.csv,Unnamed: 14,categorical_or_text,144,0,144,0,,,,,,,{}

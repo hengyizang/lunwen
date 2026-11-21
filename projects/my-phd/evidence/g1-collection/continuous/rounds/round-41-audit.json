@@ -1,0 +1,364 @@
+{
+  "schema_version": "1.0",
+  "round": 41,
+  "completed_at": "2026-11-21T10:49:08Z",
+  "batch_label": "Broad Engineering R41: Mechatronics_PHM_Control",
+  "base_head_sha": "f82a04be6fd5d9b9b7648f72dff84280b0640cc8",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 167,
+    "duplicates_skipped": 27,
+    "net_new": 140,
+    "new_reading_queue": 120,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "active magnetic bearing control",
+        "receipt_id": "20261121t104908z-openalex-f74e7046b9",
+        "request_url": "https://api.openalex.org/works?search=active+magnetic+bearing+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d280cc903ea98fe89bda5dac9b94ced005debe025127e5c0269bce78077e69c7",
+        "normalized_results_sha256": "be636a8713a362e59492631374a54c366c1e5800808aa28f891921f8ce0269ad"
+      },
+      {
+        "provider": "crossref",
+        "query": "active magnetic bearing control",
+        "receipt_id": "20261121t104910z-crossref-d326236c67",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=active+magnetic+bearing+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "7fb401660d74b167bd24b7de808c2923508df108bf6f52d54e08079b7de9e990",
+        "normalized_results_sha256": "31ace029a9c0c65c29680f7e2ff9a2e406820c93f66e79f9b0d1dbbb60f30fb0"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "active magnetic bearing control",
+        "receipt_id": "20261121t104911z-europe-pmc-d6259e4e38",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=active+magnetic+bearing+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "014576aa4ea3dda0caa4182c8ed655e807e242ee29e2c63b162fa89e315b3074",
+        "normalized_results_sha256": "1b885acbbb0ebe87a0e03f635306b1b780352c80c6f6b3120c94992a365bbab8"
+      },
+      {
+        "provider": "hal",
+        "query": "active magnetic bearing control",
+        "receipt_id": "20261121t104918z-hal-2bc66be419",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=active+magnetic+bearing+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 11,
+        "response_sha256": "4066184e31a02e08c969a254da55738fe61e5bfa412b9a7391637bef30f67ad7",
+        "normalized_results_sha256": "4d3a91af67829199ab8d53b1a8551b126260b9cd7d5eb6ff0c0e5253f737a9e7"
+      },
+      {
+        "provider": "openalex",
+        "query": "piezoelectric stage nanopositioning control",
+        "receipt_id": "20261121t104920z-openalex-1e92154044",
+        "request_url": "https://api.openalex.org/works?search=piezoelectric+stage+nanopositioning+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e8e4409af7eaa4fdf1ae80fbea2df96806c542d7bb19f29348e9ea08b0052d22",
+        "normalized_results_sha256": "b7acfdc11b1ba038e61efd416bed83427044e1b050f6a7547bda63e9644526f5"
+      },
+      {
+        "provider": "crossref",
+        "query": "piezoelectric stage nanopositioning control",
+        "receipt_id": "20261121t104921z-crossref-c9238a893f",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=piezoelectric+stage+nanopositioning+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "83bb8fca78dc6a39bd137a892859a906eda4f3dcdd0de44c54de922b966c0bac",
+        "normalized_results_sha256": "5f2ecbc0bf27b84da64cb94b9b165ed52feb7ded8155c8de20449041de195336"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "piezoelectric stage nanopositioning control",
+        "receipt_id": "20261121t104923z-europe-pmc-7345592919",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=piezoelectric+stage+nanopositioning+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "526cad5e13405c53539a26a766a32ae45902df22a320ee3718d36fec449a698f",
+        "normalized_results_sha256": "29e485e6834f5ca1994c561e24e4ebfcb41f77b4ddc0689ded8af7634d099eda"
+      },
+      {
+        "provider": "hal",
+        "query": "piezoelectric stage nanopositioning control",
+        "receipt_id": "20261121t104925z-hal-ad2d1e4ccc",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=piezoelectric+stage+nanopositioning+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 2,
+        "response_sha256": "520a97aec1db75cc0191251dad99cdb816c1f8b5de393f4e74dd45dd43ed42a7",
+        "normalized_results_sha256": "ceeddeff586cf60afe9c5b193f2db230547b58748d7a7af5fe05656e342a9e59"
+      },
+      {
+        "provider": "openalex",
+        "query": "rolling bearing acoustic diagnosis",
+        "receipt_id": "20261121t104927z-openalex-d26c3ef585",
+        "request_url": "https://api.openalex.org/works?search=rolling+bearing+acoustic+diagnosis&per-page=12",
+        "result_count": 12,
+        "response_sha256": "bdc066dad04011a157a80e07814a7921246260643c3e54c07f0895cf8e503205",
+        "normalized_results_sha256": "1be705e0a9121114942a0bb46469356e49c92f31410a47fb4ddcd436fce22f64"
+      },
+      {
+        "provider": "crossref",
+        "query": "rolling bearing acoustic diagnosis",
+        "receipt_id": "20261121t104929z-crossref-ad256cfbab",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=rolling+bearing+acoustic+diagnosis&rows=12",
+        "result_count": 12,
+        "response_sha256": "73279c898ef4cc13d7ebc08c26561af5103427e340b861f1f3ae8c26cea843f0",
+        "normalized_results_sha256": "242be4f6f1a2f09a5809fce2b3fecec9dc4777cc513c906aaef02d66a64ef7fd"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "rolling bearing acoustic diagnosis",
+        "receipt_id": "20261121t104930z-europe-pmc-e80179deff",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=rolling+bearing+acoustic+diagnosis&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "a1075e89809175397dae67fd89d97a1ac12d677b39bcb49a926d4d3a591930c5",
+        "normalized_results_sha256": "3c64415a20afbc66598102e17650efbd4f9ca6bf3c0d8a0c796e2b002bab14dd"
+      },
+      {
+        "provider": "hal",
+        "query": "rolling bearing acoustic diagnosis",
+        "receipt_id": "20261121t104932z-hal-aa78aaaec5",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=rolling+bearing+acoustic+diagnosis&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 4,
+        "response_sha256": "6b5b70a66016c986d496623230c38634e14d92efbf02e962a66547cbaae2ee6b",
+        "normalized_results_sha256": "06c2792436695852e17e5dc7a47df11bc238e67d9e0966973486000f1fc5d63a"
+      },
+      {
+        "provider": "openalex",
+        "query": "planetary gearbox fault classification",
+        "receipt_id": "20261121t104933z-openalex-4b1ccdb309",
+        "request_url": "https://api.openalex.org/works?search=planetary+gearbox+fault+classification&per-page=12",
+        "result_count": 12,
+        "response_sha256": "ff27ff5abc45e8020f1902d557b83c0b44f28002c9d00c50082d4950a067ef33",
+        "normalized_results_sha256": "6d85366b3e8eaab8092f340ddd91d9cf61a1bdd45e661f294676415fef41e66c"
+      },
+      {
+        "provider": "crossref",
+        "query": "planetary gearbox fault classification",
+        "receipt_id": "20261121t104935z-crossref-8c53e175fe",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=planetary+gearbox+fault+classification&rows=12",
+        "result_count": 12,
+        "response_sha256": "85591711d486cc4f05d5c994629a10f4af16a9eef1e50f1abedd1f39b7a9716a",
+        "normalized_results_sha256": "c8948a11e79855c7a2330a1dd880412769a673c95dcfb74a04129913a466581f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "planetary gearbox fault classification",
+        "receipt_id": "20261121t104936z-europe-pmc-07e4197163",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=planetary+gearbox+fault+classification&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "689c4edb825dd69c4ce9c64306584ef87e9d444c1d58d4040413e0040468a167",
+        "normalized_results_sha256": "0807443ca8640a9278a2ab120a092806b6d4e6117c8043b474914e42b107e151"
+      },
+      {
+        "provider": "hal",
+        "query": "planetary gearbox fault classification",
+        "receipt_id": "20261121t104945z-hal-da6b56a011",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=planetary+gearbox+fault+classification&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1088/1757-899x/231/1/012026",
+        "receipt_id": "20261121t104946z-opencitations-3ffdebfedb",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/s1006-706x(10)60178-1",
+        "receipt_id": "20261121t104947z-opencitations-f1a4acc186",
+        "result_count": 6,
+        "response_sha256": "fa13f62c8338a1af97eb16a8aef68d3474d504d9cd6cee950759d8e2ba5fb70c"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 174,
+    "off_topic_filtered": 89,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 56,
+    "net_new": 29,
+    "provider_statuses": [
+      {
+        "query": "tactile manipulation sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "tactile manipulation sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tactile manipulation sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tactile manipulation sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tactile manipulation sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "bearing fault sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "bearing fault sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bearing fault sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "tool wear sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tool wear sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "tool wear sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "tool wear sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "tool wear sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "additive manufacturing sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "additive manufacturing sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "additive manufacturing sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 14,
+    "cleaned": [
+      {
+        "slug": "dataverse-nssigl-date-stamping-us-housing",
+        "key": "dataverse:10.7910/dvn/nssigl",
+        "dataset_name": "Date-stamping US housing market explosivity",
+        "doi": "10.7910/dvn/nssigl",
+        "landing_url": "https://doi.org/10.7910/DVN/NSSIGL",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-nssigl-date-stamping-us-housing-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-nssigl-date-stamping-us-housing-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_nssigl_date_stamping_us_housing.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 1988,
+        "verified_sha256": "0ba1e5896d6921f58262f9feb1f59f30e9a2204e2a651c4353a4f95212c41ac9"
+      },
+      {
+        "slug": "dataverse-sqs8my-replication-data-for-tur",
+        "key": "dataverse:10.7910/dvn/sqs8my",
+        "dataset_name": "Replication Data for: \"Turning on Those Who Turn to the Courts: Experimental Evidence of Backlash Against Personal Injury Litigants\"",
+        "doi": "10.7910/dvn/sqs8my",
+        "landing_url": "https://doi.org/10.7910/DVN/SQS8MY",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-sqs8my-replication-data-for-tur-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-sqs8my-replication-data-for-tur-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_sqs8my_replication_data_for_tur.py",
+        "cleaned_rows": 190,
+        "raw_total_rows": 1529,
+        "verified_sha256": "200f9737871026168a295205ad9a9e88de058763ff293b3c60d78fccb6af17ff"
+      },
+      {
+        "slug": "dataverse-mygsyo-replication-data-for-foo",
+        "key": "dataverse:10.7910/dvn/mygsyo",
+        "dataset_name": "Replication Data for: Foot-propelled swimming kinematics and turning strategies in common loons",
+        "doi": "10.7910/dvn/mygsyo",
+        "landing_url": "https://doi.org/10.7910/DVN/MYGSYO",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-mygsyo-replication-data-for-foo-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-mygsyo-replication-data-for-foo-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_mygsyo_replication_data_for_foo.py",
+        "cleaned_rows": 24,
+        "raw_total_rows": 1499,
+        "verified_sha256": "b5455e1580d18effb736586dff4849ba908e7ffccc73676b8693d8bbf8f9edaf"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

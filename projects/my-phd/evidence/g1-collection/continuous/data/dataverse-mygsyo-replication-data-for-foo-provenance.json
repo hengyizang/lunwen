@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-mygsyo-replication-data-for-foo",
+  "dataset_name": "Replication Data for: Foot-propelled swimming kinematics and turning strategies in common loons",
+  "doi": "10.7910/dvn/mygsyo",
+  "landing_url": "https://doi.org/10.7910/DVN/MYGSYO",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/MYGSYO",
+  "access_date": "2026-11-21",
+  "round_number": 41,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "CLoon4_02-body_xyzres.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3241651",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYGSYO/1667f0a783b-9afab85220ad?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27CLoon4_02-body_xyzres.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105039Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cc66e5478c0c35a56ebaa15e72cfddc721d52f993c76d5c6e68c6d19a89021bf",
+      "http_status": 200,
+      "bytes": 5050,
+      "publisher_checksum": "md5:27bd52273b16db59f60e9bfe05527f9f",
+      "verified_md5": "27bd52273b16db59f60e9bfe05527f9f",
+      "verified_sha256": "b5455e1580d18effb736586dff4849ba908e7ffccc73676b8693d8bbf8f9edaf"
+    },
+    {
+      "file": "CLoon4_04-eye_xyzres.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3241662",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYGSYO/1667f0a937a-1eaf4800baa0?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27CLoon4_04-eye_xyzres.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105041Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=51e7ebe839a8ed7a219015257461a6a7f82b9c2cf64076a8a6a8ff9dca89eb76",
+      "http_status": 200,
+      "bytes": 5323,
+      "publisher_checksum": "md5:14af0e8e18076bc9892b437fc2279e31",
+      "verified_md5": "14af0e8e18076bc9892b437fc2279e31",
+      "verified_sha256": "bf6324d3e2c2fd23d9c344401338ac61d339e2e118758f5d37016dfdc471995a"
+    },
+    {
+      "file": "CLoon4_04-body_xyzres.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3241656",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYGSYO/1667f0a8b0c-c069367c6dc5?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27CLoon4_04-body_xyzres.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105043Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=4db303d48d1c9da0a6b488a9f01cb04d635751a08b1e6a4c4914dc3ab75d06b3",
+      "http_status": 200,
+      "bytes": 6128,
+      "publisher_checksum": "md5:cf67d24e5705d2e07b01a88066dd2a59",
+      "verified_md5": "cf67d24e5705d2e07b01a88066dd2a59",
+      "verified_sha256": "46aa9d08f4ceb89d2215230a1f6276b60513b770ac6b918887bc0668739dac99"
+    },
+    {
+      "file": "CLoon2_05-Rfoot_xyzpts.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3241612",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYGSYO/1667f0a1b52-2a855ba04521?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27CLoon2_05-Rfoot_xyzpts.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105044Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=497c22c6e066c17e5c30fcba807d02b89691a5935d9c022f73bf926fdcb52524",
+      "http_status": 200,
+      "bytes": 23175,
+      "publisher_checksum": "md5:755a5dab99d565d30675a817403d5dd2",
+      "verified_md5": "755a5dab99d565d30675a817403d5dd2",
+      "verified_sha256": "d2b318d8300e7160c92a36bfd6959fd4fb4742f403312244d2165751030a7d53"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-mygsyo-replication-data-for-foo",
+  "raw_total_bytes": 39676,
+  "raw_total_rows": 1499,
+  "duplicate_rows_removed": 876,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-mygsyo-replication-data-for-foo-cleaned.csv",
+  "cleaned_csv_sha256": "ee96a49a3b10dd8f4a601770a262e5efa31498cbbf8945238e8e08d762e9981a",
+  "cleaned_rows": 24,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "CLoon4_02-body_xyzres.csv": {
+      "p": 0,
+      "1_dl": 188,
+      "res": 188
+    },
+    "CLoon4_04-eye_xyzres.csv": {
+      "p": 0,
+      "1_dl": 65,
+      "res": 65
+    },
+    "CLoon4_04-body_xyzres.csv": {
+      "p": 0,
+      "1_dl": 226,
+      "res": 226
+    },
+    "CLoon2_05-Rfoot_xyzpts.csv": {
+      "pt1_X": 1,
+      "pt1_Y": 1,
+      "pt1_Z": 1,
+      "Unnamed: 3": 44,
+      "Unnamed: 4": 44,
+      "Unnamed: 5": 44,
+      "Unnamed: 6": 144,
+      "Unnamed: 7": 144,
+      "Unnamed: 8": 144,
+      "Unnamed: 9": 144,
+      "Unnamed: 10": 144,
+      "Unnamed: 11": 144,
+      "Unnamed: 12": 144,
+      "Unnamed: 13": 144,
+      "Unnamed: 14": 144
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-nssigl-date-stamping-us-housing",
+  "dataset_name": "Date-stamping US housing market explosivity",
+  "doi": "10.7910/dvn/nssigl",
+  "landing_url": "https://doi.org/10.7910/DVN/NSSIGL",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/NSSIGL",
+  "access_date": "2026-11-21",
+  "round_number": 41,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "US.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3035832",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/NSSIGL/15d3b46e974-5589ceb1206b?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27US.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105023Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=42610504939c99dd821463dc5dd91488a3ce9810dcb4524c9efc9782ea41ed57",
+      "http_status": 200,
+      "bytes": 4677,
+      "publisher_checksum": "dataverse_original_md5:7bbb6718bc0fe73910286513c3b7928a",
+      "verified_md5": "220c1c7b3abb00887d03ae78ab4edd16",
+      "verified_sha256": "0ba1e5896d6921f58262f9feb1f59f30e9a2204e2a651c4353a4f95212c41ac9"
+    },
+    {
+      "file": "ShillervsWinans.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3137717",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/NSSIGL/16270d664bd-b943590aea38?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27ShillervsWinans.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105025Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=b165e43c455a559539d126400af38fce4b640d7713ea26e8ddaba752e696e4be",
+      "http_status": 200,
+      "bytes": 6548,
+      "publisher_checksum": "dataverse_original_md5:5811409f2907e5735389cc84a588fcfe",
+      "verified_md5": "76d93eafad522472101fd3c1920dd555",
+      "verified_sha256": "18e8d76e61a221929dff5da260b33a2fb51c210611c533182faffb26b211e690"
+    },
+    {
+      "file": "Housing prices GSADF_mehmet.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3137715",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/NSSIGL/16270d62c8d-5a0bca09aaf8?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Housing%2520prices%2520GSADF_mehmet.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T105026Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=060ff0cdd35ba38e2cd31a561390af637d7f48073402011d5f291ef404e35bb7",
+      "http_status": 200,
+      "bytes": 86845,
+      "publisher_checksum": "dataverse_original_md5:fd33f67c960cda4a35bdb2948ae16ddb",
+      "verified_md5": "3d950be470aa53e6f4d994af418ec7bc",
+      "verified_sha256": "339259adc2f760f9bbb4a8bc251f15e06e086af74eef2b08ad1fcecf3c29dd97"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-nssigl-date-stamping-us-housing",
+  "raw_total_bytes": 98070,
+  "raw_total_rows": 1988,
+  "duplicate_rows_removed": 1480,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-nssigl-date-stamping-us-housing-cleaned.csv",
+  "cleaned_csv_sha256": "ca41ad23d7e2eb925f5c98bdb8b9ebf1134d8354f71fc6977b165341643224ad",
+  "cleaned_rows": 30,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "US.tab": {
+      "Year": 1,
+      "RealHousePrice": 1
+    },
+    "ShillervsWinans.tab": {
+      "date": 0,
+      "ShillerAnnualizedHP": 0,
+      "Winans": 0,
+      "lshiller": 0,
+      "lwinans": 0
+    },
+    "Housing prices GSADF_mehmet.tab": {
+      "RightTailedADFTests": 5,
+      "B": 25,
+      "C": 28,
+      "D": 9,
+      "E": 171,
+      "F": 194,
+      "G": 195,
+      "H": 199,
+      "I": 195,
+      "J": 199,
+      "K": 199,
+      "L": 199,
+      "M": 199,
+      "N": 199,
+      "O": 199,
+      "P": 199,
+      "Q": 199,
+      "R": 199,
+      "RightTailedADFTests.1": 190,
+      "T": 196,
+      "U": 199,
+      "V": 194,
+      "W": 197
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

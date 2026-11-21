@@ -1,0 +1,31 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+US.tab,Year,numeric,185,184,1,184,1830,1875.75,1921.5,1921.5,1967.25,2013,53.2604
+US.tab,RealHousePrice,numeric,185,184,1,184,5850.45,18048.1,28893.4,44239.5,68620.4,136024,36143.9
+ShillervsWinans.tab,date,numeric,124,124,0,124,1890,1920.75,1951.5,1951.5,1982.25,2013,35.9398
+ShillervsWinans.tab,ShillerAnnualizedHP,numeric,124,124,0,124,65.6143,87.9464,106.088,105.303,114.692,194.762,24.9113
+ShillervsWinans.tab,Winans,numeric,124,124,0,124,75.3311,132.44,205.521,280.284,432.792,651.485,171.343
+ShillervsWinans.tab,lshiller,numeric,124,124,0,124,4.18379,4.47673,4.66426,4.63061,4.74225,5.27178,0.228555
+ShillervsWinans.tab,lwinans,numeric,124,124,0,124,4.32189,4.88612,5.32553,5.44338,6.07025,6.47925,0.629299
+Housing prices GSADF_mehmet.tab,RightTailedADFTests,numeric,199,194,5,194,1830,1875.75,1921.5,1921.5,1967.25,2013,53.2604
+Housing prices GSADF_mehmet.tab,B,numeric,199,174,25,174,0.00742387,0.552871,0.625509,0.600754,0.689949,0.908031,0.147621
+Housing prices GSADF_mehmet.tab,C,numeric,199,171,28,171,-1.67397,-1.29811,-0.983046,-0.587858,-0.252812,2.41502,0.989563
+Housing prices GSADF_mehmet.tab,D,numeric,199,190,9,190,0.0016247,0.00543325,0.00980923,0.0665947,0.0153511,3.09697,0.367922
+Housing prices GSADF_mehmet.tab,E,numeric,199,28,171,4,0.054,1,1,0.963615,1,1,0.185526
+Housing prices GSADF_mehmet.tab,F,numeric,199,5,194,5,1977,1985.5,1994,1990.67,1997.5,2001,12.3423
+Housing prices GSADF_mehmet.tab,G,numeric,199,4,195,4,1992,1994,1996,1998,2001,2006,7.2111
+Housing prices GSADF_mehmet.tab,H,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,I,numeric,199,4,195,4,4.7211,21.3972,45.1821,42.8919,66.6768,76.4821,32.9656
+Housing prices GSADF_mehmet.tab,J,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,K,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,L,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,M,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,N,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,O,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,P,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,Q,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,R,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,RightTailedADFTests.1,categorical_or_text,199,9,190,9,,,,,,,"{""Sample : 1830 2013"": 1, ""Included observations: 184"": 1, ""Null hypothesis: PIR has a unit root"": 1}"
+Housing prices GSADF_mehmet.tab,T,categorical_or_text,199,3,196,3,,,,,,,"{""99% level"": 1, ""95% level"": 1, ""90% level"": 1}"
+Housing prices GSADF_mehmet.tab,U,categorical_or_text,199,0,199,0,,,,,,,{}
+Housing prices GSADF_mehmet.tab,V,numeric,199,5,194,5,-2.61809,-1.0443,-0.343459,-0.670646,0.030193,0.622426,1.38333
+Housing prices GSADF_mehmet.tab,W,numeric,199,2,197,2,0.891,0.891,0.891,0.891,0.891,0.891,0

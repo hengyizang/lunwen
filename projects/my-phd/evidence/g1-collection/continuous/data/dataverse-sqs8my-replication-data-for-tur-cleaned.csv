@@ -1,0 +1,191 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+TurningToCourts_RemedyExhaustion.tab,id,numeric,522,522,0,174,1,44,87.5,87.5,131,174,50.2768
+TurningToCourts_RemedyExhaustion.tab,remedy,numeric,522,522,0,3,1,1,2,2,3,3,0.81728
+TurningToCourts_RemedyExhaustion.tab,ClaimAppropriate,numeric,522,522,0,5,1,3,4,3.82184,5,5,0.958276
+TurningToCourts_RemedyExhaustion.tab,Justifiable,numeric,522,522,0,5,1,2,3,3.2682,4,5,1.26404
+TurningToCourts_RemedyExhaustion.tab,raceDummy,numeric,522,522,0,2,0,1,1,0.758621,1,1,0.42833
+TurningToCourts_RemedyExhaustion.tab,IllnessSeverity,numeric,522,522,0,4,1,2,3,2.54598,3,4,0.792717
+TurningToCourts_RemedyExhaustion.tab,BlameShare,numeric,522,522,0,60,0,54,78.5,73.6609,95,100,23.2013
+TurningToCourts_RemedyExhaustion.tab,age,numeric,522,522,0,4,1,1,2,2.13793,3,4,0.961913
+TurningToCourts_RemedyExhaustion.tab,education,numeric,522,522,0,8,1,3,6,5.3908,7,8,2.03816
+TurningToCourts_RemedyExhaustion.tab,ideology,numeric,522,522,0,8,-3,-2,0,6.67816,2,99,25.212
+TurningToCourts_RemedyExhaustion.tab,GenderDummy,numeric,522,522,0,2,0,0,0,0.465517,1,1,0.499288
+TurningToCourts_RemedyExhaustion.tab,Race,categorical_or_text,522,522,0,7,,,,,,,"{""White"": 396, ""Black or African American"": 66, ""Other"": 27}"
+TurningToCourts_RemedyExhaustion.tab,Lawsuit,numeric,522,522,0,1,1,1,1,1,1,1,0
+TurningToCourts_RemedyExhaustion.tab,GovClaim,numeric,522,522,0,1,0,0,0,0,0,0,0
+TurningToCourts_RemedyExhaustion.tab,HireLawyer,numeric,522,522,0,1,0,0,0,0,0,0,0
+TurningToCourts_RemedyExhaustion.tab,Control,numeric,522,522,0,1,0,0,0,0,0,0,0
+TurningToCourts_RemedyExhaustion.tab,FamilyHelp,numeric,522,522,0,1,0,0,0,0,0,0,0
+TurningToCourts_RemedyExhaustion.tab,LumpingIt,numeric,522,522,0,1,0,0,0,0,0,0,0
+TurningToCourts_RemedyExhaustion.tab,treatment,numeric,522,522,0,1,5,5,5,5,5,5,0
+TurningToCourts_RemedyExhaustion.tab,JoeSympathetic,numeric,522,522,0,5,1,3,3,3.23563,4,5,0.999056
+TurningToCourts_RemedyExhaustion.tab,JoeTrustworthy,numeric,522,522,0,5,1,3,3,3.43678,4,5,0.887549
+TurningToCourts_RemedyExhaustion.tab,JoeDishonest,numeric,522,522,0,5,1,3,4,3.68391,5,5,1.17952
+TurningToCourts_RemedyExhaustion.tab,JoeGreedy,numeric,522,522,0,5,1,3,4,3.54023,5,5,1.24044
+TurningToCourts_RemedyExhaustion.tab,Claimant,numeric,522,522,0,13,2,3,3.5,3.47414,4,5,0.655555
+TurningToCourts_RemedyExhaustion.tab,ClaimFamily,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,ClaimLawyer,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,LawyerFamily,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,ChoiceRank2,numeric,522,522,0,4,1,2,2,2.36782,3,4,0.930791
+TurningToCourts_RemedyExhaustion.tab,ChoiceRank3,numeric,522,522,0,4,1,1,2,2.25287,3,4,1.05385
+TurningToCourts_RemedyExhaustion.tab,ChoiceRank4,numeric,522,522,0,4,1,2,4,3.06322,4,4,1.20533
+TurningToCourts_RemedyExhaustion.tab,ChoiceRank1,numeric,522,522,0,4,1,1,2,2.31609,3,4,1.07211
+TurningToCourts_RemedyExhaustion.tab,TreatmentCheck,numeric,522,522,0,2,0,0,1,0.586207,1,1,0.492985
+TurningToCourts_RemedyExhaustion.tab,JoeOtherCharacteristics3,categorical_or_text,522,231,291,76,,,,,,,"{""na"": 6, ""Honest "": 3, ""wants action"": 3}"
+TurningToCourts_RemedyExhaustion.tab,JoeOtherCharacteristics2,categorical_or_text,522,273,249,88,,,,,,,"{""Deserving"": 6, ""Angry"": 6, ""Determined"": 6}"
+TurningToCourts_RemedyExhaustion.tab,JoeOtherCharacteristics1,categorical_or_text,522,351,171,105,,,,,,,"{""desperate"": 6, ""Honest"": 6, ""Concerned"": 6}"
+TurningToCourts_RemedyExhaustion.tab,gender_interval,numeric,522,522,0,3,1,1,1,1.5,2,3,0.533881
+TurningToCourts_RemedyExhaustion.tab,engagement,numeric,522,522,0,4,1,2,3,2.98851,4,4,1.00089
+TurningToCourts_RemedyExhaustion.tab,partyID,numeric,522,522,0,4,1,1,2,1.86207,3,4,0.912768
+TurningToCourts_RemedyExhaustion.tab,voted2016,numeric,522,522,0,2,0,0,1,0.729885,1,1,0.444445
+TurningToCourts_RemedyExhaustion.tab,president2016,numeric,522,522,0,3,1,1,1,1.56322,2,3,0.629434
+TurningToCourts_RemedyExhaustion.tab,vote2020,numeric,522,522,0,4,0,1,1,1.02874,1,11,1.50786
+TurningToCourts_RemedyExhaustion.tab,importidduration,numeric,522,522,0,156,106,328,509,600.839,748,3133,451.306
+TurningToCourts_RemedyExhaustion.tab,state,categorical_or_text,522,522,0,36,,,,,,,"{""New York - NY"": 57, ""Florida - FL"": 42, ""Texas - TX"": 42}"
+TurningToCourts_RemedyExhaustion.tab,hispanic,categorical_or_text,522,522,0,2,,,,,,,"{""No"": 447, ""Yes"": 75}"
+TurningToCourts_RemedyExhaustion.tab,race_other,categorical_or_text,522,6,516,2,,,,,,,"{""Mexican"": 3, ""I just identify as hispanic"": 3}"
+TurningToCourts_RemedyExhaustion.tab,ControlJoeNextActions,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,GovernmentClaimValidationOrder,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid131_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid132_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid134_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid135_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid136,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid140_do,categorical_or_text,522,522,0,24,,,,,,,"{""Filing a claim with a government program|Asking his family for help|Hiring a lawyer to write a letter|Filing a lawsuit|I don't remember"": 42, ""Filing a cla..."
+TurningToCourts_RemedyExhaustion.tab,importidqid151_do,categorical_or_text,522,522,0,24,,,,,,,"{""Filing a claim with a government program|Asking his family for help|Hiring a lawyer to write a letter|Filing a lawsuit"": 33, ""Filing a claim with a governm..."
+TurningToCourts_RemedyExhaustion.tab,importidqid152_text,categorical_or_text,522,522,0,173,,,,,,,"{""Idk"": 6, ""It was his right to be taken care of by the company "": 3, ""he for sure could get money directly from the company so shouldn������t give up and tu..."
+TurningToCourts_RemedyExhaustion.tab,importidqid154_text,categorical_or_text,522,243,279,79,,,,,,,"{""Joe recovered his expenses"": 9, ""Joe would recover his expenses "": 3, ""joe recovered his expenses"": 3}"
+TurningToCourts_RemedyExhaustion.tab,importidqid155_text,categorical_or_text,522,249,273,82,,,,,,,"{""None "": 6, ""Joe possibly agreed to a settlement."": 3, ""He did not recover expenses."": 3}"
+TurningToCourts_RemedyExhaustion.tab,importidqid156,categorical_or_text,522,522,0,3,,,,,,,"{""Yes"": 354, ""I am not sure"": 105, ""No"": 63}"
+TurningToCourts_RemedyExhaustion.tab,importidqid103_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid112_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid113_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid115_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid116_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid117,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid69_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid95_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid96_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid98_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid99_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid100,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid218_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid219_text,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidqid178,categorical_or_text,522,231,291,15,,,,,,,"{""Workers compensation"": 54, ""An individual lawsuit"": 54, ""A government compensation program for an on-the-job injury"": 21}"
+TurningToCourts_RemedyExhaustion.tab,importidqid179,categorical_or_text,522,522,0,5,,,,,,,"{""Somewhat knowledgeable"": 264, ""Knowledgeable"": 102, ""Very knowledgeable"": 72}"
+TurningToCourts_RemedyExhaustion.tab,importidqid180,categorical_or_text,522,522,0,5,,,,,,,"{""Somewhat knowledgeable"": 204, ""No knowledge"": 147, ""Knowledgeable"": 90}"
+TurningToCourts_RemedyExhaustion.tab,importidqid182,categorical_or_text,522,522,0,2,,,,,,,"{""Yes"": 303, ""No"": 219}"
+TurningToCourts_RemedyExhaustion.tab,importidqid183,categorical_or_text,522,303,219,19,,,,,,,"{""The nature of Joe Miller's illness,Knowledge about risks faced by Joe Miller in the workplace"": 57, ""Joe Miller,Joe Miller's company,The nature of Joe Mill..."
+TurningToCourts_RemedyExhaustion.tab,importidqid184_text,categorical_or_text,522,15,507,5,,,,,,,"{""When you refer to government programs did you intend Workers Comp programs?"": 3, ""Age"": 3, ""doctors input, public info about the chemical, company's reputa..."
+TurningToCourts_RemedyExhaustion.tab,importidqid185,categorical_or_text,522,522,0,5,,,,,,,"{""Agree"": 192, ""Neither agree nor disagree"": 129, ""Strongly agree"": 96}"
+TurningToCourts_RemedyExhaustion.tab,importidqid186_text,categorical_or_text,522,381,141,118,,,,,,,"{""none"": 15, ""None "": 15, ""nothing"": 6}"
+TurningToCourts_RemedyExhaustion.tab,importidq_totalduration,numeric,522,522,0,156,106,328,509,600.839,748,3133,451.306
+TurningToCourts_RemedyExhaustion.tab,importidbl_5dpm1a5rnx6ixvx_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_e5xjeyyggp7yayf_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_aynutpukgg3kbrv_do,categorical_or_text,522,522,0,24,,,,,,,"{""Q44|Q45|Q46|Q50|Q48|Q47|Q49|Q51"": 42, ""Q44|Q45|Q46|Q47|Q49|Q48|Q50|Q51"": 33, ""Q44|Q45|Q46|Q47|Q50|Q48|Q49|Q51"": 30}"
+TurningToCourts_RemedyExhaustion.tab,importidbl_2gfm9nz81qe1rgl_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_e9yaojnf55eoacx_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_39garhh8unyuiwj_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_0sordhfmnxhfc6v_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_0fxx43yduy9pqin_do,categorical_or_text,522,522,0,44,,,,,,,"{""Q141|Q142|Q144|Q143|Q145|Q146|Q147|Q148|Q151|Q152|Q153|Q155|Q156|Q157|Q149|Q150|Q125"": 24, ""Q141|Q144|Q145|Q143|Q142|Q146|Q147|Q148|Q151|Q152|Q153|Q154|Q15..."
+TurningToCourts_RemedyExhaustion.tab,importidbl_czl8mdirjpkqvkt_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_1h4p9uiz4wzb9bv_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts_RemedyExhaustion.tab,importidbl_1c7lffnixpqgpkl_do,categorical_or_text,522,0,522,0,,,,,,,{}
+TurningToCourts.tab,treatment,numeric,1007,1007,0,6,0,1,3,2.49652,4,5,1.72853
+TurningToCourts.tab,LumpingIt,numeric,1007,1007,0,2,0,0,0,0.16286,0,1,0.369421
+TurningToCourts.tab,FamilyHelp,numeric,1007,1007,0,2,0,0,0,0.160874,0,1,0.367597
+TurningToCourts.tab,Control,numeric,1007,1007,0,2,0,0,0,0.174777,0,1,0.379965
+TurningToCourts.tab,HireLawyer,numeric,1007,1007,0,2,0,0,0,0.166832,0,1,0.373011
+TurningToCourts.tab,GovClaim,numeric,1007,1007,0,2,0,0,0,0.161867,0,1,0.368512
+TurningToCourts.tab,Lawsuit,numeric,1007,1007,0,2,0,0,0,0.17279,0,1,0.378254
+TurningToCourts.tab,JoeSympathetic,numeric,1007,1007,0,5,1,3,3,3.35353,4,5,1.01976
+TurningToCourts.tab,JoeTrustworthy,numeric,1007,1007,0,5,1,3,4,3.5859,4,5,0.924764
+TurningToCourts.tab,JoeDishonest,numeric,1007,1007,0,5,1,3,4,3.75273,5,5,1.15474
+TurningToCourts.tab,JoeGreedy,numeric,1007,1007,0,5,1,3,4,3.80636,5,5,1.17683
+TurningToCourts.tab,Claimant,numeric,1007,1007,0,16,1,3,3.5,3.62463,4,5,0.677114
+TurningToCourts.tab,IllnessSeverity,numeric,1007,1007,0,4,1,2,2,2.42502,3,4,0.765879
+TurningToCourts.tab,BlameShare,numeric,1007,1007,0,88,0,52,77,73.1629,95,100,23.06
+TurningToCourts.tab,ideology,numeric,1007,1007,0,8,-3,-2,0,7.07646,2,99,25.7685
+TurningToCourts.tab,gender,numeric,1007,1007,0,3,1,1,2,1.50943,2,3,0.517737
+TurningToCourts.tab,GenderDummy,numeric,1007,1007,0,2,0,0,0,0.491559,1,1,0.500177
+TurningToCourts.tab,age,numeric,1007,1007,0,4,1,1,2,2.10328,3,4,0.970366
+TurningToCourts.tab,education,numeric,1007,1007,0,8,1,4,6,5.32969,7,8,1.92879
+TurningToCourts.tab,raceDummy,numeric,1007,1007,0,2,0,0,1,0.733863,1,1,0.442156
+TurningToCourts.tab,treatmentthree,numeric,1007,1007,0,3,0,1,2,1.48759,2,2,0.774593
+TurningToCourts.tab,SuitFamily,numeric,1007,174,833,5,1,2,3,2.91379,4,5,1.21576
+TurningToCourts.tab,SuitLawyer,numeric,1007,174,833,5,1,3,3,3.32759,4,5,1.2314
+TurningToCourts.tab,SuitGov,numeric,1007,174,833,5,1,3,4,3.56322,5,5,1.26492
+TurningToCourts.tab,ModerateDummy,numeric,1007,934,73,2,0,0,0,0.298715,1,1,0.45794
+TurningToCourts.tab,IdeologyDummy,numeric,1007,934,73,2,0,0,0,0.334047,1,1,0.471909
+TurningToCourts.tab,Race,categorical_or_text,1007,1007,0,16,,,,,,,"{""White"": 739, ""Black or African American"": 134, ""Other"": 44}"
+TurningToCourts.tab,ClaimingGroups,numeric,1007,1007,0,2,0,0,1,0.662363,1,1,0.473139
+TurningToCourts.tab,ClaimFamily,numeric,1007,163,844,5,1,2,3,2.93252,4,5,1.21781
+TurningToCourts.tab,ClaimLawyer,numeric,1007,163,844,5,1,2,3,3.12883,4,5,1.13392
+TurningToCourts.tab,LawyerFamily,numeric,1007,168,839,5,1,2,3,2.85119,4,5,1.1666
+TurningToCourts.tab,ChoiceRank2,numeric,1007,825,182,4,1,2,2,2.34182,3,4,1.01303
+TurningToCourts.tab,ChoiceRank3,numeric,1007,825,182,4,1,1,2,2.26182,3,4,1.03779
+TurningToCourts.tab,ChoiceRank4,numeric,1007,825,182,4,1,2,4,2.94788,4,4,1.22512
+TurningToCourts.tab,ChoiceRank1,numeric,1007,825,182,4,1,2,2,2.44848,3,4,1.05668
+TurningToCourts.tab,ClaimAppropriate,numeric,1007,831,176,5,1,3,4,3.44525,4,5,1.214
+TurningToCourts.tab,TreatmentCheck,numeric,1007,654,353,2,0,0,1,0.605505,1,1,0.489116
+TurningToCourts.tab,JoeOtherCharacteristics3,categorical_or_text,1007,391,616,336,,,,,,,"{""Honest"": 5, ""Worried"": 5, ""Good"": 4}"
+TurningToCourts.tab,JoeOtherCharacteristics2,categorical_or_text,1007,480,527,401,,,,,,,"{""Honest"": 8, ""Good"": 8, ""Nice"": 4}"
+TurningToCourts.tab,JoeOtherCharacteristics1,categorical_or_text,1007,682,325,467,,,,,,,"{""Honest"": 19, ""Good"": 9, ""Good "": 8}"
+TurningToCourts.tab,engagement,numeric,1007,1007,0,4,1,2,3,2.99603,4,4,0.973804
+TurningToCourts.tab,partyID,numeric,1007,1007,0,4,1,1,2,1.87388,3,4,0.879964
+TurningToCourts.tab,voted2016,numeric,1007,1007,0,2,0,0,1,0.695134,1,1,0.460579
+TurningToCourts.tab,president2016,numeric,1007,1004,3,3,1,1,2,1.66633,2,3,0.691223
+TurningToCourts.tab,vote2020,numeric,1007,1007,0,4,0,1,1,1.00298,1,11,1.43687
+TurningToCourts.tab,importidduration,numeric,1007,1007,0,636,94,281.5,454,575.659,678.5,8166,605.506
+TurningToCourts.tab,state,categorical_or_text,1007,1007,0,49,,,,,,,"{""New York - NY"": 111, ""California - CA"": 91, ""Texas - TX"": 77}"
+TurningToCourts.tab,hispanic,categorical_or_text,1007,1007,0,2,,,,,,,"{""No"": 863, ""Yes"": 144}"
+TurningToCourts.tab,race_other,categorical_or_text,1007,23,984,20,,,,,,,"{""human"": 2, ""Other"": 2, ""Mexican"": 2}"
+TurningToCourts.tab,ControlJoeNextActions,categorical_or_text,1007,172,835,162,,,,,,,"{""Sued"": 3, ""Not sure"": 2, ""Got a lawyer"": 2}"
+TurningToCourts.tab,GovernmentClaimValidationOrder,categorical_or_text,1007,163,844,24,,,,,,,"{""Asking his family for help|Hiring a lawyer to write a letter|Filing a lawsuit|Filing a claim with a government program|I don't remember"": 10, ""Filing a law..."
+TurningToCourts.tab,importidqid131_do,categorical_or_text,1007,163,844,24,,,,,,,"{""Asking his family for help|Filing a claim with a government program|Hiring a lawyer to write a letter|Filing a lawsuit"": 11, ""Asking his family for help|Hi..."
+TurningToCourts.tab,importidqid132_text,categorical_or_text,1007,160,847,160,,,,,,,"{""My thoughts "": 1, ""He was injured unjustly, there's nothing wrong in seeking compensation"": 1, ""Thats the order that seems more reasonable."": 1}"
+TurningToCourts.tab,importidqid134_text,categorical_or_text,1007,77,930,74,,,,,,,"{""Joe recovered his expenses"": 3, ""Not sure "": 2, ""Yes"": 1}"
+TurningToCourts.tab,importidqid135_text,categorical_or_text,1007,78,929,75,,,,,,,"{""Yes"": 2, ""Idk"": 2, ""Joe recovered his expenses "": 2}"
+TurningToCourts.tab,importidqid136,categorical_or_text,1007,163,844,3,,,,,,,"{""Yes"": 105, ""No"": 31, ""I am not sure"": 27}"
+TurningToCourts.tab,importidqid140_do,categorical_or_text,1007,174,833,24,,,,,,,"{""Filing a claim with a government program|Asking his family for help|Hiring a lawyer to write a letter|Filing a lawsuit|I don't remember"": 14, ""Asking his f..."
+TurningToCourts.tab,importidqid151_do,categorical_or_text,1007,174,833,24,,,,,,,"{""Filing a claim with a government program|Filing a lawsuit|Hiring a lawyer to write a letter|Asking his family for help"": 11, ""Filing a claim with a governm..."
+TurningToCourts.tab,importidqid152_text,categorical_or_text,1007,174,833,173,,,,,,,"{""Idk"": 2, ""That's what happens"": 1, ""It������s the best one for sur"": 1}"
+TurningToCourts.tab,importidqid154_text,categorical_or_text,1007,81,926,79,,,,,,,"{""Joe recovered his expenses"": 3, ""I don't know "": 1, ""No idea"": 1}"
+TurningToCourts.tab,importidqid155_text,categorical_or_text,1007,83,924,82,,,,,,,"{""None "": 2, ""He won"": 1, ""It������s good for sure "": 1}"
+TurningToCourts.tab,importidqid156,categorical_or_text,1007,174,833,3,,,,,,,"{""Yes"": 118, ""I am not sure"": 35, ""No"": 21}"
+TurningToCourts.tab,importidqid103_do,categorical_or_text,1007,168,839,24,,,,,,,"{""Filing a lawsuit|Asking his family for help|Filing a claim with a government program|Hiring a lawyer to write a letter|I don't remember"": 12, ""Filing a law..."
+TurningToCourts.tab,importidqid112_do,categorical_or_text,1007,168,839,24,,,,,,,"{""Hiring a lawyer to write a letter|Asking his family for help|Filing a claim with a government program|Filing a lawsuit"": 16, ""Filing a lawsuit|Filing a cla..."
+TurningToCourts.tab,importidqid113_text,categorical_or_text,1007,167,840,166,,,,,,,"{""I don������t know "": 2, ""How I feel"": 1, ""Great app for a real time and you "": 1}"
+TurningToCourts.tab,importidqid115_text,categorical_or_text,1007,81,926,78,,,,,,,"{""Joe recovered his expenses"": 4, ""Great app method to get you to get your phone number and "": 1, ""He had to hire a lawyer."": 1}"
+TurningToCourts.tab,importidqid116_text,categorical_or_text,1007,79,928,75,,,,,,,"{""Joe recovered his expenses"": 3, ""Not sure"": 2, ""Idk"": 2}"
+TurningToCourts.tab,importidqid117,categorical_or_text,1007,168,839,3,,,,,,,"{""Yes"": 99, ""No"": 42, ""I am not sure"": 27}"
+TurningToCourts.tab,importidqid69_do,categorical_or_text,1007,162,845,24,,,,,,,"{""Filing a claim with a government program|Asking his family for help|Hiring a lawyer to write a letter|Filing a lawsuit|I don't remember"": 12, ""Filing a cla..."
+TurningToCourts.tab,importidqid95_do,categorical_or_text,1007,162,845,24,,,,,,,"{""Filing a claim with a government program|Filing a lawsuit|Hiring a lawyer to write a letter|Asking his family for help"": 10, ""Filing a claim with a governm..."
+TurningToCourts.tab,importidqid96_text,categorical_or_text,1007,160,847,160,,,,,,,"{""Because family should be the last option"": 1, ""It������s okay "": 1, ""That������s the right legal way"": 1}"
+TurningToCourts.tab,importidqid98_text,categorical_or_text,1007,73,934,72,,,,,,,"{""No"": 2, ""Joes favor "": 1, ""To help pay his medical bills and his employer was dishonest "": 1}"
+TurningToCourts.tab,importidqid99_text,categorical_or_text,1007,80,927,80,,,,,,,"{""I think that he ended up getting a lawyer"": 1, ""Joe did something good"": 1, ""he placed the burden upon his family."": 1}"
+TurningToCourts.tab,importidqid100,categorical_or_text,1007,162,845,3,,,,,,,"{""Yes"": 67, ""No"": 57, ""I am not sure"": 38}"
+TurningToCourts.tab,importidqid218_do,categorical_or_text,1007,164,843,24,,,,,,,"{""Filing a claim with a government program|Hiring a lawyer to write a letter|Filing a lawsuit|Asking his family for help"": 14, ""Filing a lawsuit|Asking his f..."
+TurningToCourts.tab,importidqid219_text,categorical_or_text,1007,163,844,161,,,,,,,"{""Good thoughts better option for me "": 2, ""good"": 2, ""i think the ogvernment needs to know"": 1}"
+TurningToCourts.tab,importidqid178,categorical_or_text,1007,435,572,17,,,,,,,"{""Workers compensation"": 110, ""An individual lawsuit"": 90, ""A government compensation program for an on-the-job injury"": 59}"
+TurningToCourts.tab,importidqid179,categorical_or_text,1007,1007,0,5,,,,,,,"{""Somewhat knowledgeable"": 490, ""Knowledgeable"": 255, ""No knowledge"": 108}"
+TurningToCourts.tab,importidqid180,categorical_or_text,1007,1007,0,5,,,,,,,"{""Somewhat knowledgeable"": 376, ""No knowledge"": 304, ""Knowledgeable"": 189}"
+TurningToCourts.tab,importidqid182,categorical_or_text,1007,1007,0,2,,,,,,,"{""Yes"": 576, ""No"": 431}"
+TurningToCourts.tab,importidqid183,categorical_or_text,1007,575,432,21,,,,,,,"{""Joe Miller,Joe Miller's company,The nature of Joe Miller's illness,Knowledge about risks faced by Joe Miller in the workplace"": 97, ""The nature of Joe Mill..."
+TurningToCourts.tab,importidqid184_text,categorical_or_text,1007,16,991,16,,,,,,,"{""How financially strapped or bankrupt treatment for the illness had made him and his family."": 1, ""doctors input, public info about the chemical, company's..."
+TurningToCourts.tab,importidqid185,categorical_or_text,1007,1007,0,5,,,,,,,"{""Agree"": 344, ""Neither agree nor disagree"": 286, ""Disagree"": 188}"
+TurningToCourts.tab,importidqid186_text,categorical_or_text,1007,718,289,630,,,,,,,"{""none"": 19, ""Nothing"": 13, ""None "": 11}"
+TurningToCourts.tab,importidq_totalduration,numeric,1007,1007,0,636,94,281.5,454,575.659,678.5,8166,605.506
+TurningToCourts.tab,importidbl_5dpm1a5rnx6ixvx_do,categorical_or_text,1007,162,845,24,,,,,,,"{""Q18|Q19|Q31|Q35|Q32|Q33|Q34|Q36"": 15, ""Q18|Q19|Q31|Q33|Q32|Q35|Q34|Q36"": 13, ""Q18|Q19|Q31|Q32|Q34|Q33|Q35|Q36"": 11}"
+TurningToCourts.tab,importidbl_e5xjeyyggp7yayf_do,categorical_or_text,1007,168,839,24,,,,,,,"{""Q36|Q37|Q38|Q41|Q40|Q39|Q42|Q43"": 13, ""Q36|Q37|Q38|Q42|Q41|Q40|Q39|Q43"": 10, ""Q36|Q37|Q38|Q39|Q41|Q40|Q42|Q43"": 10}"
+TurningToCourts.tab,importidbl_aynutpukgg3kbrv_do,categorical_or_text,1007,174,833,24,,,,,,,"{""Q44|Q45|Q46|Q50|Q48|Q47|Q49|Q51"": 14, ""Q44|Q45|Q46|Q47|Q49|Q48|Q50|Q51"": 11, ""Q44|Q45|Q46|Q47|Q50|Q48|Q49|Q51"": 10}"
+TurningToCourts.tab,importidbl_2gfm9nz81qe1rgl_do,categorical_or_text,1007,163,844,24,,,,,,,"{""Q52|Q53|Q54|Q57|Q58|Q55|Q56|Q59"": 13, ""Q52|Q53|Q54|Q55|Q58|Q56|Q57|Q59"": 11, ""Q52|Q53|Q54|Q57|Q56|Q55|Q58|Q59"": 11}"
+TurningToCourts.tab,importidbl_e9yaojnf55eoacx_do,categorical_or_text,1007,164,843,24,,,,,,,"{""Q155|Q156|Q157|Q161|Q158|Q159|Q160|Q162"": 17, ""Q155|Q156|Q157|Q160|Q158|Q159|Q161|Q162"": 13, ""Q155|Q156|Q157|Q161|Q159|Q160|Q158|Q162"": 10}"
+TurningToCourts.tab,importidbl_39garhh8unyuiwj_do,categorical_or_text,1007,176,831,24,,,,,,,"{""Q159|Q162|Q160|Q163|Q161|Q164|Q172|Q176|Q190"": 14, ""Q159|Q163|Q162|Q161|Q160|Q164|Q172|Q176|Q190"": 10, ""Q159|Q163|Q162|Q160|Q161|Q164|Q172|Q176|Q190"": 10}"
+TurningToCourts.tab,importidbl_0sordhfmnxhfc6v_do,categorical_or_text,1007,163,844,46,,,,,,,"{""Q122|Q125|Q126|Q124|Q123|Q127|Q128|Q129|Q131|Q132|Q133|Q135|Q136|Q137|Q130|Q138"": 8, ""Q122|Q125|Q123|Q124|Q126|Q127|Q128|Q129|Q131|Q132|Q133|Q135|Q136|Q137..."
+TurningToCourts.tab,importidbl_0fxx43yduy9pqin_do,categorical_or_text,1007,174,833,44,,,,,,,"{""Q141|Q142|Q144|Q143|Q145|Q146|Q147|Q148|Q151|Q152|Q153|Q155|Q156|Q157|Q149|Q150|Q125"": 8, ""Q141|Q143|Q145|Q142|Q144|Q146|Q147|Q148|Q151|Q152|Q153|Q154|Q156..."
+TurningToCourts.tab,importidbl_czl8mdirjpkqvkt_do,categorical_or_text,1007,168,839,47,,,,,,,"{""Q104|Q105|Q108|Q106|Q107|Q109|Q110|Q111|Q112|Q113|Q114|Q116|Q117|Q118|Q119"": 7, ""Q104|Q108|Q106|Q105|Q107|Q109|Q110|Q111|Q112|Q113|Q114|Q115|Q117|Q118|Q119..."
+TurningToCourts.tab,importidbl_1h4p9uiz4wzb9bv_do,categorical_or_text,1007,162,845,44,,,,,,,"{""Q87|Q91|Q90|Q88|Q89|Q92|Q93|Q94|Q95|Q96|Q97|Q99|Q100|Q101"": 10, ""Q87|Q90|Q91|Q88|Q89|Q92|Q93|Q94|Q95|Q96|Q97|Q98|Q100|Q101"": 10, ""Q87|Q88|Q91|Q90|Q89|Q92|Q..."
+TurningToCourts.tab,importidbl_1c7lffnixpqgpkl_do,categorical_or_text,1007,164,843,24,,,,,,,"{""Q164|Q165|Q178|Q179|Q182|Q181|Q183|Q184|Q185|Q186|Q187|Q188"": 12, ""Q164|Q165|Q182|Q178|Q179|Q181|Q183|Q184|Q185|Q186|Q187|Q188"": 10, ""Q164|Q179|Q178|Q182|Q..."
+TurningToCourts.tab,AgeDummy,numeric,1007,1007,0,2,0,0,0,0.340616,1,1,0.474152
+TurningToCourts.tab,EducationDummy,numeric,1007,1007,0,2,0,0,1,0.51142,1,1,0.500118
