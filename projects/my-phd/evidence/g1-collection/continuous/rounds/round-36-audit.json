@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "round": 36,
+  "completed_at": "2026-11-21T10:24:02Z",
+  "batch_label": "Broad Engineering R36: Mechanical_Physics_AI",
+  "base_head_sha": "21e18af044cb555776f0ac43ddfaf33cb0deaf57",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 142,
+    "duplicates_skipped": 15,
+    "net_new": 127,
+    "new_reading_queue": 110,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "rotor dynamics unbalance identification",
+        "receipt_id": "20261121t102402z-arxiv-419de153e2",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arotor+AND+all%3Adynamics+AND+all%3Aunbalance+AND+all%3Aidentification&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "a8574cf63e49ab464956424c49a6ef653bedcac0963174cae1f98c19cd75b016",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "openalex",
+        "query": "rotor dynamics unbalance identification",
+        "receipt_id": "20261121t102403z-openalex-cf81cb2b1b",
+        "request_url": "https://api.openalex.org/works?search=rotor+dynamics+unbalance+identification&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4da318f3a1244d94c71f178d3981a09a6a0c4a572cbf2e7dcba85d5f6260e180",
+        "normalized_results_sha256": "4e427adbc60f17e1aba9f36e82c9cc33b7495576da44b8caf506b88db2429cfc"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "rotor dynamics unbalance identification",
+        "receipt_id": "20261121t102405z-europe-pmc-af8670bd43",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=rotor+dynamics+unbalance+identification&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "d0d83b753985d354b94ddeb374c5a544bc964587ab9624d7304435f551bd48af",
+        "normalized_results_sha256": "2ac1b922bbebf76fc3c53a35efb9304ae73a5a12aadf1a7746532cfa332744a1"
+      },
+      {
+        "provider": "arxiv",
+        "query": "nonlinear vibration identification neural",
+        "receipt_id": "20261121t102409z-arxiv-7a9148ad91",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Anonlinear+AND+all%3Avibration+AND+all%3Aidentification+AND+all%3Aneural&start=0&max_results=12",
+        "result_count": 9,
+        "response_sha256": "e4a6518b9870f8d6949f9253d73af9c16d0614cdee503ed9b514a6fa63f3f27c",
+        "normalized_results_sha256": "0a8b1e532fdc89ed44517f241f3edc6a845a822e75255226756bd2e8e5654f5a"
+      },
+      {
+        "provider": "openalex",
+        "query": "nonlinear vibration identification neural",
+        "receipt_id": "20261121t102410z-openalex-530837c2f7",
+        "request_url": "https://api.openalex.org/works?search=nonlinear+vibration+identification+neural&per-page=12",
+        "result_count": 12,
+        "response_sha256": "676b41d6ffc07a85222a684c123a385db6506fd2c1a2b8cb8399abfd90b8ecfd",
+        "normalized_results_sha256": "10099bba464d4112d232b4e84c03904c161147ea18937751f8ccf99e58ea7fd3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "nonlinear vibration identification neural",
+        "receipt_id": "20261121t102412z-europe-pmc-8faea13be1",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=nonlinear+vibration+identification+neural&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "eff6c775c2bdc5f991f3b8950c03fd63064c90cd58e611d88e1b5100a74925bf",
+        "normalized_results_sha256": "97ef08c71d65c7d50623092920dfb02061ed858d6a6b0318e6a6238d005bfc2b"
+      },
+      {
+        "provider": "arxiv",
+        "query": "heat transfer neural operator",
+        "receipt_id": "20261121t102417z-arxiv-e59af9e306",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aheat+AND+all%3Atransfer+AND+all%3Aneural+AND+all%3Aoperator&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "1f4eba7c85d96da71a8ab30557f63f0a545525cf32c65c297ed03c6bb42fdd49",
+        "normalized_results_sha256": "20a93ccabb666e9c985c768e2c0190c413181ee8d233c8617dc45afb15c7f5a0"
+      },
+      {
+        "provider": "openalex",
+        "query": "heat transfer neural operator",
+        "receipt_id": "20261121t102418z-openalex-0c1a367951",
+        "request_url": "https://api.openalex.org/works?search=heat+transfer+neural+operator&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9980c875a46e494195319694ca6e52849297f6f1fe852a769dffa995c8cb2026",
+        "normalized_results_sha256": "197714d3051f227334c77dac2beca11d098b984fb6b47a76b5c07d4fb2b7b6e3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "heat transfer neural operator",
+        "receipt_id": "20261121t102420z-europe-pmc-b807749a92",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=heat+transfer+neural+operator&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "701d9b86ae923d94edb52b79616c24de91694fa6570a36fe650e0454700c6f3d",
+        "normalized_results_sha256": "e0fd0ab8d1f0fb7c0ddc887ad670a081f67215216342130c9cb663012408dcab"
+      },
+      {
+        "provider": "arxiv",
+        "query": "aerodynamic shape optimization deep",
+        "receipt_id": "20261121t102426z-arxiv-274206001f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aaerodynamic+AND+all%3Ashape+AND+all%3Aoptimization+AND+all%3Adeep&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "7f44b941b610a4aaff465e11fcf3be05efa1bb437d83079b831a4f1884065df4",
+        "normalized_results_sha256": "70628d7bd74933ad081917b2aef7811d3371ba67232b8803e2d86f7c5503b79d"
+      },
+      {
+        "provider": "openalex",
+        "query": "aerodynamic shape optimization deep",
+        "receipt_id": "20261121t102427z-openalex-cb9521b3cb",
+        "request_url": "https://api.openalex.org/works?search=aerodynamic+shape+optimization+deep&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d7d5c34d99a6f3c7d0797d05671e7b8f0b35f34bdfd8a225df26f4fd229eee0d",
+        "normalized_results_sha256": "ea0262886f1d4133579d948d3498901b8df12525f071502f93a01f0ab5f706f9"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "aerodynamic shape optimization deep",
+        "receipt_id": "20261121t102428z-europe-pmc-18bcbc8915",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=aerodynamic+shape+optimization+deep&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "66e065ebe00dbd70d1a39c0f63d0133665d287d0564da28349219b966981205e",
+        "normalized_results_sha256": "551dea956a277dc53148336708945192deed144f40c8511518ae05b7a3e2568c"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.mex.2023.102122",
+        "receipt_id": "20261121t102433z-opencitations-8dd1f2cad7",
+        "result_count": 1,
+        "response_sha256": "b015d59d52e20007c3e96a6ab4a72485c5447d6f76f99929a7184f91be5e8499"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s23218769",
+        "receipt_id": "20261121t102434z-opencitations-e86e3ab3ea",
+        "result_count": 12,
+        "response_sha256": "4833920e616be307d1908b827d5a87a0cbf6196b496cbc6dd1fc3ae7aca6120a"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 153,
+    "off_topic_filtered": 83,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 32,
+    "net_new": 38,
+    "provider_statuses": [
+      {
+        "query": "drilling thrust",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "drilling thrust",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "drilling thrust",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "drilling thrust",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "drilling thrust",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rotor imbalance",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "rotor imbalance",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rotor imbalance",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotor imbalance",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotor imbalance",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "shaft misalignment",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "shaft misalignment",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "shaft misalignment",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "shaft misalignment",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "shaft misalignment",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "piezoelectric actuator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "piezoelectric actuator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "piezoelectric actuator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "piezoelectric actuator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "piezoelectric actuator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
