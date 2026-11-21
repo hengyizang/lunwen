@@ -1,0 +1,4 @@
+water_side_kPa,specimens,closing_trials,opening_trials,closing_abs_mean_kPa,opening_abs_mean_kPa,mean_abs_threshold_separation_kPa,smallest_cross_pair_margin_kPa,reported_video_frame_identifiers
+15,1,5,5,11.814,8.476,3.338,1.99,0
+55,1,5,5,12.416,9.096,3.32,2.56,0
+pooled,1,10,10,12.115,8.786,3.329,1.57,0

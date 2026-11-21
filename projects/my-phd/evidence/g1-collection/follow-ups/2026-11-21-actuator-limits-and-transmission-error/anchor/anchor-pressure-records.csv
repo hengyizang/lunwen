@@ -1,0 +1,13 @@
+member,trial,sha256,pressure_rows,identical_PC_time_steps,equal_time_changed_pressure,median_PC_step_s,min_PC_step_s,max_PC_step_s,min_kPa,max_kPa,included_in_published_summary,published_trigger_to_cycle_min_s,compatible_pressure_and_duration_pairs,first_matching_trigger_row_1based,first_matching_min_row_1based
+zenodo-deposit/data/integration/porcine/P1.csv,P1,e8f9183ce56853c4d7b6d099b649de06abf3043192cca3257b9fd49b5f12396a,9548,0,0,1.001,0.801,1.129,-22.25,0.65,1,7.0,1,2279,2286
+zenodo-deposit/data/integration/porcine/P2.csv,P2,c6a8f3fd9db89096186c5063fb5450f0cef8b1d5c714747f16e98fa841266175,9912,0,0,1.001,0.97,1.047,-24.41,0.65,1,15.1,1,2596,2611
+zenodo-deposit/data/integration/porcine/P3.csv,P3,9c23c86324321aa8b551016ffcfb04ed6232af98c2f9d3a5ea5462fd8281751d,9924,0,0,1.001,0.986,1.016,-22.47,1.39,1,4.0,1,2182,2186
+zenodo-deposit/data/integration/porcine/P4.csv,P4,0f8e94194275d5de905a3a9fea7ebb9c36bb0e49be95364efc899a2f750acebd,9442,0,0,1.001,0.986,1.019,-23.6,0.9,0,,,,
+zenodo-deposit/data/integration/porcine/P5.csv,P5,5bb621ef456add3e9624a256b131daf6a92407868c158365845c227ce3063cfb,39053,0,0,1.001,0.884,1.122,-22.11,1.34,1,49.2,1,3380,3429
+zenodo-deposit/data/integration/porcine/P6.csv,P6,7da923bf2f7ae7c33515b74f8059e1fe32e2b6ce107ac20f611c2bd004b81716,11079,0,0,1.001,0.927,1.019,-22.05,0.84,1,4.0,1,3226,3230
+zenodo-deposit/data/integration/silicone/S1.csv,S1,e33852294d3995bdf4d251ee36cbd5f1d5984a945bd07edbbf241cec58e97416,10232,0,0,1.001,0.982,1.019,-22.81,0.2,1,23.1,1,2128,2151
+zenodo-deposit/data/integration/silicone/S2.csv,S2,2ffb6bf774a7f83c165f0cbe33beb9cb03d2a0d28e845f9b14426b4d3e1c6551,13093,0,0,1.001,0.986,1.02,-24.05,1.1,1,10.0,1,2955,2965
+zenodo-deposit/data/integration/silicone/S3.csv,S3,1943d79b5c66922b6fe9316510c92de6770c777a95f43069c075b796a40f1662,14602,8,5,1.001,0.0,8.265,-23.41,-0.01,1,24.1,1,3614,3638
+zenodo-deposit/data/integration/silicone/S4.csv,S4,6d086666f7f214219faefab4bd1027bcef6b8e870c5cd857b0e791b092e23bc3,11099,0,0,1.001,0.987,1.02,-23.2,0.38,1,27.1,1,3033,3060
+zenodo-deposit/data/integration/silicone/S5.csv,S5,32e90a29bcd2f6932633a1940398bb611558741308048c17f0ce0f1f92d23385,13539,0,0,1.001,0.984,1.019,-22.6,0.29,1,9.0,1,2718,2727
+zenodo-deposit/data/integration/silicone/S6.csv,S6,82a594d0e9274065e5c9f4ce72d77d2735601b7fd496c9ce0e257099ec0f172f,15655,1,1,1.001,0.0,2.923,-20.81,0.34,1,20.1,1,2899,2919

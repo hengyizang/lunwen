@@ -1,0 +1,4 @@
+gear,printed_table,repetitions_per_matched_output,matched_output_loads,lowest_matched_output_Nm,highest_matched_output_Nm,median_direct_threshold_input_Nm_with_unloaded_output,backdrive_output_threshold_Nm_with_unloaded_input,median_paired_input_width_Nm_at_lowest_matched_output,median_paired_input_width_Nm_at_highest_matched_output,increasing_adjacent_median_widths,adjacent_load_pairs,pdf_sha256
+HFUC,2.2,3,9,6.014,108.383,0.0200,2.026,0.0420,0.3960,8,8,e4358902f0e64d464cc7090132c25344dad64645e2506abbed16e3609c6d0a86
+HFUS,2.3,4,9,6.014,108.383,0.0190,1.781,0.0415,0.5445,8,8,e4358902f0e64d464cc7090132c25344dad64645e2506abbed16e3609c6d0a86
+HDUR,2.4,1,9,131.899,517.932,0.3000,62.515,1.2270,4.9050,8,8,e4358902f0e64d464cc7090132c25344dad64645e2506abbed16e3609c6d0a86

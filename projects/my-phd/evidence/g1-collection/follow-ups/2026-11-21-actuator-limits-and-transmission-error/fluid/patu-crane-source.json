@@ -1,0 +1,130 @@
+{
+  "title": "A Dataset from a Hydraulically Actuated Forestry Crane for Data-Driven Stress Estimation (PATU655Stress)",
+  "doi": "10.17632/rn5j42rpyr.2",
+  "concept_doi": "10.17632/rn5j42rpyr",
+  "creator": [
+    {
+      "name": "saeed, sohaib",
+      "nameType": "Personal",
+      "givenName": "sohaib",
+      "familyName": "saeed",
+      "affiliation": [],
+      "nameIdentifiers": []
+    },
+    {
+      "name": "Zhidchenko, Victor",
+      "nameType": "Personal",
+      "givenName": "Victor",
+      "familyName": "Zhidchenko",
+      "affiliation": [],
+      "nameIdentifiers": []
+    },
+    {
+      "name": "Handroos, Heikki",
+      "nameType": "Personal",
+      "givenName": "Heikki",
+      "familyName": "Handroos",
+      "affiliation": [],
+      "nameIdentifiers": []
+    }
+  ],
+  "version": "2",
+  "landing": "https://doi.org/10.17632/rn5j42rpyr.2",
+  "accessed_utc_date": "2026-11-21",
+  "metadata_url": "https://api.datacite.org/dois/10.17632/rn5j42rpyr.2",
+  "metadata_sha256": "1a0e00049e73405aa6f151a7cfbfeefb36b6d0efc598694814c1736edcf96883",
+  "rights": [
+    {
+      "rightsUri": "info:eu-repo/semantics/openAccess"
+    },
+    {
+      "rights": "Creative Commons Attribution 4.0 International",
+      "rightsUri": "https://creativecommons.org/licenses/by/4.0/legalcode",
+      "schemeUri": "https://spdx.org/licenses/",
+      "rightsIdentifier": "cc-by-4.0",
+      "rightsIdentifierScheme": "SPDX"
+    }
+  ],
+  "included": "Newly computed statistics, metadata and digests. Attribute the authors listed in the record.",
+  "history": {
+    "parent_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "texts_and_early_catalogue": 664,
+    "identifiers": [
+      "10.17632/rn5j42rpyr.2",
+      "10.17632/rn5j42rpyr",
+      "PATU655Stress",
+      "A Dataset from a Hydraulically Actuated Forestry Crane for Data-Driven Stress Estimation (PATU655Stress)",
+      "10.1016/j.dib.2026.112848"
+    ],
+    "matching_paths": []
+  },
+  "queries": [
+    {
+      "api": "https://api.datacite.org/dois",
+      "parameters": {
+        "query": "(\"hydraulic\" \"valve command\") AND types.resourceTypeGeneral:Dataset",
+        "page[size]": 24
+      },
+      "response_sha256": "86eb48e34d643f3ad09e207551ebfd9e7b606460f74dd13617f572cad9808581"
+    },
+    {
+      "api": "https://api.crossref.org/works",
+      "query.bibliographic": "PATU655Stress hydraulically actuated forestry crane data-driven stress estimation",
+      "route": "Verified companion Data in Brief paper in PMC and version 2 grouped archive."
+    }
+  ],
+  "article": {
+    "doi": "10.1016/j.dib.2026.112848",
+    "pmcid": "PMC13233766",
+    "fulltext": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13233766/fullTextXML",
+    "sha256": "90c1f9826dc4ef63400c16650d2cb76263d4f1ccdaca5f034b45eb48b63bacc9",
+    "locator": "Data Description and Tables 1–2; Experimental Design, Materials and Methods; Limitations. Table 1 identifies the two directional valve commands, chamber pressures and cylinder piston displacements. Methods describe a shared acquisition reference with reported 58.8 samples/s. Five strain channels are direct readings; cylinder force is derived from chamber pressures and geometry."
+  },
+  "files_endpoint": "https://data.mendeley.com/public-api/datasets/rn5j42rpyr/files?folder_id={folder_id}&version=2&$start=0&$limit=1000",
+  "archive": {
+    "url": "https://data.mendeley.com/public-api/zip/rn5j42rpyr/download/2",
+    "bytes": 191695894,
+    "sha256": "47c0ca6fd0922c3003347b5f29983829a60236fa44f880aedd4c897bebcfada6",
+    "accept_header": "application/vnd.mendeley-public-dataset.1+json",
+    "folder_listing": "https://data.mendeley.com/public-api/datasets/rn5j42rpyr/folders/2",
+    "folder_listing_sha256": "e7f022815275d884abbe8cc07b23d406716d6f136b3b1f5f0c378b299fe2d5b1"
+  },
+  "metadata_by_folder": [
+    {
+      "folder_name": "148KG",
+      "folder_id": "18c4bb55-49a9-4b1d-904b-59a8224419ae",
+      "manifest_sha256": "3bcad54fee86939bf79094270e38dbcb9c48221ecfa5ba94fb2c40693c933a32",
+      "files": 2
+    },
+    {
+      "folder_name": "180KG",
+      "folder_id": "c1277e09-9d0b-4284-9df8-ce6a50bb6225",
+      "manifest_sha256": "a4dab9cccf61a6111acee4330fb74544cda6031771301e4908d6c501f185c2dd",
+      "files": 44
+    },
+    {
+      "folder_name": "278KG",
+      "folder_id": "2246b2e3-bdff-4874-a262-c976d8c7acfc",
+      "manifest_sha256": "cf2bf64c8bc0ecc713a8e9f7f0279d6cfdd15c2be08dc7e0be521af96aafb61e",
+      "files": 33
+    },
+    {
+      "folder_name": "95KG",
+      "folder_id": "f08966d7-674e-4ca4-b5fc-4728ad3bc9fb",
+      "manifest_sha256": "0ffd02ac56707cacd1d9eb1cc7b874fca1f2b0317bf097c6f3711706bbc6c11f",
+      "files": 29
+    },
+    {
+      "folder_name": "Crane Dataset",
+      "folder_id": "2cc32c40-0e49-458d-952d-8891ceb15f48",
+      "manifest_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "files": 0
+    }
+  ],
+  "integrity": "All 108 complete archive CSVs checked against version 2 publisher file SHA-256 and byte lengths from their four load-folder manifests. Per-file SHA and bytes in patu-acquisitions.csv.",
+  "scope": "Real laboratory, two planar crane cylinders. Payload folders contain 29, 2, 44 and 33 recordings at 95, 148, 180 and 278 kg, respectively. Table 1 distinguishes valve command voltages, chamber pressure transducers, cylinder displacement, boom angles and five load-dependent strain measurements. The archive has no measured spool travel, clipped/unclipped command pair, pressure relief opening flag, or load cell for independent joint torque.",
+  "derivation": "For each axis and file, quantize valve command to the nearest millivolt before grouping contiguous constant intervals of at least 8 archived rows. Summarize net displacement across interval endpoints and the 5th/95th quantiles of piston-side minus rod-side pressure. Delta pressure alone is not cylinder force, since effective areas differ on the two sides. Whole-file stroke span includes noise, drift and load coupling; it does not assign a mechanism or prove a valve dead zone. The 8-row duration is a selection in recorded rows, whose physical spacing differs in two files.",
+  "clock": "File header says Time[epoch_ms] but the 19-digit integers all yield UTC dates in August 2025 when treated as nanoseconds. This agrees with acquisition dates in names and with the paper’s nominal sampling frequency for most files. Preserve exact int64 values and qualify Hz estimates as conditional on nanoseconds. Two files show 114.61 / 115.27 Hz by raw time labels but all 19 physical/non-time fields in every successive pair of rows are identical. patu-acquisitions.csv reports all-channel consecutive duplicates and effective update rates. This pattern cannot establish sensor-internal raw sample times.",
+  "case": "At millivolt precision 96/108 recordings have a constant jib valve input for the complete record (85 at 5.8 V, 11 at 6.0 V). Measured jib stroke spans 2.44 to 14.83 mm across those recordings. Independent paper limitations report unmeasured extension–jib backlash, limited loading and two trials at 148 kg.",
+  "reproduce": "Python 3 with NumPy and pandas: python derive_crane.py crane.zip OUT. Read the 108 data files in sorted archive order. For independent hash verification compare output rows against content_details.sha256_hash in each release folder’s files_endpoint."
+}

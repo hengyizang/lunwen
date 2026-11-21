@@ -1,0 +1,97 @@
+{
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "be1803e0b7f7385be69333dfce29009413791e64",
+  "title": "A Low-Cost Platform for Measuring Backlash in Popular UART Servos",
+  "authors": [
+    {
+      "name": "Boris, Kotov",
+      "affiliation": null
+    },
+    {
+      "name": "Robonine",
+      "affiliation": null
+    }
+  ],
+  "doi": "10.5281/zenodo.19261714",
+  "concept_doi": "10.5281/zenodo.17903001",
+  "landing": "https://doi.org/10.5281/zenodo.19261714",
+  "version": "Zenodo fixed record 19261714; companion Git revision 5273b56230f38cae1201103dc30d64b2ceebf3ef",
+  "archive": {
+    "url": "https://zenodo.org/api/records/19261714/files/Measuring-Backlash-in-Popular-UART-Servos-main.zip/content",
+    "publisher_verified_md5": "md5:326bc9221c38d8a75fbdde322c31d293",
+    "bytes": 603240,
+    "sha256": "2a21abc4f3325e85aad1ed6fbc2e66a03aab987978051d3d37c4c58ce62c1dff"
+  },
+  "mirror": "https://github.com/roboninecom/Measuring-Backlash-in-Popular-UART-Servos/tree/5273b56230f38cae1201103dc30d64b2ceebf3ef",
+  "publisher_record": {
+    "url": "https://zenodo.org/api/records/19261714",
+    "bytes": 10288,
+    "sha256": "0f56e63cd70241c8d2f1236aa88c0210b6be7de68e6512d949f644527cbc94a0"
+  },
+  "associated_article": {
+    "doi": "10.1016/j.ohx.2026.e00767",
+    "name": "An open-source test stand for backlash measurement in low-cost UART servo motors",
+    "xml_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13087586/fullTextXML",
+    "locator": "Sections 5–7, Table 4, effective backlash measurements",
+    "xml_sha256": "9e51aad5f739e4b54dee89254e2649c66efa07778b7ad6a7246a432cff111bd8"
+  },
+  "inputs_checked_in_both_sources": {
+    "LICENSE": {
+      "size": 643,
+      "sha256": "a9d48e28c125ade97a210eace6a59d86e4d510715403bff0fcbdb6745e8d05ee"
+    },
+    "logs/motor_telemetry_comp2.csv": {
+      "size": 50536,
+      "sha256": "eca1e69d17376979462e6a208fa649cc4906a82d6efd7d63456cf82166d2eb21"
+    },
+    "logs/motor_telemetry_nocomp2.csv": {
+      "size": 34569,
+      "sha256": "11c62dcdcc1550ad4a495fe533b566d5e5f34323e3f074199442cd817ed8eafd"
+    },
+    "logs/motor_telemetry_pgain_zero_db.csv": {
+      "size": 39581,
+      "sha256": "75c484654bbe4b9f767bc10a8d84639c49a16150209c23991434440611956df8"
+    },
+    "logs/motor_telemetry_single.csv": {
+      "size": 27163,
+      "sha256": "067ad48c2d18a2e60fe8b1900598ecf52aa40e151780264ab7aee16de6270c2f"
+    },
+    "logs/motor_telemetry_single_3250.csv": {
+      "size": 43871,
+      "sha256": "b5adc33ed1d9b83f7bd368630aace485716e9dc293cf14cc3b025374be51c849"
+    },
+    "software/backlash_test/app.js": {
+      "size": 6734,
+      "sha256": "3ab8007b7636d8f5ae514c91509ee9694fa9453b410fcac2a4c80123d55f4f55"
+    },
+    "software/logs_analysis/config/config_m1_m2.json": {
+      "size": 565,
+      "sha256": "4f8e0c62deac0774cadf51fdf761e0b4d32a9aa40317d5ff9934dc581bbc2ab2"
+    },
+    "software/logs_analysis/config/config_m4.json": {
+      "size": 559,
+      "sha256": "a03471848e475ba584cb7e8d9c9a409806e507bf1ea66182ca2170aeb91107ae"
+    },
+    "software/logs_analysis/config/config_m5.json": {
+      "size": 559,
+      "sha256": "9cefe4623f9a30b95725d3f637319ef40fd01de956fe6c306ff10d922e3067bc"
+    },
+    "software/logs_analysis/config_utils.py": {
+      "size": 6052,
+      "sha256": "fe8dc1aeebca9d16b975d3a32f4b760bd6341df78f96fd450e7aa9828d09e61a"
+    },
+    "software/logs_analysis/log_calc.py": {
+      "size": 9451,
+      "sha256": "9f0a0a43170a4d08c351cf4cdaada98db416437ba49eabe5cfd645ff0a651416"
+    }
+  },
+  "rights": "Zenodo record CC BY 4.0, credit Boris Kotov / Robonine. Repository LICENSE assigns software GPLv3, CAD and hardware documentation CC BY 4.0 and does not separately mention logs. Included here are only an independent reader and aggregate statistics.",
+  "queries": [
+    "servo control hardware backlash friction saturation reference voltage experiments benchmark actuator positioning data download system identification physical table github robot joint current",
+    "HardwareX paper → Table 4 and source file repository DOI → archive → five telemetry files, controller log loop and phase rules → byte-identical files in Git mirror."
+  ],
+  "cleaning": "CSV snapshots include host clock, last commanded target cached after successful host write, and latest cached telemetry registers. Count complete vectors and missing position/target pairs separately. Preserve any extra registered channel. The snapshot has no per-motor receive timestamp. The load column is onboard telemetry; the scale and elastic bands in the article do not provide a continuously measured independent torque.",
+  "definitions": "Use the supplied three analysis configurations. A home window requires target counts at the specified home position for at least ten snapshots. Within it take every qualifying puller stretch and the first following jointly relaxed interval as in the source analysis; average DUT positions weighted by valid rows. Distinct snapshots and disjoint intervals are not independent motor units. Compare opposite pull directions for each DUT. Published Table 4 picks the larger DUT deviation for coupled motors. These are effective output-encoder excursions with control deadband, compliance and load effects, not isolated gear tooth clearance.",
+  "published_check": "Rounded to two counts decimals, both loaded and released gaps agree with all six Table 4 entries using single.csv, single_3250.csv and the maximum per phase of nocomp2.csv. comp2 and pgain_zero_db are separate files. Filename alone cannot verify specific internal gains. No bench torque waveform or explicit duty saturation flag was identified.",
+  "reproduce": "Python standard library: python derive_uart.py Zenodo_archive.zip OUT"
+}

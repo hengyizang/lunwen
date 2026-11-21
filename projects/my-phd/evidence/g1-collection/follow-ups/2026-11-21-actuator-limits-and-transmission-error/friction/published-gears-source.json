@@ -1,0 +1,30 @@
+{
+  "title": "Improving the productivity of Collaborative Robots in the context of manufacturing companies: identification and control improvement",
+  "author": "Carlos Wilfrido Ponce Quiroga",
+  "kind": "Université de Lorraine PhD thesis, defended 2022-05-09 in Metz; public official full text, published-table evidence only.",
+  "landing": "https://docnum.univ-lorraine.fr/public/DDOC_T_2022_0063_PONCE_QUIROGA.pdf",
+  "sha256": "e4358902f0e64d464cc7090132c25344dad64645e2506abbed16e3609c6d0a86",
+  "bytes": 5840006,
+  "accessed_utc": "2026-11-21",
+  "history": {
+    "commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "matched": [],
+    "keys": [
+      "DDOC_T_2022_0063_PONCE_QUIROGA",
+      "Improving the productivity of Collaborative Robots in the context of manufacturing companies identification and control improvement",
+      "Amélioration de la productivité des Robots Collaboratifs dans le cadre des entreprises manufacturières identification et amélioration de la commande"
+    ],
+    "paths_scanned": 861,
+    "baseline_index_scanned": true,
+    "tar_members_scanned": 301,
+    "method": "Normalized Unicode/case/alphanumeric comparison on all files in the base commit evidence tree, decompressing gzip and reading tar members, plus the early catalogue. Identifiers and title aliases above."
+  },
+  "queries": [
+    "harmonic drive transmission hysteresis torque angle experimental dataset robotics strain wave gear friction zenodo dataset gearbox robot joint torque raw data measurements csv torque position",
+    "Follow archived university PDF, section 2.4.3.1 measurement method and tables 2.2, 2.3, 2.4 pp. 32–34. Search by exact dissertation title and author."
+  ],
+  "rights": "Public university PDF bearing an author intellectual-property notice. Only original small derived aggregates and textual locators. No original page, table or raw data mirror.",
+  "measurement": "Apply calibrated masses to input and output, adding input weight to induce continuous motion in the direct sense; reduce weight until the output moves in the opposite sense. Convert via lever radius and gravity. Tables separate this operating envelope from the two unloaded-end measurements. These are incipient-motion torque thresholds, not powered servo time series, and model repeats share the rig.",
+  "statistics": "For each gear and each of nine output loads with both directions reported, calculate direct minus indirect input torque within each printed trial column pair, then take the median across repeats. Report the lowest and highest load values and count adjacent load increases that widen the median interval. HFUC, HFUS and HDUR have 3, 4 and 1 repetitions respectively. No individual motor saturation event or waveform was available.",
+  "reproduce": "Python 3 with Poppler pdftotext. python derive_published_gears.py PATH_TO_PDF OUT."
+}

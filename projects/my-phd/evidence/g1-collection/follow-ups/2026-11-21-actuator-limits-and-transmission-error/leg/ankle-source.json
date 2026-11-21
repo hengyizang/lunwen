@@ -1,0 +1,107 @@
+{
+  "title": "Assisting walking balance using a bio-inspired exoskeleton controller",
+  "doi": "10.17605/OSF.IO/EKRQJ",
+  "landing": "https://doi.org/10.17605/OSF.IO/EKRQJ",
+  "creator": "Maarten Afschrift (OSF DataCite registration); experiment by Afschrift, van Asseldonk, van Mierlo, Bayón, Keemink, van der Kooij and De Groote.",
+  "version": "OSF file 64e79d7a939a2308e37f6f5e version 1, uploaded 2023-08-24; separate README 649406f96513ba05583a3afa version 1",
+  "accessed_utc": "2026-11-21",
+  "rights": "CC BY 4.0 per OSF license record and DataCite; attribute Afschrift et al. All included tables are new per-file or per-condition statistics.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "record_api": "https://api.osf.io/v2/nodes/ekrqj/files/osfstorage/",
+  "record_sha256": "3b6674db25e51b5401f3422e0d0ee593d7f7351f3db980b1e8e1370c63e87d94",
+  "license_api": "https://api.osf.io/v2/licenses/563c1cf88c5e4a3877f9e96a/",
+  "archive_and_readme": [
+    {
+      "name": "README.md",
+      "download": "https://osf.io/download/7jubx/?version=1",
+      "fixed_file_id": "649406f96513ba05583a3afa",
+      "version": 1,
+      "record_updated": "2023-06-22T08:31:53.476901",
+      "bytes": 4183,
+      "sha256": "4866f23065f0c19abb27e1071f568394e52462a7ac0761ea3c4b1898a0a60a50",
+      "verified": true
+    },
+    {
+      "name": "Data_NMC_Balance_Ankle.zip.zip",
+      "download": "https://osf.io/download/2su3e/?version=1",
+      "fixed_file_id": "64e79d7a939a2308e37f6f5e",
+      "version": 1,
+      "record_updated": "2023-08-24T18:12:10.820106",
+      "bytes": 621786272,
+      "sha256": "e96405d601d1b29f4b6bf5560978bc7160bcb4d12e916e5824108edc144f6f2e",
+      "verified": true
+    }
+  ],
+  "queries": [
+    "exoskeleton torque tracking dataset desired measured torque figshare Zenodo joint torque walking hip ankle load cell data",
+    "Assisting walking balance Afschrift research data repository dataset zenodo figshare RDR exoskeleton parameter data",
+    "Followed article Availability of data and materials → EKRQJ DOI → OSF file API and version 1 downloads. Followed paper reference [45] to the instrument design and article links to the authors’ control model."
+  ],
+  "history": {
+    "branch_ref": "be1803e0b7f7385be69333dfce29009413791e64",
+    "tracked_paths": 861,
+    "including_early_index_and_expanded_members": 1161,
+    "keys": [
+      "10.17605/OSF.IO/EKRQJ",
+      "osf.io/ekrqj",
+      "MaartenAfschrift/GeyerAnkle_Simulink",
+      "Assisting walking balance using a bio-inspired exoskeleton controller",
+      "10.1186/s12984-023-01205-9"
+    ],
+    "matches": []
+  },
+  "papers": [
+    {
+      "doi": "10.1186/s12984-023-01205-9",
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10303867/fullTextXML",
+      "sha256": "60e3845d4c78a1070453b1fe8a434101b6c3f47d3bf0cd75f4d34a33a683a083",
+      "locators": "Methods: Exoskeleton and controller; Data recording and analysis; reference 45. Bilateral physical series-elastic ankles, 1 kHz control and moment recording, shared analog ground reaction timing reference, rated controlled peak 100 N m."
+    },
+    {
+      "doi": "10.1109/TNSRE.2021.3049960",
+      "source": "https://pure.tudelft.nl/ws/portalfiles/portal/88286237/09316891.pdf",
+      "sha256": "d93c0543b97014b316e93832dc2455a747be9d0afe7945566a0f26b4348acb34",
+      "locators": "Section II-B, pp. 332–333: series spring plus separate absolute encoders for joint output, spring deflection and motor angle. Describes the modular device family; individual spring parameters are not assumed for each trial."
+    }
+  ],
+  "source_code": {
+    "controller_tree": "https://github.com/MaartenAfschrift/GeyerAnkle_Simulink/tree/cdc6ac5a23cbc9f2c423bc9207adbe6b10fe6458",
+    "verified_files": [
+      {
+        "path": "README.md",
+        "source": "https://raw.githubusercontent.com/MaartenAfschrift/GeyerAnkle_Simulink/cdc6ac5a23cbc9f2c423bc9207adbe6b10fe6458/README.md",
+        "bytes": 456,
+        "sha256": "78904aa6014663e6ab0c2750ab28f7027ec4d77057dccae8c0ceafb86bbbb259",
+        "git_blob": "c8e36f8e71530f48722a0f55e380b9af270e9f86"
+      },
+      {
+        "path": "WEankle_controllerMaarten.slx",
+        "source": "https://raw.githubusercontent.com/MaartenAfschrift/GeyerAnkle_Simulink/cdc6ac5a23cbc9f2c423bc9207adbe6b10fe6458/WEankle_controllerMaarten.slx",
+        "bytes": 121192,
+        "sha256": "1caed5bba9d531688e3b343349090106dee952d7ca2ec1d096c2259a393c4a32",
+        "git_blob": "a760a5dcdb1ae6fa88bb984bb404f5f2922a9a6b"
+      },
+      {
+        "path": "WEankle_controllerMaarten_TimingPerturb.slx",
+        "source": "https://raw.githubusercontent.com/MaartenAfschrift/GeyerAnkle_Simulink/cdc6ac5a23cbc9f2c423bc9207adbe6b10fe6458/WEankle_controllerMaarten_TimingPerturb.slx",
+        "bytes": 239143,
+        "sha256": "e4948d17f798b08d9ee7cc50a5fdf62ebfa6ff5ca10e228a7e73546a9eb096fc",
+        "git_blob": "780ed7cc5ed3ad9fd92bbd58a5cc2d15c977cda2"
+      },
+      {
+        "path": "WEankle_controllerMaarten_TimingPerturb_2018.slx",
+        "source": "https://raw.githubusercontent.com/MaartenAfschrift/GeyerAnkle_Simulink/cdc6ac5a23cbc9f2c423bc9207adbe6b10fe6458/WEankle_controllerMaarten_TimingPerturb_2018.slx",
+        "bytes": 146817,
+        "sha256": "0a6849193ccc23ecc001ae8652139fe84334e2fc94dfbc419b111b9e5eb9ae0e",
+        "git_blob": "a40c1c8c7eda3f36dbcdf4569338b781cc72165d"
+      }
+    ],
+    "analysis_tree": "https://github.com/MaartenAfschrift/NMC_Ankle_PostProcessing/tree/ed8ff7f7019d16cddd9f25abfcff5974234fa92c"
+  },
+  "evidence_level": "Downloaded and CRC-decoded every published subject CSV and compared the shared file SHA-256 to OSF. The CSVs contain both desired and reported applied torque per ankle; the experiment did not include an independently synchronized external joint dynamometer.",
+  "scope": "1,054 distinct CSVs from 12 participant codes; 1,381,854 bilateral rows (each side has a finite desired/applied pair in every row). 1,006 short push/pull windows, 48 steady records. The ZIP paths contain NMC_Bal (208 files), which the standalone author README says was not evaluated in the paper. Use trial type and condition to separate these from the published comparison. Subject 9 and 10 were missing per the README.",
+  "time_and_units": "All signals were interpolated by the authors to 100 Hz. Time 0 marks the platform perturbation onset for push/pull files; steady files have their own local zero. Use same-row reported torque differences in N m on this common grid. Interpolation and synchronization through an analog GRF reference do not yield controller tick or packet timing.",
+  "results": "All 289 minimal-impedance files (12 steady, 134 pull, 143 push) show zero desired torque at both ankles for all 365,889 published instants. In those windows 547,719 of 731,778 ankle-side records have |applied torque| > 1 N m. Across all conditions the peak |desired| is 50.0 N m and the peak |applied| is 62.900175 N m. Neither exceeds the stated 100 N m peak capability. The data show residual interaction under a zero setpoint; residuals alone do not identify friction, spring-model error or saturation.",
+  "statistics": "RMSE is the square root of mean squared applied-minus-desired torque. Condition values pool finite ankle-time pairs within condition, trial type and side, weighting each row equally. The 1 N m cut is descriptive; no inference about population or clinical effects. No waveforms are redistributed.",
+  "reproduce": "Python 3 with pandas and NumPy. Download archive_and_readme[1] (the zip) or the file named Data_NMC_Balance_Ankle.zip.zip; run OPENBLAS_NUM_THREADS=1 python derive_ankle.py SOURCE_ZIP OUT. Source hash and CSV member CRC are checked; each member digest is in ankle-torque-trials.csv."
+}

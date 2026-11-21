@@ -1,0 +1,97 @@
+{
+  "title": "Electric Motor Temperature",
+  "provider": "Department of Power Electronics and Electrical Drives (LEA), Paderborn University; released via Kaggle.",
+  "landing": "https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature/versions/3",
+  "repository": "wkirgsn/electric-motor-temperature",
+  "kaggle_dataset_id": 236410,
+  "version": 3,
+  "version_date": "2021-04-26T09:07:04.53Z",
+  "retrieved_utc": "2026-11-21",
+  "public_record": "https://api.kaggle.com/v1/datasets/view/wkirgsn/electric-motor-temperature",
+  "record_hash": {
+    "sha256": "b3fa2e836ae558565013e24d19af014432133107fd563aa9fc1b59b583bc60dd",
+    "representation": "unmodified response bytes"
+  },
+  "history": {
+    "commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "compared_texts_plus_early_inventory": 664,
+    "keys": [
+      "wkirgsn/electric-motor-temperature",
+      "10.34740/kaggle/dsv/2161054",
+      "Electric Motor Temperature",
+      "10.1109/TPEL.2020.3045596",
+      "Estimating Electric Motor Temperatures With Deep Residual Machine Learning"
+    ],
+    "matches": []
+  },
+  "separation": "The related LEA current transition, stationary torque grid, and thermal drive-cycle releases involve distinct acquisitions and lack a common test identifier. Do not join individual files across releases.",
+  "doi": "10.34740/kaggle/dsv/2161054",
+  "creators": [
+    "Wilhelm Kirchgässner",
+    "Oliver Wallscheid",
+    "Joachim Böcker"
+  ],
+  "rights": "CC BY-SA 4.0 per Kaggle release https://creativecommons.org/licenses/by-sa/4.0/ ; attribute the above depositors. This batch distributes independently derived nonoverlapping-window and model summary tables, provided under the same CC BY-SA 4.0. The source CSV, ZIP and article are not mirrored.",
+  "query_log": [
+    "DataCite query: titles.title:(motor AND temperature) AND creators.name:(Kirchg*); returned the version DOI. Followed version DOI to Kaggle, checked release comparison and the cited paper.",
+    "Zenodo titles on PMSM experimental/identification and motor test benches also returned simulated fault studies and manuscript-only deposits; these have not been counted as separate measured releases."
+  ],
+  "release_file": {
+    "url": "https://api.kaggle.com/v1/datasets/download/wkirgsn/electric-motor-temperature?datasetVersionNumber=3",
+    "local_alias": "thermal",
+    "member": "measures_v2.csv",
+    "archive_bytes": 122212134,
+    "archive_sha256": "10e49e6220fa3c8a9d22c8bab8280ffe2d5e1e3380a6a18bcfc64ea2e8b56b92",
+    "archive_md5": "cf0c44124cfa329dea64b72bfa0a3e8e",
+    "member_bytes": 300061411,
+    "member_crc32": "c35e2a91",
+    "member_sha256": "78f3d150f0f2ad9c5dc7ff24dd12c00d386ad530f48c1589ad24fcd88867d3ad"
+  },
+  "paper": {
+    "doi": "10.1109/TPEL.2020.3045596",
+    "title": "Estimating Electric Motor Temperatures With Deep Residual Machine Learning",
+    "pdf": "https://ieeexplore.ieee.org/ielx7/63/9371270/09296842.pdf",
+    "sha256": "86f3cf1bf4db0f2dd27fee3a21f85707b2735a2e9703ac206c9a592e3ce1d41b",
+    "locators": "Section III, Tables I and II, pp. 7482–7483: 52 kW torque-controlled traction PMSM and 210 kW speed-controlled load, sampling at 2 Hz, synchronous ADCs, embedded type-K thermocouples and telemetry for mean of four magnet sensors. Paper reports about 140 h and excludes torque from its input features. Kaggle v3 reports the 185 h expanded collection."
+  },
+  "coverage": {
+    "physical": true,
+    "profiles": 69,
+    "rows": 1330816,
+    "columns": 13,
+    "nan_or_nonfinite_rows": 0,
+    "nonoverlapping_nominal_60s_windows": 11060
+  },
+  "method": "Output nominal one-minute winding change = winding[j+120]-winding[j], stepping j by 120 only inside each profile. Adjacent windows share one endpoint. Regress on 1, mean((id/100)^2 + (iq/100)^2) and mean(abs(rpm)/1000) during the observed interval. The second model also uses initial coolant-minus-winding and yoke-minus-winding temperature divided by 20. Fit ordinary least squares on 68 profiles, evaluate the remaining complete profile and repeat. Persistence predicts zero change. Pooled RMSE is weighted by held-out window counts. Test-window drive inputs are observed.",
+  "findings": [
+    {
+      "model": "electrical_and_speed",
+      "heldout_profiles": "69",
+      "test_windows": "11060",
+      "pooled_rmse_C": "4.244047180",
+      "pooled_mae_C": "3.014093375",
+      "median_profile_rmse_C": "4.321449600"
+    },
+    {
+      "model": "electrical_speed_and_initial_thermal_gradients",
+      "heldout_profiles": "69",
+      "test_windows": "11060",
+      "pooled_rmse_C": "1.710008405",
+      "pooled_mae_C": "1.329569879",
+      "median_profile_rmse_C": "1.615134146"
+    },
+    {
+      "model": "persistence",
+      "heldout_profiles": "69",
+      "test_windows": "11060",
+      "pooled_rmse_C": "4.947700324",
+      "pooled_mae_C": "2.823000421",
+      "median_profile_rmse_C": "5.023177775"
+    }
+  ],
+  "limitations": [
+    "Profile order in the release determines sample order; no separate time column is provided. “60 seconds” assumes the published 2 Hz cadence. Only intervals with a full endpoint are kept.",
+    "This is a single motor and fixed split protocol. Model comparisons are conditional descriptions; they do not identify thermal derating or causal cooling rates. The file does not include the commanded torque, pre/post limit values, saturation flags or a separately identified torque transducer. The Kaggle card calls torque an achieved quantity; this batch uses the temperatures as independent measured targets."
+  ],
+  "reproduce": "Python >=3.11 with numpy and pandas. OPENBLAS_NUM_THREADS=1 python derive_motor_thermal.py SOURCE_V3_ZIP OUT"
+}

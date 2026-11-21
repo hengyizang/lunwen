@@ -1,0 +1,78 @@
+{
+  "title": "Reaction-wheel pendulum — physical balance experiment, final nominal two-second export",
+  "creator": "gvp-study (upstream repository owner)",
+  "source": "https://github.com/gvp-study/reaction-wheel-pendulum",
+  "landing": "https://github.com/gvp-study/reaction-wheel-pendulum/tree/1a9edbf31a0e786b82d07102e8854f3bd7b73188",
+  "fixed_revision": "1a9edbf31a0e786b82d07102e8854f3bd7b73188",
+  "checked_utc_date": "2026-11-21",
+  "history": {
+    "prior_branch_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "previous_evidence_paths": 861,
+    "archived_members": 301,
+    "early_baseline_scanned": true,
+    "key_normalization": "Unicode NFKD, casefold, alphanumeric characters; DOI, repository, distinctive title and older release aliases as applicable.",
+    "keys": [
+      "gvp-study/reaction-wheel-pendulum",
+      "1a9edbf31a0e786b82d07102e8854f3bd7b73188",
+      "a9cc690baa54d06579a0758f04991ea89bea9ee8"
+    ],
+    "matches": []
+  },
+  "rights": "Public GitHub repository. GitHub repository metadata reports licence=null and the fixed tree has no LICENSE/COPYING file. Reuse permission for upstream data/code/media is undetermined. Only new aggregate counts, source links and a separately written analysis routine are included; no upstream data, firmware, graphics or photographs are redistributed.",
+  "search": [
+    "Followed the gvp-study/reaction-wheel-pendulum candidate from the R2 control-bench search. Checked fixed repository tree, README, data history and acquisition code rather than inferring channels from filenames.",
+    "https://api.github.com/repos/gvp-study/reaction-wheel-pendulum/commits?path=data&per_page=100 showed one commit affecting the data/ path, a9cc690baa54d06579a0758f04991ea89bea9ee8."
+  ],
+  "hardware": "Single physical bar, reaction wheel, encoder and AS5048A PWM angle sensor, STM32G431 FOC controller. README section 9 links the 126 s physical balance with a deliberate final push, firmware v3.6, gain 0.85, nominal 12 V supply limited at 3 A, command limit +/−6 V. The accompanying fit_closed_loop.py identifies balance.csv as the final nominal 2 s of that run.",
+  "sources": [
+    {
+      "path": "data/balance.csv",
+      "url": "https://raw.githubusercontent.com/gvp-study/reaction-wheel-pendulum/1a9edbf31a0e786b82d07102e8854f3bd7b73188/data/balance.csv",
+      "release_git_blob": "4f39bd2bc84bae6019b2e6df0eac3dc612b1e66b",
+      "verified_bytes": 33080,
+      "sha256": "250b0298fb6369082618535fab7c9f952a3874310e77c70ec58ac2f5e8b6437b"
+    },
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/gvp-study/reaction-wheel-pendulum/1a9edbf31a0e786b82d07102e8854f3bd7b73188/README.md",
+      "release_git_blob": "d24833ee33af66f1c6a1fd7402d04c22efea4962",
+      "verified_bytes": 30480,
+      "sha256": "e42c8bceca8f53690216e268cf59c73bf5a896d08ebdc173c45fe7387883bc20"
+    },
+    {
+      "path": "code/esc1_balance/esc1_balance.ino",
+      "url": "https://raw.githubusercontent.com/gvp-study/reaction-wheel-pendulum/1a9edbf31a0e786b82d07102e8854f3bd7b73188/code/esc1_balance/esc1_balance.ino",
+      "release_git_blob": "3a3ff860ab76b4326abe28edf7885446b1bfdc4a",
+      "verified_bytes": 19745,
+      "sha256": "9d4f6485fe4cf4be679d09925ccb31d83b7d76175929114d617896293548fd4d"
+    },
+    {
+      "path": "code/esc1_balance/fit_closed_loop.py",
+      "url": "https://raw.githubusercontent.com/gvp-study/reaction-wheel-pendulum/1a9edbf31a0e786b82d07102e8854f3bd7b73188/code/esc1_balance/fit_closed_loop.py",
+      "release_git_blob": "812df33ce2f2fc794ef832ca36c5b0e6a64d178f",
+      "verified_bytes": 3482,
+      "sha256": "1edef1a197b9076805ca7d8d8d9163ab88c030e2c73eaa66bca5ffb22f4de5b2"
+    }
+  ],
+  "time_and_commands": "Firmware esc1_balance.ino lines 281–295 computes a state feedback voltage request, clips to ±U_MAX, then limits the change to ±0.3 V per control update. Only the post-limiter state u is stored, rounded to millivolts. Telemetry records every other active update in a 1,000-row ring. Lines 214–224 print t_ms = 2 × export slot and loop() can resynchronize after missing ticks. Adjacent 2 ms labels denote nominal spacing, not measured wall-clock interval. motor.move(u) is sent through the separate FOC loop. Bus voltage is sampled separately.",
+  "cleaning": "Verify end-of-export marker, exact nominal slot sequence, row count and field types. Aggregate disjoint same-polarity endpoint intervals in recorded millivolts, adjacent finite differences in these integer units, and bus/encoder extrema. An interval including the last row is censored at export end.",
+  "findings": [
+    {
+      "sha256": "250b0298fb6369082618535fab7c9f952a3874310e77c70ec58ac2f5e8b6437b",
+      "rows": "1000",
+      "min_command_mV": "-119",
+      "max_command_mV": "6000",
+      "command_plus_6V_rows": "501",
+      "command_minus_6V_rows": "0",
+      "endpoint_segments": "4",
+      "adjacent_steps": "999",
+      "positive_600mV_changes": "190",
+      "negative_600mV_changes": "195",
+      "abs_changes_above_600mV": "0",
+      "bus_min_V": "12.01",
+      "bus_max_V": "12.25"
+    }
+  ],
+  "interpretation": "The observed +6.000 V rows reach the recorded command endpoint at 1 mV output precision. No row reaches −6 V. A change of exactly 600 mV across two saved slots is consistent with the slew bound on two consecutive 1 kHz updates within rounding. Neither the pre-clipping request nor the intervening 1 ms sample is logged. The bus voltage is not the applied motor phase voltage and the 3 A supply setting is not measured current. No anti-windup comparator or independent standard of torque is supplied.",
+  "reproduce": "Python 3: download data/balance.csv at the fixed URL in sources, then python derive_reaction_wheel.py balance.csv OUT."
+}

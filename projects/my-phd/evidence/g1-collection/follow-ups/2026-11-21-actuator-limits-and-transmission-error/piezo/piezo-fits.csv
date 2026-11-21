@@ -1,0 +1,5 @@
+member,model,training_cycles,heldout_cycles,training_rows,test_rows,matrix_rank,chronological_test_rmse_um
+data/h50us.csv,cubic_voltage,1499,1500,99933,100000,4,7.9756182
+data/h50us.csv,cubic_voltage_separate_directions,1499,1500,99933,100000,8,0.8493987
+data/hysteresis_v_150_1hz.csv,cubic_voltage,2,2,10000,9999,4,1.8746202
+data/hysteresis_v_150_1hz.csv,cubic_voltage_separate_directions,2,2,10000,9999,8,0.1018863

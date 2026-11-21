@@ -1,0 +1,91 @@
+{
+  "title": "Identifying the Physics Behind an Electric Motor",
+  "provider": "Department of Power Electronics and Electrical Drives (LEA), Paderborn University; released via Kaggle.",
+  "landing": "https://www.kaggle.com/datasets/hankelea/system-identification-of-an-electric-motor/versions/4",
+  "repository": "hankelea/system-identification-of-an-electric-motor",
+  "kaggle_dataset_id": 476057,
+  "version": 4,
+  "version_date": "2020-03-18T01:36:09.04Z",
+  "retrieved_utc": "2026-11-21",
+  "public_record": "https://api.kaggle.com/v1/datasets/view/hankelea/system-identification-of-an-electric-motor",
+  "record_hash": {
+    "sha256": "bbfb601ef5ef393c442957ae21b35cc0fd9001e0c3bf9c8910e33046032580a0",
+    "representation": "parsed Kaggle JSON serialized by json.dumps with default Python settings"
+  },
+  "history": {
+    "commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "compared_texts_plus_early_inventory": 664,
+    "keys": [
+      "hankelea/system-identification-of-an-electric-motor",
+      "Identifying the Physics Behind an Electric Motor",
+      "2003.07273",
+      "2003.06268"
+    ],
+    "matches": []
+  },
+  "separation": "The related LEA current transition, stationary torque grid, and thermal drive-cycle releases involve distinct acquisitions and lack a common test identifier. Do not join individual files across releases.",
+  "creator": "Kaggle release by Hanke, with Sören Hanke, Oliver Wallscheid and Joachim Böcker named on Parts I and II of the dataset description.",
+  "rights": "Kaggle displays “Data files © Original Authors”. No express redistribution license for the raw measurements was verified. Only independently computed summary statistics, digests and a reader are shared; source measurements and PDFs remain at source.",
+  "query_log": [
+    "Followed the “Currents and motor speed per switching state” cross-link from Electric Motor Temperature to the distinct Hanke public release; verified v4 by Kaggle API and the fixed individual file.",
+    "Followed the release links to both arXiv full texts. Part I defines elementary vectors and ordering; Part II supplies the operating envelope and deliberate random replacements. Compared version/slug, normalized title and both arXiv IDs with all project evidence text and the early index."
+  ],
+  "release_file": {
+    "url": "https://api.kaggle.com/v1/datasets/download/hankelea/system-identification-of-an-electric-motor/Dataset_Electric_Motor.csv?datasetVersionNumber=4",
+    "local_alias": "switch",
+    "member": "Dataset_Electric_Motor.csv",
+    "archive_bytes": 983662996,
+    "archive_sha256": "d6de6d191dfb92b8d4c005f151e9c46adc0c0ff1d1a9e45719557436a7484fcd",
+    "archive_md5": "f6411c4306e429122c639783ceac9e5c",
+    "member_bytes": 2141666012,
+    "member_crc32": "501b8d88",
+    "member_sha256": "f5c5d3611648dab7b7613906b8c5c567d446a08e2deb58fc1939092b58fe2e53",
+    "gcs_source_generation": "1584496040449505"
+  },
+  "papers": [
+    {
+      "arxiv": "2003.07273",
+      "title": "Data Set Description: Identifying the Physics Behind an Electric Motor – Data-Driven Learning of the Electrical Behavior (Part I)",
+      "url": "https://arxiv.org/pdf/2003.07273",
+      "sha256": "592636fe541136cb843f97dac69855effe11a95e5ca53058461eaa5899a81de0",
+      "locator": "Section III and Table II. Each row gives both axes of current at k and k+1, applied elementary vector and previous vector. The authors explicitly state that successive file rows do not constitute a time series."
+    },
+    {
+      "arxiv": "2003.06268",
+      "title": "Data Set Description: Identifying the Physics Behind an Electric Motor – Data-Driven Learning of the Electrical Behavior (Part II)",
+      "url": "https://arxiv.org/pdf/2003.06268",
+      "sha256": "79e7b34faf96a050804bdcce7de9d03393ff0dc884da2aad679d7303c8a1985e",
+      "locator": "Tables III–IV and Fig. 4. 57 kW traction IPMSM bench; fixed 1000 rpm, 300 V, approximately 55 °C, controller period 50 μs. Maximum allowed dq current vector length 240 A. To cover the current plane, 478 different setpoints and deliberate random substitutions of some MPC-selected elementary vectors were used."
+    }
+  ],
+  "measurement": "For each released row, evaluate hypot(id_k,iq_k) and hypot(id_k1,iq_k1) against the paper’s 240 A dq operating range. Classify strict exceeds. Group by previous and applied switch-vector index. A row crossing a current threshold reports a physical current measurement after the applied action; it does not establish clipping of the requested command.",
+  "source_rows": 40963202,
+  "transition_groups": 49,
+  "min_group_rows": 558381,
+  "max_group_rows": 2210498,
+  "comparison_counts": {
+    "start_over_240_a": 548814,
+    "end_over_240_a": 1801663,
+    "inside_to_over": 1683018,
+    "over_to_inside": 430169,
+    "over_to_over": 118645,
+    "start_exact_240_a": 0,
+    "end_exact_240_a": 0,
+    "unchanged_currents": 0
+  },
+  "max_dq_at_start_a": 252.343747966,
+  "max_dq_at_end_a": 338.440039591,
+  "row_order": {
+    "source_rows": "40963202",
+    "adjacent_stored_rows": "40963201",
+    "previous_outcome_equals_next_start_both_currents": "0",
+    "previous_applied_equals_next_previous_vector": "6046230",
+    "both_currents_and_vector_match": "0"
+  },
+  "limits": [
+    "No pre-limiter request, output limiter flag, thermal derating flag, phase-by-phase actuator fault flag, or per-row indicator of which actions were randomly substituted. The data do not identify the dynamics of an untouched closed-loop policy or the duration of an over-current episode.",
+    "The article’s 240 A is a specified operating range, not the current measurement chain’s ADC rail. Report the measured dq norm before and after each vector. Adjacent file rows cannot be used to reconstruct dwell times: not a single adjacent pair has both preceding end currents exactly equal to the following start currents. Exact equality was checked on both published numerical coordinates without rounding.",
+    "The 49 transitions cover 7 discrete vector indices, with unequal cell counts. Transition-conditioned statistics reflect both selected operating points and applied input; no randomized-group causal comparison is claimed."
+  ],
+  "reproduce": "Python >=3.11 with numpy and pandas. OPENBLAS_NUM_THREADS=1 python derive_switch_currents.py SOURCE_V4_FILE_ZIP OUT."
+}

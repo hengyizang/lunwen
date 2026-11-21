@@ -1,0 +1,2 @@
+sha256,rows,min_command_mV,max_command_mV,command_plus_6V_rows,command_minus_6V_rows,endpoint_segments,adjacent_steps,positive_600mV_changes,negative_600mV_changes,abs_changes_above_600mV,bus_min_V,bus_max_V
+250b0298fb6369082618535fab7c9f952a3874310e77c70ec58ac2f5e8b6437b,1000,-119,6000,501,0,4,999,190,195,0,12.01,12.25

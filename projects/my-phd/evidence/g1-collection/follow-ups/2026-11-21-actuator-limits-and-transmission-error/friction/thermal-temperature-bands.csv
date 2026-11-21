@@ -1,0 +1,6 @@
+source,nominal_speed_magnitude_rad_s,direction,lower_band_rows,upper_band_rows,lower_band_median_velocity_rad_s,upper_band_median_velocity_rad_s,lower_band_median_abs_tau_f_Nm,upper_band_median_abs_tau_f_Nm,upper_minus_lower_median_abs_tau_f_Nm
+identification/theta_dot=0p9425.csv,0.94250000,-1,33845,112623,-0.94196467,-0.94247780,4.51051231,2.91423034,-1.59628197
+identification/theta_dot=1p0996.csv,1.09960000,1,24584,80974,1.09937941,1.09924327,5.01824198,3.03761290,-1.98062908
+identification/theta_dot=1p2566.csv,1.25660000,1,15477,57553,1.25718160,1.25633337,5.52795373,3.15708270,-2.37087103
+identification/theta_dot=1p4137.csv,1.41370000,1,15565,52598,1.41381094,1.41355961,6.03931190,3.28389646,-2.75541543
+identification/theta_dot=1p5708.csv,1.57080000,1,12769,41319,1.57064972,1.57142465,6.55347865,3.40769719,-3.14578146

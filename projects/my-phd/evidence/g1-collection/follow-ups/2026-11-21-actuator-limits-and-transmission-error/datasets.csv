@@ -1,0 +1,18 @@
+source,release,file_evidence,rights,history_status,source_record
+双水箱闭环泵控,https://doi.org/10.5281/zenodo.23529910,控制算法与发布增益两种途径重建请求，日志中的占空比输出及 8 位映射,CC BY 4.0,new,limits/two-tank-source.json
+飞轮倒立摆,https://github.com/gvp-study/reaction-wheel-pendulum/tree/1a9edbf31a0e786b82d07102e8854f3bd7b73188,软件的限后电压命令、名义导出索引和实物状态,公开访问，原日志再分发权未明确,new,limits/reaction-wheel-source.json
+Franka / FAIRINO 关节摩擦,https://github.com/longshike/NNFM/tree/a343d3a3537addd116d6283dae55f687fbf7748f,实物关节采样和两次闭环轨迹，包含填充轴、时间交集和符号核验,公开访问，原日志再分发权未明确,new,friction/nnfm-source.json
+摆线减速器润滑温度与摩擦,https://doi.org/10.18419/DARUS-5015,有方向的速度、摩擦力矩与独立温度通道，逐行核查嵌套试验,CC BY 4.0,new,friction/thermal-source.json
+摆线减速器传动误差,https://doi.org/10.18419/DARUS-4454,224 份辨识、19 份验证，规定载荷、速度和温度下的角度域误差,CC BY 4.0,new,gears/cycloidal-source.json
+Stäubli TX2-40 关节补偿,https://doi.org/10.18419/DARUS-5760,128 份记录，编码器与激光跟踪仪派生误差，按轴和速度配对,CC BY 4.0,new,gears/staubli-source.json
+UART 舵机回差,https://doi.org/10.5281/zenodo.19261714,5 个物理拉力台架遥测文件，比对论文表 4，主机缓存给定和舵机编码器,Zenodo CC BY 4.0，配套代码 GPLv3,new,servo/uart-source.json
+压电微操作器,https://doi.org/10.1016/j.dib.2020.105175,期刊实物补充包，驱动电压与光学位移；完整周期与时间顺序留出,CC BY 4.0,new,piezo/piezo-source.json
+双踝步行辅助外骨骼,https://doi.org/10.17605/OSF.IO/EKRQJ,全量实物试验，期望力矩与设备报告的施加力矩逐侧核验,CC BY 4.0,new,leg/ankle-source.json
+AI-EXO 双髋外骨骼,https://github.com/Embodied-HRI-Lab/AI-EXO/tree/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2,原始模型、主机给定、驱动电流换算反馈、主机采样与设备序号,公开访问，原日志再分发权未明确,new,leg/hip-source.json
+Paderborn 电机热台架,https://www.kaggle.com/datasets/wkirgsn/electric-motor-temperature/versions/3,整条工况留出，实测驱动状态、冷却液和绕组温度,CC BY-SA 4.0，派生温度表同许可,new,dyno/motor-thermal-source.json
+Paderborn 两转速轴扭矩标定,https://www.kaggle.com/datasets/graxlmaxl/identifying-the-physics-behind-an-electric-motor/versions/3,三相波形与每个工况一个独立轴扭矩均值,原作者保留数据权利，仅发布独立统计,new,dyno/torque-grid-source.json
+Paderborn 逆变器开关与电流步响应,https://www.kaggle.com/datasets/hankelea/system-identification-of-an-electric-motor/versions/4,单个控制周期前后状态，开关矢量与实测电流边界比较,原作者保留数据权利，仅发布独立统计,new,dyno/switch-current-source.json
+液压林业起重机 PATU655Stress,https://doi.org/10.17632/rn5j42rpyr.2,阀电压、两腔压力、应变与液压缸行程，复核相邻重复记录,CC BY 4.0,new,fluid/patu-crane-source.json
+软气动执行器迟滞,https://doi.org/10.5281/zenodo.15584329,归档输入输出、多周期加载反向和时间基准核验,CC BY 4.0,new,fluid/pneumatic-loops-source.json
+三指气动抓手,https://doi.org/10.5281/zenodo.23005291,从补充表核查旋钮换算压力、弯曲量及重复试次前缀,CC BY 4.0,upgrade,fluid/gripper-pressure-source.json
+软锚气动闭环与阀门阈值,https://doi.org/10.5281/zenodo.21263963,20 次实物阀门试验与 12 场整机压强记录，包含机械失败,CC BY 4.0,new,anchor/anchor-valve-source.json

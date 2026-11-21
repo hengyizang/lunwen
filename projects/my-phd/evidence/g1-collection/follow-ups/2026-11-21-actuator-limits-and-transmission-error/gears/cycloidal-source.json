@@ -1,0 +1,49 @@
+{
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "be1803e0b7f7385be69333dfce29009413791e64",
+  "title": "Replication Data for: \"Modeling Load-, Velocity-, and Temperature-Dependent Transmission Errors of Cycloidal Drives for Industrial Robots Using Fourier Series\"",
+  "authors": [
+    "Bauer, Christian Johannes Eugen"
+  ],
+  "doi": "10.18419/DARUS-4454",
+  "landing": "https://doi.org/10.18419/DARUS-4454",
+  "version": "1.1",
+  "published_utc": "2025-05-08T12:05:53Z",
+  "registry": {
+    "url": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.1?persistentId=doi:10.18419/DARUS-4454",
+    "bytes": 235431,
+    "sha256": "85f6fd74f8d10cb75c6db48fd81091ac5d15d754faf0878fd9e46c1d8419f2d6"
+  },
+  "source_code_and_readers": {
+    "plot_figures.m": {
+      "file_id": 365895,
+      "bytes": 9216,
+      "sha256": "e5101c9e6f8977867e6e8e72f0025266a139858201e63f1c1e86848a338e671a"
+    },
+    "read_data.m": {
+      "file_id": 366140,
+      "bytes": 4578,
+      "sha256": "1e2585e47143b6f42919f0bf7e187c30442cca03857a2a76e6a6fc7160d4d858"
+    }
+  },
+  "article": {
+    "url": "https://arxiv.org/pdf/2609.29112v1",
+    "version": "2609.29112v1",
+    "bytes": 3666642,
+    "sha256": "c99cd658432f5ad01a0f00ff957dea77d5e61a3f1d6e1db3a94c4b3b83f56e32"
+  },
+  "rights": "DaRUS dataset CC BY 4.0, credit the listed depositors. Publisher files remain at DaRUS; original summaries and readers only.",
+  "search": [
+    "Stuttgart lubricant friction and gearbox identification: trace same-group referenced data and citations from DARUS-5015 → DARUS-4454",
+    "Followed depositor version metadata, associated manuscript, figures scripts and every original tabular file; verified each original against the Dataverse MD5 rather than hashing an alternate TSV export."
+  ],
+  "inputs": {
+    "complete_registry_files": 245,
+    "download_template": "https://darus.uni-stuttgart.de/api/access/datafile/{file_id}?format=original",
+    "all_file_bytes_checked": "All original MD5 checked. CSV file IDs and original SHA-256 in per-run table, use the fixed version registry for original filenames and MD5."
+  },
+  "reproduce": "Save version registry as 4454.json in RAW. Run python fetch_gear_files.py RAW/4454.json RAW; python derive_gears.py RAW OUT --only 4454. Python 3 + NumPy.",
+  "related_doi": "10.1109/ICIT63637.2025.10965256",
+  "evidence": "Nabtesco cycloidal-drive test bench. Angle at both sides from encoders; load-side torque sensor and lubricant temperature instrumentation described in the article. Raw CSV fields are the published input-side angular coordinate (in the output-angle scale) and transmission error in radians. Load, speed and temperature are per-file operating conditions, not independently sampled torque or temperature waveforms. 224 identification and 19 validation files.",
+  "analysis": "Wrap the provided angle at 2π and assign each sample to one of 720 equal angular bins. Compute mean error per bin before comparing conditions. For each validation record, choose the same-direction training setting nearest in Euclidean distance after scaling load, signed speed and temperature by their training-set ranges. A second baseline averages all same-direction training curves. Report original RMSE as well as independently centered shapes, the latter removing a constant offset from both. These checks describe transfer across settings and do not reproduce the authors’ Fourier model, filtering, or a feedback compensation trial."
+}

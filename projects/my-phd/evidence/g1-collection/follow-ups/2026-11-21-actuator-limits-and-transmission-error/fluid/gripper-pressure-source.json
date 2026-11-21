@@ -1,0 +1,76 @@
+{
+  "title": "Supplementary Materials - Data-Driven Contact-State Estimation of an Endoskeleton-Reinforced Soft Pneumatic Gripper Using Sigmoidal Pressure–Bending Response Analysis",
+  "creators": [
+    {
+      "name": "Chimuka, Batanai Alistair",
+      "affiliation": "Zhejiang Sci-Tech University",
+      "orcid": "0009-0003-0110-600X"
+    }
+  ],
+  "doi": "10.5281/zenodo.23005291",
+  "concept_doi": "10.5281/zenodo.15587379",
+  "version": "4",
+  "landing": "https://doi.org/10.5281/zenodo.23005291",
+  "accessed_utc_date": "2026-11-21",
+  "record_metadata_url": "https://zenodo.org/api/records/23005291",
+  "record_metadata_sha256": "94bd5c56daec90009eadbfc55e782ee782905a5a48d2c51b3adc71f8b3547541",
+  "rights": "CC BY 4.0, per fixed archive metadata. Credit the listed depositors. Only newly computed tables and source identifiers, hashes and references are included.",
+  "verified_sources": [
+    {
+      "name": "Supplementary Materials Part 1_Materials_and_Methods.pdf",
+      "url": "https://zenodo.org/api/records/23005291/files/Supplementary%20Materials%20Part%201_Materials_and_Methods.pdf/content",
+      "bytes": 1591183,
+      "published_checksum": "md5:bf3fd472cd5f0d4a6a0b607756f1c3d5",
+      "sha256": "2b375571336b8056229778d6220362012811ec9509a7f22b0093cf5da50007ca"
+    },
+    {
+      "name": "Data S2 - Gripping data.zip",
+      "url": "https://zenodo.org/api/records/23005291/files/Data%20S2%20-%20Gripping%20data.zip/content",
+      "bytes": 15842406,
+      "published_checksum": "md5:97a7a25c1a15f04f3a989144f9bc914a",
+      "sha256": "d859a610526034d9571dcc11c83c63fe57da049defe004119a663b5e2ba19693"
+    },
+    {
+      "name": "Data S1 - Blocking data.zip",
+      "url": "https://zenodo.org/api/records/23005291/files/Data%20S1%20-%20Blocking%20data.zip/content",
+      "bytes": 5611115,
+      "published_checksum": "md5:acee25e56a6f400808eb94a1c641d837",
+      "sha256": "37e7099706f19d6c085ff27e9840c3080c73104b8d3d09a9ead7d0f33826c200"
+    },
+    {
+      "name": "Supplementary Materials Part 2_Code.pdf",
+      "url": "https://zenodo.org/api/records/23005291/files/Supplementary%20Materials%20Part%202_Code.pdf/content",
+      "bytes": 431862,
+      "published_checksum": "md5:1419f1f211b4879cbd639b0ba38efb53",
+      "sha256": "70eb748a807b4b661b867d63f2422b0f5c222dd5e268b7f7d7b71f31ffd7ac82"
+    }
+  ],
+  "history": {
+    "parent_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "texts_and_early_catalogue": 664,
+    "identifiers": [
+      "10.5281/zenodo.23005291",
+      "10.5281/zenodo.15587379",
+      "Supplementary Materials - Data-Driven Contact-State Estimation of an Endoskeleton-Reinforced Soft Pneumatic Gripper Using Sigmoidal Pressure–Bending Response Analysis"
+    ],
+    "matching_paths": [
+      "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv"
+    ]
+  },
+  "queries": [
+    {
+      "api": "https://api.datacite.org/dois",
+      "parameters": {
+        "query": "titles.title:(\"soft pneumatic\") AND types.resourceTypeGeneral:Dataset",
+        "page[size]": 22
+      },
+      "response_sha256": "01fc081f30a4a9608af43c308e411e68cb93c83122442e6cc60016a95cf181fa",
+      "route": "Matched the existing concept DOI, selected fixed record 23005291 (v4), read two methods PDFs and both data archives."
+    }
+  ],
+  "scope": "Physically acquired pressure-regulator, potentiometer and one/three flex-sensor experiments. S1 contains six sensor series, S2 has 17 grasp series and 17 derived fitted tables. The measurement CSVs include postprocessed channels; PNGs, FE plots and the video are not time-series inputs to this audit. The supplementary video was not checked.",
+  "methods": "Part 1 §2.3 Tables S5/S6 and §3.1; Part 2 programs S1, S2, S4 and S5. S1 maps its potentiometer readout to pressure; Position1 explicitly labels that channel as predicted. The three-finger logger S5 computes System Pressure from potentiometer voltage using 0.5263*V^2 + 18.5199*V + 1.9964 and prints three decimals. The separately described pressure-display calibration is not an independent continuous pressure trace.",
+  "cleaning": "Drop only blank/noncomplete rows and report both counts. Timestamps are parsed at their archived minute resolution; repeated stamps may involve several observations. Near-identical series share exactly equal leading rows across all exported columns, including timestamps: SmallerCake and SmallerCakeCrush share 34 leading complete rows, followed by a differing row. This is a shared prefix, not evidence that the entire recordings are identical or that the extra rows are independent trials.",
+  "results": "All 975 complete S2 grasp measurement rows across 17 records agree to three decimals with the published polynomial. S1 has 350 complete rows in 6 records. There are 51 parameter-fit rows among the separate S2 summaries. No physical saturation flag or measured actuator-side pressure wave is present in these CSVs. Event/contact labels inferred from bending are estimates, with no independent measured contact force in this release.",
+  "reproduce": "Python 3: put both original ZIPs in DATA. Run python derive_gripper.py DATA OUT."
+}

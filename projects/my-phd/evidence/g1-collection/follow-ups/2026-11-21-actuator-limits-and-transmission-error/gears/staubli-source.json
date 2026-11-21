@@ -1,0 +1,49 @@
+{
+  "accessed_utc": "2026-11-21",
+  "historical_parent": "be1803e0b7f7385be69333dfce29009413791e64",
+  "title": "Replication Data for: \"Transmission Error Compensation for Industrial Robots Using Fourier Series\"",
+  "authors": [
+    "Bauer, Christian Johannes Eugen",
+    "Nowinski, Simon"
+  ],
+  "doi": "10.18419/DARUS-5760",
+  "landing": "https://doi.org/10.18419/DARUS-5760",
+  "version": "1.0",
+  "published_utc": "2026-05-08T15:15:34Z",
+  "registry": {
+    "url": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.18419/DARUS-5760",
+    "bytes": 122491,
+    "sha256": "fd0287483d8eeaa757919d909ec65c5a9013cce17a69b62899f3f5c503680a40"
+  },
+  "source_code_and_readers": {
+    "plot_figures.m": {
+      "file_id": 488539,
+      "bytes": 3411,
+      "sha256": "30ed544ea54942e4cb3e5a095191c55cdcd61ddb41f4f2ed3de0bd11fb73fe15"
+    },
+    "read_data.m": {
+      "file_id": 488479,
+      "bytes": 4451,
+      "sha256": "2fa2b45c76b5af8f74a05eb1666c26f1cda499d97f46bca1b3a9e9e5723340a9"
+    }
+  },
+  "article": {
+    "url": "https://arxiv.org/pdf/2610.23882v1",
+    "version": "2610.23882v1",
+    "bytes": 911856,
+    "sha256": "34226c76b386c9a6e690cbe5190f6dee1649afce8ffd111fe7de5f2818f6976f"
+  },
+  "rights": "DaRUS dataset CC BY 4.0, credit the listed depositors. Publisher files remain at DaRUS; original summaries and readers only.",
+  "search": [
+    "Stuttgart lubricant friction and gearbox identification: trace same-group referenced data and citations from DARUS-5015 → DARUS-5760",
+    "Followed depositor version metadata, associated manuscript, figures scripts and every original tabular file; verified each original against the Dataverse MD5 rather than hashing an alternate TSV export."
+  ],
+  "inputs": {
+    "complete_registry_files": 130,
+    "download_template": "https://darus.uni-stuttgart.de/api/access/datafile/{file_id}?format=original",
+    "all_file_bytes_checked": "All original MD5 checked. CSV file IDs and original SHA-256 in per-run table, use the fixed version registry for original filenames and MD5."
+  },
+  "reproduce": "Save version registry as 5760.json in RAW. Run python fetch_gear_files.py RAW/5760.json RAW; python derive_gears.py RAW OUT --only 5760. Python 3 + NumPy.",
+  "evidence": "Stäubli TX2-40 on physical robot. A laser tracker measured the circular path; plane/circle fitting produced joint angle. TwinCAT motor angles were scaled by reduction; estimated time shift using velocity edges. The CSV holds input-side angle, target and derived transmission error in radians. Neither raw tracker points nor an electrical limit flag appears in these files.",
+  "analysis": "Compare the 52 pairs with the same axis and commanded speed across identification (baseline) and hardware compensation validation. Compute mean absolute transmission error separately in each recorded run using the author plot window on q_set, −90° to +80° for axis 2 and −65° to +115° for axis 3. Test exact identity of entire setpoint vectors, avoiding unsupported per-row pairing. Axis 1 has identification recordings only. The paper reports its own overall MAE metric; here percent changes are per-speed and within the named interval. They refer to joint angle, not direct tip error."
+}

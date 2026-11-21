@@ -1,0 +1,173 @@
+{
+  "title": "Data and code for: Embodied, electronics-free closed-loop control in a soft robotic anchor",
+  "authors": [
+    {
+      "name": "WU, YANGWENJIN",
+      "affiliation": "University of Strathclyde",
+      "orcid": "0000-0002-9009-1705"
+    },
+    {
+      "name": "Yao, Wei",
+      "affiliation": "University of Salford",
+      "orcid": "0000-0001-8520-4755"
+    }
+  ],
+  "doi": "10.5281/zenodo.21263963",
+  "concept_doi": "10.5281/zenodo.21263962",
+  "version": "Fixed Zenodo record 21263963; no depositor version string.",
+  "landing": "https://doi.org/10.5281/zenodo.21263963",
+  "accessed_utc_date": "2026-11-21",
+  "metadata_url": "https://zenodo.org/api/records/21263963",
+  "metadata_sha256": "523126f2d55eb28760f700d5bd4d9e68599ec71c8e122d96fb7445bcf28c4468",
+  "rights": "Zenodo record carries CC BY 4.0; attribute Yangwenjin Wu and Wei Yao. The internal README separately suggests CC BY for data and MIT for code. This package includes independent numerical summaries and our own reader.",
+  "archive": {
+    "name": "soft-anchor-data-and-code.zip",
+    "url": "https://zenodo.org/api/records/21263963/files/soft-anchor-data-and-code.zip/content",
+    "bytes": 897541,
+    "verified_publisher_md5": "md5:aae6aab316352013918bc6d15fc407aa",
+    "sha256": "f3610e9122633fbcf01e1331e65e3d422f07a1fc09ca1415cb472da3c6cabd36",
+    "members": [
+      {
+        "member": "zenodo-deposit/README.md",
+        "bytes": 5255,
+        "sha256": "30411eeff16f6cc13e44314a23058f3f29d0377f23c9100728bbddc2d187cf98"
+      },
+      {
+        "member": "zenodo-deposit/code/analyze_trials.py",
+        "bytes": 24138,
+        "sha256": "fd78cb6650285566ff208a3dea480f77c5c409de3444b48a20ed321808e06ca0"
+      },
+      {
+        "member": "zenodo-deposit/code/plot_chapter6_results.py",
+        "bytes": 11725,
+        "sha256": "56e4265e48d99fad54b16be1c94af2a90bbdd286e2f3c267c5305570e735633f"
+      },
+      {
+        "member": "zenodo-deposit/code/process_chapter5_3_results.py",
+        "bytes": 10318,
+        "sha256": "4c9ad69c1ff5282f65e42f04fabf9037d891069be2436236bce0ac3baba7b8cc"
+      },
+      {
+        "member": "zenodo-deposit/data/actuator/chapter_6_spring_comparison.csv",
+        "bytes": 538,
+        "sha256": "5ce8394ba9d8222f98f15cd40710f0c816d25eee80268661e9e0f2388bd72c75"
+      },
+      {
+        "member": "zenodo-deposit/data/actuator/chapter_6_water_volume.csv",
+        "bytes": 860,
+        "sha256": "04026428aa26b56154f5fb79ff63e004a3c7d337a8a52d42ecbecfe4a68bf117"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P1.csv",
+        "bytes": 413939,
+        "sha256": "e8f9183ce56853c4d7b6d099b649de06abf3043192cca3257b9fd49b5f12396a"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P2.csv",
+        "bytes": 430212,
+        "sha256": "c6a8f3fd9db89096186c5063fb5450f0cef8b1d5c714747f16e98fa841266175"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P3.csv",
+        "bytes": 429553,
+        "sha256": "9c23c86324321aa8b551016ffcfb04ed6232af98c2f9d3a5ea5462fd8281751d"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P4.csv",
+        "bytes": 408182,
+        "sha256": "0f8e94194275d5de905a3a9fea7ebb9c36bb0e49be95364efc899a2f750acebd"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P5.csv",
+        "bytes": 1682285,
+        "sha256": "5bb621ef456add3e9624a256b131daf6a92407868c158365845c227ce3063cfb"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/porcine/P6.csv",
+        "bytes": 479850,
+        "sha256": "7da923bf2f7ae7c33515b74f8059e1fe32e2b6ce107ac20f611c2bd004b81716"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S1.csv",
+        "bytes": 442538,
+        "sha256": "e33852294d3995bdf4d251ee36cbd5f1d5984a945bd07edbbf241cec58e97416"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S2.csv",
+        "bytes": 567615,
+        "sha256": "2ffb6bf774a7f83c165f0cbe33beb9cb03d2a0d28e845f9b14426b4d3e1c6551"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S3.csv",
+        "bytes": 632829,
+        "sha256": "1943d79b5c66922b6fe9316510c92de6770c777a95f43069c075b796a40f1662"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S4.csv",
+        "bytes": 481726,
+        "sha256": "6d086666f7f214219faefab4bd1027bcef6b8e870c5cd857b0e791b092e23bc3"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S5.csv",
+        "bytes": 586055,
+        "sha256": "32e90a29bcd2f6932633a1940398bb611558741308048c17f0ce0f1f92d23385"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/silicone/S6.csv",
+        "bytes": 675052,
+        "sha256": "82a594d0e9274065e5c9f4ce72d77d2735601b7fd496c9ce0e257099ec0f172f"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/splice_validity_n11.csv",
+        "bytes": 296,
+        "sha256": "f2c25c512b224a64b3c840d4780c63a0fafd79e85be5f830490369ee3425d8a4"
+      },
+      {
+        "member": "zenodo-deposit/data/integration/summary_n11.csv",
+        "bytes": 1327,
+        "sha256": "8163d92a55ae6884f0ef667b4c331c85bfb2a5341fbde0ce2c9b31188e2a2bfa"
+      },
+      {
+        "member": "zenodo-deposit/data/valve/chapter_5_3_hysteresis_raw_test1.csv",
+        "bytes": 547,
+        "sha256": "eeac0a2674db8e96463bb03cdff0e8087f4ce69d486fe7f029732f8a0f4d0ae0"
+      },
+      {
+        "member": "zenodo-deposit/data/valve/chapter_5_3_hysteresis_stats_filled.csv",
+        "bytes": 399,
+        "sha256": "d724ca4598acba53c22762fdde4e0399eab81c0d6e0b3d7e99aad679d0bf7b7e"
+      }
+    ]
+  },
+  "history": {
+    "parent_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "texts_and_early_catalogue": 664,
+    "identifiers": [
+      "10.5281/zenodo.21263963",
+      "10.5281/zenodo.21263962",
+      "Embodied, electronics-free closed-loop control in a soft robotic anchor"
+    ],
+    "matching_paths": []
+  },
+  "queries": [
+    {
+      "api": "https://api.datacite.org/dois",
+      "parameters": {
+        "query": "(\"pneumatic\" \"closed-loop\" \"control\") AND types.resourceTypeGeneral:Dataset",
+        "page[size]": 24
+      },
+      "response_sha256": "3121f946ad8ae0f18cb2c6b773fadb2b4de317a74456eff364b92b2e3ea3cd9b"
+    },
+    {
+      "api": "https://api.crossref.org/works",
+      "query.bibliographic": "Embodied electronics-free closed-loop control in a soft robotic anchor",
+      "response_sha256": "7240c4a04635be634c0f77b889cf04dceac43be598f446cea9a8bef108c784a6",
+      "result": "Three top results were unrelated. No separate verified publication DOI was attached to this data family."
+    }
+  ],
+  "scope": "Physical vacuum-actuated soft robotic anchor. The valve bench file contains five closing and five opening threshold determinations at each of 15 and 55 kPa water-side pressure on a single specimen; no video frame number is populated. Independent valve-channel recordings are absent in the final assembled-device files: their only columns are PC time and pressure.",
+  "valve": "Using magnitudes of the negative readings, the mean closing-minus-opening thresholds are 3.338 and 3.320 kPa respectively; the smallest margin across arbitrary closing vs opening observations under both conditions is 1.57 kPa. These are measured pressure thresholds for one valve. They are not motor-drive limits or a population bound.",
+  "integration": "12 independent archive-labeled traces, including the P4 trial identified in the README as a mechanical failure and excluded from the publisher’s 11 trial summary. We retain it in file coverage. For each of the other 11, locate all row pairs that match the published trigger and cycle-minimum pressures to 0.01 kPa and the published time separation to 0.05 s (half its printed 0.1-s unit). Require the intervening raw pressure never falls more than 0.005 kPa below the printed end minimum. There is exactly one compatible pair per trial. This independently ties the summaries to archived pressure rows but does not detect the actual valve transition by separate instrumentation. Counterfactual no-device outcomes in the archive are constructed from segments, not physically recorded paired control runs.",
+  "clock": "Nine adjacent pairs share a PC capture timestamp, all in S3 and S6; pressure changes in six of those pairs. Retain source ordering and all samples. The date string is a time on the PC and does not document timezone or a synchronized independent actuator event.",
+  "reproduce": "Python 3: python derive_valve_thresholds.py soft-anchor-data-and-code.zip OUT"
+}

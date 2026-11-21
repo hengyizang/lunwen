@@ -1,0 +1,137 @@
+first,second,rows_first,rows_second,identical_initial_complete_rows
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,90,91,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,90,115,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Bottle.csv,90,75,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Cake.csv,90,63,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,90,44,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,90,66,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,90,70,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,90,52,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,90,37,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,90,35,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,90,60,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,90,49,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,90,32,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/Additional object data/chips.csv,90,35,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,90,32,0
+Data S2 - Gripping data/10-object Evaluation/Banana.csv,Data S2 - Gripping data/Additional object data/tuna.csv,90,29,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,91,115,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Bottle.csv,91,75,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Cake.csv,91,63,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,91,44,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,91,66,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,91,70,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,91,52,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,91,37,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,91,35,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,91,60,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,91,49,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,91,32,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/Additional object data/chips.csv,91,35,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,91,32,0
+Data S2 - Gripping data/10-object Evaluation/BeakerLab.csv,Data S2 - Gripping data/Additional object data/tuna.csv,91,29,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Bottle.csv,115,75,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Cake.csv,115,63,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,115,44,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,115,66,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,115,70,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,115,52,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,115,37,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,115,35,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,115,60,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,115,49,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,115,32,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/Additional object data/chips.csv,115,35,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,115,32,0
+Data S2 - Gripping data/10-object Evaluation/BeerCan.csv,Data S2 - Gripping data/Additional object data/tuna.csv,115,29,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/Cake.csv,75,63,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,75,44,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,75,66,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,75,70,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,75,52,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,75,37,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,75,35,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,75,60,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,75,49,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,75,32,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/Additional object data/chips.csv,75,35,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,75,32,0
+Data S2 - Gripping data/10-object Evaluation/Bottle.csv,Data S2 - Gripping data/Additional object data/tuna.csv,75,29,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,63,44,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,63,66,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,63,70,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,63,52,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,63,37,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,63,35,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,63,60,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,63,49,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,63,32,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/Additional object data/chips.csv,63,35,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,63,32,0
+Data S2 - Gripping data/10-object Evaluation/Cake.csv,Data S2 - Gripping data/Additional object data/tuna.csv,63,29,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/Earphone.csv,44,66,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,44,70,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,44,52,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,44,37,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,44,35,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,44,60,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,44,49,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,44,32,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/Additional object data/chips.csv,44,35,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,44,32,0
+Data S2 - Gripping data/10-object Evaluation/CakeCrusher.csv,Data S2 - Gripping data/Additional object data/tuna.csv,44,29,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/Egg.csv,66,70,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,66,52,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,66,37,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,66,35,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,66,60,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,66,49,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,66,32,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/Additional object data/chips.csv,66,35,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,66,32,0
+Data S2 - Gripping data/10-object Evaluation/Earphone.csv,Data S2 - Gripping data/Additional object data/tuna.csv,66,29,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/10-object Evaluation/Orange.csv,70,52,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,70,37,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,70,35,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,70,60,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,70,49,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,70,32,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/Additional object data/chips.csv,70,35,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,70,32,0
+Data S2 - Gripping data/10-object Evaluation/Egg.csv,Data S2 - Gripping data/Additional object data/tuna.csv,70,29,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/10-object Evaluation/Pear.csv,52,37,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,52,35,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,52,60,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,52,49,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,52,32,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/Additional object data/chips.csv,52,35,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,52,32,0
+Data S2 - Gripping data/10-object Evaluation/Orange.csv,Data S2 - Gripping data/Additional object data/tuna.csv,52,29,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,37,35,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,37,60,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,37,49,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,37,32,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/Additional object data/chips.csv,37,35,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,37,32,0
+Data S2 - Gripping data/10-object Evaluation/Pear.csv,Data S2 - Gripping data/Additional object data/tuna.csv,37,29,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,35,60,34
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,35,49,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,35,32,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/Additional object data/chips.csv,35,35,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,35,32,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCake.csv,Data S2 - Gripping data/Additional object data/tuna.csv,35,29,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,Data S2 - Gripping data/10-object Evaluation/test.csv,60,49,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,60,32,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,Data S2 - Gripping data/Additional object data/chips.csv,60,35,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,60,32,0
+Data S2 - Gripping data/10-object Evaluation/SmallerCakeCrush.csv,Data S2 - Gripping data/Additional object data/tuna.csv,60,29,0
+Data S2 - Gripping data/10-object Evaluation/test.csv,Data S2 - Gripping data/Additional object data/banana_n.csv,49,32,0
+Data S2 - Gripping data/10-object Evaluation/test.csv,Data S2 - Gripping data/Additional object data/chips.csv,49,35,0
+Data S2 - Gripping data/10-object Evaluation/test.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,49,32,0
+Data S2 - Gripping data/10-object Evaluation/test.csv,Data S2 - Gripping data/Additional object data/tuna.csv,49,29,0
+Data S2 - Gripping data/Additional object data/banana_n.csv,Data S2 - Gripping data/Additional object data/chips.csv,32,35,0
+Data S2 - Gripping data/Additional object data/banana_n.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,32,32,0
+Data S2 - Gripping data/Additional object data/banana_n.csv,Data S2 - Gripping data/Additional object data/tuna.csv,32,29,0
+Data S2 - Gripping data/Additional object data/chips.csv,Data S2 - Gripping data/Additional object data/pearbigger3.csv,35,32,0
+Data S2 - Gripping data/Additional object data/chips.csv,Data S2 - Gripping data/Additional object data/tuna.csv,35,29,0
+Data S2 - Gripping data/Additional object data/pearbigger3.csv,Data S2 - Gripping data/Additional object data/tuna.csv,32,29,0

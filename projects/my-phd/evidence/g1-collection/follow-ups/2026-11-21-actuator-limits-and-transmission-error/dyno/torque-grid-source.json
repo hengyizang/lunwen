@@ -1,0 +1,94 @@
+{
+  "title": "Torque Characteristics of a Permanent Magnet Motor",
+  "provider": "Department of Power Electronics and Electrical Drives (LEA), Paderborn University; released via Kaggle.",
+  "landing": "https://www.kaggle.com/datasets/graxlmaxl/identifying-the-physics-behind-an-electric-motor/versions/3",
+  "repository": "graxlmaxl/identifying-the-physics-behind-an-electric-motor",
+  "kaggle_dataset_id": 583842,
+  "version": 3,
+  "version_date": "2020-04-06T10:27:00.567Z",
+  "retrieved_utc": "2026-11-21",
+  "public_record": "https://api.kaggle.com/v1/datasets/view/graxlmaxl/identifying-the-physics-behind-an-electric-motor",
+  "record_hash": {
+    "sha256": "4d84e599b68062ed2836938af30b2654b3f4b35ec0d41452c98bfc852a24759d",
+    "representation": "parsed Kaggle JSON serialized by json.dumps with default Python settings"
+  },
+  "history": {
+    "commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "compared_texts_plus_early_inventory": 664,
+    "keys": [
+      "graxlmaxl/identifying-the-physics-behind-an-electric-motor",
+      "Torque Characteristics of a Permanent Magnet Motor",
+      "10.1109/TII.2021.3060469",
+      "Torque and Inductances Estimation for Finite Model Predictive Control of Highly Utilized Permanent Magnet Synchronous Motors"
+    ],
+    "matches": []
+  },
+  "separation": "The related LEA current transition, stationary torque grid, and thermal drive-cycle releases involve distinct acquisitions and lack a common test identifier. Do not join individual files across releases.",
+  "creator": "Anian Brosch (Kaggle release author); related article by Anian Brosch, Oliver Wallscheid, and Joachim Böcker.",
+  "rights": "Kaggle declares “Data files © Original Authors”. No explicit right to redistribute the source tables was verified. Only independently calculated aggregates, condition-level current summaries, differences of two measurements, model statistics, checksums and an independent reader are shared; no full source torque table or raw waveform is included.",
+  "query_log": [
+    "Followed the public torque-characteristics link on the Electric Motor Temperature release to its distinct Kaggle family. API dataset listing identifies two independently compressed speed time series and a small torque table.",
+    "Followed the release’s detailed dataset description and IEEE 9359525. Compared release slug, article DOI and normalized titles with the project history. DataCite title/author searches did not yield a separate dataset DOI."
+  ],
+  "release_files": [
+    {
+      "url": "https://api.kaggle.com/v1/datasets/download/graxlmaxl/identifying-the-physics-behind-an-electric-motor/Time_series_120rpm.csv?datasetVersionNumber=3",
+      "member": "Time_series_120rpm.csv",
+      "archive_bytes": "851374233",
+      "archive_sha256": "d74980b87ba1885804544bea098cda39eab67b2d53a0c205cc988c35178bab31",
+      "member_bytes": "3256550780",
+      "member_crc32": "37732777",
+      "member_sha256": "a9782db6e7572830df8329a25f9a1d61053058a1656a806aba7a020130d801ef",
+      "upstream_gcs_etag": "3e0eeb63348d0cc06dbfeab1c76ea222",
+      "upstream_generation": "1586169737759622"
+    },
+    {
+      "url": "https://api.kaggle.com/v1/datasets/download/graxlmaxl/identifying-the-physics-behind-an-electric-motor/Time_series_2000rpm.csv?datasetVersionNumber=3",
+      "member": "Time_series_2000rpm.csv",
+      "archive_bytes": "1064086756",
+      "archive_sha256": "45053394b0da2cfbca67e5f856ffcd461526496d9bad3454d85046513dc202ff",
+      "member_bytes": "3293627008",
+      "member_crc32": "3cd15c9c",
+      "member_sha256": "f93c74295e750a93eb293850d40ef1451496b1049c5733fd4a01ec022f009fc8",
+      "upstream_gcs_etag": "56f72c9f6064feb1f4169637f840961c",
+      "upstream_generation": "1586169804476860"
+    },
+    {
+      "member": "Torque_Table.csv",
+      "bytes": 2662,
+      "sha256": "880707fa3818d6f2ac00bdd58d6f23ace32f4b89ada9bc27027360893c760431",
+      "upstream_gcs_etag_verified_md5": "28da8fb3b8f4abe2690cb18ccff5d345",
+      "url": "https://api.kaggle.com/v1/datasets/download/graxlmaxl/identifying-the-physics-behind-an-electric-motor/Torque_Table.csv?datasetVersionNumber=3"
+    }
+  ],
+  "documentation": {
+    "url": "https://drive.google.com/open?id=1fUdJudinJYsVb5lO9JGJ8Kqf75UDN3WF",
+    "title": "Data Set Description: Torque Characteristics of a Permanent Magnet Motor - 74 Million Samples for Data-Driven Learning",
+    "pdf_sha256": "ce0db397f8061796c617ce57125dfac377bc3e1064a413a080ca985eac738588",
+    "locators": "Section III and Tables II–III. Stationary left-half id-iq operating grid, 0.5 s per point, phase currents and voltages at 1 MHz, angle, dc bus voltage and elementary state from control ADCs (20 kHz) placed on the 1 MHz grid. HBM T10FS 2 kN·m strain-gauge shaft transducer. The released torque is averaged per speed and operating point; bearing drag, friction, inertia and resonance separate shaft measurements from air-gap torque."
+  },
+  "companion_paper": {
+    "doi": "10.1109/TII.2021.3060469",
+    "title": "Torque and Inductances Estimation for Finite Model Predictive Control of Highly Utilized Permanent Magnet Synchronous Motors",
+    "source": "Release citation and bibliographic DOI; technical data interpretation here uses the openly available test-bench description."
+  },
+  "coverage": {
+    "two_measured_nominal_speeds_rpm": [
+      120,
+      2000
+    ],
+    "torque_targets": 148,
+    "operating_points_each_speed": 74,
+    "scope_rows": 73999999,
+    "rows_with_all_three_currents_and_angle": 73999988,
+    "short_group": "2000 rpm OP 38 has 499,999 rows; all other groups have 500,000.",
+    "current_missing": "11 rows with incomplete phase currents in 2000 rpm, OP 5. All timestamps and angles available. Scope rows are counted even when omitted from current features."
+  },
+  "processing": "Read both single-member ZIPs to EOF and verify CRC. Use amplitude-invariant Clarke transform followed by d=cos(theta)*alpha+sin(theta)*beta, q=−sin(theta)*alpha+cos(theta)*beta. The features are group means of q and d*q (not the product of means). Pair the measured mean torque to (speed,OP) once. Fit an intercept and q, or an intercept, q and d*q, by unweighted OLS on all 74 operating points at one speed. Evaluate both the fitted speed and the held-out speed. Keep nominal time-grid variation, nonmonotone count and unavailable switching values visible.",
+  "results": "Training at 120 rpm and testing at 2000 rpm, RMSE across 74 mean torque labels is 35.9410 N·m for q only and 13.6917 N·m with the d*q interaction; the within-speed values are 35.1630 and 13.2783 N·m. Reverse-speed transfer of the interaction model yields 13.3166 N·m.",
+  "limitations": [
+    "The same operating grid is revisited at the second speed. Held-out speed does not imply new motor, new operating-point grid or transient torque validation. The affine empirical model and Park convention are declared baselines, not a reconstruction of the authors’ nonlinear model.",
+    "Only one mean strain-gauge reading per speed/point is retained. No transient torque, phase-resolved torque, commanded current history or clipping flag can be recovered from those means. Exceeding a nominal torque is not a saturation flag."
+  ],
+  "reproduce": "Python >=3.11 with numpy and pandas. Store both source ZIPs as Time_series_120rpm.csv.zip and Time_series_2000rpm.csv.zip, plus Torque_Table.csv, in INPUT. OPENBLAS_NUM_THREADS=1 python derive_torque_grid.py INPUT OUT."
+}

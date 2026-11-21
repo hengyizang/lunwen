@@ -1,0 +1,172 @@
+{
+  "title": "Two-Tank Water System Dataset for RLS-Based Identification and Adaptive PID Control Under Diverse Operating Conditions",
+  "authors": [
+    "Gómez González, Pedro Pablo",
+    "Michelena, Álvaro",
+    "García-Fischer, Agustín",
+    "Freire-Mahía, Noel",
+    "Jove, Esteban",
+    "Calvo-Rolle, José Luis"
+  ],
+  "landing": "https://doi.org/10.5281/zenodo.23529910",
+  "concept_doi": "10.5281/zenodo.17688566",
+  "dataset_doi": "10.5281/zenodo.23529910",
+  "version": "v2.0, compared with the earlier version (one experimental family)",
+  "accessed_utc": "2026-11-21",
+  "history": {
+    "prior_branch_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+    "previous_evidence_paths": 861,
+    "archived_members": 301,
+    "early_baseline_scanned": true,
+    "key_normalization": "Unicode NFKD, casefold, alphanumeric characters; DOI, repository, distinctive title and older release aliases as applicable.",
+    "keys": [
+      "10.5281/zenodo.17688566",
+      "10.5281/zenodo.17688567",
+      "10.5281/zenodo.23529910",
+      "zenodo.org/records/17688567",
+      "zenodo.org/records/23529910",
+      "Two-Tank Water System Dataset for RLS-Based Identification and Adaptive PID Control Under Diverse Operating Conditions",
+      "10.1038/s41597-026-07686-2",
+      "Multi-scenario datasets for system identification and adaptive control of a nonlinear two tank system",
+      "pedropgg/TwoTank-Dataset-Code"
+    ],
+    "matches": []
+  },
+  "rights": "Both data releases are CC BY 4.0 under fixed Zenodo records. Attribute the depositors in releases. https://creativecommons.org/licenses/by/4.0/ . Companion repository uses MIT (pinned LICENSE). This package adds independent aggregate results, integrity hashes and replay routines; raw traces and original source code remain at source.",
+  "releases": [
+    {
+      "version": "first Zenodo release; labeled v1 by authors in v2 provenance",
+      "doi": "10.5281/zenodo.17688567",
+      "record": 17688567,
+      "authors": [
+        "Gómez González, Pedro Pablo"
+      ],
+      "rights": "cc-by-4.0",
+      "api": "https://zenodo.org/api/records/17688567",
+      "record_sha256": "9838e271726deef0313c657cabdbc6c43b3dfe33cc22bbe6272fbbcf446f7715",
+      "file": "Dataset.zip",
+      "url": "https://zenodo.org/api/records/17688567/files/Dataset.zip/content",
+      "bytes": 33225674,
+      "verified_publisher_checksum": "md5:347430b1fa7438865ea39cb5b8c58a57",
+      "sha256": "54be1f72f73e3c5e7f64216ace26aa076ae6431f1fead87f1477056688c10fe9"
+    },
+    {
+      "version": "v2.0",
+      "doi": "10.5281/zenodo.23529910",
+      "record": 23529910,
+      "authors": [
+        "Gómez González, Pedro Pablo",
+        "Michelena, Álvaro",
+        "García-Fischer, Agustín",
+        "Freire-Mahía, Noel",
+        "Jove, Esteban",
+        "Calvo-Rolle, José Luis"
+      ],
+      "rights": "cc-by-4.0",
+      "api": "https://zenodo.org/api/records/23529910",
+      "record_sha256": "d3a776572f44876de824e0516311b0c43f46a3b3cbcb2edfee470a50e1080e82",
+      "file": "Dataset_v2.zip",
+      "url": "https://zenodo.org/api/records/23529910/files/Dataset_v2.zip/content",
+      "bytes": 35517324,
+      "verified_publisher_checksum": "md5:3a70e0b3b9d14b4c0520110963c3d33e",
+      "sha256": "e31b41da2376d885774891606d346b26926d93db8483d9d7ac6bfcc23e24128e"
+    }
+  ],
+  "associated_article": {
+    "doi": "10.1038/s41597-026-07686-2",
+    "title": "Multi-scenario datasets for system identification and adaptive control of a nonlinear two tank system",
+    "authors": [
+      "Pedro-Pablo Gómez-González",
+      "Álvaro Michelena",
+      "Agustín García Fischer",
+      "Noel Freire-Mahía",
+      "Esteban Jove",
+      "José Luis Calvo-Rolle"
+    ],
+    "publisher": "https://www.nature.com/articles/s41597-026-07686-2",
+    "publisher_html_sha256": "37fa67640b635477641fc40927417c26b5909a24b01571a93c11dfa2b3957bef"
+  },
+  "source_code": [
+    {
+      "path": "README.md",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/README.md",
+      "release_git_blob": "6cbefad1bd4f4d1332f820776e7625e8e403cdae",
+      "verified_bytes": 5977,
+      "sha256": "ab54913730bb3ccfb694c7822021705c3dbdbc3b6baf20ecb0eb5911046ebb7a"
+    },
+    {
+      "path": "LICENSE",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/LICENSE",
+      "release_git_blob": "dc53cec2d4f54195783e704f3298ced75d943cfd",
+      "verified_bytes": 1065,
+      "sha256": "1cf8b0ab03bf6b69c91298ccb00c2929c8837a02481df61e9e8fc1278693623e"
+    },
+    {
+      "path": "MATLAB_Control/PID_dahlin.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/PID_dahlin.m",
+      "release_git_blob": "dc9e2b5e90168777dce2ff02dfb0145f6c076827",
+      "verified_bytes": 1492,
+      "sha256": "3590da28fcf7b5717600bdafb0d7ace7fbd6d6fc9a8a7b7aecd95bce01911a40"
+    },
+    {
+      "path": "MATLAB_Control/DAQ_Baseline.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/DAQ_Baseline.m",
+      "release_git_blob": "3e99a693dc3eaa1d6f32b44d425baf53b1bc8373",
+      "verified_bytes": 4069,
+      "sha256": "1ddd6f19540ed32ac99c7a906e0738284cd37a93967f363acbf799bb798cd326"
+    },
+    {
+      "path": "MATLAB_Control/DAQ_PassiveOutflow.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/DAQ_PassiveOutflow.m",
+      "release_git_blob": "143d04c5cddee25b72a956c5f7fa1bd9b9db4447",
+      "verified_bytes": 4076,
+      "sha256": "48a5fb68c0c45b66c3e5acb0fc50bfc215804e5b7dce75596fef67ea377ac537"
+    },
+    {
+      "path": "MATLAB_Control/DAQ_HighOutflow.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/DAQ_HighOutflow.m",
+      "release_git_blob": "383f504741bd8dcac0cb257e36abfcc56227dffc",
+      "verified_bytes": 4534,
+      "sha256": "3351fa0e2fc6e4006b0b31a26dd576007d473d9213015498f5d3ebc44c64085a"
+    },
+    {
+      "path": "MATLAB_Control/DAQ_LowOutflow.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/DAQ_LowOutflow.m",
+      "release_git_blob": "f2ae57ec6cca64e1ed240f64b4da4f7d8510799c",
+      "verified_bytes": 4533,
+      "sha256": "56dbc05ef7a542cdc981cec7b07a39357a852c334d61ef5ca662f0ae3f8e4f1c"
+    },
+    {
+      "path": "MATLAB_Control/DAQ_Write.m",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/MATLAB_Control/DAQ_Write.m",
+      "release_git_blob": "491a3ac0a11642b5d6d58fb2f46656cbef43b847",
+      "verified_bytes": 771,
+      "sha256": "057f2fb1af90e01dc04cfcf9201df6c32d0e785913c0732133aeeeb3522e9e67"
+    },
+    {
+      "path": "Arduino Firmware/TwoTank_DAQ_reconstructed/TwoTank_DAQ_reconstructed.ino",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/Arduino%20Firmware/TwoTank_DAQ_reconstructed/TwoTank_DAQ_reconstructed.ino",
+      "release_git_blob": "66b04a34a7d051f56e6a85e2de57cd0d5fa16301",
+      "verified_bytes": 2035,
+      "sha256": "d97fc244ede6a29b917719b9b5fb2aaceb72902200f9c44b0281d8fa0202e241"
+    },
+    {
+      "path": "tools/make_v2.py",
+      "url": "https://raw.githubusercontent.com/pedropgg/TwoTank-Dataset-Code/b5229d854cb4f0534dd316fc5a90f49dc199e256/tools/make_v2.py",
+      "release_git_blob": "bccf9eca8b531610a1c0a6d2433f1c418ac8b131",
+      "verified_bytes": 3844,
+      "sha256": "dbf44b4d25c5308f28186ca331400d0d01f56eea6d28e9a27572cfa4da57fae1"
+    }
+  ],
+  "query_trail": [
+    "Zenodo API public query: (\"actuator saturation\" OR \"windup\") AND resource_type.type:dataset; first page (size 25) returned the two-tank record. Inspected version and concept metadata, associated Scientific Data article, archived README and CHANGELOG, fixed acquisition scripts, and both original ZIP bundles.",
+    "Wider queries: \"anti-windup\"; (\"clipped\" OR \"saturation\") AND (\"motor controller\" OR \"servomotor\"). The Segway-like anti-windup paper 10.1016/j.automatica.2024.111830 Figure 2/section 6.3 reports blue physical traces and orange simulation on a separate scale. Its command is a voltage reference implemented using PWM; no separately downloadable numerical run was identified here. The adaptive BIC paper 10.1109/LCSYS.2023.3282378 tests the controller using simulations. Neither source supplies the pump recordings."
+  ],
+  "coverage": "25 physical, scalar feedback-controlled pump/upper-tank experiments with a lower reservoir. 30,600 samples per trial, 765,000 total (nominally 1 Hz). Version 2 is a corrected representation of the same acquisitions. Each of 25 v2 members matched a single v1 member by a hash of the binary64 values of level, logged command, setpoint, error, Kp, a1, a2, b1; complete member SHA-256 for both versions are separately recorded. Four wholly empty trailing v1 rows were excluded. Each file is one run. Keep fixed v2 valve-opening labels and names; see CHANGELOG for the high-outflow relabeling.",
+  "acquisition": "The MATLAB program reads the level, updates error and RLS coefficients, computes incremental self-tuning PID, clips each request to [0,100] percent, sends a separately rounded 8-bit serial command, and logs the clipped percentage. The first two rows use a distinct fallback controller. Pre-limit control is reconstructed, not recorded separately. The released Arduino firmware is a reconstruction: physical PWM timing, pin assignments, terminal voltage, speed and pump current are not verified by the logs.",
+  "formulas": "For k≥3 in one-based indexing and nominal T=1 s, use u(k-1) from the logged clipped command. Unguarded request = u(k−1) + Kp*Δe + Ki*e(k) + Kd*Δ²e. Independently use original RLS coefficients with Q=1−exp(−1/3): u(k−1) + Q/b1 * [−(a1+2*a2)*Δe + (1+a1+a2)*e(k) + a2*Δ²e]. Both use the same measured errors and prior command; they are two numerical routes through the same controller equations. The gain route uses the corrected Ki/Kd, and v1 had accidentally interchanged Ti/Td during logging. Original DAQ command did not use v1’s mistaken *logged* gain values.",
+  "thresholds": "An upper or lower clipped event is called when both reconstructions exceed the same bound by >0.01 percentage points and the separately logged post-limiter command equals that bound exactly. This 0.01 is an analysis tolerance for rounded inputs. Also report independently the maximum post-clip mismatch per file, the remaining endpoint rows, and simultaneous Sensor_Dropout flags. Extreme pre-limit values are algebraic requests under the supplied coefficients, not physical pump capabilities.",
+  "results": "Of 764,950 adaptive rows, 1,144 met the lower criterion and 200,314 the upper. A further 26 logged 100% rows did not clear the dual 0.01 threshold. No dual-threshold exceedance occurred with an output off the expected rail. Re-clipping coefficient-replayed requests agrees within 0.000092 percentage points on every adaptive row. Re-clipping the corrected-gain replay gives 7 errors >0.01 (maximum 0.051781). 13,607 upper-bound and 446 lower-bound rows coincide with the authors’ zero-level-after-fill flag. These flags describe sensor dropouts, not causal attribution for the limit events. Across the full 765,000 recorded commands, host DAQ_Write rounding would assign unsigned byte 255 to 200,904 rows, including 564 below 100 percent. It would assign byte 0 to 1,153 rows, including 9 above 0 percent. These bytes are reconstructed from published percentages, not a separate capture or terminal voltage measurement.",
+  "time": "Time_s is a regular sample index supplied in v2. Wall-clock timestamps have limited resolution including duplicate minute-stamped values in baseline runs. Analyses use record order, keep flagged dropouts because the physical controller consumed them, and do not interpret repeated clock labels as duplicate samples.",
+  "reproduction": "Python 3 + numpy + pandas: download Dataset.zip and Dataset_v2.zip from releases, then python derive_two_tank.py Dataset.zip Dataset_v2.zip OUT. Output contains per-file independent summaries only."
+}

@@ -1,0 +1,17 @@
+file,dut,state,first_puller,second_puller,first_puller_position_rows,second_puller_position_rows,abs_directional_mean_gap_counts
+motor_telemetry_comp2.csv,1,loaded,3,4,9,9,0.44444444
+motor_telemetry_comp2.csv,1,released,3,4,45,44,0.21717172
+motor_telemetry_comp2.csv,2,loaded,3,4,9,9,1.44444444
+motor_telemetry_comp2.csv,2,released,3,4,45,44,0.1969697
+motor_telemetry_nocomp2.csv,1,loaded,3,4,6,6,7.0
+motor_telemetry_nocomp2.csv,1,released,3,4,30,29,5.33103448
+motor_telemetry_nocomp2.csv,2,loaded,3,4,6,6,7.66666667
+motor_telemetry_nocomp2.csv,2,released,3,4,30,29,5.24712644
+motor_telemetry_pgain_zero_db.csv,1,loaded,3,4,7,9,2.14285714
+motor_telemetry_pgain_zero_db.csv,1,released,3,4,35,34,1.11428571
+motor_telemetry_pgain_zero_db.csv,2,loaded,3,4,7,9,2.77777778
+motor_telemetry_pgain_zero_db.csv,2,released,3,4,35,34,0.14705882
+motor_telemetry_single.csv,5,loaded,3,4,8,9,14.77777778
+motor_telemetry_single.csv,5,released,3,4,33,32,7.03030303
+motor_telemetry_single_3250.csv,4,loaded,1,2,9,9,3.77777778
+motor_telemetry_single_3250.csv,4,released,1,2,26,29,1.48408488

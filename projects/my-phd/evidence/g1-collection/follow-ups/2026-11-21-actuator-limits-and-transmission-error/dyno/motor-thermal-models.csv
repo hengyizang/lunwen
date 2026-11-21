@@ -1,0 +1,4 @@
+model,heldout_profiles,test_windows,pooled_rmse_C,pooled_mae_C,median_profile_rmse_C
+electrical_and_speed,69,11060,4.244047180,3.014093375,4.321449600
+electrical_speed_and_initial_thermal_gradients,69,11060,1.710008405,1.329569879,1.615134146
+persistence,69,11060,4.947700324,2.823000421,5.023177775

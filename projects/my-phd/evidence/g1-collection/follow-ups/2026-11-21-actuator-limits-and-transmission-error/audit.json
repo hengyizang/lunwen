@@ -1,0 +1,356 @@
+{
+  "accessed_utc": "2026-11-21",
+  "parent_commit": "be1803e0b7f7385be69333dfce29009413791e64",
+  "gate": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "prior_rounds": 55,
+  "prior_followups": 8,
+  "tracked_evidence_paths_screened": 861,
+  "additional_tar_members": 301,
+  "early_catalog_screened": true,
+  "dataset_families": 17,
+  "new_dataset_families": 16,
+  "upgraded_dataset_families": 1,
+  "per_release_history": {
+    "limits/two-tank": {
+      "keys": [
+        "10.5281/zenodo.17688566",
+        "10.5281/zenodo.17688567",
+        "10.5281/zenodo.23529910",
+        "zenodo.org/records/17688567",
+        "zenodo.org/records/23529910",
+        "Two-Tank Water System Dataset for RLS-Based Identification and Adaptive PID Control Under Diverse Operating Conditions",
+        "10.1038/s41597-026-07686-2",
+        "Multi-scenario datasets for system identification and adaptive control of a nonlinear two tank system",
+        "pedropgg/TwoTank-Dataset-Code"
+      ],
+      "prior_files": []
+    },
+    "limits/reaction-wheel": {
+      "keys": [
+        "gvp-study/reaction-wheel-pendulum",
+        "1a9edbf31a0e786b82d07102e8854f3bd7b73188",
+        "a9cc690baa54d06579a0758f04991ea89bea9ee8"
+      ],
+      "prior_files": []
+    },
+    "friction/nnfm": {
+      "keys": [
+        "longshike/NNFM",
+        "a343d3a3537addd116d6283dae55f687fbf7748f",
+        "10.1109/TMECH.2026.3696633",
+        "A Novel Neural Network Modeling Approach for Robot Flexible Joints Friction Considering Abrupt Nonsmooth Properties"
+      ],
+      "prior_files": []
+    },
+    "friction/thermal": {
+      "keys": [
+        "10.18419/DARUS-5015",
+        "10.1109/IECON58223.2025.11221072",
+        "2610.23881",
+        "Lubricant Temperature Observer for Gearboxes in Industrial Robots"
+      ],
+      "prior_files": []
+    },
+    "gears/cycloidal": {
+      "keys": [
+        "10.18419/DARUS-4454",
+        "Modeling Load-, Velocity-, and Temperature-Dependent Transmission Errors of Cycloidal Drives for Industrial Robots Using Fourier Series"
+      ],
+      "prior_files": []
+    },
+    "gears/staubli": {
+      "keys": [
+        "10.18419/DARUS-5760",
+        "Transmission Error Compensation for Industrial Robots Using Fourier Series"
+      ],
+      "prior_files": []
+    },
+    "servo/uart": {
+      "keys": [
+        "10.5281/zenodo.19261714",
+        "10.5281/zenodo.17903001",
+        "roboninecom/Measuring-Backlash-in-Popular-UART-Servos",
+        "A Low-Cost Platform for Measuring Backlash in Popular UART Servos",
+        "An open-source test stand for backlash measurement in low-cost UART servo motors"
+      ],
+      "prior_files": []
+    },
+    "piezo/piezo": {
+      "keys": [
+        "10.1016/j.dib.2020.105175",
+        "PMC6997478",
+        "Piezoelectric micromanipulator dataset for hysteresis identification"
+      ],
+      "prior_files": []
+    },
+    "leg/ankle": {
+      "keys": [
+        "10.17605/OSF.IO/EKRQJ",
+        "osf.io/ekrqj",
+        "MaartenAfschrift/GeyerAnkle_Simulink",
+        "Assisting walking balance using a bio-inspired exoskeleton controller",
+        "10.1186/s12984-023-01205-9"
+      ],
+      "prior_files": []
+    },
+    "leg/hip": {
+      "keys": [
+        "Embodied-HRI-Lab/AI-EXO",
+        "d44774c50e0643c60b2e9c58310d1a1d6362cf8b",
+        "c33ccdcaf8b682f246d475ad2173182652b48433",
+        "tcn_0916_jc.csv",
+        "AI-EXO bilateral hip exoskeleton"
+      ],
+      "prior_files": []
+    },
+    "dyno/motor-thermal": {
+      "keys": [
+        "wkirgsn/electric-motor-temperature",
+        "10.34740/kaggle/dsv/2161054",
+        "Electric Motor Temperature",
+        "10.1109/TPEL.2020.3045596",
+        "Estimating Electric Motor Temperatures With Deep Residual Machine Learning"
+      ],
+      "prior_files": []
+    },
+    "dyno/torque-grid": {
+      "keys": [
+        "graxlmaxl/identifying-the-physics-behind-an-electric-motor",
+        "Torque Characteristics of a Permanent Magnet Motor",
+        "10.1109/TII.2021.3060469",
+        "Torque and Inductances Estimation for Finite Model Predictive Control of Highly Utilized Permanent Magnet Synchronous Motors"
+      ],
+      "prior_files": []
+    },
+    "dyno/switch-current": {
+      "keys": [
+        "hankelea/system-identification-of-an-electric-motor",
+        "Identifying the Physics Behind an Electric Motor",
+        "2003.07273",
+        "2003.06268"
+      ],
+      "prior_files": []
+    },
+    "fluid/patu-crane": {
+      "keys": [
+        "10.17632/rn5j42rpyr.2",
+        "10.17632/rn5j42rpyr",
+        "PATU655Stress",
+        "A Dataset from a Hydraulically Actuated Forestry Crane for Data-Driven Stress Estimation (PATU655Stress)",
+        "10.1016/j.dib.2026.112848"
+      ],
+      "prior_files": []
+    },
+    "fluid/pneumatic-loops": {
+      "keys": [
+        "10.5281/zenodo.15584329",
+        "10.5281/zenodo.15584328",
+        "Hysteresis modeling of soft pneumatic actuators: an experimental review",
+        "10.3390/act14070321"
+      ],
+      "prior_files": []
+    },
+    "fluid/gripper-pressure": {
+      "keys": [
+        "10.5281/zenodo.23005291",
+        "10.5281/zenodo.15587379",
+        "Supplementary Materials - Data-Driven Contact-State Estimation of an Endoskeleton-Reinforced Soft Pneumatic Gripper Using Sigmoidal Pressure–Bending Response Analysis"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv"
+      ]
+    },
+    "anchor/anchor-valve": {
+      "keys": [
+        "10.5281/zenodo.21263963",
+        "10.5281/zenodo.21263962",
+        "Embodied, electronics-free closed-loop control in a soft robotic anchor"
+      ],
+      "prior_files": []
+    }
+  },
+  "bibliographic_records": 80,
+  "new_bibliographic_records": 65,
+  "bibliographic_evidence": {
+    "historical / full text": 5,
+    "new bibliography record / author abstract": 36,
+    "historical / author abstract": 9,
+    "new bibliography record / full text": 29,
+    "historical / bibliographic screening": 1
+  },
+  "citation_relations": 82,
+  "citation_evidence": {
+    "verified reference": 82
+  },
+  "independently_recomputed_tables": {
+    "anchor/anchor-pressure-records.csv": {
+      "rows": 12,
+      "sha256": "698ac8d6ea3cf78ed868f0cc001da33b27a86a88baf18887c0f97f2d1ac40f82"
+    },
+    "anchor/anchor-valve-separation.csv": {
+      "rows": 3,
+      "sha256": "be016a50f17c049445d92cdcfcfa2cc045b01e8381bade15b19a8bec506a2fbb"
+    },
+    "dyno/motor-thermal-models.csv": {
+      "rows": 3,
+      "sha256": "11c28f3d5079f60490469d8f776a55514f1ed6c94d6ea5309642c808a5672f3e"
+    },
+    "dyno/motor-thermal-profile-holdout.csv": {
+      "rows": 207,
+      "sha256": "be1d5738b885f46c1a95cc0d32f50c0dbf51b6c602e9670aba8ec7290d63343f"
+    },
+    "dyno/motor-thermal-profiles.csv": {
+      "rows": 69,
+      "sha256": "2aa271cc5d754959ed515184f165c154d81e8512d6b5d6919cbbceef3b03cedd"
+    },
+    "dyno/switch-current-row-order.csv": {
+      "rows": 1,
+      "sha256": "4e760e7e16e50a4fab5cf96cb0bc415ad56ac6bc92ff452dea4f706f3ce70a8c"
+    },
+    "dyno/switch-current-transitions.csv": {
+      "rows": 49,
+      "sha256": "60fc94f79e45cdf114f4c8cf4fc66ef8c4a7fc6fa754d4808901451310170a77"
+    },
+    "dyno/torque-grid-cross-speed-models.csv": {
+      "rows": 8,
+      "sha256": "d2f22773947ec6c3c3de29a023e1e712c3095ba5dca2e8c57b3c99b31e758674"
+    },
+    "dyno/torque-grid-operating-points.csv": {
+      "rows": 148,
+      "sha256": "0ec65361326a0d7c134291072d8bf0ed2320d9a85eb3b0c00273e6320b594d9f"
+    },
+    "dyno/torque-grid-source-files.csv": {
+      "rows": 2,
+      "sha256": "ec1f6978d1fa36605d0fd388bed88d416e4985d6e754169d19d274009ce0923a"
+    },
+    "dyno/torque-grid-speed-differences.csv": {
+      "rows": 74,
+      "sha256": "7392f82731c169f6bf00a7eba1943251d7571b00b28743a75b7edc01fdacced0"
+    },
+    "fluid/gripper-csv-audit.csv": {
+      "rows": 40,
+      "sha256": "4900b0e9ed6e0f4cacd5ad0e7333f272612f76cbbf6746412633f1bb2f240be8"
+    },
+    "fluid/gripper-grasp-prefixes.csv": {
+      "rows": 136,
+      "sha256": "8879f4768c4f5719d46a67630e56b54e67ce5a61eee3b89bea18b5bf5b97d772"
+    },
+    "fluid/patu-acquisitions.csv": {
+      "rows": 108,
+      "sha256": "2a45b2c527888e438ff0681eb9bf366308af1bbe92a1c349a19bd6645ba8340a"
+    },
+    "fluid/patu-valve-and-stroke.csv": {
+      "rows": 216,
+      "sha256": "9b2953c8863d3e12c0d35f3df467c06c5cd4f9ec2b6b70505d8e9837a2288d23"
+    },
+    "fluid/pneumatic-hysteresis-cycles.csv": {
+      "rows": 4,
+      "sha256": "35f328121a9b580ca4a816717c3760d55df397feb795e8baff30d31aee599581"
+    },
+    "friction/nnfm-joint-channels.csv": {
+      "rows": 149,
+      "sha256": "31fec38deb98494d89187970f1609e750aef4c952b320aa42278de7e1592eb63"
+    },
+    "friction/nnfm-traces.csv": {
+      "rows": 25,
+      "sha256": "32f2c58a331b987302e88268d6a477ee02f804338e5e1db09ce5f834f600015e"
+    },
+    "friction/nnfm-tracking-comparison.csv": {
+      "rows": 7,
+      "sha256": "c1187218605cecf47750fb03f2112a8d7626fb2b2417b7492f6eaccf8b86d5b3"
+    },
+    "friction/published-gear-thresholds.csv": {
+      "rows": 3,
+      "sha256": "2bd74d7a5ee6b5e29c58cf444b4175454379d4f9a77b547ffba716de07d9dd22"
+    },
+    "friction/thermal-temperature-bands.csv": {
+      "rows": 5,
+      "sha256": "097b2d51363f5cbfa4004afb79284868f100aa811beace8b42eb5505b84fe45f"
+    },
+    "friction/thermal-traces.csv": {
+      "rows": 13,
+      "sha256": "bba56ebb1bb1ba4b8b81e36e494d5df7b779b5792da700c2846599bcdbd8d766"
+    },
+    "friction/thermal-validation-overlap.csv": {
+      "rows": 2,
+      "sha256": "656cd8ac7b8629a83149e354ee878db53a7c2703366e93b3edcf83ff590b4d01"
+    },
+    "gears/cycloidal-heldout.csv": {
+      "rows": 19,
+      "sha256": "d838a7c6e32e9dcf498c2bd3e3457ec118e22e5960b563a8150e1f98c705093d"
+    },
+    "gears/cycloidal-runs.csv": {
+      "rows": 243,
+      "sha256": "f40b9c0114b7bd08a95f3e1c94f8fea592cb208fe9beff10c40e7c18c2069210"
+    },
+    "gears/staubli-compensation.csv": {
+      "rows": 52,
+      "sha256": "97661dea26f70653f6f7badc27645432aed64eee9e6b6271594f835c14b82c52"
+    },
+    "gears/staubli-runs.csv": {
+      "rows": 128,
+      "sha256": "2700751caf4770983dddf34533b415ccf705d1434e6d6613a465d1853ddb2313"
+    },
+    "leg/ankle-torque-conditions.csv": {
+      "rows": 24,
+      "sha256": "0343d449eb23f3a004a4071d9f47656f7a1942d880c16e0944f4c3225d412e58"
+    },
+    "leg/ankle-torque-trials.csv": {
+      "rows": 1054,
+      "sha256": "c72f882e08ce978b858573375dff0e49ee2faf4fc1d9eb2206ac2cd89a7785ad"
+    },
+    "leg/hip-command-endpoints.csv": {
+      "rows": 24,
+      "sha256": "2093d70fcca4ed342e89d021b33bc441d26cad3056bfea67421414f807d2748e"
+    },
+    "leg/hip-control-files.csv": {
+      "rows": 12,
+      "sha256": "848a0df3a139a88510b8618edbd5155fd94487cec9da21a8ab4d8654b7b8260b"
+    },
+    "limits/reaction-wheel-endpoints.csv": {
+      "rows": 4,
+      "sha256": "80d8f6bd02cb8ffe7f848ce0cda49e48d07d771a4ca63e7040a02cfd811eeedd"
+    },
+    "limits/reaction-wheel-settings.csv": {
+      "rows": 1,
+      "sha256": "de402418c9faaa0e9998aa2adc6c2786a96c2186ed8432f2810651cb4d3a551e"
+    },
+    "limits/two-tank-files.csv": {
+      "rows": 25,
+      "sha256": "7560fd4b7f39dcc4cee00623fdf603a2e7dfb8110e9b78ea849b72122ef5f62c"
+    },
+    "limits/two-tank-reconstruction.csv": {
+      "rows": 25,
+      "sha256": "d77910a91280104851db7a6b6c1f60f495a57882c60d407bdd3a90aa7ca1984e"
+    },
+    "piezo/piezo-cycles.csv": {
+      "rows": 3003,
+      "sha256": "b96dcdcd1482d3360fb6b0925c47480d5398d3f5e716cab528f0201589882e31"
+    },
+    "piezo/piezo-fits.csv": {
+      "rows": 4,
+      "sha256": "8311a49c8dc263afc08d4cb8a1271393d5693d63e6783426ede32e1a99abe438"
+    },
+    "piezo/piezo-runs.csv": {
+      "rows": 2,
+      "sha256": "89ddf482cbe8ed3b13765277f9a52cc168e74226e121fbceac28858b169e4965"
+    },
+    "servo/uart-directional-gaps.csv": {
+      "rows": 16,
+      "sha256": "acb070cfab74f8db27923ce0022c4f3bc95ce2eaac2ee1daf4c73e943fea3204"
+    },
+    "servo/uart-telemetry.csv": {
+      "rows": 19,
+      "sha256": "bedb8ed83f07cfa7f76cd1bdd8e4e3ca38ff7aa5d56bc7c1c12bb8c36f7579dc"
+    },
+    "servo/uart-windows.csv": {
+      "rows": 238,
+      "sha256": "b28821bfc0a167b4440c1a2946becb7b62479cd140882ab7dd05b9b9de2a6e63"
+    }
+  },
+  "interpretation": "A release counts once across mirrors, versions and file representations. Shared bench, lab or robot does not establish independent experimental subjects. The Ponce Quiroga dissertation table is counted as publication evidence only. File coverage and permission are documented per release. The derivatives do not redistribute original waveforms, articles or videos."
+}

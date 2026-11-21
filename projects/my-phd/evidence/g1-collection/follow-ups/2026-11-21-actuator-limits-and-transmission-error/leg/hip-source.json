@@ -1,0 +1,173 @@
+{
+  "title": "AI-EXO bilateral hip exoskeleton: paired torque command and feedback logs",
+  "organization": "Embodied-HRI-Lab; acquisition data introduced by repository contributor Aster",
+  "landing": "https://github.com/Embodied-HRI-Lab/AI-EXO/tree/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2",
+  "acquisition_commit": "d44774c50e0643c60b2e9c58310d1a1d6362cf8b",
+  "version": "First commit including the selected recordings, 2026-09-03. File discovery first used commit c33ccdcaf8b682f246d475ad2173182652b48433; analysis is pinned to the earlier revision and its corresponding controller sources.",
+  "accessed_utc": "2026-11-21",
+  "rights": "Public GitHub source with no root license in the pinned tree. The nested third-party GMRbasedGP license does not grant a license for the telemetry. Link to data at origin; share only new aggregate statistics, independent reader and identifiers. Do not mirror raw source files.",
+  "history": {
+    "branch_ref": "be1803e0b7f7385be69333dfce29009413791e64",
+    "tracked_paths": 861,
+    "including_early_index_and_expanded_members": 1161,
+    "keys": [
+      "Embodied-HRI-Lab/AI-EXO",
+      "d44774c50e0643c60b2e9c58310d1a1d6362cf8b",
+      "c33ccdcaf8b682f246d475ad2173182652b48433",
+      "tcn_0916_jc.csv",
+      "AI-EXO bilateral hip exoskeleton"
+    ],
+    "matches": []
+  },
+  "queries": [
+    "GitHub exoskeleton torque controller data torque tracking experiment ankle torque measured force sensor exoskeleton csv measured desired repository data",
+    "Followed AI-EXO repository description → RealData/2026_9_2 files → first data commit via GitHub commits-by-path → exact tree, telemetry CSV headers and upper/lower motor controller sources."
+  ],
+  "version_tree": "https://api.github.com/repos/Embodied-HRI-Lab/AI-EXO/git/trees/d44774c50e0643c60b2e9c58310d1a1d6362cf8b?recursive=1",
+  "evidence_grade": "Original lab-labelled RealData with bilateral joint command and drive-feedback telemetry. Separate simulation (SimData), expert imitation clips and raw optical motion-capture recordings are outside this analysis.",
+  "coverage": "All four RealData/2026_9_2/*/tcn_lb/tcn_*.csv runs (33,235 rows) and all eight */samsung/samsung_*.csv runs (55,250 rows) in the fixed tree. 12 unique file digests, 88,485 bilateral time rows. Selection by named actuator telemetry file pattern. Nine other CSVs in the same directory family have separate treadmill trial naming and no role in this result.",
+  "source_files": [
+    {
+      "path": "Higher_Controller/NN_Controller/pc_tcn_formal_controller_v3.py",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Higher_Controller/NN_Controller/pc_tcn_formal_controller_v3.py",
+      "bytes": 62887,
+      "sha256": "368aca534a151d8fc1fbfc9851f098e3916650bba683eb5dad93cf0e36d0a0b2",
+      "git_blob": "4a98d82f5067253d90ab00c07c6ed90d7985bdeb"
+    },
+    {
+      "path": "Higher_Controller/NN_Controller/rpi_tcn_formal_controller.py",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Higher_Controller/NN_Controller/rpi_tcn_formal_controller.py",
+      "bytes": 48231,
+      "sha256": "0ad726e47d04b9c1e792d4b3ab093c2763aefed9a4a57f162b2b9600e21404ae",
+      "git_blob": "ac2889454af1e2f66ae68237a3c5b1df60bb1ab3"
+    },
+    {
+      "path": "Higher_Controller/samsung_pc_controller_50hz_synced_csv.py",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Higher_Controller/samsung_pc_controller_50hz_synced_csv.py",
+      "bytes": 75151,
+      "sha256": "f6039e505a9336d2fbbdb4f09bed9ed18d1c860118652e2c15201aecaef905b5",
+      "git_blob": "06498eb64c9d56e69eb0cf5383481eed292cfd9f"
+    },
+    {
+      "path": "Higher_Controller/samsung_rpi_controller.py",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Higher_Controller/samsung_rpi_controller.py",
+      "bytes": 69943,
+      "sha256": "426be55607ee503ae7136e3983a7982aeac2aa13ff2922acc183225a6bb5e071",
+      "git_blob": "569171c2407c0ff5684affade6deebe12d36eeba"
+    },
+    {
+      "path": "Lower_Controller/Hip_Raspberry/Hip_Raspberry.ino",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Lower_Controller/Hip_Raspberry/Hip_Raspberry.ino",
+      "bytes": 20994,
+      "sha256": "3b0df73daf23c73a087ae2c3fc8337b0a2fd530a9289fcca96dfa1f21f4d7685",
+      "git_blob": "a5c3eed3854443d9faf15be4ef8ef27f2853ac57"
+    },
+    {
+      "path": "Lower_Controller/Hip_Raspberry/Motor_Control_Tmotor.cpp",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/Lower_Controller/Hip_Raspberry/Motor_Control_Tmotor.cpp",
+      "bytes": 29101,
+      "sha256": "8e1a32bb0934ed170f4042bb6e8d8ae5e21323183f9793d959e5e7d56f08f126",
+      "git_blob": "7eeedf00c21e290a8be9afe07aba1883bc5964df"
+    },
+    {
+      "path": "README.md",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/README.md",
+      "bytes": 9638,
+      "sha256": "a42b72b44e9c7e146839d8c1fda6c935e956560250900ccfec3dfa0588a17f34",
+      "git_blob": "594a5c7ee183e700c0f484960e959d8694270f08"
+    },
+    {
+      "path": "RealData/2026_9_2/hjc/samsung/samsung_0518_jc.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/hjc/samsung/samsung_0518_jc.csv",
+      "bytes": 312316,
+      "sha256": "a6dbf757a451d32d39c1ebb5344244854e77f511481ac3745d6926bf1e6730e6",
+      "git_blob": "a2e791a83c1a6abd3409502e7fec72526ffa9538"
+    },
+    {
+      "path": "RealData/2026_9_2/hjc/samsung/samsung_0916_jc.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/hjc/samsung/samsung_0916_jc.csv",
+      "bytes": 545392,
+      "sha256": "2d53ac91aa4ccb8130a7b62059d36d185d21fe1533c62fbfc2e033168965d505",
+      "git_blob": "2f67fbe70cdaa7d8cfab53ab885ccbaaa850cd8d"
+    },
+    {
+      "path": "RealData/2026_9_2/hjc/tcn_lb/tcn_0916_jc.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/hjc/tcn_lb/tcn_0916_jc.csv",
+      "bytes": 759626,
+      "sha256": "5c057de730dc16b79e62df3b8ab2e4aaaa5c098b45e08045c3c13fae02364e28",
+      "git_blob": "af99cdbf0d56935a1b07171505771829d77cdc11"
+    },
+    {
+      "path": "RealData/2026_9_2/lb/samsung/samsung_0518_lb.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lb/samsung/samsung_0518_lb.csv",
+      "bytes": 330474,
+      "sha256": "dbc5d65db8c06fc9ba2e73f66ebe1fbca7aa46c86533245154c9f9a7b7bb6fa4",
+      "git_blob": "ec3e35e5210a7fffa98d6bc8bb70298c6b8397d7"
+    },
+    {
+      "path": "RealData/2026_9_2/lb/samsung/samsung_0916_lb.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lb/samsung/samsung_0916_lb.csv",
+      "bytes": 300867,
+      "sha256": "b74a9d37a2262602e2b0feeedf5c67f6156f0fabcce52c34b43d2480de7d91d3",
+      "git_blob": "67eaa76057efb35efbf361acbba23d08bb8380e4"
+    },
+    {
+      "path": "RealData/2026_9_2/lb/tcn_lb/tcn_0916_lb.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lb/tcn_lb/tcn_0916_lb.csv",
+      "bytes": 871059,
+      "sha256": "6c59b85735659b7c7b09b10d2f8ca6eaa3fae7b14f535694c2e4d48db5b8d9ae",
+      "git_blob": "3befb13e1942844b003574cce628b672e67c09bc"
+    },
+    {
+      "path": "RealData/2026_9_2/lzn/samsung/samsung_0518_zn.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lzn/samsung/samsung_0518_zn.csv",
+      "bytes": 371149,
+      "sha256": "57894709b095ff879b323e38be7f550350f261f2144a4bb7d61a07cb3452c285",
+      "git_blob": "14f56180346844cc1c54f464c1a45044d83231db"
+    },
+    {
+      "path": "RealData/2026_9_2/lzn/samsung/samsung_0916_zn.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lzn/samsung/samsung_0916_zn.csv",
+      "bytes": 385866,
+      "sha256": "84142386f540f95b3ffd4d0bf1c598e46138ec715ebddec1f68c776d06f5472a",
+      "git_blob": "4425a9320c6b4a18a81c670679d700b91fb2c24a"
+    },
+    {
+      "path": "RealData/2026_9_2/lzn/tcn_lb/tcn_0916_zn.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/lzn/tcn_lb/tcn_0916_zn.csv",
+      "bytes": 1729301,
+      "sha256": "327b37b022f2d6bb1327a1a6f6b9bec7311f3729f746898436641d891ddac44f",
+      "git_blob": "6c16a07cf8cd287997143a35e2058b94c64f016e"
+    },
+    {
+      "path": "RealData/2026_9_2/wt/samsung/samsung_0518_wt.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/wt/samsung/samsung_0518_wt.csv",
+      "bytes": 502470,
+      "sha256": "fc8baa6d47f56e54dd3fc5812af2c0cb8bec51be96da1390b61f602163ff2a74",
+      "git_blob": "9c53244d7091dc984f202d33b151b5db111df313"
+    },
+    {
+      "path": "RealData/2026_9_2/wt/samsung/samsung_0916_wt.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/wt/samsung/samsung_0916_wt.csv",
+      "bytes": 482006,
+      "sha256": "9ed6baa7b610626b551e6dc09c50ac8b796bddf1df80730d6f9c0b2febec5f6a",
+      "git_blob": "ee1ffda4fcda150a3826e7766896dd845ed1bd43"
+    },
+    {
+      "path": "RealData/2026_9_2/wt/tcn_lb/tcn_0916_wt.csv",
+      "source": "https://raw.githubusercontent.com/Embodied-HRI-Lab/AI-EXO/d44774c50e0643c60b2e9c58310d1a1d6362cf8b/RealData/2026_9_2/wt/tcn_lb/tcn_0916_wt.csv",
+      "bytes": 654675,
+      "sha256": "1ae2de169d3fe25362286d2ad173e4fd95ad83fb71704797f2181a9b0c7950ff",
+      "git_blob": "bb413c5002bf911ab16460cd9a0fc2f31bb0cde2"
+    }
+  ],
+  "signal_semantics": [
+    "Four TCN logs include raw model output, computed host command, cached actual feedback and a 16-bit Teensy sequence. Eight Samsung logs supply bilateral host command and actual feedback without raw model output or sequence. One hip-side observation is one numeric command; a bilateral time row contains two.",
+    "Same-commit Higher_Controller/NN_Controller/rpi_tcn_formal_controller.py lines 81–91, 1283–1330: raw model output undergoes selectable scale, filtering and slew limiting, and host reporting reads feedback before possible send. --max-torque has a default of 8 N m; send is gated by arming/validity. The four files contain computed host command but no sent/armed or drive-applied setpoint field. Some observed kinematic column names differ from this checked source. Exact firmware, flags and session settings are unrecorded.",
+    "Same-commit Higher_Controller/samsung_rpi_controller.py lines 1843–1860 and 2037–2058 supplies a related acquisition schema; sends are also conditional. Lower_Controller/Hip_Raspberry/Motor_Control_Tmotor.cpp lines 650–651 and 687–688 converts measured q-current and a motor constant into reported torque. There is no independent joint-side torque sensor evident in these logs.",
+    "Hip_Raspberry.ino excerpts (lines 76–79, 407–434, 561–591) set a ±5 N m input validation threshold, ±10 A q-current and command slew limit. Four TCN files contain logged host commands up to ±8 N m and reports beyond 8 N m. These co-published sources cannot establish that the checked firmware/configuration was flashed for each session. The 5 N m count for Samsung and 8 N m count for TCN characterize numerical endpoints observed in those series; no reconstruction of drive-level clipping."
+  ],
+  "results": "There are 1,385 hip-side TCN command values exactly at ±8 N m (66,470 side rows). Among these, 641 have |raw model output| > 8, 603 have a finite |raw| ≤ 8 and 141 have missing raw output. The same-row raw output alone cannot predict a clipped command in this stateful controller. Eight Samsung logs have 4,238 hip-side values exactly at ±5 N m. TCN telemetry reuses the previous 16-bit sequence on 1,222 adjacent host rows. Difference-of-sequence gaps identify distinct label jumps but do not by themselves count network loss.",
+  "method": "Use exact comparisons on exported decimal endpoint values. Count runs separately on each joint within a file. Finite feedback minus the same host-row command is descriptive because feedback may be cached and predates a potential transmit. The logged time step does not identify the instant of current sensing, physical actuation, or a unique command-response pairing.",
+  "reproduce": "Obtain fixed commit tree (or fetch 12 telemetry entries under source_files preserving repository-relative paths). python derive_hip.py REPOSITORY_ROOT OUT. Requires NumPy and pandas. Compare file SHA-256 in hip-control-files.csv to source_files. The code is analyzed offline, no actuators operated."
+}

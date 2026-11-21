@@ -1,0 +1,5 @@
+command_endpoint_V,first_export_slot,last_export_slot,sample_rows,first_nominal_ms,last_nominal_ms,first_to_last_nominal_span_ms,includes_last_record,min_wheel_rad_s,max_wheel_rad_s,min_bus_V,max_bus_V
+6,481,482,2,962,964,2,0,39.5,42.7,12.06,12.06
+6,491,493,3,982,986,4,0,43.2,46.9,12.06,12.10
+6,501,505,5,1002,1010,8,0,44.7,50.1,12.06,12.11
+6,509,999,491,1018,1998,980,1,49.9,54.2,12.11,12.15

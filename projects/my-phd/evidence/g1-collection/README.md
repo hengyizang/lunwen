@@ -15,3 +15,4 @@
 - [R2 驱动电流、反馈与限幅的实物证据](follow-ups/2026-11-21-drive-current-and-feedback/README.md)
 - [R1 接触起点、载荷参照与六轴扳手校正](follow-ups/2026-11-21-contact-onset-and-wrench-references/README.md)
 - [R5 多机器人无线交易、时钟与实物控制响应](follow-ups/2026-11-21-radio-clocks-and-control-response/README.md)
+- [R2 执行器限幅前后的命令与传动误差](follow-ups/2026-11-21-actuator-limits-and-transmission-error/README.md)
