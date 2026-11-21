@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0",
+  "round": 28,
+  "completed_at": "2026-11-21T09:44:03Z",
+  "batch_label": "Broad Engineering R28: Mechatronics_PHM_Control",
+  "base_head_sha": "7ca13c3e0bbd43ffc287db01cd2907d808117038",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 101,
+    "duplicates_skipped": 9,
+    "net_new": 92,
+    "new_reading_queue": 84,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "fuel cell fault prognostics",
+        "receipt_id": "20261121t094403z-arxiv-fccee7135a",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Afuel+AND+all%3Acell+AND+all%3Afault+AND+all%3Aprognostics&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "341ef20e776fab092fa3c5dc859c8047477478a45f3dc9f00425374ca6e92965",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "fuel cell fault prognostics",
+        "receipt_id": "20261121t094403z-crossref-ce380400b0",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=fuel+cell+fault+prognostics&rows=12",
+        "result_count": 12,
+        "response_sha256": "0fb565519a40223ebf704d6655a98d1550b4e2fdefc3d4bd0f3502c94a59fa4f",
+        "normalized_results_sha256": "ad68b0fa6a312f462112b5b9927c63d20c43340a6473aeecf9a9577425bf15cb"
+      },
+      {
+        "provider": "openalex",
+        "query": "fuel cell fault prognostics",
+        "receipt_id": "20261121t094405z-openalex-7e2bd47d0c",
+        "request_url": "https://api.openalex.org/works?search=fuel+cell+fault+prognostics&per-page=12",
+        "result_count": 12,
+        "response_sha256": "be6b2ec5b6b655347c68ba7aa81f34b427954205a9f4f491ad006a7db9a24b1f",
+        "normalized_results_sha256": "97dd6aa9392e91bc88a3e750a91e7185c6c5d99c52debbecc9fa1b52784b4a13"
+      },
+      {
+        "provider": "arxiv",
+        "query": "wind turbine gearbox SCADA",
+        "receipt_id": "20261121t094407z-arxiv-308cd87628",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awind+AND+all%3Aturbine+AND+all%3Agearbox+AND+all%3ASCADA&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "7fcfb09226f7e4f0ae0ece306524d3bdc8c3f48d60d0cba05152b147c1076dae",
+        "normalized_results_sha256": "dfc963690d4a269b6be48143e83196e9f678cac3a8af73be32dd5f1a968dc1c6"
+      },
+      {
+        "provider": "crossref",
+        "query": "wind turbine gearbox SCADA",
+        "receipt_id": "20261121t094408z-crossref-2506f9fd98",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=wind+turbine+gearbox+SCADA&rows=12",
+        "result_count": 12,
+        "response_sha256": "336565adfd0f3e5cbd35d77d24348bab0df92be5ba8a14becfde1077415643cb",
+        "normalized_results_sha256": "c052cffc4c2f6ea5e71f26d31c8336b540a23e8d8e8b115495e95ab0c1f885be"
+      },
+      {
+        "provider": "openalex",
+        "query": "wind turbine gearbox SCADA",
+        "receipt_id": "20261121t094410z-openalex-36e6e0a60b",
+        "request_url": "https://api.openalex.org/works?search=wind+turbine+gearbox+SCADA&per-page=12",
+        "result_count": 12,
+        "response_sha256": "b139cbaf989380a12a508d26a584c073df26edcc6861001c1f8a85b853b7a7a5",
+        "normalized_results_sha256": "5f1c18c469662130e27ea9e182c006703e45b6fd39ee4a1d2b467cf1f510e4d5"
+      },
+      {
+        "provider": "arxiv",
+        "query": "centrifugal pump cavitation diagnosis",
+        "receipt_id": "20261121t094411z-arxiv-7998279db8",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acentrifugal+AND+all%3Apump+AND+all%3Acavitation+AND+all%3Adiagnosis&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "a8ce2cdff6a6106c3511dec531fc2eaf309f90ed365431098b5dd5b65230b651",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "centrifugal pump cavitation diagnosis",
+        "receipt_id": "20261121t094412z-crossref-874a47e48c",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=centrifugal+pump+cavitation+diagnosis&rows=12",
+        "result_count": 12,
+        "response_sha256": "866af3d13cea25452ac7007cee101e6aa7ae2496110af5d7cd0d2a157e0ca31f",
+        "normalized_results_sha256": "f0b5a9b687e4095daf3bd42e8718afb4d656acb06eff7b9a47d541eede9fe812"
+      },
+      {
+        "provider": "openalex",
+        "query": "centrifugal pump cavitation diagnosis",
+        "receipt_id": "20261121t094413z-openalex-1ac0bfbee4",
+        "request_url": "https://api.openalex.org/works?search=centrifugal+pump+cavitation+diagnosis&per-page=12",
+        "result_count": 12,
+        "response_sha256": "968404a7d4efe4bcc943d84835dfb4dc4d149bcb756c7b0112858145873909d2",
+        "normalized_results_sha256": "0a122b16ec7eb07b78085bd2e1049918be6af4784dd83182547ea6e9c6303251"
+      },
+      {
+        "provider": "arxiv",
+        "query": "spindle bearing thermal error",
+        "receipt_id": "20261121t094414z-arxiv-8783f346e5",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aspindle+AND+all%3Abearing+AND+all%3Athermal+AND+all%3Aerror&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "ee97e667bf9b10c4c206fddb16ec8bd3d199b4bc3a710ed382a1861f10d3fb1c",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "spindle bearing thermal error",
+        "receipt_id": "20261121t094415z-crossref-155928c20d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=spindle+bearing+thermal+error&rows=12",
+        "result_count": 12,
+        "response_sha256": "40051fd54009d71e49598be175180d3dbc1a937e6cb00f3235fe67aa791f9372",
+        "normalized_results_sha256": "fc20a51c947ff693ce1e5380029e9c55b9cf831c2f3c60f6fd7a21d2ebd3b6dc"
+      },
+      {
+        "provider": "openalex",
+        "query": "spindle bearing thermal error",
+        "receipt_id": "20261121t094417z-openalex-1d24d61445",
+        "request_url": "https://api.openalex.org/works?search=spindle+bearing+thermal+error&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e994410fcf0f6e4ce282b76c80771826fdad27ae989b3dcc5243baff898424bc",
+        "normalized_results_sha256": "ac3e8617592583b7ed0dd111dab95f45163c30d9133fdf2518a38095abd44074"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1186/s40510-025-00578-y",
+        "receipt_id": "20261121t094419z-opencitations-4563e10057",
+        "result_count": 1,
+        "response_sha256": "098de12e7588b2edb97fac7c31c866761700697d3fd8d62228987df2e521c124"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/biomimetics10100650",
+        "receipt_id": "20261121t094420z-opencitations-ac23458f03",
+        "result_count": 2,
+        "response_sha256": "512382b6f5a1a3704dd4d44c2068fe0355313921253ef806c845c386ab453eff"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 211,
+    "off_topic_filtered": 128,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 46,
+    "net_new": 37,
+    "provider_statuses": [
+      {
+        "query": "cable robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cable robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "cable robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cable robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cable robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "bin picking",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bin picking",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bin picking",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "bin picking",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "bin picking",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "deformable manipulation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "deformable manipulation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "deformable manipulation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "deformable manipulation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "deformable manipulation",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=deformable+manipulation&per_page=15: The read operation timed out"
+      },
+      {
+        "query": "impedance control",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "impedance control",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "impedance control",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "impedance control",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "impedance control",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

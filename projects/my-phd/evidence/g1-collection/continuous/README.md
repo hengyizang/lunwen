@@ -7,11 +7,11 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：27
-- **最近更新时间 (UTC)**：2026-11-21T09:39:08Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2902 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1377 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2511 条
+- **已完成轮次**：28
+- **最近更新时间 (UTC)**：2026-11-21T09:44:03Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2994 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1414 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2595 条
 - **累计已完成确定性清洗数据集**：57 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
@@ -19,16 +19,16 @@
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 124 | 54 |
-| `R2_Aerial_Actuator` | 387 | 48 |
+| `R1_Force_Contact` | 124 | 56 |
+| `R2_Aerial_Actuator` | 387 | 49 |
 | `R5_MultiRobot_Comm` | 242 | 41 |
-| `Robotics_Embodied` | 1040 | 409 |
-| `Mechanical_Physics_AI` | 878 | 629 |
-| `Mechatronics_PHM_Control` | 687 | 421 |
-| `Smart_Manufacturing` | 242 | 282 |
-| `Smart_Factory_DigitalTwin` | 154 | 69 |
+| `Robotics_Embodied` | 1040 | 442 |
+| `Mechanical_Physics_AI` | 912 | 635 |
+| `Mechatronics_PHM_Control` | 746 | 430 |
+| `Smart_Manufacturing` | 251 | 283 |
+| `Smart_Factory_DigitalTwin` | 155 | 69 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 243 | 0 |
+| `Adjacent` | 246 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -76,7 +76,6 @@
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 3 | 2026-11-21T07:44:04Z | Broad Engineering R3: R2_Aerial_Actuator / R5_MultiRobot_Comm | +94 | +107 | +3 | [round-03-audit.json](rounds/round-03-audit.json) |
 | 4 | 2026-11-21T07:45:57Z | Broad Engineering R4: R5_MultiRobot_Comm | +93 | +92 | +2 | [round-04-audit.json](rounds/round-04-audit.json) |
 | 5 | 2026-11-21T07:49:14Z | Broad Engineering R5: Robotics_Embodied | +118 | +112 | +3 | [round-05-audit.json](rounds/round-05-audit.json) |
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
@@ -101,3 +100,4 @@
 | 25 | 2026-11-21T09:29:02Z | Broad Engineering R25: Mechanical_Physics_AI | +117 | +72 | +3 | [round-25-audit.json](rounds/round-25-audit.json) |
 | 26 | 2026-11-21T09:34:02Z | Broad Engineering R26: Mechanical_Physics_AI | +202 | +62 | +2 | [round-26-audit.json](rounds/round-26-audit.json) |
 | 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
+| 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
