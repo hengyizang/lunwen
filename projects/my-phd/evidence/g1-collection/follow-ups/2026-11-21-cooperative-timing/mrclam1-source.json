@@ -1,0 +1,143 @@
+{
+  "dataset": "UTIAS Multi-Robot Cooperative Localization and Mapping Dataset, Dataset 1",
+  "checked_utc_date": "2026-11-21",
+  "authors": [
+    "Keith Y. K. Leung",
+    "Yoni Halpern",
+    "Timothy D. Barfoot",
+    "Hugh H. T. Liu"
+  ],
+  "article_doi": "10.1177/0278364911398404",
+  "article_url": "https://doi.org/10.1177/0278364911398404",
+  "official_documentation": "https://asrl.utias.utoronto.ca/datasets/mrclam/index.html",
+  "official_archive_directory_as_advertised": "ftp://asrl3.utias.utoronto.ca/MRCLAM/",
+  "reviewed_mirror": "https://github.com/CAOR-MINES-ParisTech/esde/tree/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1",
+  "comparison_mirror": "https://github.com/doclorenzo/SLAM-Project/tree/729e8e35c27e9cfcd86ecefa294fca86aa59e576/data/raw/MRCLAM_Dataset1",
+  "provenance_limit": "The official description and its seventeen-file schema were checked. The research team's FTP archive was not fetched; a primary publisher digest was not found on the documentation page. File sizes and digests below identify the exact public HTTPS mirror examined.",
+  "rights": "The official page requests citation. A grant to redistribute source measurements or trajectories was not located on the documentation page. This directory contains independently computed aggregate facts, links and verification code.",
+  "mirror_comparison": "The two named public Git trees agree on all 15 robot files and the landmark ground-truth file. Barcodes.dat differs only in the assignments of barcodes 18 and 61 to static landmark subjects 11 and 17. Both are static; neither mapping changes these aggregates. The official FTP mapping for these two subjects was not verified.",
+  "comparison_barcodes_sha256": "0138e2ae217112de3be9867deaab4bc62ca076a1a46ccb9a21ce46eb67741b37",
+  "file_count": 17,
+  "total_input_bytes": 42438173,
+  "files": [
+    {
+      "name": "Barcodes.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Barcodes.dat",
+      "bytes": 404,
+      "sha256": "11049b54d75d8142297fe6473686dc406e0d74312b1dc679c6f3c3d826328a0b",
+      "git_blob_sha1": "3b4c2f710b2d7894db83dd95fef2abf9e2440632"
+    },
+    {
+      "name": "Landmark_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Landmark_Groundtruth.dat",
+      "bytes": 1098,
+      "sha256": "682c416aafb066992e964ef4233ee9054f41f0e18501409bf5efd005fef152d8",
+      "git_blob_sha1": "6e3a0d93f391e38a06e71299cf6f258e0d35c8dd"
+    },
+    {
+      "name": "Robot1_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot1_Groundtruth.dat",
+      "bytes": 4582218,
+      "sha256": "c6e6f1d4bd241e8612f0947387c8ec1c3a617438e91be38dc2a9cb70a67ff0a9",
+      "git_blob_sha1": "637aaf3a208a87d7825ed56aa8ee67bd058e52ab"
+    },
+    {
+      "name": "Robot1_Measurement.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot1_Measurement.dat",
+      "bytes": 229138,
+      "sha256": "3257dd730fe65773e0a093c2aa45da998ab8c790f666d0477f6976d03aef1abf",
+      "git_blob_sha1": "8d26fbe13e8b17c22a13b95f4e6638a8e4505b95"
+    },
+    {
+      "name": "Robot1_Odometry.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot1_Odometry.dat",
+      "bytes": 3328485,
+      "sha256": "51a3f6362684a3993c50fcde83fd89eac49f68acd1568cb2f399680b88afab81",
+      "git_blob_sha1": "b81761b0665cd7ffc19e8fb2b925d8a3ff7711bd"
+    },
+    {
+      "name": "Robot2_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot2_Groundtruth.dat",
+      "bytes": 4877839,
+      "sha256": "6f18dc6de7925577b74dad293e136743556e5cdd4c3b836bbfb9692a93102fd8",
+      "git_blob_sha1": "9df50a46074d8dc541148fa4e40c8e4385a56bff"
+    },
+    {
+      "name": "Robot2_Measurement.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot2_Measurement.dat",
+      "bytes": 268178,
+      "sha256": "af9746edb6d6023aebb4a09105988db9b530391de2de4f9041ecea30977472e6",
+      "git_blob_sha1": "1fb2b8f2ab405a52c40c632ec2d650b71eda7a09"
+    },
+    {
+      "name": "Robot2_Odometry.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot2_Odometry.dat",
+      "bytes": 3224309,
+      "sha256": "a4c26b277cfdb984f2172560d49dddd4bbddcfedaeaf23daa87928cd8167d1e2",
+      "git_blob_sha1": "825c939aed1c6bc7a7860ea0775e4f2f5d4301db"
+    },
+    {
+      "name": "Robot3_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot3_Groundtruth.dat",
+      "bytes": 5000487,
+      "sha256": "cd389d151679d8053f58675e1f77a49cc56710d8551c5c8f080e8f902c835380",
+      "git_blob_sha1": "f4ac198ed36495f26f5902ced5731d104eba4317"
+    },
+    {
+      "name": "Robot3_Measurement.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot3_Measurement.dat",
+      "bytes": 349898,
+      "sha256": "2ad96e0d6a4fab5ee165ddb946c554ee0d80aeaf4def12621139b48410fb4a84",
+      "git_blob_sha1": "43a62f12ec2b11cf5711c5e97678bb280c91321d"
+    },
+    {
+      "name": "Robot3_Odometry.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot3_Odometry.dat",
+      "bytes": 3310159,
+      "sha256": "787fe8b11d2506d764c16db6265b63ce6cca8301bc257a70f1470b46b00dd26f",
+      "git_blob_sha1": "3bcd4bffdba80f19ba60188bfe069af70fef58ce"
+    },
+    {
+      "name": "Robot4_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot4_Groundtruth.dat",
+      "bytes": 5126974,
+      "sha256": "9ab55e17a7d5e1677efe72bf9fa9409aa87869849fd9c02d9ef2555fb9fb19ac",
+      "git_blob_sha1": "20777318eae36b45b5dce5fb9c2bc0c0878b47c8"
+    },
+    {
+      "name": "Robot4_Measurement.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot4_Measurement.dat",
+      "bytes": 159858,
+      "sha256": "4a8cb16e910b963e3614b12e08ad87a392078df61b5e81dc22074658f5e59568",
+      "git_blob_sha1": "3856cc75b1dbb4c73554d695793b35efc84f1581"
+    },
+    {
+      "name": "Robot4_Odometry.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot4_Odometry.dat",
+      "bytes": 3400633,
+      "sha256": "74b824e3cf3ac1dc1b9bcd1623174088256810c64f98d1debd8ac2ed721cfb02",
+      "git_blob_sha1": "f4453a1b6ff821856461b6d0ad49862792dcc7c5"
+    },
+    {
+      "name": "Robot5_Groundtruth.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot5_Groundtruth.dat",
+      "bytes": 4801688,
+      "sha256": "473acf3062890783964aeabc1f9564709e3d96bd34538641f8c387b2e316fea6",
+      "git_blob_sha1": "105db567b2a40a6dfaadca537e02cf42915edee0"
+    },
+    {
+      "name": "Robot5_Measurement.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot5_Measurement.dat",
+      "bytes": 351898,
+      "sha256": "31813e405d86e6a0de5243bea2ce39035f6daef0a54e0fd8949d14333f8a6593",
+      "git_blob_sha1": "f92591298b1ebe0f4d7677115ed09a312cdb0225"
+    },
+    {
+      "name": "Robot5_Odometry.dat",
+      "url": "https://raw.githubusercontent.com/CAOR-MINES-ParisTech/esde/f7b27039b6d4e913bf9a10bd6c81838e17f87d4a/experiments/MRCLAM1/Robot5_Odometry.dat",
+      "bytes": 3424909,
+      "sha256": "689313f51d214ce4d858fbce526b505c08ef5ab850e0758d6163721d0d9064dc",
+      "git_blob_sha1": "b9e1822a8632dab15c8b1a004a1fa9e01b39e305"
+    }
+  ]
+}

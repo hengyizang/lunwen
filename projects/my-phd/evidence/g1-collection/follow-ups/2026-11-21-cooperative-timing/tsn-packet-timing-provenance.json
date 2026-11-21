@@ -1,0 +1,73 @@
+{
+  "title": "Packet latency measurements in experimental TSN-capable networks",
+  "authors": [
+    "Manuel Cheminod",
+    "Marc Ruiz Ramírez",
+    "Luis Velasco Esteban",
+    "Claudio Zunino"
+  ],
+  "doi": "10.34810/DATA1885",
+  "doi_url": "https://doi.org/10.34810/DATA1885",
+  "release": "CORA/RDR Dataverse 1.0",
+  "release_utc": "2024-12-04T17:24:25Z",
+  "version_metadata_url": "https://dataverse.csuc.cat/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.34810/data1885",
+  "license": {
+    "name": "CC BY 4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "Original measurements by Manuel Cheminod, Marc Ruiz Ramírez, Luis Velasco Esteban and Claudio Zunino (2024). Derived file-level summaries and transport-age proxy computed for G1."
+  },
+  "retrieved_utc_date": "2026-11-21",
+  "evidence": "Primary documentation inspected and all 20 public receiver reports downloaded, digest-verified and parsed.",
+  "population": "Static laboratory UDP traffic replay in Torino, February–March 2024. Two UDP streams, two repetitions; AP, NXP1028, chained NXP1028–AP, and Wi-Fi–NUC at 2.4/5 GHz. Ground-robot motion and closed-loop control performance were not measured.",
+  "selection": "Selected every receiver_*.txt in data/results/ and the two methodological documents; the generator input was unneeded. Only file-level aggregates and hashes are redistributed.",
+  "data_files": 20,
+  "total_receiver_rows": 200000,
+  "wireless_files": 8,
+  "wired_files": 12,
+  "schema_and_clock": "ReadMe.txt and Description.pdf pp. 1–2: id is an incremental per-stream packet index. The unused payload field, txtime, hwtime, rxtime, systime and UDP payload length complete the seven integer fields. Generator records txtime into the sent UDP payload; sender and receiver NIC clocks are synchronized. The NUC Wi-Fi receiver lacks hardware timestamps; PTP aligns its Ethernet PHC to the generator, and phc2sys aligns its system clock. Interrupt/software delays remain in its receive timestamps. Absolute error after synchronization is not quantified per packet.",
+  "computation": "Apply integer timestamp arithmetic in ns. Wired latency = hwtime - txtime; Wi-Fi = rxtime + 37000000000 - txtime. Convert to microseconds only after subtraction. Each CSV row is one original file; quantile uses ascending rank ceil(0.95*n). Every file contained a contiguous sequence 0–9999 and nondecreasing send and corrected receive timestamps. No internal sequence gaps establishes completeness within that observed range, not reliability of other traffic.",
+  "age_proxy": "For each stream, use transmit time as generation time only for a transport-level age proxy. Over the observed interval from first to last reception, let d_i = receive_i - transmit_i and h_i = receive_(i+1) - receive_i. Time-weighted mean age = sum(d_i*h_i + h_i^2/2)/sum(h_i), i=0..n-2. There are no stale/out-of-order updates under these checks. True controller/sensor AoI requires sample generation times and application-use times, which these files do not supply.",
+  "quality_notes": [
+    "Description.pdf Table 4 middle four Wi-Fi rows have conflicting filename versus band/port labels. The matching statistics follow band/port metadata, not the printed filenames. CSV uses the publisher file paths and measured contents.",
+    "For receiver_1027-2.4g-TEST1.txt the observed minimum is 496.830 µs; the corresponding Table 4 numeric row prints 493.83 µs. Retained file-derived result.",
+    "One-way latency is supported at the documented timestamping layers. The clock correction is specific to this dataset; transport-age estimates do not establish timing on a mobile robot."
+  ],
+  "documents": [
+    {
+      "name": "Description.pdf",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/161484",
+      "bytes": 397512,
+      "md5": "ffc3f83c3b08742a083a4fac6c13023c",
+      "sha256": "fd430322ab6cf1fe3891f54585a86d041ed30671f040cb89010f9b97b37df2c8"
+    },
+    {
+      "name": "ReadMe.txt",
+      "url": "https://dataverse.csuc.cat/api/access/datafile/161483",
+      "bytes": 7411,
+      "md5": "11b7f3ea6d1b5b1c77814cd82f72aed0",
+      "sha256": "092f0271ac538109805a078462856335657f1c6b001a674f5362516b3728584f"
+    }
+  ],
+  "aggregate_csv_sha256": "04d9caf0870f16506239111131d1de3deedd54d3b5705d61864595d1d3138718",
+  "query_log": [
+    {
+      "query": "Packet latency measurements in experimental TSN-capable networks",
+      "source": "https://personals.ac.upc.edu/lvelasco/Datasets.html",
+      "action": "Screened author dataset directory and followed its CORA RDR deposit."
+    },
+    {
+      "query": "doi:10.34810/data1885 version 1.0, then all data/results/receiver reports",
+      "source": "https://dataverse.csuc.cat/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.34810/data1885",
+      "action": "Checked release and license, read methodological documents, validated all receiver file MD5/size against version manifest, independently computed SHA-256 and aggregate statistics."
+    }
+  ],
+  "reproduction": {
+    "script": "derive_tsn_packet_timing.py",
+    "requirements": "Python 3 standard library. Supply all 20 files from the CSV download_url column, retaining the release directory tree or saving each file with its numeric file ID; several source basenames repeat across directories.",
+    "online_command": "python3 derive_tsn_packet_timing.py /path/to/receiver-files --output recalculated.csv",
+    "offline_command": "python3 derive_tsn_packet_timing.py --metadata release-v1.0.json /path/to/receiver-files --output recalculated.csv",
+    "offline_metadata": "Save the JSON from version_metadata_url before running offline. Individual receiver file paths may replace the input directory. Compare outputs with cmp recalculated.csv tsn-packet-timing.csv.",
+    "exact_option": "Add --exact to append latency_sum_ns, transport_age_twice_area_ns2 and observation_duration_ns. Divide the first by packet_rows for exact mean delay in ns; divide twice-area by twice the duration for exact time-mean transport age in ns. Epoch timestamps and time differences are handled as integers; only displayed microsecond means are rounded.",
+    "verification": "Both directory and explicit-file input regenerated the saved CSV byte-for-byte. An incomplete list failed. All 20 exact-integer results matched the displayed means within half a unit in the last displayed decimal place (allowing floating-point roundoff)."
+  }
+}

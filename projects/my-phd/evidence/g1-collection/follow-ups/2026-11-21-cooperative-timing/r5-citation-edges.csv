@@ -1,0 +1,16 @@
+citing_doi,cited_doi,source_verification
+10.1177/0278364918760698,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.15607/rss.2016.xii.016,10.1177/0278364911398404,OpenAlex edge + explicit full-text reference
+10.1109/itsc.2019.8916915,10.15607/rss.2016.xii.016,OpenAlex + Crossref deposited DOI
+10.1109/lra.2020.2969916,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1109/lra.2022.3169604,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI + explicit full-text reference
+10.1109/itsc.2019.8916915,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1016/j.robot.2018.09.010,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1109/iros47612.2022.9982117,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI + explicit full-text reference
+10.1007/978-3-030-28619-4_46,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1109/itsc.2019.8916915,10.1007/978-3-030-28619-4_46,OpenAlex edge
+10.1109/iros45743.2020.9340833,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1109/lsens.2021.3065931,10.1177/0278364911398404,OpenAlex + Crossref deposited DOI
+10.1177/0278364911398404,10.1109/tro.2009.2035741,OpenAlex + Crossref deposited DOI
+10.1177/0278364911398404,10.1109/robot.2009.5152214,OpenAlex edge
+10.1109/plans61210.2025.11028384,10.1109/itsc.2019.8916915,OpenAlex + Crossref deposited DOI

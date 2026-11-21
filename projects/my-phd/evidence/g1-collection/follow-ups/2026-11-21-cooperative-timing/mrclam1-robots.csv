@@ -1,0 +1,6 @@
+observer,measurement_rows,unique_measurement_times,other_robot_rows,self_rows,landmark_rows,distinct_landmarks_seen,unmapped_rows,unmapped_barcode_counts,measurement_span_s,groundtruth_rows,odometry_rows,measurement_time_reversals,groundtruth_time_reversals,odometry_time_reversals
+1,5723,3774,952,0,4771,15,0,,1487.105,81877,97890,0,0,0
+2,6699,4447,1156,0,5543,15,0,,1486.268,86988,94826,0,0,0
+3,8742,5276,1969,0,6771,15,2,43=2,1485.885,89106,97351,0,0,0
+4,3991,3303,722,0,3269,15,0,,1489.367,91537,100012,0,0,0
+5,8792,5453,1654,0,7137,15,1,43=1,1486.742,85606,100726,0,0,0
