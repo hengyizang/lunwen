@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-cfzwvn-rural-donegal-drone-imag",
+  "dataset_name": "Rural Donegal Drone Images",
+  "doi": "10.7910/dvn/cfzwvn",
+  "landing_url": "https://doi.org/10.7910/DVN/CFZWVN",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/CFZWVN",
+  "access_date": "2026-11-21",
+  "round_number": 35,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "user2~DJI_0140700.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3997307",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CFZWVN/1739c351bd9-94873ba5e89d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27user2%257EDJI_0140700.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T101954Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=69269f2ea5f8c69619829973606fe17853e676e1376805133d5215fef031af05",
+      "http_status": 200,
+      "bytes": 390855,
+      "publisher_checksum": "md5:3ff513fb6ad86ac4c54942407dd0e399",
+      "verified_md5": "3ff513fb6ad86ac4c54942407dd0e399",
+      "verified_sha256": "fa833327bc6269da090eee165cb06c9753687e4e5747715a2fd56d224ea555e4"
+    },
+    {
+      "file": "user2~DJI_01532300.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3997362",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CFZWVN/1739c352224-66e53e84e91b?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27user2%257EDJI_01532300.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T101956Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=bf9283d97cd1ef4727807606cef2e7456b4f76866e0fe561c263d4fd526a11ae",
+      "http_status": 200,
+      "bytes": 409097,
+      "publisher_checksum": "md5:4f2ad5a07a4739385cb00f1d6acb3419",
+      "verified_md5": "4f2ad5a07a4739385cb00f1d6acb3419",
+      "verified_sha256": "f063437eb0ab027ae38eca659a01a033b9be06e31feb269277dd93ab945dc82f"
+    },
+    {
+      "file": "user2~DJI_01530.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3996519",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CFZWVN/1739c3521fb-af745c189cc9?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27user2%257EDJI_01530.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T101959Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=c640dee7526326a4264aaf5cffaa3cb84ea39bdeb251232f548ccb62c661b17f",
+      "http_status": 200,
+      "bytes": 414605,
+      "publisher_checksum": "md5:5c8a6cd63553c2060d8f0a26da535154",
+      "verified_md5": "5c8a6cd63553c2060d8f0a26da535154",
+      "verified_sha256": "ef07499990095d0383f6e19632614bcf9d8c5b37a28bc988f26f6f5f7031a4ba"
+    },
+    {
+      "file": "user1~DJI_0107600.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3997364",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/CFZWVN/1739c34fd88-b2aadebbf05c?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27user1%257EDJI_0107600.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T102001Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=40059c355435df719cfba79f3326588315805ee0af7bbbdfee69ac84cb10773d",
+      "http_status": 200,
+      "bytes": 414864,
+      "publisher_checksum": "md5:9e6bb74f7bd731464a9b50ac14ff27dc",
+      "verified_md5": "9e6bb74f7bd731464a9b50ac14ff27dc",
+      "verified_sha256": "4ae4b3ebff63e1901061f4f32869c932f0deaa8e9757499fe6e83e26993e3632"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-cfzwvn-rural-donegal-drone-imag",
+  "raw_total_bytes": 1629421,
+  "raw_total_rows": 35968,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-cfzwvn-rural-donegal-drone-imag-cleaned.csv",
+  "cleaned_csv_sha256": "d5901c30d2a712c6e684c313414e00b5231eb0b0bc4c9131da4cec81df87216c",
+  "cleaned_rows": 12,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "user2~DJI_0140700.json": {
+      "xCoord": 0,
+      "yCoord": 0,
+      "category": 0
+    },
+    "user2~DJI_01532300.json": {
+      "xCoord": 0,
+      "yCoord": 0,
+      "category": 0
+    },
+    "user2~DJI_01530.json": {
+      "xCoord": 0,
+      "yCoord": 0,
+      "category": 0
+    },
+    "user1~DJI_0107600.json": {
+      "xCoord": 0,
+      "yCoord": 0,
+      "category": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

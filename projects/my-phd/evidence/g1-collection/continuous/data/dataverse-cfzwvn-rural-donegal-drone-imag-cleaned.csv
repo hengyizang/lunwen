@@ -1,0 +1,13 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+user2~DJI_0140700.json,xCoord,numeric,8320,8320,0,128,0,31.75,63.5,63.5,95.25,127,36.9515
+user2~DJI_0140700.json,yCoord,numeric,8320,8320,0,65,0,16,32,32,48,64,18.7628
+user2~DJI_0140700.json,category,categorical_or_text,8320,8320,0,3,,,,,,,"{""foliage"": 8119, ""road"": 101, ""building"": 100}"
+user2~DJI_01532300.json,xCoord,numeric,9216,9216,0,128,0,31.75,63.5,63.5,95.25,127,36.9513
+user2~DJI_01532300.json,yCoord,numeric,9216,9216,0,72,0,17.75,35.5,35.5,53.25,71,20.7837
+user2~DJI_01532300.json,category,categorical_or_text,9216,9216,0,2,,,,,,,"{""road"": 8067, ""foliage"": 1149}"
+user2~DJI_01530.json,xCoord,numeric,9216,9216,0,128,0,31.75,63.5,63.5,95.25,127,36.9513
+user2~DJI_01530.json,yCoord,numeric,9216,9216,0,72,0,17.75,35.5,35.5,53.25,71,20.7837
+user2~DJI_01530.json,category,categorical_or_text,9216,9216,0,2,,,,,,,"{""road"": 6230, ""foliage"": 2986}"
+user1~DJI_0107600.json,xCoord,numeric,9216,9216,0,128,0,31.75,63.5,63.5,95.25,127,36.9513
+user1~DJI_0107600.json,yCoord,numeric,9216,9216,0,72,0,17.75,35.5,35.5,53.25,71,20.7837
+user1~DJI_0107600.json,category,categorical_or_text,9216,9216,0,1,,,,,,,"{""water"": 9216}"

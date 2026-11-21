@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 34,
-  "total_new_literature": 3511,
-  "total_new_datasets": 1629,
-  "total_new_reading_queue": 3026,
+  "round_number": 35,
+  "total_new_literature": 3652,
+  "total_new_datasets": 1672,
+  "total_new_reading_queue": 3155,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -79,7 +79,10 @@
     "dataverse:10.7910/dvn/yuiynm",
     "figshare:34950610",
     "figshare:24116583",
-    "figshare:25024495"
+    "figshare:25024495",
+    "dataverse:10.7910/dvn/cfzwvn",
+    "dataverse:10.7910/dvn/itfa7o",
+    "dataverse:10.7910/dvn/0wb6z1"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1131,6 +1134,48 @@
       "cleaned_rows": 88,
       "raw_total_rows": 88,
       "verified_sha256": "9d05e14cdbecb059a07f79b3ad989892d2e273ecae929242e564a373bb2379e5"
+    },
+    {
+      "slug": "dataverse-cfzwvn-rural-donegal-drone-imag",
+      "key": "dataverse:10.7910/dvn/cfzwvn",
+      "dataset_name": "Rural Donegal Drone Images",
+      "doi": "10.7910/dvn/cfzwvn",
+      "landing_url": "https://doi.org/10.7910/DVN/CFZWVN",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-cfzwvn-rural-donegal-drone-imag-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-cfzwvn-rural-donegal-drone-imag-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_cfzwvn_rural_donegal_drone_imag.py",
+      "cleaned_rows": 12,
+      "raw_total_rows": 35968,
+      "verified_sha256": "fa833327bc6269da090eee165cb06c9753687e4e5747715a2fd56d224ea555e4"
+    },
+    {
+      "slug": "dataverse-itfa7o-replication-data-for-ind",
+      "key": "dataverse:10.7910/dvn/itfa7o",
+      "dataset_name": "Replication Data for: Individual vulnerability to industrial robot adoption increases support for the radical right",
+      "doi": "10.7910/dvn/itfa7o",
+      "landing_url": "https://doi.org/10.7910/DVN/ITFA7O",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-itfa7o-replication-data-for-ind-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-itfa7o-replication-data-for-ind-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_itfa7o_replication_data_for_ind.py",
+      "cleaned_rows": 10,
+      "raw_total_rows": 160686,
+      "verified_sha256": "6160be0c6072f27eb26a72c0fde1dc6c6b4fca0691a2c44fe152c5f733c175fd"
+    },
+    {
+      "slug": "dataverse-0wb6z1-the-replication-material",
+      "key": "dataverse:10.7910/dvn/0wb6z1",
+      "dataset_name": "The replication materials for the paper titled \"Industrial Robots, Management Practices, and Firm Productivity in China\"",
+      "doi": "10.7910/dvn/0wb6z1",
+      "landing_url": "https://doi.org/10.7910/DVN/0WB6Z1",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-0wb6z1-the-replication-material-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-0wb6z1-the-replication-material-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_0wb6z1_the_replication_material.py",
+      "cleaned_rows": 30,
+      "raw_total_rows": 5934,
+      "verified_sha256": "24a008db25af3d8a4a07fd674da73481ba8d1bb6387a9c24bed16581cb3cc7bb"
     }
   ],
   "snowballed_dois": [
@@ -1198,6 +1243,8 @@
     "10.48550/arxiv.2609.35709",
     "10.48550/arxiv.2610.25628",
     "10.5194/ms-15-531-2024",
+    "10.5281/zenodo.23348845",
+    "10.55592/cilamce2025.v5i.14009",
     "10.5772/intechopen.1010959"
   ],
   "rounds_history": [
@@ -1506,35 +1553,44 @@
       "net_new_datasets": 30,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 35,
+      "completed_at": "2026-11-21T10:19:03Z",
+      "batch_label": "Broad Engineering R35: Mechanical_Physics_AI",
+      "net_new_literature": 141,
+      "net_new_datasets": 43,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T10:14:04Z",
+  "updated_at": "2026-11-21T10:19:03Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
     "Adjacent": 306,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 387,
-    "Mechanical_Physics_AI": 1074,
-    "Mechatronics_PHM_Control": 804,
-    "Robotics_Embodied": 1062,
-    "R5_MultiRobot_Comm": 244,
-    "R1_Force_Contact": 140,
-    "Smart_Manufacturing": 492,
+    "R2_Aerial_Actuator": 388,
+    "Mechanical_Physics_AI": 1184,
+    "Mechatronics_PHM_Control": 825,
+    "Robotics_Embodied": 1065,
+    "R5_MultiRobot_Comm": 245,
+    "R1_Force_Contact": 142,
+    "Smart_Manufacturing": 525,
     "Smart_Factory_DigitalTwin": 201
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 715,
-    "Mechatronics_PHM_Control": 518,
-    "Smart_Manufacturing": 309,
-    "Robotics_Embodied": 485,
+    "Mechanical_Physics_AI": 735,
+    "Mechatronics_PHM_Control": 529,
+    "Smart_Manufacturing": 332,
+    "Robotics_Embodied": 488,
     "R5_MultiRobot_Comm": 77,
     "Smart_Factory_DigitalTwin": 71,
-    "R2_Aerial_Actuator": 83,
+    "R2_Aerial_Actuator": 84,
     "R1_Force_Contact": 58
   },
   "probed_uncleanable_keys": [
@@ -1543,6 +1599,7 @@
     "dataverse:10.7910/dvn/2es4c1",
     "dataverse:10.7910/dvn/2jxwvw",
     "dataverse:10.7910/dvn/4sjujn",
+    "dataverse:10.7910/dvn/5agsiu",
     "dataverse:10.7910/dvn/7cbbat",
     "dataverse:10.7910/dvn/7mxfch",
     "dataverse:10.7910/dvn/8h6npo",
@@ -1558,6 +1615,7 @@
     "dataverse:10.7910/dvn/gqaliw",
     "dataverse:10.7910/dvn/gvr2ba",
     "dataverse:10.7910/dvn/hepecm",
+    "dataverse:10.7910/dvn/hgd1jp",
     "dataverse:10.7910/dvn/hne12j",
     "dataverse:10.7910/dvn/hxc8hk",
     "dataverse:10.7910/dvn/iaxsrd",
@@ -1566,6 +1624,7 @@
     "dataverse:10.7910/dvn/iyplnq",
     "dataverse:10.7910/dvn/j0hc23",
     "dataverse:10.7910/dvn/j9lzez",
+    "dataverse:10.7910/dvn/jmsuae",
     "dataverse:10.7910/dvn/jmvovg",
     "dataverse:10.7910/dvn/jtysfc",
     "dataverse:10.7910/dvn/kckng3",
@@ -1596,6 +1655,7 @@
     "dataverse:10.7910/dvn/wwpac4",
     "dataverse:10.7910/dvn/xopuxy",
     "dataverse:10.7910/dvn/yu0dps",
+    "dataverse:10.7910/dvn/zcziyu",
     "dataverse:10.7910/dvn/zfjcet",
     "figshare:11833950",
     "figshare:11881506",

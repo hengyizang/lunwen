@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0",
+  "round": 35,
+  "completed_at": "2026-11-21T10:19:03Z",
+  "batch_label": "Broad Engineering R35: Mechanical_Physics_AI",
+  "base_head_sha": "df71c7f8ffb0d28559eb2bed44cc26de458ed443",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 168,
+    "duplicates_skipped": 27,
+    "net_new": 141,
+    "new_reading_queue": 129,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "acoustic metamaterial inverse design",
+        "receipt_id": "20261121t101903z-openalex-1e1b63d62b",
+        "request_url": "https://api.openalex.org/works?search=acoustic+metamaterial+inverse+design&per-page=12",
+        "result_count": 12,
+        "response_sha256": "86067b6f13247ba63bd2052b1ff5fc5da032cc17f5a69ec166f8b66c3da7d263",
+        "normalized_results_sha256": "f785eb35f354676f85ab4c038c658bde0aa50c57349545560ecdd4b52377c96d"
+      },
+      {
+        "provider": "crossref",
+        "query": "acoustic metamaterial inverse design",
+        "receipt_id": "20261121t101905z-crossref-acd628ce2d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=acoustic+metamaterial+inverse+design&rows=12",
+        "result_count": 12,
+        "response_sha256": "c1eb9d1747db5326c8c86111fc720b2352e34fc8211344fccb010b2c68581b00",
+        "normalized_results_sha256": "73a977bfcb4fdb823af8f1297ff81e26f39bc0065b2d0b14084a5b1e85ea522c"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "acoustic metamaterial inverse design",
+        "receipt_id": "20261121t101906z-europe-pmc-8196702dd0",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=acoustic+metamaterial+inverse+design&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "4db162e0fee278ee89668b5e2521db082eba8b44dd959cdb1172b287ca865b51",
+        "normalized_results_sha256": "c9f16a3d7720ba4598fbd003e023501fb44f3523a175d10b0a1337d0aab58cba"
+      },
+      {
+        "provider": "hal",
+        "query": "acoustic metamaterial inverse design",
+        "receipt_id": "20261121t101910z-hal-dbbe8aae4d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=acoustic+metamaterial+inverse+design&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 2,
+        "response_sha256": "435552959ef3462a68cd2ebbf4e96d0a9dfbb909251ebdd1e9bc3a9337d7f849",
+        "normalized_results_sha256": "6da67f3376459a121505c54b1f596eebeb053df3f4d71d89c333fdae6bcd0718"
+      },
+      {
+        "provider": "openalex",
+        "query": "lattice structure optimization additive",
+        "receipt_id": "20261121t101912z-openalex-c05a46de96",
+        "request_url": "https://api.openalex.org/works?search=lattice+structure+optimization+additive&per-page=12",
+        "result_count": 12,
+        "response_sha256": "c642938247f3cc885762c49b834b4749c6d2f9b75bf7d344c7fa1f1ffebfbb91",
+        "normalized_results_sha256": "c56869e80895141e93d999531a61a5c3cc057f1eca613a6c3b00f00813832523"
+      },
+      {
+        "provider": "crossref",
+        "query": "lattice structure optimization additive",
+        "receipt_id": "20261121t101914z-crossref-dc92a218bd",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=lattice+structure+optimization+additive&rows=12",
+        "result_count": 12,
+        "response_sha256": "7387c54ae55369b085c2cba738df8eaf0c74accff84ff1a1b74d9141dafa8d3e",
+        "normalized_results_sha256": "36209f64c45458f12cbcdc4d50dfefd315c4ad7288f6cdc9bd2ea5771ad3d9f4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "lattice structure optimization additive",
+        "receipt_id": "20261121t101915z-europe-pmc-bf2325407d",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=lattice+structure+optimization+additive&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "76977deeb75499c019d9bf35bc3156a423e4c1f377da8d14e939a1e1afb1937c",
+        "normalized_results_sha256": "ca98291894f282fb3da41263e41bae093a4219c4181cd42464f3448dcdab376c"
+      },
+      {
+        "provider": "hal",
+        "query": "lattice structure optimization additive",
+        "receipt_id": "20261121t101917z-hal-df73fbfe2f",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=lattice+structure+optimization+additive&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "db69021c1f86d29ddf305b6dcedd8860e73d51d06981056808c92ece4b5785fb",
+        "normalized_results_sha256": "716de52b4c23e2ff65e3455a42e7118f1d37df319c2156498da455f0cb9bf278"
+      },
+      {
+        "provider": "openalex",
+        "query": "contact mechanics neural network",
+        "receipt_id": "20261121t101919z-openalex-1198d4da5a",
+        "request_url": "https://api.openalex.org/works?search=contact+mechanics+neural+network&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a96ec929ac03aa6d4c9b47b3502329fd1c629ac8296230eb6627fe5089e8389e",
+        "normalized_results_sha256": "61060bd8b19eaf281f2857db9c4bcc8cfc10074b3f110af079bf751f2898016d"
+      },
+      {
+        "provider": "crossref",
+        "query": "contact mechanics neural network",
+        "receipt_id": "20261121t101920z-crossref-5c46f2b4c2",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=contact+mechanics+neural+network&rows=12",
+        "result_count": 12,
+        "response_sha256": "b35bb2f31fbcf0b6ee152886bb39946e7ebbc07e7a38c01795b9db76d77c19d4",
+        "normalized_results_sha256": "3493dca3a0503f9e4247c80a2ff5dc8f520378b607fbe0aa36a62debb432b49d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "contact mechanics neural network",
+        "receipt_id": "20261121t101921z-europe-pmc-f73088c557",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=contact+mechanics+neural+network&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "cd07bd6bfdd1af3aa97a3cef47e2db56823f6c97485a3e749dae4a02bd3db7a5",
+        "normalized_results_sha256": "dc57a8cb4dae241cb01feeb9154847ed189d9def859f4f08fecbd4a2433dc45a"
+      },
+      {
+        "provider": "hal",
+        "query": "contact mechanics neural network",
+        "receipt_id": "20261121t101923z-hal-5c83dbd98a",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=contact+mechanics+neural+network&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 10,
+        "response_sha256": "ed754ac764d7bc261be8dea6566b0aadf87826d4717f07fd38a80dd70af7cf6d",
+        "normalized_results_sha256": "e7c2ff4106f4baac9873fb8d1e0784aa81a8ada994b26dbca435eca25b9179aa"
+      },
+      {
+        "provider": "openalex",
+        "query": "elastohydrodynamic lubrication machine learning",
+        "receipt_id": "20261121t101925z-openalex-0f73c8fe09",
+        "request_url": "https://api.openalex.org/works?search=elastohydrodynamic+lubrication+machine+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "ac3dcb7c78cfadfbe660b3ee4a0073384bae8828db0246c68721a401f84ca7a0",
+        "normalized_results_sha256": "393800b4013e55b4b74e20976cac873b4fccd3e7253fe4ea33f9d752423a73e7"
+      },
+      {
+        "provider": "crossref",
+        "query": "elastohydrodynamic lubrication machine learning",
+        "receipt_id": "20261121t101927z-crossref-c9375447ff",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=elastohydrodynamic+lubrication+machine+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "f8b080be773e6cf5e8d7fc5541767d96d6f1b8866b49b22230fb64de3d777962",
+        "normalized_results_sha256": "3f158b4923d1d885e76a2435f18064e8363f6567175095fb540671e550748659"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "elastohydrodynamic lubrication machine learning",
+        "receipt_id": "20261121t101928z-europe-pmc-e63ce6e49a",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=elastohydrodynamic+lubrication+machine+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "2f8b0876917c8aa4c2ecd4fb78308b718bfbd96c3838cb1b8a0932a722b4399d",
+        "normalized_results_sha256": "617d9494821f4e1aa31ad1bff4320a8a0de07fbc7c355779a6ab5b4f73cd14fa"
+      },
+      {
+        "provider": "hal",
+        "query": "elastohydrodynamic lubrication machine learning",
+        "receipt_id": "20261121t101940z-hal-9a8339dd1f",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=elastohydrodynamic+lubrication+machine+learning&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.55592/cilamce2025.v5i.14009",
+        "receipt_id": "20261121t101942z-opencitations-24af0b837d",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.5281/zenodo.23348845",
+        "receipt_id": "20261121t101943z-opencitations-41a4eead5b",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 197,
+    "off_topic_filtered": 135,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 19,
+    "net_new": 43,
+    "provider_statuses": [
+      {
+        "query": "friction stir welding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "friction stir welding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "friction stir welding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "friction stir welding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "friction stir welding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "resistance spot welding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "resistance spot welding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "resistance spot welding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "resistance spot welding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "resistance spot welding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "surface roughness",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface roughness",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "surface roughness",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface roughness",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surface roughness",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cutting force",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cutting force",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cutting force",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cutting force",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cutting force",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 8,
+    "cleaned": [
+      {
+        "slug": "dataverse-cfzwvn-rural-donegal-drone-imag",
+        "key": "dataverse:10.7910/dvn/cfzwvn",
+        "dataset_name": "Rural Donegal Drone Images",
+        "doi": "10.7910/dvn/cfzwvn",
+        "landing_url": "https://doi.org/10.7910/DVN/CFZWVN",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-cfzwvn-rural-donegal-drone-imag-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-cfzwvn-rural-donegal-drone-imag-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_cfzwvn_rural_donegal_drone_imag.py",
+        "cleaned_rows": 12,
+        "raw_total_rows": 35968,
+        "verified_sha256": "fa833327bc6269da090eee165cb06c9753687e4e5747715a2fd56d224ea555e4"
+      },
+      {
+        "slug": "dataverse-itfa7o-replication-data-for-ind",
+        "key": "dataverse:10.7910/dvn/itfa7o",
+        "dataset_name": "Replication Data for: Individual vulnerability to industrial robot adoption increases support for the radical right",
+        "doi": "10.7910/dvn/itfa7o",
+        "landing_url": "https://doi.org/10.7910/DVN/ITFA7O",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-itfa7o-replication-data-for-ind-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-itfa7o-replication-data-for-ind-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_itfa7o_replication_data_for_ind.py",
+        "cleaned_rows": 10,
+        "raw_total_rows": 160686,
+        "verified_sha256": "6160be0c6072f27eb26a72c0fde1dc6c6b4fca0691a2c44fe152c5f733c175fd"
+      },
+      {
+        "slug": "dataverse-0wb6z1-the-replication-material",
+        "key": "dataverse:10.7910/dvn/0wb6z1",
+        "dataset_name": "The replication materials for the paper titled \"Industrial Robots, Management Practices, and Firm Productivity in China\"",
+        "doi": "10.7910/dvn/0wb6z1",
+        "landing_url": "https://doi.org/10.7910/DVN/0WB6Z1",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-0wb6z1-the-replication-material-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-0wb6z1-the-replication-material-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_0wb6z1_the_replication_material.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 5934,
+        "verified_sha256": "24a008db25af3d8a4a07fd674da73481ba8d1bb6387a9c24bed16581cb3cc7bb"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

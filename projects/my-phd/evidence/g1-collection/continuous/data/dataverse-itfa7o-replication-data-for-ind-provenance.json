@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-itfa7o-replication-data-for-ind",
+  "dataset_name": "Replication Data for: Individual vulnerability to industrial robot adoption increases support for the radical right",
+  "doi": "10.7910/dvn/itfa7o",
+  "landing_url": "https://doi.org/10.7910/DVN/ITFA7O",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/ITFA7O",
+  "access_date": "2026-11-21",
+  "round_number": 35,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "FigS3data.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5379617",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ITFA7O/17d0eb0d10c-0fedb067147f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27FigS3data.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T102015Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=d77f60ce6b59054330ce14f23ff4a9a77aaccfed2a36a33a0bfe7ee1757ca0c8",
+      "http_status": 200,
+      "bytes": 532,
+      "publisher_checksum": "dataverse_original_md5:4450ef5db31f19fd94fcbc78864d9886",
+      "verified_md5": "38289d04c92830abe32b1aae46d6f848",
+      "verified_sha256": "6160be0c6072f27eb26a72c0fde1dc6c6b4fca0691a2c44fe152c5f733c175fd"
+    },
+    {
+      "file": "F&O_twodigits_Wide.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5379722",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ITFA7O/17d0eb0dbbc-0128fba483c9?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27F%2526O_twodigits_Wide.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T102016Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=394120d68a43d03bca8da7cfae034a12c3d3136dc7d57de4929be794c540b4b3",
+      "http_status": 200,
+      "bytes": 1022,
+      "publisher_checksum": "dataverse_original_md5:7b0241368ef23f7f3c82dfb459351c45",
+      "verified_md5": "dcbae86f7b88a56308dfa42900f355a9",
+      "verified_sha256": "7d8f4f2373eb5e651b93a5d50be39c93d924fe9f991b5489b98ab12a838b6fad"
+    },
+    {
+      "file": "FigS4data.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5379687",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/ITFA7O/17d0eb0d2b4-c93e9413d500?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27FigS4data.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T102018Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6e19ac6c97c7391494d22a05bde54641bc39f94a6e8dacbc1b362c7ed0fcc4f7",
+      "http_status": 200,
+      "bytes": 5151283,
+      "publisher_checksum": "dataverse_original_md5:63fff8c10e73ccca53624c4b7905c49b",
+      "verified_md5": "d01644a6ad5d2faf769e8ac4098c3f94",
+      "verified_sha256": "3e0342357aa5c9e8d6289ad7db2966995731457ca03b42eb548a10055d4af1b4"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-itfa7o-replication-data-for-ind",
+  "raw_total_bytes": 5152837,
+  "raw_total_rows": 160686,
+  "duplicate_rows_removed": 61188,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-itfa7o-replication-data-for-ind-cleaned.csv",
+  "cleaned_csv_sha256": "2f8f086847dd2644545a1e192ce8de8ac3159dd9490b7d7c3ed556fb01eac288",
+  "cleaned_rows": 10,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "FigS3data.tab": {
+      "isco88_1d": 0,
+      "occ_real": 0,
+      "dhat": 0,
+      "isco88_1d_names": 0
+    },
+    "FigS4data.tab": {
+      "age": 286,
+      "nuts2": 0,
+      "radical_right_dummy": 40302,
+      "year": 0,
+      "edu_level": 821,
+      "d13_indshock_fo": 1065
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

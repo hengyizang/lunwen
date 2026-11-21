@@ -1,0 +1,11 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+FigS3data.tab,isco88_1d,numeric,9,9,0,9,1,3,5,5,7,9,2.73861
+FigS3data.tab,occ_real,numeric,9,9,0,9,3954,12784,16307,15750.8,20798,23752,6250.27
+FigS3data.tab,dhat,numeric,9,9,0,9,10080.5,14543.7,19664.7,17689.9,21330.9,24017.7,4815.7
+FigS3data.tab,isco88_1d_names,categorical_or_text,9,9,0,9,,,,,,,"{""Production/Operation Managers"": 1, ""Professionals"": 1, ""ICT Operators"": 1}"
+FigS4data.tab,age,numeric,99489,99203,286,94,14,34,49,49.4699,64,123,18.7638
+FigS4data.tab,nuts2,categorical_or_text,99489,99489,0,125,,,,,,,"{""BE2"": 2728, ""FI1C-FI20"": 2057, ""CH03-CH04"": 2009}"
+FigS4data.tab,radical_right_dummy,numeric,99489,59187,40302,2,0,0,0,0.0701843,0,1,0.25546
+FigS4data.tab,year,numeric,99489,99489,0,17,1999,2003,2007,2006.77,2010,2015,4.21674
+FigS4data.tab,edu_level,numeric,99489,98668,821,3,1,1,2,1.91601,3,3,0.765083
+FigS4data.tab,d13_indshock_fo,numeric,99489,98424,1065,48619,-0.0551987,0.0188246,0.0503456,0.0546073,0.0840225,0.330395,0.0536927
