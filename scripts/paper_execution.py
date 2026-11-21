@@ -89,7 +89,7 @@ def primary_registry_paths(project: Path) -> list[Path]:
 
 def papers(project: Path, gate: str | None = None) -> list[str]:
     value = state(project)
-    if enabled(project) and (gate or value.get("gate")) in {"G3", "G4", "G5"}:
+    if enabled(project) and (gate is None or gate in {"G3", "G4", "G5"}):
         return [selected(project)]
     return [p.name for p in sorted((project / "papers").glob("P[0-9][0-9]"))]
 
@@ -181,6 +181,22 @@ def dataset_snapshot(project: Path, paper_id: str | None = None) -> Path:
     return project / "experiments/papers" / paper / "datasets.jsonl"
 
 
+def protocol_seal(project: Path, paper_id: str | None = None) -> dict | None:
+    """Read current execution authority without manufacturing a gate approval."""
+    from scripts.research_artifacts import read, sha, path_in
+    plan = artifact_path(project, "experiments/plan.json", paper_id)
+    if plan.is_file():
+        target = path_in(project, "experiments/protocols/" + sha(plan) + ".json", exists=False)
+        if target.is_file():
+            value = read(target)
+            if (value.get("kind") != "execution_protocol" or value.get("experiment_plan_sha256") != sha(plan)
+                    or value.get("plan") != read(plan)
+                    or value.get("experiment_budget_sha256") != sha(artifact_path(project, "experiments/budget.json", paper_id))):
+                raise ValueError("execution protocol snapshot is missing or changed")
+            return value
+    return approval(project, "G3", paper_id)
+
+
 def refreshable_preregistration(project: Path, paper_id: str) -> bool:
     """Only the current, unsealed controller draft may follow author revisions.
 
@@ -191,8 +207,7 @@ def refreshable_preregistration(project: Path, paper_id: str) -> bool:
     from scripts.output_provenance import current_origin
     try:
         value = state(project)
-        if (value.get("gate"), value.get("stage"), value.get("status"), value.get("active_paper")) != (
-                "G3", "experiment-design", "awaiting_work", paper_id):
+        if enabled(project) and selected(project) != paper_id:
             return False
         gate_key = f"G3:{paper_id}" if enabled(project) else "G3"
         if (project / "state/experiment-execution-lease.json").exists() or gate_key in value.get("approved_gates", []) or approval(project, "G3", paper_id):
@@ -204,6 +219,8 @@ def refreshable_preregistration(project: Path, paper_id: str) -> bool:
         if not plan.is_file():
             return False
         plan_hash = sha(plan)
+        if (project / "experiments/protocols" / (plan_hash + ".json")).exists():
+            return False
         for receipt in (project / "experiments/runs").glob("*/run.json"):
             item = read(receipt)
             if item.get("paper_id") == paper_id and item.get("approved_plan_sha256") == plan_hash:
@@ -225,10 +242,15 @@ def prepare_datasets(project: Path) -> None:
         return
     from scripts.research_artifacts import read, record
     paper = selected(project)
-    contract = read(project / "papers" / paper / "paper-contract.json")
-    wanted = set(contract.get("datasets", []))
+    contract_path = project / "papers" / paper / "paper-contract.json"
     source = project / "data/datasets.jsonl"
     rows = [json.loads(line) for line in source.read_text(encoding="utf-8").splitlines() if line.strip()] if source.is_file() else []
+    if contract_path.is_file():
+        wanted = set(read(contract_path).get("datasets", []))
+    else:
+        plan = read(artifact_path(project, "experiments/plan.json"))
+        hashes = {i["sha256"] for r in plan.get("runs", []) for i in r.get("inputs", [])}
+        wanted = {row["dataset_id"] for row in rows if row.get("download", {}).get("sha256") in hashes}
     found = [row for row in rows if row.get("dataset_id") in wanted]
     if {row.get("dataset_id") for row in found} != wanted or len(found) != len(wanted):
         raise ValueError("the active paper still needs its exact dataset manifests")
@@ -252,8 +274,6 @@ def enable(project: Path) -> None:
     """
     from scripts.research_artifacts import read, write, record
     value = state(project)
-    if value.get("gate") != "G2" or value.get("status") != "approved":
-        raise ValueError("independent execution starts after checked human G2 topic decisions")
     if any(a.get("gate") in {"G3", "G4", "G5"} for a in value.get("approvals", [])):
         raise ValueError("do not silently migrate an already sealed experiment protocol")
     registry = project / "experiments/registry.jsonl"
@@ -290,7 +310,7 @@ def prompt_contract(project: Path) -> str:
     paper = selected(project)
     paths = {name: artifact_path(project, name).relative_to(project).as_posix() for name in ALIASES}
     return ("INDEPENDENT PAPER EXECUTION: Work only on " + paper + " at this stage. "
-            "Keep the approved six-paper doctoral mapping. Other papers need not have experiment designs or results yet. "
+            "Develop other papers when their research questions warrant it; they need not have designs or results yet. "
             "Use these actual canonical paths instead of the legacy batch aliases:\n" + json.dumps(paths, sort_keys=True) +
             "\nUse unique run IDs prefixed with " + paper + "- and result outputs under results/" + paper +
             "/ or the native papers/" + paper + "/results/ contract. Native cleaning may use data/processed/" + paper +

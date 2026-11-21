@@ -14,9 +14,10 @@ import re
 MAX_FILES = 200
 MAX_BYTES = 10 * 1024 * 1024
 INCLUDE = re.compile(r"\\(?:input|include|subfile)(?![A-Za-z@])\s*(?:\{([^{}]+)\}|([^\s{}%]+))")
-DEPENDENCY = re.compile(r"\\(documentclass|LoadClass|usepackage|RequirePackage|bibliography|bibliographystyle|addbibresource|includegraphics|lstinputlisting|verbatiminput|pgfplotstableread)\*?(?:\s*\[[^\]]*\])*\s*\{([^{}]+)\}")
+DEPENDENCY = re.compile(r"\\(documentclass|LoadClass|usepackage|RequirePackage|bibliography|bibliographystyle|addbibresource|includegraphics|lstinputlisting|verbatiminput|pgfplotstableread|pgfplotstabletypeset|csvautotabular)\*?(?:\s*\[[^\]]*\])*\s*\{([^{}]+)\}")
 TEXT_SUFFIXES = {".tex", ".sty", ".cls", ".bst", ".cfg", ".def", ".clo"}
 ASSET_SUFFIXES = {".pdf", ".png", ".jpg", ".jpeg", ".eps", ".svg", ".tif", ".tiff"}
+PDF_GRAPHICS_EXTENSIONS = (".pdf", ".png", ".jpg", ".jpeg", ".mps", ".jbig2", ".jb2")
 SECRET_NAMES = {".env", "credentials.json", "secrets.json", "id_rsa", "id_ed25519"}
 
 
@@ -44,7 +45,7 @@ def safe_path(root: Path, path: Path, *, required=True) -> Path:
         raise ValueError("TeX source/dependency cannot use a symlink")
     result = raw.resolve()
     if result == root or not result.is_relative_to(root):
-        raise ValueError("TeX source/dependency escapes its allowed directory")
+        raise ValueError("TeX source/dependency traversal escapes its allowed directory")
     relative = result.relative_to(root)
     if any(part.startswith(".") for part in relative.parts) or result.name.lower() in SECRET_NAMES or result.suffix.lower() in {".key", ".pem", ".p12", ".pfx"}:
         raise ValueError("Hidden or credential-like TeX dependency is forbidden")
@@ -67,6 +68,29 @@ def _visible(text):
     return masked
 
 
+def resolve_graphic(name: str, *, working: Path, paper: Path, text: str = "") -> Path:
+    """Resolve a PDF-engine graphic in declared search order, never by uniqueness.
+
+    A sibling SVG is often an editable source, not a second rendered figure.
+    Explicit extensions and DeclareGraphicsExtensions take precedence.
+    """
+    name = _name(name)
+    directories = [working]
+    for group in re.finditer(r"\\graphicspath\s*\{((?:\s*\{[^{}]+\}\s*)+)\}", _visible(text)):
+        directories.extend(working / _name(value) for value in re.findall(r"\{([^{}]+)\}", group[1]))
+    declarations = list(re.finditer(r"\\DeclareGraphicsExtensions\s*\{([^{}]+)\}", _visible(text)))
+    extensions = [part.strip() for part in declarations[-1][1].split(",")] if declarations else PDF_GRAPHICS_EXTENSIONS
+    if any(not re.fullmatch(r"\.[A-Za-z0-9]+", ext) for ext in extensions):
+        raise ValueError("Graphics extensions must be literal suffixes")
+    # graphicx searches each extension across the configured directories.
+    for suffix in ([""] if Path(name).suffix else extensions):
+        for directory in directories:
+            target = safe_path(paper, directory / (name + suffix), required=False)
+            if target.is_file():
+                return target
+    raise ValueError("Missing explicit local TeX graphic: " + name)
+
+
 @dataclass
 class Expanded:
     text: str
@@ -82,6 +106,7 @@ class Expanded:
 
 def expand(path: Path, *, root: Path | None = None) -> Expanded:
     root = (root or path.parent).resolve()
+    working = path.parent.resolve()
     files, chunks, locations = set(), [], []
     size = 0
     offset = 0
@@ -111,13 +136,15 @@ def expand(path: Path, *, root: Path | None = None) -> Expanded:
             append(text[position:match.start()], target, text[:position].count("\n") + 1)
             name = _name(match.group(1) or match.group(2))
             relative = Path(name)
-            if ".." in relative.parts:
-                raise ValueError("TeX input traversal is forbidden")
             if not relative.suffix:
                 relative = relative.with_suffix(".tex")
             if relative.suffix.lower() != ".tex":
                 raise ValueError("TeX inputs must be .tex source files")
-            visit(root / relative, stack + (target,))
+            primary = working / relative
+            included = safe_path(root, primary if primary.resolve().is_relative_to(root) else target.parent / relative, required=False)
+            if not included.is_file():
+                included = safe_path(root, target.parent / relative)
+            visit(included, stack + (target,))
             position = match.end()
         append(text[position:], target, text[:position].count("\n") + 1)
     visit(path, ())
@@ -136,8 +163,6 @@ def dependencies(path: Path, *, paper: Path) -> list[Path]:
         text = _visible(source.read_text(encoding="utf-8"))
         for include in INCLUDE.finditer(text):
             name = _name(include.group(1) or include.group(2))
-            if ".." in Path(name).parts:
-                raise ValueError("TeX input traversal is forbidden")
             candidate = Path(name) if Path(name).suffix else Path(name).with_suffix(".tex")
             target = safe_path(paper, working / candidate, required=False)
             if not target.is_file():
@@ -156,6 +181,10 @@ def dependencies(path: Path, *, paper: Path) -> list[Path]:
             names = value.split(",") if command in {"usepackage", "RequirePackage", "bibliography"} else [value]
             for value in names:
                 name = _name(value)
+                if command == "includegraphics":
+                    target = resolve_graphic(name, working=working, paper=paper, text=expanded.text)
+                    found.add(target)
+                    continue
                 suffixes = ({"documentclass": [".cls"], "LoadClass": [".cls"], "usepackage": [".sty"],
                              "RequirePackage": [".sty"], "bibliography": [".bib"], "bibliographystyle": [".bst"],
                              "addbibresource": [".bib"], "includegraphics": sorted(ASSET_SUFFIXES)}).get(command, [""])

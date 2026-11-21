@@ -1,37 +1,16 @@
-# Direction screening and ranking for the six-paper programme
+# Optional research and career direction comparison
 
-The declared G0 weights are a provisional decision rubric, not measured market
-results. Apply the following prerequisites before computing a score:
+Use this method when the user asks to compare research directions, doctoral opportunities or careers. It is separate from starting a concrete research task. Use the user's actual preferences; six papers, a particular country list or mechanical-engineering background is not universal.
 
-1. Every current paper has a credible route to authorized, versioned data,
-   independent primary evidence, reproducible experiments and an available
-   cloud runner within the declared budget and deadline. No physical laboratory,
-   local GPU, future PhD admission or access-control bypass can be a prerequisite.
-2. Check relevant application-route eligibility, ethics, privacy, source/version and known access restrictions,
-   funding terms and the researcher's actual background. An ineligible funded
-   opening does not count as an opportunity for that route. Licence/research-use
-   review remains optional metadata, not a pre-use or direction-selection gate.
-3. For each specific topic after direction screening, require evidence of
-   novelty, doctoral depth and original contribution. A direction score cannot
-   waive these topic and paper gates.
+| Factor | Evidence to examine |
+| --- | --- |
+| Funded doctoral opportunities | Distinct eligible funded openings, institution, location, actual date and original posting; distinguish observed supply from forecasts. |
+| Employment and salary | Role, location, career stage, gross/net basis, currency and time window from dated statistics or verifiable employers. |
+| Longer-term demand | Primary research/industrial/policy evidence, uncertainty and transferable skills. |
+| Competition | Published applicant/place or applicant/opening data when available; label proxies and missing denominators. |
+| Background and route fit | Actual prerequisites, current skills, supervision, residence/language/work conditions and feasible ways to close gaps. |
+| Scientific value and feasibility | Relevant prior work, meaningful contribution, accessible data/methods/resources and a useful next test. |
 
-An extension B paper among P01–P06 must pass the same cloud test. A separate
-post-admission laboratory extension may be proposed, with its hypotheses
-clearly marked untested; its hoped-for results cannot support the six papers.
+Show qualitative comparisons when numbers would imply false precision. If the user supplies weights, explain scales and sensitivity; do not invent missing scores, salaries or admission probabilities. No score substitutes for a topic's scientific contribution. Proposed future data or laboratory work remains unexecuted until it actually happens.
 
-| Direction factor | Weight | Evidence to collect before assigning a score |
-|---|---:|---|
-| Funded PhD position supply | 25% | Count distinct, genuinely funded positions in the relevant countries and eligibility routes over a stated recent window; record institution, date, funding, topic fit and source. Deduplicate reposts and separate observed openings from forecasts. |
-| Employment and salary | 25% | Compare role availability and location-adjusted salary ranges for relevant research and industry roles from dated official statistics or verifiable employer listings; state whether amounts are gross and which career stage they cover. |
-| Future growth potential | 15% | Assess credible medium-term research, industrial and policy demand from dated primary sources, including uncertainty and adjacent skills that transfer across fields. |
-| Funded PhD competition | 7.5% | Use published applicant-to-funded-place ratios when available; otherwise label cautious proxies and their limits. Higher scores mean a better chance of admission, not more competition. |
-| Job market competition | 7.5% | Use dated applicant-to-opening or qualified-supply evidence for relevant roles when available; label proxies and their limits. Higher scores mean a better chance of obtaining a job. |
-| Background fit | 10% | Compare prerequisites and evidence of the researcher's mechanical-engineering and Big Data/AI skills to realistic entry requirements, including gaps that can be closed before applying. |
-| Application-route fit | 10% | Check country, PhD/industrial doctorate/EngD route, supervision, residence, language and work-status requirements for France, Spain, the Netherlands, the UK, Japan and Hong Kong; only compare routes open to this researcher. |
-
-For each factor, score eligible directions on the same anchored scale and keep
-the source URL, access date, geography, time window, denominator, assumptions
-and confidence beside the score. Report the weighted result and the unweighted
-factor scores. Show sensitivity to plausible weight and data changes; ties or
-thin evidence should be presented to the researcher instead of manufactured
-precision. Recheck time-sensitive market and programme evidence at G1.
+`program/direction-assessments.json` and the existing ranking adapter can preserve detailed observations when selected. Their historical field/score template is optional; source-backed reasoning can be recorded directly in the research notes.

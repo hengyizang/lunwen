@@ -1,9 +1,12 @@
-name: Prepare pinned research runtime
-description: Set up Python, restore immutable upstream skills and install declared dependencies.
+name: Prepare requested research runtime
+description: Set up Python and only the dependencies requested by this job.
 inputs:
   python-version:
     description: Python version used by this job.
     default: '3.12'
+  ccfa:
+    description: Restore the complete pinned CCFA resources when this job uses them.
+    default: 'false'
   packages:
     description: JSON array of pip arguments; parsed as data without shell evaluation.
     default: '[]'
@@ -15,10 +18,12 @@ runs:
         python-version: ${{ inputs.python-version }}
         cache: pip
     - uses: actions/cache@v4
+      if: inputs.ccfa == 'true'
       with:
         path: third_party/ccfa-skills
         key: ccfa-${{ hashFiles('integrations/ccfa-skills.lock.json') }}
-    - name: Restore and verify the exact upstream resources
+    - name: Restore and verify the requested upstream resources
+      if: inputs.ccfa == 'true'
       shell: bash
       run: python -m scripts.ccfa_runtime bootstrap
     - name: Install this job's declared Python dependencies

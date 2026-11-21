@@ -1,69 +1,14 @@
-# Question-scoped literature evidence and efficient reading
+# Question-scoped literature reading
 
-Use the existing authorized shared workbench and the same doctoral question.
-The current writer prepares specifications during its existing stage cycle;
-no additional model, paid planning loop, external workbench or desktop plugin
-is required. Read docs/LITERATURE-EVIDENCE-READING.md for executable interfaces.
+Read the material needed for the current question and reuse valid prior work. The existing interfaces are described in `docs/LITERATURE-EVIDENCE-READING.md` and `docs/LITERATURE-COMPLETION.md`; they are available tools, not mandatory stages.
 
-1. Use title/abstract/keywords to prioritize discovery, retaining direct,
-   adjacent and contrary searches. Full-text claims require original method,
-   result, appendix or figure evidence. A missing abstract field is unknown,
-   not a research gap. Retain preprint/published source versions separately;
-   citation counts never replace the version that supplied evidence.
-2. For a concrete question select registered papers and prepare at most five
-   explicit query_expansions with reasons about alternative terminology for
-   that same question. literature_retrieve fuses BM25 routes by RRF. Mark
-   known contrary/mixed papers in stances; inability to fit them requests an
-   explicit narrower scope, not silent deletion. Vectors are optional existing
-   source/query/model-version-bound caches. Explicit literature_semantic can
-   generate vectors and independent rerank scores with pinned cloud CPU models;
-   no paid embedding service or automatic route promotion is enabled.
-3. Request literature_reading_index for stable original sentence IDs, exact
-   reader lines and physical PDF pages. locate_pdf=true explicitly uses the
-   cloud PDF positioner; absent/ambiguous coordinates or page labels stay
-   unknown. Translations and generated explanations cannot become originals.
-4. Record actual question-bound reading answers through literature_progress.
-   literature_coverage distinguishes located material from attributed answers
-   and semantic/human review. Reuse current exact evidence before re-reading;
-   read counts, summaries and extraction do not prove coverage. Ask for missing
-   method/result/appendix/figure evidence rather than repeating whole summaries.
-5. Prepare program/literature-extraction.json for all selected papers and
-   fields. Reuse all relevant existing card entries, preserving unknown cells.
-   Bind each field to original text and its interpretation boundary. Numbers
-   need exact raw token, unit, quantity, population and conditions; tables also
-   need row/column labels and footnotes. Located regions remain visually and
-   scientifically pending. Deterministic Decimal conversion preserves original
-   values, signs, inequalities and intervals. Never use generated calculations
-   or an automatically populated cell as an approved Meta-analysis input.
-6. Request literature_benchmark against attributed source-bound gold anchors.
-   Compare unchanged source scopes, quote integrity, missing-evidence responses,
-   numeric values/units and measured retrieval time. Reconcile actual existing
-   runtime costs, including cache writes/reads, embeddings, reranking, failures
-   and tools; missing cost is unknown, not zero. Synthetic software acceptance
-   cannot establish real reading quality or justify automatic model promotion.
+1. Use title/abstract/keywords to discover direct, adjacent and contrary work. Full-text claims need the relevant original methods, results, appendix or figure. Missing metadata is unknown, not proof of a research gap; retain preprint and published versions distinctly.
+2. Use query expansion, BM25/RRF, optional vectors and reranking to find relevant passages. Their scores rank candidates, not scientific truth. Include known counterevidence and state any limits on the supplied source scope.
+3. Use original sentence/page locations. Physical PDF page indices can differ from printed labels. OCR, translations and generated explanations never replace the original; unresolved positions remain unknown.
+4. Record what was actually read and answered. Choose missing material that affects the question instead of repeating whole summaries or requiring every reading phase. Summaries, extraction and counts are not proof of comprehension.
+5. For extracted numbers preserve the original token, unit, quantity, population, row/column labels, footnotes and conditions. Check unit semantics as well as arithmetic: exact Decimal conversion alone cannot distinguish a temperature interval from an absolute temperature. Inspect derived cells before using them as scientific evidence.
+6. Benchmark retrieval or reading methods when that comparison is the task. Use the same appropriate corpus and source-backed reference judgments, preserve failures and compare actual time/cost. Small synthetic cases do not establish general reading quality.
 
-Source mechanisms are independently expressed adaptations of the pinned
-PaperQA2, paperai, llm-for-zotero, Beaver, OpenPaper and daily-paper-reader
-references in integrations/upstreams.lock.json. PaperPilot/PaperLens inform
-discovery only: DOI format or a nonempty citation list does not prove identity,
-entailment, novelty or scientific strength. No upstream code is copied here.
+Source mechanisms are independently adapted from pinned PaperQA2, paperai, llm-for-zotero, Beaver, OpenPaper and daily-paper-reader references in `integrations/upstreams.lock.json`; PaperPilot/PaperLens inform discovery. Preserve attribution and actual version information.
 
-Completion operations are documented in docs/LITERATURE-COMPLETION.md. Use
-literature_pdf for actual page overlays/annotated copies and optional separate
-OCR assistance. The original page is authoritative; ambiguous positions and
-OCR text remain pending review. literature_matrix also exports Markdown.
-literature_zotero reads actual Web API libraries or a hash-bound export without
-server writes or desktop execution; source processing rights remain separate.
-literature_roles derives overlapping core/adjacent/counterevidence categories
-from current search receipts and never supplies a scientific inclusion decision.
-
-Use literature_comparison to prepare same-question/same-original-corpus
-retrieval-versus-complete-text arms. Full text must actually cover all registered
-pages and fit the declared context; do not truncate. Only explicit execute in an
-authorized cycle may request existing centrally metered reader-qa calls; exact
-requests/identical contexts reuse cache. Keep rejected/failed/unknown charges,
-stop subsequent work on unresolved billing, and send blinded review proposals
-through the existing protected owner review mechanism. Source-location probes
-are not independent human semantic ratings or real-topic quality equivalence.
-Optional literature_paperqa uses the pinned upstream SDK's local vector store
-and the same controlled answer route; do not launch its unmetered agent/CLI.
+`literature_pdf`, `literature_matrix`, `literature_zotero`, `literature_roles`, `literature_comparison` and the native PaperQA2 adapter remain available. Install only needed dependencies and use supported interfaces. Retain actual failed requests and unknown charges; bounded reservations use the same cumulative budget without blocking independent affordable work. Do not invent human ratings or model authenticity from source-location checks.

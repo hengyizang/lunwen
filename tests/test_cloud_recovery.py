@@ -410,7 +410,7 @@ class RecoveryTests(unittest.TestCase):
                     patch.object(cloud_job, "git", return_value=subprocess.CompletedProcess([], 0, MAIN, "")), \
                     patch.object(cloud_checkpoint, "prepare"), \
                     patch.object(cloud_research_steps, "acquire_data"), \
-                    patch.object(cloud_job, "cycle_command", return_value=["scripts/api_orchestrator.py"]), \
+                    patch.object(cloud_job, "cycle_command", return_value=["scripts/api_orchestrator.py", "cycle", "my-phd", "experiment-execution"]), \
                     patch.object(cloud_continuation, "evaluate", return_value=decision), \
                     patch.object(cloud_runtime, "prepare", side_effect=broken_prepare), \
                     patch.object(cloud_job, "run_command") as transport, \

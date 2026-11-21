@@ -158,6 +158,25 @@ def cmd_mark_deployed(args: argparse.Namespace) -> int:
     return 0
 
 
+def _execute(plan: dict, env: dict) -> int:
+    try:
+        child = subprocess.run(plan["argv"], cwd=plan["cwd"], env=env, capture_output=True,
+                               timeout=plan["timeout_seconds"], check=False)
+        code, stdout, stderr = child.returncode, child.stdout, child.stderr
+        plan["timed_out"] = False
+    except subprocess.TimeoutExpired as exc:
+        code, stdout, stderr = 124, exc.stdout or b"", exc.stderr or b""
+        plan["timed_out"] = True
+    plan["exit_code"] = code
+    for stream, data in (("stdout", stdout), ("stderr", stderr)):
+        plan[stream + "_sha256"] = hashlib.sha256(data).hexdigest()
+        text = data.decode("utf-8", "replace")
+        plan[stream + "_preview"] = text[:400]
+        if text:
+            print(text[:2000], file=sys.stderr if stream == "stderr" else sys.stdout)
+    return 128 - code if code < 0 else code
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     value = _load()
     row = _find(value, args.id)
@@ -187,27 +206,14 @@ def cmd_run(args: argparse.Namespace) -> int:
             print("note: --execute after -- belongs to the tool; put it before -- to run",
                   file=sys.stderr)
         return 0
-    result = subprocess.run(argv, cwd=cwd, env=env, shell=False,
-                            capture_output=True, text=True,
-                            timeout=args.timeout, check=False)
-    plan.update({
-        "exit_code": result.returncode,
-        "stdout_sha256": _sha_text(result.stdout or ""),
-        "stderr_sha256": _sha_text(result.stderr or ""),
-        "stdout_preview": (result.stdout or "")[:400],
-        "stderr_preview": (result.stderr or "")[:400],
-    })
+    code = _execute(plan, env)
     receipt = _receipt(f"run-{args.id}", plan)
     row["last_run_at"] = _now()
     _save(value)
-    print(json.dumps({"exit_code": result.returncode,
+    print(json.dumps({"exit_code": plan["exit_code"], "timed_out": plan["timed_out"],
                       "receipt": _display(receipt),
                       "advisory_only": True}, ensure_ascii=False, indent=2))
-    if result.stdout:
-        print(result.stdout[:2000])
-    if result.stderr:
-        print(result.stderr[:2000], file=sys.stderr)
-    return 0
+    return code
 
 
 def cmd_bind_output(args: argparse.Namespace) -> int:
@@ -559,25 +565,12 @@ def cmd_free(args: argparse.Namespace) -> int:
             print("note: --execute after -- belongs to the tool; put it before -- to run",
                   file=sys.stderr)
         return 0
-    result = subprocess.run(argv, cwd=cwd, env=env, shell=False,
-                            capture_output=True, text=True,
-                            timeout=args.timeout, check=False)
-    plan.update({
-        "exit_code": result.returncode,
-        "stdout_sha256": _sha_text(result.stdout or ""),
-        "stderr_sha256": _sha_text(result.stderr or ""),
-        "stdout_preview": (result.stdout or "")[:400],
-        "stderr_preview": (result.stderr or "")[:400],
-    })
+    code = _execute(plan, env)
     receipt = None if args.no_receipt else _receipt("free", plan)
-    print(json.dumps({"exit_code": result.returncode,
+    print(json.dumps({"exit_code": plan["exit_code"], "timed_out": plan["timed_out"],
                       "receipt": _display(receipt) if receipt else None,
                       "advisory_only": True}, ensure_ascii=False, indent=2))
-    if result.stdout:
-        print(result.stdout[:2000])
-    if result.stderr:
-        print(result.stderr[:2000], file=sys.stderr)
-    return 0
+    return code
 
 
 def _adapter_errors() -> list[str]:

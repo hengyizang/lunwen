@@ -46,15 +46,17 @@ class ControlledResearchTests(unittest.TestCase):
             self.assertEqual(second['new_search_calls'],3);self.assertEqual(second['pending_searches'],0)
             self.assertEqual(fetch.call_count,9)
 
-    def test_no_literature_receipts_prevents_paid_model_transport(self):
+    def test_topic_and_writing_tasks_do_not_fetch_unrelated_data_or_require_prior_receipts(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory);project=root/'projects/demo'
-            steps.write(root/'config/stages.json',{'stages':{'topic-intelligence':{'gate':'G1'}}})
-            steps.write(project/'state/run.json',{'stage':'topic-intelligence','gate':'G1','status':'awaiting_work'})
-            with patch.object(api_orchestrator,'ROOT',root),patch.object(api_orchestrator,'prepare_discovery_evidence',return_value=(json.dumps({'literature':{'receipts':[],'pending_searches':0}}),None)),patch.object(api_orchestrator.model_runtime,'call') as model:
-                result=api_orchestrator.run_cycle('demo','topic-intelligence','uuapi-anthropic','uuapi-openai','uuapi-anthropic','','',automatic_data=False)
-            model.assert_not_called();self.assertFalse(result['paid_model_cycle'])
-            self.assertEqual(result['controlled_steps']['blockers'][0]['kind'],'literature_service_unavailable')
+            project=Path(directory)
+            steps.write(project/"state/run.json",{"stage":"topic-intelligence","active_paper":"P01"})
+            steps.write(project/"data/manifests/unrelated.json",{})
+            with patch.object(steps,"acquire_data",side_effect=AssertionError("unrelated data acquisition")), patch.object(steps,"request_experiments",side_effect=AssertionError("implicit experiment")):
+                for stage in ("topic-intelligence","experiment-design","writing-and-review"):
+                    result=steps.before_cycle(project,stage)
+                    self.assertFalse(result["control_only"])
+                    self.assertEqual(result["blockers"],[])
+                    self.assertEqual(steps.after_write(project,stage)["executed_operations"],[])
 
     def direction_fixture(self,project):
         now=datetime.now(timezone.utc);today=now.date()

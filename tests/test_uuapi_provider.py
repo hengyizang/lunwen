@@ -256,38 +256,11 @@ class UuapiProviderTests(unittest.TestCase):
         )
         self.assertNotIn("secret", json.dumps(value))
 
-    def test_cycle_rejects_anthropic_persistent_writer(self) -> None:
-        with self.assertRaises(ValueError):
-            api_orchestrator.run_cycle(
-                "demo",
-                "intake",
-                "uuapi-anthropic",
-                "uuapi-anthropic",
-                "uuapi-openai",
-                "",
-                "",
-            )
+    def test_anthropic_can_be_selected_as_persistent_writer(self) -> None:
+        api_orchestrator.validate_roles("uuapi-anthropic","uuapi-anthropic","uuapi-openai")
 
-    def test_cycle_rejects_writer_and_critic_from_same_family(self) -> None:
-        with self.assertRaises(ValueError):
-            api_orchestrator.run_cycle(
-                "demo",
-                "intake",
-                "anthropic",
-                "openai",
-                "uuapi-openai",
-                "",
-                "",
-            )
+    def test_same_family_can_be_selected_for_writer_and_critic(self) -> None:
+        api_orchestrator.validate_roles("anthropic","openai","uuapi-openai")
 
-    def test_cycle_requires_claude_semantic_planner(self) -> None:
-        with self.assertRaises(ValueError):
-            api_orchestrator.run_cycle(
-                "demo",
-                "intake",
-                "openai",
-                "uuapi-openai",
-                "uuapi-anthropic",
-                "",
-                "",
-            )
+    def test_planner_is_not_assigned_to_a_fixed_brand(self) -> None:
+        api_orchestrator.validate_roles("openai","uuapi-openai","uuapi-anthropic")

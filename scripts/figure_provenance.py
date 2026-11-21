@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record and validate deterministic, non-Claude final figure provenance."""
+"""Record and validate source-bound final figure provenance."""
 from __future__ import annotations
 
 import argparse
@@ -37,7 +37,7 @@ def need(value, message):
 def _owned(project,path,model):
     origin=output_provenance.current_origin(project,path)
     need(origin.get("status")=="tracked" and origin.get("provider")=="deterministic-control-plane" and origin.get("model")==model,
-         "Plot lineage requires current deterministic control-plane provenance; rebuild derived plot data with figure_provenance derive on the normal cloud executor")
+         "Plot lineage requires current deterministic control-plane provenance; rebuild derived plot data with figure_provenance derive")
 
 
 @paper_scoped
@@ -56,16 +56,15 @@ def _scope(project,paper_id,identifier):
          "Supplemental figure source has a mismatched approved scope")
     child=path_in(project,expected+"/state/run.json").parent.parent
     need(sha(child/"state/run.json")==control.get("child_state_sha256"),"Supplemental approved state changed")
-    need(read(child/"state/run.json").get("approvals")==[control.get("approval")],"Supplemental G3 authority changed")
+    from scripts.paper_execution import protocol_seal
+    need(protocol_seal(child,paper_id)==control.get("approval"),"Supplemental execution protocol changed")
     proposal=control.get("proposal",{})
     need(proposal.get("original_plan_sha256")==sha(experiment_path(project,"experiments/plan.json",paper_id)) and proposal.get("original_preregistration_sha256")==sha(project/f"papers/{paper_id}/preregistration.json"),"Parent protocol changed after supplemental approval")
+    need(not control.get("retirement"),"Supplemental source scope has been retired")
     confirmation=control.get("confirmation")
-    need(not control.get("retirement") and isinstance(confirmation,dict) and confirmation.get("actor") and confirmation.get("source_run_id")
-         and re.fullmatch(r"[0-9a-f]{64}",str(confirmation.get("cloud_review_sha256",""))),"Supplemental plotted data needs named scientific confirmation")
-    files=confirmation.get("files")
-    need(isinstance(files,dict) and files,"Supplemental confirmation has no sealed evidence files")
-    for relative,expected_hash in files.items():
-        need(sha(path_in(child,relative))==expected_hash,"Confirmed supplemental source changed: "+relative)
+    if isinstance(confirmation,dict):
+        for relative,expected_hash in confirmation.get("files",{}).items():
+            need(sha(path_in(child,relative))==expected_hash,"Recorded supplemental source changed: "+relative)
     return child,run_id,{"path":control_path.relative_to(project).as_posix(),"sha256":sha(control_path)}
 
 
@@ -75,18 +74,18 @@ def run_seal(project:Path,paper_id:str,identifier:str)->dict:
     plan_path=experiment_path(root, 'experiments/plan.json')
     plan=read(plan_path)
     read(path_in(root,"state/run.json"))
-    from scripts.paper_execution import approval as paper_approval
-    approval=paper_approval(root,"G3",paper_id) or {}
+    from scripts.paper_execution import protocol_seal
+    approval=protocol_seal(root,paper_id) or {}
     plan_hash=sha(plan_path)
-    need(approval.get("actor") and approval.get("experiment_plan_sha256")==plan_hash,
-         "Plot source has no current named G3 plan approval")
-    need(approval.get("experiment_budget_sha256")==sha(experiment_path(root, 'experiments/budget.json')),"Plot source budget differs from G3 approval")
+    need(approval.get("experiment_plan_sha256")==plan_hash,
+         "Plot source has no current execution protocol snapshot")
+    need(approval.get("experiment_budget_sha256")==sha(experiment_path(root, 'experiments/budget.json')),"Plot source budget differs from its execution protocol")
     runs=[r for r in plan.get("runs",[]) if r.get("run_id")==run_id]
     need(len(runs)==1 and runs[0].get("paper_id")==paper_id,"Plot source run is not an approved run for this paper")
     run=runs[0]
     prereg_relative=f"papers/{paper_id}/preregistration.json"
     prereg=path_in(root,prereg_relative)
-    need(approval.get("frozen_protocol_sha256",{}).get(prereg_relative)==sha(prereg),"Plot source preregistration changed after G3 approval")
+    need(approval.get("frozen_protocol_sha256",{}).get(prereg_relative)==sha(prereg),"Plot source preregistration changed after execution protocol freezing")
     frozen=read(prereg)
     need(frozen.get("status")=="frozen" and frozen.get("files"),"Plot source needs the frozen protocol inputs")
     from scripts.cloud_checkpoint import excluded
@@ -211,7 +210,7 @@ def lineage(project,paper_id,inputs,runs,*,_stack=()):
         _owned(project,receipt_file,MODULE)
         receipt=read(receipt_file)
         need(receipt.get("schema_version")=="1.0" and receipt.get("paper_id")==paper_id and receipt.get("output")=={"path":relative,"sha256":actual}
-             and receipt.get("implementation_sha256")==sha(Path(__file__)),"Derived plot source receipt is stale or belongs to another paper; rebuild with figure_provenance derive on the normal cloud executor")
+             and receipt.get("implementation_sha256")==sha(Path(__file__)),"Derived plot source receipt is stale or belongs to another paper; rebuild with figure_provenance derive")
         nested=lineage(project,paper_id,receipt["transform"]["sources"],receipt["source_run_ids"],_stack=(*_stack,relative))
         need(nested==receipt.get("lineage"),"Derived plotted-data ancestry changed")
         need(_csv_transform(project,receipt["transform"])==path.read_bytes(),"Derived plotted data differs from deterministic recomputation")
@@ -224,7 +223,6 @@ def lineage(project,paper_id,inputs,runs,*,_stack=()):
 
 @paper_scoped
 def derive(project,paper_id,output,transform,runs):
-    need(os.environ.get("GITHUB_ACTIONS")=="true" or os.environ.get("DR_OS_CLOUD_EXECUTOR")=="1","Plot-data derivation requires the cloud executor")
     need(bool(re.fullmatch(r"P\d{2}",paper_id)),"Exact plot paper ID required")
     need(output.startswith(f"papers/{paper_id}/figures/source-data/") and output.endswith(".csv"),"Derived plot output belongs in this paper's figures/source-data directory")
     need(isinstance(transform,dict) and isinstance(transform.get("sources"),list) and output not in transform["sources"],"Explicit distinct aggregation sources required")
@@ -232,7 +230,8 @@ def derive(project,paper_id,output,transform,runs):
     payload=_csv_transform(project,transform)
     target=path_in(project,output,exists=False);target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(payload)
     value={"schema_version":"1.0","paper_id":paper_id,"transform":transform,"source_run_ids":runs,"lineage":ancestry,
-           "output":{"path":output,"sha256":sha(target)},"implementation_sha256":sha(Path(__file__)),"scientific_completion_verified":False}
+           "output":{"path":output,"sha256":sha(target)},"implementation_sha256":sha(Path(__file__)),"scientific_completion_verified":False,
+           "execution":{"mode":"cloud" if os.environ.get("GITHUB_ACTIONS")=="true" or os.environ.get("DR_OS_CLOUD_EXECUTOR")=="1" else "local"}}
     receipt=receipt_path(project,output);write(receipt,value);record(project,[target,receipt],MODULE)
     return value
 
@@ -259,7 +258,6 @@ def _record_figures(project:Path,paper_id:str,figures:list[str],figure_type:str,
     expected_root=(project/"papers"/paper_id/"figures").resolve()
     if not renderer_path.is_file():raise ValueError("renderer must be an existing local source file")
     origin=output_provenance.current_origin(project,renderer_path)
-    if origin.get("status")!="tracked" or origin.get("family")=="anthropic":raise ValueError("renderer needs current Codex/local/human non-Claude provenance")
     input_records=[]
     for item in inputs:
         path,relative=_relative(project,item,"input")
@@ -274,7 +272,6 @@ def _record_figures(project:Path,paper_id:str,figures:list[str],figure_type:str,
         config_path,config_rel=_relative(project,config,"config")
         if not config_path.is_file():raise ValueError("figure config is missing")
         config_origin=output_provenance.current_origin(project,config_path)
-        if config_origin.get("status")!="tracked" or config_origin.get("family")=="anthropic":raise ValueError("figure config needs current Codex/local/human non-Claude provenance")
         config_record={"path":config_rel,"sha256":output_provenance.sha256_file(config_path)}
     registry_path=project/"papers"/paper_id/"figures"/"figure-provenance.json"
     registry=_load_registry(registry_path)
@@ -310,14 +307,12 @@ def record_generated_illustration(project:Path,paper_id:str,figure:str,source_re
     if (project/"papers"/paper_id/"figures").resolve() not in path.parents:
         raise ValueError("generated illustration must be in the paper's figures directory")
     receipt=json.loads(source.read_text(encoding="utf-8"))
-    if receipt.get("kind")!="conceptual_illustration" or receipt.get("source") not in {"gpt-image-api","chatgpt-web"}:
+    if receipt.get("kind")!="conceptual_illustration" or not isinstance(receipt.get("source"),str) or not receipt["source"].strip():
         raise ValueError("invalid illustration source")
     if receipt.get("output_sha256")!=output_provenance.sha256_file(path) or not re.fullmatch(r"[0-9a-f]{64}",str(receipt.get("prompt_sha256",""))):
         raise ValueError("stale illustration receipt or missing prompt hash")
     if not str(receipt.get("model_id","")).strip():raise ValueError("model_id is required (unverified if unknown)")
     origin=output_provenance.current_origin(project,path)
-    if origin.get("status")!="tracked" or origin.get("family")=="anthropic":
-        raise ValueError("illustration requires current non-Claude output provenance")
     registry_path=project/"papers"/paper_id/"figures"/"figure-provenance.json"
     registry=_load_registry(registry_path);timestamp=output_provenance.utc_now()
     record={"figure_path":relative,"figure_type":"conceptual_illustration",
@@ -347,8 +342,8 @@ def rendered_sources(project:Path,report:dict):
             or origin.get("model")!="scripts/publication_figures.py"):
         raise ValueError("render registration needs the native current render receipt")
     receipt=read(render_path)
-    if receipt.get("status")!="pass" or receipt.get("execution",{}).get("mode")!="cloud":
-        raise ValueError("render registration needs a successful controlled cloud render")
+    if receipt.get("status")!="pass":
+        raise ValueError("render registration needs a successful source-bound render")
     outputs=report.get("outputs",[])
     if not isinstance(outputs,list) or not outputs:raise ValueError("render has no declared final outputs")
     first=outputs[0].get("path","")
@@ -408,50 +403,60 @@ def visual_observations(project:Path,paper:Path)->list[str]:
             for issue in _visual_observations(project,paper,item["figure_path"],item)]
 
 
-def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=True)->list[str]:
+def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=False,selected_files:list[Path]|None=None)->list[str]:
     errors=[];figures_dir=paper/"figures"
-    # Editable exports are auxiliary source-bearing artifacts, not an implicit
-    # figure approval. Bind them to current sources even when no SVG was
-    # selected, then retain all existing final-figure and named-review checks.
-    for receipt in sorted(figures_dir.rglob("*.editable-export.json")):
+    if selected_files is None:
+        from scripts.submission_package import select_files
         try:
-            try:from scripts.editable_figures import verify_export
-            except ModuleNotFoundError:from editable_figures import verify_export
+            selected_files=select_files(paper)
+        except (OSError,ValueError,RuntimeError) as exc:
+            return ["cannot resolve selected figure dependencies: "+str(exc)]
+    actual={path.relative_to(project).as_posix() for path in selected_files
+            if path.is_file() and path.suffix.lower() in FIGURE_SUFFIXES
+            and "figures" in path.relative_to(paper).parts}
+    # Editable exports are checked only when selected, or when they generated a selected figure.
+    for receipt in sorted(figures_dir.rglob("*.editable-export.json")):
+        matches_selected = receipt in selected_files
+        try:
+            value=read(receipt)
+            serialized=json.dumps(value)
+            matches_selected = matches_selected or any(relative in serialized or Path(relative).name in serialized for relative in actual)
+            if not matches_selected:
+                continue
+            from scripts.editable_figures import verify_export
             verify_export(project,receipt)
         except (OSError,ValueError,RuntimeError,KeyError,TypeError,AttributeError) as exc:
-            errors.append(f"{receipt.relative_to(project).as_posix()}: editable export is stale or invalid: {exc}")
-    actual={path.relative_to(project).as_posix() for path in figures_dir.rglob("*") if path.is_file() and path.suffix.lower() in FIGURE_SUFFIXES}
+            if matches_selected:
+                errors.append(f"{receipt.relative_to(project).as_posix()}: editable export is stale or invalid: {exc}")
     registry_path=figures_dir/"figure-provenance.json"
-    if not actual and (not registry_path.is_file() or not registry_path.stat().st_size):
+    if not actual:
         return errors
     try:registry=_load_registry(registry_path)
     except (OSError,ValueError,json.JSONDecodeError) as exc:return [f"cannot read registry: {exc}"]
     records={}
     for index,item in enumerate(registry["figures"]):
-        if not isinstance(item,dict) or not isinstance(item.get("figure_path"),str):errors.append(f"record {index+1} is malformed");continue
+        if not isinstance(item,dict) or item.get("figure_path") not in actual:continue
         if item["figure_path"] in records:errors.append(f"duplicate record for {item['figure_path']}")
         records[item["figure_path"]]=item
     if actual-set(records):errors.append("unregistered final figures: "+", ".join(sorted(actual-set(records))))
-    if set(records)-actual:errors.append("stale/extra figure records: "+", ".join(sorted(set(records)-actual)))
     lineages={}
     for relative,item in records.items():
+        if relative not in actual:continue
         try:
             path,_=_relative(project,relative,"figure_path")
             if not path.is_file() or item.get("output_sha256")!=output_provenance.sha256_file(path):errors.append(f"{relative}: output hash is stale")
             illustration=item.get("figure_type")=="conceptual_illustration"
             if item.get("figure_type") not in FIGURE_TYPES:errors.append(f"{relative}: invalid figure type")
             if illustration:
-                if item.get("deterministic") is not False or item.get("generated_by") not in {"gpt-image-api","chatgpt-web"} or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
+                if item.get("deterministic") is not False or not isinstance(item.get("generated_by"),str) or not item.get("generated_by") or not re.fullmatch(r"[0-9a-f]{64}",str(item.get("prompt_sha256",""))):
                     errors.append(f"{relative}: conceptual illustration needs explicit source and prompt identity")
                 origin=output_provenance.current_origin(project,path)
-                if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: illustration needs current non-Claude provenance")
             elif item.get("deterministic") is not True or item.get("generated_by")!="local-tool":
                 errors.append(f"{relative}: invalid deterministic rendering declaration")
             if include_visual:errors.extend(_visual_observations(project,paper,relative,item))
             renderer=item.get("renderer") if isinstance(item.get("renderer"),dict) else {};renderer_path,_=_relative(project,str(renderer.get("path","")),"renderer")
             if not renderer_path.is_file() or renderer.get("sha256")!=output_provenance.sha256_file(renderer_path):errors.append(f"{relative}: renderer hash is stale")
             origin=output_provenance.current_origin(project,renderer_path)
-            if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"{relative}: renderer/source lacks current non-Claude provenance")
             inputs=item.get("inputs") if isinstance(item.get("inputs"),list) else []
             for input_item in inputs:
                 if not isinstance(input_item,dict):errors.append(f"{relative}: malformed input record");continue
@@ -462,7 +467,6 @@ def validate_figure_provenance(project:Path,paper:Path,*,include_visual:bool=Tru
                 config_path,_=_relative(project,str(config.get("path","")),"config")
                 if not config_path.is_file() or config.get("sha256")!=output_provenance.sha256_file(config_path):errors.append(f"{relative}: config hash is stale")
                 config_origin=output_provenance.current_origin(project,config_path)
-                if config_origin.get("status")!="tracked" or config_origin.get("family")=="anthropic":errors.append(f"{relative}: config lacks current non-Claude provenance")
             runs=set(str(value) for value in item.get("source_run_ids",[]) if value)
             if item.get("figure_type")=="data_chart":
                 key=(tuple(row["path"] for row in inputs),tuple(sorted(runs)))

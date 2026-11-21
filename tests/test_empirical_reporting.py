@@ -146,8 +146,19 @@ class EmpiricalReportingTests(unittest.TestCase):
         write(path, altered); self.seal_all()
         self.assertTrue(any("recomputation" in x for x in reporting.audit(self.project, "P01")["errors"]))
 
-    def test_diagnostic_failure_missing_details_or_fake_boolean_is_blocked(self):
-        for change in ({"passed": False}, {"details": {}}, {"passed": "true"}, {"diagnostic_id": "different"}):
+    def test_diagnostic_failure_retains_estimates_and_interpretation_limits(self):
+        write(self.project/self.diagnostic["output"], {**self.diagnostic_result, "passed": False})
+        self.seal_all()
+        result = reporting.refresh(self.project, "P01")
+        self.assertEqual(result["status"], "diagnostics_failed")
+        self.assertFalse(result["errors"])
+        self.assertEqual(len(result["rows"]), len(self.specs))
+        self.assertTrue(result["complete_results_archive"])
+        self.assertEqual(result["interpretation_limits"][0]["diagnostic_id"], "timing")
+        self.assertTrue(reporting.measured(self.project, "P01", self.specs[0]["id"])["interpretation_limits"])
+
+    def test_missing_details_or_fake_boolean_is_blocked(self):
+        for change in ({"details": {}}, {"passed": "true"}, {"diagnostic_id": "different"}):
             value = {**copy.deepcopy(self.diagnostic_result), **change}
             write(self.project/self.diagnostic["output"], value); self.seal_all()
             self.assertTrue(reporting.audit(self.project, "P01")["errors"], change)

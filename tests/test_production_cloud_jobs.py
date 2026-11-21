@@ -170,18 +170,17 @@ class ProductionCloudJobTests(unittest.TestCase):
         job=request("cycle",stage="experiment-design",task_kind="critical-experiment-design")
         with patch.object(model_routing,"load_policy",return_value=({"critical_tasks":["critical-experiment-design"]},"fake")):
             self.assertEqual(cloud_job.validate_request(job),job)
-            for bad in ("make-cheaper",None,[],42):
+            for bad in ("bad kind",None,[],42):
                 with self.subTest(bad=bad),self.assertRaises(cloud_job.CloudJobError):
                     cloud_job.validate_request({**job,"task_kind":bad})
         with patch.dict(os.environ,{"DR_OS_ROUTING_PROFILE":"production"}), \
              patch.object(cloud_job,"ROOT",self.root),patch.object(cloud_progress,"pause_reason",return_value=None), \
              patch.object(cloud_job.model_spend,"read",return_value=self.control), \
              patch.object(cloud_job.cloud_continuation,"configuration_errors",return_value=[]), \
-             patch.object(cloud_job.researchctl,"load_state",return_value=self.state), \
+             patch.object(cloud_job.researchctl,"select_work",return_value={"stage":"experiment-design","task":"Design experiment"}), \
              patch.object(cloud_job.model_spend,"grant") as grant:
             command=cloud_job.cycle_command(job,"my-phd")
         self.assertEqual(command[-2:],["--task-kind","critical-experiment-design"])
-        self.assertEqual(command[command.index("--writer-provider")+1],"cheapai-gpt-pro")
-        self.assertEqual(command[command.index("--critic-provider")+1],"codekey-kiro-enterprise")
-        self.assertFalse(any("uuapi" in value for value in command))
+        self.assertEqual(command[command.index("--context")+1], "Design experiment")
+        self.assertNotIn("--review", command)
         grant.assert_not_called()

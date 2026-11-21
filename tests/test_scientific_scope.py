@@ -30,21 +30,19 @@ class ScientificScopeTests(unittest.TestCase):
             for gate in ("G2", "G3", "G4", "G5"):
                 self.assertEqual(scientific_scope.validate(project, gate, "P01"), [])
 
-    def test_drift_in_doctoral_question_extension_or_other_paper_mapping_blocks_later_work(self):
-        for relative, field in (("program/core-thesis.json", "doctoral_question"), ("program/extension-thesis.json", "distinct_contribution"),
-                                ("papers/P06/paper-contract.json", "research_question"), ("papers/P06/paper-contract.json", "working_title")):
-            with self.subTest(relative=relative), tempfile.TemporaryDirectory() as temp:
-                project, _ = self.fixture(Path(temp))
-                value = read(project / relative)
-                value[field] = "Unauthorized different scientific scope"
-                write(project / relative, value)
-                self.assertTrue(scientific_scope.validate(project, "G5", "P01"))
+    def test_scientific_changes_are_visible_without_blocking_unrelated_work(self):
         with tempfile.TemporaryDirectory() as temp:
-            project, _ = self.fixture(Path(temp))
-            mapping = read(project / "program/paper-map.json")
-            mapping["thesis_synthesis"]["integrated_contribution"] = "Unrelated six-paper story"
-            write(project / "program/paper-map.json", mapping)
-            self.assertTrue(scientific_scope.validate(project, "G3"))
+            project,_=self.fixture(Path(temp));before=scientific_scope.review_binding(project,"P01")
+            path=project/"papers/P06/paper-contract.json";value=read(path)
+            value["research_question"]="A revised P06 question";write(path,value)
+            self.assertEqual(scientific_scope.review_binding(project,"P01"),before)
+            self.assertTrue(scientific_scope.changes(project,"P06"))
+            self.assertEqual(scientific_scope.validate(project,"G5","P01"),[])
+            path=project/"papers/P01/paper-contract.json";value=read(path)
+            value.update(working_title="A clearer title",target_jcr_quartile="Q2");write(path,value)
+            self.assertEqual(scientific_scope.review_binding(project,"P01"),before)
+            value["research_question"]="A revised local question";write(path,value)
+            self.assertNotEqual(scientific_scope.review_binding(project,"P01"),before)
 
     def test_measured_synthesis_progress_does_not_create_another_topic_vote(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -70,43 +68,25 @@ class ScientificScopeTests(unittest.TestCase):
             write(target, contract)
             self.assertNotEqual(scientific_scope.projection(project, "G2"), frozen)
 
-    def test_legacy_approval_without_scope_seal_never_silently_migrates(self):
+    def test_legacy_missing_scope_record_is_not_invented_or_a_work_prerequisite(self):
         with tempfile.TemporaryDirectory() as temp:
-            project, _ = self.fixture(Path(temp))
-            (project / "state/scientific-scope/G1.json").unlink()
-            self.assertTrue(any("lacks a protected scope seal" in e for e in scientific_scope.validate(project, "G3")))
+            project,_=self.fixture(Path(temp));target=project/"state/scientific-scope/G1.json";target.unlink()
+            before=(project/"state/run.json").read_bytes()
+            self.assertEqual(scientific_scope.validate(project,"G3"),[])
+            self.assertFalse(target.exists());self.assertEqual((project/"state/run.json").read_bytes(),before)
 
-    def test_human_amendment_preserves_history_and_demands_fresh_gate_approval(self):
-        with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
-            project, original = self.fixture(Path(temp))
-            core = read(project / "program/core-thesis.json")
-            core["doctoral_question"] = "A genuinely changed synthetic doctoral question?"
-            write(project / "program/core-thesis.json", core)
-            source = "program/scope-amendment.json"
-            write(project / source, {"schema_version": "1.0", "id": "changed-doctoral-scope", "gate": "G1",
-                "reason": "The human requests a synthetic changed doctoral question after a documented evidence reassessment.",
-                "expected_seal_sha256": sha(project / "state/scientific-scope/G1.json"),
-                "proposed_projection": scientific_scope.projection(project, "G1")})
-            scientific_scope.apply_amendment(project, source, "Named human", "a" * 64, "cloud-fixture-run", "Reopen G1 for scientific reapproval")
-            current = read(project / "state/run.json")
-            self.assertEqual(current["gate"], "G1")
-            self.assertEqual(current["approvals"], original["approvals"])
-            self.assertEqual(current["approved_gates"], [])
-            self.assertEqual(scientific_scope.validate(project, "G1"), [])
-            self.assertTrue(scientific_scope.validate(project, "G2"))
-            approval = {"gate": "G1", "actor": "Named human", "artifact_sha256": "b" * 64}
-            scientific_scope.seal_approval(project, "G1", "Named human", approval)
-            current["approved_gates"].append("G1")
-            current["approvals"].append(approval)
-            write(project / "state/run.json", current)
-            self.assertTrue(scientific_scope.validate(project, "G3"))
-            second = {"gate": "G2", "actor": "Named human", "artifact_sha256": "c" * 64,
-                      "paper_topic_approvals": [{"paper_id": f"P{n:02d}", "actor": "Named human", "artifact_sha256": "c" * 64} for n in range(1, 7)]}
-            scientific_scope.seal_approval(project, "G2", "Named human", second)
-            current["approved_gates"].append("G2")
-            current["approvals"].append(second)
-            write(project / "state/run.json", current)
-            self.assertEqual(scientific_scope.validate(project, "G3"), [])
+    def test_recorded_scope_change_preserves_other_papers_and_existing_approvals(self):
+        with tempfile.TemporaryDirectory() as temp,patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1"}):
+            project,original=self.fixture(Path(temp))
+            core=read(project/"program/core-thesis.json");core["doctoral_question"]="A changed question";write(project/"program/core-thesis.json",core)
+            source="program/scope-amendment.json"
+            write(project/source,{"schema_version":"1.0","id":"changed-scope","gate":"G1","reason":"The user changes the question after inspecting the actual evidence.","expected_seal_sha256":sha(project/"state/scientific-scope/G1.json"),"proposed_projection":scientific_scope.projection(project,"G1")})
+            receipt=scientific_scope.apply_amendment(project,source,"Named human","a"*64,"fixture-run","Record the new question")
+            current=read(project/"state/run.json")
+            for key in ("gate","stage","active_paper","paper_statuses","approvals","approved_gates"):
+                self.assertEqual(current[key],original[key])
+            self.assertEqual(receipt["status"],"recorded")
+            self.assertEqual(scientific_scope.validate(project,"G5","P01"),[])
 
     def test_amendment_cas_and_subsequent_candidate_drift_are_rejected(self):
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
@@ -124,7 +104,8 @@ class ScientificScopeTests(unittest.TestCase):
             scientific_scope.apply_amendment(project, "program/scope-amendment.json", "Human", "a" * 64, "cloud-fixture", "Human amendment")
             core["doctoral_question"] = "A further unreviewed candidate change?"
             write(project / "program/core-thesis.json", core)
-            self.assertTrue(any("after the named human amendment" in e for e in scientific_scope.validate(project, "G1")))
+            self.assertTrue(scientific_scope.changes(project))
+            self.assertEqual(scientific_scope.validate(project,"G1"),[])
 
     def test_exact_human_approved_supplement_inherits_parent_without_new_thesis(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -146,7 +127,9 @@ class ScientificScopeTests(unittest.TestCase):
             core = read(parent / "program/core-thesis.json")
             core["doctoral_question"] = "Unapproved changed parent doctoral question"
             write(parent / "program/core-thesis.json", core)
-            self.assertTrue(scientific_scope.validate(child, "G4", "P01"))
+            self.assertEqual(scientific_scope.validate(child,"G4","P01"),[])
+            write(parent/"experiments/plan.json",{"changed":"execution inputs"})
+            self.assertTrue(scientific_scope.validate(child,"G4","P01"))
 
     def test_synthetic_helper_refuses_actual_repository_project_paths(self):
         from scripts.acceptance_scope import prepare_scope

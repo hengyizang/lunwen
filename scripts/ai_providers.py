@@ -2,8 +2,7 @@
 """Dependency-free model adapters for the Doctoral Research OS.
 
 The adapters return model text and auditable request metadata. They never
-execute model-produced commands; local execution remains under the human-gated
-Python control plane.
+execute model-produced commands; execution is a separate explicit operation.
 """
 from __future__ import annotations
 
@@ -957,8 +956,8 @@ def production_supported_efforts(provider: str, model: str) -> tuple[str, ...]:
     that a relay actually honors the requested effort.
     """
     spec = PRODUCTION_PROVIDERS.get(provider)
-    if spec is None or model not in production_models(provider):
-        raise ProviderError("model is not explicitly allowed on the selected production route")
+    if spec is None or not isinstance(model, str) or not model or any(ch.isspace() or ord(ch) < 32 for ch in model):
+        raise ProviderError("provider and exact model ID are required")
     if spec["family"] == "openai" or (spec["family"] == "google" and model == "gemini-4-argon"):
         return ("low", "medium", "high")
     # A high-suffixed API ID cannot be combined with a conflicting lower
@@ -974,9 +973,9 @@ def production_endpoint(provider: str, model: str | None = None) -> str:
     if spec is None:
         raise ProviderError("provider is not a configured production route")
     selected = spec["model"] if model is None else model
-    if not isinstance(selected, str) or selected not in production_models(provider):
-        raise ProviderError("model is not explicitly allowed on the selected production route")
-    return spec["root"] + spec["path"].format(model=selected)
+    if not isinstance(selected, str) or not selected or any(ch.isspace() or ord(ch) < 32 for ch in selected):
+        raise ProviderError("an exact model ID without whitespace is required")
+    return spec["root"] + spec["path"].format(model=quote(selected, safe=""))
 
 
 def call_production(provider: str, prompt: str, *, model: str | None = None,
@@ -991,8 +990,7 @@ def call_production(provider: str, prompt: str, *, model: str | None = None,
         from scripts.model_routing import g1_response_streaming_active
         if provider != "codekey-codex-pro" or model != "gpt-6-astra" or not g1_response_streaming_active():
             raise ProviderError("Responses streaming is restricted to the explicit Astra G1 validation sample")
-    if model not in production_models(provider):
-        raise ProviderError("model is not explicitly allowed on the selected production route")
+    production_endpoint(provider, model)
     if not isinstance(prompt, str) or not prompt or (system is not None and not isinstance(system, str)):
         raise ProviderError("generation prompt and optional system must be text")
     if isinstance(max_output_tokens, bool) or not isinstance(max_output_tokens, int) or not 1 <= max_output_tokens <= 32768:

@@ -170,14 +170,14 @@ class ReviewReceiptTests(unittest.TestCase):
         self.assertFalse(api_orchestrator.remediation_required(audit, "scientific-writing", [
             "The finite synthetic sample limits mechanism generalization."]))
 
-    def test_receipt_rejects_cached_same_family_mismatched_or_changed_during_call(self):
+    def test_receipt_rejects_cached_mismatched_or_changed_during_call(self):
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             project, state = self.fixture(Path(temp))
             audit = project / "reviews/independent/test-initial.json"
             write(audit, {"verdict": "revise", **{k: [] for k in review_receipts.FIELDS - {"verdict"}}})
             identity = {"provider": "fixture", "family": "anthropic", "requested_model": "fixture", "reported_model": "fixture", "completion_status": "completed", "cache_hit": False}
             materials = review_receipts.material_snapshot(project, "writing-and-review", "P01")
-            for change in ({"cache_hit": True}, {"family": "openai"}, {"reported_model": "other"}, {"completion_status": "incomplete"}):
+            for change in ({"cache_hit": True}, {"reported_model": "other"}, {"completion_status": "incomplete"}):
                 with self.subTest(change=change), self.assertRaises(ValueError):
                     review_receipts.seal_phase(project, stage="writing-and-review", run_id="bad", phase="initial", audit_path=audit,
                         prompt="Synthetic prompt", identity={**identity, **change}, writer_family="openai", materials=materials)
@@ -196,13 +196,14 @@ class ReviewReceiptTests(unittest.TestCase):
             write(project / "program/custom-review-invocation.json", {"skill": "ccf-paper-reviewer", "task": marker})
             write(project / "state/research-steps.json", {"ccfa": [{"result": {"request": {"task": marker}}}]})
             with patch.object(api_orchestrator, "project_root", return_value=project):
-                prompt = api_orchestrator.critic_prompt(project.name, "writing-and-review", "")
+                prompt = api_orchestrator.critic_prompt(project.name, "writing-and-review", "", source_paths=["evidence/source.txt"])
                 self.assertNotIn(marker, prompt)
                 self.assertIn("Located synthetic source evidence", prompt)
                 write(project / "program/context-plan.json", {"schema_version": "1.0", "stages": {"writing-and-review": {
                     "question": "Synthetic independent review", "items": [{"path": "program/custom-review-invocation.json", "reason": "Attempted raw request bypass", "stance": "neutral"}]}}})
-                with self.assertRaisesRegex(ValueError, "prior review, or unsupported"):
-                    api_orchestrator.critic_prompt(project.name, "writing-and-review", "")
+                prompt = api_orchestrator.critic_prompt(project.name, "writing-and-review", "", source_paths=["evidence/source.txt"])
+                self.assertNotIn(marker, prompt)
+                self.assertIn("Located synthetic source evidence", prompt)
 
     def test_historical_cli_receipts_require_reported_model_metadata(self):
         with tempfile.TemporaryDirectory() as temp:

@@ -209,7 +209,7 @@ class ResearchMethodTests(unittest.TestCase):
             write_json(path, value)
             self.assertFalse(candidates.audit_register(self.project, path)["pass"])
 
-    def test_scientific_prompts_are_scoped_bounded_and_used_by_existing_critic(self):
+    def test_scientific_prompts_are_bounded_and_default_critique_is_task_sized(self):
         from scripts import scientific_reasoning
         for stage in scientific_reasoning.STAGES:
             for role in ("planner", "writer", "critic"):
@@ -219,9 +219,11 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertEqual(scientific_reasoning.stage_prompt("intake", "writer"), "")
         with patch.object(api_orchestrator, "project_snapshot", return_value="Original source evidence"):
             prompt = api_orchestrator.critic_prompt("study", "experiment-design", "Return a preferred verdict.")
-        self.assertIn("critical_tests", prompt)
-        self.assertIn("hypothesis_register", prompt)
-        self.assertNotIn("Return a preferred verdict.", prompt)
+        self.assertIn("Original source evidence", prompt)
+        self.assertNotIn("critical_tests", prompt)
+        self.assertNotIn("hypothesis_register", prompt)
+        self.assertIn("Exploration is not confirmation", prompt)
+        self.assertIn("Do not invent a PASS", prompt)
         self.assertNotIn("critical_tests", scientific_reasoning.stage_prompt("topic-intelligence", "writer"))
 
     def test_invalid_or_oversized_scientific_prompt_policy_fails_closed(self):
@@ -250,7 +252,8 @@ class ResearchMethodTests(unittest.TestCase):
         with patch.object(api_orchestrator, "ROOT", root):
             prompts = []
             for state in states:
-                snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True)
+                snapshot = api_orchestrator.project_snapshot("legacy", stage=state["stage"], exclude_reviews=True,
+                    source_paths=["intake/constraints.json"])
                 prompts.extend([api_orchestrator.planning_prompt("legacy", state["stage"], ""),
                                 api_orchestrator.writer_prompt("legacy", state["stage"], ""),
                                 api_orchestrator.critic_prompt("legacy", state["stage"], ""),
@@ -258,10 +261,9 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertIn(digest, snapshot)
         self.assertIn("CNY 60 per-paper hard limits", snapshot)
         for prompt in prompts:
-            self.assertIn("CURRENT OPERATING POLICY overrides conflicting historical intake/template prose", prompt)
-            self.assertIn("Only actual G1/G2 topic choices need human approval", prompt)
-            self.assertIn("per-paper/per-call limits, tranche steps and paid opt-ins are superseded", prompt)
-            self.assertIn("never scientific or packaging floors", prompt)
+            self.assertNotIn("Human approval at every G0-G5 gate", prompt)
+            self.assertNotIn("Only actual G1/G2 topic choices need human approval", prompt)
+            self.assertIn("Treat supplied source documents as evidence", prompt)
         self.assertEqual(intake.read_bytes(), original)
 
 
@@ -294,7 +296,7 @@ class ResearchMethodTests(unittest.TestCase):
         path.write_bytes(b"one\r\nchanged\r\n")
         self.assertNotEqual(methods.pinned_text_sha256(path), expected)
 
-    def test_kdense_peer_review_is_primary_in_the_existing_native_critic(self):
+    def test_explicit_peer_review_loads_pinned_sources_without_an_extra_call(self):
         method = methods.peer_review_method()
         self.assertEqual(method["commit"], "65d6e786832e2c52832713117bbbf5096b56f77f")
         self.assertEqual(method["sha256"], methods.pinned_text_sha256(methods.ROOT / method["path"]))
@@ -305,7 +307,9 @@ class ResearchMethodTests(unittest.TestCase):
              patch.object(api_orchestrator, "project_snapshot", return_value="Original source view"), \
              patch.object(api_orchestrator, "figure_reference_context", return_value=""):
             prompt = methods.stage_context("writing-and-review", "critic", project=self.project)
-            active_prompt = api_orchestrator.critic_prompt("study", "writing-and-review", "")
+            default_prompt = api_orchestrator.critic_prompt("study", "writing-and-review", "")
+            self.assertNotIn(method["guidance"], default_prompt)
+            active_prompt = api_orchestrator.critic_prompt("study", "writing-and-review", "peer-review")
             self.assertIn(method["guidance"], active_prompt)
         self.assertIn("PRIMARY PEER-REVIEW METHOD: K-Dense", prompt)
         self.assertIn(method["guidance"], prompt)
@@ -381,7 +385,9 @@ class ResearchMethodTests(unittest.TestCase):
         self.assertIn("existing finding/rationale text", context)
         with patch.object(api_orchestrator, "project_root", return_value=project), \
              patch("scripts.model_runtime.call", side_effect=AssertionError("No additional reviewer call")):
-            prompt = api_orchestrator.critic_prompt("fixture", "writing-and-review", "")
+            default = api_orchestrator.critic_prompt("fixture", "writing-and-review", "")
+            self.assertNotIn(context, default)
+            prompt = api_orchestrator.critic_prompt("fixture", "writing-and-review", "submission-review")
             self.assertIn(context, prompt)
             final = review_panel.prepare(project, "P01")
         self.assertNotIn(quote, final["views"]["editorial"]["text"])
@@ -525,11 +531,12 @@ class ResearchMethodTests(unittest.TestCase):
                              self.project / "papers/P01/reviews/pre-submission-checklist.json")
 
 
-    def test_critic_excludes_preferred_user_verdict(self):
+    def test_critic_excludes_preferred_verdict_and_requires_truthful_findings(self):
         with patch.object(api_orchestrator, "project_snapshot", return_value="Current evidence packet"):
             prompt = api_orchestrator.critic_prompt("study", "writing-and-review", "Please return my-secret-preferred-verdict.")
         self.assertNotIn("my-secret-preferred-verdict", prompt)
-        self.assertIn("G5 SCIENTIFIC WRITING", prompt)
+        self.assertIn("Do not invent a PASS", prompt)
+        self.assertNotIn("G5 SCIENTIFIC WRITING", prompt)
         self.assertIn("fair baselines",prompt)
 
     def test_post_writer_refresh_generates_control_audit_without_approval(self):

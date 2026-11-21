@@ -38,7 +38,7 @@ FIELD_DIMENSIONS = {"methods": ("methods", "protocols", "splits", "statistics"),
 
 def _paper(project, paper_id, output_dir):
     wb._id(paper_id, "library paper ID")
-    library, _, manifest = wb._snapshot(project, output_dir)
+    library, _, manifest = wb._snapshot(project, output_dir, paper_ids=[paper_id])
     paper = next((p for p in library["papers"] if p["id"] == paper_id), None)
     if paper is None or paper.get("status") != "current":
         raise ValueError("sentence index needs a current registered library paper")
@@ -68,12 +68,9 @@ def _sentence_rows(project, paper):
         # Mechanical sentence candidates preserve exact bytes and line offsets.
         # Abbreviations/formula punctuation may split candidates; no linguistic
         # completeness or semantic entailment is inferred from segmentation.
-        for match in re.finditer(r"\S[\s\S]*?(?:[.!?。！？](?=\s|$)|\Z)", original):
+        for match in re.finditer(r"\S[\s\S]*?(?:[。！？]|[.!?](?=\s|$)|\Z)", original):
             quote = match.group().rstrip()
             if not quote:
-                continue
-            if len(quote) > 4000:
-                omitted += 1
                 continue
             start = first + original.count("\n", 0, match.start())
             end = start + quote.count("\n")
@@ -143,16 +140,14 @@ def _locate_sentence(sentence, page):
 def _pdf_positions(project, paper, sentences):
     if not paper.get("reader") or Path(paper["source"]["path"]).suffix.lower() != ".pdf":
         raise ValueError("PDF positioning requires a bound native PDF reader")
-    if os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1" and os.environ.get("GITHUB_ACTIONS") != "true":
-        raise ValueError("PDF positioning executes only on the authorized cloud runner")
     program = shutil.which("pdftotext")
     if program is None:
         raise RuntimeError("explicit PDF positioning requires the existing Poppler pdftotext tool")
     from pypdf import PdfReader
     pdf = path_in(project, paper["source"]["path"])
     reader = PdfReader(str(pdf), strict=False)
-    if reader.is_encrypted or not 1 <= len(reader.pages) <= 100:
-        raise ValueError("PDF positioning requires an unencrypted PDF of at most 100 pages")
+    if reader.is_encrypted or not reader.pages:
+        raise ValueError("PDF positioning requires an unencrypted PDF with pages")
     with tempfile.TemporaryDirectory(prefix="literature-positions-") as temporary:
         target = Path(temporary) / "positions.xhtml"
         subprocess.run([program, "-bbox-layout", "-cropbox", str(pdf), str(target)],
@@ -233,7 +228,7 @@ def build_index(project: Path, paper_id: str, *, output_dir=None, locate_pdf=Fal
     """Build/reuse an original-text sentence index after current source validation.
 
     ``output_dir`` selects the existing workbench snapshot, not a new corpus.
-    PDF box extraction is explicit and cloud-only; the free default uses the
+    PDF box extraction explicitly uses local Poppler; the free default uses the
     native original-text map and makes no PDF-coordinate claim.
     """
     project = Path(project).resolve()
@@ -418,14 +413,14 @@ def coverage(project: Path, request: dict, *, output_dir=None) -> dict:
     library, _, _ = wb._snapshot(project, output_dir)
     papers = {p["id"]: p for p in library["papers"] if p.get("status") == "current"}
     explicit = request.get("paper_ids")
-    if explicit is not None and (not isinstance(explicit, list) or not 1 <= len(explicit) <= 30
+    if explicit is not None and (not isinstance(explicit, list) or not explicit
             or any(not isinstance(i, str) for i in explicit) or len(set(explicit)) != len(explicit)
             or any(i not in papers for i in explicit)):
         raise ValueError("coverage papers must be distinct current sources within the scoped reading plan")
     plan = reasoning.itinerary(project, question, topic_id=request.get("topic_id"), paper_id=request.get("paper_id"),
-                               limit=request.get("limit", 30), output_dir=output_dir)
+                               paper_ids=explicit, limit=request.get("limit", 30), output_dir=output_dir)
     selected = request.get("paper_ids", plan["selected_paper_ids"])
-    if (not isinstance(selected, list) or not 1 <= len(selected) <= 30 or any(not isinstance(i, str) for i in selected)
+    if (not isinstance(selected, list) or not selected or any(not isinstance(i, str) for i in selected)
             or len(set(selected)) != len(selected) or any(i not in plan["selected_paper_ids"] for i in selected)):
         raise ValueError("coverage papers must be distinct current sources within the scoped reading plan")
     rows, reused, missing = [], [], []

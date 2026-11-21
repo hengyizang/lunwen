@@ -1,25 +1,10 @@
 ---
 name: scientific-brainstorming
-description: Generate and challenge specific research ideas after direction screening, preserving rejected alternatives, evidence gaps and cloud feasibility.
+description: Develop and challenge research ideas with evidence and useful tests.
 ---
 
-# Scientific brainstorming
+# Scientific Brainstorming
 
-Read references/research-methods/topic-hypotheses.md and the pinned upstream
-third_party/kdense/skills/scientific-brainstorming/SKILL.md. Its deterministic
-scripts are installed beside that file and can run on the cloud runner.
+Use a creative method suited to the current obstacle, then compare the important predictions against relevant prior work. Keep source observations, assumptions and speculative transfers separate. A few serious ideas may suffice; do not manufacture expert consensus, fixed candidate counts or all-pairs tables. Preserve why an idea changed or was rejected and choose the next useful information-gathering action.
 
-Use the complete 1.4 entry and relevant references. For actual candidate
-screening, follow docs/INNOVATION-SCREENING.md and the required
-innovation_screening section of schemas/research-hypotheses.schema.json.
-Keep explicit assumptions, all candidate-pair differences/shared failure risks,
-source gaps, data exposure, original rounds and candidate dispositions. Reuse
-current independent critique and final submission panel and writer decisions; a completed
-record or weighted ranking never establishes novelty or selects a topic.
-Pick a method suited to the obstacle; do not run every creative technique or
-add another paid reviewer loop. Multiple model samples are not expert consensus.
-
-Keep the existing G0 direction weights and G1 originality gate. Use multiple
-perspectives and sensitivity checks; never automatically select a topic,
-infer novelty from search absence or write invented findings. Claude plans
-and critic outputs remain internal. Codex/OpenAI writes persistent artifacts.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

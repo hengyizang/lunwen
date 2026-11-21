@@ -211,11 +211,9 @@ class ResearchSearchTreeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "provenance"):
             self.context(result)
 
-    def test_cloud_boundary_and_current_selected_toolkit_summary(self):
+    def test_local_execution_and_current_selected_toolkit_summary(self):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                self.prepare()
-        result = self.prepare()
+            result = self.prepare()
         builder = self.root / toolkit.MODULE
         builder.write_text("bound toolkit fixture\n", encoding="utf-8")
         recipe = self.root / "integrations/codex-research-tools/skills/research-ai-scientist/SKILL.md"

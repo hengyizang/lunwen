@@ -1,90 +1,13 @@
-# Specific topics and competing hypotheses
+# Questions, hypotheses and competing explanations
 
-Method sources: kdense-topic-methods, nature-skills. Read the pinned originals
-under third_party/kdense and third_party/nature-methods when deeper guidance is
-needed. Apply this module after direction screening.
+Method sources: kdense-topic-methods, nature-skills. Read the selected pinned method when it helps; no prior direction-ranking exercise or fixed stage is required.
 
-Keep the G0 direction weights for funded PhD supply, employment/salary, growth,
-PhD competition, job competition, background and application-route fit.
-Cloud feasibility is mandatory for every current paper. Novelty, doctoral depth
-and original contribution are separate topic requirements, never tradeable
-direction-score weights. Keep future laboratory extensions outside current
-paper evidence.
+Start from a meaningful observation or problem and relevant primary work. Separate importance from novelty. State what would be learned, the prediction, an alternative explanation worth distinguishing, an informative test and the limits of available resources or evidence. A negative or inconclusive result can still be valuable.
 
-Write program/hypothesis-register.json using
-schemas/research-hypotheses.schema.json. Set schema_version=1.0,
-scope=specific_topics_after_direction_screening, direction_id to the screened
-direction, automatic_selection=false, and hypotheses to at least three
-distinct concrete hypotheses.
+Generate as many serious alternatives as the problem warrants. Choose one useful creative method—assumption reversal, analogy with mismatches, boundary/scale change, morphological combination, SCAMPER or a failure premortem—rather than stacking every method. Repeated model samples are not an expert panel or proof of independence.
 
-For each hypothesis record hypothesis_id, hypothesis, source_observation,
-precise_difference, prediction, falsifying_result, null_result_value,
-source_anchors, alternative_explanations, failure_modes and test_plan.
-Keep evidence_status=hypothesis and novelty_status=prior_art_search_required;
-only the existing originality audit and novelty matrix can establish a
-comparative novelty judgement. Do not interpret search absence as novelty.
+Use direct notes or the existing hypothesis-register/card schemas when useful. Keep located source observations, interpretations, prior exposure, real changes of mind and rejected ideas with their reasons. Numerical candidate scores, all-pairs tables, two generation rounds and fixed counts of hypotheses/failure modes are optional aids, not selection prerequisites.
 
-Each source_anchor contains a project-relative path, current sha256, locator
-and an exact bounded excerpt (at most 25 words and 1000 characters). PDF anchors
-also require the positive PDF page index, separate from printed page labels.
-For text sources use verifiable line locators such as L1 or L1-L3; for DOCX
-use paragraph 1 (one-based paragraph index). An excerpt found elsewhere does
-not confirm the declared location.
-At least two alternative_explanations each need explanation,
-discriminating_test and expected_if_true. Specify at least two failure_modes.
-test_plan contains comparator, controls[], metric, dataset, cloud_execution,
-budget_cny (finite, nonnegative estimate) and deadline (ISO date). An estimate
-never authorizes spending. Include why a null or negative result would still
-inform the research question.
+Compare the actual proposed difference with relevant closest and adjacent work. Preserve uncertainty and counterevidence; an unsuccessful search, renamed module or complete form does not prove originality. A structural audit checks its data contract, not scientific value.
 
-Build argument_plan with research_question, allowed_claims[], forbidden_claims[],
-planned_evidence[] and stopping_conditions[]. Establish facts and uncertainty
-before paragraphs. Do not write favorable results before experiments run.
-Materialize each paper's allowed/forbidden claims and evidence plan in its
-existing paper contract, claim matrix and paragraph argument ledger.
-
-Before drafting, compare each candidate with closest and adjacent work, use
-different perspectives without manufacturing agreement, and preserve rejected
-ideas with reasons. Direction-ranking weights remain separate from optional
-candidate-rating weights; neither can waive originality or falsification.
-
-The register also requires innovation_screening (schema_version=1.0):
-- scope: focal_question matching argument_plan, one doctoral_question, in/out
-  scope and real/assumed/negotiable/unknown constraints;
-- generation: chosen method/reason, truthful contributors and represented/missing
-  perspectives, prior examples, independence/deviations, hash-bound initial and
-  post_evidence round records when actually performed, and cluster/merge/split events retaining originals. Exploratory drafts retain their real rounds without inventing a second round;
-- assumptions: IDs, category/status, affected candidate IDs, located evidence,
-  test_or_check and failure_consequence;
-- candidates: exactly one record per hypothesis with mechanism, assumption_ids,
-  support/challenge anchors, evidence_gaps/search_limits, prior_exposure,
-  adversarial_checks, disposition and gate_status;
-- comparisons: full decision mode covers all pairs; a justified focused mode compares every focal candidate with alternatives. Exploratory drafts may retain incomplete comparisons. Record actual mechanism/prediction differences, distinguishing tests and shared failure risks;
-- evaluation: narrative reasons may omit numerical criteria and ratings. An optional weighted_matrix retains actual criteria/anchors, original/revised ratings, missingness, dissent and limitations. Never fill a
-  missing rating with zero or present plausible ranges as confidence intervals.
-
-Keep the native schema and docs/INNOVATION-SCREENING.md available while preparing
-these records. Exact duplicate hypothesis/prediction/difference tuples fail;
-semantic independence remains a question for the existing independent critic.
-Candidates may share legitimate doctoral background assumptions. They must not
-silently become unrelated doctoral topics. Retain all rejected/deferred ideas.
-
-Record seen data, outcomes and analyses. Same-observation follow-up remains
-exploratory; describe new data or untouched holdout for a future confirmatory
-test. If human-first or independent generation did not happen, record that
-deviation rather than inventing participants or independence. Keep adversarial
-checks as proposed challenges/responses until actually independently reviewed.
-The existing critic must assess candidate differences, joint failure risks,
-source gaps and dispositions, and the writer resolves those findings item by item.
-
-Choose one useful creative method for the current obstacle: assumption reversal,
-boundary/scale change, source-to-target analogy with mismatches, morphological
-combinations, SCAMPER, constraint ladder or failure premortem. Use the relevant
-pinned brainstorming reference; do not stack all methods or manufacture an
-expert panel/Delphi process from repeated model samples. Separate source-system
-evidence from target-system predictions. Include an inconclusive/control-failure
-condition in the minimum test, alongside existing continue/revise/stop criteria.
-
-The control plane creates program/hypothesis-audit.json. Its pass means that
-the register is structurally complete and anchors are replayable. It does not
-validate the science, select a topic or approve G1.
+Record whether an idea was developed after seeing the data. Same-data follow-up is exploratory; a prospective confirmation needs genuinely unobserved evidence and prior choices appropriate to the design. Adapt papers and questions when evidence warrants it without rewriting earlier outcomes or inventing user approval.

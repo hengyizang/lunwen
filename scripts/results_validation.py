@@ -58,8 +58,8 @@ def validate_registry(
         import json
         try:
             json.loads(state_path.read_text(encoding="utf-8"))
-            from scripts.paper_execution import approval as paper_approval
-            approval = paper_approval(project, "G3")
+            from scripts.paper_execution import protocol_seal
+            approval = protocol_seal(project)
             approval_hash = approval.get("experiment_plan_sha256") if isinstance(approval, dict) else None
         except (OSError, ValueError):
             errors.append("state/run.json cannot establish the G3-approved plan")
@@ -182,10 +182,17 @@ def _outcome_error(status: str, comparisons: list[dict], *, empirical: bool) -> 
         return "supported claim does not meet every confirmatory threshold"
     if status == "partially_supported" and not any(c.get("decision") in passing for c in primary):
         return "partial support needs a passing confirmatory primary comparison"
-    if status == "contradicted" and empirical:
+    if status == "contradicted" and (empirical or any("statistics" in c for c in primary)):
         opposite = []
         for comp in primary:
-            low, high, margin = comp.get("ci_low"), comp.get("ci_high"), comp.get("minimum_effect")
+            if comp.get("interpretation_limits"):
+                continue
+            summary = comp.get("statistics", {}).get("summary", {})
+            low, high = comp.get("ci_low", summary.get("ci_low")), comp.get("ci_high", summary.get("ci_high"))
+            margin = comp.get("minimum_effect", comp.get("statistics", {}).get("minimum_effect"))
+            direction = comp.get("direction", comp.get("statistics", {}).get("direction"))
+            if summary and direction in {"lower", "less"} and type(low) in (int, float) and type(high) in (int, float):
+                low, high = -high, -low
             if not all(type(value) in (int, float) and math.isfinite(value) for value in (low, high, margin)):
                 continue
             if comp.get("decision_rule") == "equivalence":

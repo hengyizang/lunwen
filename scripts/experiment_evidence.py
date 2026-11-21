@@ -428,7 +428,8 @@ def _measure(project: Path, comp: dict, registry: list[dict], plan_hash: str, fa
                 "standard_error": actual["standard_error"], "independent_units": actual["n_units"],
                 "n_observations": actual["n_observations"], "seeds": 1, "seed_effects": [], "seed_effect_sd": None,
                 "unit_design": "model", "aggregation": "model_based_on_declared_units", "method": actual["method"],
-                "recomputed_from_units": True, "sources": [bound["source"]], "scientific_validity_verified": False}
+                "recomputed_from_units": True, "sources": [bound["source"]], "scientific_validity_verified": False,
+                "interpretation_limits": bound.get("interpretation_limits", [])}
     if comp.get("unit_design", "independent" if comp["analysis_mode"] == "welch_t" else "paired") == "independent":
         return _measure_independent(project, comp, registry, plan_hash, family_size)
     sources, per_seed, expected = [], [], None
@@ -575,8 +576,8 @@ def build_report(project: Path, paper_id: str) -> dict:
     from scripts.research_quality import validate_preregistration
     try:
         read(project / "state/run.json")
-        from scripts.paper_execution import approval as paper_approval
-        approval = paper_approval(project,"G3",paper_id) or {}
+        from scripts.paper_execution import protocol_seal
+        approval = protocol_seal(project, paper_id) or {}
         need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg_path),
              "preregistration differs from the G3-approved frozen protocol")
         errors.extend(validate_preregistration(read(prereg_path), paper_id, project))
@@ -631,6 +632,8 @@ def build_report(project: Path, paper_id: str) -> dict:
                                if threshold_met and p_adjusted <= comp["alpha"] else "does_not_establish_claim")
             if comp["analysis_phase"] == "exploratory":
                 row["decision"] = "exploratory_only"
+            elif row.get("interpretation_limits"):
+                row["decision"] = "diagnostics_failed"
     from scripts.scientific_reasoning import critical_test_results
     report["critical_test_results"] = critical_test_results(protocol, report["comparisons"])
     report["status"] = "complete" if not errors else "blocked"

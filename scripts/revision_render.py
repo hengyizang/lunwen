@@ -58,6 +58,19 @@ def validate_render_receipt(paper: Path, pdf: Path, receipt_path: Path) -> dict:
     relative = receipt_path.resolve().relative_to(paper).as_posix()
     receipt_path = path_in(paper, relative)
     value = read(receipt_path)
+    if relative == "reviews/venue-compliance.json":
+        from scripts.venue_compliance import manuscript_tree_sha256
+        main = canonical_manuscript(paper)
+        compiled = value.get("compile", {})
+        target = Path(compiled.get("pdf") or compiled.get("pdf_path") or "")
+        if not target.is_absolute():
+            target = paper / target
+        if (main.suffix.lower() != ".tex" or compiled.get("status") != "pass"
+                or value.get("manuscript", {}).get("source_tree_sha256") != manuscript_tree_sha256(main)
+                or target.resolve() != pdf.resolve() or compiled.get("pdf_sha256") != sha(pdf)):
+            raise ValueError("local TeX rendering receipt is stale for its actual sources or PDF")
+        pdf_pages(pdf)
+        return {"path": relative, "sha256": sha(receipt_path)}
     if value.get("schema_version") != "1.0" or value.get("status") != "pass":
         raise ValueError("PDF locations need a passing real cloud rendering receipt")
     execution, renderer = value.get("execution", {}), value.get("renderer", {})
@@ -89,7 +102,7 @@ def validate_render_receipt(paper: Path, pdf: Path, receipt_path: Path) -> dict:
     if outputs.get(pdf.resolve().relative_to(project).as_posix()) != sha(pdf):
         raise ValueError("rendering receipt does not bind the actual PDF output")
     origin = current_origin(project, receipt_path)
-    if any(origin.get(key) != expected for key, expected in {"status": "tracked", "family": "other", "provider": implementation[1], "role": "render-receipt"}.items()):
+    if any(origin.get(key) != expected for key, expected in {"status": "tracked", "provider": implementation[1], "role": "render-receipt"}.items()):
         raise ValueError("rendering receipt lacks protected deterministic control-plane provenance")
     return {"path": relative, "sha256": sha(receipt_path)}
 

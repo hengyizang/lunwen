@@ -55,7 +55,14 @@ def measured(project: Path, paper_id: str, specification_id: str) -> dict:
     expected = empirical_runtime.calculate(card, spec, path_in(project, card["data"]["path"]), design_path=card_path)
     _need(_same(output, expected), "empirical result differs from deterministic estimator recomputation")
     _need(output.get("scientific_validity_verified") is False, "an estimator cannot certify causal validity")
-    return {"specification": spec, "result": output, "source": source, "executor": seal}
+    try:
+        diagnostics = _diagnostics(project, paper_id, card)
+        limits = [{"diagnostic_id": row["id"], "reason": "diagnostic failed",
+                   "failure_action": row["failure_action"]} for row in diagnostics if not row["passed"]]
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        limits = [{"reason": "diagnostic evidence unavailable", "detail": str(exc)}]
+    return {"specification": spec, "result": output, "source": source, "executor": seal,
+            "interpretation_limits": limits}
 
 
 @paper_scoped
@@ -70,8 +77,9 @@ def _diagnostics(project, paper_id, card):
         _need(payload.get("diagnostic_id") == diagnostic["id"] and type(payload.get("passed")) is bool,
               "diagnostic output needs its registered ID and an explicit computed outcome")
         _need(isinstance(payload.get("details"), dict) and payload["details"], "diagnostic needs actual check details")
-        _need(payload["passed"], "diagnostic failed; follow its predeclared failure_action: " + diagnostic["id"])
         bindings.append({"id": diagnostic["id"], **output, "executor": seal,
+                         "passed": payload["passed"], "details": payload["details"],
+                         "failure_action": diagnostic.get("failure_action"),
                          "scientific_assumption_verified": False})
     return bindings
 
@@ -171,7 +179,8 @@ def _map_errors(project, paper_id, rows, *, require_mapping):
                       and re.search(r"\b" + other + r"\b", quote) is None,
                       "reported analysis phase differs from actual run")
             else:
-                _need(re.search(r"(?<![\w.\d+-])" + re.escape(display) + r"(?![\w.\d])", quote) is not None, "reported number differs from actual estimator output")
+                from scripts.scientific_numbers import number_in_text
+                _need(number_in_text(quote, display), "reported number differs from actual estimator output")
                 _need(not (field in {"p_value", "p_adjusted"} and value > 0 and float(display) == 0), "do not round a positive p-value to zero")
             fields.add(field)
             inputs.append({"path": relative, "sha256": sha(target)})
@@ -205,7 +214,15 @@ def audit(project: Path, paper_id: str, *, require_mapping=False):
         card = read(path_in(project, f"papers/{paper_id}/empirical-design.json"))
         result["design_sha256"] = sha(project/f"papers/{paper_id}/empirical-design.json")
         result["registered_specifications"] = card["specifications"]
-        result["diagnostics"] = _diagnostics(project, paper_id, card)
+        try:
+            result["diagnostics"] = _diagnostics(project, paper_id, card)
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            result["diagnostics"] = []
+            result["errors"].append("diagnostic evidence: " + str(exc))
+        result["interpretation_limits"] = [
+            {"diagnostic_id": row["id"], "reason": "diagnostic failed",
+             "failure_action": row["failure_action"], "affected_specifications": [s["id"] for s in card["specifications"]]}
+            for row in result["diagnostics"] if not row["passed"]]
         for spec in card["specifications"]:
             measured_result = measured(project, paper_id, spec["id"])
             output = measured_result["result"]
@@ -224,7 +241,8 @@ def audit(project: Path, paper_id: str, *, require_mapping=False):
         result["errors"].extend(mapping_errors)
         result["reporting_inputs"] = inputs
         result["reported_specification_ids"] = identifiers
-        result["status"] = "blocked" if result["errors"] else "ready_for_scientific_review"
+        result["status"] = ("blocked" if result["errors"] else
+                            "diagnostics_failed" if result["interpretation_limits"] else "ready_for_scientific_review")
     except (OSError, ValueError, KeyError, TypeError, RuntimeError, ImportError) as exc:
         result["errors"].append(str(exc))
     return result

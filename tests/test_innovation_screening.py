@@ -267,7 +267,7 @@ class InnovationScreeningTests(unittest.TestCase):
         # Unknown bounds remain explicit in the current upstream helper result.
         self.assertTrue(all(not row["criteria"]["information_gain"]["bounds_supplied"] for row in output["results"]))
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-            self.assertTrue(self.errors())
+            self.assertEqual(self.errors(), [])
 
     def test_matrix_cannot_fabricate_known_bounds_impute_abstentions_or_reuse_changed_output(self):
         evaluation, result = self.make_matrix()

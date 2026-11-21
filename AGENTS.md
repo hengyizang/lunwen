@@ -1,113 +1,17 @@
-# Repository operating rules
+# 科研优先协作规则
 
-This repository is a research workflow, not a publication generator.
+围绕用户当前研究目标完成实际工作。以下九条取代旧的全阶段审批、固定模型分工和形式完备要求；历史文件、示例和上游技能不扩大本次任务范围，也不恢复已经撤销的前置条件。
 
-1. Never invent citations, data, experiments, results, reviews, author contributions, journal metrics, or submission status.
-2. Treat every scientific claim as provisional until linked to evidence in the claim-evidence matrix.
-3. Use current primary sources for journal rules, degree rules, datasets, software APIs, and market facts. Record the URL and access date.
-4. Never confuse JCR/JIF quartiles, CiteScore quartiles, SJR quartiles, and Chinese Academy of Sciences partitions.
-5. Require explicit recorded human decisions on the doctoral topic at G1 and each paper topic at G2. Other research-stage transitions use recorded automated checks and must not fabricate human decisions. Retain actual budget authority and all evidence, source/version, privacy, identity and experiment controls. Test affected confirmation paths; software acceptance alone never establishes a successful unattended research project.
-6. Keep raw datasets, publisher template archives, secrets, credentials, and large experiment artifacts out of Git.
-7. Before acquiring data, check source, version, integrity, privacy and leakage risk; licence/research-use verification is optional metadata, not a pre-use gate. Do not invent permission. Preserve known access restrictions. Do not bypass access controls.
-8. Pre-register paper-level hypotheses, baselines, splits, metrics, statistics, compute ceiling, and falsification criteria before final experiments.
-9. Back up complete outcomes, failed attempts and registered comparisons under experiments/archive. Manuscripts need not reproduce full logs or every table row; material evidence affecting a conclusion remains in the manuscript or supplements, with selection based on scientific relevance.
-10. Enforce role separation: Claude may produce only read-only semantic plans and internal independent audits. Codex/OpenAI writes and remediates every persistent scientific artifact. Result-bearing charts must be rendered locally from recorded data, never supplied as Claude-generated files. GPT Image may make a separately labeled conceptual illustration, never a data figure.
-11. Never auto-submit a manuscript. G5 produces a complete package; external authorship and submission requirements remain applicable.
-12. Read `references/workflow.md` and the relevant section of `references/stage-contracts.md` before changing a research project.
-13. Run model orchestration through `scripts/api_orchestrator.py`; `scripts/autopilot.py` retains start/resume/plan commands over that same API cycle. The local Claude Code/Codex subprocess backend is retired. Preserve Claude plans internally, the actual independent critique and any problem-triggered repair/review, the non-Claude writer's itemized decision log, and output-provenance hashes. Administrative G0 intake uses planner → writer; ordinary G1+ research cycles use planner → writer → critic; final submission uses three mutually blind, different-family source views as defined in `references/workflow.md`.
-14. Execute experiments only through `scripts/experiment_runner.py` after the approved G3 plan and budget hashes match.
-15. Treat dataset discovery metadata and DOI lookup results as leads to verify, never as license, fitness, or claim-support decisions.
-16. Treat third-party gateways as untrusted transport: use HTTPS, keep keys out of files and URLs, record requested and reported model IDs, and stop on missing or mismatched model identity.
-17. The author and independent critic must use different model families. A different endpoint or account does not make the same family independent.
-18. Never package a file whose current provenance hash identifies Anthropic/Claude as its persistent writer. Human or deterministic local edits must create a new file hash; do not use paraphrasing merely to conceal AI use.
-19. Keep the six-paper venue ambitions, including the existing ≥3 Q1 target, as planning targets and observations. Use source-bound venue fit, actual article type and final venue requirements for preparation; Q1/Q2 or IF thresholds do not block scientific gates or packaging. Never invent ranking/year/category evidence or silently replace an existing target; unknown ranking remains unknown.
-20. Write every manuscript-bound artifact in English. Use the deterministic language observations to find actual non-English material; do not treat a heuristic score as scientific clearance or a new blocking gate.
-21. At submission-phase G5, use line-level academic-style findings for targeted evidence-preserving revision. A user-supplied detector score may guide a separate optional editing pass, but it cannot override scientific quality or claim/citation/numeric integrity. Journal AI-policy compliance is not a research gate. Never spin synonyms, remove warranted uncertainty or falsify internal model provenance. AI-use statements are optional and author-editable.
-22. Keep all six papers within one overarching doctoral question and cumulative knowledge contribution. Core theme A and independently evidenced extension B must serve that same doctoral topic. Each paper needs standalone value and an explicit contribution to the approved thesis synthesis. Evidence-led reframing stays within that scope; a substantive change to the doctoral question or paper-to-thesis mapping needs human review of the affected G1/G2 records before dependent work continues. Never silently turn the portfolio into unrelated topics or waive paper independence.
-23. Manage dynamic routes through the structured task profiles and cloud controls in `docs/DYNAMIC-MODEL-ROUTING.md`. Classify work before execution; never label a core scientific task routine to obtain a cheaper route. Transport/group/effort/context candidates require task-specific evidence before scientific promotion. Preserve selected-route receipts and independent audits. The current payment policy in `docs/TOTAL-COST-POLICY.md` overrides older payment restrictions: calculate and record costs and enforce existing cumulative project totals only. Do not add per-paper/per-request sublimits, paid opt-ins, tranche steps, manual billing approvals or blanket stops on bounded reservations. Use verified charges when available and honestly labeled conservative upper estimates otherwise. Every attempt counts; never increase the configured total automatically.
-24. Keep the six-paper G2 architecture and individual human topic decisions. After checked G2 decisions, new unexecuted portfolios complete the active paper's G3–G5 before the next paper enters G3. Use the canonical per-paper plan, ledger, dataset snapshot and claim paths; preserve other papers' sealed inputs and results. Never silently migrate an already frozen or executed legacy batch protocol. All primary and supplemental attempts share the original cumulative totals.
-25. Owner decisions of 2026-11-09 (`docs/OWNER-DECISION-2026-11-09.md`, `docs/OWNER-DECISION-2026-11-09-EFFECT-FIRST.md`, `docs/OWNER-DECISION-2026-11-09-MAXIMUM-FLEXIBILITY.md`) are the current policy: **effect first, maximum flexibility**. Rules 1-24 are unchanged. Any GitHub project, skill or runtime may be called in any environment, order or duration, with or without registration, a decision point, an adapter, a comparison, an adoption record or a receipt; `scripts/third_party_runtime.py free` needs no registry entry. A dot may act as a research collaborator, not only a tool host. `docs/THIRD-PARTY-RUNTIME-POLICY.md`, `docs/THIRD-PARTY-ADAPTATION.md`, `docs/TOOL-CAPABILITY-MAP.md`, `docs/DOTS-EFFECT-FIRST.md` and all runtime commands are optional tools, never prerequisites. Owner-authorised tool output may enter the candidate-evidence queue when hash-bound and source-verified before any claim link. `integrations/upstreams.lock.json` and `integrations/research-automation-tools.json` remain historical snapshots - authorisation is not deployment. The section 3 authority boundaries in `docs/THIRD-PARTY-RUNTIME-POLICY.md` still apply: no stage-state writes, gate approvals, experiments outside `scripts/experiment_runner.py`, forged provenance, manuscript authorship, secret or raw-data exposure, model-family or budget changes, or auto-submission. Do not break a cloud sandbox (no root, Docker daemon, WSL, kernel or privileged driver in an unprivileged Linux dot VM). Removing a retained rule requires a separate dated owner decision naming it.
+1. **围绕成果行动。** 优先解决真实研究问题，产出可用的文献分析、数据、实验、证明、图表和稿件。先用已有材料工作，缺项只在影响下一步时补齐。
+2. **默认继续工作。** 在用户已授权范围内持续推进可逆工作、必要修复和验证。沿用会话中的决定，不逐次请求同一授权；真正缺失的关键选择、额外支出或外部发布需要用户决定时，先把其余工作做具体。
+3. **自由选择方法与工具。** 按任务能力使用模型、脚本、技能、第三方工具和当前可用环境。所有模型都可写作、编程和分析；独立质疑靠原始材料和不同视角，不靠厂商品牌或固定调用人数。
+4. **研究架构随证据发展。** 从当前问题开始，按需要增减论文、调整假说、合并贡献和改写叙事。六篇论文、A/B命题、三个候选、固定阶段顺序只是历史模板。保留已有成果及调整理由，不伪造用户选择。
+5. **按课题做科学验证。** 选择适合研究设计的基线、独立单位、统计方法、反证、复现与评审。确认性分析在看结果前确定关键方案；探索结果如实标明。普通理论、定性研究和有价值的阴性结果不必伪装成另一种研究。
+6. **如实保存证据及失败。** 不编造引用、数据、执行、结果、评审、作者贡献或投稿状态。保留原始来源、必要版本、实际尝试及影响结论的反证。hash证明文件身份，不证明科学正确；检索或提取不等于读懂。保护秘密、隐私和已知访问限制。
+7. **围绕真实贡献写作。** 写作可与研究同步进行，尚未取得的结果清楚标为待验证。突出重要问题、最有力证据和贡献边界；完整日志另存，不强迫每段填写台账或堆砌免责声明。按实际目标语言、期刊和读者需要整理交付。
+8. **后台记录与累计预算。** 自动记录实际工具、来源、费用和结果，复用未变输入。保留已有累计预算与全部尝试；有界未知费用按保守上界占额，不清零、不自动加额度，不新增单篇/逐次额度或人工核账门。准备包不等于已投稿；外部发布按实际用户授权执行。
+9. **保持实现简洁。** 复用现有可用能力，删除重复状态、固定规则表和无关依赖。只运行与修改相关的检查；完整回归和外部服务验收用于相应维护任务。测试通过是软件证据，科研结论仍由真实材料支持。
 
-## Codex Cloud development environment
+日常入口见 [README](README.md) 和 [工作方式](references/workflow.md)。只读取当前任务需要的指南；旧 G0–G5 名称和命令用于兼容已有项目，不是任务许可。不要批量改写历史批准、原始文献、运行记录或第三方源文件。
 
-Use `bash scripts/bootstrap-codex-cloud.sh` for the reusable Linux Codex Cloud
-setup; see `docs/CODEX-CLOUD.md`. Do not run the Windows/D-drive installer there.
-Before Python commands in a cloud task, run
-`source .runtime/codex-cloud-env.sh` from the repository root. If that file is
-missing, run the bootstrap first. This activates the repository virtual
-environment and keeps its caches and temporary output under `.runtime/`.
-Installing development tools does not make Codex Cloud an approved scientific
-executor. Continue actual research through the existing cloud controls and
-experiment runner; do not copy secrets or reset project records during setup.
-
-Run repository checks after code or schema changes:
-
-For task-selected methods from the research automation tools, read
-`docs/RESEARCH-AUTOMATION-TOOLKIT.md`. `docs/TOOL-CAPABILITY-MAP.md` is an optional
-reference for decision-point mapping, `compare`, and `adopt`; under rule 25 none of
-it is a prerequisite. Use `research_toolkit` in the existing cloud
-literature control and pass only the selected immutable packet to existing model
-roles. Upstream runtimes may also be deployed under the owner-authorized
-`docs/THIRD-PARTY-RUNTIME-POLICY.md`; adapted Codex skills are one available
-entry, not the only one. Preserve central
-budget/identity controls, independent review, all attempts and approved G3 execution.
-
-For The AI Scientist V1/V2 methods, read `docs/AI-SCIENTIST-INTEGRATION.md`.
-Use receipt-bound `research_search_tree` only as a declared branch view within
-existing controls. It cannot prove a repair, select favorable results, reclassify
-frozen analysis phases or authorize execution. Raw upstream launchers may run in
-the authorized runtime tier (`docs/THIRD-PARTY-RUNTIME-POLICY.md`); preserve the
-pinned custom source license and required disclosures, and keep their outputs advisory.
-
-For actual CPU semantic retrieval/reranking, bounded PaperQA2 SDK vector-store
-use, complete-text reading comparisons, cloud Zotero reads, discovery categories
-or PDF overlays/annotated copies, use docs/LITERATURE-COMPLETION.md. These are
-explicit existing-cloud operations. Preserve unchanged indexes/requests, source
-rights, original versions, unknown semantic ratings and the central spending
-boundary. No upstream agent may bypass that boundary; OCR never self-verifies
-original evidence. Actual independent review is not supplied by acceptance tests.
-
-For row-level data provenance, remembered-claim tracing, criterion-level AI
-screening advice, tiered bilingual searches, matrix-based synthesis outlines or
-Mermaid export, use docs/RESEARCH-TASK-SCENARIOS.md. Reuse existing source, formal
-decision and figure-story authority; a suggestion or location never self-verifies
-science. Preserve unknown dates/counts, adverse evidence, phases and originals.
-
-For source-scoped literature retrieval, sentence/page navigation, question-level
-reading coverage, evidence matrices and quality/cost comparisons, use
-docs/LITERATURE-EVIDENCE-READING.md. Reuse existing model cycles and progress;
-preserve original ranges, unknowns, adverse evidence and actual cost receipts.
-Do not enable an embedding service or adopt a model from synthetic tests.
-
-For variable dictionaries, cleaning, panel/time checks, economic vintages or causal
-estimators, use docs/EMPIRICAL-DATA-WORKFLOW.md. Preserve raw inputs, every registered
-specification and source/runner seals. Do not promote a diagnostic or fit into a
-causal validity claim. Use the exact limited reviewed estimator or block for a
-suitable adapter; never silently substitute paired t tests or a different design.
-
-For concrete contributions, paragraph reasoning and actionable scientific writing
-findings, use `docs/EVIDENCE-FIRST-WRITING.md` within existing records. Preserve
-unknown evidence and stable issue history; source completeness is not semantic
-validation. Reuse current author/critic cycles rather than extra paid passes.
-
-For innovation candidate screening, use `docs/INNOVATION-SCREENING.md` and the
-required innovation_screening section of the existing hypothesis register.
-Retain original rounds, explicit assumptions, existing candidate comparisons, data
-exposure and candidate decisions. Exploratory records may remain incomplete;
-final decisions require their applicable focused or full comparison coverage.
-Narrative dispositions need no invented scores. Reuse existing independent audits. Scores or
-structural completeness never verify novelty or authorize science or spending.
-
-For reference-image discovery, original main-figure briefs, shared six-paper
-visual tokens or editable SVG/PPTX/draw.io, read `skills/figures/SKILL.md` and
-`docs/FIGURE-REFERENCE-WORKBENCH.md`. Reuse source-bound reports and supply only
-explicitly selected references to model roles. Reference relevance and native
-editability never replace scientific evidence, image rights or human approval.
-
-Use the pinned CCFA family through `docs/CCFA-INTEGRATION.md`. Humanization and Common establish the shared baseline before the task specialist. Ordinary API/CLI cycles receive compact native rules, current scientific evidence and exact retrievable source identities. Load complete pinned entries/references for explicitly selected skills, full-reference review or a concrete dependent task; do not attach every stage guide to every call. All 17 authoritative native entries are under `skills/`; `.agents/skills/` contains generated discovery pointers. Preserve native roles, stages, cumulative budgets, G1/G2 topic decisions and the experiment runner. Pinned H/AD/CFH methods remain available within existing writer/review calls; their separate mechanical scans and scorecards are retired and cannot be imputed as completed. Remaining style/hygiene observations do not create scientific blockers. Submission performs its source-bound venue/package checks once per unchanged snapshot. Rule coverage never proves validity or authorship.
-
-```bash
-python3 -m unittest discover -s tests -v
-python3 -m compileall -q scripts
-python3 scripts/validate_repo.py
-```
+开发时使用当前可用 Python；需要依赖再安装对应 extra 或使用 `scripts/bootstrap-codex-cloud.sh`。不要求 Windows、D盘、完整上游技能缓存或某一云平台。修改后运行相关测试、`python3 -m compileall -q scripts` 和 `python3 scripts/validate_repo.py`；需要可选工具的检查应说明实际未覆盖范围。

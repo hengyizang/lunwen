@@ -54,6 +54,15 @@ class LiteratureMatrixTests(WorkbenchFixture):
         p = [c for c in report["cells"] if c["field_id"] == "p_value"]
         self.assertTrue(all("numeric" not in c and c["status"] == "unknown" for c in p))
 
+    def test_selected_matrix_identity_excludes_views_and_unrelated_sources(self):
+        other = self.add_paper("b", "An unrelated paper.")
+        first = self.prepare(self.cell())
+        from scripts import literature_reasoning
+        literature_reasoning.itinerary(self.project, "Another reading question")
+        (self.project / other["source"]["path"]).write_text("A changed unrelated paper.", encoding="utf-8")
+        second = matrix.build(self.project, self.spec)
+        self.assertEqual(first["fingerprint"], second["fingerprint"])
+
     def test_existing_card_entries_are_reused_without_selecting_one(self):
         self.spec["fields"] = [{"id": "method", "type": "text", "card_field": "methods"}]
         card = self.card(self.paper, field="methods")
@@ -72,6 +81,24 @@ class LiteratureMatrixTests(WorkbenchFixture):
         report = self.prepare(self.cell(raw="0"))
         self.assertEqual(report["cells"][0]["numeric"]["value"], "0.00")
         self.assertEqual(report["unknown_cell_count"], 0)
+
+    def test_absolute_temperature_and_temperature_difference_use_distinct_conversions(self):
+        self.source_text("Population A under fixed conditions reported 2 C; 95% CI 1 to 3.")
+        self.spec["fields"] = [{"id": "temperature", "type": "number", "quantity": "temperature", "unit": "K", "measure": "difference"}]
+        cell = self.cell(raw="2", raw_unit="C", field="temperature", quantity="temperature")
+        cell["numeric"]["uncertainty"] = {"lower": "1", "upper": "3", "label": "95% CI"}
+        result = self.prepare(cell)["cells"][0]["numeric"]
+        self.assertEqual(result["value"], "2")
+        self.assertEqual((result["uncertainty"]["lower"], result["uncertainty"]["upper"]), ("1", "3"))
+        self.spec["fields"][0]["measure"] = "value"
+        result = self.prepare(cell)["cells"][0]["numeric"]
+        self.assertEqual(result["value"], "275.15")
+        self.assertEqual((result["uncertainty"]["lower"], result["uncertainty"]["upper"]), ("274.15", "276.15"))
+
+    def test_ratio_cannot_apply_an_absolute_temperature_offset(self):
+        self.spec["fields"][0].update(measure="ratio", unit="K")
+        with self.assertRaisesRegex(ValueError, "ratios must"):
+            self.prepare(self.cell())
 
     def test_zero_p_value_is_preserved_with_precision_review(self):
         self.source_text("Population A under fixed conditions reported p = 0.")

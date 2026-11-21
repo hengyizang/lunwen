@@ -10,14 +10,14 @@ from scripts.research_artifacts import read, sha, write
 
 
 class RealPaperAcceptanceBoundaries(unittest.TestCase):
-    def test_real_acceptance_refuses_local_execution_before_network_or_writes(self):
+    def test_local_acceptance_still_requires_actual_source_evidence(self):
         with tempfile.TemporaryDirectory() as temporary, \
                 patch.dict(os.environ, {"GITHUB_ACTIONS": "", "DR_OS_CLOUD_EXECUTOR": ""}), \
-                patch.object(acceptance, "fetch_bytes") as fetch:
-            with self.assertRaisesRegex(ValueError, "cloud"):
+                patch.object(acceptance, "fetch_bytes", side_effect=RuntimeError("source unavailable")) as fetch:
+            with self.assertRaisesRegex(RuntimeError, "source unavailable"):
                 acceptance.demonstrate(Path(temporary) / "output")
             self.assertFalse((Path(temporary) / "output").exists())
-            fetch.assert_not_called()
+            fetch.assert_called_once()
 
     def test_acceptance_fixture_never_authorizes_existing_research_project(self):
         with tempfile.TemporaryDirectory() as temporary:

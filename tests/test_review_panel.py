@@ -72,6 +72,58 @@ def panel_inputs(project):
 
 
 class ReviewPanelTests(unittest.TestCase):
+    def test_absent_request_needs_no_review_or_cloud_call(self):
+        (self.project / review_panel.request_path("P01")).unlink()
+        with patch.object(model_runtime, "call") as call, patch.object(review_panel.review_receipts, "_cloud") as cloud:
+            self.assertEqual(review_panel.run(self.project, "P01", "unused")["paid_calls"], 0)
+            self.assertEqual(review_panel.submission_errors(self.project, "P01"), [])
+        call.assert_not_called(); cloud.assert_not_called()
+
+    def test_selected_editorial_view_needs_no_experiment_or_different_family(self):
+        request = self.project / review_panel.request_path("P01")
+        spec = read(request); spec["views"] = {"editorial": spec["views"]["editorial"]}; write(request, spec)
+        for name in ("preregistration.json", "experiment-evidence-plan.json"):
+            (self.project / "papers/P01" / name).unlink()
+        def route(stage, role):
+            return {"provider": "uuapi-openai", "family": "openai", "model": "gpt-fixture", "role": role,
+                    "reasoning_effort": None, "max_output_tokens": 1000}
+        with patch.object(review_panel.model_routing, "select", side_effect=route):
+            result, calls = self.run_panel()
+        self.assertEqual(calls.call_count, 1)
+        self.assertEqual(result["paid_calls"], 1)
+        self.assertEqual(len(review_panel.responses(self.project, "P01")), 1)
+        self.assertFalse(result["scientific_completion_verified"])
+
+    def test_suffix_free_pdf_and_editable_svg_resolve_to_actual_pdf(self):
+        main = self.project / "papers/P01/manuscript/main.tex"
+        folder = self.project / "papers/P01/figures"; folder.mkdir()
+        (folder / "chart.pdf").write_bytes(b"synthetic locator fixture")
+        (folder / "chart.svg").write_text("<svg/>")
+        main.write_text(main.read_text().replace(r"\begin{figure}", "\\begin{figure}\n\\includegraphics{../figures/chart}", 1))
+        packet = review_panel.prepare(self.project, "P01")
+        paths = {row["path"] for view in packet["views"].values() for source in view["sources"] for row in source["canonical_sources"]}
+        self.assertIn("papers/P01/figures/chart.pdf", paths)
+        self.assertNotIn("papers/P01/figures/chart.svg", paths)
+
+    def test_same_word_file_distinct_paragraph_views_are_not_merged(self):
+        canonical, spec = self.word_inputs()
+        with patch("scripts.figure_provenance.lineage", return_value={"fixture_only":True}):
+            paragraphs = review_panel._canonical_scope(self.project, "P01")[-1]
+        desired = {"domain": {"methods": "SYNTHETIC methods", "results": "SYNTHETIC results", "numeric_table": "SYNTHETIC numeric_table"},
+                   "editorial": {"title": "SYNTHETIC title", "abstract": "SYNTHETIC abstract", "headline_claim": "SYNTHETIC headline_claim", "figure_one": "Figure 1."}}
+        spec["views"] = {}
+        for seat, kinds in desired.items():
+            spec["views"][seat] = []
+            for kind, prefix in kinds.items():
+                first = next(index for index, text in enumerate(paragraphs, 1) if text.startswith(prefix))
+                spec["views"][seat].append({"kind": kind, "path": canonical.relative_to(self.project).as_posix(),
+                    "sha256": sha(canonical), "start_paragraph": first, "end_paragraph": first + (kind == "numeric_table")})
+        write(self.project / review_panel.request_path("P01"), spec)
+        with patch("scripts.figure_provenance.lineage", return_value={"fixture_only":True}):
+            packet = review_panel.prepare(self.project, "P01")
+        self.assertEqual(set(packet["views"]), {"domain", "editorial"})
+        self.assertNotEqual(packet["views"]["domain"]["sha256"], packet["views"]["editorial"]["sha256"])
+
     def setUp(self):
         self.stack = ExitStack()
         self.addCleanup(self.stack.close)
@@ -145,8 +197,9 @@ class ReviewPanelTests(unittest.TestCase):
         state = read(self.project / "state/run.json")
         state["approvals"][-1]["frozen_protocol_sha256"]["papers/P01/preregistration.json"] = "0" * 64
         write(self.project / "state/run.json", state)
-        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "G3 protocol decision"):
-            review_panel.run(self.project, "P01", "replaced-study-freeze")
+        with patch.object(model_runtime, "call") as calls:
+            reused = review_panel.run(self.project, "P01", "replaced-study-freeze")
+        self.assertEqual(reused["paid_calls"], 0)
         calls.assert_not_called()
 
     def test_theory_panel_reads_complete_proofs_without_inventing_numeric_data_or_figure(self):
@@ -185,7 +238,7 @@ class ReviewPanelTests(unittest.TestCase):
         spec["study_route"] = "theory"
         spec["views"]["domain"] = [row for row in spec["views"]["domain"] if row["kind"] != "numeric_table"]
         write(request, spec)
-        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "missing view-specific"):
+        with patch.object(model_runtime, "call") as calls, self.assertRaisesRegex(ValueError, "cannot declare a study route"):
             review_panel.run(self.project, "P01", "false-theory-waiver")
         calls.assert_not_called()
 
@@ -347,9 +400,8 @@ class ReviewPanelTests(unittest.TestCase):
         calls.assert_not_called()
         trial["views"]["statistics"] = [row for row in original["views"]["statistics"] if not row["path"].endswith("experiment-evidence-plan.json")]
         write(self.project / review_panel.request_path("P01"),trial)
-        with patch.object(model_runtime,"call") as calls, self.assertRaisesRegex(ValueError,"both the complete frozen"):
-            review_panel.run(self.project,"P01","freeze-receipt-only")
-        calls.assert_not_called()
+        packet = review_panel.prepare(self.project, "P01")
+        self.assertTrue(any(row["kind"] == "protocol" for row in packet["views"]["statistics"]["sources"]))
         write(self.project / review_panel.request_path("P01"),original)
         packet = review_panel.prepare(self.project,"P01")
         self.assertIn('"comparisons"', packet["views"]["statistics"]["text"])

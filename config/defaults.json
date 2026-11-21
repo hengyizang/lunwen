@@ -1,39 +1,48 @@
 {
   "schema_version": "1.0",
-  "paper_count": 6,
-  "trial_venue": "ijssd",
+  "paper_count": 1,
+  "trial_venue": null,
   "venue_portfolio": {
-    "minimum_q1_papers": 3,
-    "minimum_remaining_quartile": "Q2",
-    "minimum_impact_factor": 1.0,
-    "indexing": ["SCI", "SCIE"]
+    "minimum_q1_papers": 0,
+    "minimum_remaining_quartile": null,
+    "minimum_impact_factor": null,
+    "indexing": [],
+    "planning_only": true
   },
   "model_budget": {
     "currency": "CNY",
     "project_hard_limit": 300.0,
-    "anthropic": {"input_per_million": 2.0, "output_per_million": 10.0},
-    "openai": {"input_per_million": 2.2, "output_per_million": 11.0}
+    "anthropic": {
+      "input_per_million": 2.0,
+      "output_per_million": 10.0
+    },
+    "openai": {
+      "input_per_million": 2.2,
+      "output_per_million": 11.0
+    },
+    "authorization_required": true,
+    "note": "project_hard_limit is a historical template value, not spending authorization; a new project starts with zero authorized spend."
   },
   "compute": {
     "local_gpu_required": false,
-    "default_cloud_budget_usd": 100,
-    "hard_budget_gate": "G3"
+    "default_cloud_budget_usd": 0,
+    "hard_budget_gate": null
   },
   "data": {
     "prefer_public_benchmarks": true,
-    "require_license_record": true,
+    "require_license_record": false,
     "require_sha256": true,
     "allow_credentialed_downloads": false,
     "max_single_download_bytes": 5368709120
   },
   "integrity": {
-    "require_claim_evidence_matrix": true,
+    "require_claim_evidence_matrix": false,
     "record_failed_experiments": true,
-    "independent_model_audit": true,
-    "claude_persistent_outputs_allowed": false,
-    "semantic_planner_family": "anthropic",
-    "persistent_writer_family": "openai",
-    "final_charts": "deterministic-local-rendering",
+    "independent_model_audit": false,
+    "claude_persistent_outputs_allowed": true,
+    "semantic_planner_family": "any",
+    "persistent_writer_family": "any",
+    "final_charts": "render-from-actual-data",
     "automatic_submission": false
   }
 }

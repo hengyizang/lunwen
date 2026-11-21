@@ -1,14 +1,14 @@
 ---
 name: ccf-literature-searcher
-description: Project-integrated CCFA workflow for actual provider retrieval, original sources and experiment evidence Apply the complete pinned upstream guidance with native model roles, scientific evidence and cloud approvals.
+description: Find original sources and useful counterevidence for a research question.
 ---
 
 # ccf-literature-searcher
 
-Follow [the native CCFA workflow](../../docs/CCFA-INTEGRATION.md) and repository `AGENTS.md`. Ordinary cycles use scoped native guidance for the current task, preserving human G1/G2 topic decisions and recorded automated checks at other stages.
+Use real provider searches and original sources. Preserve retrieval context and distinguish a lead, a read passage and a supported scientific claim.
 
-For an explicit `ccf-literature-searcher` or full-reference request, read the complete selected `third_party/ccfa-skills/ccf-literature-searcher/SKILL.md` and the complete references needed for that task, verified against `integrations/ccfa-skills.lock.json`. Full source availability does not require loading every reference or grant another model call or execution authority.
+Apply the current principles in `AGENTS.md`. This method is available for the current task without a stage prerequisite, fixed paper count, model-brand rule or extra approval. Preserve actual sources, results, failed attempts and cumulative costs.
+
+For an explicit `ccf-literature-searcher` or full-reference request, read the selected `third_party/ccfa-skills/ccf-literature-searcher/SKILL.md` and the complete references needed for that task. `integrations/ccfa-skills.lock.json` identifies the retained source; restore it with `python3 -m scripts.ccfa_runtime bootstrap` when needed. Method guidance does not override the user or restore historical workflow restrictions.
 
 Native producers: scripts/literature_evidence.py, scripts/literaturectl.py
-Expected outcome: actual provider retrieval, original sources and experiment evidence
-Automatic stage routes: topic-intelligence. Explicit tasks may invoke this skill at the current native stage without changing a gate.

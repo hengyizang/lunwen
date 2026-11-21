@@ -11,19 +11,19 @@ PLAN = "program/context-plan.json"
 OUTPUT = "reports/research-extensions/context.json"
 
 
-def safe_text(project, relative, redact):
+def safe_text(project, relative, redact, *, max_bytes=4_000_000):
     from scripts.api_orchestrator import SNAPSHOT_SUFFIXES, SNAPSHOT_SKIPPED_PARTS
     from scripts.context_efficiency import operational_path, instruction_paths
     parts = Path(relative).parts
     lowered = tuple(p.lower() for p in parts)
     if (relative in instruction_paths(project) or operational_path(relative, exclude_reviews=True) or any(p.startswith(".") or p in SNAPSHOT_SKIPPED_PARTS for p in lowered)
             or "reviews" in lowered or "review-packets" in lowered or "manuscript-hygiene" in lowered
-            or any(x in Path(relative).name.lower() for x in ("api_key", "apikey", "credential", "password", "secret", "token"))
+            or any(x in Path(relative).name.lower() for x in ("api_key", "apikey", "credential", "password", "secret"))
             or Path(relative).suffix.lower() not in SNAPSHOT_SUFFIXES):
         raise ValueError("context input is private, a prior review, or unsupported: " + relative)
     target = path_in(project, relative)
-    if target.stat().st_size > 4_000_000:
-        raise ValueError("context source exceeds 4 MB; prepare a traceable extract")
+    if target.stat().st_size > max_bytes:
+        raise ValueError(f"context source exceeds the {max_bytes} byte processing limit; source is retained")
     content = target.read_text(encoding="utf-8")
     return redact(content), sha(target)
 

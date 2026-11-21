@@ -20,158 +20,62 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from scripts import ai_providers, api_orchestrator, model_runtime, researchctl
-from scripts.cloud_continuation import transition_ready_gate
-from scripts.research_cycle import decision_errors, requires_critic
-from scripts.research_phase import requires_submission
+from scripts.research_cycle import decision_errors
 
 
 class AutopilotError(RuntimeError):
     pass
 
 
-def show_plan(project: str, context: str = "") -> dict[str, Any]:
-    """Preview the current stage without requests, spending or state mutations."""
-    state = researchctl.load_state(project)
-    if state["gate"] is None:
-        return {
-            "project": project,
-            "status": "submission_ready",
-            "steps": [],
-            "paid_model_calls": 0,
-        }
-    if state["status"] == "awaiting_approval" and state["gate"] in {"G1", "G2"}:
-        return {
-            "project": project,
-            "status": "awaiting_human_topic_approval",
-            "steps": [],
-            "planned_model_calls": 0,
-            "with_repair_model_calls": 0,
-            "paid_model_calls": 0,
-        }
-    if state["status"] in {"approved", "awaiting_approval"}:
-        return {
-            "project": project,
-            "stage": state["stage"],
-            "gate": state["gate"],
-            "status": "control_pending",
-            "steps": ["checked gate transition before the next model-cycle plan"],
-            "planned_model_calls": None,
-            "with_repair_model_calls": None,
-            "paid_model_calls": 0,
-            "next_control": "Inspect the successor plan after its checked transition; successor calls are unknown here.",
-        }
-    api_orchestrator.stage_config(state["stage"])
-    steps = ["read-only semantic plan", "non-Anthropic persistent writer"]
-    conditional = []
-    if requires_submission(researchctl.project_dir(project), state["stage"]):
-        steps.extend(
-            ["blind domain review", "blind editorial review", "blind statistics review"]
-        )
-        mode = "three_blind_submission_views"
-    elif requires_critic(state["stage"]):
-        steps.append("fresh source-bound independent critique")
-        conditional = ["itemized repair", "fresh independent review of changed sources"]
-        from scripts.supplemental_experiments import proposal_pending
-
-        if proposal_pending(researchctl.project_dir(project)):
-            steps.append("fresh final supplemental-protocol authority review")
-            conditional = ["itemized repair before the final protocol review"]
-        mode = "scientific_review"
-    else:
-        mode = "administrative_intake"
-    return {
-        "project": project,
-        "stage": state["stage"],
-        "gate": state["gate"],
-        "active_paper": state.get("active_paper"),
-        "context_supplied": bool(context),
-        "backend": "api",
-        "review_mode": mode,
-        "steps": steps,
-        "conditional_steps": conditional,
-        "repair_trigger": "actual actionable findings",
-        "planned_model_calls": len(steps),
-        "with_repair_model_calls": len(steps) + len(conditional),
-        "paid_model_calls": 0,
-        "next_control": "Preview covers the current stage. Resume checks ready/advance first and may select a different stage with different calls. G1/G2 require the actual owner topic decision.",
-    }
+def show_plan(project: str, context: str = "", *, paper_id: str | None = None,
+              stage: str | None = None, planning: bool = False, review: bool = False,
+              remediate: bool = False, source_paths: list[str] | None = None) -> dict[str, Any]:
+    """Preview selected research work without requests, spending or mutations."""
+    work=researchctl.current_work(project)
+    if paper_id:
+        researchctl.validate_paper_id(paper_id)
+        if not (researchctl.project_dir(project)/"papers"/paper_id).is_dir():
+            raise AutopilotError("Unknown paper: "+paper_id)
+        work={**work,"paper_id":paper_id}
+    if stage:
+        if stage not in {row["name"] for row in researchctl.STAGES[:-1]}:
+            raise AutopilotError("Unknown research task stage")
+        work={**work,"stage":stage}
+    from scripts.research_cycle import requires_critic
+    review = review or requires_critic(work["stage"],researchctl.project_dir(project))
+    # The selected operation and review policy determine any additional calls.
+    # A preview cannot promise a route or fabricate an independent review.
+    return {**work,"active_paper":work["paper_id"],"task":context or work["task"],
+            "backend":"api","context_supplied":bool(context),"status":"work_available",
+            "steps":(["plan the selected task"] if planning else [])+["execute the selected research task with its relevant sources"]+(["independent source-bound review"] if review else []),
+            "conditional_steps":["use a selected research tool or independent review when the task needs it"],
+            "planned_model_calls":1+int(planning)+int(review),"with_repair_model_calls":1+int(planning)+int(review)+(2 if review and remediate else 0),"paid_model_calls":0,
+            "next_control":"Run start or resume. Existing cumulative budgets and actual operation inputs apply; historical gates do not grant or withhold permission to work."}
 
 
-def run_stage(
-    project: str,
-    context: str = "",
-    *,
-    planner_provider: str = "anthropic",
-    writer_provider: str = "openai",
-    critic_provider: str = "anthropic",
-    max_output_tokens: int = 12000,
-    control_max_output_tokens: int = 4000,
-) -> dict[str, Any]:
-    """Run the shared API cycle, retaining checked stage transitions and stops."""
-    state = researchctl.load_state(project)
-    from scripts.scientific_scope import validate
-
-    errors = validate(
-        researchctl.project_dir(project), state.get("gate"), state.get("active_paper")
-    )
-    if errors:
-        raise AutopilotError("; ".join(errors))
-    if state["status"] == "approved":
-        transition_ready_gate(project, {"reason": "approved_gate_ready_to_advance"})
-        state = researchctl.load_state(project)
-    if state["status"] == "awaiting_approval" and state["gate"] not in {"G1", "G2"}:
-        reason = (
-            "automatic_gate_reopen"
-            if researchctl.gate_errors(project, state["gate"])
-            else "automatic_gate_ready"
-        )
-        transition_ready_gate(project, {"reason": reason})
-        state = researchctl.load_state(project)
-    if state["gate"] is None:
-        return {"project": project, "status": "submission_ready", "runs": []}
-    if state["status"] == "awaiting_approval":
-        return {
-            "project": project,
-            "stage": state["stage"],
-            "gate": state["gate"],
-            "status": "awaiting_human_topic_approval",
-            "runs": [],
-        }
+def run_stage(project: str, context: str = "", *, planner_provider: str | None = None,
+              writer_provider: str | None = None, critic_provider: str | None = None,
+              max_output_tokens: int = 12000, control_max_output_tokens: int = 4000,
+              paper_id: str | None = None, stage: str | None = None, planning: bool = False,
+              review: bool = False, remediate: bool = False, source_paths: list[str] | None = None) -> dict[str, Any]:
+    """Execute a task through the shared API, preserving all existing evidence."""
+    work=researchctl.select_work(project,context,paper_id,stage)
+    from scripts.research_cycle import requires_critic
+    review=review or requires_critic(work["stage"],researchctl.project_dir(project))
+    if remediate and not review:raise AutopilotError("remediate requires a selected review")
     with model_runtime.authorized_calls(researchctl.project_dir(project)):
-        manifest = api_orchestrator.run_cycle(
-            project,
-            state["stage"],
-            planner_provider,
-            writer_provider,
-            critic_provider,
-            context,
-            "",
-            max_output_tokens,
-            control_max_output_tokens,
-        )
-    result = {"project": project, "gate": state["gate"], "backend": "api", **manifest}
-    if manifest.get("paid_model_cycle") is False:
-        return {**result, "status": "controlled_step", "runs": []}
-    if manifest.get("writing_phase_transition"):
-        return {**result, "status": "submission_preparation", "gate_errors": []}
-    if manifest.get("primary_recovery", {}).get("retired"):
-        return {**result, "status": "protocol_retired_to_G3"}
-    errors = researchctl.gate_errors(project, state["gate"])
-    errors.extend(decision_errors(manifest.get("research_decision", {})))
-    if errors:
-        return {**result, "status": "needs_work", "gate_errors": errors}
-    transition_ready_gate(project, {"reason": "automatic_gate_ready"})
-    current = researchctl.load_state(project)
-    if current["status"] == "awaiting_approval" and state["gate"] not in {"G1", "G2"}:
-        raise AutopilotError(
-            "The checked non-topic gate did not record its automatic decision"
-        )
-    status = (
-        "awaiting_human_topic_approval"
-        if current["status"] == "awaiting_approval"
-        else "stage_advanced"
-    )
-    return {**result, "status": status, "gate_errors": []}
+        from scripts.cloud_progress import track_cycle
+        execute=track_cycle(researchctl.project_dir)(api_orchestrator.run_cycle)
+        manifest=execute(project,work["stage"],planner_provider,
+            writer_provider,critic_provider,context or work["task"],"",max_output_tokens,control_max_output_tokens,
+            planning=planning,review=review,remediate=remediate,source_paths=source_paths)
+    result={"project":project,"gate":work["gate"],"active_paper":work["paper_id"],"backend":"api",**manifest}
+    if manifest.get("control_only") is True or manifest.get("paid_model_cycle") is False:
+        return {**result,"status":"controlled_step","runs":[]}
+    # Scientific findings affect the stated conclusion. They do not send the
+    # project through ready/approve/advance or invalidate other papers.
+    issues=decision_errors(manifest.get("research_decision",{}))
+    return {**result,"status":"needs_work" if issues else "work_completed", "research_findings":issues}
 
 
 def parser() -> argparse.ArgumentParser:
@@ -181,10 +85,16 @@ def parser() -> argparse.ArgumentParser:
         item = sub.add_parser(command)
         item.add_argument("--project", required=True)
         item.add_argument("--context", default="")
+        item.add_argument("--paper", dest="paper_id")
+        item.add_argument("--plan-work", dest="planning", action="store_true")
+        item.add_argument("--review", action="store_true")
+        item.add_argument("--remediate", action="store_true")
+        item.add_argument("--source", dest="source_paths", action="append")
+        item.add_argument("--stage", choices=[row["name"] for row in researchctl.STAGES[:-1]])
         for role, provider in (
-            ("planner", "anthropic"),
-            ("writer", "openai"),
-            ("critic", "anthropic"),
+            ("planner", None),
+            ("writer", None),
+            ("critic", None),
         ):
             item.add_argument(
                 f"--{role}-provider", choices=ai_providers.PROVIDERS, default=provider
@@ -248,7 +158,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         elif not researchctl.project_dir(args.project).is_dir():
             raise AutopilotError(f"Project does not exist: {args.project}")
         result = (
-            show_plan(args.project, args.context)
+            show_plan(args.project, args.context, paper_id=args.paper_id, stage=args.stage, planning=args.planning, review=args.review, remediate=args.remediate, source_paths=args.source_paths)
             if args.command == "plan"
             else run_stage(
                 args.project,
@@ -258,6 +168,8 @@ def main(argv: Iterable[str] | None = None) -> int:
                 critic_provider=args.critic_provider,
                 max_output_tokens=args.max_output_tokens,
                 control_max_output_tokens=args.control_max_output_tokens,
+                paper_id=args.paper_id, stage=args.stage, planning=args.planning, review=args.review,
+                remediate=args.remediate, source_paths=args.source_paths,
             )
         )
         print(json.dumps(result, ensure_ascii=False, indent=2))

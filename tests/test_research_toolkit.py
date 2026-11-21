@@ -177,8 +177,7 @@ class ResearchToolkitTests(unittest.TestCase):
             self.assertEqual(literaturectl.execute_operation(self.project, checked), {"paid_calls": 0})
             refresh.assert_called_once_with(self.project, self.relative)
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                self.prepare()
+            self.prepare()
         for forbidden in ("model", "execute", "approve"):
             write(self.project / "program/operation.json", {**operation, forbidden: True})
             with self.assertRaises(cloud_job.CloudJobError):
@@ -201,7 +200,8 @@ class ResearchToolkitTests(unittest.TestCase):
         packet = self.prepare()
         write(self.project / "program/custom-operation.json", {"action": "research_toolkit", "request_file": self.relative})
         with patch.object(api_orchestrator, "project_root", return_value=self.project):
-            snapshot = api_orchestrator.project_snapshot("study", stage="experiment-design", exclude_reviews=True)
+            snapshot = api_orchestrator.project_snapshot("study", stage="experiment-design", exclude_reviews=True,
+                source_paths=["evidence/current-source.txt"])
         self.assertNotIn(self.request["task"], snapshot)
         self.assertNotIn(packet["packet_path"], snapshot)
         self.assertNotIn("FILE program/custom-operation.json", snapshot)

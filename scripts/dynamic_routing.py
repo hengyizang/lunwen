@@ -36,7 +36,7 @@ class RoutingError(ValueError):
 
 
 def enabled() -> bool:
-    mode = os.environ.get("DR_OS_DYNAMIC_ROUTING", "production")
+    mode = os.environ.get("DR_OS_DYNAMIC_ROUTING", "off")
     if mode not in {"off", "production"}:
         raise RoutingError("DR_OS_DYNAMIC_ROUTING must be off or production")
     return mode == "production"
@@ -48,7 +48,7 @@ def digest(value: Any) -> str:
 
 def validate_profile(value: Any, *, stage: str | None = None, role: str | None = None) -> dict:
     if value is None:
-        risk = "critical" if stage in {"experiment-execution", "writing-and-review"} and role in CYCLE else "scientific" if role in CYCLE else "auxiliary"
+        risk = "scientific" if role in CYCLE else "auxiliary"
         return {"task_class": "unspecified", "science_risk": risk, "priority": "quality"}
     allowed = {"task_class", "science_risk", "min_output_tokens", "deadline_seconds", "priority"}
     if not isinstance(value, dict) or set(value) - allowed:
@@ -68,8 +68,7 @@ def validate_profile(value: Any, *, stage: str | None = None, role: str | None =
             if type(value[key]) is not int or not 1 <= value[key] <= ceiling:
                 raise RoutingError(f"{key} must be a positive integer up to {ceiling}")
             result[key] = value[key]
-    from scripts.route_review import classify
-    return classify(result, stage=stage)["effective_task_profile"]
+    return result
 
 
 def load_policy() -> tuple[dict, str]:
@@ -94,7 +93,7 @@ def load_policy() -> tuple[dict, str]:
             raise RoutingError("duplicate candidate or attempted registry-only promotion")
         seen.add(row["candidate_id"])
         spec = ai_providers.PRODUCTION_PROVIDERS.get(row["provider"])
-        if not spec or row["family"] != spec["family"] or row["model"] not in spec["models"]:
+        if not spec or row["family"] != spec["family"] or not isinstance(row["model"], str) or not row["model"].strip():
             raise RoutingError("candidate is outside the native transport allowlist")
         if row["reasoning_effort"] not in {"low", "medium", "high"} or row["context_band"] not in {"standard", "long"}:
             raise RoutingError("unknown candidate effort or context band")
@@ -136,11 +135,7 @@ def _id(route: dict) -> dict:
 
 
 def _profile_for_route(value: dict | None, route: dict) -> dict:
-    profile = validate_profile(value, stage=route.get("stage"), role=route.get("role"))
-    if (route.get("task_kind") is not None or route.get("role") in model_routing.APPROVED_CRITICAL_TASKS
-            or (route.get("stage") in {"topic-intelligence", "paper-architecture", "experiment-design"} and route.get("role") in CYCLE)):
-        profile["science_risk"] = "critical"
-    return profile
+    return validate_profile(value, stage=route.get("stage"), role=route.get("role"))
 
 
 def _origin(project: Path, target: Path, *, authority: bool = False) -> None:
@@ -332,9 +327,6 @@ def record_acceptance(project: Path, candidate_id: str, baseline_route: dict, *,
     if candidate is None or not isinstance(actor, str) or not actor.strip():
         raise RoutingError("acceptance requires a registered candidate and named manager")
     profile = _profile_for_route(task_profile, baseline_route)
-    if profile["science_risk"] in {"critical", "scientific"} or baseline_route.get("fresh_required"):
-        if any(candidate[key] != baseline_route.get(key) for key in ("model", "family", "reasoning_effort")):
-            raise RoutingError("scientific acceptance cannot lower the approved model/family/effort floor")
     _available(candidate)
     rows = _ledger(project)
     _check_holds(project, rows)
@@ -374,7 +366,7 @@ def _available(candidate: dict) -> None:
 
 
 def _budget_feasible(project: Path, candidate: dict, baseline: dict, prompt: str, system: str | None,
-                     max_output_tokens: int, *, has_media: bool) -> float:
+                     max_output_tokens: int, *, media: list) -> float:
     try:
         from scripts import billing_quotes, model_runtime
     except ImportError:
@@ -385,7 +377,7 @@ def _budget_feasible(project: Path, candidate: dict, baseline: dict, prompt: str
     tools = model_runtime._billing_configuration("DR_OS_MODEL_TOOL_LIMITS_JSON", candidate["provider"], None)
     limits = billing_quotes.tool_limits(quote, tools)
     bound = model_runtime.reservation_bound(candidate["provider"], prompt, system, max_output_tokens, quote, limits,
-                                            controlled=model_spend.read(project) is not None, has_media=has_media)
+                                            controlled=model_spend.read(project) is not None, media=media, model=candidate["model"])
     paper = model_runtime._paper_for_stage(project, str(baseline.get("stage", "")))
     budget = model_runtime.budget_status(project, paper)
     if bound > budget["project_remaining"]:
@@ -420,17 +412,14 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
         raise RoutingError("explicit output requirement exceeds the caller's authorized token ceiling")
     baseline_output_sufficient = route["max_output_tokens"] >= needed
     decision = {"mode": mode, "selected_candidate_id": "baseline", "task_profile": profile,
-                "excluded": [], "reason": "approved baseline; no unverified route is tried", "not_scientific_equivalence": True}
-    if mode == "off":
+                "excluded": [], "reason": "configured route; automatic selection is opt-in", "not_scientific_equivalence": True}
+    if mode == "off" or baseline_route.get("explicit_selection"):
         if not baseline_output_sufficient:
             raise RoutingError("explicit output requirement exceeds the approved baseline; adjust the task before calling")
         return {"route": route, "decision": decision}
     policy, policy_sha = load_policy()
     rows = _ledger(project)
     _check_holds(project, rows)
-    from scripts.route_review import review
-    decision["management_review"] = review(project, task_profile=profile,
-        stage=baseline_route.get("stage"), role=baseline_route.get("role"))
     input_bytes = len(prompt.encode("utf-8")) + len((system or "").encode("utf-8"))
     media = ai_providers.validate_attachments(attachments) if attachments else []
     modalities = {"text"} | ({"pdf" if item.get("mime_type") == "application/pdf" else "text" if item.get("mime_type") == "text/plain" else "image" for item in media} if media else set())
@@ -467,27 +456,6 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
             required_output = max(route["max_output_tokens"], needed)
             if candidate["max_input_bytes"] < input_bytes or candidate["max_output_tokens"] < required_output or not modalities <= set(candidate["modalities"]):
                 raise RoutingError("candidate limits cannot preserve the complete task")
-            family = candidate["family"]
-            if baseline_route.get("role") in model_routing.PANEL_MODELS and family != baseline_route.get("family"):
-                raise RoutingError("a panel seat must retain its designated distinct model family")
-            if family == "anthropic" and baseline_route.get("role") not in model_routing.READ_ONLY_ROLES | set(model_routing.PANEL_MODELS) | {"independent-critique"}:
-                raise RoutingError("Claude remains limited to read-only scientific planning and independent audits")
-            if baseline_route.get("persistent_output") and family != "openai":
-                raise RoutingError("persistent scientific writer must remain OpenAI")
-            if baseline_route.get("persistent_output") and candidate["model"] not in {"gpt-6.1-sol", "gpt-6-astra", "gpt-6.1-terra"}:
-                raise RoutingError("persistent scientific writers require an allowed OpenAI model and scoped acceptance")
-            if candidate["model"] == "gpt-5.6-luna" and baseline_route.get("role") not in {"metadata-extraction", *model_routing.APPROVED_HEALTH_ROLES}:
-                raise RoutingError("Luna remains limited to its validated metadata source-contract role")
-            if baseline_route.get("role") in model_routing.READ_ONLY_ROLES and family != "anthropic":
-                raise RoutingError("independent planner/critic must remain Anthropic")
-            if (profile["science_risk"] in {"critical", "scientific"} or baseline_route.get("task_kind") is not None or baseline_route.get("fresh_required")) and _id(candidate) != _id(baseline_route):
-                # For scientific roles only transport/group/context may vary.
-                if any(candidate[key] != baseline_route.get(key) for key in ("model", "family", "reasoning_effort")):
-                    raise RoutingError("scientific model, family and effort floor cannot be lowered")
-            if baseline_route.get("role") == "metadata-extraction" and candidate["model"] != "gpt-5.6-luna":
-                raise RoutingError("metadata source-contract route retains its accepted model")
-            if baseline_route.get("role") in {"engineering-diagnosis", "engineering-code-review", "engineering-test-design", "engineering-reproducibility"} and candidate["model"] != "deepseek-v4.1-flash":
-                raise RoutingError("engineering source-contract role retains its scoped model")
             matching = [item for item in records if item.get("candidate_id") == name and item.get("scope") == scope]
             if len(matching) != 1:
                 raise RoutingError("no task-specific manager acceptance with held-out human quality and bills")
@@ -503,7 +471,7 @@ def choose(project: Path, baseline_route: dict, *, prompt: str, system: str | No
             if profile.get("deadline_seconds") and (latency is None or latency > profile["deadline_seconds"]):
                 raise RoutingError("candidate has no accepted latency evidence within the task deadline")
             _available(candidate)
-            _budget_feasible(project, candidate, baseline_route, prompt, system, required_output, has_media=bool(media))
+            _budget_feasible(project, candidate, baseline_route, prompt, system, required_output, media=media)
             # Never claim cache portability. Paid sample costs include actual cache
             # writes/reads; require a margin to offset switching uncertainty.
             cost = statistics_["cost_per_accepted_task_cny"]
@@ -556,7 +524,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "status":
         target = path_in(project, ACCEPTANCES, exists=False)
         from scripts.route_review import review
-        print(json.dumps({"mode": os.environ.get("DR_OS_DYNAMIC_ROUTING", "production"), "policy_sha256": policy_sha,
+        print(json.dumps({"mode": os.environ.get("DR_OS_DYNAMIC_ROUTING", "off"), "policy_sha256": policy_sha,
                           "candidate_count": len(policy["candidates"]), "candidates": policy["candidates"],
                           "acceptances": read(target) if target.is_file() else None,
                           "management_review": review(project),

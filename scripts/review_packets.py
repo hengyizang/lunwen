@@ -451,6 +451,12 @@ def create_confirmation(project: Path, packet_id: str, actor: str, judgments: di
     attempts = previous.get("attempts", [])
     if not isinstance(attempts, list):
         raise ValueError("confirmation attempts malformed")
+    correction = judgments.get("correction_of")
+    if correction is not None:
+        prior = next((item for item in attempts if item.get("attempt_sha256") == correction), None)
+        if prior is None or prior.get("snapshot_sha256") != snapshot["snapshot_sha256"]:
+            raise ValueError("a correction must identify this reviewer's actual current prior attempt")
+        text(judgments.get("correction_reason"), "correction reason")
     attempt = {"at": datetime.now(timezone.utc).isoformat(), "actor": actor,
                "snapshot_sha256": snapshot["snapshot_sha256"], "judgments": judgments}
     attempt["attempt_sha256"] = digest(attempt)
@@ -460,7 +466,7 @@ def create_confirmation(project: Path, packet_id: str, actor: str, judgments: di
 
 
 def validate_gate_reviews(project: Path, paper_id: str | None = None) -> list[str]:
-    """Declared visual packets require actual current automated observations.
+    """Declared visual packets accept current human or automated observations.
 
     Human calibration ratings remain optional genuine observations. Historical
     adverse visual observations are retained and cannot be outvoted on unchanged
@@ -485,15 +491,18 @@ def validate_gate_reviews(project: Path, paper_id: str | None = None) -> list[st
                 owner = match[1]
                 if paper_id is not None and owner != paper_id:
                     continue
-                target = automated_visual_review.packet_target(packet["id"], row["artifact_id"])
-                errors.extend(f"{packet['id']}/{row['artifact_id']}: {issue}" for issue
-                              in automated_visual_review.verify(project, owner, target))
+                human_checks = []
                 for confirmation in packet["confirmations"]:
                     for attempt in confirmation["attempts"]:
-                        if attempt["current"] and any(
-                            inspection["artifact_id"] == row["artifact_id"] and not all(inspection["checks"].values())
-                            for inspection in attempt["judgments"]["inspections"]):
-                            errors.append(f"{packet['id']}/{row['artifact_id']}: unchanged adverse visual observation requires a correction")
+                        if attempt["current"] and not attempt.get("superseded", False):
+                            human_checks.extend(all(inspection["checks"].values()) for inspection in attempt["judgments"]["inspections"]
+                                                if inspection["artifact_id"] == row["artifact_id"])
+                if False in human_checks:
+                    errors.append(f"{packet['id']}/{row['artifact_id']}: unchanged adverse visual observation requires a correction")
+                elif not human_checks:
+                    target = automated_visual_review.packet_target(packet["id"], row["artifact_id"])
+                    errors.extend(f"{packet['id']}/{row['artifact_id']}: {issue}" for issue
+                                  in automated_visual_review.verify(project, owner, target))
         return errors
     except (ValueError, OSError, KeyError, TypeError) as exc:
         return ["review packet validation failed: " + str(exc)]
@@ -518,6 +527,17 @@ def audit(project: Path, *, paper_id: str | None = None) -> dict:
                         or not isinstance(receipt.get("attempts"), list) or not receipt["attempts"]):
                     raise ValueError("human confirmation receipt malformed")
                 attempts = []
+                superseded = set()
+                known = {}
+                for attempt in receipt["attempts"]:
+                    correction = attempt.get("judgments", {}).get("correction_of") if isinstance(attempt, dict) else None
+                    if correction is not None:
+                        prior = known.get(correction)
+                        if prior is None or prior.get("snapshot_sha256") != attempt.get("snapshot_sha256"):
+                            raise ValueError("human correction does not identify its actual prior source-bound attempt")
+                        text(attempt["judgments"].get("correction_reason"), "correction reason")
+                        superseded.add(correction)
+                    known[attempt.get("attempt_sha256")] = attempt
                 for attempt in receipt["attempts"]:
                     if not isinstance(attempt, dict) or attempt.get("actor") != receipt.get("actor"):
                         raise ValueError("human review attempt identity changed")
@@ -528,9 +548,9 @@ def audit(project: Path, *, paper_id: str | None = None) -> dict:
                     if fresh:
                         judgments_checked(project, packet["id"], attempt["judgments"])
                         rater_ids.add(attempt["judgments"]["rater_id"])
-                        if packet["kind"] == "visual":
+                        if packet["kind"] == "visual" and expected_hash not in superseded:
                             visual_observations.append(all(all(item["checks"].values()) for item in attempt["judgments"]["inspections"]))
-                    attempts.append({"attempt_sha256": expected_hash, "current": fresh, "judgments": attempt["judgments"]})
+                    attempts.append({"attempt_sha256": expected_hash, "current": fresh, "superseded": expected_hash in superseded, "judgments": attempt["judgments"]})
                 row["confirmations"].append({"path": target.relative_to(project).as_posix(), "sha256": sha(target), "attempts": attempts})
             row.update(status="pass", current_independent_rater_ids=sorted(rater_ids),
                        review_status="human_observations_recorded" if rater_ids else "needs_human_review",
@@ -546,7 +566,8 @@ def audit(project: Path, *, paper_id: str | None = None) -> dict:
                     target = automated_visual_review.packet_target(packet["id"], artifact["artifact_id"])
                     machine_errors.extend(automated_visual_review.verify(project, owner[1], target))
                 row.update(human_observations_recorded=bool(rater_ids),
-                           review_status="automated_visual_review_pending" if machine_errors else "automated_visual_observations_recorded",
+                           review_status=("human_observations_recorded" if row["visual_checklist_passed_by_human"] else
+                                          "automated_visual_review_pending" if machine_errors else "automated_visual_observations_recorded"),
                            automated_visual_check_errors=machine_errors)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             row.update(status="fail", error=str(exc))

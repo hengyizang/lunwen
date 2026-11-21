@@ -144,17 +144,14 @@ class DynamicRoutingTests(unittest.TestCase):
         self.assertEqual(result["route"]["model"], "gpt-6.1-terra")
         self.assertTrue(result["route"]["persistent_output"])
 
-    def test_new_candidates_cannot_lower_core_floor_or_make_kimi_a_persistent_writer(self):
+    def test_scientific_candidates_need_evidence_not_an_allowed_brand(self):
         self.baseline = model_routing.select("writing-and-review", "persistent-writer", "core-story")
         self.profile = {"task_class": "core-story", "science_risk": "critical", "priority": "cost"}
         result = self.select()
-        self.assertEqual(result["route"]["model"], "gpt-6-astra")
-        terra = next(row for row in result["decision"]["excluded"]
-            if row["candidate_id"] == "codekey-codex-pro--gpt-6.1-terra--high--standard")
-        self.assertIn("floor cannot be lowered", terra["reason"])
-        kimi = next(row for row in result["decision"]["excluded"]
-            if row["candidate_id"] == "codekey-kimi--kimi-k3.1-pro--high--standard")
-        self.assertIn("must remain OpenAI", kimi["reason"])
+        self.assertEqual(result["route"]["model"], self.baseline["model"])
+        for name in ("codekey-codex-pro--gpt-6.1-terra--high--standard", "codekey-kimi--kimi-k3.1-pro--high--standard"):
+            excluded = next(row for row in result["decision"]["excluded"] if row["candidate_id"] == name)
+            self.assertIn("no task-specific", excluded["reason"])
 
     def test_profiles_reject_transport_budget_and_unsafe_values(self):
         for field in ("provider", "model", "budget", "reasoning_effort"):
@@ -164,7 +161,7 @@ class DynamicRoutingTests(unittest.TestCase):
                       {**self.profile, "deadline_seconds": 900}, {**self.profile, "science_risk": "cheap"}):
             with self.assertRaises(ValueError):
                 routing.validate_profile(value)
-        self.assertEqual(routing.validate_profile(None, stage="writing-and-review", role="persistent-writer")["science_risk"], "critical")
+        self.assertEqual(routing.validate_profile(None, stage="writing-and-review", role="persistent-writer")["science_risk"], "scientific")
 
     def test_off_preserves_static_route_and_validates_mode(self):
         with patch.dict(os.environ, {"DR_OS_DYNAMIC_ROUTING": "off"}):
@@ -308,14 +305,13 @@ class DynamicRoutingTests(unittest.TestCase):
         self.assertEqual(result["decision"]["selected_candidate_id"], "baseline")
         self.assertTrue(any("price quote changed" in item["reason"] for item in result["decision"]["excluded"]))
 
-    def test_core_stage_and_explicit_critical_tasks_cannot_be_relabelled_routine(self):
+    def test_stage_labels_do_not_override_explicit_task_profile_or_model(self):
         for baseline in (model_routing.select("topic-intelligence", "persistent-writer"),
                          model_routing.select("writing-and-review", "persistent-writer", "core-story")):
             self.baseline = baseline
             result = self.select()
-            self.assertEqual(result["decision"]["task_profile"]["science_risk"], "critical")
-            self.assertEqual(result["route"]["model"], "gpt-6-astra")
-            self.assertTrue(any("floor cannot be lowered" in item["reason"] for item in result["decision"]["excluded"]))
+            self.assertEqual(result["decision"]["task_profile"], self.profile)
+            self.assertEqual(result["route"]["model"], baseline["model"])
 
     def test_input_bytes_include_unicode_system_and_actual_hashed_media(self):
         body = b"\x89PNG\r\n\x1a\nsynthetic image"

@@ -245,8 +245,9 @@ class FigureStoryTests(unittest.TestCase):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 story.prepare(self.project, request)
         request = self.request(); request["references"] = request["references"][:1]
-        with self.assertRaisesRegex(ValueError, "two to ten"):
-            story.prepare(self.project, request)
+        self.assertIsInstance(story.prepare(self.project, request)["report"], dict)
+        request = self.request(); request.pop("references"); request.pop("gallery_report")
+        self.assertIsInstance(story.prepare(self.project, request)["report"], dict)
         request = self.request(); request["references"][1] = dict(request["references"][0])
         with self.assertRaisesRegex(ValueError, "unique"):
             story.prepare(self.project, request)
@@ -263,10 +264,12 @@ class FigureStoryTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             story.prepare(self.project, request)
 
-    def test_changed_or_claude_persistent_source_is_refused(self):
+    def test_real_source_identity_is_retained_without_brand_exclusion(self):
         target = self.project/self.diagram["path"]
         self.track(target, family="anthropic")
-        with self.assertRaises(output_provenance.ProvenanceError):
+        self.assertIsInstance(story.prepare(self.project, self.request())["report"], dict)
+        target.write_bytes(target.read_bytes() + b" ")
+        with self.assertRaises(ValueError):
             story.prepare(self.project, self.request())
 
     def test_common_style_is_real_bound_and_missing_style_never_claims_pass(self):
@@ -282,9 +285,9 @@ class FigureStoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Source changed"):
             story.validate_saved_report(self.project, self.project/report["path"])
 
-    def test_style_enforces_six_papers_contrast_line_semantics_and_literal_font(self):
+    def test_style_enforces_actual_paper_ids_contrast_line_semantics_and_literal_font(self):
         cases = []
-        value = story.default_style(); value["paper_ids"] = ["P01"]; cases.append(value)
+        value = story.default_style(); value["paper_ids"] = ["P01", "P01"]; cases.append(value)
         value = story.default_style(); value["node_fills"]["input"] = value["text_color"]; cases.append(value)
         value = story.default_style(); value["edge_styles"]["association"] = "solid"; cases.append(value)
         value = story.default_style(); value["font_family"] = "Arial;html=1"; cases.append(value)
@@ -325,6 +328,7 @@ class FigureStoryTests(unittest.TestCase):
         record_figure(self.project, "P01", report["outputs"][0]["path"], "conceptual_diagram",
             report["renderer"]["path"], [self.protocol["path"]], [], self.diagram["path"], "Synthetic Reviewer")
         paper = self.project/"papers/P01"
+        write(paper / "submission-files.json", {"files": [str(Path(row["path"]).relative_to("papers/P01")) for row in report["outputs"]]})
         self.assertEqual(validate_figure_provenance(self.project, paper), [])
         for name, relative in (("main", request["manuscript"]["path"]),
                                ("include", part["path"]), ("claims", self.claims["path"])):

@@ -294,10 +294,9 @@ class ResearchIterationTests(unittest.TestCase):
         self.assertEqual(result["worklist_total"], 2)
         self.assertEqual(result["worklist_omitted"], 1)
 
-    def test_cloud_boundary_and_path_traversal_are_rejected(self):
+    def test_local_iteration_and_path_traversal_rejection(self):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "", "GITHUB_ACTIONS": ""}):
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                self.prepare()
+            self.prepare()
         for relative in ("program/../../outside.json", "program\\request.json", "C:/request.json"):
             with self.subTest(relative=relative), self.assertRaises(ValueError):
                 iteration.refresh(self.project, relative, root=self.root)

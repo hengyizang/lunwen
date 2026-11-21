@@ -1,17 +1,10 @@
 ---
 name: hypothesis-generation
-description: Turn located observations into falsifiable hypotheses with competing explanations, discriminating tests, controls and a cloud execution plan.
+description: Turn observations into testable research questions and discriminating predictions.
 ---
 
-# Hypothesis generation
+# Hypothesis Generation
 
-Read references/research-methods/topic-hypotheses.md and the pinned upstream
-third_party/kdense/skills/hypothesis-generation/SKILL.md. Use the native
-schemas/research-hypotheses.schema.json contract for program/hypothesis-register.json.
+Read relevant source observations and compare plausible explanations. State the exact proposed difference, a prediction and what evidence would change the decision. Use `references/research-methods/topic-hypotheses.md`; an optional hypothesis register can organize larger studies. Do not require three ideas, two failure reasons, all-pairs scoring or a fully populated innovation table. Keep prior outcome exposure and novelty uncertainty explicit.
 
-The upstream deterministic scaffolds and validators are installed under its
-scripts directory. Their outputs are planning aids; only the existing
-research_quality.py may create the authoritative preregistration.
-Keep observations, hypotheses, predictions and observed results separate.
-Do not grant novelty, make causal claims from predictive performance or
-relax actual G1/G2 topic decisions, automated evidence checks, data rights or model role separation.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

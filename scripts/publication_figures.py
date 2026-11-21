@@ -333,7 +333,9 @@ def _draw_standard(ax: Any, panel: dict[str, Any], frame: Any, np: Any) -> None:
                     **kwargs,
                 )
             else:
-                ax.scatter(group[x], group[y], s=34, **{key: value for key, value in kwargs.items() if key not in {"markersize"}})
+                ax.scatter(group[x], group[y], s=34, edgecolors="white", linewidths=0.55,
+                           **{key: value for key, value in kwargs.items()
+                              if key not in {"markersize", "markeredgecolor", "markeredgewidth"}})
             if uncertainty:
                 if (
                     (group[uncertainty["lower"]] > group[y]).any()

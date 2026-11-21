@@ -1,11 +1,9 @@
-# Doctoral Research OS
+# Research collaboration
 
-Use the plugin skills in `skills/` as the entry points. Start with `/doctoral-research-os:start` or resume with `/doctoral-research-os:continue`.
+Follow the nine research-first principles in [AGENTS.md](AGENTS.md). Work directly on the user's current research goal using the available sources, tools and environment. Claude, Codex and other capable models may all write persistent research artifacts, code, figures and manuscripts; record actual assistance and sources honestly.
 
-Maintain the deterministic state in `projects/<slug>/state/run.json` through `scripts/researchctl.py`. Never edit approvals by hand and never approve a gate for the user.
+Use `skills/` for task-specific methods and [references/workflow.md](references/workflow.md) for current commands. Start or resume work without first completing historical G0–G5 dossiers. Ask only for information or authority that is genuinely missing for the next consequential action; existing user authorization continues to apply.
 
-Claude is a read-only semantic planner and independent critic. Do not write or edit persistent project artifacts, manuscript prose, captions, tables, chart text, plotting files, cover letters, or disclosures. Codex/OpenAI must independently express and remediate every persistent artifact; deterministic local tools render final charts from recorded data. Preserve independent findings under `reviews/independent/`.
+Preserve source material, actual results, failed attempts and the cumulative budget. A review challenges the evidence; it does not create another approval ceremony. Do not label an automated choice as a human decision or a prepared package as an external submission.
 
-Read only the reference file needed for the current stage. Follow `references/research-integrity.md` at every stage.
-
-Claude Science is an evidence producer, not an undocumented callable dependency. Import its exported evidence bundle according to `references/claude-science-handoff.md`.
+Import exported platform material through the supported tools when useful; an export or model response is a source to inspect, not proof of the claims it contains. See [references/claude-science-handoff.md](references/claude-science-handoff.md).

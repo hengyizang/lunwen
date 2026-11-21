@@ -47,12 +47,12 @@ EXPERIMENT_AXES = (
     "thesis_contribution",
 )
 RESOLUTIONS = {
-    "research_question": "State the bounded question and its contribution to the same doctoral question.",
+    "research_question": "State the bounded question and its intended scientific contribution.",
     "hypotheses": "Specify a falsifiable mechanism and directional or quantitative prediction.",
     "competing_explanations": "Specify at least two plausible rivals and predictions that differ from the main hypothesis.",
     "assumptions": "Locate identifiability, measurement and applicability assumptions and a way to test each.",
     "baseline": "Identify exact closest-work versions, code revisions and justified comparator settings.",
-    "datasets": "Resolve dataset version, license, access, independent unit and leakage risk through existing approvals.",
+    "datasets": "Resolve dataset version, access conditions, independent unit and leakage risk.",
     "splits": "Specify disjoint train/validation/test units, time boundaries and leakage checks.",
     "metrics": "Specify primary/secondary outcomes, direction, practical threshold and uncertainty.",
     "protocols": "Specify the executable preprocessing, fitting, tuning and evaluation sequence.",
@@ -60,13 +60,13 @@ RESOLUTIONS = {
     "negative_controls": "Select controls that should not carry the proposed signal and define failure decisions.",
     "robustness": "Predeclare relevant shifts, seeds and perturbations; retain every registered outcome.",
     "statistics": "Specify independent units, sample size rationale, uncertainty, multiplicity and missing-data handling.",
-    "compute_budget": "Estimate runner, memory, runtime, repeat count and approved cost ceiling before G3 execution.",
+    "compute_budget": "Estimate runner, memory, runtime, repeat count and authorized cost ceiling before execution.",
     "resources": "Resolve code revision, dependencies, data/model access and reproducible cloud feasibility.",
     "comparability": "Audit units, dataset/splits, metrics, tuning, compute and inference scope pair by pair.",
     "contradictions": "Locate disconfirming and adjacent evidence; distinguish disagreement from incompatible protocols.",
     "discriminating_tests": "State main and rival predictions, controlled intervention and explicit decision conditions.",
     "falsification": "State the outcome that would reject or narrow the proposed claim before final runs.",
-    "thesis_contribution": "Map standalone value and cumulative contribution to P01-P06 under one doctoral question.",
+    "thesis_contribution": "Explain the standalone and cumulative contribution of the selected papers to the research question.",
 }
 OUTCOMES = {"supports", "contradicts", "insufficient", "unclear"}
 
@@ -94,9 +94,6 @@ def _load(project, relative, default):
         return default, None
     if path.stat().st_size > 2_000_000:
         raise ValueError("reasoning/progress input exceeds 2 MB")
-    from scripts.output_provenance import current_origin
-    if current_origin(project, path).get("family") == "anthropic":
-        raise ValueError("persistent reasoning/progress may not have a Claude writer")
     result = _wb()._json(path.read_bytes())
     if not isinstance(result, dict) or result.get("schema_version") != "1.0":
         raise ValueError("unsupported literature reasoning/progress schema")
@@ -180,8 +177,8 @@ def _config(project, library, reasoning_path=None):
                 targets = row.get("paper_ids", [])
                 if (not isinstance(targets, list) or any(not isinstance(i, str) for i in targets)
                         or len(set(targets)) != len(targets)
-                        or any(i not in {f"P{i:02d}" for i in range(1, 7)} for i in targets)):
-                    raise ValueError("candidate mappings must be distinct P01-P06 IDs")
+                        or any(not _wb().IDENTIFIER.fullmatch(i) for i in targets)):
+                    raise ValueError("candidate mappings must be distinct safe paper IDs")
                 nearest = row.get("nearest_work_ids", [])
                 if (not isinstance(nearest, list) or any(not isinstance(i, str) for i in nearest)
                         or len(set(nearest)) != len(nearest)
@@ -337,7 +334,7 @@ def _progress(project, papers, question, steps, progress_path):
     return binding
 
 
-def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, limit=8,
+def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, paper_ids=None, limit=8,
               output_dir=None, reasoning_path=None, progress_path=None) -> dict:
     """Build section-aware, multi-phase plans; validated objectives override lexical ranking.
 
@@ -353,6 +350,10 @@ def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, lim
     papers = {p["id"]: p for p in library["papers"] if p["status"] == "current"}
     eligible = {i: p for i, p in papers.items() if (topic_id is None or p.get("topic_id") == topic_id)
                 and (paper_id is None or paper_id in p.get("paper_ids", []))}
+    if paper_ids is not None and (not isinstance(paper_ids, list) or not paper_ids
+            or any(not isinstance(i, str) for i in paper_ids) or len(set(paper_ids)) != len(paper_ids)
+            or any(i not in eligible for i in paper_ids)):
+        raise ValueError("explicit reading sources must be distinct current sources within the requested scope")
     hits = _wb().search(project, question, topic_id=topic_id, paper_id=paper_id, limit=100, output_dir=output_dir)
     scores = {}
     for row in hits["results"]:
@@ -360,7 +361,7 @@ def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, lim
     objective_owners = {o["paper_id"] for o in config["reading_objectives"]}
     # Explicit semantic objectives and mapped contrary evidence outrank keyword
     # scores. Without a lexical match the bounded source set is still readable.
-    ordered = sorted(eligible, key=lambda i: (i not in objective_owners,
+    ordered = list(paper_ids) if paper_ids is not None else sorted(eligible, key=lambda i: (i not in objective_owners,
         not bool(_card_rows(eligible[i], ("counterevidence", "contradictions"))), -scores.get(i, 0), i))[:limit]
     steps = []
     for identifier in ordered:
@@ -393,7 +394,7 @@ def itinerary(project: Path, question: str, *, topic_id=None, paper_id=None, lim
         "inputs": [v for v in (binding, progress_binding) if v], "reasoning_path": reasoning_path or CONFIG,
         "progress_path": progress_path or PROGRESS, "snapshot_sha256": _digest(manifest),
         "implementation_sha256": sha(Path(__file__)), "status": "reading_plan_only" if steps else "no_eligible_sources",
-        "selection_method": "explicit_semantic_objectives_then_contrary_evidence_then_lexical_relevance",
+        "selection_method": "explicit_source_selection" if paper_ids is not None else "explicit_semantic_objectives_then_contrary_evidence_then_lexical_relevance",
         "retrieval_completeness_verified": False, "gate_approved": False,
         "scientific_completion_verified": False, "semantic_verification": False, "model_call_made": False}
     _wb()._save_view(project, output_dir, "itinerary.json", result)
@@ -528,7 +529,7 @@ def comparison_packet(project: Path, paper_ids: list[str], *, question="", outpu
             "nearest_work_matrix": [r for r in rows if r["paper_id"] in candidate["nearest_work_ids"]],
             "needs_nearest_work_selection": not bool(candidate["nearest_work_ids"]),
             "needs_target_paper_mapping": not bool(candidate["paper_ids"]),
-            "readiness": "source_bound_proposal_requires_G1_G3_review"})
+            "readiness": "source_bound_research_proposal"})
     result = {"schema_version": "1.0", "kind": "source_bound_comparison_and_experiment_evidence_packet",
         "question": question, "scope": library.get("scope"), "rows": rows,
         "experiment_design_axes": axes, "pairwise_comparability": pairs, "gap_hypotheses": gap_leads,

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Versioned, fail-closed task routes for the approved production model roster.
+"""Versioned configurable task routes with actual provider and model identities.
 
 This module only selects a route. It never sends requests, grants spending
 authority, approves scientific evidence or substitutes a model after failure.
@@ -140,33 +140,35 @@ def _exact_names(value: Any, expected: set[str], label: str) -> None:
 
 
 def local_model_overrides() -> dict[str, tuple[str, str, str]]:
-    """Read explicit local identities without changing process-wide defaults."""
+    """Read local model identities; aliases and roster size are user choices."""
+    if not LOCAL_MODEL_OVERRIDES.is_file():
+        return {}
     try:
-        override = json.loads(LOCAL_MODEL_OVERRIDES.read_text(encoding="utf-8-sig"))
-    except (OSError, ValueError):
-        return {}
-    rows = override.get("models") if isinstance(override, dict) else None
+        document = json.loads(LOCAL_MODEL_OVERRIDES.read_text(encoding="utf-8-sig"))
+    except (OSError, ValueError) as exc:
+        raise ValueError("local model configuration is invalid JSON") from exc
+    rows = document.get("models") if isinstance(document, dict) else None
     if not isinstance(rows, dict):
-        return {}
-    identities = {}
+        raise ValueError("local model configuration needs a models object")
+    result = {}
     for name, row in rows.items():
         default = APPROVED_MODELS.get(name)
-        if (default is None or not isinstance(row, dict) or
-                not isinstance(row.get("model"), str) or not row["model"].strip()):
-            continue
-        provider, family = row.get("provider") or default[0], row.get("family") or default[2]
-        if isinstance(provider, str) and isinstance(family, str):
-            identities[name] = (provider, row["model"], family)
-    return identities
+        if not isinstance(row, dict) or not isinstance(row.get("model"), str) or not row["model"].strip():
+            raise ValueError("local model identity needs an exact model ID")
+        provider = row.get("provider") or (default[0] if default else None)
+        family = ai_providers.provider_family(provider)
+        if row.get("family", family) != family:
+            raise ValueError("local model family differs from its actual provider")
+        result[name] = (provider, row["model"], family)
+    return result
 
 
 def _apply_local_model_overrides(policy: dict[str, Any], overrides=None) -> dict[str, Any]:
-    """Keep the uploaded opt-in feature local to this policy load."""
     models = policy.get("models") if isinstance(policy, dict) else None
     if isinstance(models, dict):
         for name, identity in (local_model_overrides() if overrides is None else overrides).items():
-            if isinstance(models.get(name), dict):
-                models[name].update(zip(("provider", "model", "family"), identity))
+            row = models.setdefault(name, {"reasoning_effort": "high", "max_output_tokens": 12000})
+            row.update(zip(("provider", "model", "family"), identity))
     return policy
 
 def production_enabled() -> bool:
@@ -182,164 +184,101 @@ def load_policy(environment: Mapping[str, str] | None = None) -> tuple[dict[str,
     env = os.environ if environment is None else environment
     path = Path(env.get("DR_OS_ROUTING_CONFIG") or DEFAULT_POLICY)
     if path.is_symlink() or not path.is_file():
-        raise ValueError("production routing policy must be a regular file")
+        raise ValueError("routing configuration must be a regular file")
     raw = path.read_bytes()
     try:
         policy = json.loads(raw)
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise ValueError("production routing policy is invalid JSON") from exc
+        raise ValueError("routing configuration is invalid JSON") from exc
     overrides = local_model_overrides()
     policy = _apply_local_model_overrides(policy, overrides)
-    approved_models = {**APPROVED_MODELS, **overrides}
-    if (not isinstance(policy, dict) or policy.get("schema_version") != "1.0"
-            or policy.get("profile") != "production"):
-        raise ValueError("unsupported production routing policy")
+    if not isinstance(policy, dict) or policy.get("schema_version") != "1.0":
+        raise ValueError("unsupported routing configuration")
     models = policy.get("models")
-    if not isinstance(models, dict) or set(models) != set(APPROVED_MODELS):
-        raise ValueError("production policy requires the approved seven-model roster")
+    if not isinstance(models, dict) or not models:
+        raise ValueError("routing configuration needs at least one model")
     for name, row in models.items():
         if (not isinstance(row, dict) or not isinstance(row.get("provider"), str)
-                or not isinstance(row.get("model"), str) or not row["model"]
-                or row.get("reasoning_effort") not in {"medium", "high"}
-                or type(row.get("max_output_tokens")) is not int or row["max_output_tokens"] < 1):
-            raise ValueError(f"malformed production model route: {name}")
-        provider = ai_providers.PRODUCTION_PROVIDERS.get(row["provider"])
-        if not provider or provider["family"] != row.get("family"):
+                or not isinstance(row.get("model"), str) or not row["model"].strip()
+                or any(ch.isspace() or ord(ch) < 32 for ch in row["model"])
+                or row.get("reasoning_effort") not in {None, "none", "minimal", "low", "medium", "high", "xhigh"}
+                or type(row.get("max_output_tokens")) is not int or not 1 <= row["max_output_tokens"] <= 100000):
+            raise ValueError(f"malformed model route: {name}")
+        family = ai_providers.provider_family(row["provider"])
+        if row.get("family", family) != family:
             raise ValueError("model route family differs from its actual provider family")
-        if row["model"] not in provider["models"] and overrides.get(name) != (row["provider"], row["model"], row["family"]):
-            raise ValueError("model route is outside its actual transport allowlist")
-        if (row["provider"], row["model"], row.get("family")) != approved_models[name]:
-            raise ValueError("model route differs from the exact approved model identity")
-        if name == "luna" and row["reasoning_effort"] != "medium":
-            raise ValueError("Luna is accepted only at the tested medium effort")
-        if name != "luna" and row["reasoning_effort"] != "high":
-            raise ValueError("scientific and selected auxiliary routes require high effort")
-    flags = policy.get("quality_policy", {})
-    if (flags.get("automatic_paid_fallback") is not False
-            or flags.get("unknown_cost_stops_execution") is not True
-            or flags.get("claude_persistent_artifacts_allowed") is not False
-            or flags.get("human_gate_approval_required") is not True):
-        raise ValueError("production quality and spending boundaries may not be weakened")
-    stages = policy.get("stage_routes")
-    if not isinstance(stages, dict) or set(stages) != APPROVED_STAGES:
-        raise ValueError("production stage routes are missing")
-    for stage, routes in stages.items():
-        if not isinstance(routes, dict) or set(routes) != set(CYCLE_ROLES):
-            raise ValueError(f"production stage needs exactly five existing roles: {stage}")
-        for role, key in routes.items():
-            if key not in models:
-                raise ValueError("production route references an unknown model")
-            family = models[key].get("family")
-            if role in WRITER_ROLES and family != "openai":
-                raise ValueError("persistent scientific writers must use the OpenAI family")
-            if role in WRITER_ROLES and key not in {"sol", "astra"}:
-                raise ValueError("auxiliary models cannot become persistent scientific writers")
-            if role in READ_ONLY_ROLES and family != "anthropic":
-                raise ValueError("semantic planners and critics must use the Anthropic family")
-            if stage in {"topic-intelligence", "paper-architecture", "experiment-design"}:
-                expected = "astra" if role in WRITER_ROLES else "opus"
-                if key != expected:
-                    raise ValueError("core scientific stages require Astra writers and Opus planners/critics")
-        if routes["independent-critic-final"] != "opus":
-            raise ValueError("every fresh final critic must use Opus")
-    auxiliary = policy.get("auxiliary_routes")
-    if not isinstance(auxiliary, dict) or set(auxiliary) != set(APPROVED_AUXILIARY_MODELS):
-        raise ValueError("production auxiliary routes are missing")
-    for kind, row in auxiliary.items():
+        row["family"] = family
+    for routes in [policy.get("default_routes", {}), policy.get("panel_routes", {}), *policy.get("stage_routes", {}).values()]:
+        if not isinstance(routes, dict) or any(key not in models for key in routes.values()):
+            raise ValueError("route references an unknown model alias")
+    for kind, row in policy.get("auxiliary_routes", {}).items():
         if (not isinstance(row, dict) or row.get("model_key") not in models
-                or not isinstance(row.get("quality_boundary"), str) or not row["quality_boundary"]
                 or type(row.get("max_output_tokens")) is not int or row["max_output_tokens"] < 1):
             raise ValueError(f"malformed auxiliary route: {kind}")
-        if row["model_key"] == "luna" and kind != "metadata-extraction":
-            raise ValueError("Luna is accepted only for bounded source-field extraction")
-        if row["model_key"] != APPROVED_AUXILIARY_MODELS[kind]:
-            raise ValueError("auxiliary role differs from its exact approved model assignment")
-    _exact_names(policy.get("critical_tasks"), APPROVED_CRITICAL_TASKS, "critical tasks")
-    _exact_names(policy.get("health_roles"), APPROVED_HEALTH_ROLES, "health roles")
-    _exact_names(policy.get("health_stages"), APPROVED_HEALTH_STAGES, "health stages")
-    _exact_names(policy.get("auxiliary_stages"), APPROVED_STAGES | {"auxiliary"}, "auxiliary stages")
+    if policy.get("default_model", next(iter(models))) not in models:
+        raise ValueError("default model references an unknown alias")
     digest = hashlib.sha256(raw).hexdigest()
     if overrides:
         digest = hashlib.sha256(json.dumps({"policy_sha256": digest, "model_overrides": overrides},
                                           sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return policy, digest
 
-
 def select(stage: str, role: str, task_kind: str | None = None, *,
            requested_provider: str | None = None, requested_model: str | None = None) -> dict[str, Any]:
-    """Return an exact named route, with its policy hash and quality boundary.
+    """Select a configured preference, or honor an explicit provider/model.
 
-    Explicit task_kind marks a critical task before a call; no text heuristic
-    chooses cheaper scientific judgment or inserts an extra review call.
+    Stage and role describe the task; they do not authorize a model to write.
+    A configured roster is a set of defaults, not a model allowlist.
     """
     policy, digest = load_policy()
     original_role = role
     if role == "writer":
         role = "persistent-writer"
+    models = policy["models"]
+    auxiliary = policy.get("auxiliary_routes", {}).get(role, {})
+    key = (policy.get("stage_routes", {}).get(stage, {}).get(role)
+           or policy.get("panel_routes", {}).get(role)
+           or auxiliary.get("model_key")
+           or policy.get("default_routes", {}).get(role)
+           or policy.get("default_model") or next(iter(models)))
+    g1_scope = _G1_TRANSPORT_ROUTE.get()
+    if g1_scope and stage == "topic-intelligence" and role in CYCLE_ROLES:
+        key = "astra" if role in WRITER_ROLES else "opus"
+        requested_provider = requested_model = None
+    model = dict(models[key])
+    if requested_provider is not None or requested_model is not None:
+        provider = requested_provider or model["provider"]
+        matches = [(name, row) for name, row in models.items() if row["provider"] == provider
+                   and (requested_model is None or row["model"] == requested_model)]
+        if matches:
+            key, row = next(((name, row) for name, row in matches if name == key), matches[0])
+            model = dict(row)
+        else:
+            configured = ai_providers.configuration(provider)
+            key = "explicit"
+            model = {"provider": provider, "model": requested_model or configured.get("model"),
+                     "family": ai_providers.provider_family(provider),
+                     "reasoning_effort": "high" if provider in ai_providers.PRODUCTION_PROVIDERS else None,
+                     "max_output_tokens": 12000}
+            if not model["model"]:
+                raise ValueError("the selected provider needs an exact model ID")
+    ceiling = model["max_output_tokens"]
+    if auxiliary and requested_provider is None and requested_model is None:
+        ceiling = min(ceiling, auxiliary["max_output_tokens"])
+    if role in APPROVED_HEALTH_ROLES:
+        ceiling = min(ceiling, 256)
     persistent = role in WRITER_ROLES
-    boundary = "Evidence-bound artifact writing with independent audits and explicit human gates."
-    if role in policy["health_roles"]:
-        if stage not in policy["health_stages"]:
-            raise ValueError("health/instrumentation roles require their explicit control stage")
-        candidates = [(key, row) for key, row in policy["models"].items()
-                      if row["provider"] == requested_provider and
-                      (not requested_model or row["model"] == requested_model)]
-        if not candidates:
-            raise ValueError("probe provider/model is outside the approved production roster")
-        key = candidates[0][0]
-        ceiling = 256
-        boundary = "Endpoint identity/instrumentation only; never scientific-quality evidence."
-    elif role in PANEL_MODELS:
-        if stage != "writing-and-review":
-            raise ValueError("the three-view panel is a submission checkpoint, not an every-stage audit")
-        choices = policy.get("panel_routes", PANEL_MODELS)
-        if set(choices) != set(PANEL_MODELS) or any(key not in policy["models"] for key in choices.values()):
-            raise ValueError("panel routes need exactly the three scientific views")
-        families = {policy["models"][key]["family"] for key in choices.values()}
-        if len(families) != 3 or "openai" in families:
-            raise ValueError("panel needs three different critic families, each different from the writer")
-        key = choices[role]
-        ceiling = policy["models"][key]["max_output_tokens"]
-        task_kind = "scientific-judgment"
-        boundary = "Read-only mutually blinded source-view criticism; no voting, acceptance estimate or persistent scientific writing."
-    elif role in CYCLE_ROLES:
-        if stage not in policy["stage_routes"]:
-            raise ValueError(f"no production stage route: {stage}")
-        key = policy["stage_routes"][stage][role]
-        if task_kind is not None:
-            if task_kind not in policy["critical_tasks"]:
-                raise ValueError(f"unknown explicit scientific task: {task_kind}")
-            key = "astra" if persistent else "opus"
-        ceiling = policy["models"][key]["max_output_tokens"]
-        if not persistent:
-            boundary = "Read-only semantic planning/independent audit; no scientific file writing or gate approval."
-    elif role in policy["auxiliary_routes"]:
-        if stage not in policy["auxiliary_stages"]:
-            raise ValueError(f"no auxiliary production route at stage: {stage}")
-        if task_kind is not None:
-            raise ValueError("auxiliary tasks cannot silently become core scientific tasks")
-        auxiliary = policy["auxiliary_routes"][role]
-        key = auxiliary["model_key"]
-        ceiling = auxiliary["max_output_tokens"]
-        boundary = auxiliary["quality_boundary"]
-    elif role in policy["critical_tasks"]:
-        if stage not in policy["auxiliary_stages"]:
-            raise ValueError(f"no scientific analysis route at stage: {stage}")
-        key = "astra"
-        ceiling = 5000
-        boundary = "Internal core scientific analysis; preserve evidence, uncertainty and human decision authority."
-    else:
-        raise ValueError(f"no production model route for role: {original_role}")
-    model = policy["models"][key]
     route = {
         **model,
-        "route_id": f"{policy['policy_version']}:{stage}:{original_role}:{task_kind or 'default'}:{key}",
-        "policy_version": policy["policy_version"], "policy_sha256": digest,
+        "route_id": f"{policy.get('policy_version', 'configured')}:{stage}:{original_role}:{task_kind or 'default'}:{key}",
+        "policy_version": policy.get("policy_version", "configured"), "policy_sha256": digest,
         "stage": stage, "role": original_role, "task_kind": task_kind,
         "model_key": key, "max_output_tokens": ceiling,
-        "persistent_output": persistent, "quality_boundary": boundary,
+        "persistent_output": persistent,
+        "quality_boundary": auxiliary.get("quality_boundary", "Preserve sources, uncertainty and actual results."),
         "automatic_paid_fallback": False,
-        "fresh_required": role.startswith("independent-critic") or role in {"independent-critique", *policy["health_roles"]},
+        "explicit_selection": requested_provider is not None or requested_model is not None,
+        "fresh_required": role.startswith("independent-critic") or role in {"independent-critique", *APPROVED_HEALTH_ROLES},
     }
     calibration = _CALIBRATION_ROUTE.get()
     if calibration is not None and stage == "auxiliary" and original_role == "independent-critique":
@@ -383,29 +322,10 @@ def select(stage: str, role: str, task_kind: str | None = None, *,
 
 def effective_task_kind(stage: str, role: str, task_kind: str | None = None,
                         task_profile: dict | None = None) -> str | None:
-    """Classify before choosing a route; unclassified late science stays critical.
-
-    A task profile is a structured management declaration, not a keyword guess
-    made from model/user prose. Existing explicit critical kinds always win.
-    """
-    if not production_enabled():
-        return task_kind
-    from scripts import dynamic_routing
-    if not dynamic_routing.enabled():
-        return task_kind
-    profile = dynamic_routing.validate_profile(task_profile, stage=stage, role=role)
+    """Keep explicitly declared task context without escalating stages or models."""
     if task_kind is not None:
         return task_kind
-    if role == "writer":
-        role = "persistent-writer"
-    if role not in CYCLE_ROLES:
-        return None
-    declared = profile.get("task_class")
-    if declared in APPROVED_CRITICAL_TASKS:
-        return declared
-    if profile.get("science_risk") == "critical":
-        return "scientific-judgment"
-    return None
+    return task_profile.get("task_class") if isinstance(task_profile, dict) and task_profile.get("task_class") != "unspecified" else None
 
 
 def resolve_call(stage: str, role: str, provider: str, model: str | None = None,
@@ -422,14 +342,10 @@ def resolve_call(stage: str, role: str, provider: str, model: str | None = None,
         return {"provider": provider, "model": model, "reasoning_effort": reasoning_effort}
     task_kind = effective_task_kind(stage, role, task_kind, task_profile)
     route = select(stage, role, task_kind, requested_provider=provider, requested_model=model)
-    # Explicit overrides cannot claim one route while paying another. Legacy
-    # default provider names may resolve through the approved production map.
-    if model is not None and model != route["model"]:
-        raise ValueError("explicit model conflicts with the approved task route")
-    if reasoning_effort is not None and reasoning_effort != route["reasoning_effort"]:
-        raise ValueError("explicit reasoning effort conflicts with the approved task route")
+    if reasoning_effort is not None:
+        route["reasoning_effort"] = reasoning_effort
     return route
 
 
-def cycle_routes(stage: str, task_kind: str | None = None) -> dict[str, dict[str, Any]]:
-    return {role: select(stage, role, task_kind) for role in CYCLE_ROLES}
+def cycle_routes(stage: str, task_kind: str | None = None, roles=None) -> dict[str, dict[str, Any]]:
+    return {role: select(stage, role, task_kind) for role in (CYCLE_ROLES if roles is None else roles)}

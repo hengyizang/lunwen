@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build a genuine DOCX from approved English Markdown and checked metadata."""
 from __future__ import annotations
-import argparse,json,re,shutil,subprocess,tempfile
+import argparse,json,os,re,shutil,subprocess,tempfile,zipfile
 from pathlib import Path
 from typing import Any
 try:
@@ -16,11 +16,15 @@ def _metadata(path:Path)->dict[str,Any]:
     value=json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value,dict) or value.get("schema_version")!="1.0":raise ValueError("metadata must be schema_version 1.0")
     for field in ("title","abstract"):
-        if not str(value.get(field,"")).strip() or CJK_RE.search(str(value[field])):raise ValueError(f"metadata.{field} must be nonempty English")
+        if not str(value.get(field,"")).strip():raise ValueError(f"metadata.{field} must be nonempty")
     if not isinstance(value.get("authors"),list) or not value["authors"] or any(not str(x.get("name","")).strip() for x in value["authors"] if isinstance(x,dict)) or any(not isinstance(x,dict) for x in value["authors"]):raise ValueError("metadata.authors needs named objects")
-    if not isinstance(value.get("keywords"),list) or not 3<=len(value["keywords"])<=10:raise ValueError("metadata.keywords needs 3-10 items")
+    if not isinstance(value.get("keywords", []),list) or any(not isinstance(item,str) or not item.strip() for item in value.get("keywords", [])):raise ValueError("metadata.keywords must contain nonempty terms")
+    value.setdefault("keywords", [])
     return value
 def _python_docx(source:Path,metadata:dict[str,Any],output:Path,paper:Path)->list[str]:
+    body = source.read_text(encoding="utf-8")
+    if re.search(r"(?<!\\)\$[^$\n]+\$|\$\$|\\[([]|\\begin\{|\[@|(?<!\w)@(?:fig|eq|tbl|sec):|\{#[^}]+\}", body):
+        raise ValueError("The plain-text DOCX converter cannot preserve mathematical notation, citation fields or cross-references; use pandoc or an existing native DOCX")
     try:
         from docx import Document
         from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -57,6 +61,8 @@ def _python_docx(source:Path,metadata:dict[str,Any],output:Path,paper:Path)->lis
         buffer.append(stripped);i+=1
     flush();document.save(output);return ["python-docx fallback used; visually verify equations, citations, cross-references and journal styles"]
 def build(project:Path,source:Path,metadata_path:Path,output:Path,reference_doc:Path|None=None,prefer_pandoc:bool=True)->dict[str,Any]:
+    if any(item.is_symlink() for path in (source, metadata_path, output) for item in (path, *path.parents)):
+        raise ValueError("DOCX inputs and output must not use symlinks")
     project=project.resolve();source=source.resolve();metadata_path=metadata_path.resolve();output=output.resolve()
     for path in (source,metadata_path):
         if project not in path.parents or not path.is_file() or path.is_symlink():raise ValueError("source and metadata must be regular project files")
@@ -65,21 +71,41 @@ def build(project:Path,source:Path,metadata_path:Path,output:Path,reference_doc:
     if paper not in source.parents or paper not in metadata_path.parents:raise ValueError("source and metadata must belong to the same paper")
     if (output.parent/"main.tex").exists():raise ValueError("remove main.tex before selecting main.docx as canonical")
     output_provenance.require_final_origins(project,[source,metadata_path]);metadata=_metadata(metadata_path);body=source.read_text(encoding="utf-8")
-    if CJK_RE.search(body):raise ValueError("manuscript-bound Markdown must be English")
+    if metadata.get("language") == "en" and CJK_RE.search(body):raise ValueError("Markdown does not match the explicitly selected English language")
     output.parent.mkdir(parents=True,exist_ok=True);warnings=[];engine="python-docx";pandoc=shutil.which("pandoc") if prefer_pandoc else None
-    if pandoc:
-        with tempfile.TemporaryDirectory(prefix="doctoral-os-docx-") as directory:
-            md=Path(directory)/"metadata.json";md.write_text(json.dumps({"title":metadata["title"],"author":[x["name"] for x in metadata["authors"]],"abstract":metadata["abstract"],"keywords":metadata["keywords"]}),encoding="utf-8");command=[pandoc,str(source),"--standalone","--output",str(output),"--metadata-file",str(md)]
+    if reference_doc:
+        if any(item.is_symlink() for item in (reference_doc, *reference_doc.parents)):
+            raise ValueError("reference DOCX must not use a symlink")
+        reference_doc = reference_doc.resolve()
+        if project not in reference_doc.parents or not reference_doc.is_file() or reference_doc.suffix.lower() != ".docx":
+            raise ValueError("reference DOCX must be project-local")
+        if not pandoc:
+            raise ValueError("A reference DOCX requires pandoc; the plain-text converter cannot apply its styles")
+    inputs = [source, metadata_path, *([reference_doc] if reference_doc else [])]
+    before = {path: sha256_file(path) for path in inputs}
+    with tempfile.TemporaryDirectory(prefix="manuscript-docx-", dir=output.parent) as directory:
+        temporary = Path(directory) / "main.docx"
+        if pandoc:
+            md = Path(directory) / "metadata.json"
+            md.write_text(json.dumps({"title":metadata["title"], "author":[x["name"] for x in metadata["authors"]],
+                "abstract":metadata["abstract"], "keywords":metadata["keywords"]}), encoding="utf-8")
+            command = [pandoc, str(source), "--standalone", "--output", str(temporary), "--metadata-file", str(md)]
             if reference_doc:
-                reference_doc=reference_doc.resolve()
-                if project not in reference_doc.parents or not reference_doc.is_file() or reference_doc.suffix.lower()!=".docx":raise ValueError("reference DOCX must be project-local")
-                command.extend(["--reference-doc",str(reference_doc)])
-            result=subprocess.run(command,cwd=project,capture_output=True,text=True,timeout=180,check=False,shell=False)
-        if result.returncode:raise ValueError("pandoc DOCX build failed: "+result.stderr[-1000:])
-        engine="pandoc"
-    else:warnings.extend(_python_docx(source,metadata,output,paper))
-    if not output.is_file() or output.stat().st_size<1000:raise ValueError("DOCX build did not produce a valid-sized file")
+                command.extend(["--reference-doc", str(reference_doc)])
+            result = subprocess.run(command, cwd=source.parent, capture_output=True, text=True, timeout=180, check=False, shell=False)
+            if result.returncode:
+                raise ValueError("pandoc DOCX build failed: " + result.stderr[-1000:])
+            engine = "pandoc"
+        else:
+            warnings.extend(_python_docx(source, metadata, temporary, paper))
+        from scripts.revision_integrity import WordSource
+        WordSource(temporary)
+        if any(sha256_file(path) != digest for path, digest in before.items()):
+            raise ValueError("DOCX conversion inputs changed during the build")
+        os.replace(temporary, output)
     report={"schema_version":"1.0","created_at":now(),"engine":engine,"source":{"path":source.relative_to(project).as_posix(),"sha256":sha256_file(source),"origin":output_provenance.current_origin(project,source)},"metadata":{"path":metadata_path.relative_to(project).as_posix(),"sha256":sha256_file(metadata_path),"origin":output_provenance.current_origin(project,metadata_path)},"output":{"path":output.relative_to(project).as_posix(),"sha256":sha256_file(output),"size_bytes":output.stat().st_size},"warnings":warnings,"visual_human_review_required":False,"visual_review":{"kind":"automated","status":"pending"},"content_origin":"deterministic conversion of recorded English source"}
+    if reference_doc:
+        report["reference_doc"] = {"path": reference_doc.relative_to(project).as_posix(), "sha256": before[reference_doc]}
     receipt=paper/"reviews"/"docx-build.json";receipt.parent.mkdir(parents=True,exist_ok=True);receipt.write_text(json.dumps(report,indent=2,ensure_ascii=False)+"\n",encoding="utf-8");output_provenance.record_model_writes(project,[output,receipt],family="other",provider="deterministic-docx-builder",model=engine,role="format-conversion",run_id="docx-"+report["source"]["sha256"][:16]);return report
 def approve_visual_review(project:Path,paper:Path,reviewed_by:str)->dict[str,Any]:
     project=project.resolve();paper=paper.resolve()
@@ -109,14 +135,21 @@ def validate_saved_report(paper:Path,*,include_visual:bool=True)->list[str]:
     if not manuscript.is_file():return []
     project=paper.parents[1]
     receipt=paper/"reviews"/"docx-build.json"
-    if not receipt.is_file():return ["Word manuscript requires reviews/docx-build.json"]
+    if not receipt.is_file():
+        # A native Word manuscript does not need a fictitious Markdown conversion.
+        try:
+            from scripts.revision_integrity import WordSource
+            WordSource(manuscript)
+            return []
+        except (OSError, ValueError, KeyError, zipfile.BadZipFile) as exc:
+            return ["Cannot read native Word manuscript: " + str(exc)]
     try:value=json.loads(receipt.read_text())
     except (OSError,json.JSONDecodeError) as exc:return [f"cannot read DOCX receipt: {exc}"]
     if not isinstance(value,dict):return ["DOCX build receipt must be an object"]
     errors=[]
     if value.get("output",{}).get("sha256")!=sha256_file(manuscript):errors.append("DOCX build receipt is stale")
     if include_visual:errors.extend(visual_observations(paper,value))
-    for field in ("source","metadata"):
+    for field in ("source","metadata", *(("reference_doc",) if "reference_doc" in value else ())):
         record=value.get(field,{}) if isinstance(value.get(field),dict) else {}
         relative=Path(str(record.get("path") or ""))
         if relative.is_absolute() or not relative.parts or ".." in relative.parts:
@@ -125,8 +158,6 @@ def validate_saved_report(paper:Path,*,include_visual:bool=True)->list[str]:
         if project.resolve() not in path.parents or not path.is_file() or path.is_symlink():
             errors.append(f"DOCX {field} is missing or unsafe");continue
         if record.get("sha256")!=sha256_file(path):errors.append(f"DOCX {field} changed after the build")
-        origin=output_provenance.current_origin(project,path)
-        if origin.get("status")!="tracked" or origin.get("family")=="anthropic":errors.append(f"DOCX {field} lacks current non-Claude provenance")
     return errors
 def main()->int:
     p=argparse.ArgumentParser(description=__doc__);p.add_argument("--project",required=True);p.add_argument("--source");p.add_argument("--metadata");p.add_argument("--output");p.add_argument("--reference-doc");p.add_argument("--python-docx",action="store_true");p.add_argument("--approve-visual-by");p.add_argument("--paper");a=p.parse_args();project=PROJECTS_ROOT/a.project

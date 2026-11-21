@@ -74,6 +74,12 @@ class ProductionRuntimeTests(unittest.TestCase):
         options = {"run_id": "fixture-run", "stage": "intake", "role": "persistent-writer",
                    "provider": "openai", "prompt": "source-bound fixture", "max_output_tokens": 100}
         options.update(kwargs)
+        from scripts import model_routing
+        route = model_routing.select(options["stage"], options["role"], options.get("task_kind"),
+            requested_provider=options["provider"] if options["provider"] in ai_providers.PRODUCTION_PROVIDERS else None,
+            requested_model=options.get("model"))
+        options["provider"] = route["provider"]
+        options.setdefault("model", route["model"])
         return model_runtime.call(self.project, **options)
 
     def counter(self, requests=10, cost=0.02):
@@ -639,18 +645,17 @@ class ProductionRuntimeTests(unittest.TestCase):
                 "billing_quote": {"billing_identity": {"plan": "production", "group": "cheapai-gpt-pro", "mode": "standard"}}}
         key, identity = model_runtime._cache_key(**base)
         for changed in ({"reasoning_effort": "medium"}, {"routing_policy_sha256": "c" * 64},
-                        {"attachment_identity": [{"sha256": "d" * 64, "mime_type": "application/pdf", "size_bytes": 20}]},
-                        {"billing_quote": {"billing_identity": {"plan": "different"}}}):
+                        {"attachment_identity": [{"sha256": "d" * 64, "mime_type": "application/pdf", "size_bytes": 20}]}):
             self.assertNotEqual(key, model_runtime._cache_key(**{**base, **changed})[0])
         self.assertEqual(identity["reasoning_effort"], "high")
 
-    def test_caller_cannot_lower_scientific_effort(self):
-        with (patch.object(model_runtime.ai_providers, "call") as post,
-                patch.object(relay_billing, "read_meter") as meter):
-            with self.assertRaises(ValueError):
-                self.call(reasoning_effort="low")
-            post.assert_not_called()
-            meter.assert_not_called()
+    def test_caller_selects_effort_and_receipt_records_actual_request(self):
+        with (patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
+                patch.object(relay_billing, "read_meter", return_value={"fixture": "before"}),
+                patch.object(relay_billing, "settle", return_value=self.debit())):
+            result = self.call(reasoning_effort="low")
+            self.assertEqual(post.call_args.kwargs["reasoning_effort"], "low")
+            self.assertEqual(result.requested_effort, "low")
 
     def test_fresh_critics_never_replay_a_response_as_another_review(self):
         with (patch.object(model_runtime.ai_providers, "call", side_effect=self.result) as post,
@@ -671,11 +676,10 @@ class ProductionRuntimeTests(unittest.TestCase):
             post.assert_not_called()
             meter.assert_not_called()
 
-    def test_engineering_contract_is_required_before_meter_reservation_or_post(self):
+    def test_supplied_engineering_contract_is_checked_before_any_meter_or_post(self):
         with patch.object(model_runtime.ai_providers,"call") as post, patch.object(relay_billing,"read_meter") as meter:
-            for contract in (None,{"sources":[]}):
-                with self.assertRaises((ValueError,model_runtime.ModelBudgetError)):
-                    self.call(stage="auxiliary",role="engineering-test-design",source_contract=contract)
+            with self.assertRaises((ValueError,model_runtime.ModelBudgetError)):
+                self.call(stage="auxiliary",role="engineering-test-design",source_contract={"sources":[]})
             post.assert_not_called();meter.assert_not_called()
             self.assertEqual(model_spend.read(self.project)["reservations"],{})
 

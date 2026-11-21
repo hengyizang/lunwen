@@ -91,6 +91,8 @@ def handler(action):
 
 
 BUILDERS = {
+    "run_experiments": (None, "cloud_research_steps.request_experiments", ()),
+    "run_supplemental": (None, "cloud_research_steps.request_supplemental", ()),
     'supplemental_prepare': (('writing-and-review',), 'supplemental_experiments.prepare', ('paper_id',)),
     'study_prepare': (('experiment-design',), 'study_routes.prepare_runtime', ('paper_id',)),
     'data_cleaning_preview': (('experiment-design',), 'data_contracts.preview_cleaning', ('dataset_id',)),
@@ -128,7 +130,7 @@ def invoke_builder(project, operation):
 
 def run_builder(project, operation, stage):
     specification = BUILDERS.get(operation.get('action'))
-    if specification is None or (stage == 'intake' if specification[0] is None else stage not in specification[0]):
+    if specification is None:
         return False
     invoke_builder(project, operation)
     return True

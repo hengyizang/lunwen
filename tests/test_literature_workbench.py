@@ -184,8 +184,8 @@ class WorkbenchTests(WorkbenchFixture):
         state = {"stage": "G1", "approved": False}
         write(self.project / "state/run.json", state)
         self.build()
-        with self.assertRaisesRegex(ValueError, "topic scope"):
-            workbench.search(self.project, "gain", paper_id="P01")
+        all_topics = workbench.search(self.project, "gain", paper_id="P01")
+        self.assertEqual({h["paper_id"] for h in all_topics["results"]}, {"a", "b"})
         hits = workbench.search(self.project, "gain", topic_id="topic-a", paper_id="P01")
         self.assertEqual({h["paper_id"] for h in hits["results"]}, {"a"})
         packet = workbench.comparison_packet(self.project, ["a", "b"], question="Which baseline is justified?")
@@ -335,7 +335,7 @@ class NativeReaderTests(WorkbenchFixture):
         write(registry, value)
         result = self.build()
         self.assertEqual(result["status"], "blocked")
-        self.assertTrue(any("controlled" in error["error"] for error in result["errors"]))
+        self.assertTrue(any("provenance" in error["error"] for error in result["errors"]))
 
     def raw_fixture(self):
         paper, text, _, _ = self.fixture()

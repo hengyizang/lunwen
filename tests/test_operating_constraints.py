@@ -90,8 +90,8 @@ class OperatingConstraintsTests(unittest.TestCase):
         self.assertEqual(current["notes"][4], original["notes"][4])
         state = researchctl.load_state(self.project.name)
         self.assertEqual(state["approved_gates"], ["G0"])
-        self.assertEqual(state["approvals"][:-1], old_state["approvals"])
-        self.assertFalse(state["approvals"][-1]["scientific_approval_granted"])
+        self.assertEqual(state["approvals"],old_state["approvals"])
+        self.assertFalse(state["history"][-1]["scientific_approval_granted"])
         self.assertEqual({k: state[k] for k in ("gate", "stage", "status", "paper_count", "paper_statuses")},
                          {k: old_state[k] for k in ("gate", "stage", "status", "paper_count", "paper_statuses")})
         spend = model_spend.read(self.project, required=True)
@@ -137,36 +137,30 @@ class OperatingConstraintsTests(unittest.TestCase):
         self.decide(new_ceiling_cny=300, target_submission_ready_date="2026-10-26")
         self.assertEqual(model_spend.read(self.project, required=True), before)
 
-    def test_deterministic_intake_cannot_replace_named_spending_owner(self):
-        state = researchctl.load_state(self.project.name)
-        state["approvals"][-1]["actor"] = "arbitrary-model-name"
-        researchctl.save_state(self.project.name, state)
-        self.assertIn("original named G0", self.dossier()["blockers"][0])
-        state["approvals"][-1]["actor"] = "deterministic-control-plane"
-        researchctl.save_state(self.project.name, state)
-        other = controls.execute(acceptance.request("review_dossier", operation="amend_operating_constraints",
-            actor="Another owner", **self.selectors), "20")
+    def test_recorded_spending_owner_is_independent_of_historical_g0(self):
+        state=researchctl.load_state(self.project.name);state["approvals"][-1]["actor"]="historical actor";researchctl.save_state(self.project.name,state)
+        self.assertTrue(self.dossier()["ready_for_operation"])
+        other=controls.execute(acceptance.request("review_dossier",operation="amend_operating_constraints",actor="Another owner",**self.selectors),"20")
         self.assertFalse(other["ready_for_operation"])
 
-    def test_advanced_or_scientifically_approved_projects_are_not_silently_rebound(self):
-        baseline = researchctl.load_state(self.project.name)
-        variants = [dict(baseline, status="awaiting_approval"), dict(baseline, approved_gates=["G0", "G1"]),
-                    dict(baseline, approvals=[*baseline["approvals"], {"gate": "G1", "actor": self.actor}])]
-        for state in variants:
-            with self.subTest(state=state):
-                write(self.project / "state/run.json", state)
-                self.assertIn("limited to open G1", self.dossier()["blockers"][0])
-        write(self.project / "state/run.json", baseline)
-        (self.project / "experiments/registry.jsonl").write_text('{"run_id":"failed","status":"failed"}\n', encoding="utf-8")
-        self.assertIn("executed experiment", self.dossier()["blockers"][0])
+    def test_resource_amendments_preserve_advanced_and_executed_science(self):
+        state=researchctl.load_state(self.project.name)
+        state.update(stage_index=4,stage="experiment-execution",gate="G4",approved_gates=["G0","G1","G2","G3"])
+        researchctl.save_state(self.project.name,state)
+        target=self.project/"experiments/registry.jsonl";target.write_text('{"run_id":"failed","status":"failed"}\n')
+        write(self.project/"papers/P01/preregistration.json",{"frozen_at":"earlier","files":[]})
+        before={p:p.read_bytes() for p in (target,self.project/"papers/P01/preregistration.json")}
+        self.assertTrue(self.dossier()["ready_for_operation"])
+        self.decide()
+        self.assertEqual(before,{p:p.read_bytes() for p in before})
+        current=researchctl.load_state(self.project.name)
+        for key in ("stage","gate","approved_gates","approvals"):self.assertEqual(current[key],state[key])
 
-    def test_changed_old_intake_or_wrong_owner_cannot_rebind_authority(self):
-        current = read(self.project / "intake/constraints.json")
-        current["research_goal"] += " Unauthorized change."
-        write(self.project / "intake/constraints.json", current)
-        self.assertIn("hashes must still match", self.dossier()["blockers"][0])
-        with self.assertRaisesRegex(ValueError, "hashes must still match"):
-            operating_constraints.prepare(self.project, 500, "2026-10-26", "Another owner")
+    def test_unrelated_intake_edit_does_not_change_spending_owner(self):
+        current=read(self.project/"intake/constraints.json");current["notes"].append("Additional background");write(self.project/"intake/constraints.json",current)
+        self.assertTrue(self.dossier()["ready_for_operation"])
+        with self.assertRaisesRegex(ValueError,"recorded owner"):
+            operating_constraints.prepare(self.project,500,"2026-10-26","Another owner")
 
     def test_bad_selectors_and_underfunded_ceiling_are_rejected(self):
         for amount in (True, 500.0, 0, -1, "500"):

@@ -27,19 +27,19 @@ class PdfContractTests(unittest.TestCase):
             self.assertEqual(run.call_args.args[0][-4:], packages)
             self.assertEqual(run.call_args.args[0][:5], ["sudo", "-n", "apt-get", "install", "-y"])
 
-    def test_available_pdf_tools_need_no_install_and_provision_is_cloud_only(self):
+    def test_available_pdf_tools_need_no_install_on_any_host(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
              patch.object(pdf.shutil, "which", return_value="/usr/bin/tool"), patch.object(pdf, "_run") as run:
             self.assertEqual(pdf.provision(Path(directory), {"enabled": False, "language": "eng"}), [])
             run.assert_not_called()
-        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), patch.object(pdf, "_run") as run:
-            with self.assertRaisesRegex(ValueError, "cloud"):
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), patch.object(pdf, "_run") as run, patch.object(pdf.shutil, "which", return_value=None):
+            with self.assertRaisesRegex(RuntimeError, "missing on this host"):
                 pdf.provision(Path("unused"), {"enabled": True, "language": "eng"})
             run.assert_not_called()
 
-    def test_cloud_guard_precedes_source_tools_or_writes(self):
+    def test_missing_original_request_precedes_tools_or_writes(self):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "0"}):
-            with self.assertRaisesRegex(ValueError, "cloud runner"):
+            with self.assertRaisesRegex(ValueError, "artifact is missing"):
                 pdf.refresh(Path("absent"))
 
     def test_ocr_tsv_retains_confidence_and_never_promotes_original_evidence(self):

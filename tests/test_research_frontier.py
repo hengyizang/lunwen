@@ -330,10 +330,9 @@ class ResearchFrontierTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "coverage question"):
             frontier.refresh(self.project)
 
-    def test_cloud_only_and_strict_request_boundary(self):
+    def test_local_execution_and_strict_request_boundary(self):
         with patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-            with self.assertRaisesRegex(ValueError, "cloud runner"):
-                frontier.refresh(self.project)
+            frontier.refresh(self.project)
         self.request["execute"] = True
         self.save()
         with self.assertRaisesRegex(ValueError, "unsupported fields"):

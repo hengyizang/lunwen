@@ -27,12 +27,14 @@ class DynamicCloudProfileTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.project = self.root / "projects" / "demo"
         (self.project / "state").mkdir(parents=True)
+        (self.project / "papers/P01").mkdir(parents=True)
 
     @contextmanager
     def command_context(self):
         with ExitStack() as stack:
             stack.enter_context(patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}))
             stack.enter_context(patch.object(cloud_job, "ROOT", self.root))
+            stack.enter_context(patch.object(cloud_job.researchctl, "PROJECTS_ROOT", self.root/"projects"))
             stack.enter_context(patch.object(cloud_progress, "pause_reason", return_value=None))
             stack.enter_context(patch.object(cloud_job.model_spend, "read", return_value={"authorized_ceiling_cny": 300, "spent_cny": 0, "reservations": {}}))
             stack.enter_context(patch.object(cloud_job.cloud_continuation, "configuration_errors", return_value=[]))
@@ -73,7 +75,8 @@ class DynamicCloudProfileTests(unittest.TestCase):
 
     def test_stale_invalid_duplicate_or_oversized_continuation_profile_stops(self):
         path = self.write_profile(stage="writing-and-review")
-        invalid_values = [path.read_text(), json.dumps({"schema_version": "1.0", "stage": "experiment-execution", "task_profile": None}),
+        self.assertIsNone(cloud_continuation.task_profile(self.project,"experiment-execution"))
+        invalid_values = [json.dumps({"schema_version": "1.0", "stage": "experiment-execution", "task_profile": None}),
                           '{"schema_version":"1.0","stage":"experiment-execution","task_profile":{},"task_profile":{}}',
                           " " * 16001]
         for value in invalid_values:
@@ -113,9 +116,10 @@ class DynamicCloudProfileTests(unittest.TestCase):
             actor="Fixture Owner", run_id="updated-management", expected_profile_sha256=result["profile_sha256"])
         self.assertEqual(updated["previous_sha256"], result["profile_sha256"])
         self.assertEqual(cloud_continuation.task_profile(self.project, "experiment-execution")["science_risk"], "critical")
-        with self.assertRaises(cloud_continuation.ContinuationError):
-            cloud_continuation.set_task_profile(self.project, "writing-and-review", ROUTINE,
-                actor="Fixture Owner", run_id="wrong-stage", expected_profile_sha256=updated["profile_sha256"])
+        cloud_continuation.set_task_profile(self.project, "writing-and-review", ROUTINE,
+            actor="Fixture Owner", run_id="new-task-context", expected_profile_sha256=updated["profile_sha256"])
+        self.assertIsNone(cloud_continuation.task_profile(self.project,"experiment-execution"))
+        self.assertEqual(cloud_continuation.task_profile(self.project,"writing-and-review")["science_risk"],"routine")
         self.assertEqual(state.read_bytes(), original)
 
     def test_set_profile_cloud_request_is_nonpaid_strict_and_stage_bound(self):
@@ -159,7 +163,7 @@ class DynamicCycleProfileTests(unittest.TestCase):
     transport = production_fixture.ProductionCycleTests.transport
     run_cycle = production_fixture.ProductionCycleTests.run_cycle
 
-    def test_cycle_forwards_one_profile_to_five_roles_and_records_actual_transport(self):
+    def test_cycle_forwards_profile_to_selected_role_and_records_actual_transport(self):
         seen = []
         def fake_call(project, **kwargs):
             seen.append(kwargs)
@@ -171,7 +175,7 @@ class DynamicCycleProfileTests(unittest.TestCase):
             return result
         with patch.object(api_orchestrator.model_runtime, "call", side_effect=fake_call):
             manifest = self.run_cycle(task_profile=ROUTINE)
-        self.assertEqual(len(seen), 5)
+        self.assertEqual(len(seen), 1)
         self.assertTrue(all(item["task_profile"]["task_class"] == ROUTINE["task_class"] for item in seen))
         self.assertEqual(manifest["declared_task_profile"], ROUTINE)
         self.assertEqual(manifest["actual_routes"]["persistent-writer"]["endpoint"],
@@ -185,11 +189,11 @@ class DynamicCycleProfileTests(unittest.TestCase):
                     self.transport(kwargs["provider"], kwargs["prompt"], **{
                         key: value for key, value in kwargs.items() if key not in {"provider", "prompt"}})) as post:
             manifest = self.run_cycle(routine=False)
-        self.assertEqual(post.call_count, 5)
+        self.assertEqual(post.call_count, 1)
         self.assertIsNone(manifest["declared_task_kind"])
         self.assertEqual(manifest["task_kind"], "scientific-judgment")
         self.assertEqual(manifest["actual_routes"]["persistent-writer"]["model"], "gpt-6-astra")
-        self.assertEqual(manifest["actual_routes"]["semantic-planner"]["model"], "claude-opus-5-5")
+        self.assertNotIn("semantic-planner",manifest["actual_routes"])
         self.assertEqual(manifest["task_profile"]["science_risk"], "critical")
 
     def test_explicit_core_kind_cannot_be_downgraded_by_a_routine_profile(self):
@@ -197,7 +201,7 @@ class DynamicCycleProfileTests(unittest.TestCase):
                 self.transport(kwargs["provider"], kwargs["prompt"], **{
                     key: value for key, value in kwargs.items() if key not in {"provider", "prompt"}})) as post:
             manifest = self.run_cycle(task_kind="core-story", task_profile=ROUTINE)
-        self.assertEqual(post.call_count, 5)
+        self.assertEqual(post.call_count, 1)
         self.assertTrue(all(call.kwargs["task_profile"]["science_risk"] == "critical"
                             for call in post.call_args_list))
         self.assertEqual(manifest["actual_routes"]["persistent-writer"]["model"], "gpt-6-astra")

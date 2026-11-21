@@ -126,9 +126,12 @@ def match_row(spec: dict[str, Any], export: list[dict[str, Any]]) -> dict[str, A
         if (wanted_issn and row["issn"] == wanted_issn)
         or (wanted_name and row["name"].casefold() == wanted_name)
     ]
+    category = str(spec.get("category", "")).strip().casefold()
+    if category:
+        matches = [row for row in matches if row["category"].casefold() == category]
     if len(matches) != 1:
         raise VenueCandidateError(
-            f"candidate {spec.get('name') or spec.get('issn')} must match exactly one JCR export row"
+            f"candidate {spec.get('name') or spec.get('issn')} must match one JCR export row; specify category for a journal listed in several categories"
         )
     return matches[0]
 
@@ -188,8 +191,8 @@ def build_registry(
             from venue_policy import meets_target, target_from_contract
         target_quartile = target_from_contract(contract)
         candidates = paper_spec.get("candidates")
-        if not isinstance(candidates, list) or len(candidates) < 2:
-            raise VenueCandidateError(f"{paper_id} requires at least two venue candidates")
+        if not isinstance(candidates, list) or not candidates:
+            raise VenueCandidateError(f"{paper_id} requires at least one selected venue candidate")
         selected_count = sum(
             1 for item in candidates
             if isinstance(item, dict) and item.get("selection_status") == "selected"
@@ -201,18 +204,12 @@ def build_registry(
             if not isinstance(item, dict):
                 raise VenueCandidateError(f"{paper_id} candidate must be an object")
             row = match_row(item, export)
-            if not meets_target(row["quartile"], target_quartile) or row["impact_factor"] <= 1 or row["indexing"] not in {"SCI", "SCIE"}:
-                raise VenueCandidateError(f"{row['name']} does not meet the JCR {target_quartile}, IF > 1 and SCI/SCIE paper target")
-            if row["jcr_year"] not in current_years:
-                raise VenueCandidateError(f"{row['name']} JCR year is stale")
             status = item.get("selection_status", "candidate")
             if status not in {"candidate", "selected", "fallback"}:
                 raise VenueCandidateError("selection_status must be candidate, selected or fallback")
-            try:
-                fit_score = float(item.get("fit_score"))
-            except (TypeError, ValueError) as exc:
-                raise VenueCandidateError("fit_score must be numeric") from exc
-            if not 0 <= fit_score <= 100:
+            fit_score = item.get("fit_score")
+            if fit_score is not None and (isinstance(fit_score, bool) or not isinstance(fit_score, (int, float))
+                    or not math.isfinite(fit_score) or not 0 <= fit_score <= 100):
                 raise VenueCandidateError("fit_score must be between 0 and 100")
             for key in ("article_type", "scope_fit"):
                 if not isinstance(item.get(key), str) or not item[key].strip():
@@ -230,23 +227,16 @@ def build_registry(
                     "fit_score": fit_score,
                     "selection_status": status,
                     "source_row_sha256": row["source_row_sha256"],
+                    "planning_observations": (["JCR year is historical"] if row["jcr_year"] not in current_years else []) +
+                        (["Outside the optional quartile preference"] if not meets_target(row["quartile"], target_quartile) else []),
                 }
             )
-        normalized_candidates.sort(key=lambda item: (-item["fit_score"], item["name"].casefold()))
+        normalized_candidates.sort(key=lambda item: (item["fit_score"] is None, -(item["fit_score"] or 0), item["name"].casefold()))
         for rank, candidate in enumerate(normalized_candidates, 1):
             candidate["rank"] = rank
         selected = next((item["venue_id"] for item in normalized_candidates if item["selection_status"] == "selected"), None)
         paper_values.append({"paper_id": paper_id, "target_jcr_quartile": target_quartile, "selected_venue_id": selected, "candidates": normalized_candidates})
     expected = {path.name for path in (project / "papers").glob("P[0-9][0-9]") if path.is_dir()}
-    if seen_papers != expected:
-        raise VenueCandidateError("candidate specification must cover every project paper exactly once")
-    try:
-        from scripts.venue_policy import validate_portfolio
-    except ImportError:
-        from venue_policy import validate_portfolio
-    portfolio_errors = validate_portfolio(paper_values, expected_count=len(expected))
-    if portfolio_errors:
-        raise VenueCandidateError("; ".join(portfolio_errors))
     return {
         "schema_version": "1.0",
         "generated_at": now(),
@@ -330,8 +320,8 @@ def validate_registry(project: Path, value: dict[str, Any]) -> list[str]:
                     f"{paper_id} target_jcr_quartile differs from paper-contract.json"
                 )
         candidates = paper.get("candidates")
-        if not isinstance(candidates, list) or len(candidates) < 2:
-            errors.append(f"{paper_id} requires at least two candidates")
+        if not isinstance(candidates, list) or not candidates:
+            errors.append(f"{paper_id} requires at least one candidate")
             continue
         selected = [item for item in candidates if isinstance(item, dict) and item.get("selection_status") == "selected"]
         if len(selected) > 1:
@@ -358,9 +348,9 @@ def validate_registry(project: Path, value: dict[str, Any]) -> list[str]:
             if status not in {"candidate", "selected", "fallback"}:
                 errors.append(f"{paper_id} candidate {rank}.selection_status is invalid")
             score = candidate.get("fit_score")
-            if not isinstance(score, (int, float)) or isinstance(score, bool) or not 0 <= score <= 100:
+            if score is not None and (not isinstance(score, (int, float)) or isinstance(score, bool) or not math.isfinite(score) or not 0 <= score <= 100):
                 errors.append(f"{paper_id} candidate {rank}.fit_score must be between 0 and 100")
-            else:
+            elif score is not None:
                 ranked_scores.append(float(score))
             for key in ("article_type", "scope_fit"):
                 if not isinstance(candidate.get(key), str) or not candidate[key].strip():
@@ -372,22 +362,11 @@ def validate_registry(project: Path, value: dict[str, Any]) -> list[str]:
             for key in ("name", "issn", "category", "quartile", "impact_factor", "indexing", "jcr_year"):
                 if candidate.get(key) != row.get(key):
                     errors.append(f"{paper_id} candidate {rank}.{key} differs from the JCR export")
-            if not meets_target(row["quartile"], target_quartile) or row["impact_factor"] <= 1 or row["indexing"] not in {"SCI", "SCIE"}:
-                errors.append(f"{paper_id} candidate {rank} fails the venue floor")
-            if row["jcr_year"] not in {date.today().year, date.today().year - 1}:
-                errors.append(f"{paper_id} candidate {rank} JCR year is stale")
             for key in ("jcr_source_url", "official_guidelines_url", "policy_source_url"):
                 if not str(candidate.get(key, "")).startswith("https://"):
                     errors.append(f"{paper_id} candidate {rank}.{key} must use HTTPS")
         if ranked_scores != sorted(ranked_scores, reverse=True):
             errors.append(f"{paper_id} candidates are not ranked by descending fit_score")
-    if seen != expected:
-        errors.append("venue registry must cover every project paper exactly once")
-    try:
-        from scripts.venue_policy import validate_portfolio
-    except ImportError:
-        from venue_policy import validate_portfolio
-    errors.extend(validate_portfolio([item for item in paper_values if isinstance(item, dict)], expected_count=len(expected)))
     return errors
 
 

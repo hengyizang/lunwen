@@ -120,7 +120,8 @@ def check_mapping(project: Path, paper_id: str, evidence: dict, mapping: dict, *
                     scale = location.get("display_scale", 1)
                     if scale != 1 and not (field == "ci_confidence" and scale == 100):
                         raise ValueError("only confidence probability to percentage conversion is supported")
-                    if not re.search(r"(?<![\w.])" + re.escape(display_value(actual[field] * scale, decimals)) + r"(?!\w|\.\d)", quote):
+                    from scripts.scientific_numbers import number_in_text
+                    if not number_in_text(quote, display_value(actual[field] * scale, decimals)):
                         raise ValueError("displayed number differs from the actual evidence at the declared precision")
                 elif location.get("value") != actual[field]:
                     raise ValueError("method, unit, phase or decision differs from the evidence record")

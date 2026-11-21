@@ -190,10 +190,16 @@ class SubmissionPackageTests(unittest.TestCase):
                 else:
                     implementation = Path(packaging.__file__)
                 implementation_bytes = implementation.read_bytes()
+                original_sha = packaging.file_sha256
+                changed_implementation = False
+                def checked_sha(path):
+                    if changed_implementation and Path(path) == implementation:
+                        return hashlib.sha256(implementation_bytes + b" changed implementation fixture").hexdigest()
+                    return original_sha(path)
                 fired = False
 
                 def mutate(archive, *args, **kwargs):
-                    nonlocal fired
+                    nonlocal fired, changed_implementation
                     result = actual_write(archive, *args, **kwargs)
                     if not fired:
                         fired = True
@@ -205,7 +211,7 @@ class SubmissionPackageTests(unittest.TestCase):
                             output_provenance.record_model_writes(project, [source], family="anthropic",
                                 provider="fixture", model="fixture", role="writer", run_id="changed")
                         elif mutation.endswith("implementation"):
-                            implementation.write_bytes(implementation_bytes + b"\n# Changed implementation fixture.\n")
+                            changed_implementation = True
                         else:
                             raise KeyboardInterrupt("interrupted ZIP software fixture")
                     return result
@@ -215,7 +221,7 @@ class SubmissionPackageTests(unittest.TestCase):
                             patch("scripts.manuscript_audit.validate_saved_report", return_value=[]):
                         destination = build_package("demo-study", "P01", root / "previous.zip")
                         old_zip, old_names = destination.read_bytes(), set(root.iterdir())
-                        with patch.object(zipfile.ZipFile, "writestr", mutate):
+                        with patch.object(zipfile.ZipFile, "writestr", mutate), patch.object(packaging, "file_sha256", side_effect=checked_sha):
                             expected = KeyboardInterrupt if mutation == "interrupt" else researchctl.ResearchCtlError
                             with self.assertRaises(expected):
                                 build_package("demo-study", "P01", destination)
@@ -223,9 +229,9 @@ class SubmissionPackageTests(unittest.TestCase):
                         self.assertEqual(destination.read_bytes(), old_zip)
                         self.assertEqual(set(root.iterdir()), old_names)
                 finally:
-                    implementation.write_bytes(implementation_bytes)
+                    self.assertEqual(implementation.read_bytes(), implementation_bytes)
 
-    def test_final_binding_includes_protected_panel_outside_the_paper_tree(self):
+    def test_optional_panel_history_does_not_become_a_final_export_prerequisite(self):
         from scripts import submission_package as packaging, review_panel, model_runtime, ai_providers
         from tests.test_review_panel import panel_inputs
         def response(project, **kwargs):
@@ -244,15 +250,16 @@ class SubmissionPackageTests(unittest.TestCase):
             latest=project/review_panel.PREFIX/"P01/latest.json"
             saved=latest.read_bytes()
             latest.unlink()
-            self.assertNotEqual(original,packaging.submission_check_binding(project,"P01"))
+            self.assertEqual(original,packaging.submission_check_binding(project,"P01"))
             latest.write_bytes(saved)
             records=review_panel.responses(project,"P01")
             response_path=project/records[0]["receipt"]["response"]["path"]
             response_path.write_text(response_path.read_text()+" ")
-            with self.assertRaisesRegex(ValueError,"changed|provenance"):
-                packaging.submission_check_binding(project,"P01")
+            self.assertEqual(original,packaging.submission_check_binding(project,"P01"))
+            with self.assertRaisesRegex(ValueError, "changed|provenance"):
+                review_panel.responses(project, "P01")
 
-    def test_final_checks_reuse_the_existing_g5_binding_and_detect_changed_external_source(self):
+    def test_final_checks_inspect_current_materials_without_reusing_g5_approval(self):
         from scripts import submission_package as packaging
         from scripts.research_artifacts import read,write,sha
         with tempfile.TemporaryDirectory() as directory:
@@ -275,11 +282,12 @@ class SubmissionPackageTests(unittest.TestCase):
                 write(project/"state/run.json",state)
                 build_package("demo-study","P01",root/"first.zip")
                 build_package("demo-study","P01",root/"second.zip")
-                self.assertEqual(checked.call_count,1)
+                self.assertEqual(checked.call_count,3)
                 source.write_text("Changed actual official-source bytes.",encoding="utf-8")
-                with self.assertRaisesRegex(researchctl.ResearchCtlError,"submission inputs changed|Paper changed after"):
+                checked.return_value = ["Actual selected journal source hash changed"]
+                with self.assertRaisesRegex(researchctl.ResearchCtlError,"journal source hash changed"):
                     build_package("demo-study","P01",root/"changed.zip")
-                self.assertEqual(checked.call_count,1)
+                self.assertEqual(checked.call_count,4)
 
     def test_submission_check_rejects_legacy_silent_tool_skip_without_fixed_age_expiry(self):
         from scripts.submission_package import submission_checks
@@ -340,6 +348,7 @@ class SubmissionPackageTests(unittest.TestCase):
             "reviews/round-1.md": "review one",
             "reviews/round-2.md": "review two",
             "submission-materials/cover-letter.md": "Dear editor",
+            "submission-files.json": json.dumps({"files": ["submission-materials/cover-letter.md"]}),
             "jcr-verification.json": json.dumps({"schema_version":"1.0","database":"Clarivate Journal Citation Reports","verification_year":datetime.now(timezone.utc).year,"impact_factor":2.5,"quartile":"Q1","category":"Engineering, Mechanical","indexing":"SCIE","source_url":"https://example.org/jcr","verified_by":"Human","verified_at":datetime.now(timezone.utc).isoformat()}),
         }
         for relative, content in fixtures.items():
@@ -387,35 +396,9 @@ class SubmissionPackageTests(unittest.TestCase):
         (project / "data" / "raw" / "private.csv").write_text("secret", encoding="utf-8")
         final_files=[paper/"manuscript"/"main.tex",paper/"manuscript"/"references.bib",paper/"submission-materials"/"cover-letter.md"]
         output_provenance.record_model_writes(project,final_files,family="openai",provider="codex",model="test",role="persistent-writer",run_id="test")
-        # Supply the new mechanical controls with explicit synthetic provenance.
-        # This fixture demonstrates packaging, not a scientifically valid paper.
-        from scripts import incremental_writing, research_increments
-        from scripts.research_artifacts import write, sha
         evidence = project / "evidence/fixture.txt"
         evidence.parent.mkdir(parents=True, exist_ok=True)
         evidence.write_text("Synthetic bounded packaging fixture.", encoding="utf-8")
-        anchor = {"path": "evidence/fixture.txt", "sha256": sha(evidence), "kind": "source_lines",
-                  "start_line": 1, "end_line": 1, "quote": evidence.read_text(encoding="utf-8")}
-        write(paper / "reviews/paper-facts.json", {"facts": [{"id": "FIXTURE", "statement": "Synthetic fixture"}]})
-        increments = research_increments.initialize(project)
-        units = incremental_writing.inventory(project, "P01")["units"]
-        argument = {"id": "PACKAGING", "paper_id": "P01", "precedence": [], "paragraphs": [
-            {"paragraph_id": "PAR" + str(index), "section": "Introduction", "function": "context",
-             "purpose": "Exercise packaging fixture coverage", "claim_ids": ["FIXTURE"],
-             "takeaway": "The synthetic fixture exercises deterministic packaging coverage.",
-             "warrant": "The bounded fixture establishes packaging behavior only and no scientific conclusion.",
-             "reasoning_status": "ready_for_scientific_review", "material_needs": [],
-             "inference_boundary": "Synthetic engineering fixture only", "transition": "Fixture continuation",
-             "units": [{"unit_id": unit["unit_id"], "sha256": unit["sha256"]}]}
-            for index, unit in enumerate(units, 1)]}
-        increments["arguments"] = [argument]
-        increments["lineage"] = [{"id": "PACKAGING", "paper_id": "P01", "nodes": [
-            {"id": "SOURCE", "kind": "primary_finding", "research_state": "unknown", "read_scope": "excerpt",
-             "statement": "Synthetic packaging source", "boundary": "Not scientific evidence",
-             "parents": [], "evidence": [anchor]}], "fact_links": [{"fact_id": "FIXTURE", "node_id": "SOURCE"}]}]
-        write(project / research_increments.PLAN, increments)
-        incremental_writing.freeze_plan(project, argument, phase="before_writer")
-        research_increments.refresh(project)
         from scripts.manuscript_hygiene import refresh as refresh_hygiene
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             refresh_hygiene(project, "P01")
@@ -479,12 +462,12 @@ class SubmissionPackageTests(unittest.TestCase):
             project = self.make_project(root)
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
-            ), patch("scripts.manuscript_audit.validate_saved_report", return_value=[]) as validate_manuscript:
+            ), patch.object(researchctl, "paper_scientific_errors", return_value=[]) as validate_manuscript:
                 # Isolate ZIP assembly; real scientific rejection is tested below.
                 first = build_package("demo-study", "P01", root / "first.zip")
                 second = build_package("demo-study", "P01", root / "second.zip")
                 self.assertEqual(validate_manuscript.call_count, 2)
-                validate_manuscript.assert_called_with(project / "papers/P01")
+                validate_manuscript.assert_called_with(project, "P01")
             self.assertEqual(hashlib.sha256(first.read_bytes()).hexdigest(), hashlib.sha256(second.read_bytes()).hexdigest())
             with zipfile.ZipFile(first) as archive:
                 names = set(archive.namelist())
@@ -497,9 +480,7 @@ class SubmissionPackageTests(unittest.TestCase):
                 self.assertFalse(any("manuscript-hygiene" in name or "original.tex" in name for name in names))
                 manifest = json.loads(archive.read("SUBMISSION-MANIFEST.json"))
                 self.assertEqual(manifest["submission_mode"], "manual_only")
-                self.assertFalse(
-                    manifest["output_policy"]["anthropic_final_outputs_allowed"]
-                )
+                self.assertNotIn("anthropic_final_outputs_allowed", manifest["output_policy"])
 
     def test_observation_refresh_keeps_current_g5_package_but_new_citation_needs_full_text(self):
         from scripts.research_artifacts import read, write
@@ -523,26 +504,30 @@ class SubmissionPackageTests(unittest.TestCase):
                 build_package("demo-study", "P01", root / "observations.zip")
                 manuscript = paper / "manuscript/main.tex"
                 manuscript.write_text(manuscript.read_text().replace(r"\end{document}",
-                    r"An unsupported source claim.\cite{x}\end{document}"), encoding="utf-8")
+                    r"An unsupported source claim.\cite{missing}\end{document}"), encoding="utf-8")
                 self.assertNotEqual(researchctl.paper_artifact_hash("demo-study", "P01"), before)
                 # Even an explicitly synthetic reseal cannot bypass the same A
                 # source-support check used by native G5.
                 state = read(project / "state/run.json")
                 state["approvals"][-1]["paper_artifact_sha256"] = researchctl.paper_artifact_hash("demo-study", "P01")
                 write(project / "state/run.json", state)
-                with self.assertRaisesRegex(researchctl.ResearchCtlError, "full-text.*covering cited keys: x"):
+                with self.assertRaisesRegex(researchctl.ResearchCtlError, "missing bibliography keys: missing"):
                     build_package("demo-study", "P01", root / "unsupported.zip")
 
-    def test_package_requires_current_manuscript_contribution_audit(self) -> None:
+    def test_optional_ledger_is_not_required_but_declared_evidence_is_checked(self):
+        from scripts.research_artifacts import write
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            self.make_project(root)
-            with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
-                "scripts.submission_package.project_dir", lambda slug: root / slug
-            ):
-                with self.assertRaisesRegex(researchctl.ResearchCtlError, "paper-facts input and manuscript audit must both exist"):
-                    build_package("demo-study", "P01", root / "blocked.zip")
-            self.assertFalse((root / "blocked.zip").exists())
+            project = self.make_project(root)
+            with patch.object(researchctl, "PROJECTS_ROOT", root), patch("scripts.submission_package.project_dir", return_value=project):
+                self.assertTrue(build_package("demo-study", "P01", root / "without-ledger.zip").is_file())
+                write(project / "papers/P01/reviews/paper-facts.json", {"schema_version": "1.0", "facts": [{
+                    "id": "F1", "statement": "Synthetic source", "source_path": "papers/P01/manuscript/main.tex",
+                    "source_sha256": "0" * 64, "location": "L1", "verbatim_evidence": "This study"}],
+                    "claim_alignment": [], "argument_ledger": [], "measurement": [], "glossary": [], "symbols": []})
+                with self.assertRaisesRegex(researchctl.ResearchCtlError, "source hash changed"):
+                    build_package("demo-study", "P01", root / "changed-evidence.zip")
+            self.assertFalse((root / "changed-evidence.zip").exists())
 
     def test_package_recomputes_hygiene_even_if_an_approval_hash_is_incorrectly_resigned(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -563,28 +548,28 @@ class SubmissionPackageTests(unittest.TestCase):
                 with self.assertRaisesRegex(researchctl.ResearchCtlError, "hygiene audit"):
                     build_package("demo-study", "P01", root / "blocked.zip")
 
-    def test_rejects_paper_before_g5_approval(self) -> None:
+    def test_final_export_uses_current_checks_without_g5_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             self.make_project(root, ready=False)
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
             ):
-                with self.assertRaises(researchctl.ResearchCtlError):
-                    build_package("demo-study", "P01", root / "blocked.zip")
+                self.assertTrue(build_package("demo-study", "P01", root / "current.zip").is_file())
 
     def test_rejects_credential_like_file(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             project = self.make_project(root)
             (project / "papers" / "P01" / "submission-materials" / "portal.key").write_text("x", encoding="utf-8")
+            (project / "papers/P01/submission-files.json").write_text(json.dumps({"files": ["submission-materials/portal.key"]}))
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
             ):
                 with self.assertRaises(researchctl.ResearchCtlError):
                     build_package("demo-study", "P01", root / "blocked.zip")
 
-    def test_rejects_current_anthropic_authored_output(self) -> None:
+    def test_keeps_current_authorship_without_brand_exclusion(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             project = self.make_project(root)
@@ -601,5 +586,8 @@ class SubmissionPackageTests(unittest.TestCase):
             with patch.object(researchctl, "PROJECTS_ROOT", root), patch(
                 "scripts.submission_package.project_dir", lambda slug: root / slug
             ):
-                with self.assertRaises(researchctl.ResearchCtlError):
-                    build_package("demo-study", "P01", root / "blocked.zip")
+                archive = build_package("demo-study", "P01", root / "selected.zip")
+                with zipfile.ZipFile(archive) as saved:
+                    manifest = json.loads(saved.read("SUBMISSION-MANIFEST.json"))
+                origin = next(row for row in manifest["output_policy"]["provenance"] if row["path"].endswith("main.tex"))
+                self.assertEqual(origin["family"], "anthropic")

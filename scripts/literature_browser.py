@@ -139,7 +139,7 @@ def markup(data: dict) -> str:
     return ('<section aria-labelledby="reading-search-title"><h2 id="reading-search-title">Search sources, notes and figures</h2>'
         '<form id="literature-search"><label>Question or keywords <input id="reading-query" maxlength="500" type="search"></label> '
         '<label>Topic <select id="reading-topic"><option value="">All topics</option></select></label> '
-        '<label>Paper <select id="reading-paper"><option value="">All six papers</option></select></label> '
+        '<label>Paper <select id="reading-paper"><option value="">All papers</option></select></label> '
         '<label>Material <select id="reading-kind"><option value="">All materials</option>'
         '<option value="metadata">Discovery metadata only</option><option value="fulltext">Original text and notes</option><option value="card">Reading cards and experiment settings</option>'
         '<option value="figure">Original figure captions</option></select></label> <button type="submit">Search</button></form>'

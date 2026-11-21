@@ -1,37 +1,10 @@
 ---
 name: review
-description: Simulate rigorous peer review, audit statistics and claims, and produce itemized revisions and response matrices.
-argument-hint: <project-slug> <paper-id> [round]
-disable-model-invocation: true
+description: Review scientific claims and prepare useful revisions or responses.
 ---
 
-# Review and revision
+# Review
 
-Use the existing native cycle and preserve independent views:
+Inspect the relevant sources, methods and manuscript. Separate demonstrated problems, verification questions and optional extensions. Identify the claim, evidence and smallest useful remedy; preserve disagreement without model voting. An independent view or existing blind panel is optional for the task, not a fixed stage requirement. For real external reviews, retain original comments and actual responses; distinguish simulated suggestions. Start authorized revisions directly, retain result-changing evidence and avoid a per-comment administrative dossier.
 
-1. Ordinary G1+ research uses planner → writer → one independent critic with method, statistics and contribution perspectives. Administrative G0 intake uses only planner → writer. At final submission use the existing mutually blind domain/editorial/statistics panel with its distinct source views; add no parallel reviewer or paid loop.
-2. Inspect design, leakage, multiplicity, uncertainty, effect sizes, robustness and source-bound calculations without the author’s preferred verdict.
-3. Classify actual findings as fatal, major, minor or editorial. Keep stable issue IDs, evidence locations and evidence-based reasons for accepting or rejecting proposed changes.
-4. For actual response commitments, retain the response matrix, fulfillment status, exact manuscript location and rationale for anything partial or unfulfilled. Revise scientific claims only when evidence supports the change; never polish away a substantive limitation.
-5. A material repair triggers a fresh independent review. A clean observation or editorial preference does not require a second review or compulsory scorecard.
-
-Audit result placement as well as wording. Compare the experiment registry,
-claim-evidence matrix, manuscript and supplement for direction-dependent
-omission or demotion. Block any missing primary outcome, falsification test,
-required baseline, material robustness failure, or result that changes
-interpretation. Accept supplement placement only when predeclared role,
-relevance or statistical adequacy justifies it and the main text cross-references
-it. Do not demand repeated apologetic caveats; require each material limitation
-once in the location where it changes interpretation.
-
-Claude review text is an internal control record only. Codex/OpenAI must independently write all persistent revision text and response materials; never copy sentences from the Claude audit.
-
-Before revision, snapshot the canonical manuscript tree under `reviews/revision-base/`; API cycles do this automatically before the writer changes an existing manuscript. After revision, use `scripts/revision_integrity.py` to check actual numeric, citation and claim-strength drift against source-bound scientific justification. `scripts/revision_trace.py` and the revision ledger describe promised changes as C observations; completeness adds no G5 gate. Independent scientific audits assess whether a changed claim is justified; no model may invent a human authorization. Historical genuine human records remain readable. Public AI-use statements are optional and author-editable. See `docs/RESEARCH-IMPROVEMENTS.md` for the current change-record contract.
-
-Use the existing G5 citation and claim-evidence controls; preserve their actual source-bound reports under the active paper's `reviews/` directory. Abstract or DOI checks alone do not verify claim support. At submission preparation reuse final B venue/package checks only for their unchanged bound snapshot.
-
-Read `references/research-methods/submission-review.md` and the pinned ARS reviewer criteria in `third_party/ars-review/`. The compact native review prompt supplies seven universal questions alongside K-Dense guidance and the exact full question-bank hash/path. Select `submission-review`, `config/pre-submission-criteria.json` or `full-method-review` when the complete article-type bank is relevant. Apply the relevant questions within the existing independent review, recording actual findings with manuscript/evidence locations, uncertainty and resolution tests. The separate categorical checklist scanner/report is retired; preserve historical originals without treating them as current clearance. Do not create a replacement coverage table, total score, acceptance probability or extra paid pass. Review figure alignment/collision observations as well as the exported PDF; observations do not complete visual inspection.
-
-For an actual rebuttal task, `python3 -m scripts.reviewer_rounds` can map original comments into concern cards with stable `comment_id`, evidence need, response stance, action and manuscript location. Preserve source hashes and unfulfilled actions in any generated response package. Concern cards, simulated comments and response completeness are C observations; missing or stale cards do not block G5 or force extra model calls. Actual scientific failures and required final venue response materials retain their applicable A/B checks. Do not automatically truncate a response or invent an experiment.
-
-Preserve rejected suggestions with reasons. A simulated pass does not predict journal acceptance.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

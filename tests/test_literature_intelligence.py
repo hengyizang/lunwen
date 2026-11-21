@@ -87,7 +87,7 @@ class LiteratureIntelligenceTests(unittest.TestCase):
              patch.object(evidence, "utc_now", return_value="2026-10-21T00:00:00+00:00"):
             project = self.project(Path(directory))
             first = intelligence.discover(project, fetcher=self.fetch)
-            self.assertEqual(first["scope_status"], "proposed_requires_G1_review")
+            self.assertEqual(first["scope_status"], "exploratory_question")
             self.assertEqual(first["metadata_requests"], 1)
             self.assertFalse(first["gate_approved"])
             self.assertFalse(first["topic_leads"][0]["gap_proven"])
@@ -110,17 +110,26 @@ class LiteratureIntelligenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "stale literature receipt"):
                 intelligence.discover(project)
 
-    def test_current_question_cannot_drift_and_local_execution_is_rejected(self):
+    def test_new_questions_can_be_explored_locally_without_rewriting_the_core(self):
         with tempfile.TemporaryDirectory() as directory:
             project = self.project(Path(directory), core={"doctoral_question": "A different approved question"})
-            with patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}), \
-                 patch.object(evidence, "execute_search") as call:
-                with self.assertRaisesRegex(ValueError, "differs from the current doctoral question"):
-                    intelligence.discover(project)
-                call.assert_not_called()
             with patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-                with self.assertRaisesRegex(RuntimeError, "cloud executor"):
-                    intelligence.discover(project)
+                report = intelligence.discover(project, fetcher=self.fetch)
+            self.assertEqual(report["scope_status"], "exploratory_question")
+            self.assertEqual(json.loads((project / "program/core-thesis.json").read_text())["doctoral_question"], "A different approved question")
+
+    def test_unresolved_filter_metadata_is_retained_as_pending_candidate(self):
+        def fetch(url, **kwargs):
+            body = {"data": [{"paperId": "pending", "title": "Robust machinery prediction", "authors": [{"name": "A Researcher"}]}]}
+            return json.dumps(body).encode(), url, 200, "application/json"
+        with tempfile.TemporaryDirectory() as directory:
+            project = self.project(Path(directory), {"searches": [{"provider": "semantic-scholar", "query": "robust machinery", "date_range": "2025", "limit": 10}]})
+            report = intelligence.discover(project, fetcher=fetch)
+            self.assertEqual(len(report["candidates"]), 1)
+            candidate = report["candidates"][0]
+            self.assertEqual(candidate["filter_status"], "pending_metadata")
+            self.assertTrue(candidate["unresolved_conditions"])
+            self.assertTrue(candidate["source_refs"][0]["locator"].startswith("filter_audit.unresolved"))
 
     def test_conference_enrichment_rejects_title_only_match_and_records_missing_identity(self):
         def fetch(url, **_kwargs):
@@ -258,7 +267,9 @@ class LiteratureIntelligenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch.dict("os.environ", {"DR_OS_CLOUD_EXECUTOR": "1"}):
             project = self.project(Path(directory), {"searches": [], "conferences": [{"venue": "conf/aaai", "year": 2025, "enrich_limit": 0}]})
             result = intelligence.discover(project, fetcher=fetch)
-            self.assertEqual([row["doi"] for row in result["candidates"]], ["10.1000/one"])
+            self.assertEqual({row["doi"] for row in result["candidates"]}, {"10.1000/one", "10.1000/missing-venue"})
+            pending = next(row for row in result["candidates"] if row["doi"] == "10.1000/missing-venue")
+            self.assertEqual(pending["filter_status"], "pending_metadata")
             self.assertEqual(result["metadata_requests"], 2)
             self.assertEqual(result["conference_sources"][0]["provider"], "crossref")
             self.assertTrue(result["conference_sources"][0]["database_not_dblp"])

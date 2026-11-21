@@ -31,13 +31,14 @@ class CCFAContextIsolationTests(unittest.TestCase):
         self.text("program/core-thesis.json", {"doctoral_question": "One doctoral question"})
         for exclude in (False, True):
             with patch.object(api, "ROOT", self.root):
-                snapshot = api.project_snapshot("demo", stage="topic-intelligence", exclude_reviews=exclude)
+                snapshot = api.project_snapshot("demo", stage="topic-intelligence", exclude_reviews=exclude,
+                    source_paths=["evidence/contrary.md", "program/core-thesis.json"])
             self.assertNotIn("PREFERRED_VERDICT", snapshot)
             self.assertNotIn("OLD_CRITIC_FINDINGS", snapshot)
             self.assertNotIn("PUBLIC_REVIEW_ANSWER_KEY_AND_MODEL_JUDGMENTS", snapshot)
             self.assertNotIn("AUXILIARY_INVOCATION_INSTRUCTIONS", snapshot)
             self.assertIn("MATERIAL_NEGATIVE_EVIDENCE", snapshot)
-            self.assertIn("authorized_ceiling_cny", snapshot)
+            self.assertNotIn("authorized_ceiling_cny", snapshot)
             self.assertIn("One doctoral question", snapshot)
 
     def test_independent_snapshot_excludes_underscore_review_namespace(self):
@@ -45,9 +46,11 @@ class CCFAContextIsolationTests(unittest.TestCase):
         self.text("reports/ccfa-science/novelty_watch/P01.json", "SOURCE_BOUND_WATCH_LIMITATIONS")
         self.text("reports/ccfa-science/exemplar/P01.json", "ATTRIBUTED_WRITING_MOVES")
         self.text("papers/P01/manuscript/main.tex", "CURRENT_MANUSCRIPT")
+        selected = ["reports/ccfa-science/internal_review/P01.json", "reports/ccfa-science/exemplar/P01.json",
+                    "reports/ccfa-science/novelty_watch/P01.json", "papers/P01/manuscript/main.tex"]
         with patch.object(api, "ROOT", self.root):
-            independent = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=True)
-            ordinary = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=False)
+            independent = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=True, source_paths=selected)
+            ordinary = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=False, source_paths=selected)
         self.assertNotIn("HISTORICAL_REVIEW_PREFERRED_OUTCOME", independent)
         self.assertIn("HISTORICAL_REVIEW_PREFERRED_OUTCOME", ordinary)
         for source in ("SOURCE_BOUND_WATCH_LIMITATIONS", "ATTRIBUTED_WRITING_MOVES", "CURRENT_MANUSCRIPT"):

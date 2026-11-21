@@ -178,9 +178,6 @@ def venue_fit_context(project: Path, paper_id: str) -> str:
 
 def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = "", project: Path | None = None) -> str:
     """Current-task core plus explicitly selected, intact source guidance."""
-    issues = installation_errors(root)
-    if issues:
-        raise ValueError("; ".join(issues))
     from scripts import ccfa_runtime
     from scripts.research_phase import disposition_stage, stage_rules
     selected = disposition_stage(project, stage) if project is not None else stage
@@ -203,8 +200,14 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
         if stage not in module["stages"] or (selected == "scientific-writing" and module["id"] == "submission-review"):
             continue
         if module["id"] in context or module["path"] in context or "full-method-review" in context:
+            path = safe_path(root, module["path"])
+            if not path.is_file() or pinned_text_sha256(path) != module["sha256"]:
+                raise ValueError("missing or modified adapted method: " + module["id"])
+            lock = json.loads((root / "integrations/upstreams.lock.json").read_text(encoding="utf-8"))
+            if not set(module["source_ids"]) <= {row["id"] for row in lock["sources"]}:
+                raise ValueError("unknown adapted-method source: " + module["id"])
             blocks.append(f"Reviewed method {module['id']} (SHA-256 {module['sha256']}):\n"
-                          + safe_path(root, module["path"]).read_text(encoding="utf-8"))
+                          + path.read_text(encoding="utf-8"))
         else:
             available.append({key: module[key] for key in ("id", "path", "sha256")})
     if available:
@@ -225,7 +228,7 @@ def stage_context(stage: str, role: str, root: Path = ROOT, *, context: str = ""
                 "version, failed_attempt_ids and diagnostic_evidence; prior_outcomes_seen=true, observed_prior_results=true, "
                 "new_analysis_phase=exploratory, failure_category=implementation_failure|infrastructure_failure and a substantive reason. "
                 "Never rewrite frozen inputs, rerun successes, hide failures or grant spending. A passing diagnosis only permits "
-                "the checked return to G3, retaining all evidence and costs; it cannot pass G4 or verify a claim.")
+                "a new protocol version, retaining all evidence and costs; it does not verify a claim.")
     if stage == "writing-and-review" and project is not None:
         state_path = project / "state/run.json"
         state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.is_file() else {}

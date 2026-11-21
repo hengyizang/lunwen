@@ -57,41 +57,35 @@ class RealWorkProfileTests(unittest.TestCase):
         (program / "topic-decision.md").write_text(
             "# Decision\n\nOwner chose C1 after reviewing all three candidates.\n", encoding="utf-8")
 
-    def test_full_protocol_is_default(self) -> None:
-        with patch.dict(os.environ, {"DR_OS_WORK_PROFILE": ""}):
-            self.assertFalse(real_work.profile_enabled("G1"))
+    def test_research_first_is_the_single_default_without_an_optin(self):
+        with patch.dict(os.environ,{"DR_OS_WORK_PROFILE":""}):
+            self.assertTrue(real_work.profile_enabled("G1"))
+            self.assertTrue(real_work.profile_enabled("G5"))
 
-    def test_minimal_profile_only_blocks_three_hard_checks(self) -> None:
+    def test_legacy_diagnostics_cannot_be_bypassed_by_three_empty_candidates(self):
         self._write_full_g1_material()
-        with patch.dict(os.environ, {"DR_OS_WORK_PROFILE": "minimal"}):
-            warnings: list[str] = []
-            errors = researchctl.gate_errors("p", "G1", warnings=warnings)
-        self.assertEqual(errors, [])
-        self.assertTrue(any("non-blocking" in item for item in warnings))
+        with patch.dict(os.environ,{"DR_OS_WORK_PROFILE":"minimal"}),patch.object(researchctl,"_full_gate_errors",return_value=["actual source issue"]) as check:
+            self.assertEqual(researchctl.gate_errors("p","G1"),["actual source issue"])
+        check.assert_called_once()
 
-    def test_minimal_profile_still_blocks_missing_owner_input(self) -> None:
-        with patch.dict(os.environ, {"DR_OS_WORK_PROFILE": "minimal"}):
-            errors = researchctl.gate_errors("p", "G1")
-        self.assertEqual(len(errors), 3)
-        self.assertTrue(all("minimal G1 requires" in item for item in errors))
+    def test_missing_topic_templates_do_not_create_a_minimal_gate(self):
+        with patch.dict(os.environ,{"DR_OS_WORK_PROFILE":"minimal"}),patch.object(researchctl,"_full_gate_errors",return_value=["legacy diagnostic"]):
+            self.assertEqual(researchctl.gate_errors("p","G1"),["legacy diagnostic"])
 
-    def test_other_gates_keep_the_full_protocol(self) -> None:
-        with patch.dict(os.environ, {"DR_OS_WORK_PROFILE": "minimal"}):
-            self.assertFalse(real_work.profile_enabled("G5"))
+    def test_prepare_decision_does_not_reintroduce_fixed_human_forms(self):
+        self._write_full_g1_material()
+        real_work.cmd_prepare_decision(argparse.Namespace(project="p"))
+        text=(self.root/"projects/p/reports/G1-DECISION-SHEET.md").read_text()
+        self.assertNotIn("three fields only you",text)
+        self.assertNotIn("quality-G1.json",text)
+        self.assertIn("autopilot resume",text)
 
-    def test_bootstrap_writes_no_scientific_content(self) -> None:
-        args = argparse.Namespace(project="p", force=False)
-        self.assertEqual(real_work.cmd_bootstrap_g1(args), 0)
-        program = self.root / "projects" / "p" / "program"
-        shortlist = json.loads((program / "topic-shortlist.json").read_text(encoding="utf-8"))
-        self.assertEqual(len(shortlist["candidates"]), 3)
-        for candidate in shortlist["candidates"]:
-            self.assertEqual(candidate["title"], "")
-            self.assertEqual(candidate["owner_rationale"], "")
-            self.assertEqual(candidate["status"], real_work.PLACEHOLDER)
-        self.assertIn(real_work.PLACEHOLDER, (program / "topic-decision.md").read_text(encoding="utf-8"))
-        core = json.loads((program / "core-thesis.json").read_text(encoding="utf-8"))
-        self.assertEqual(core["doctoral_question"], "")
+    def test_bootstrap_writes_no_candidate_quota_or_scientific_content(self):
+        self.assertEqual(real_work.cmd_bootstrap_g1(argparse.Namespace(project="p",force=False)),0)
+        program=self.root/"projects/p/program"
+        self.assertEqual(json.loads((program/"topic-shortlist.json").read_text())["candidates"],[])
+        self.assertEqual(json.loads((program/"core-thesis.json").read_text())["doctoral_question"],"")
+        self.assertIn(real_work.PLACEHOLDER,(program/"topic-decision.md").read_text())
 
     def test_bootstrap_does_not_overwrite_existing_material(self) -> None:
         self._write_full_g1_material()

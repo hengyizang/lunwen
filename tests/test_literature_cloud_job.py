@@ -151,7 +151,7 @@ class LiteratureCloudJobTests(unittest.TestCase):
         with self.mocked_job() as mocks:
             self.assertEqual(cloud_job.run_job(request(), "501"), 0)
             mocks.restore.assert_called_once_with("my-phd")
-            mocks.acquire.assert_called_once_with(self.project)
+            mocks.acquire.assert_not_called()
             mocks.execute.assert_called_once_with(self.project, {"action": "literature_workbench"})
             mocks.checkpoint.assert_called_once()
             mocks.persist.assert_called_once()

@@ -1,8 +1,6 @@
-"""Evaluate owner-confirmed continuous work without granting gates or spending.
+"""Continue selected research under an existing owner policy and total budget.
 
-One serialized cloud job runs one bounded API cycle. Successful work can request
-the next job; cron only supplies recovery wakeups. Every job re-reads the project,
-the original owner confirmation, exact constraints and the cumulative ledger.
+Historical gate records remain readable; they are not permission to do the next task.
 """
 from __future__ import annotations
 
@@ -54,9 +52,11 @@ def task_profile(project: Path, stage: str) -> dict[str, Any] | None:
     try:
         value = strict_json(path.read_text(encoding="utf-8"), duplicate_error="duplicate task routing profile property")
         if (not isinstance(value, dict) or set(value) != {"schema_version", "stage", "task_profile"}
-                or value["schema_version"] != "1.0" or value["stage"] != stage
+                or value["schema_version"] != "1.0"
                 or not isinstance(value["task_profile"], dict)):
-            raise ValueError("profile must bind schema_version 1.0 and the exact current stage")
+            raise ValueError("profile must bind schema_version 1.0 and a task profile")
+        if value["stage"] != stage:
+            return None  # An unrelated historical task classification cannot block new work.
         from scripts import dynamic_routing
         return dynamic_routing.validate_profile(value["task_profile"], stage=stage,
                                                 role="persistent-writer")
@@ -70,8 +70,8 @@ def set_task_profile(project: Path, stage: str, profile: dict, *, actor: str, ru
     from scripts import dynamic_routing, output_provenance
     from scripts.research_artifacts import path_in, write
     state = _object(path_in(project, "state/run.json"))
-    if stage != state.get("stage"):
-        raise ContinuationError("routing profile must bind the current persisted stage")
+    if stage not in {row["name"] for row in researchctl.STAGES[:-1]}:
+        raise ContinuationError("routing profile needs a supported task context")
     if not isinstance(profile, dict):
         raise ContinuationError("routing task profile must be a JSON object")
     normalized = dynamic_routing.validate_profile(profile, stage=stage, role="persistent-writer")
@@ -111,40 +111,54 @@ def _object(path: Path) -> dict[str, Any]:
     return value
 
 
-def configuration_errors(environment: Mapping[str, str]) -> list[str]:
-    """Use the same resolver as transport; return labels without secret values."""
-    if environment.get("DR_OS_ROUTING_PROFILE") == "production":
-        from scripts.production_readiness import report
-        return report(environment)["configuration_errors"]
-    errors: list[str] = []
-    providers = [ai_providers.configuration(provider, environment)
-                 for provider in ("uuapi-openai", "uuapi-anthropic")]
-    for provider in providers:
-        if provider["configuration_error"]:
-            errors.append(provider["configuration_error"])
-        if not provider["strict_model_id"]:
-            errors.append("cloud execution requires UUAPI_STRICT_MODEL_ID=true")
-    models = [provider["model"] for provider in providers]
-    if all(models) and models[0] == models[1]:
-        errors.append("author and critic must use distinct exact model IDs")
-    if not environment.get("DR_OS_MODEL_PRICING_JSON", "").strip():
-        errors.append("missing DR_OS_MODEL_PRICING_JSON")
-    else:
+def task_routes(environment: Mapping[str,str], stage="topic-intelligence", project=None) -> list[dict]:
+    """Resolve only this task's configured roles, without probes or global roster checks."""
+    roles=["persistent-writer"]
+    if project is not None:
+        from scripts.research_cycle import requires_critic
+        if requires_critic(stage,project):roles.append("independent-critic-initial")
+    if environment.get("DR_OS_ROUTING_PROFILE")=="production" or environment.get("DR_OS_ROUTING_CONFIG"):
+        from scripts import model_routing
+        policy,_=model_routing.load_policy(environment)
+        configured=policy["stage_routes"].get(stage,{})
+        return [dict(policy["models"][configured.get(role,policy.get("default_routes",{}).get(role))]) for role in roles]
+    providers=["uuapi-openai"]+(["uuapi-anthropic"] if len(roles)>1 else [])
+    return [{"provider":provider,"model":ai_providers.configuration(provider,environment).get("model")} for provider in providers]
+
+
+def configuration_errors(environment: Mapping[str, str], stage="topic-intelligence", project=None) -> list[str]:
+    """Read exact selected route configuration; catalog availability is diagnostic only."""
+    from scripts import billing_quotes
+    errors=[]
+    try:routes=task_routes(environment,stage,project)
+    except (OSError,ValueError,KeyError,TypeError) as exc:return ["task route configuration is invalid: "+str(exc)]
+    for route in routes:
+        provider,model=route["provider"],route["model"]
+        config=ai_providers.configuration(provider,environment)
+        if not config.get("configured"):
+            errors.append(config.get("configuration_error") or f"model route is not configured: {provider}")
+        if config.get("strict_model_id") is False:errors.append("model response identity checking must remain enabled")
         try:
-            rates = json.loads(environment["DR_OS_MODEL_PRICING_JSON"])
-            if not isinstance(rates, dict):
-                raise ValueError("not an object")
-            for model in models:
-                price = rates.get(model)
-                if not isinstance(price, dict):
-                    raise ValueError("missing exact model price")
-                for key in ("input_per_million", "output_per_million"):
-                    number = price.get(key)
-                    if (not isinstance(number, (int, float)) or isinstance(number, bool)
-                            or not math.isfinite(number) or number <= 0):
-                        raise ValueError("invalid price")
-        except (ValueError, TypeError, KeyError):
-            errors.append("DR_OS_MODEL_PRICING_JSON needs positive finite CNY input/output prices for both exact model IDs")
+            raw=environment.get("DR_OS_MODEL_PRICING_JSON","").strip()
+            if not raw and provider in ai_providers.PRODUCTION_PROVIDERS:
+                raw=(researchctl.ROOT/"config/model-pricing.json").read_text(encoding="utf-8")
+            prices=json.loads(raw or "{}")
+            if not isinstance(prices,dict):raise ValueError("pricing must be an object")
+            endpoint=ai_providers.production_endpoint(provider,model) if provider in ai_providers.PRODUCTION_PROVIDERS else config.get("endpoint","")
+            if "quotes" in prices or "schema_version" in prices:
+                billing_quotes.select(prices,provider,endpoint,model,config.get("billing_identity",{}))
+            else:
+                if provider in ai_providers.PRODUCTION_PROVIDERS:raise ValueError("production billing needs an exact conditional quote")
+                key="|".join((provider,endpoint,str(model)))
+                scoped=any(isinstance(k,str) and "|" in k and k.rsplit("|",1)[-1]==model for k in prices)
+                price=prices.get(key if scoped else model)
+                if not isinstance(price,dict):raise ValueError("missing exact model price")
+                for field in ("input_per_million","output_per_million"):
+                    value=price.get(field)
+                    if type(value) not in (int,float) or not math.isfinite(value) or value<=0:
+                        raise ValueError("prices must be positive finite CNY values")
+        except (OSError,ValueError,TypeError,KeyError):
+            errors.append(f"missing or invalid exact model quote: {provider}/{model}")
     return list(dict.fromkeys(errors))
 
 
@@ -155,14 +169,15 @@ def startup_report(slug: str, environment: Mapping[str, str] | None = None) -> d
     Authentication, balance and real response quality require a later authorized run.
     """
     env = os.environ if environment is None else environment
-    errors = configuration_errors(env)
+    project = researchctl.project_dir(slug)
+    work=researchctl.current_work(slug) if (project/"state/run.json").is_file() else {"stage":"topic-intelligence"}
+    errors = configuration_errors(env,work["stage"],project if project.exists() else None)
+    try:routes=task_routes(env,work["stage"],project if project.exists() else None)
+    except (OSError,ValueError,KeyError,TypeError):routes=[]
     report: dict[str, Any] = {
         "schema_version": "1.0", "project": slug, "paid_calls": 0,
         "configuration_ready": not errors, "configuration_errors": errors,
-        "providers": [ai_providers.configuration(provider, env)
-                      for provider in (tuple(ai_providers.PRODUCTION_PROVIDERS)
-                                       if env.get("DR_OS_ROUTING_PROFILE")=="production"
-                                       else ("uuapi-openai", "uuapi-anthropic"))],
+        "providers": [ai_providers.configuration(row["provider"],env) for row in routes],
         "ready_to_continue": False, "provider_authentication_verified": False,
         "scientific_completion_verified": False,
         "next_action": "Configure missing fields, then rerun the non-billable check.",
@@ -192,125 +207,48 @@ def startup_report(slug: str, environment: Mapping[str, str] | None = None) -> d
         report["next_action"] = ("Run the start mode to begin an authorized cloud cycle. "
                                  "Each request reserves budget before transport; real authentication is not yet verified.")
     elif not errors:
-        report["next_action"] = "Resolve the reported project, human-review or budget blocker; configuration alone does not grant authority."
+        report["next_action"] = "Resolve the reported task input or budget issue; configuration alone does not grant new spending."
     return report
 
 
 def evaluate(slug: str, environment: Mapping[str, str] | None = None) -> dict[str, Any]:
-    project = researchctl.project_dir(slug)
-    env = os.environ if environment is None else environment
-    result: dict[str, Any] = {"project": slug, "should_run": False, "reason": "not_enabled"}
-    if not (project / POLICY).is_file():
-        return result
-    policy = _object(project / POLICY)
-    if (set(policy) != POLICY_FIELDS or policy.get("schema_version") != "1.0"
-            or type(policy.get("enabled")) is not bool):
+    project=researchctl.project_dir(slug);env=os.environ if environment is None else environment
+    result={"project":slug,"should_run":False,"reason":"not_enabled"}
+    if not (project/POLICY).is_file():return result
+    policy=_object(project/POLICY)
+    if set(policy)-POLICY_FIELDS or policy.get("schema_version") not in {"1.0","2.0"} or type(policy.get("enabled")) is not bool:
         raise ContinuationError("invalid owner continuation policy")
-    if not policy["enabled"]:
-        return result
-    if (policy["system_execution_hours_per_day"] != 24 or type(policy["system_execution_hours_per_day"]) is not int
-            or policy["resume_interval_minutes"] != 15 or type(policy["resume_interval_minutes"]) is not int
-            or policy["stop_when"] != "all_papers_submission_ready"):
-        raise ContinuationError("unsupported continuation schedule or stop condition")
-    for field in ("actor", "confirmation_note"):
-        if not isinstance(policy.get(field), str) or not policy[field].strip():
-            raise ContinuationError("a named owner confirmation is required")
+    if not policy["enabled"]:return result
+    if not isinstance(policy.get("actor"),str) or not policy["actor"].strip():
+        raise ContinuationError("continuation needs the recorded owner authorization")
     try:
-        confirmed = datetime.fromisoformat(policy["confirmed_at"])
-        if confirmed.tzinfo is None or confirmed > datetime.now(timezone.utc):
-            raise ValueError("invalid confirmation time")
-    except (TypeError, ValueError):
-        raise ContinuationError("owner confirmation must have a valid past timestamp") from None
-    for field in ("constraints_sha256", "g0_approval_artifact_sha256"):
-        if not isinstance(policy.get(field), str) or not re.fullmatch(r"[a-f0-9]{64}", policy[field]):
-            raise ContinuationError("owner confirmation needs exact input hashes")
-    constraints_path = project / "intake/constraints.json"
-    if not constraints_path.is_file() or _sha(constraints_path) != policy["constraints_sha256"]:
-        return {**result, "reason": "constraints_changed_since_confirmation"}
-    constraints = _object(constraints_path)
-    if (intake_validation.validate_constraints(constraints)
-            or constraints.get("execution_mode") != "cloud_only"
-            or constraints.get("system_execution_hours_per_day") != 24):
-        return {**result, "reason": "invalid_cloud_constraints"}
-    state = researchctl.load_state(slug)
-    approvals = state.get("approvals", [])
-    gates = state.get("approved_gates", [])
-    if (not isinstance(approvals, list) or any(not isinstance(item, dict) for item in approvals)
-            or not isinstance(gates, list) or any(not isinstance(item, str) for item in gates)
-            or type(state.get("stage_index")) is not int):
-        raise ContinuationError("invalid scientific approval records")
-    approved = set(gates)
-    g0 = next((item for item in reversed(approvals) if item.get("gate") == "G0"), None)
-    if state["gate"] == "G0" and not g0:
-        if researchctl.artifact_hash(slug, "G0") != policy["g0_approval_artifact_sha256"]:
-            return {**result, "reason": "g0_confirmation_pending"}
-        result.update({"stage": state["stage"], "gate": "G0", "actor": policy["actor"]})
-        if state["status"] in {"awaiting_work", "awaiting_approval"}:
-            if not researchctl.gate_errors(slug, "G0"):
-                return {**result, "reason": "automatic_gate_ready"}
-            if state["status"] == "awaiting_approval":
-                return {**result, "reason": "automatic_gate_reopen"}
-        return {**result, "reason": "g0_constraints_pending"}
-    if ("G0" not in approved or not g0
-            or (g0.get("actor") != policy["actor"] and not (
-                g0.get("decision_type") == "deterministic"
-                and g0.get("actor") == "deterministic-control-plane"))
-            or g0.get("artifact_sha256") != policy["g0_approval_artifact_sha256"]):
-        return {**result, "reason": "g0_confirmation_pending"}
-    result.update({"stage": state["stage"], "gate": state["gate"], "actor": policy["actor"]})
-    count = state.get("paper_count")
-    if type(count) is not int or not 1 <= count <= 20:
-        raise ContinuationError("invalid paper portfolio size")
-    paper_ids = [f"P{index:02d}" for index in range(1, count + 1)]
-    required = [f"G{index}" for index in range(min(state["stage_index"], 5))]
-    from scripts.paper_execution import enabled, selected
-    independent = enabled(project)
-    paper = selected(project) if independent else None
-    def prior_approved(gate):
-        scoped = independent and gate in {"G3", "G4"}
-        key = f"{gate}:{paper}" if scoped else gate
-        return key in approved and any(item.get("gate") == gate
-            and (not scoped or item.get("paper_id") == paper) for item in approvals)
-    if any(not prior_approved(gate) for gate in required):
-        return {**result, "reason": "prior_human_gate_missing"}
-    if state["gate"] is None:
-        if state["status"] != "submission_ready":
-            return {**result, "reason": "incomplete_paper_portfolio"}
-        for paper_id in paper_ids:
-            approval = next((item for item in reversed(approvals)
-                             if item.get("gate") == "G5" and item.get("paper_id") == paper_id), None)
-            if (state.get("paper_statuses", {}).get(paper_id) != "submission_ready"
-                    or f"G5:{paper_id}" not in approved or not approval
-                    or not approval.get("actor", "").strip()
-                    or approval.get("paper_artifact_sha256") != researchctl.paper_artifact_hash(slug, paper_id)):
-                return {**result, "reason": "incomplete_or_changed_paper_approval"}
-        return {**result, "reason": "all_papers_submission_ready"}
-    if state["status"] == "approved":
-        return {**result, "reason": "approved_gate_ready_to_advance"}
-    if state["status"] == "awaiting_approval":
-        if state["gate"] in {"G1", "G2"}:
-            return {**result, "reason": "human_gate_pending"}
-        return {**result, "reason": "automatic_gate_reopen" if researchctl.gate_errors(slug, state["gate"]) else "automatic_gate_ready"}
-    if not researchctl.gate_errors(slug, state["gate"]):
-        return {**result, "reason": "automatic_gate_ready"}
-    control = model_spend.read(project, required=True)
-    assert control is not None
-    remaining = control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control)
-    result.update({"authorized_ceiling_cny": control["authorized_ceiling_cny"],
-                   "spent_cny": control["spent_cny"], "remaining_cny": round(remaining, 8)})
-    if remaining <= 0:
-        return {**result, "reason": "cumulative_budget_boundary"}
-    errors = configuration_errors(env)
-    if errors:
-        return {**result, "reason": "configuration_pending", "configuration_errors": errors}
-    previous = _object(project / STATUS) if (project / STATUS).is_file() else {}
-    if previous.get("last_cycle_exit_code", 0) != 0:
-        return {**result, "reason": "previous_cycle_failed_requires_inspection"}
+        confirmed=datetime.fromisoformat(policy["confirmed_at"])
+        if confirmed.tzinfo is None or confirmed>datetime.now(timezone.utc):raise ValueError()
+    except (KeyError,TypeError,ValueError):raise ContinuationError("owner confirmation must have a valid past timestamp") from None
+    hours=policy.get("system_execution_hours_per_day",24);interval=policy.get("resume_interval_minutes",15)
+    if type(hours) is not int or not 1<=hours<=24 or type(interval) is not int or not 1<=interval<=1440:
+        raise ContinuationError("continuation schedule is outside its supported bounds")
+    if policy.get("stop_when","manual") not in {"manual","task_complete","all_papers_submission_ready"}:
+        raise ContinuationError("unsupported continuation stop condition")
+    state=researchctl.load_state(slug);work=researchctl.current_work(slug)
+    result.update(stage=work["stage"],gate=work["gate"],paper_id=work["paper_id"],task=work["task"],actor=policy["actor"])
+    if work["status"] in {"paused","stopped","complete"}:
+        return {**result,"reason":"task_"+work["status"]}
+    if policy.get("stop_when")=="all_papers_submission_ready" and state.get("paper_statuses") and all(
+            value=="submission_ready" for value in state["paper_statuses"].values()):
+        return {**result,"reason":"all_papers_submission_ready"}
+    # Intake notes, historical approvals and unrelated papers do not change the
+    # actual cumulative authority. The spending ledger remains its single source.
+    control=model_spend.read(project,required=True)
+    remaining=control["authorized_ceiling_cny"]-control["spent_cny"]-model_spend.reserved(control)
+    result.update(authorized_ceiling_cny=control["authorized_ceiling_cny"],spent_cny=control["spent_cny"],remaining_cny=round(remaining,8))
+    if remaining<=0:return {**result,"reason":"cumulative_budget_boundary"}
+    errors=configuration_errors(env,work["stage"],project)
+    if errors:return {**result,"reason":"configuration_pending","configuration_errors":errors}
     from scripts.cloud_progress import pause_reason
-    pause = pause_reason(slug)
-    if pause:
-        return {**result, **pause}
-    return {**result, "should_run": True, "reason": "current_stage_work_allowed"}
+    pause=pause_reason(slug)
+    if pause:return {**result,**pause}
+    return {**result,"should_run":True,"reason":"current_task_work_allowed"}
 
 
 def checkpoint(slug: str, decision: dict[str, Any], run_id: str,
@@ -389,7 +327,7 @@ def enqueue_followup(path: Path) -> int:
         return subprocess.run(["gh", "api", "--method", "PUT",
                                f"repos/{cloud_job.REPOSITORY}/actions/workflows/research-continuation.yml/disable"],
                               check=False).returncode
-    if value.get("should_run") is not True or value.get("reason") != "current_stage_work_allowed":
+    if value.get("should_run") is not True or value.get("reason") not in {"current_task_work_allowed", "current_stage_work_allowed"}:
         print("Continuation paused: " + str(value.get("reason", "unknown")))
         return 0
     return subprocess.run(["gh", "workflow", "run", "research-continuation.yml", "--ref", "main",

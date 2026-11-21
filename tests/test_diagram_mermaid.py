@@ -59,11 +59,10 @@ class DiagramMermaidTests(unittest.TestCase):
         self.assertIn("&quot;", value)
         self.assertEqual(sum(line.startswith("  n") for line in value.splitlines()), 5)
 
-    def test_export_requires_current_non_claude_ir_and_real_brief(self):
+    def test_export_accepts_current_ir_from_anthropic_and_requires_real_brief(self):
         request = self.export_request()
         self.track(self.project / self.diagram["path"], family="anthropic")
-        with self.assertRaisesRegex(ValueError, "non-Claude"):
-            diagram_mermaid.build(self.project, request)
+        self.assertTrue(diagram_mermaid.build(self.project, request)["mermaid"])
 
     def test_changed_original_method_invalidates_attached_arrow_evidence(self):
         request = self.export_request()

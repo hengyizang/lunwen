@@ -139,8 +139,8 @@ def rank(project: Path, assessment: dict, ledger: dict) -> dict:
     if not 0 < (end - start).days <= 90 or end > date.today() or (date.today() - end).days > 14:
         raise DirectionEvidenceError("use the same recent observation window of at most 90 days")
     candidates = assessment.get("candidates")
-    if not isinstance(candidates, list) or len(candidates) < 3:
-        raise DirectionEvidenceError("compare at least three eligible cloud-feasible directions")
+    if not isinstance(candidates, list) or not candidates:
+        raise DirectionEvidenceError("supply the research direction to assess")
     rows, errors = [], []
     seen_ids = set()
     for item in candidates:
@@ -232,7 +232,7 @@ def rank(project: Path, assessment: dict, ledger: dict) -> dict:
             total = sum(altered.values())
             ranking = sorted(valid, key=lambda r: sum(altered[k] / total * r["scores"][k] for k in FACTORS), reverse=True)
             sensitivity.append({"factor": factor, "multiplier": multiplier, "ranking": [r["id"] for r in ranking]})
-    return {"schema_version": "1.0", "status": "blocked" if errors or len(valid) < 3 else "ready_for_human_review",
+    return {"schema_version": "1.0", "status": "blocked" if errors or not valid else "ready_for_human_review",
             "weights": weights, "window_start": str(start), "window_end": str(end),
             "candidates": sorted(rows, key=lambda r: r.get("weighted_score", -1), reverse=True),
             "errors": errors, "sensitivity": sensitivity, "novelty_is_a_tradeable_score": False,

@@ -1,4 +1,4 @@
-"""Five-role production cycles on temporary fixtures and mocked gateways.
+"""Task-selected production calls on temporary fixtures and mocked gateways.
 
 This exercises real routing, runtime reservations, artifact writes and writer
 provenance. Scientific retrieval/builders are replaced by fixture receipts;
@@ -81,18 +81,13 @@ class ProductionCycleTests(unittest.TestCase):
     def transport(self, provider, prompt, **kwargs):
         spec = ai_providers.PRODUCTION_PROVIDERS[provider]
         model = kwargs["model"]
-        body = self.payloads()[self.index]
-        if self.index in {1, 3}:
-            from tests.research_cycle_fixtures import pending_decision
-            cycle_id = re.search(r'cycle_id="([^"]+)"', prompt).group(1)
-            notebook = pending_decision(self.root/"response-fixture", self.stage, cycle_id, "P01")
-            body["artifacts"].append({"path":"program/research-notebook.json", "content":json.dumps(notebook)})
+        body = self._response_sequence[self.index]
         self.index += 1
         return ai_providers.ModelResult(provider, model, json.dumps(body), {"input_tokens": 100, "output_tokens": 20},
             f"fixture-request-{self.index}", model, spec["protocol"], spec["root"] + spec["path"].format(model=model),
             "fixture-only-gateway", completion_status="completed", requested_effort=kwargs["reasoning_effort"])
 
-    def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True, validation_roster=None):
+    def run_cycle(self, stage="experiment-execution", task_kind=None, task_profile=None, *, routine=True, validation_roster=None, planning=False, review=False, remediate=False, writer_provider=None, critic_provider=None, clean_review=False):
         self.stage = stage
         gate = "G1" if stage == "topic-intelligence" else "G4"
         state = {"stage": stage, "gate": gate, "status": "awaiting_work", "paper_count": 1, "active_paper": "P01"}
@@ -101,128 +96,97 @@ class ProductionCycleTests(unittest.TestCase):
         (self.project / "state" / "run.json").write_text(json.dumps(state), encoding="utf-8")
         (self.project / "intake").mkdir(exist_ok=True)
         (self.project / "intake/constraints.json").write_text(json.dumps({"research_goal":"Synthetic route fixture; no research was conducted."}), encoding="utf-8")
-        if gate == "G4":
-            from tests.review_scope_fixtures import prepare_scope
-            prepare_scope(self.project, state)
+        (self.project / "papers/P01").mkdir(parents=True, exist_ok=True)
+        payloads = self.payloads()
+        if clean_review:
+            payloads[2] = payloads[4]
+        order = ([0] if planning else []) + [1] + ([2] if review else [])
+        if remediate and not clean_review:
+            order += [3, 4]
+        self._response_sequence = [payloads[index] for index in order]
+        self.index = 0
         if task_profile is None and routine:
             task_profile = {"task_class": "routine-implementation", "science_risk": "routine"}
         with (model_routing.g1_transport_validation_route(self.project, "d" * 64, validation_roster=validation_roster)
               if validation_roster else nullcontext()):
-            return api_orchestrator.run_cycle("demo", stage, "anthropic", "openai", "anthropic", "", "",
+            return api_orchestrator.run_cycle("demo", stage, None, writer_provider, critic_provider, "Synthetic task", "",
                 max_output_tokens=300, control_max_output_tokens=100, automatic_data=False, task_kind=task_kind,
-                task_profile=task_profile)
+                task_profile=task_profile, planning=planning, review=review, remediate=remediate)
 
-    def test_explicit_g1_sample_preserves_fresh_source_only_review_and_real_authorship(self):
-        internal = self.project / "api_runs/old/claude-plan.txt"; internal.parent.mkdir(parents=True)
-        internal.write_text("HIDDEN_PLAN_OPINION")
-        old_review = self.project / "reviews/old.json"; old_review.parent.mkdir()
-        old_review.write_text('{"verdict":"HIDDEN_PREFERRED_VERDICT"}')
-        self.critic_prompt.side_effect = self.real_critic_prompt
-        with patch.dict("os.environ", {"DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH": str(time.time() + 3600)}), \
-             patch.object(ai_providers, "call", side_effect=self.transport) as post, \
-             patch.object(model_runtime, "call", wraps=model_runtime.call) as runtime:
-            manifest = self.run_cycle(stage="topic-intelligence", validation_roster="astra-argon", routine=False,
-                task_profile={"task_class": "g1-transport-validation", "science_risk": "critical", "priority": "quality"})
-        self.assertEqual([call.kwargs["model"] for call in post.call_args_list],
-                         ["gpt-6-astra", "gpt-6-astra", "gemini-4-argon", "gpt-6-astra", "gemini-4-argon"])
-        for index in (2, 4):
-            self.assertFalse(runtime.call_args_list[index].kwargs["use_cache"])
-            prompt = post.call_args_list[index].args[1]
-            self.assertIn("Fixture draft" if index == 2 else "Revised fixture", prompt)
-            self.assertNotIn("HIDDEN_PLAN_OPINION", prompt)
-            self.assertNotIn("HIDDEN_PREFERRED_VERDICT", prompt)
-        run = self.project / "api_runs" / manifest["run_id"]
-        self.assertTrue((run / "semantic-plan.json").is_file())
-        self.assertFalse((run / "claude-plan.json").exists())
-        provenance = json.loads((self.project / "state/output-provenance.json").read_text())
-        self.assertEqual(provenance["files"]["program/fixture.md"]["model"], "gpt-6-astra")
-        self.assertEqual(manifest["provider_audit"]["critic_final"]["reported_model"], "gemini-4-argon")
-        self.assertEqual(json.loads((self.project / "state/run.json").read_text())["approved_gates"], ["G0"])
-        self.assertEqual(model_routing.select("topic-intelligence", "semantic-planner")["model"], "claude-opus-5-5")
-
-    def test_real_five_role_cycle_forwards_models_effort_and_fresh_independent_reviews(self):
-        with (patch.object(ai_providers, "call", side_effect=self.transport) as post,
-                patch.object(model_runtime, "call", wraps=model_runtime.call) as runtime):
+    def test_default_cycle_runs_one_writer_and_records_real_spend_and_origin(self):
+        with patch.object(ai_providers, "call", side_effect=self.transport) as post:
             manifest = self.run_cycle()
-        expected = ["claude-sonnet-5-5", "gpt-6.1-sol", "claude-sonnet-5-5", "gpt-6.1-sol", "claude-opus-5-5"]
-        self.assertEqual([call.kwargs["model"] for call in post.call_args_list], expected)
-        self.assertEqual([call.kwargs["reasoning_effort"] for call in post.call_args_list], ["high"] * 5)
-        self.assertEqual([call.kwargs["max_output_tokens"] for call in post.call_args_list], [100, 300, 100, 300, 100])
-        self.assertEqual([call.kwargs["role"] for call in runtime.call_args_list], [
-            "semantic-planner", "persistent-writer", "independent-critic-initial", "persistent-remediator", "independent-critic-final"])
+        self.assertEqual(post.call_count, 1)
+        self.assertEqual([row["role"] for row in manifest["calls"]], ["persistent-writer"])
+        self.assertEqual(manifest["reviews"], [])
+        self.assertFalse(manifest["scientific_completion_verified"])
+        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], .001)
+        self.assertEqual(model_spend.read(self.project)["reservations"], {})
+        provenance=json.loads((self.project/"state/output-provenance.json").read_text())
+        self.assertEqual(provenance["files"]["program/fixture.md"]["model"],"gpt-6.1-sol")
+
+    def test_explicit_plan_review_and_repair_make_five_actual_source_bound_calls(self):
+        with patch.object(ai_providers,"call",side_effect=self.transport) as post, \
+             patch.object(model_runtime,"call",wraps=model_runtime.call) as runtime:
+            manifest=self.run_cycle(planning=True,review=True,remediate=True)
+        self.assertEqual([row.kwargs["role"] for row in runtime.call_args_list],list(model_routing.CYCLE_ROLES))
+        self.assertEqual([row.kwargs["max_output_tokens"] for row in post.call_args_list],[100,300,100,300,100])
         self.assertFalse(runtime.call_args_list[2].kwargs["use_cache"])
         self.assertFalse(runtime.call_args_list[4].kwargs["use_cache"])
-        self.assertEqual(manifest["output_policy"]["persistent_writer_family"], "openai")
+        self.assertEqual(len(manifest["reviews"]),2)
+        self.assertNotEqual(manifest["reviews"][0]["sources"],manifest["reviews"][1]["sources"])
+        provenance=json.loads((self.project/"state/output-provenance.json").read_text())
+        self.assertEqual(provenance["files"]["program/fixture.md"]["role"],"persistent-remediator")
+        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"],.005)
+        self.assertEqual(model_spend.read(self.project)["reservations"],{})
+        self.assertEqual(json.loads((self.project/"state/run.json").read_text())["status"],"awaiting_work")
 
-        self.assertEqual(manifest["provider_audit"]["critic_1"]["requested_model"], "claude-sonnet-5-5")
-        self.assertEqual(manifest["provider_audit"]["critic_final"]["requested_model"], "claude-opus-5-5")
-        self.assertEqual(len(manifest["cost_controls"]["route_preflight"]), 3)
-        provenance = json.loads((self.project / "state/output-provenance.json").read_text())
-        self.assertEqual(provenance["files"]["program/fixture.md"]["family"], "openai")
-        self.assertEqual(provenance["files"]["program/fixture.md"]["role"], "persistent-remediator")
-        self.assertEqual(provenance["files"]["program/fixture.md"]["model"], "gpt-6.1-sol")
-        self.assertEqual(provenance["files"]["program/research-notebook.json"]["family"], "openai")
-        self.assertEqual(manifest["research_decision"]["status"], "independently_observed")
-        reviews = list((self.project / "reviews/independent").glob("*.json"))
-        self.assertEqual(len(reviews), 2)
-        self.assertTrue(any(path.name.endswith("-initial.json") for path in reviews))
-        self.assertTrue(any(path.name.endswith("-final.json") for path in reviews))
-        self.assertAlmostEqual(model_spend.read(self.project)["spent_cny"], 0.005)
-        self.assertEqual(model_spend.read(self.project)["reservations"], {})
-        self.assertEqual(json.loads((self.project / "state/run.json").read_text())["status"], "awaiting_work")
+    def test_same_family_can_write_and_review_without_automatic_repair(self):
+        with patch.object(ai_providers,"call",side_effect=self.transport) as post:
+            manifest=self.run_cycle(review=True,writer_provider="codekey-kiro-enterprise",critic_provider="codekey-kiro-enterprise")
+        self.assertEqual(post.call_count,2)
+        self.assertTrue(all(row["family"]=="anthropic" for row in manifest["actual_routes"].values()))
+        self.assertEqual(manifest["independent_audit"]["verdict"],"revise")
+        self.assertEqual((self.project/"program/fixture.md").read_text(),"Fixture draft without scientific results.")
 
-    def test_failure_controller_runs_only_after_current_independent_audits(self):
-        from scripts import primary_recovery, review_receipts
+    def test_clean_review_does_not_make_an_unused_repair_call(self):
+        with patch.object(ai_providers,"call",side_effect=self.transport) as post:
+            manifest=self.run_cycle(review=True,remediate=True,clean_review=True)
+        self.assertEqual(post.call_count,2)
+        self.assertEqual(len(manifest["reviews"]),1)
+        self.assertNotIn("persistent-remediator",manifest["actual_routes"])
 
-        def withdraw(project, *, run_id):
-            self.assertEqual(self.index, 5)
-            self.assertEqual(review_receipts.validate_gate(project, "G4"), [])
-            pointer = json.loads((project/"state/review-receipts/G4/latest.json").read_text(encoding="utf-8"))
-            final = json.loads((project/pointer["path"]).read_text(encoding="utf-8"))
-            self.assertEqual(final["run_id"], run_id)
-            return {"retired": True, "status": "retired", "paid_calls": 0}
+    def test_task_label_does_not_force_other_models_or_roles(self):
+        with patch.object(ai_providers,"call",side_effect=self.transport) as post:
+            manifest=self.run_cycle(task_kind="core-story")
+        self.assertEqual(post.call_count,1)
+        self.assertEqual(manifest["actual_routes"]["persistent-writer"]["model"],"gpt-6.1-sol")
 
-        with patch.object(ai_providers, "call", side_effect=self.transport), patch.object(
-            primary_recovery, "automatic_retirement", side_effect=withdraw
-        ) as controller:
-            manifest = self.run_cycle()
-        controller.assert_called_once()
-        self.assertTrue(manifest["primary_recovery"]["retired"])
-        self.assertIn("unchanged cumulative budget", manifest["next_action"])
-
-    def test_core_stage_keeps_opus_and_astra_across_all_five_roles(self):
-        with patch.object(ai_providers, "call", side_effect=self.transport) as post:
-            manifest = self.run_cycle(stage="topic-intelligence")
-        self.assertEqual([call.kwargs["model"] for call in post.call_args_list], [
-            "claude-opus-5-5", "gpt-6-astra", "claude-opus-5-5", "gpt-6-astra", "claude-opus-5-5"])
-        self.assertEqual(len(manifest["cost_controls"]["route_preflight"]), 2)
-        self.assertEqual(manifest["output_policy"]["persistent_writer_family"], "openai")
-
-    def test_explicit_core_task_changes_models_without_adding_paid_roles(self):
-        with patch.object(ai_providers, "call", side_effect=self.transport) as post:
-            manifest = self.run_cycle(task_kind="core-story")
-        self.assertEqual(post.call_count, 5)
-        self.assertEqual([call.kwargs["model"] for call in post.call_args_list], [
-            "claude-opus-5-5", "gpt-6-astra", "claude-opus-5-5", "gpt-6-astra", "claude-opus-5-5"])
-        self.assertEqual(manifest["task_kind"], "core-story")
-
-    def test_missing_later_final_critic_quote_blocks_the_first_paid_request(self):
-        prices = json.loads((model_runtime.ROOT / "config/model-pricing.json").read_text())
-        prices["quotes"] = [quote for quote in prices["quotes"] if quote["model"] != "claude-opus-5-5"]
-        with (patch.dict("os.environ", {"DR_OS_MODEL_PRICING_JSON": json.dumps(prices)}),
-                patch.object(ai_providers, "call") as post,
-                patch.object(relay_billing, "read_meter") as meter):
-            with self.assertRaises(model_runtime.ModelBudgetError):
-                self.run_cycle()
-        post.assert_not_called()
-        meter.assert_not_called()
-        self.assertEqual(model_spend.read(self.project)["reservations"], {})
-        self.assertEqual(model_spend.read(self.project)["spent_cny"], 0)
-
-    def test_unneeded_optional_argon_quote_does_not_block_this_scientific_cycle(self):
-        prices = json.loads((model_runtime.ROOT / "config/model-pricing.json").read_text())
-        prices["quotes"] = [quote for quote in prices["quotes"] if quote["model"] != "gemini-4-argon"]
-        with (patch.dict("os.environ", {"DR_OS_MODEL_PRICING_JSON": json.dumps(prices)}),
-                patch.object(ai_providers, "call", side_effect=self.transport) as post):
+    def test_optional_critic_price_is_not_needed_for_default_writer(self):
+        prices=json.loads((model_runtime.ROOT/"config/model-pricing.json").read_text())
+        prices["quotes"]=[row for row in prices["quotes"] if row["model"]!="claude-opus-5-5"]
+        with patch.dict("os.environ",{"DR_OS_MODEL_PRICING_JSON":json.dumps(prices)}), \
+             patch.object(ai_providers,"call",side_effect=self.transport) as post:
             self.run_cycle()
-        self.assertEqual(post.call_count, 5)
+        self.assertEqual(post.call_count,1)
+
+    def test_requested_later_critic_price_is_checked_before_the_first_paid_call(self):
+        prices=json.loads((model_runtime.ROOT/"config/model-pricing.json").read_text())
+        prices["quotes"]=[row for row in prices["quotes"] if row["model"]!="claude-opus-5-5"]
+        with patch.dict("os.environ",{"DR_OS_MODEL_PRICING_JSON":json.dumps(prices)}), \
+             patch.object(ai_providers,"call") as post:
+            with self.assertRaises(model_runtime.ModelBudgetError):
+                self.run_cycle(planning=True,review=True,remediate=True)
+        post.assert_not_called()
+        self.assertEqual(model_spend.read(self.project)["spent_cny"],0)
+
+    def test_explicit_g1_validation_keeps_its_selected_transport_sample(self):
+        self.critic_prompt.side_effect=self.real_critic_prompt
+        with patch.dict("os.environ",{"DR_OS_CLOUD_COMMAND_DEADLINE_EPOCH":str(time.time()+3600)}), \
+             patch.object(ai_providers,"call",side_effect=self.transport) as post:
+            manifest=self.run_cycle(stage="topic-intelligence",validation_roster="astra-argon",planning=True,review=True,remediate=True)
+        self.assertEqual([row.kwargs["model"] for row in post.call_args_list],
+                         ["gpt-6-astra","gpt-6-astra","gemini-4-argon","gpt-6-astra","gemini-4-argon"])
+        self.assertIn("Fixture draft",post.call_args_list[2].args[1])
+        self.assertIn("Revised fixture",post.call_args_list[4].args[1])
+        self.assertEqual(manifest["reviews"][-1]["identity"]["reported_model"],"gemini-4-argon")

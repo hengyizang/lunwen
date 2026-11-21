@@ -1,34 +1,11 @@
 # Empirical data and identification
 
-Use docs/EMPIRICAL-DATA-WORKFLOW.md within the existing author/critic cycle.
-Declare variable definitions, units, missing codes and formulas in data contracts.
-Check full expected calendars, unique unit-time keys, attrition, treatment timing,
-join cardinality and unit compatibility. Accept explained imbalance; never delete
-rows to force balance. Preserve raw data and explicit step-level cleaning history.
+Declare relevant variable definitions, units, missing codes and transformations. Check unit-time keys, treatment timing, joins, attrition and expected calendars as the design requires. Explain imbalance rather than deleting rows to force balance; preserve original data and reproducible cleaning.
 
-For causal questions, use empirical-design.json: estimand, assignment, assumptions,
-rivals, diagnostic/falsification runs, exact data/runtime and every specification
-ID/phase/family. Full forms or diagnostic passes do not verify identification.
-The native scopes are two-period DID, independent homoskedastic 2SLS and fixed-
-bandwidth sharp RDD with conventional HC1, not robust bias-corrected inference.
-Unsupported variants need another validated adapter. A first-stage threshold does
-not prove instrument validity; a single pre-period cannot test parallel trends.
+For causal questions, state the estimand, assignment mechanism, assumptions and plausible rival explanations. Diagnostics and complete forms do not prove identification. Native estimators currently cover two-period DID, independent homoskedastic 2SLS and fixed-bandwidth sharp RDD with conventional HC1; those are implementation limits, not an exhaustive list of legitimate methods. Use another appropriate, checked tool for other designs. A first-stage threshold does not prove instrument validity; one pre-period cannot establish parallel trends.
 
-Use model-based empirical_estimator evidence rather than invented paired arms.
-Freeze all preprocessing/specifications and keep every attempted result, including
-adverse and exploratory results. Existing pilot, power, multiplicity, independent
-review, actual G1/G2 topic decisions, automated protocol checks and thesis-scope requirements remain. Never search for a
-preferred significance result or pick the most favorable specification.
+Choose confirmatory specifications before observing their outcomes and record subsequent exploration. Preserve attempted specifications and adverse results; do not search for favorable significance. Power, precision, multiplicity and sensitivity checks should answer real design questions rather than fill a universal template.
 
-Economic data requests explicitly bind variable scope, dates and vintage. FRED
-as-of snapshots and World Bank current retrieval snapshots have distinct meanings.
-Metadata is a lead; observation access needs protected owner authorization. Keys
-stay in cloud Secrets; preserve complete pagination and immutable response hashes.
+Economic data need the actual variable scope, dates and vintage. FRED as-of snapshots differ from World Bank current retrieval snapshots. Respect known source access restrictions and existing credentials; ordinary authorized retrieval does not require a second owner signature. Preserve actual pagination and responses.
 
-Use sealed, numerically recomputed estimates for tables and the existing figure
-lineage. Map manuscript numbers and actual phases to current source lines; do not
-promote software acceptance to a causal/scientific or journal-quality verdict.
-Use deterministic CPU tools for repeated data/table work, without an extra model
-round. Existing model routes/budgets stay unchanged. The upstream design ideas
-are independently adapted; no external SaaS, Stata installation or new provider
-is authorized by loading this guidance.
+Bind reported estimates and figures to the calculations that produced them. Check units, independent sample counts and analysis phase. A software fixture or successful estimator call does not establish causality, novelty or journal quality. Use `docs/EMPIRICAL-DATA-WORKFLOW.md` as a technical adapter reference; current operating policy remains [AGENTS.md](../../AGENTS.md).

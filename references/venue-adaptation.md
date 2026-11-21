@@ -1,24 +1,11 @@
 # Venue adaptation
 
-Treat scientific content and venue rendering as separate layers.
+Keep scientific content and presentation separate. Select the actual intended venue and article type; use its official current instructions for the deliverable. Ranking is optional planning information, not scientific clearance. Do not confuse JCR/JIF, CiteScore, SJR and CAS categories.
 
-## Inputs
+1. Check scope, article type, fees, length, reference style and applicable declarations from real sources. Unknown values stay unknown; apply only requirements relevant to the actual submission.
+2. Inspect a supplied template ZIP with `python3 -m scripts.venue_compliance inspect ARCHIVE.zip`; use `ingest ARCHIVE.zip PAPER/venue-template` to retain its original files and safe extraction inventory.
+3. Put manuscript content into a new editable source without overwriting the publisher sample. Preserve actual author, ethics, funding and conflict facts.
+4. Compile or render the selected output and inspect equations, figures, tables, references and pagination. Missing tools are a concrete export dependency, not proof of a successful render.
+5. Prepare the requested package. Report unresolved actual submission requirements; do not impose a generic AI-policy/metric freshness gate or claim the package was submitted.
 
-- semantic manuscript sections, figures, tables, bibliography and declarations;
-- current official submission guidelines;
-- official Word or LaTeX author template downloaded by the human or an authorized tool;
-- `venues/<venue>/venue.json`.
-
-## Procedure
-
-1. Re-verify the venue identity, ISSNs, scope, current metric year, JCR category/quartile, article type, fees, length, reference style and AI/data policies.
-2. Record official URLs and access dates. Do not use Scopus/SJR quartiles as JCR evidence.
-3. Inspect the archive with `scripts/venue_compliance.py inspect ARCHIVE.zip`.
-4. Import it with `scripts/venue_compliance.py ingest ARCHIVE.zip PAPER/venue-template` into the paper’s ignored template directory. ZIP path, member, size and file-type checks and the hash inventory remain mandatory; import never overwrites an existing destination.
-5. Identify the canonical sample file, class/style files, bibliography style, required metadata and declarations.
-6. Map semantic blocks into a new manuscript file. Do not overwrite the publisher sample.
-7. Compile or render; inspect page size, margins, columns, fonts, equations, figures, tables, references and metadata.
-8. Record any rule that could not be verified. Block G5 for unresolved mandatory rules.
-
-Retargeting must change presentation and venue-specific declarations, not experimental results or scientific claims.
-
+Retargeting may change presentation and venue-specific text. Scientific claims change only when the evidence and argument justify them; retain prior versions and actual user authority for external publication.

@@ -1,60 +1,16 @@
-# Evidence, argument and revision boundaries
+# Evidence, argument and revision
 
 Method sources: paperspine, ars-codex, academic-research-skills, nature-skills.
 Based on Academic Research Skills by Cheng-I Wu,
 https://github.com/Imbad0202/academic-research-skills .
 The retained ARS source documents use CC BY-NC 4.0; see integrations/licenses.
 
-Reuse the existing ledgers. Map PaperSpine source records to exact source
-path/hash/page/row in paper-facts.json; claims to claim_alignment and
-claims/claim-evidence.csv; methods/outcomes to experiment designs and registered
-run outputs; numeric facts to source-bound facts; argument units to
-argument_ledger. Do not create a second competing result authority.
+Use the existing source and result records. For important claims retain the original source location or analysis, the actual observation, interpretation and scope. Identity verification, excerpt provenance and semantic support are different: a DOI or exact quote does not validate an inference. Abstract-only knowledge cannot support unseen method, table or mechanism details.
 
-Distinguish identity verification, excerpt provenance and semantic claim
-support. A DOI match proves neither a numerical result nor a mechanism.
-An exact excerpt match proves located text, not the author's inference.
-Keep abstract-only support bounded to the observed abstract. Mechanisms,
-procedures, figure/table details and broad generalization need the appropriate
-source and result evidence.
+Keep source_missing, access_failed, retrieval_failed, not_checked and unconfirmed_anchor states honest. Include supporting and contrary material; a successful API, parser, hash or model review does not make missing evidence verified. Reading a supplied excerpt does not attest a human full-text read.
 
-Carry source_missing, access_failed, retrieval_failed, not_checked and
-unconfirmed_anchor states explicitly. Never promote them to verified because
-an API request, parser, hash check or model review succeeded. Preserve both
-supporting and contradictory sources, access scope and unresolved boundaries.
-Viewing an excerpt does not attest that the human read the paper.
+Draft around the question, contribution and decisive evidence. A paragraph plan or argument ledger can help difficult sections but is optional. Do not pad the bibliography or require a takeaway/warrant form for every source unit. Planned outcomes stay planned; presented numeric findings need actual analyses or located primary evidence.
 
-Before writing each section, establish purpose, inputs, allowed claims,
-forbidden claims and validation. Explain how each paragraph serves the
-question-to-evidence argument. A reference bank supports concrete manuscript
-claims; exemplar papers teach structure. Do not confuse the two, pad a
-bibliography or restrict the evidence search to prestigious journal brands.
+Revise language while preserving numbers, equations, citations and claim strength. Meaning can change when new evidence warrants it; retain the reason and prior version. Do not turn association into causality or hide adverse evidence with more cautious wording. Close obsolete review issues with their reasons instead of accumulating permanent unresolved tasks.
 
-Planned analyses and expected results remain planned. Register actual
-conditions, estimands, units, uncertainty and failed attempts after execution.
-Every final numeric claim must connect to a real registered output or located
-primary source. Preserve the shared evidence graph through all sections,
-tables, figures and supplements.
-
-Retain the current revision baseline, numeric/citation/claim-strength
-conservation, itemized response trace and exact source-bound automated change records. Editing
-cannot upgrade association to causality, remove unfavorable evidence, or turn
-an unsupported claim into a supported one by adding cautious wording.
-
-Apply docs/EVIDENCE-FIRST-WRITING.md within these existing records. Record each
-scientific paragraph's takeaway and warrant, actual missing materials and the
-action needed to close the gap. A phrase match is a candidate style finding;
-establish its consequence before assigning severity. Do not force method,
-transition, theory and results paragraphs into one formula.
-
-Core contributions need current located findings, design-appropriate effect/
-uncertainty or proposition/assumptions/proof, and three-axis closest-work
-comparisons. Revisit original predictions against executed outcomes. Update
-abstract/introduction/conclusion to the strongest supported bounded finding,
-preserving original hypotheses and unfavorable outcomes. Unknown evidence stays
-pending. A filled form or exact quote cannot certify semantic support.
-
-Use the current independent critique, final blind panel and existing issue ledger for empty
-evaluation, missing evidence and inference gaps. Retain exact location, claim,
-needed data/literature/analysis/proof, concrete action and completion condition.
-Do not add a paid pass per paragraph or create another worklist.
+Use the relevant closest-work comparisons and design-appropriate uncertainty or proof assumptions. Compare predictions with actual outcomes and reframe the contribution when justified. A useful review identifies the claim, source, consequence and proportionate next action; it need not fill all dimensions or add a paid pass per paragraph.

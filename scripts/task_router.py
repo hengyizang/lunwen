@@ -41,7 +41,7 @@ def _candidates(project:Path,kind:str,provider:str,configured:str,legacy:str|Non
         candidate_provider=str(row.get("provider") or provider);model=str(row.get("model") or "");tier=str(row.get("tier") or "basic")
         if not model or (candidate_provider,model) in seen:continue
         seen.add((candidate_provider,model))
-        if ai_providers.provider_family(candidate_provider)!=ai_providers.provider_family(provider) or tier not in TIERS or TIERS[tier]<TIERS[minimum] or health.get((candidate_provider,model))=="failed":continue
+        if tier not in TIERS or TIERS[tier]<TIERS[minimum] or health.get((candidate_provider,model))=="failed":continue
         valid.append({"provider":candidate_provider,"model":model,"tier":tier,"priority":int(row.get("priority",50)),"health":health.get((candidate_provider,model),"unknown")})
     return valid
 def _task_prompt(route:dict,prompt:str)->str:
@@ -50,7 +50,7 @@ def _task_prompt(route:dict,prompt:str)->str:
 
 
 def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
-    route=model_routing.select("auxiliary",kind)
+    route=model_routing.select("auxiliary",kind,requested_provider=provider)
     from scripts import dynamic_routing
     profile=dynamic_routing.validate_profile(task_profile,stage="auxiliary",role=kind)
     if _health(project).get((route["provider"],route["model"]))=="failed":
@@ -59,7 +59,7 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
     if type(tokens) is not int or not 1<=tokens<=ceiling:
         raise ValueError(f"{kind} output cap must be 1..{ceiling}")
     request_prompt=_task_prompt(route,prompt)
-    contract_required=route["model_key"]=="luna" or kind in engineering_contract.TASKS
+    contract_required=False
     complete=not contract_required or source_contract is not None
     if source_contract is not None:
         request_prompt=_contract_handler(kind).build_prompt(request_prompt,source_contract)
@@ -69,7 +69,7 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
     active=json.loads(state.read_text(encoding="utf-8")).get("active_paper") if state.is_file() else None
     budget=model_runtime.budget_status(project,active)
     return {**route,"profile":kind,"quality_tier":"bounded_auxiliary" if route["model_key"]=="luna" else "approved_task_route",
-            "risk":PROFILES[kind][4],"health":_health(project).get((route["provider"],route["model"]),"unknown"),
+            "risk":PROFILES.get(kind,(None,None,None,None,"unspecified"))[4],"health":_health(project).get((route["provider"],route["model"]),"unknown"),
             "candidate_count":1,"input_tokens_estimated":estimated,"output_tokens_ceiling":tokens,
             "maximum_estimated_cost_cny":maximum,"budget":budget,
             "within_estimated_budget":complete and maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),
@@ -81,13 +81,11 @@ def _production_plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:in
 
 
 def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
-    if kind not in PROFILES:raise ValueError(f"unknown auxiliary task kind: {kind}")
     if model_routing.production_enabled():return _production_plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract,task_profile=task_profile)
-    if task_profile is not None:raise ValueError("task profiles require production routing")
-    if kind in engineering_contract.TASKS:raise ValueError("bounded engineering support requires production routing")
-    if source_contract is not None:raise ValueError("source-field contracts require production routing")
-    family,env_name,ceiling,minimum,risk=PROFILES[kind]
-    if ai_providers.provider_family(provider)!=family:raise ValueError(f"{kind} requires {family} family")
+    provider=provider or "openai"
+    _,env_name,ceiling,minimum,risk=PROFILES.get(kind,(None,"DR_OS_TASK_MODEL",5000,"basic","unspecified"))
+    family=ai_providers.provider_family(provider)
+    if source_contract is not None:prompt=_contract_handler(kind).build_prompt(prompt,source_contract)
     configured=ai_providers.configuration(provider)["model"];legacy=os.environ.get(env_name);rates=_json_env("DR_OS_MODEL_PRICING_JSON");candidates=_candidates(project,kind,provider,configured,legacy,minimum)
     if not candidates:raise ValueError("no healthy candidate satisfies family and minimum quality tier")
     for row in candidates:
@@ -98,17 +96,13 @@ def plan(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,
     for row in candidates:row["maximum_estimated_cost_cny"]=model_runtime.cost_cny(row["provider"],estimated,tokens,row["model"])
     candidates.sort(key=(lambda x:(x["maximum_estimated_cost_cny"],x["priority"])) if risk=="low" else (lambda x:(x["priority"],-TIERS[x["tier"]])));chosen=candidates[0]
     state=project/"state"/"run.json";active=json.loads(state.read_text(encoding="utf-8")).get("active_paper") if state.is_file() else None;budget=model_runtime.budget_status(project,active);maximum=chosen["maximum_estimated_cost_cny"]
-    return {"profile":kind,"provider":chosen["provider"],"model":chosen["model"],"family":family,"quality_tier":chosen["tier"],"risk":risk,"health":chosen["health"],"candidate_count":len(candidates),"input_tokens_estimated":estimated,"output_tokens_ceiling":tokens,"maximum_estimated_cost_cny":maximum,"budget":budget,"within_estimated_budget":maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),"persistent_output":False}
+    return {"profile":kind,"provider":chosen["provider"],"model":chosen["model"],"family":ai_providers.provider_family(chosen["provider"]),"quality_tier":chosen["tier"],"risk":risk,"health":chosen["health"],"candidate_count":len(candidates),"input_tokens_estimated":estimated,"output_tokens_ceiling":tokens,"maximum_estimated_cost_cny":maximum,"budget":budget,"within_estimated_budget":maximum<=budget["project_remaining"] and (budget["paper_remaining"] is None or maximum<=budget["paper_remaining"]),"persistent_output":False}
 def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*,attachments:list[dict]|None=None,source_contract:dict|None=None,task_profile:dict|None=None)->dict:
-    if model_routing.production_enabled() and (kind=="metadata-extraction" or kind in engineering_contract.TASKS):
+    if source_contract is not None:
         source_contract=_contract_handler(kind).validate_contract(source_contract)
-    elif source_contract is not None:
-        raise ValueError("source contracts require production metadata extraction or bounded engineering support")
     info=plan(project,kind,provider,prompt,max_tokens,source_contract=source_contract,task_profile=task_profile)
     if kind=="multimodal-inspection" and not attachments:
         raise ValueError("multimodal inspection requires explicit source attachments")
-    if attachments and kind!="multimodal-inspection":
-        raise ValueError("source attachments are supported only by multimodal inspection")
     run_id="aux-"+uuid.uuid4().hex;state=project/"state"/"run.json"
     stage="writing-and-review" if state.is_file() and json.loads(state.read_text()).get("active_paper") else "auxiliary"
     request={"run_id":run_id,"stage":stage,"role":kind,"provider":info["provider"],"model":info["model"],
@@ -122,7 +116,7 @@ def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*
     result=model_runtime.call(project,**request)
     directory=project/"api_runs"/run_id;directory.mkdir(parents=True,exist_ok=False)
     receipt={**info,"run_id":run_id,"reported_model":result.reported_model,"cache_hit":result.cache_hit,
-             "text":result.text,"not_manuscript_or_evidence":True,"automatic_acceptance":False}
+             "text":result.text,"scientific_completion_verified":False,"automatic_acceptance":False}
     receipt["baseline_route"]={key:info.get(key) for key in ("provider","model","reasoning_effort","route_id")}
     receipt.update(provider=result.provider,model=result.model,reasoning_effort=result.requested_effort,
                    requested_reasoning_effort=result.requested_effort,endpoint=result.endpoint,
@@ -130,15 +124,15 @@ def run(project:Path,kind:str,provider:str,prompt:str,max_tokens:int|None=None,*
                    dynamic_candidate_id=result.dynamic_candidate_id,routing_policy_sha256=result.routing_policy_sha256)
     if source_contract is not None:receipt["source_contract_sha256"]=_contract_handler(kind).contract_sha256(source_contract)
     if kind in engineering_contract.TASKS:
-        receipt["required_followup"]="OpenAI review/implementation and deterministic cloud checks; no automatic application"
+        receipt["required_followup"]="Verify relevant implementation changes with deterministic checks; no automatic application"
         receipt["scientific_equivalence_verified"]=False
     (directory/"result.json").write_text(json.dumps(receipt,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     return {"run_id":run_id,"result":(directory/"result.json").relative_to(project).as_posix(),"model":result.reported_model or result.model,
-            "cache_hit":result.cache_hit,"not_manuscript_or_evidence":True}
+            "cache_hit":result.cache_hit,"scientific_completion_verified":False}
 def main()->int:
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--project",required=True);p.add_argument("--kind",choices=sorted(PROFILES),required=True)
-    p.add_argument("--provider",choices=ai_providers.PROVIDERS,default="openai")
+    p.add_argument("--project",required=True);p.add_argument("--kind",required=True)
+    p.add_argument("--provider",choices=ai_providers.PROVIDERS)
     p.add_argument("--prompt-file",required=True);p.add_argument("--max-output-tokens",type=int)
     p.add_argument("--attachments-file",help="Project-relative JSON source attachment list for multimodal inspection")
     p.add_argument("--source-contract",help="Project-relative JSON source contract for metadata or engineering support")
@@ -151,7 +145,7 @@ def main()->int:
     if a.kind=="multimodal-inspection" and not attachments:raise ValueError("multimodal inspection requires source attachments")
     value=run(project,a.kind,a.provider,prompt,a.max_output_tokens,attachments=attachments,source_contract=source_contract) if a.execute else plan(project,a.kind,a.provider,prompt,a.max_output_tokens,source_contract=source_contract)
     if model_routing.production_enabled() and a.kind=="metadata-extraction":
-        value["source_contract_required"]=True
+        value["source_contract_required"]=False
         value["source_contract_supplied"]=source_contract is not None
     print(json.dumps(value,indent=2,ensure_ascii=False));return 0
 if __name__=="__main__":raise SystemExit(main())

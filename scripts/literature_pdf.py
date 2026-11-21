@@ -26,8 +26,7 @@ MODULE = "scripts/literature_pdf.py"
 
 
 def _cloud():
-    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
-        raise ValueError("PDF viewing, annotation and OCR execute only on the authorized cloud runner")
+    """Compatibility hook; explicit PDF operations use the available host tools."""
 
 
 def _request(project, request_path):
@@ -48,9 +47,9 @@ def _prepare(project, spec):
     if Path(paper["source"]["path"]).suffix.lower() != ".pdf":
         raise ValueError("PDF view needs a current registered original PDF")
     pages = spec.get("pages")
-    if (not isinstance(pages, list) or not 1 <= len(pages) <= 20
-            or any(type(p) is not int or not 1 <= p <= 100 for p in pages) or len(set(pages)) != len(pages)):
-        raise ValueError("select 1..20 distinct physical PDF pages within 1..100")
+    if (not isinstance(pages, list) or not pages
+            or any(type(p) is not int or p < 1 for p in pages) or len(set(pages)) != len(pages)):
+        raise ValueError("select distinct positive physical PDF page numbers")
     ids = spec.get("sentence_ids")
     if ids is not None and (not isinstance(ids, list) or len(ids) > 500 or any(not isinstance(i, str) for i in ids)
                             or len(set(ids)) != len(ids)):
@@ -69,9 +68,9 @@ def _prepare(project, spec):
         if set(ids) - available:
             raise ValueError("sentence ID is absent from current selected original pages")
         sentences = [s for s in sentences if s["sentence_id"] in ids]
-    if len(sentences) > 500:
-        raise ValueError("select at most 500 sentences for a PDF view")
-    fingerprint = wb._digest({"spec": spec, "paper": paper["input_fingerprint"], "workbench": manifest,
+    matrix_manifest = path_in(project, "reports/literature-matrix/manifest.json", exists=False)
+    fingerprint = wb._digest({"spec": spec, "source": paper["source"], "reader": paper.get("reader"),
+                              "matrix": sha(matrix_manifest) if matrix_manifest.exists() else None,
                               "sentences": sentences, "implementation": sha(Path(__file__))})
     return {"id": identifier, "paper": paper, "pages": sorted(pages), "sentences": sentences,
             "ocr": {"enabled": ocr["enabled"], "language": ocr.get("language", "eng")},
@@ -96,6 +95,8 @@ def provision(project, ocr):
         language_packages = {"eng": "tesseract-ocr-eng", "chi_sim": "tesseract-ocr-chi-sim"}
         packages += [language_packages[language] for language in ocr["language"].split("+") if language not in installed]
     if packages:
+        if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
+            raise RuntimeError("PDF tools are missing on this host; install " + ", ".join(packages))
         _run(["sudo", "-n", "sed", "-i", "-e", "s|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g",
               "-e", "s|mirror+file:/etc/apt/apt-mirrors.txt|https://archive.ubuntu.com/ubuntu|g",
               "/etc/apt/sources.list.d/ubuntu.sources"])
@@ -111,8 +112,8 @@ def provision(project, ocr):
 def _normalize(source, destination):
     from pypdf import PdfReader, PdfWriter
     reader = PdfReader(str(source), strict=False)
-    if reader.is_encrypted or not 1 <= len(reader.pages) <= 100:
-        raise ValueError("PDF view needs an unencrypted original of 1..100 pages")
+    if reader.is_encrypted or not reader.pages:
+        raise ValueError("PDF view needs an unencrypted original with pages")
     writer = PdfWriter()
     rotations = []
     for original in reader.pages:
@@ -271,7 +272,7 @@ def refresh(project: Path, request_path=REQUEST):
     project = Path(project).resolve()
     spec = _request(project, request_path)
     prepared = _prepare(project, spec)
-    directory = path_in(project, OUTPUT + "/" + prepared["id"], exists=False)
+    directory = path_in(project, OUTPUT + "/" + prepared["id"] + "/versions/" + prepared["fingerprint"], exists=False)
     manifest_path = directory / "manifest.json"
     if directory.exists() and any(directory.iterdir()):
         if not manifest_path.is_file():
@@ -349,8 +350,8 @@ def refresh(project: Path, request_path=REQUEST):
 def validate_saved_report(project: Path, request_path=REQUEST):
     project = Path(project).resolve()
     prepared = _prepare(project, _request(project, request_path))
-    directory = path_in(project, OUTPUT + "/" + prepared["id"], exists=False)
-    manifest_path = path_in(project, OUTPUT + "/" + prepared["id"] + "/manifest.json")
+    directory = path_in(project, OUTPUT + "/" + prepared["id"] + "/versions/" + prepared["fingerprint"], exists=False)
+    manifest_path = directory / "manifest.json"
     expected = {p.relative_to(project).as_posix() for p in directory.iterdir() if p.is_file() and p != manifest_path}
     if not {(directory / name).relative_to(project).as_posix() for name in ("report.json", "index.html")} <= expected:
         raise ValueError("PDF view output inventory changed")

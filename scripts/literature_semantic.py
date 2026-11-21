@@ -28,7 +28,7 @@ MAX_WINDOWS = 4096
 
 
 def _cloud():
-    from scripts.figure_gallery import _cloud as require_cloud
+    from scripts.literaturectl import require_cloud
     require_cloud()
 
 
@@ -222,8 +222,6 @@ def _spec(project, request):
     prepared = literature_review.prepare(project, request["retrieval"])
     baseline = evidence_retrieval.retrieve(project, prepared["spec"])
     chunks, searched = evidence_retrieval.corpus(project, prepared["spec"]["sources"])
-    if len(chunks) > MAX_BLOCKS:
-        raise ValueError("semantic corpus exceeds 300 blocks; select a smaller explicit corpus")
     return prepared, chunks, searched, baseline
 
 
@@ -265,8 +263,6 @@ def _save(project, relative, data, *, compact=False):
         raise ValueError("semantic output changed outside its controlled builder")
     if compact:
         payload = json.dumps(data, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
-        if len(payload.encode()) > 4_000_000:
-            raise ValueError("dense cache exceeds 4 MB; declare a smaller explicit corpus")
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(payload + "\n", encoding="utf-8")
     else:
@@ -300,13 +296,27 @@ def build(project, request):
         if [{key: row[key] for key in identities[0]} for row in index.get("blocks", [])] != identities:
             raise ValueError("semantic index block inventory changed")
     else:
-        engine = CpuEngine(project, "embedding")
         blocks = []
         for identity, chunk in zip(identities, chunks):
-            vector, coverage = engine.embed(chunk["quote"])
-            blocks.append({**identity, "vector": vector, "coverage": coverage})
+            block_key = wb._digest({"identity": identity, "model": corpus_binding["model"], "lock": sha(LOCK)})
+            block_path = OUTPUT + "/blocks/" + block_key + ".json"
+            block_target = path_in(project, block_path, exists=False)
+            if block_target.is_file():
+                if not _current(project, block_target):
+                    raise ValueError("semantic block cache changed")
+                row = read(block_target)
+                if any(row.get(key) != value for key, value in identity.items()):
+                    raise ValueError("semantic block cache source changed")
+                evidence_retrieval._vector(row.get("vector"), model["dimension"], "cached block")
+            else:
+                engine = engine or CpuEngine(project, "embedding")
+                vector, coverage = engine.embed(chunk["quote"])
+                row = {**identity, "vector": vector, "coverage": coverage}
+                _save(project, block_path, row)
+            blocks.append(row)
         index = {"schema_version": "1.0", "binding": corpus_binding, "blocks": blocks,
-                 "execution": engine.receipt(), "semantic_quality_verified": False}
+                 "execution": engine.receipt() if engine else {"onnx_executions": 0, "block_cache_reused": True},
+                 "semantic_quality_verified": False}
         _save(project, index_path, index)
     query = prepared["spec"]["query"]
     query_id = wb._digest({"query": query, "index_sha256": sha(index_target)})[:24]
@@ -373,7 +383,19 @@ def refresh(project, request_file="program/literature-semantic.json"):
     source = wb._path(project, request_file)
     if source.stat().st_size > 1_000_000:
         raise ValueError("semantic request exceeds 1 MB")
-    target = path_in(project, OUTPUT + "/latest.json", exists=False)
+    request = wb._json(source.read_bytes())
+    latest = path_in(project, OUTPUT + "/latest.json", exists=False)
+    if latest.is_file():
+        if not _current(project, latest):
+            raise ValueError("semantic output changed outside its controlled builder")
+        legacy_version = OUTPUT + "/results/" + sha(latest) + ".json"
+        if not path_in(project, legacy_version, exists=False).exists():
+            _save(project, legacy_version, read(latest))
+    prepared, _, _, _ = _spec(project, request)
+    identity = wb._digest({"request": request, "request_file": {"path": request_file, "sha256": sha(source)},
+                          "source_binding": prepared, "lock": sha(LOCK), "implementation": sha(Path(__file__))})
+    relative = OUTPUT + "/results/" + identity + ".json"
+    target = path_in(project, relative, exists=False)
     if target.is_file() and _current(project, target):
         previous = read(target)
         if (previous.get("request_file") == {"path": request_file, "sha256": sha(source)}
@@ -381,24 +403,38 @@ def refresh(project, request_file="program/literature-semantic.json"):
                 and previous.get("implementation_sha256") == sha(Path(__file__))):
             prepared, _, _, _ = _spec(project, wb._json(source.read_bytes()))
             if prepared == previous.get("source_binding"):
-                checked = validate_saved_report(project, request_file)
-                return {"report": OUTPUT + "/latest.json", **checked, "complete_result_cache_hit": True}
+                checked = validate_saved_report(project, request_file, report_binding={"path": relative, "sha256": sha(target)})
+                _save(project, OUTPUT + "/latest.json", checked)
+                return {"report": relative, **checked, "complete_result_cache_hit": True}
     report = build(project, wb._json(source.read_bytes()))
     report["request_file"] = {"path": request_file, "sha256": sha(source)}
+    _save(project, relative, report)
     _save(project, OUTPUT + "/latest.json", report)
-    return {"report": OUTPUT + "/latest.json", **report}
+    return {"report": relative, **report}
 
 
-def validate_saved_report(project, request_file="program/literature-semantic.json"):
-    source = wb._path(project, request_file)
-    target = path_in(project, OUTPUT + "/latest.json")
+def validate_saved_report(project, request_file="program/literature-semantic.json", *, report_binding=None):
+    source = wb._path(project, request_file) if report_binding is None else None
+    if report_binding is None:
+        target = path_in(project, OUTPUT + "/latest.json")
+    else:
+        relative = report_binding.get("path", "")
+        if not (relative == OUTPUT + "/latest.json" or re.fullmatch(re.escape(OUTPUT) + r"/results/[a-f0-9]{64}\.json", relative)):
+            raise ValueError("semantic report requires a versioned source-bound result")
+        target = path_in(project, relative)
+        if sha(target) != report_binding.get("sha256"):
+            # Compatibility for existing callers that pinned a former latest.
+            versions = list((Path(project) / OUTPUT / "results").glob("*.json")) if relative.endswith("/latest.json") else []
+            target = next((p for p in versions if sha(p) == report_binding.get("sha256")), None)
+            if target is None:
+                raise ValueError("semantic report binding changed")
     if not _current(project, target):
         raise ValueError("semantic report changed outside its controlled builder")
     report = read(target)
-    if (report.get("request_file") != {"path": request_file, "sha256": sha(source)}
+    if ((source is not None and report.get("request_file") != {"path": request_file, "sha256": sha(source)})
             or report.get("lock_sha256") != sha(LOCK) or report.get("implementation_sha256") != sha(Path(__file__))):
         raise ValueError("semantic request, implementation or model lock changed")
-    prepared, _, _, _ = _spec(project, wb._json(source.read_bytes()))
+    prepared, _, _, _ = _spec(project, report["request"])
     if prepared != report.get("source_binding"):
         raise ValueError("semantic source rights, original scope or source version changed")
     verify_files(project, [report["index"], report["dense_cache"]], origin={"family": "other", "model": MODULE},

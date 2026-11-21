@@ -1,6 +1,6 @@
 ---
 name: ccf-paper-writer
-description: Project-integrated CCFA workflow for authorized non-Claude authoring with source and argument contracts Apply the complete pinned upstream guidance with native model roles, scientific evidence and cloud approvals.
+description: Draft evidence-led scientific text using any capable model.
 ---
 
 Read the repository-root `skills/ccf-paper-writer/SKILL.md` and follow its complete current instructions. This entry is generated; edit the source skill.

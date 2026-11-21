@@ -220,10 +220,10 @@ class ExperimentResourceTests(unittest.TestCase):
         run=self.run_spec();run["timeout_seconds"]=1800
         with tempfile.TemporaryDirectory() as directory,patch.object(runner,"runner_capabilities",return_value=CAPACITY):
             project=Path(directory)
-            with patch.dict(os.environ,{"DR_OS_CLOUD_JOB_DEADLINE_EPOCH":str(time.time()+3000)},clear=True):
+            with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1", "DR_OS_CLOUD_JOB_DEADLINE_EPOCH":str(time.time()+3000)},clear=True):
                 self.assertTrue(steps._cloud_run_eligible(project,run))
-            with patch.dict(os.environ,{},clear=True):self.assertFalse(steps._cloud_run_eligible(project,run))
-            with patch.dict(os.environ,{"DR_OS_CLOUD_JOB_DEADLINE_EPOCH":"1"},clear=True):
+            with patch.dict(os.environ,{},clear=True):self.assertTrue(steps._cloud_run_eligible(project,run))
+            with patch.dict(os.environ,{"DR_OS_CLOUD_EXECUTOR":"1", "DR_OS_CLOUD_JOB_DEADLINE_EPOCH":"1"},clear=True):
                 self.assertFalse(steps._cloud_run_eligible(project,run))
         self.assertEqual(cloud_runtime.execution_window(environment={},current_time=1000)["max_run_timeout_seconds"],1200)
         window=cloud_runtime.execution_window(environment={"DR_OS_CLOUD_JOB_DEADLINE_EPOCH":"4000",

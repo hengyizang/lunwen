@@ -198,8 +198,6 @@ def _identity(identity: dict, writer_family: str) -> dict:
         raise ValueError("critic needs actual provider/family/requested and reported model/completion identity")
     if identity["completion_status"] != "completed" or identity.get("cache_hit") is not False:
         raise ValueError("independent criticism must be a fresh completed invocation")
-    if writer_family != "openai" or identity["family"] in {writer_family, "other", "unknown"}:
-        raise ValueError("critic family must differ from the actual OpenAI writer family")
     if identity["requested_model"] != identity["reported_model"]:
         raise ValueError("critic requested/reported model mismatch")
     return {k: identity.get(k) for k in (*required, "cache_hit", "request_id", "endpoint", "transport")}
@@ -303,6 +301,10 @@ def seal_phase(project: Path, *, stage: str, run_id: str, phase: str, audit_path
         latest = path_in(project, f"{PREFIX}/{key}/{name}", exists=False)
         write(latest, {"path": target.relative_to(project).as_posix(), "sha256": sha(target)})
         paths.append(latest)
+        if phase == "observation":
+            current = path_in(project, f"{PREFIX}/{key}/latest.json", exists=False)
+            write(current, {"path": target.relative_to(project).as_posix(), "sha256": sha(target)})
+            paths.append(current)
     record(project, paths, MODULE)
     return {"path": target.relative_to(project).as_posix(), "sha256": sha(target)}
 
@@ -341,6 +343,19 @@ def validate_gate(project: Path, gate: str, paper_id: str | None = None, *, expe
         from scripts.paper_execution import enabled,selected
         if enabled(project) and gate in {"G3","G4","G5"}:paper_id=selected(project,paper_id)
         key = _key(gate, paper_id)
+        observed = project / PREFIX / key / "observation-latest.json"
+        latest_path = project / PREFIX / key / "latest.json"
+        if observed.is_file() and (not latest_path.is_file() or read(observed) == read(latest_path)):
+            current = observation(project, STAGES[gate], paper_id)["receipt"]
+            if (current["materials"].get("review_purpose", "stage") != expected_purpose
+                    or not materials_match(current["materials"], material_snapshot(project, STAGES[gate], paper_id,
+                        _version=current["materials"].get("schema_version", "1.0")))):
+                raise ValueError("independent observation is stale or assesses a different purpose")
+            from scripts.researchctl import audit_document_valid
+            errors = []
+            audit = path_in(project, current["audit"]["path"])
+            audit_document_valid(audit, read(audit), errors, final=False)
+            return errors
         latest = path_in(project, f"{PREFIX}/{key}/latest.json")
         _owned(project, latest)
         pointer = read(latest)

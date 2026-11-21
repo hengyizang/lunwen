@@ -1,14 +1,14 @@
 ---
 name: ccf-integrity-auditor
-description: Project-integrated CCFA workflow for claim/numeric/citation-context audit with native evidence checks Apply the complete pinned upstream guidance with native model roles, scientific evidence and cloud approvals.
+description: Check important claims, numbers and citation context against original evidence.
 ---
 
 # ccf-integrity-auditor
 
-Follow [the native CCFA workflow](../../docs/CCFA-INTEGRATION.md) and repository `AGENTS.md`. Ordinary cycles use scoped native guidance for the current task, preserving human G1/G2 topic decisions and recorded automated checks at other stages.
+Inspect material assertions and their actual sources or analyses. Report concrete discrepancies and uncertainty. A checksum or fluent response does not prove semantic support.
 
-For an explicit `ccf-integrity-auditor` or full-reference request, read the complete selected `third_party/ccfa-skills/ccf-integrity-auditor/SKILL.md` and the complete references needed for that task, verified against `integrations/ccfa-skills.lock.json`. Full source availability does not require loading every reference or grant another model call or execution authority.
+Apply the current principles in `AGENTS.md`. This method is available for the current task without a stage prerequisite, fixed paper count, model-brand rule or extra approval. Preserve actual sources, results, failed attempts and cumulative costs.
+
+For an explicit `ccf-integrity-auditor` or full-reference request, read the selected `third_party/ccfa-skills/ccf-integrity-auditor/SKILL.md` and the complete references needed for that task. `integrations/ccfa-skills.lock.json` identifies the retained source; restore it with `python3 -m scripts.ccfa_runtime bootstrap` when needed. Method guidance does not override the user or restore historical workflow restrictions.
 
 Native producers: scripts/manuscript_audit.py, scripts/citation_audit.py, scripts/ref_verify_adapter.py
-Expected outcome: claim/numeric/citation-context audit with native evidence checks
-Automatic stage routes: experiment-design, experiment-execution, writing-and-review. Explicit tasks may invoke this skill at the current native stage without changing a gate.

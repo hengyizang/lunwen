@@ -35,6 +35,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - name: Check shell syntax and prepare environment without credentials
         run: |
           bash -n scripts/bootstrap-codex-cloud.sh

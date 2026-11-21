@@ -33,6 +33,7 @@ CONVERSIONS = {
     ("C", "K"): ("1", "273.15"), ("K", "C"): ("1", "-273.15"),
 }
 UNITLESS = {"1", "unitless", "dimensionless"}
+RATIO_UNITS = UNITLESS | {"%", "proportion"}
 
 
 def _text(value, label, maximum=6000):
@@ -108,6 +109,8 @@ def _fields(items):
                 raise ValueError("unsupported numeric measure")
             if row["measure"] == "p_value" and row["unit"] not in UNITLESS:
                 raise ValueError("p values must be dimensionless")
+            if row["measure"] == "ratio" and row["unit"] not in RATIO_UNITS:
+                raise ValueError("ratios must use dimensionless units, percent or proportion")
         elif set(field) & {"quantity", "unit", "measure"}:
             raise ValueError("text fields cannot declare numerical units or measures")
         result.append(row)
@@ -192,12 +195,17 @@ def _numeric(value, field, anchors, context):
         raise ValueError("reported inequality must preserve the operator beside the original value")
     if field["measure"] == "p_value" and (raw_unit not in UNITLESS or not 0 <= raw <= 1):
         raise ValueError("reported p value must be dimensionless and within 0..1")
+    if field["measure"] == "ratio" and raw_unit not in RATIO_UNITS:
+        raise ValueError("reported ratios must be dimensionless; absolute units cannot establish a ratio")
     target = field["unit"]
     if target == raw_unit or target in UNITLESS and raw_unit in UNITLESS:
         scale, offset = Decimal(1), Decimal(0)
     elif (raw_unit, target) in CONVERSIONS:
         factor, addition = CONVERSIONS[(raw_unit, target)]
-        scale, offset = Decimal(factor), Decimal(addition)
+        # Differences are intervals on a scale: 2 degrees C is a 2 K change,
+        # whereas an absolute temperature of 2 degrees C is 275.15 K.
+        scale = Decimal(factor)
+        offset = Decimal(0) if field["measure"] == "difference" else Decimal(addition)
     else:
         raise ValueError("unsupported unit conversion; retain original units or add a reviewed exact conversion")
     with localcontext() as precision:
@@ -284,7 +292,7 @@ def build(project: Path, spec: dict, *, workbench_dir=None) -> dict:
     incoming = spec.get("cells", [])
     if not isinstance(incoming, list) or len(incoming) > len(ids) * len(fields):
         raise ValueError("cells must be a bounded subset of the selected papers x fields")
-    library, _, manifest = workbench._snapshot(project, workbench_dir)
+    library, _, manifest = workbench._snapshot(project, workbench_dir, paper_ids=ids)
     papers = {p["id"]: p for p in library["papers"]}
     for identifier in ids:
         if identifier not in papers or papers[identifier].get("status") != "current":
@@ -322,7 +330,7 @@ def build(project: Path, spec: dict, *, workbench_dir=None) -> dict:
                  "manifest": papers[i].get("manifest"),
                  "input_fingerprint": papers[i]["input_fingerprint"], "title": papers[i]["title"],
                  "source_scope": papers[i].get("source_scope"), "read_scope": papers[i].get("read_scope")} for i in ids]
-    fingerprint = workbench._digest({"spec": spec, "bindings": bindings, "workbench_manifest": manifest,
+    fingerprint = workbench._digest({"spec": spec, "bindings": bindings,
                                      "implementation_sha256": sha(Path(__file__))})
     return {"schema_version": "1.0", "question": question, "fields": fields, "papers": bindings,
             "cells": cells, "unknown_cell_count": sum(c["status"] == "unknown" for c in cells),
@@ -426,6 +434,17 @@ def refresh(project: Path, request_path=REQUEST, *, workbench_dir=None) -> dict:
         raise ValueError("refusing to overwrite a directory owned by another tool")
     directory.mkdir(parents=True, exist_ok=True)
     paths = [directory / "matrix.json", directory / "matrix.csv", directory / "index.html", directory / "matrix.md"]
+    if paths[0].is_file():
+        archive = directory / "versions" / sha(paths[0])
+        archive.mkdir(parents=True, exist_ok=True)
+        retained = []
+        for previous in [*paths, directory / "manifest.json"]:
+            if previous.is_file() and not (archive / previous.name).exists():
+                (archive / previous.name).write_bytes(previous.read_bytes())
+                retained.append(archive / previous.name)
+        if retained:
+            from scripts.research_artifacts import record
+            record(project, retained, "scripts/literature_matrix.py")
     write(paths[0], report)
     paths[1].write_text(csv_text(report), encoding="utf-8")
     paths[2].write_text(html_text(project, report), encoding="utf-8")

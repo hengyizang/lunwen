@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
-"""Track which model family last wrote a project artifact.
-
-The registry is control-plane metadata under ``state/``. Models are not allowed
-to edit it. A current Anthropic record blocks a file from a submission package;
-human or deterministic local edits invalidate the old hash rather than being
-mislabelled as model output.
-"""
+"""Record actual artifact origins and content hashes without brand restrictions."""
 from __future__ import annotations
 
 import argparse
@@ -81,7 +75,7 @@ def record_model_writes(
 ) -> list[str]:
     """Record non-empty files written by a model-controlled authoring step."""
 
-    if family not in {"anthropic", "openai", "other"}:
+    if not isinstance(family, str) or not family.strip():
         raise ProvenanceError(f"Unsupported model family: {family}")
     registry = _load(project)
     records = registry["files"]
@@ -132,31 +126,20 @@ def _origin(project: Path, path: Path, records: dict) -> dict[str, Any]:
     return {"status": "tracked", "path": relative, **record}
 
 
-def reject_current_anthropic_outputs(project: Path, paths: Iterable[Path]) -> None:
-    blocked: list[str] = []
-    for origin in provenance_report(project, (path for path in paths if path.is_file())):
-        if origin.get("status") == "tracked" and origin.get("family") == "anthropic":
-            blocked.append(origin["path"])
-    if blocked:
-        raise ProvenanceError(
-            "Refusing Claude/Anthropic-authored final output: " + ", ".join(sorted(blocked))
-        )
+def reject_current_anthropic_outputs(project_root: Path, paths: Iterable[Path]) -> None:
+    """Compatibility hook; origin brands do not restrict artifact use."""
+    provenance_report(project_root, paths)
 
 
-def require_final_origins(project: Path, paths: Iterable[Path]) -> None:
-    """Require a current, explicitly non-Anthropic origin for final files."""
+def require_final_origins(project_root: Path, paths: Iterable[Path]) -> list[dict[str, Any]]:
+    """Report actual origins without inventing an attestation for unknown authors."""
+    selected = list(paths)
+    for path in selected:
+        path = Path(path)
+        if path.is_symlink() or not path.is_file() or not path.resolve().is_relative_to(project_root.resolve()):
+            raise ProvenanceError("final source must be an existing regular project file")
+    return provenance_report(project_root, selected)
 
-    blocked: list[str] = []
-    for origin in provenance_report(project, (path for path in paths if path.is_file())):
-        if origin.get("status") != "tracked":
-            blocked.append(f"{origin['path']} ({origin['status']})")
-        elif origin.get("family") == "anthropic":
-            blocked.append(f"{origin['path']} (anthropic)")
-    if blocked:
-        raise ProvenanceError(
-            "Final files need current Codex/local/human provenance: "
-            + ", ".join(sorted(blocked))
-        )
 
 
 def provenance_report(project: Path, paths: Iterable[Path]) -> list[dict[str, Any]]:
@@ -192,7 +175,7 @@ def changed_files(project: Path, before: dict[str, str]) -> list[Path]:
 def attest_human_files(
     project: Path, paths: Iterable[Path], *, actor: str, note: str
 ) -> list[str]:
-    """Record a human's explicit non-Claude authorship/review attestation."""
+    """Record a human's explicit recorded authorship/review attestation."""
 
     if not actor.strip() or not note.strip():
         raise ProvenanceError("Human attestation requires a named actor and an explanatory note")

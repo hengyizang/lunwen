@@ -151,7 +151,8 @@ def deduplicate(works: list[dict]) -> list[dict]:
             if version:
                 versions.add(version)
             observations.append({key: item.get(key) for key in ("provider", "provider_id", "doi", "arxiv_id", "title",
-                "publication_year", "publication_date", "authors", "venue", "citation_count", "abstract")})
+                "publication_year", "publication_date", "authors", "venue", "citation_count", "abstract",
+                "filter_status", "unresolved_conditions")})
             for key in ("abstract", "publication_date", "venue", "arxiv_id", "citation_count"):
                 if not merged.get(key) and item.get(key) is not None:
                     merged[key] = item[key]
@@ -161,6 +162,10 @@ def deduplicate(works: list[dict]) -> list[dict]:
                 conflicts.append({"field": key, "values": values, "resolution": "requires_source_review"})
         merged.update(canonical_id=canonical_identity(merged), source_refs=refs, arxiv_versions=sorted(versions),
                       source_observations=observations, metadata_conflicts=conflicts, duplicate_count=len(group) - 1)
+        pending = [item for item in group if item.get("filter_status") == "pending_metadata"]
+        if pending:
+            merged["filter_status"] = "pending_metadata" if len(pending) == len(group) else "matched_with_pending_source_metadata"
+            merged["unresolved_conditions"] = list(dict.fromkeys(reason for item in pending for reason in item.get("unresolved_conditions", [])))
         results.append(merged)
     # Shared titles or arXiv IDs with conflicting DOIs remain separate, visible leads.
     for index, left in enumerate(results):
@@ -267,11 +272,9 @@ def _scope(project: Path, question: str) -> dict:
     actual = current.get("doctoral_question")
     unassigned = {"", "unassigned", "tbd", "not selected", "not yet selected", "pending"}
     if isinstance(actual, str) and actual.strip().casefold() not in unassigned:
-        if question.strip() != actual.strip():
-            raise ValueError("discovery scope differs from the current doctoral question; G1/G2 human review is required")
-        return {"doctoral_question": actual.strip(), "scope_status": "current_question_bound_requires_scientific_review",
+        return {"doctoral_question": question.strip(), "scope_status": "current_question" if question.strip() == actual.strip() else "exploratory_question",
                 "core_thesis": {"path": "program/core-thesis.json", "sha256": sha(core)}}
-    return {"doctoral_question": question.strip(), "scope_status": "proposed_requires_G1_review",
+    return {"doctoral_question": question.strip(), "scope_status": "exploratory_question",
             "core_thesis": {"path": "program/core-thesis.json", "sha256": sha(core)} if core.is_file() else None}
 
 
@@ -290,12 +293,15 @@ def _receipt_works(project: Path, receipt: dict) -> tuple[list[dict], dict]:
     works = normalized.get("works")
     if not isinstance(works, list) or len(works) != receipt.get("result_count"):
         raise ValueError("literature receipt result count differs from its source")
-    return [{**work, "source_refs": [{**refs, "locator": f"works[{index}]"}]} for index, work in enumerate(works)], refs
+    candidates = [{**work, "source_refs": [{**refs, "locator": f"works[{index}]"}]} for index, work in enumerate(works)]
+    for index, pending in enumerate(normalized.get("filter_audit", {}).get("unresolved", [])):
+        candidates.append({**pending["work"], "filter_status": "pending_metadata",
+            "unresolved_conditions": pending.get("reasons", []),
+            "source_refs": [{**refs, "locator": f"filter_audit.unresolved[{index}].work"}]})
+    return candidates, refs
 
 
 def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetcher=None) -> dict:
-    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
-        raise RuntimeError("literature intelligence runs only on the declared cloud executor")
     if output != OUTPUT:
         raise ValueError("topic leads must use program/topic-leads.json")
     plan_source = path_in(project, plan_path)
@@ -492,7 +498,7 @@ def discover(project: Path, plan_path: str = PLAN, output: str = OUTPUT, *, fetc
         "reading_recommendations": [row["canonical_id"] for row in ranked if row["reading_candidate"]][:10],
         "candidates": ranked, "topic_leads": leads, "enrichment": enrichment, "errors": errors,
         "conference_sources": conference_sources,
-        "status": "partial_requires_review" if errors else "discovery_requires_G1_review",
+        "status": "partial_requires_review" if errors else "discovery_available",
         "coverage_complete": False, "automatic_inclusion_exclusion": False, "novelty_verified": False,
         "scope_alignment_verified": False,
         "scientific_completion_verified": False, "gate_approved": False, "human_scientific_review_required": True}

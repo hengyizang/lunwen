@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import patch
 
 from scripts import literature_review, literature_semantic as semantic
-from scripts.research_artifacts import read, write
+from scripts.research_artifacts import read, sha, write
 from tests.test_literature_workbench import WorkbenchFixture
 
 
@@ -94,6 +94,27 @@ class SemanticTests(WorkbenchFixture):
         self.assertEqual([x for x in FakeEngine.calls if x[0] == "embed"],
                          [("embed", self.request["retrieval"]["question"])])
 
+    def test_previous_query_version_remains_replayable_after_latest_changes(self):
+        first = self.refresh()
+        binding = {"path": first["report"], "sha256": sha(self.project / first["report"])}
+        self.request["retrieval"]["question"] = "Which vegetables grow?"
+        second = self.refresh()
+        self.assertNotEqual(first["report"], second["report"])
+        replay = semantic.validate_saved_report(self.project, report_binding=binding)
+        self.assertEqual(replay["result"], first["result"])
+
+    def test_unrelated_source_and_view_changes_reuse_selected_result(self):
+        self.request["retrieval"]["paper_ids"] = ["a"]
+        first = self.refresh()
+        from scripts import literature_reasoning
+        literature_reasoning.itinerary(self.project, "A new reading question")
+        (self.project / self.b["source"]["path"]).write_text("An unrelated revision.", encoding="utf-8")
+        FakeEngine.calls = []
+        again = self.refresh()
+        self.assertEqual(first["report"], again["report"])
+        self.assertTrue(again["complete_result_cache_hit"])
+        self.assertEqual(FakeEngine.calls, [])
+
     def test_cache_tamper_is_rejected(self):
         report = self.refresh()
         target = self.project / report["dense_cache"]["path"]
@@ -135,10 +156,11 @@ class SemanticTests(WorkbenchFixture):
             with self.subTest(request=request), self.assertRaises(ValueError):
                 semantic.build(self.project, request)
 
-    def test_cpu_ceiling_has_no_truncated_fallback(self):
-        with patch.object(semantic, "MAX_BLOCKS", 1), self.assertRaisesRegex(ValueError, "smaller"):
-            self.refresh()
-        self.assertEqual(FakeEngine.calls, [])
+    def test_block_batch_ceiling_does_not_truncate_selected_corpus(self):
+        with patch.object(semantic, "MAX_BLOCKS", 1):
+            report = self.refresh()
+        self.assertEqual({r["path"] for r in report["result"]["results"]},
+                         {self.a["source"]["path"], self.b["source"]["path"]})
 
     def test_rerank_is_independent_and_preserves_low_scoring_counterevidence(self):
         self.a["source"] = self.source(self.a["source"]["path"], "Treatment failed for all patients.\n")

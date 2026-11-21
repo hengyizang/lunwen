@@ -54,6 +54,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[figures,reader,figure-retrieval]"]'
       - name: Install independent presentation renderer
         run: |

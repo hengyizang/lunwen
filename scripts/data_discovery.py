@@ -345,7 +345,10 @@ SEARCHERS: dict[str, Callable[[str, int, Callable[..., Any]], list[dict[str, Any
 
 
 def _query_terms(query: str) -> set[str]:
-    return {part for part in re.findall(r"[a-z0-9]+", query.lower()) if len(part) >= 3}
+    terms = {part for part in re.findall(r"[a-z0-9]+", query.lower()) if len(part) >= 3}
+    for run in re.findall(r"[\u3400-\u9fff]+", query):
+        terms.update(run[i:i + 2] for i in range(max(1, len(run) - 1)))
+    return terms
 
 
 def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int, list[str], list[str]]:
@@ -356,6 +359,7 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
     all_terms: set[str] = set()
     phrase_bonus = 0
     title_matches = 0
+    best_coverage = 0.0
     for query in queries:
         terms = _query_terms(query)
         all_terms.update(terms)
@@ -363,11 +367,12 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
         if current:
             matched_queries.append(query)
             matched_terms.update(current)
-        normalized_query = " ".join(re.findall(r"[a-z0-9]+", query.lower()))
+        best_coverage = max(best_coverage, len(current) / max(1, len(terms)))
+        normalized_query = " ".join(query.lower().split())
         if normalized_query and normalized_query in f"{title} {description}":
             phrase_bonus = max(phrase_bonus, 18)
         title_matches += len({term for term in terms if term in title})
-    coverage = len(matched_terms) / max(1, len(all_terms))
+    coverage = best_coverage
     cross_source_count = len(candidate.get("also_found_by", []))
     cross_source_bonus = min(6, max(0, cross_source_count - 1) * 3)
     version_bonus = 3 if candidate.get("version") else 0
@@ -379,7 +384,7 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
               + cross_source_bonus
               + version_bonus),
     )
-    reasons = [f"matched {len(matched_terms)}/{max(1, len(all_terms))} query terms"]
+    reasons = [f"best query term coverage {coverage:.3f}; {len(matched_terms)} matching terms across queries"]
     if title_matches:
         reasons.append(f"{title_matches} title-term matches")
     if candidate.get("doi"):
@@ -396,9 +401,13 @@ def _rank_candidate(candidate: dict[str, Any], queries: list[str]) -> tuple[int,
 def _dedupe_key(candidate: dict[str, Any]) -> str:
     doi = str(candidate.get("doi") or "").lower().strip()
     doi = doi.removeprefix("https://doi.org/").removeprefix("doi:")
+    version = str(candidate.get("version") or "")
     if doi:
-        return f"doi:{doi}"
-    return f"url:{str(candidate.get('landing_url') or '').lower().rstrip('/')}"
+        return f"doi:{doi}:version:{version}"
+    url = urllib.parse.urlsplit(str(candidate.get("landing_url") or ""))
+    # Hosts are case-insensitive; paths and query strings need not be.
+    normalized = urllib.parse.urlunsplit((url.scheme.lower(), url.netloc.lower(), url.path, url.query, ""))
+    return f"url:{normalized}:version:{version}"
 
 
 def discover_many(
@@ -448,12 +457,14 @@ def discover_many(
 
     merged: dict[str, dict[str, Any]] = {}
     for candidate in collected:
+        observation = dict(candidate)
         key = _dedupe_key(candidate)
         if key not in merged:
-            merged[key] = candidate
-            candidate["also_found_by"] = [candidate["provider"]]
+            merged[key] = {**candidate, "also_found_by": [candidate["provider"]],
+                           "source_observations": [observation]}
         else:
             current = merged[key]
+            current["source_observations"].append(observation)
             current["matched_queries"] = sorted(
                 set(current.get("matched_queries", [])) | set(candidate.get("matched_queries", []))
             )
@@ -477,7 +488,6 @@ def discover_many(
             str(item.get("title", "")).lower(),
         )
     )
-    ranked = ranked[:max_candidates]
     return {
         "schema_version": "1.1",
         "created_at": now(),
@@ -489,6 +499,9 @@ def discover_many(
         "raw_candidate_count": len(collected),
         "candidate_count": len(ranked),
         "candidates": ranked,
+        "suggested_candidate_count": min(max_candidates, len(ranked)),
+        "suggested_candidates": ranked[:max_candidates],
+        "all_discovered_candidates_retained": True,
         "ranking_note": (
             "The score measures metadata/query overlap only. It is not evidence of scientific "
             "fitness, data quality, license validity, novelty, or publication suitability."

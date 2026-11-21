@@ -82,20 +82,29 @@ def validate_selected_venue(project: Path, paper_id: str) -> list[str]:
 
 
 def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | None = None) -> list[str]:
-    """B: one final package check, independent of numerical/editorial self-scores.
+    """Inspect current selected material without scoring or stage-approval prerequisites.
 
-    G5 records its binding in the existing decision. Packaging reuses that check
-    only while the approved paper and its actual external sources remain equal.
     No check here acquires data, runs an experiment, submits, or invokes a model.
     """
     from scripts import citation_audit, journal_dossier, jcr_verify, venue_policy, venue_compliance
     from scripts import manuscript_docx, revision_render, reporting_checklist, study_routes, publication_disclosure
-    paper=project/"papers"/paper_id;errors=validate_selected_venue(project,paper_id)
+    paper=project/"papers"/paper_id;errors=validate_selected_venue(project,paper_id);venue={}
     def check(label, callback):
         try:errors.extend(f"{paper_id} {label}: {issue}" for issue in callback())
         except (OSError,ValueError,RuntimeError,KeyError,TypeError,ImportError) as exc:errors.append(f"{paper_id} {label}: {exc}")
     def rendered_pdf():
-        revision_render.validate_render_manifest(paper)
+        if (paper / "reviews/revision-render.json").is_file():
+            revision_render.validate_render_manifest(paper)
+        else:
+            report = load_object(paper / "reviews/venue-compliance.json")
+            value = report.get("compile", {}).get("pdf") or report.get("compile", {}).get("pdf_path")
+            if not isinstance(value, str) or not value:
+                raise ValueError("actual compiled PDF is missing")
+            pdf = Path(value)
+            if not pdf.is_absolute():
+                pdf = paper / pdf
+            safe_file(pdf, paper)
+            revision_render.validate_render_receipt(paper, pdf, paper / "reviews/venue-compliance.json")
         return []
     # Quartiles and impact factors describe targets; they are not scientific
     # validity or automatic venue-fit cutoffs. Preserve unknown metadata.
@@ -132,14 +141,18 @@ def submission_checks(project: Path, paper_id: str, *, warnings: list[str] | Non
         require_final_origins(project,files)
     except (OSError,ValueError,RuntimeError,KeyError,TypeError) as exc:errors.append(f"{paper_id} final package: {exc}")
     check("DOCX export",lambda:manuscript_docx.validate_saved_report(paper,include_visual=False))
-    check("reporting guideline",lambda:reporting_checklist.validate_saved_report(paper))
+    if ((paper / "reviews/reporting-guideline-input.json").is_file() or
+            venue.get("requirements", {}).get("reporting_guideline")):
+        check("reporting guideline",lambda:reporting_checklist.audit(paper).get("errors", []))
     check("research exports",lambda:study_routes.export_errors(project,paper_id))
     # Check truthful internal usage; public AI-use statements are author-editable.
     check("recorded internal usage",lambda:publication_disclosure.integrity_errors(project,paper_id))
-    try:
-        from scripts.review_panel import submission_errors
-        check("blind scientific panel",lambda:submission_errors(project,paper_id))
-    except ImportError as exc:errors.append(f"{paper_id} blind scientific panel unavailable: {exc}")
+    if warnings is not None:
+        try:
+            from scripts.review_panel import submission_errors
+            warnings.extend(f"{paper_id} optional source review: {issue}" for issue in submission_errors(project, paper_id))
+        except (ImportError, OSError, ValueError, KeyError, TypeError) as exc:
+            warnings.append(f"{paper_id} optional source review: {exc}")
     return errors
 
 
@@ -151,8 +164,11 @@ def _submission_inputs(project: Path, paper_id: str) -> dict:
     def sources(value):
         if isinstance(value,dict):
             for key,item in value.items():
-                if key in {"path","raw_path"} and isinstance(item,str):
-                    source=path_in(project,item,exists=False)
+                if key in {"path","raw_path","source_path"} and isinstance(item,str):
+                    relative = Path(item)
+                    if relative.is_absolute():
+                        relative = relative.resolve().relative_to(project.resolve())
+                    source=path_in(project,relative.as_posix(),exists=False)
                     if source.is_file():paths.add(source)
                 else:sources(item)
         elif isinstance(value,list):
@@ -174,25 +190,31 @@ def _submission_inputs(project: Path, paper_id: str) -> dict:
         sources(receipts)
     # Paper contents are also sealed by paper_artifact_sha256. Include package
     # and local template bytes here because build/venue-template are excluded there.
-    for directory in ("manuscript","figures","tables","supplement","submission-materials","venue-template"):
-        base=paper/directory
-        if base.exists():
-            for path in base.rglob("*"):
-                if path.is_symlink():raise ResearchCtlError("Submission inputs cannot use symlinks")
-                if path.is_file():paths.add(path)
-    fixed=("venue.json","jcr-verification.json","reviews/venue-compliance.json","reviews/citation-audit.json","reviews/panel-inputs.json","reviews/revision-render.json","reviews/cloud-tex-build.json","reviews/cloud-word-build.json","disclosures.json")
+    paths.update(select_files(paper))
+    fixed=("venue.json","submission-files.json","reviews/venue-compliance.json","reviews/citation-audit.json","reviews/revision-render.json","reviews/cloud-tex-build.json","reviews/cloud-word-build.json","disclosures.json",
+           "reviews/docx-build.json", "reviews/tex-dependency-rights.json", "reviews/paper-facts.json",
+           "statistical-reporting-map.json", "reviews/reporting-guideline-input.json")
     paths.update(paper/name for name in fixed if (paper/name).is_file())
-    for name in ("jcr-verification.json","reviews/citation-audit.json","reviews/panel-inputs.json"):
+    for name in ("reviews/citation-audit.json", "reviews/docx-build.json", "reviews/paper-facts.json", "statistical-reporting-map.json"):
         if (paper/name).is_file():sources(load_object(paper/name))
-    # Panel receipts live outside the paper tree. Bind the actual current
-    # protected opinions as well as the author's source-bound responses so
-    # cached B checks cannot conceal changed or removed review evidence.
-    from scripts import review_panel
-    latest=path_in(project,f"{review_panel.PREFIX}/{paper_id}/latest.json",exists=False)
-    if latest.exists():
-        paths.add(latest)
-        sources(load_object(latest))
-        for row in review_panel.responses(project,paper_id):sources(row["receipt"])
+    selected_paths = select_files(paper)
+    selected_names = {path.relative_to(project).as_posix() for path in selected_paths}
+    registry = paper / "figures/figure-provenance.json"
+    selected_figures = ([row for row in load_object(registry).get("figures", [])
+                         if isinstance(row, dict) and row.get("figure_path") in selected_names]
+                        if registry.is_file() and any(path.is_relative_to(paper / "figures") for path in selected_paths) else [])
+    sources(selected_figures)
+    for receipt in (paper / "figures").glob("*.editable-export.json"):
+        try:
+            value = load_object(receipt)
+        except ResearchCtlError:
+            if receipt in selected_paths:
+                raise
+            continue
+        if any(isinstance(row, dict) and row.get("path") in selected_names for row in value.get("outputs", [])):
+            paths.add(receipt); sources(value)
+    # Optional reviewer opinions have their own source bindings. Their presence
+    # does not add a hidden prerequisite to exporting the chosen manuscript.
     module_names=("submission_package.py","journal_dossier.py","jcr_verify.py","venue_policy.py","venue_compliance.py",
         "citation_audit.py","manuscript_docx.py","revision_render.py","cloud_runtime.py","word_render.py",
         "reporting_checklist.py","publication_disclosure.py","review_panel.py","research_artifacts.py",
@@ -202,6 +224,7 @@ def _submission_inputs(project: Path, paper_id: str) -> dict:
     payload={"schema_version":"1.0","paper_id":paper_id,"journal_dossiers":selected,"journal_receipts":receipts,
         "files":{path.relative_to(project).as_posix():file_sha256(path) for path in sorted(paths)},
         "validators":{name:file_sha256(Path(__file__).parent/name) if (Path(__file__).parent/name).is_file() else None for name in module_names},
+        "selected_figure_records": selected_figures,
         "provenance":provenance_report(project,select_files(paper))}
     return payload
 
@@ -230,7 +253,7 @@ def safe_file(path: Path, paper: Path) -> None:
         raise ResearchCtlError(f"Refusing private/control material: {path}")
 
 
-def tex_dependency_files(paper: Path, manuscript: Path) -> list[Path]:
+def tex_dependency_files(paper: Path, manuscript: Path, *, require_rights: bool = True) -> list[Path]:
     """Select actual safe build inputs; third-party source needs reviewable rights."""
     try:
         from scripts.tex_sources import dependencies
@@ -246,7 +269,7 @@ def tex_dependency_files(paper: Path, manuscript: Path) -> list[Path]:
         relative=path.relative_to(paper).as_posix()
         if path.relative_to(paper).parts[0] not in {"manuscript","figures","tables","supplement","submission-materials"}:
             raise ResearchCtlError("Internal review material cannot be a submitted TeX dependency: "+relative)
-        if path.suffix.lower() in {".sty",".cls",".bst",".def",".cfg",".clo"}:
+        if require_rights and path.suffix.lower() in {".sty",".cls",".bst",".def",".cfg",".clo"}:
             row=records.get(relative,{})
             if (row.get("sha256")!=file_sha256(path) or row.get("redistribution_allowed") is not True
                     or not isinstance(row.get("license"),str) or not row["license"].strip()
@@ -284,21 +307,45 @@ def directory_files(directory: Path, paper: Path) -> Iterable[Path]:
     return sorted(files, key=lambda item: item.relative_to(paper).as_posix())
 
 
-def select_files(paper: Path) -> list[Path]:
+def select_files(paper: Path, *, draft: bool = False, warnings: list[str] | None = None) -> list[Path]:
+    """Select the manuscript's actual dependencies and explicitly named deliverables.
+
+    Working figures, recipes, thumbnails and abandoned drafts are not a submission
+    simply because they share a directory with the chosen paper.
+    """
     manuscript = paper / "manuscript"
     sources = [path for path in (manuscript / "main.tex", manuscript / "main.docx") if path.is_file()]
+    if not sources and draft:
+        sources = [path for path in (manuscript / "main.md", manuscript / "draft.md") if path.is_file()][:1]
     if len(sources) != 1:
         raise ResearchCtlError("Exactly one manuscript/main.tex or manuscript/main.docx is required.")
 
-    selected = tex_dependency_files(paper,sources[0]) if sources[0].suffix.lower()==".tex" else list(sources)
+    selected = list(sources)
+    if sources[0].suffix.lower() == ".tex":
+        try:
+            selected = tex_dependency_files(paper, sources[0], require_rights=not draft)
+        except ResearchCtlError as exc:
+            if not draft or "Missing" not in str(exc):
+                raise
+            if warnings is not None:
+                warnings.append("Incomplete draft dependency closure: " + str(exc))
     for name in ("references.bib", "main.pdf"):
         path = manuscript / name
         if path.is_file():
             selected.append(path)
-    for dirname in OPTIONAL_DIRS:
-        selected.extend(directory_files(paper / dirname, paper))
+    selection_path = paper / "submission-files.json"
+    if selection_path.is_file():
+        declared = load_object(selection_path).get("files")
+        if not isinstance(declared, list) or any(not isinstance(name, str) for name in declared):
+            raise ResearchCtlError("submission-files.json must name a files array of paper-relative paths")
+        for name in declared:
+            relative = PurePosixPath(name)
+            if relative.is_absolute() or ".." in relative.parts or not relative.parts or relative.parts[0] not in {"manuscript", *OPTIONAL_DIRS}:
+                raise ResearchCtlError("Selected submission file must be a publishable paper-relative path: " + name)
+            selected.append(paper / name)
 
-    compliance = load_object(paper / "reviews" / "venue-compliance.json")
+    compliance_path = paper / "reviews" / "venue-compliance.json"
+    compliance = load_object(compliance_path) if compliance_path.is_file() and not draft else {}
     compile_info = compliance.get("compile", {})
     if isinstance(compile_info, dict) and compile_info.get("status") == "pass":
         pdf_value = compile_info.get("pdf") or compile_info.get("pdf_path")
@@ -326,9 +373,8 @@ def checklist(project: str, paper_id: str) -> bytes:
 
 This archive was prepared locally. It has **not** been submitted anywhere.
 
-Research-stage checks are completed by the recorded automated workflow after
-human selection of the doctoral topic and every paper topic. Packaging does not
-waive external authorship, consent or publisher requirements.
+The manifest records the selected files and their current hashes. Packaging does
+not establish scientific validity or waive authorship, consent or publisher requirements.
 
 - [ ] Satisfy the journal's author agreement and any co-author consent requirements.
 - [ ] Match portal metadata to the manuscript exactly.
@@ -340,7 +386,9 @@ Do not upload `SUBMISSION-MANIFEST.json` or this checklist unless the journal re
     return text.encode("utf-8")
 
 
-def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
+def build_package(slug: str, paper_id: str, output: Path | None = None, *, draft: bool = False) -> Path:
+    if draft:
+        return _build_draft(slug, paper_id, output)
     from scripts.paper_execution import enabled,scope
     project=project_dir(slug)
     if enabled(project):
@@ -351,40 +399,22 @@ def build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
 
 def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path:
     paper_id = validate_paper_id(paper_id)
-    state = load_state(slug)
-    if state.get("paper_statuses", {}).get(paper_id) != "submission_ready":
-        raise ResearchCtlError(f"{paper_id} has not passed its G5 checks.")
     paper = project_dir(slug) / "papers" / paper_id
     if not paper.is_dir():
         raise ResearchCtlError(f"Missing paper directory: {paper}")
-
     project = paper.parent.parent
     venue_errors = validate_selected_venue(project, paper_id)
     if venue_errors:
         raise ResearchCtlError("; ".join(venue_errors))
-    approval=next((item for item in reversed(state.get("approvals",[])) if item.get("gate")=="G5" and item.get("paper_id")==paper_id),None)
-    if not approval or approval.get("paper_artifact_sha256")!=paper_artifact_hash(slug,paper_id):
-        raise ResearchCtlError("Paper changed after the G5 decision or lacks its current per-paper hash; re-run G5 checks")
-    binding=approval.get("submission_checks_sha256")
-    snapshot=_submission_inputs(project,paper_id)
-    checked_binding=_submission_binding(snapshot)
-    if binding is None:
-        # Old G5 records did not carry B input bindings. Inspect once rather
-        # than inventing a completed check or rewriting their research history.
-        issues=submission_checks(project,paper_id)
-        if issues:raise ResearchCtlError("Final submission checks failed: "+"; ".join(issues))
-    elif binding!=checked_binding:
-        raise ResearchCtlError("Final submission inputs changed after G5; rerun the submission check")
-    from scripts import researchctl,research_identity,scientific_scope,empirical_workflow,research_extensions,research_increments
-    scientific_errors=researchctl.paper_scientific_errors(project,paper_id)
-    for check in (
-        lambda:research_identity.validate(project,paper_id,"G5"),
-        lambda:scientific_scope.validate(project,"G5",paper_id),
-        lambda:empirical_workflow.gate_errors(project,"G5",paper_id),
-        lambda:research_extensions.gate_errors(project),
-        lambda:research_increments.gate_errors(project,"G5",paper_id)):
-        scientific_errors.extend(check())
-    if scientific_errors:raise ResearchCtlError("Scientific integrity changed after G5: "+"; ".join(scientific_errors))
+    snapshot = _submission_inputs(project, paper_id)
+    checked_binding = _submission_binding(snapshot)
+    observations: list[str] = []
+    issues = submission_checks(project, paper_id, warnings=observations)
+    from scripts import researchctl
+    issues.extend(researchctl.paper_scientific_errors(project, paper_id))
+    researchctl.paper_observations(project, paper_id, observations)
+    if issues:
+        raise ResearchCtlError("Final submission checks failed: " + "; ".join(dict.fromkeys(issues)))
     files = select_files(paper)
     try:
         require_final_origins(project, files)
@@ -405,8 +435,9 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
         "project": slug,
         "paper_id": paper_id,
         "submission_mode": "manual_only",
+        "scientific_completion_verified": False,
+        "observations": observations,
         "output_policy": {
-            "anthropic_final_outputs_allowed": False,
             "provenance": origins,
         },
         "files": [
@@ -418,7 +449,38 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
     ).encode("utf-8")
 
-    destination = output or paper / "submission" / "manual-upload.zip"
+    def unchanged():
+        if checked_binding != submission_check_binding(project, paper_id):
+            raise ResearchCtlError("Submission inputs changed during packaging; rerun the submission check")
+    return _write_archive(entries, output or paper / "submission/manual-upload.zip", unchanged)
+
+
+def _build_draft(slug: str, paper_id: str, output: Path | None = None) -> Path:
+    """Export readable work at any stage, without inventing review or readiness."""
+    paper_id = validate_paper_id(paper_id)
+    paper = project_dir(slug) / "papers" / paper_id
+    warnings: list[str] = []
+    files = select_files(paper, draft=True, warnings=warnings)
+    entries = {path.relative_to(paper).as_posix(): path.read_bytes() for path in files}
+    hashes = {name: sha256_bytes(payload) for name, payload in entries.items()}
+    selection = paper / "submission-files.json"
+    selection_hash = file_sha256(selection) if selection.is_file() else None
+    manifest = {"schema_version": "1.0", "project": slug, "paper_id": paper_id,
+                "submission_mode": "draft_unreviewed", "submission_ready": False,
+                "scientific_completion_verified": False, "warnings": warnings,
+                "files": [{"path": name, "size": len(payload), "sha256": hashes[name]}
+                          for name, payload in sorted(entries.items())]}
+    entries["DRAFT-MANIFEST.json"] = (json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+    entries["DRAFT-README.txt"] = b"Unreviewed draft. Export does not certify completeness, scientific validity, or submission readiness.\n"
+    def unchanged():
+        if (any(not (paper / name).is_file() or file_sha256(paper / name) != value for name, value in hashes.items())
+                or (file_sha256(selection) if selection.is_file() else None) != selection_hash):
+            raise ResearchCtlError("Draft inputs changed during export; retry using the current files")
+    return _write_archive(entries, output or paper / "submission/draft.zip", unchanged)
+
+
+def _write_archive(entries: dict[str, bytes], destination: Path, unchanged) -> Path:
+    """Atomically publish only after checking every written archive member."""
     destination = destination.resolve()
     destination.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(dir=destination.parent, delete=False) as handle:
@@ -446,9 +508,7 @@ def _build_package(slug: str, paper_id: str, output: Path | None = None) -> Path
                         raise ResearchCtlError("Written submission ZIP differs from the checked payload: " + name)
         except zipfile.BadZipFile as exc:
             raise ResearchCtlError("Written submission ZIP failed CRC or container validation") from exc
-        if (approval["paper_artifact_sha256"]!=paper_artifact_hash(slug,paper_id)
-                or checked_binding!=submission_check_binding(project,paper_id)):
-            raise ResearchCtlError("Submission inputs changed during packaging; rerun the G5 check")
+        unchanged()
         os.replace(temporary, destination)
     finally:
         temporary.unlink(missing_ok=True)
@@ -460,18 +520,19 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--project", required=True)
     value.add_argument("--paper", required=True)
     value.add_argument("--output", type=Path)
+    value.add_argument("--draft", action="store_true", help="Export current selected materials without submission approval; label the archive as an unreviewed draft")
     return value
 
 
 def main() -> int:
     args = parser().parse_args()
     try:
-        destination = build_package(args.project, args.paper, args.output)
+        destination = build_package(args.project, args.paper, args.output, draft=args.draft)
     except ResearchCtlError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
     print(destination)
-    print("Package created for manual upload only; no submission action was performed.")
+    print("Unreviewed draft exported; no submission readiness is asserted." if args.draft else "Package created for manual upload only; no submission action was performed.")
     return 0
 
 

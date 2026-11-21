@@ -1,6 +1,6 @@
 # Upstream components
 
-The local orchestrator is the authority for state, artifacts and human gates. An upstream skill may contribute a bounded method; it cannot approve a gate, change experimental results, or submit a manuscript.
+This is an attributed capability and installation reference, including historical review decisions. Select tools for the current task under AGENTS.md; historical stage/brand restrictions below do not create new prerequisites. Preserve sources, actual results, cumulative costs and real publication authority.
 
 ## K-Dense Scientific Agent Skills
 
@@ -14,7 +14,7 @@ bash scripts/install-kdense-core.sh --install
 
 The installer fetches the exact commit, verifies the resolved SHA and MIT license marker, and copies only the allowlisted skill directories. It does not execute their bundled scripts. Before first use, inspect any script, package requirement, network endpoint, API key request and pricing implication.
 
-Select domain skills only after G1. Examples that may become relevant are `openpiv`, `fluidsim`, `pymoo`, `simpy`, `stable-baselines3`, `modal` or `timesfm-forecasting`; none should be installed merely because its name sounds useful.
+Select domain skills when their capabilities help the current task. Examples that may become relevant are `openpiv`, `fluidsim`, `pymoo`, `simpy`, `stable-baselines3`, `modal` or `timesfm-forecasting`; none should be installed merely because its name sounds useful.
 
 ## Academic Research Skills
 
@@ -24,10 +24,9 @@ attributed framework/rubric/evidence-protocol files are already retained under
 pinned source identities in `THIRD-PARTY-NOTICES.md` and the integration locks.
 Those selected adaptations retain their noncommercial license; the deterministic
 Python adapters are independently implemented. The complete upstream
-orchestrators/plugins are not installed and cannot become a competing state
-machine or bypass native writer/critic/rights/budget controls.
+orchestrators/plugins are not installed and can be used through their actual supported interfaces within current user authority and cumulative budgets.
 
-The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e9370309c24b99977ad44091f`. Most orchestration overlaps the local state machine. The retained improvement is independently implemented revision-drift control: `scripts/revision_integrity.py` compares exact numeric, citation-key and claim-strength token multisets. Final scientific checks retain actual unsupported-change failures; revision-ledger completeness is an observation. A protected automated change record binds actual material scientific changes, while refreshing an editorial ledger alone does not invalidate G5.
+The 2026-09-26 review used the Codex repository at commit `3c37ef8ab480ba1e9370309c24b99977ad44091f`. Most orchestration overlaps the local state machine. The retained improvement is independently implemented revision-drift control: `scripts/revision_integrity.py` compares exact numeric, citation-key and claim-strength token multisets. Final scientific checks retain actual unsupported-change failures; revision-ledger completeness is an observation. An automated change record links actual material scientific changes; refreshing an editorial ledger alone does not invalidate unchanged scientific evidence.
 
 The next review also identified a shared `paper-facts` ledger, construct-to-item/coding/analysis validity chain, paragraph argument map, contradiction/method comparability grid and reviewer-concern triage as useful missing concepts across Supervisor Skills, Academic Research Skills and related projects. They are independently implemented in `scripts/manuscript_audit.py`, `scripts/systematic_review.py` and `scripts/reviewer_rounds.py`. These Python mechanisms are native implementations; the separately attributed selected reference adaptations above remain subject to their own CC BY-NC license. No broad upstream agent installation follows from this review.
 
@@ -53,26 +52,26 @@ pinned hashes and stricter file-level rights continue to apply.
 
 ## Experiment Agent
 
-The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Reconsider it only after G2 if it adds a capability the local executor lacks and the use satisfies the license.
+The reviewed upstream is also CC BY-NC 4.0. It is not installed in v1 because the local `experiment` skill already defines preregistration, budgets, execution logs, negative-result retention and independent statistical audits. Running two experiment orchestrators would create ambiguous state and duplicate provenance. Use it when it adds a useful capability and the actual use satisfies its license.
 
 ## proselint
 
 [`amperser/proselint`](https://github.com/amperser/proselint) is an optional
 BSD-3-Clause command-line linter for English prose. Version `0.16.0` is the
 reviewed integration target, corresponding to Git commit
-`a83a6164999803909f69eb3274d783c7070e73c1`. The G5 controller runs it only
+`a83a6164999803909f69eb3274d783c7070e73c1`. The writing audit runs it only
 when the executable is already installed, only over a temporary plain-text extraction of the active
 manuscript, and with `config/proselint-academic.json`. The temporary file is
 removed after the local process exits; no manuscript is uploaded.
 
 Its diagnostics are advisory. In particular, the project disables the generic
 hedging rule because uncertainty and limitations can be scientifically required.
-The built-in hash-bound audit remains the gate authority, and neither tool is an
+Neither tool is an
 AI detector or a basis for concealing model assistance.
 
 ## Academic writing-pattern sources
 
-The built-in line-level G5 rules in `config/academic-style-rules.json` use a
+The advisory line-level rules in `config/academic-style-rules.json` use a
 reviewed academic subset of ideas from three MIT-licensed projects:
 
 - [`conorbronsdon/avoid-ai-writing`](https://github.com/conorbronsdon/avoid-ai-writing)
@@ -103,14 +102,14 @@ normalizes its JSON findings. The temporary text is removed after execution.
 
 Harper is advisory and intentionally not auto-installed: its release and
 platform-specific binary must be reviewed before installation. A missing Harper
-binary never disables the built-in audit or G5; the quality report records its status
+binary never blocks research; the quality report records its status
 separately.
 
 ## Research-quality toolchain
 
-The v2.0 hard gates use a small dependency-free core for file hashes, complete
+The data-quality tools use a small dependency-free core for file hashes, complete
 tabular scans, non-tabular handler dispatch, exact duplicates, label imbalance and
-split/group overlap. This keeps the gate auditable when an optional package is
+split/group overlap. This keeps factual checks available when an optional package is
 unavailable. The following mature upstreams were reviewed and pinned rather
 than reimplementing their specialist functionality:
 
@@ -128,8 +127,8 @@ than reimplementing their specialist functionality:
   reference/current cohort quality and drift analysis. A named reference cohort
   is required; the tool must not infer one silently.
 - [`DVC`](https://github.com/treeverse/dvc), Apache-2.0: optional data and
-  pipeline versioning. DVC metadata never replaces this repository's G0–G5
-  state, approved-plan hash or experiment registry.
+  pipeline versioning. DVC metadata does not by itself establish scientific validity or replace actual
+  data, protocol versions and experiment records.
 - [`ToolUniverse`](https://github.com/mims-harvard/ToolUniverse), Apache-2.0:
   optional topic-selected AI4Science tool ecosystem. It is strongest for
   biomedical/life-science routes and is not enabled indiscriminately. The local
@@ -139,9 +138,9 @@ than reimplementing their specialist functionality:
   local scientific-document RAG and contradiction-checking layer. Its answers
   remain advisory and every citation still needs primary-source verification.
   The local adapter invokes the official `pqa` CLI over a hash-inventoried,
-  human-owned corpus and rechecks every input after execution.
+  explicitly selected corpus and rechecks every input after execution.
 
-All optional tools remain opt-in and local. Their availability and version are shown in
+All these tools are optional; use an available appropriate environment. Their availability and version are shown in
 the generated data-quality report. Heavy optional profilers are not silently
 installed or allowed to upload research data. The exact reviewed commits and
 licenses are recorded in `integrations/upstreams.lock.json`.
@@ -154,6 +153,6 @@ Do not replace a pinned commit with the latest branch tip automatically. For an 
 
 1. inspect the upstream diff, license and security workflow;
 2. review new scripts, hooks, network domains, dependencies and credential handling;
-3. run upstream tests and this repository's checks;
+3. run checks relevant to the changed capability;
 4. update the full commit SHA and review date in the lock file;
 5. preserve attribution and document the decision.

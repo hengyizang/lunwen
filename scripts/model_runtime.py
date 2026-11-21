@@ -374,10 +374,26 @@ def _cache_key(
         "billing_quote_sha256": (billing_quote.get("quote_sha256") or billing_quotes.quote_digest(billing_quote)) if billing_quote is not None else None,
         "declared_tool_limits": declared_tool_limits or {},
     }
-    digest = hashlib.sha256(
-        json.dumps(identity, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    ).hexdigest()
+    generation = {field: value for field, value in identity.items() if field not in CACHE_BILLING_FIELDS}
+    digest = hashlib.sha256(json.dumps(generation, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return digest, identity
+
+
+CACHE_BILLING_FIELDS = {"billing_identity", "billing_quote_sha256"}
+
+
+def _cached_file(directory: Path, key: str, identity: dict) -> Path:
+    target = directory / (key + ".json")
+    if target.is_file() or not directory.is_dir():
+        return target
+    # Existing v5 entries used the invoice as part of their filename.
+    old_key = hashlib.sha256(json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+    old = directory / (old_key + ".json")
+    return old if old.is_file() and not old.is_symlink() else target
+
+
+def _matches_request(cached, identity):
+    return all(cached.get(k) == v for k, v in identity.items() if k not in CACHE_BILLING_FIELDS)
 
 
 def fresh_call_required(role: str) -> bool:
@@ -418,8 +434,6 @@ def _write_cache(path: Path, value: dict[str, Any]) -> None:
 
 
 def _paper_for_stage(project_root: Path, stage: str) -> str | None:
-    if stage != "writing-and-review":
-        return None
     try:
         state = json.loads((project_root / "state" / "run.json").read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
@@ -430,17 +444,30 @@ def _paper_for_stage(project_root: Path, stage: str) -> str | None:
 
 def reservation_bound(provider: str, prompt: str, system: str | None, max_output_tokens: int,
                       quote: dict, limits: dict, *, controlled: bool = False,
-                      has_media: bool = False) -> float:
+                      has_media: bool = False, media: list | None = None, model: str | None = None) -> float:
     """Pure conservative bound shared by selection and the final spending gate."""
     request_text = (system or "") + "\n" + prompt
     predicted = estimate_tokens(request_text)
     conservative = controlled or quote.get("quote_schema") == "2.0"
     inputs = max(predicted, len(request_text.encode("utf-8")) + 1000) if conservative else predicted
     production = provider in ai_providers.PRODUCTION_PROVIDERS
-    if production and has_media:
-        # Media can consume the full multimodal context; text requests use
-        # their actual encoded request size rather than a flat 65k minimum.
-        inputs = max(inputs, 1048576)
+    if production and (has_media or media):
+        if (media and ai_providers.provider_family(provider) == "openai"
+                and all(item["mime_type"] == "text/plain" for item in media)):
+            # Responses sends these as input_text, with a small envelope per part.
+            inputs += sum(len(item["decoded"]) + 256 for item in media)
+        else:
+            # Binary media tokenization is endpoint-specific. Use its declared
+            # full input limit when supplied, falling back to the legacy cap.
+            raw = os.environ.get("DR_OS_MODEL_CONTEXT_LIMITS_JSON", "{}")
+            try:
+                configured = json.loads(raw)
+                ceiling = configured.get(f"{provider}|{model}", 1_048_576)
+                if type(ceiling) is not int or ceiling < 1:
+                    raise ValueError("expected a positive input-token ceiling")
+            except (ValueError, AttributeError) as exc:
+                raise ModelBudgetError("invalid configured model context limit") from exc
+            inputs = max(inputs, ceiling)
     cost = billing_quotes.reserve_cost(quote, inputs, max_output_tokens, limits)
     return round(cost, 8)
 
@@ -483,28 +510,20 @@ def call(
     if role == "multimodal-inspection" and not media:
         raise ModelBudgetError("multimodal inspection requires source-hashed attachments")
     contract_validator = None
-    if role in engineering_contract.TASKS:
-        if not production or model != "deepseek-v4.1-flash" or source_contract is None:
-            raise ModelBudgetError("engineering support requires its production route and source contract")
-        contract_validator = engineering_contract
-    elif production and model == "gpt-5.6-luna" and role not in {"endpoint-health", "model-signature", "model-instrumentation"}:
-        if role != "metadata-extraction" or source_contract is None:
-            raise ModelBudgetError("Luna requires a bounded metadata source contract")
-        from scripts import metadata_contract
-        contract_validator = metadata_contract
-    elif source_contract is not None:
-        raise ModelBudgetError("source contracts require their scoped metadata or engineering route")
+    if source_contract is not None:
+        if role in engineering_contract.TASKS:
+            contract_validator = engineering_contract
+        elif role == "metadata-extraction":
+            from scripts import metadata_contract
+            contract_validator = metadata_contract
+        else:
+            raise ModelBudgetError("source contracts require a supported metadata or engineering task")
     if contract_validator is not None:
         source_contract = contract_validator.validate_contract(source_contract)
         prompt = contract_validator.build_prompt(prompt, source_contract)
     decision = None
     if production:
         from scripts import dynamic_routing
-        if (route.get("task_kind") or role in model_routing.APPROVED_CRITICAL_TASKS
-                or (stage in {"topic-intelligence", "paper-architecture", "experiment-design"}
-                    and role in {*model_routing.CYCLE_ROLES, "writer"})):
-            task_profile = {**dynamic_routing.validate_profile(task_profile, stage=stage, role=role),
-                            "science_risk": "critical"}
         # A fully validated exact replay has no new inference cost. Do not
         # switch to a paid candidate merely because its historical unit price
         # is lower. Fresh independent reviews never enter this path.
@@ -520,10 +539,10 @@ def call(
                     provider, prompt, system, max_output_tokens, model, baseline_quote, baseline_limits,
                     stage=stage, role=role, reasoning_effort=reasoning_effort,
                     attachment_identity=baseline_media, routing_policy_sha256=route.get("policy_sha256"))
-                baseline_file = project_root / ".cache/model-responses" / (baseline_key + ".json")
+                baseline_file = _cached_file(project_root / ".cache/model-responses", baseline_key, baseline_identity)
                 cached_baseline = json.loads(baseline_file.read_text(encoding="utf-8"))
                 if (not baseline_file.is_symlink()
-                        and all(cached_baseline.get(k) == v for k, v in baseline_identity.items())
+                        and _matches_request(cached_baseline, baseline_identity)
                         and cached_baseline.get("reported_model") == model
                         and cached_baseline.get("completion_status") == "completed"
                         and cached_baseline.get("response_text_sha256") == hashlib.sha256(
@@ -594,10 +613,11 @@ def call(
             "not_scientific_evidence": True,
         })
     cache_path = project_root / ".cache" / "model-responses" / f"{key}.json"
-    if use_cache and cache_path.is_file():
+    prior = _cached_file(cache_path.parent, key, identity) if use_cache else cache_path
+    if use_cache and prior.is_file() and not prior.is_symlink():
         try:
-            cached = json.loads(cache_path.read_text(encoding="utf-8"))
-            if any(cached.get(field) != value for field, value in identity.items()):
+            cached = json.loads(prior.read_text(encoding="utf-8"))
+            if not _matches_request(cached, identity):
                 raise ValueError("cached scope or billing identity differs from the exact request")
             if configuration.get("strict_model_id") is True and cached.get("reported_model") != effective_model:
                 raise ValueError("cached reported model differs from the strict requested identity")
@@ -662,7 +682,7 @@ def call(
     if production and not controlled:
         raise ModelBudgetError("production calls require the persisted owner-approved spending ledger")
     reserved_cost = reservation_bound(provider, prompt, system, max_output_tokens, quote, limits,
-                                      controlled=controlled, has_media=bool(media))
+                                      controlled=controlled, media=media, model=effective_model)
     if reserved_cost > float(status["project_remaining"]):
         raise ModelBudgetError(
             f"request could exceed project model budget: reserve up to CNY {reserved_cost:.4f}, "

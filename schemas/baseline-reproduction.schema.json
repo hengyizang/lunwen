@@ -4,33 +4,216 @@
   "title": "Evidence-bound baseline reproduction",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "paper_id", "status", "baselines", "human_review_required"],
+  "required": [
+    "schema_version",
+    "paper_id",
+    "status",
+    "baselines",
+    "human_review_required"
+  ],
   "properties": {
-    "schema_version": {"const": "1.0"},
-    "paper_id": {"type": "string", "pattern": "^P[0-9]{2}$"},
-    "status": {"const": "pass"},
+    "schema_version": {
+      "const": "1.0"
+    },
+    "paper_id": {
+      "type": "string",
+      "pattern": "^P[0-9]{2}$"
+    },
+    "status": {
+      "const": "pass"
+    },
     "baselines": {
-      "type": "array", "minItems": 2,
+      "type": "array",
+      "minItems": 2,
       "items": {
-        "type": "object", "additionalProperties": false,
-        "required": ["baseline_id", "class", "metric", "reference_source_url", "reference_value", "observed_value", "absolute_tolerance", "comparable_protocol", "within_tolerance", "run_ids", "attempt_ids", "evidence_files", "comparison_notes"],
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "baseline_id",
+          "class",
+          "metric",
+          "reference_source_url",
+          "reference_value",
+          "observed_value",
+          "absolute_tolerance",
+          "comparable_protocol",
+          "within_tolerance",
+          "run_ids",
+          "attempt_ids",
+          "evidence_files",
+          "comparison_notes",
+          "reference_source",
+          "observed_source"
+        ],
         "properties": {
-          "baseline_id": {"type": "string", "minLength": 1},
-          "class": {"enum": ["domain_standard", "strong_recent"]},
-          "metric": {"type": "string", "minLength": 1},
-          "reference_source_url": {"type": "string", "pattern": "^https://"},
-          "reference_value": {"type": "number"},
-          "observed_value": {"type": "number"},
-          "absolute_tolerance": {"type": "number", "minimum": 0},
-          "comparable_protocol": {"const": true},
-          "within_tolerance": {"const": true},
-          "run_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-          "attempt_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-          "evidence_files": {"type": "array", "minItems": 1, "items": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}},
-          "comparison_notes": {"type": "string", "minLength": 1}
+          "baseline_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "class": {
+            "enum": [
+              "domain_standard",
+              "strong_recent"
+            ]
+          },
+          "metric": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference_source_url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "reference_value": {
+            "type": "number"
+          },
+          "observed_value": {
+            "type": "number"
+          },
+          "absolute_tolerance": {
+            "type": "number",
+            "minimum": 0
+          },
+          "comparable_protocol": {
+            "const": true
+          },
+          "within_tolerance": {
+            "const": true
+          },
+          "run_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "attempt_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "evidence_files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          },
+          "comparison_notes": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference_source": {
+            "$ref": "#/$defs/value_source"
+          },
+          "observed_source": {
+            "$ref": "#/$defs/value_source"
+          }
         }
       }
     },
-    "human_review_required": {"type": "boolean"}
+    "human_review_required": {
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "value_source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256",
+        "selector"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "selector": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "json_pointer"
+              ],
+              "properties": {
+                "json_pointer": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "column",
+                "row"
+              ],
+              "properties": {
+                "column": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "row": {
+                  "type": "object",
+                  "minProperties": 1,
+                  "additionalProperties": {
+                    "type": [
+                      "string",
+                      "number"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "line",
+                "numeric_token"
+              ],
+              "properties": {
+                "line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "numeric_token": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
   }
 }

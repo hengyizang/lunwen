@@ -24,11 +24,11 @@ class FigureProvenanceTests(unittest.TestCase):
             record_figure(project,"P01","papers/P01/figures/result.svg","data_chart","analysis/chart.py",["results/metrics.csv"],["r1"],language_checked_by="Researcher")
             from scripts.figure_provenance import lineage
             with patch("scripts.figure_provenance.lineage",wraps=lineage) as checked:
-                self.assertEqual(validate_figure_provenance(project,paper),[])
+                self.assertEqual(validate_figure_provenance(project,paper,selected_files=[p for p in (paper/"figures").iterdir() if p.suffix in {".png",".svg"}]),[])
             self.assertEqual(checked.call_count,1)
             self.assertEqual(output_provenance.current_origin(project,paper/"figures"/"figure-provenance.json")["status"],"tracked")
             data.write_text("x,y\n1,3\n",encoding="utf-8")
-            self.assertTrue(any("input hash is stale" in error for error in validate_figure_provenance(project,paper)))
+            self.assertTrue(any("input hash is stale" in error for error in validate_figure_provenance(project,paper,selected_files=[p for p in (paper/"figures").iterdir() if p.suffix in {".png",".svg"}])))
 
     def test_figure_without_human_label_uses_machine_review(self)->None:
         with tempfile.TemporaryDirectory() as temp:
@@ -37,7 +37,7 @@ class FigureProvenanceTests(unittest.TestCase):
             registry=json.loads((paper/"figures/figure-provenance.json").read_text())
             self.assertEqual(registry["figures"][0]["review_kind"],"automated")
             self.assertNotIn("language_checked_by",registry["figures"][0])
-            self.assertTrue(any("automated visual" in error for error in validate_figure_provenance(project,paper)))
+            self.assertTrue(any("automated visual" in error for error in validate_figure_provenance(project,paper,include_visual=True,selected_files=[p for p in (paper/"figures").iterdir() if p.suffix in {".png",".svg"}])))
 
     def test_native_render_registers_only_executor_sealed_data_without_human_name(self)->None:
         from scripts.research_artifacts import write,sha

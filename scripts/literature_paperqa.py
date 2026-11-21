@@ -74,8 +74,8 @@ def sdk_rank(query, chunks, dense, *, project=None):
         raise ValueError("PaperQA2 SDK differs from the reviewed exact package version")
     from paperqa.llms import NumpyVectorStore
     from paperqa.types import Doc, Text
-    if not chunks or len(chunks) > literature_semantic.MAX_BLOCKS:
-        raise ValueError("SDK corpus must contain bounded nonempty original blocks")
+    if not chunks:
+        raise ValueError("SDK corpus must contain original blocks")
     dimension = dense["dimension"]
     if dense["query"]["text"] != query or dense["query"]["sha256"] != hashlib.sha256(query.encode()).hexdigest():
         raise ValueError("SDK query differs from the exact cached embedding")
@@ -129,11 +129,11 @@ def _request(project, request_file):
 def _prepare(project, spec):
     prepared = literature_review.prepare(project, spec.get("retrieval"))
     semantic_request = spec.get("semantic_request", "program/literature-semantic.json")
-    report = literature_semantic.validate_saved_report(project, semantic_request)
     semantic = spec.get("semantic")
-    target = path_in(project, literature_semantic.OUTPUT + "/latest.json")
-    if (not isinstance(semantic, dict) or semantic != {"path": literature_semantic.OUTPUT + "/latest.json", "sha256": sha(target)}
-            or report["request"]["retrieval"] != spec["retrieval"]):
+    if not isinstance(semantic, dict) or set(semantic) != {"path", "sha256"}:
+        raise ValueError("PaperQA2 requires an exact semantic report binding")
+    report = literature_semantic.validate_saved_report(project, semantic_request, report_binding=semantic)
+    if report["request"]["retrieval"] != spec["retrieval"]:
         raise ValueError("PaperQA2 bridge requires the exact current semantic report and original retrieval scope")
     bound = literature_review.prepare(project, report["retrieval_request"])
     chunks, searched = evidence_retrieval.corpus(project, prepared["spec"]["sources"])
@@ -204,11 +204,11 @@ def _answer(project, question, retrieval, max_tokens):
     try:
         response = paper_qa.validate_response(result.text, retrieval["blocks"], require_statement_citations=True)
         return {"status": "source_citations_checked_semantics_require_review", "response": response,
-                "model_receipt": receipt, "model_call_made": not result.cache_hit}, result
+                "raw_response": result.text, "model_receipt": receipt, "model_call_made": not result.cache_hit}, result
     except (ValueError, TypeError) as exc:
         return {"status": "model_response_rejected_do_not_use", "validation_error": str(exc),
                 "response_sha256": hashlib.sha256(result.text.encode()).hexdigest(),
-                "model_receipt": receipt, "model_call_made": not result.cache_hit}, result
+                "raw_response": result.text, "model_receipt": receipt, "model_call_made": not result.cache_hit}, result
 
 
 def refresh(project: Path, request_file=REQUEST, *, execute=False):
@@ -218,7 +218,7 @@ def refresh(project: Path, request_file=REQUEST, *, execute=False):
     project = Path(project).resolve()
     spec = _request(project, request_file)
     prepared = _prepare(project, spec)
-    directory = path_in(project, OUTPUT + "/" + spec["id"], exists=False)
+    directory = path_in(project, OUTPUT + "/" + spec["id"] + "/versions/" + prepared["fingerprint"], exists=False)
     target, manifest_path = directory / "report.json", directory / "manifest.json"
     if target.is_file():
         existing = validate_saved_report(project, request_file)
@@ -256,8 +256,9 @@ def validate_saved_report(project: Path, request_file=REQUEST):
     project = Path(project).resolve()
     spec = _request(project, request_file)
     prepared = _prepare(project, spec)
-    manifest_path = path_in(project, OUTPUT + "/" + spec["id"] + "/manifest.json")
-    target = path_in(project, OUTPUT + "/" + spec["id"] + "/report.json")
+    directory = OUTPUT + "/" + spec["id"] + "/versions/" + prepared["fingerprint"]
+    manifest_path = path_in(project, directory + "/manifest.json")
+    target = path_in(project, directory + "/report.json")
     validate_manifest(project, manifest_path, MODULE, {target.relative_to(project).as_posix()},
         metadata={"request": {"path": request_file, "sha256": sha(path_in(project, request_file))},
                   "fingerprint": prepared["fingerprint"]})
@@ -271,6 +272,6 @@ def validate_saved_report(project: Path, request_file=REQUEST):
     if "response" in report:
         paper_qa.validate_response(json.dumps(report["response"]), context["blocks"], require_statement_citations=True)
     report_origin = output_provenance.current_origin(project, target)
-    if report_origin.get("status") != "tracked" or report_origin.get("family") == "anthropic":
+    if report_origin.get("status") != "tracked":
         raise ValueError("PaperQA2 bridge answer provenance changed")
     return report

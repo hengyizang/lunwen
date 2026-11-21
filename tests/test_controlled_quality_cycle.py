@@ -22,6 +22,7 @@ class ControlledQualityCycleTests(unittest.TestCase):
         self.addCleanup(fixture.doCleanups)
         self.fixture = fixture
         self.project = fixture.project
+        write(self.project / "program/review-policy.json", {"enabled": True, "stages": ["experiment-design"]})
         self.slug = fixture.slug
         self.prereg = self.project / "papers/P01/preregistration.json"
         self.script = self.project / "analysis/probe.py"
@@ -130,15 +131,16 @@ class ControlledQualityCycleTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             api.safe_target(self.slug, "analysis/probe.py")
 
-    def test_unapproved_scientific_scope_refuses_machine_preparation_without_writes(self):
+    def test_missing_topic_approval_does_not_block_actual_protocol_preparation(self):
         state = read(self.project / "state/run.json")
         state["approved_gates"].remove("G2")
         write(self.project / "state/run.json", state)
         before = {p.relative_to(self.project).as_posix(): p.read_bytes() for p in self.project.rglob("*") if p.is_file()}
         result = automated_quality.checked_run(self.project, "experiment-design")
-        self.assertTrue(result["blockers"])
-        self.assertFalse(self.prereg.exists())
-        self.assertEqual(before, {p.relative_to(self.project).as_posix(): p.read_bytes() for p in self.project.rglob("*") if p.is_file()})
+        self.assertEqual(result["blockers"], [])
+        self.assertTrue(self.prereg.exists())
+        self.assertNotIn("G2", read(self.project / "state/run.json")["approved_gates"])
+        self.assertFalse(read(self.prereg)["human_confirmation"])
 
     def test_checked_quality_uses_actual_stage_and_skips_nonresearch_stages(self):
         self.assertIsNone(automated_quality.checked_run(self.project, "topic-intelligence"))

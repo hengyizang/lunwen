@@ -205,9 +205,6 @@ def automatic_retry(project, item):
     result = {"attempt_id": item["attempt_id"], "retry_authorized": False,
               "decision_kind": "automated", "human_confirmation": False}
     try:
-        state = read(project / "state/run.json")
-        if state.get("gate") != "G4" or state.get("status") != "awaiting_work":
-            raise RecoveryError("automatic recovery requires the open G4 stage")
         receipt(project, item)
         if (project / "state/experiment-execution-lease.json").exists():
             raise RecoveryError("execution reservation is unresolved; no automatic retry")
@@ -268,9 +265,6 @@ def diagnosis_context(project):
     """
     result = {"status": "not_needed", "paid_calls": 0, "execution_authorized": False}
     try:
-        state = read(project / "state/run.json")
-        if (state.get("gate"), state.get("status")) != ("G4", "awaiting_work"):
-            return result
         rows = records(project)
         if not any(row.get("status") in {"failed", "timed_out"} for row in rows):
             return result
@@ -371,9 +365,6 @@ def failure_control_status(project):
     try:
         from scripts import experiment_runner as runner
         from scripts.supplemental_experiments import all_compute_cost
-        state = read(project / "state/run.json")
-        if (state.get("gate"), state.get("status")) != ("G4", "awaiting_work"):
-            return context
         if (project / "state/experiment-execution-lease.json").exists():
             return context
         plan, ceiling = runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
@@ -421,8 +412,8 @@ def automatic_retirement(project, *, run_id):
             raise RecoveryError(context.get("blocker", "no eligible failed protocol"))
         proposal = read(source)
         origin = output_provenance.current_origin(project, source)
-        if origin.get("status") != "tracked" or origin.get("family") != "openai":
-            raise RecoveryError("automatic retirement needs the actual authorized non-Claude writer proposal")
+        if origin.get("status") != "tracked":
+            raise RecoveryError("automatic retirement needs the actual source-bound writer proposal")
         fields = {"schema_version", "operation", "plan_sha256", "budget_sha256", "version", "reason",
                   "prior_outcomes_seen", "observed_prior_results", "new_analysis_phase", "failure_category",
                   "failed_attempt_ids", "diagnostic_evidence"}
@@ -481,9 +472,10 @@ def automatic_retirement(project, *, run_id):
 def prepare(project, source, actor, operation):
     from scripts import experiment_runner as runner
     state = read(project / "state/run.json")
-    if state.get("gate") != "G4" or state.get("status") != "awaiting_work":
-        raise RecoveryError("primary recovery requires the open G4 stage")
-    runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
+    try:
+        runner.approved_plan(project, experiment_path(project, 'experiments/plan.json'), experiment_path(project, 'experiments/budget.json'))
+    except runner.ExperimentError as exc:
+        raise RecoveryError(f"cannot recover changed or invalid frozen inputs: {exc}") from exc
     proposal = read(path_in(project, source))
     if (not actor or proposal.get("schema_version") != "1.0" or proposal.get("operation") != operation
             or proposal.get("plan_sha256") != sha(experiment_path(project, 'experiments/plan.json'))

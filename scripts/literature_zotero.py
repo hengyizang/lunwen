@@ -130,7 +130,14 @@ def build(project, spec, *, fetch=None):
     identity = {k: spec.get(k) for k in ("mode", "library_type", "library_id", "authenticated")}
     if previous and previous.get("library") != identity:
         raise ValueError("use a new Zotero import ID when changing library identity")
-    files, receipts = [], []
+    files, receipts, pending_responses = [], [], {}
+
+    def stage_response(path, payload):
+        # Validate the complete remote snapshot before touching the current
+        # library. A later pagination/deletion error must leave it usable.
+        data = (json.dumps(payload, ensure_ascii=False, indent=2) + "\n").encode()
+        pending_responses[path] = data
+        return hashlib.sha256(data).hexdigest()
     records = {r["key"]: r for r in previous.get("items", [])} if previous and spec["mode"] == "web" else {}
     previous_version = previous.get("library_version", 0) if previous else 0
     version, removed = None, []
@@ -159,14 +166,13 @@ def build(project, spec, *, fetch=None):
                 raise ValueError("invalid Zotero page/count")
             digest = hashlib.sha256(raw).hexdigest()
             raw_path = directory / "responses" / (digest + ".json")
-            raw_path.parent.mkdir(parents=True, exist_ok=True)
             # Keep only the reviewed projection. Private notes/annotations and
             # attachment metadata must not leak via an ostensibly raw receipt.
-            write(raw_path, {"raw_response_sha256": digest, "raw_response_not_retained": True,
+            projection_sha = stage_response(raw_path, {"raw_response_sha256": digest, "raw_response_not_retained": True,
                              "items": [_item(item)[1] for item in items]})
             files.append(raw_path)
             receipts.append({"url": url, "raw_response_sha256": digest,
-                             "sanitized_projection": {"path": raw_path.relative_to(project).as_posix(), "sha256": sha(raw_path)},
+                             "sanitized_projection": {"path": raw_path.relative_to(project).as_posix(), "sha256": projection_sha},
                              "library_version": version, "total_results": total, "returned": len(items)})
             for item in items:
                 key, _ = _item(item)
@@ -189,9 +195,9 @@ def build(project, spec, *, fetch=None):
             if not isinstance(removed, list) or any(not KEY.fullmatch(str(k)) for k in removed):
                 raise ValueError("invalid Zotero deleted item keys")
             raw_path = directory / "responses" / (hashlib.sha256(raw).hexdigest() + ".json")
-            write(raw_path, {"raw_response_sha256": hashlib.sha256(raw).hexdigest(), "deleted_item_keys": removed})
+            projection_sha = stage_response(raw_path, {"raw_response_sha256": hashlib.sha256(raw).hexdigest(), "deleted_item_keys": removed})
             files.append(raw_path)
-            receipts.append({"url": url, "response": {"path": raw_path.relative_to(project).as_posix(), "sha256": sha(raw_path)},
+            receipts.append({"url": url, "response": {"path": raw_path.relative_to(project).as_posix(), "sha256": projection_sha},
                              "library_version": version, "deletions": len(removed)})
     changed = []
     for batch in batches:
@@ -214,12 +220,24 @@ def build(project, spec, *, fetch=None):
         "paid_calls": 0, "attachments_downloaded": False, "full_text_checked": False,
         "imported_at": datetime.now(timezone.utc).isoformat(), "scientific_inclusion": False}
     index = directory / "index.json"
+    if index.is_file():
+        archive = directory / "history" / (sha(index) + ".json")
+        archive.parent.mkdir(parents=True, exist_ok=True)
+        if not archive.exists():
+            archive.write_bytes(index.read_bytes())
+    for path, data in pending_responses.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if path.exists() and path.read_bytes() != data:
+            raise ValueError("Zotero response projection changed for an existing content hash")
+        path.write_bytes(data)
     write(index, report)
     page = directory / "index.html"
     page.write_text("<!doctype html><meta charset='utf-8'><title>Zotero bibliography</title><h1>Zotero bibliography</h1>"
         "<p>Metadata leads only. No PDF, scientific screening or server writes.</p><ul>" + "".join(
         "<li>" + html.escape(r.get("work", {}).get("title", r["status"])) + "</li>" for r in report["items"]) + "</ul>", encoding="utf-8")
-    files += [index, page]
+    # Keep every earlier source projection and report. The next sync validates
+    # this same complete inventory, rather than only the latest response set.
+    files = [p for p in directory.rglob("*") if p.is_file() and p.name != "manifest.json"]
     manifest = directory / "manifest.json"
     seal_manifest(project, list(dict.fromkeys(files)), manifest, "scripts/literature_zotero.py", {}, files_key="files")
     return {**report, "report_path": relative + "/index.json", "html_path": relative + "/index.html"}

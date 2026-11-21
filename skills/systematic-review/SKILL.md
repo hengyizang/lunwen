@@ -1,12 +1,10 @@
 ---
 name: systematic-review
-description: Run a reproducible systematic literature screening ledger, PRISMA-style flow, contradiction/method comparison matrix and citation exports from executed search receipts.
+description: Conduct a reproducible systematic review appropriate to its actual protocol.
 ---
 
-# Systematic review
+# Systematic Review
 
-Read `references/stage-contracts.md` G1 and `skills/citations/SKILL.md`. Choose quick, standard, deep or audit scope before searching. Execute enough lawful provider searches with `scripts/literature_evidence.py`, saving query family, time, filters and receipt hashes. The mode is a scope setting, never proof that a review is comprehensive.
+Use the relevant question, eligibility criteria, search sources and study/report identities. Preserve inclusion/exclusion reasons, missing texts, actual screener identity and bias judgments. Independent screening/adjudication and PRISMA reporting belong to the chosen review design or target, not every literature search. The existing `scripts/systematic_review.py` ledger and exports can help. Never silently convert pending decisions to included/excluded or present a generated checklist as completed human review.
 
-Run `scripts/systematic_review.py seed --project <slug> --receipt <id> --mode <mode> --criteria '<predeclared inclusion rules>' --actor '<person>'`. Deep/Audit must also pass `--protocol <project-relative-json>`; the protocol needs `registered` or `author-approved` status and a named authority. Record actual attributed title/abstract and full-text screening decisions, exclusion reasons, and exact included-report evidence locations in `evidence/systematic/screening.json`. Deep/Audit additionally require two actual independently attributed decisions at each decided stage; disagreement requires a third named adjudicator and rationale. For included reports, record `report_id`, a cross-report `study_group_id`, method/population/outcome/limitations and a named risk-of-bias tool with two assessors and domain-level support. Never auto-include pending records.
-
-Run `report` to export PRISMA-style report/study counts and flow, search-strategy receipts, protocol binding, comparison and risk-of-bias CSVs, BibTeX, RIS, included JSON, HTML and a hash manifest. Fill comparisons from actual full text, not metadata. Complete the generated PRISMA 2020 and PRISMA-S template with manuscript locations, a named signature and date; run `validate --completed-checklist <json>` before treating the export as complete. The mechanical export does not certify methodological or reporting compliance.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

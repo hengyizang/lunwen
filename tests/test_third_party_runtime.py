@@ -79,6 +79,16 @@ class ThirdPartyRuntimeTests(unittest.TestCase):
         self.assertFalse(body["scientific_evidence"])
         self.assertNotIn("API_KEY", " ".join(body["env_keys"]))
 
+    def test_failure_and_timeout_report_actual_partial_output(self):
+        for argv, timeout, code in ((["print('partial'); raise SystemExit(7)"], 10, 7),
+                                    (["import time; print('partial', flush=True); time.sleep(5)"], .2, 124)):
+            args = ns(source="local", argv=[sys.executable, "-c", *argv], cwd="", timeout=timeout,
+                      execute=True, no_receipt=False)
+            self.assertEqual(t.cmd_free(args), code)
+            records = [json.loads(p.read_text()) for p in (t.REPORTS / "receipts").glob("free-*.json")]
+            self.assertTrue(any(r["exit_code"] == code and r["timed_out"] == (code == 124)
+                                and "partial" in r["stdout_preview"] for r in records))
+
     def test_bind_output_hashes_file_and_refuses_escape(self):
         self.register()
         target = self.tmp / "result.json"

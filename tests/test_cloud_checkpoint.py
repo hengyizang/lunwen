@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -49,6 +50,7 @@ class CloudCheckpointTests(unittest.TestCase):
                 "api_runs/trial/claude-plan.json": b'{"internal_only":true}',
                 ".cache/model-responses/exact.json": b'{"cache":"fixture"}',
                 "state/model-usage.jsonl": b'{"cost_cny":0.1}\n',
+                "state/citation-metadata/catalog.json": b'{"title":"published source"}',
                 "state/model-route-decisions.jsonl": b'{"selected_candidate_id":"baseline"}\n',
             }
             for rel, data in files.items():
@@ -65,6 +67,18 @@ class CloudCheckpointTests(unittest.TestCase):
             self.assertEqual(manifest["retention_days"], 90)
             self.assertIn("data/processed/measurements.parquet", [p["path"] for p in manifest["files"]])
             self.assertIn("state/model-route-decisions.jsonl", [p["path"] for p in manifest["files"]])
+
+    def test_source_records_remain_in_git_above_small_checkpoint_quota(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            names = ("data/datasets.jsonl", "evidence/literature/raw/search.xml",
+                     "evidence/literature/normalized/search.json", "data/discovery-batch.json")
+            for name in names:
+                path = project / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"public record" * 20)
+            with patch.object(cp, "GIT_FILE_LIMIT", 50), patch.object(cp, "GIT_TOTAL_LIMIT", 100):
+                self.assertEqual({p.relative_to(project).as_posix() for p in cp.git_files(project)}, set(names))
 
     def test_tampering_or_missing_archive_blocks_without_partial_restore(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -123,6 +137,26 @@ class CloudCheckpointTests(unittest.TestCase):
             with self.assertRaisesRegex(cp.CheckpointError,'forbidden'):
                 cp.restore(project,archive)
             self.assertFalse((project/'state/run.json').exists())
+
+    def test_billing_retry_pushes_already_committed_reservation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checkout, remote, project = root / "checkout", root / "remote.git", root / "example"
+            subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+            subprocess.run(["git", "remote", "add", "origin", str(remote)], cwd=checkout, check=True)
+            (project / "state").mkdir(parents=True)
+            control = project / "state/model-spend-control.json"
+            control.write_text('{"reservation":"existing"}')
+            env = {"DR_OS_REQUIRE_REMOTE_RESERVATION":"1", "GITHUB_ACTIONS":"true",
+                   "DR_OS_STATE_WORKTREE":str(checkout), "DR_OS_STATE_BRANCH":"cloud-state/example"}
+            with patch.dict(os.environ, env):
+                with self.assertRaises(cp.CheckpointError):
+                    cp.sync_billing(project)
+                subprocess.run(["git", "init", "--bare", "-q", str(remote)], check=True)
+                cp.sync_billing(project)
+            pushed = subprocess.check_output(["git", "show",
+                "cloud-state/example:projects/example/state/model-spend-control.json"], cwd=remote)
+            self.assertEqual(pushed, control.read_bytes())
 
     def test_unchanged_idle_checkpoint_does_not_write_a_new_manifest_or_archive(self):
         with tempfile.TemporaryDirectory() as directory:
