@@ -36,6 +36,24 @@
       "run_id": "20261108t101618z-crossref-f4ed1f2dee",
       "sha256": "182ca1f52079d5b90d9dad92659938a184c29558dd2ef14aa775154bf034eb8b"
     },
+    "evidence/literature/assets/096422efaf7b7c609d72100f/latest.json": {
+      "family": "other",
+      "model": "scripts/literature_assets.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-21T04:20:00+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "5053534c998a6381383bb50afaebc88d4b814c76b22675b0f34bbcc395544d53"
+    },
+    "evidence/literature/assets/096422efaf7b7c609d72100f/receipts/5053534c998a6381383bb50afaebc88d4b814c76b22675b0f34bbcc395544d53.json": {
+      "family": "other",
+      "model": "scripts/literature_assets.py",
+      "provider": "deterministic-control-plane",
+      "recorded_at": "2026-11-21T04:20:00+00:00",
+      "role": "artifact-builder",
+      "run_id": "quality-refresh",
+      "sha256": "5053534c998a6381383bb50afaebc88d4b814c76b22675b0f34bbcc395544d53"
+    },
     "evidence/literature/assets/a9e0b5854c66252d916f7336/latest.json": {
       "family": "other",
       "model": "scripts/literature_assets.py",
@@ -803,5 +821,5 @@
     }
   },
   "schema_version": "1.0",
-  "updated_at": "2026-11-21T04:18:49+00:00"
+  "updated_at": "2026-11-21T04:20:00+00:00"
 }

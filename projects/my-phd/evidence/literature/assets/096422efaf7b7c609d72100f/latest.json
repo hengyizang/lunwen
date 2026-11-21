@@ -1,0 +1,64 @@
+{
+  "acquired_at": "2026-11-21T04:20:00.320748+00:00",
+  "arxiv_id": null,
+  "downloads": [
+    {
+      "acquired_at": "2026-11-21T04:20:00.789812+00:00",
+      "bytes": 1033392,
+      "content_type": "application/pdf",
+      "final_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730.pdf",
+      "sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+      "source_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf"
+    }
+  ],
+  "execution": {
+    "mode": "cloud",
+    "receipt_id": "44865545357"
+  },
+  "failures": [],
+  "final_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+  "local_pdf": "data/raw/literature/sources/d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730.pdf",
+  "original_input": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+  "pdf_status": "acquired",
+  "pdfs": [
+    {
+      "acquired_at": "2026-11-21T04:20:00.789812+00:00",
+      "bytes": 1033392,
+      "content_type": "application/pdf",
+      "final_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+      "http_status": 200,
+      "kind": "pdf",
+      "path": "data/raw/literature/sources/d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730.pdf",
+      "permissions": {
+        "human_review": "required",
+        "license": "unknown",
+        "permission_evidence_url": null,
+        "public_access_is_not_reuse_permission": true,
+        "reuse_permission": "unknown"
+      },
+      "sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+      "source_pdf_sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+      "source_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+      "version": null
+    }
+  ],
+  "permissions": {
+    "human_review": "required",
+    "license": "unknown",
+    "permission_evidence_url": null,
+    "public_access_is_not_reuse_permission": true,
+    "reuse_permission": "unknown"
+  },
+  "publication_date": null,
+  "schema_version": 1,
+  "scientific_support_status": "unreviewed_source",
+  "source_pdf_sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+  "source_type": "pdf_url",
+  "source_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+  "status": "acquired",
+  "version": null,
+  "version_basis": "unspecified; acquired bytes fixed by SHA256"
+}
