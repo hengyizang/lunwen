@@ -1,0 +1,103 @@
+{
+  "title": "Dataset of Physical cart-pole recordings under periodic and event-driven MPC",
+  "doi": "10.12795/11441/189931",
+  "creators": [
+    "Díaz Romero, Santiago",
+    "Paluch, Marcin",
+    "Delbruck, Tobi",
+    "Ríos Navarro, José Antonio",
+    "Linares Barranco, Alejandro"
+  ],
+  "dated": "2026-10-01",
+  "accessed_utc_date": "2026-11-21",
+  "record": "https://idus.us.es/items/9eb52123-7954-4030-91a9-f7d4f789390c",
+  "rights": "CC BY 4.0, original measurements by Santiago Díaz Romero, Marcin Paluch, Tobi Delbruck, José Antonio Ríos Navarro and Alejandro Linares Barranco. Derived per-run timing summaries for G1.",
+  "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+  "evidence": "All 1010 original hardware CSV files parsed in the CRC-checked raw members of the MD5-verified repository ZIP. Parallel processed copies are reformatting for replay and were not counted. The 500 SECLOC trajectory recordings used in the Computers article are part of this dataset.",
+  "fields": "time_chip is the Zedboard clock in seconds. controller_update_applied is the logged decision at row k. Q is the normalized command; according to the release documentation it reflects that decision at row k+1. controller_steptime is the logged solve time and can repeat on skipped updates. Only executed rows are used for each run’s median computation time.",
+  "analysis": "Runs remain separate. Board time increments are rounded to integer microseconds, then mapped to the nearest 10 ms grid interval with a 1 ms tolerance. gap_intervals counts multi-tick jumps; inferred_missing_grid_ticks sums their missing ticks. Off-grid and nonpositive intervals are recorded separately. A held/update-to-Q comparison requires a single tick and uses abs(Q[k+1]-Q[k])>1e-7. Within unchanged Q pairs after a real execution, the bound column counts pairs for which both commands lie within 1e-7 of normalized magnitude 1. It does not measure physical actuator saturation. The final row of a run cannot be paired. Counts of decisions and changed actions have different denominators. No imputation or averaging across different clocks.",
+  "limits": "The gate flag measures a host MPC execution, not motor torque, wall-clock adoption at a drive or network delivery. Q and actualMotorSave are commands, not independent action-onset timestamps. The host and board clocks have no stated common absolute origin. Missing rows do not reveal the gate status of unseen updates. Repetitions share target sequences and can begin from the previous run’s terminal state. All analysis concerns a single stationary control bench. The source README identifies the additionalLatency field as artificially injected latency and reports zero in these experiments.",
+  "source_notice": "Tracking recordings include swing-up and tracking. Compare per-task counts. The README describes balance periods of about 150 s; archived board spans may also contain swing-up. No phase trimming here.",
+  "files": [
+    {
+      "file": "cartpole 1_Dataset.zip",
+      "local_name": "cartpole.zip",
+      "bytes": 708754140,
+      "publisher_md5": "3b54517dbe3ed306a707017d20ee131c",
+      "sha256": "00173e4461f7d201eead3a39d156a59b875c32049f63c7ef4b8818e1200428e8",
+      "url": "https://idus.us.es/server/api/core/bitstreams/e32008f5-697b-491b-b906-e54c48f3d2a3/content"
+    },
+    {
+      "file": "README_idUS_completo.txt",
+      "local_name": "readme.txt",
+      "bytes": 16679,
+      "publisher_md5": "e820a892f772e2f2e8137fedb80e8750",
+      "sha256": "b1f907674de4966ff9f1383284ce47e710638ce37311fc710c8f06139661233d",
+      "url": "https://idus.us.es/server/api/core/bitstreams/983d68da-3df3-4abf-8bdf-4445e6eec13b/content"
+    }
+  ],
+  "searches": [
+    {
+      "query": "event-triggered networked inverted pendulum real experiments SECLOC source timestamps",
+      "result": "SSRN data description 10.2139/ssrn.7576712 and Computers 10.3390/computers15110794 traced to idUS. Full text Appendix A shows the one-row alignment.",
+      "source": "https://mdpi-res.com/d_attachment/computers/computers-15-00794/article_deploy/computers-15-00794.pdf",
+      "sha256": "b5a333301ccb41d5335ae40c5944166617a695a5c3dcfb9a041351b8ff54cc66"
+    },
+    {
+      "query": "Institutional DOI and original downloadable bitstreams",
+      "url": "https://idus.us.es/server/api/core/items/9eb52123-7954-4030-91a9-f7d4f789390c",
+      "metadata_sha256": "8374bc86fd3e8f04b7ebac8f1dff7c93a63a697705a6b943c75c63c35e0a20ce",
+      "catalogue_bitstream_sha256": "6bea4b7b661571e4ad28841c2e11f3539f4eed9f877cb11433d822a81dc70f6a",
+      "result": "Decoded original data/raw CSVs only. Checked the archive digest and read each raw CSV by its Zip CRC. Published processed copies excluded."
+    }
+  ],
+  "reproduction": "Python 3.11+ standard library: python derive_cartpole.py ARCHIVE.zip OUTPUT_DIR. The archive MD5 is checked; per-CSV SHA-256 in cartpole-runs.csv identifies the raw bytes.",
+  "time_quality": "The first and last board time of each recorded run determine its observed span. An interior value outside that span is marked invalid. Exclude both incident steps from gap magnitudes, tick inference, update/Q comparisons and continuous execution spacing. Do not interpolate across the excluded row. Keep native execution counts and per-file hashes. max_board_step_us spans pairs of valid neighboring timestamps only.",
+  "clock_spike_check": {
+    "independent_method": "Re-read affected original CSV time_chip values using decimal arithmetic. Twelve runs contained a single interior timestamp above the last time; both adjacent steps were excluded. The neighboring valid anchors are separated by 39.998 to 79.999 ms. No missing ticks are imputed across the invalid sample.",
+    "example_member": "data/raw/trajectories/MPC/MPC_T01_R09.csv",
+    "data_rows_one_based": [
+      390,
+      391,
+      392
+    ],
+    "board_seconds_as_deposited": [
+      "16.228195",
+      "2651681930598.853",
+      "16.298197"
+    ],
+    "first_last_board_seconds": [
+      "9.898195",
+      "52.868202"
+    ]
+  },
+  "flag_quality": "All 342 disagreements between auxiliary skip markers and the execution flag occur in SECLOC_T37_R02.csv. In all rows (swingup), (controller_update_applied, secloc_skipped_update, secloc_gate_skipped)=(0,1,0); Q is constant and the clock has no gaps. Counts of logged gate decisions rely on the documented controller_update_applied field. These data do not explain the inconsistency. A run without two executions has blank execution-spacing statistics.",
+  "filename_cleaning": "The archived trajectory member MPC_T19_R010.csv encodes repetition 10 with three digits. MPC_T19 has repetitions 01 through 09 and this R010; no R10 duplicate exists. The integer repetition field is normalized; source_member retains the exact archived name.",
+  "execution_spacing": "Each interval starts and ends on two consecutive observed controller_update_applied=1 rows. Its elapsed time uses time_chip on the board clock. Keep interval statistics only when every intervening recorded-step increment is a single nominal 10 ms tick within 1 ms tolerance; count intervals crossing off-grid steps or gaps separately. Median and nearest-rank p95 are within-run statistics. The group maximum ranges over accepted intervals in individual runs. This is spacing between board samples associated with controller executions, not a hardware timestamp for command arrival.",
+  "independent_alignment_check": {
+    "source_member": "data/raw/trajectories/SECLOC/SECLOC_T50_R10.csv",
+    "source_row_numbering": "zero-based data row index after the CSV header",
+    "publication_comparison": "Compared all eight rows, k=1877..1884, in the Computers paper Table A1 with the archived source CSV. All eight logged execution flags match. All eight prior and successor Q pairs agree to within 0.0005 with the reported three-decimal held and computed commands, respectively. The board increment preceding k=1880 is 20.001 ms. Timing of physical actuation is not recorded by this check."
+  },
+  "second_method_two_run_check": {
+    "method": "Independent decimal parsing of two CRC-verified raw members. One-tick pair compares flag[k] with Q[k+1]-Q[k]. A continuous interval between execution flags permits only sample increments from 9000 to 11000 microseconds inclusive. The values below can be checked against the per-run table.",
+    "SECLOC_T50_R10.csv": {
+      "recorded_rows": 4260,
+      "controller_executions": 3008,
+      "one_tick_pairs_after_update": 2972,
+      "unchanged_command_after_update": 42,
+      "unchanged_at_bound": 42,
+      "max_continuous_execution_interval_ms": 220.0,
+      "execution_intervals_across_gaps": 37
+    },
+    "MPC_BAL_R01.csv": {
+      "recorded_rows": 15781,
+      "controller_executions": 15781,
+      "one_tick_pairs_after_update": 15568,
+      "unchanged_command_after_update": 226,
+      "unchanged_at_bound": 226,
+      "max_continuous_execution_interval_ms": 10.002,
+      "execution_intervals_across_gaps": 212
+    }
+  }
+}

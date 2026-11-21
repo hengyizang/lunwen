@@ -1,0 +1,98 @@
+{
+  "verified_utc_date": "2026-11-21",
+  "lapland": {
+    "title": "Private 5G latency and data rate measurements",
+    "authors_credited_by_deposit": [
+      "Lapland University of Applied Sciences"
+    ],
+    "version": "unspecified",
+    "doi": "10.5281/zenodo.18150618",
+    "concept_recid": "18150617",
+    "release_date": "2026-01-05",
+    "landing": "https://doi.org/10.5281/zenodo.18150618",
+    "rights": "CC BY 4.0. Statistics independently computed for G1.",
+    "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+    "metadata_url": "https://zenodo.org/api/records/18150618",
+    "metadata_sha256": "5b2931a384616116605f2adb89cb6c5cb19bb623dec9f99506e45007873ef55e",
+    "verified_inputs": [
+      {
+        "file": "18150618/latency_20250122_172110.csv",
+        "url": "https://zenodo.org/api/records/18150618/files/latency_20250122_172110.csv/content",
+        "bytes": 407095,
+        "publisher_md5": "3a4a883fe915ebdf4ccd1c9ee5588a9d",
+        "sha256": "b65f3c7933724b3b789c82c4266b5ed9e0685f7888eeddb0da4d1ea7cbaa0811"
+      },
+      {
+        "file": "18150618/latency_20250124_093157.csv",
+        "url": "https://zenodo.org/api/records/18150618/files/latency_20250124_093157.csv/content",
+        "bytes": 465102,
+        "publisher_md5": "e6a3ebd5158d440772b33dd3b36f66be",
+        "sha256": "d92ffe12c87b8de2134ae765676a1fc0f8a8e6882ba5dcb835d26f7d635beedb"
+      },
+      {
+        "file": "18150618/latency_20250425_123408_with_load.csv",
+        "url": "https://zenodo.org/api/records/18150618/files/latency_20250425_123408_with_load.csv/content",
+        "bytes": 531617,
+        "publisher_md5": "ef6f6b47b7a59463f5b4713cb31f607b",
+        "sha256": "d76bb765cc16b6c7420ac0faea7b6706f97314823a03588d2aa5334218f5f9a9"
+      },
+      {
+        "file": "18150618/latency_20250425_131206_with_load_single_lidar.csv",
+        "url": "https://zenodo.org/api/records/18150618/files/latency_20250425_131206_with_load_single_lidar.csv/content",
+        "bytes": 566661,
+        "publisher_md5": "427cd94558e4848f516a022a1e4f0a55",
+        "sha256": "e52483fb7316748e0e23a1251eb92dfe6656fd5e34c74c5c8319a2e00a6baed6"
+      }
+    ],
+    "scope": "All four ROS1 two-host latency CSVs from the publisher, excluding five throughput-monitor screenshot PNGs. Each CSV contains timestamp and latency_ms. The timestamps are not documented as sample generation, transmit, receive or control-use events. RTT is round trip at the ROS layer. No message identifier, robot pose, synchronization record, independently measured one-way delay or controller actuation time occurs in this schema.",
+    "load_conditions": "The two April filenames mark with_load and with_load_single_lidar. The January filenames supply no explicit within-file load label. Durations and clock gaps use the observed timestamp field; do not convert gaps into packet loss or pool the two April recordings into one experiment.",
+    "companion": "Data Transmission of a ROS-Based Autonomous Vehicle Over a Private 5G Network, DOI 10.1109/MIPRO65660.2025.11131889; repository conference-paper abstract describes the UTV, ROS core and remote PC. Its global average is not reassigned to a particular CSV. The data record does not provide a row-level link to vehicle movement.",
+    "companion_landing": "https://zenodo.org/records/18464830"
+  },
+  "upv": {
+    "title": "Remote Driving Dataset in UPV's 5G Private network (n40)",
+    "authors_credited_by_deposit": [
+      "Manchón, Carles Navarro",
+      "Lozano Teruel, Raul",
+      "Viciedo, Iván",
+      "Roche Peris, Jorge",
+      "Gomez-Barquero, David"
+    ],
+    "version": "unspecified",
+    "doi": "10.5281/zenodo.18410980",
+    "concept_recid": "18410979",
+    "release_date": "2026-01-29",
+    "landing": "https://doi.org/10.5281/zenodo.18410980",
+    "rights": "CC BY 4.0. Statistics independently computed for G1.",
+    "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+    "metadata_url": "https://zenodo.org/api/records/18410980",
+    "metadata_sha256": "fe599ea5d1fbf3013234bce20cae5aa6394e5e9c1807486992b845662dce239c",
+    "verified_inputs": [
+      {
+        "file": "18410980/Remote Driving Dataset in UPV's 5G Private network (n40).zip",
+        "url": "https://zenodo.org/api/records/18410980/files/Remote%20Driving%20Dataset%20in%20UPV's%205G%20Private%20network%20(n40).zip/content",
+        "bytes": 4545339,
+        "publisher_md5": "0ac2e442ca992ed55b0b25648bca62ec",
+        "sha256": "a8c5a7ab9b683dedc4f770ceab5aebf80eec5d38a99f813808637cb7fa171753"
+      }
+    ],
+    "scope": "Four-wheel remote-driving platform on the UPV private n40 network, six tests. Summarize all twelve NEMO handset CSVs and the six top-level IxChariot ixchariot.csv exports. For network logs also inspected the test reports and acquisition schedule. Application, mix and user exports are nested views of the same tests and are excluded to avoid double-counting. Raw files remain with the publisher, numbers in output tables exclude location and network identifiers.",
+    "network_statistics": "One-Way Delay is read from the top-level two-second IxChariot reporting windows (units ms in the test report); it measures injected test traffic. Percentiles/means of valid retained windows are descriptive across windows and are not per-packet or application-control latency. Drop N/A values without replacing them by zero. TestDescriptions.xlsx, Test 2, explicitly requests dropping the final minute: remove windows ending after max timestamp minus 60,000 ms, or 30 windows. The two error fields are the last exported whole-test values and still describe the full untrimmed test, not recomputed trimmed-subset errors. The per-trial clock-synchronization residual series is absent. Substantial whole-test error indicators make one-way values unsuitable as a timing ground truth.",
+    "handset_statistics": "NEMO event-table RTT is the handset ping metric. No unit appears in the exported column heading; statistics preserve its native numeric values. Velocity is a separately populated field, no interpolation or alignment. There are two device roles per condition. The XLSX places ASUS on the four-wheel platform, but S25 has a separate role. Six folders are not six independent samples per configuration. No message-generation timestamp, sequence keyed to a plant measurement, driver command receipt or application-use timestamp is identified.",
+    "mapping_issue": "TestDescriptions.xlsx declares only ASUS active in test 1 and requests disregarding the late minute for test 2. The test 1 ASUS clock begins near 11:53, S25 near 11:45, and the nominal test 2 ASUS and S25 start near 11:45 and 11:53 respectively. Nominal starts in the workbook are near 11:46 and 11:54. The presence of an S25 file in the disabled condition and these clock/filename mismatches prevent defensible cross-device or scenario-level pairing for the first two conditions. Keep original files, descriptive statistics and an explicit mapping flag, with no speculative relabel or handset trim. No co-clock registration across the two recording tools is assumed.",
+    "method": "Median is the middle value or two-point midpoint, p95 nearest rank ceil(0.95 n), conditional only on recorded measurements. An empirical threshold count in the ROS1 table is strictly greater than 100 ms; no transport reliability, packet-loss rate or causal motion effect is inferred."
+  },
+  "queries": [
+    {
+      "terms": "mobile robot industrial private 5g measurement RTT AGV robot wireless delay dataset zenodo mobile robot latency; WiFi AGV mobile robot communications latency robot latency dataset measurement RTT robots wireless public github 5G ROS",
+      "source": "public web index -> original authors’ Zenodo records (immutable version IDs above)"
+    },
+    {
+      "terms": "Data Transmission of a ROS-Based Autonomous Vehicle Over a Private 5G Network ROS1 latency ROS round trip LiDAR devices Lapland PDF",
+      "source": "Zenodo conference paper deposit / paper abstract, read alongside dataset"
+    }
+  ],
+  "prior_branch_head": "c4470bac4372e8472e1293a0fb2b3b45609f597e",
+  "dedup_scope": "Both fixed and concept record IDs and dataset titles checked against the initial, continuous and follow-up catalogues and early baseline. Previous R5 CORA and MR.CLAM are distinct testbeds.",
+  "reproduce": "Python 3 standard library. Place publisher files at the paths in verified_inputs, relative to INPUT. Run python derive_mobile_5g.py INPUT OUTPUT; all five SHA-256 and sizes and all ZIP member CRCs are checked."
+}

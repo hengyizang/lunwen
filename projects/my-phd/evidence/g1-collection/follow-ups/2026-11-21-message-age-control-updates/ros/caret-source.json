@@ -1,0 +1,210 @@
+{
+  "title": "CARET end_to_end_sample, single-host ROS 2 instrumented software trace",
+  "creator": "TIER IV / CARET contributors",
+  "repository": "https://github.com/tier4/caret_demos",
+  "commit": "0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26",
+  "release_context": "2022-07-05 commit replacing sample results for CARET v0.2.3. The same CTF bytes remain in the inspected current tree a4d8bf89c6015797d3e4890a7ccc2542822b6282.",
+  "checked_utc_date": "2026-11-21",
+  "trace_path": "samples/end_to_end_sample/end_to_end_sample",
+  "tree_url": "https://api.github.com/repos/tier4/caret_demos/git/trees/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26?recursive=1",
+  "download_url_template": "https://raw.githubusercontent.com/tier4/caret_demos/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26/{path}",
+  "rights": {
+    "repo_license": "Apache-2.0",
+    "url": "https://github.com/tier4/caret_demos/blob/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26/LICENSE",
+    "scope": "Repository includes the example CTF trace; this package contains independently produced timing summaries, relative event times, documentation and verification code."
+  },
+  "evidence_level": "Decoded all 2,880 LTTng userspace trace events. A real execution of a reference software workload, one host and one process using a multithreaded executor and rmw_cyclonedds_cpp. Dummy sensor and actuator, with code-inserted sleeps and no physical hardware acquisition or actuation event. The selected five topics exclude parameter-events and other infrastructure.",
+  "ctf_files": [
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_0.idx",
+      "bytes": 88,
+      "git_blob_sha1": "40d011fc05384113b0b2e91ab4b81cfab0c34883",
+      "sha256": "ae6343f3169c850b4cfe7032da060febf3cafff336a99e73c7d36ac4d4e00c9a"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_1.idx",
+      "bytes": 160,
+      "git_blob_sha1": "a603d182c50f465cab09238e9dfe8b99eb788547",
+      "sha256": "c934b850270f310d017419934122a4990ddc2f06fbd5e0440273c800ca70b438"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_10.idx",
+      "bytes": 88,
+      "git_blob_sha1": "01dc2c0dfde6a5f493d37844f834ea73b7c9d5b7",
+      "sha256": "350e7de0ba429dfcb4396bfe0fc369fec0041bf344dfc3c208a3afc4d9118252"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_11.idx",
+      "bytes": 88,
+      "git_blob_sha1": "d0fe485c93050e468747605785921f6d6046e37a",
+      "sha256": "5f58f416639f17606d9fcb52f277587f3d084d29bf9184bcae76e71952b3ac88"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_2.idx",
+      "bytes": 88,
+      "git_blob_sha1": "3231959397167e9ced7d7aa63b8142187d22f7ac",
+      "sha256": "04f971cf2a4acf674f36ad5b100d4374c40b0dd12b449eb3ced26f99762d9a3c"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_3.idx",
+      "bytes": 88,
+      "git_blob_sha1": "00dc841dfb858faf4751ffb4435a59b91abbb159",
+      "sha256": "27b74b2d032d646cf95f93c3f39abf5619edab6b7445ddde0eb15883eaa5dfd1"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_4.idx",
+      "bytes": 88,
+      "git_blob_sha1": "2b3499c8394fa10bc6fcbeb7e44dbe32a64ee804",
+      "sha256": "00749e158909164c7b24cedab6ae54e2cd5488a0cca0ec0d233495194b229c2d"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_5.idx",
+      "bytes": 88,
+      "git_blob_sha1": "df139405d48ef2fa7e8ffed01c2b2a698c154435",
+      "sha256": "9c3c2debeaaef6007da1784d7907214662232ffe38bc25d028e23dd577def2f6"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_6.idx",
+      "bytes": 88,
+      "git_blob_sha1": "82c41f0eddef0e1f661cc957ed6528e7edf0a78b",
+      "sha256": "e0790936fc07053181215b4f756ef136d1275f68e2ae3938ebbec53f8d8d5aac"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_7.idx",
+      "bytes": 88,
+      "git_blob_sha1": "7a3efa75b7f5597c312724d0862d608b40919000",
+      "sha256": "3e02b53029eb1775a5cbf52b20cd9ca886b9d39043768f8dfd6e49b5c9a7c5f8"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_8.idx",
+      "bytes": 88,
+      "git_blob_sha1": "70a3f9bf809afb4937d366dd73efa0655814863a",
+      "sha256": "38120cd58a204cc68c561611ae4cb466296b1451b21ebd85a39c78d372eee61e"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/index/ros2_9.idx",
+      "bytes": 88,
+      "git_blob_sha1": "828bfee7aa38e4f1e791fc0af2d5eb241bd4050f",
+      "sha256": "40b73a4f02665b563778fd958b0a457c25cc17b75eb4a3f96fedefeebc634c6d"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/metadata",
+      "bytes": 16384,
+      "git_blob_sha1": "126cf57eb4b1b4a9c5cc5b3911b27c300c3207b6",
+      "sha256": "062cd0b3917a1bc9696f54253517cd554f717eb7ed94c8577a18d2f7603bd63a"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_0",
+      "bytes": 12288,
+      "git_blob_sha1": "67dbae4860628b171d7a63b8a2ea1277452ee2d5",
+      "sha256": "7dafdad1cf9ef51e416805da5855d3b011977650d12fc181f890f36df242de72"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_1",
+      "bytes": 57344,
+      "git_blob_sha1": "0875fca53e2b2ce4718e8dafea68a41bdabc67fb",
+      "sha256": "5724a13849cdff88dd6a19a81203a95c5d563191bda600b121128cd8a6fe101e"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_10",
+      "bytes": 12288,
+      "git_blob_sha1": "66e86b81f16125b24badb603f0ec6ea7b96ed0a3",
+      "sha256": "107b57154ba26974d2e594ebacf2d3c7de12a6e4c23828b70b725917bae35a16"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_11",
+      "bytes": 16384,
+      "git_blob_sha1": "460b37b6a129cde3e5080d79a991e4592f8edc28",
+      "sha256": "d984c151ff7487dc058a774250c218176120b17dfcb04cb630b2f786777234ad"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_2",
+      "bytes": 8192,
+      "git_blob_sha1": "1ac2a9164ce1a9c4710ecce6a4537c8c4a4e7e89",
+      "sha256": "ec8151ebae5f568b62c739a251854d8f2581fa50b41c04c5a203ad2ec8639b7c"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_3",
+      "bytes": 4096,
+      "git_blob_sha1": "c92dfa5dc47f95c1a9023bf16b783032641e03a8",
+      "sha256": "91182eec11f577668a4390a0f0947c6e44f7df24347ab170356045d78b6d8064"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_4",
+      "bytes": 8192,
+      "git_blob_sha1": "732b09f5388cae6b846a5a61ecb9dffc1ea704d1",
+      "sha256": "189e24f453561cfb1cdcc0e0d24aa6dea8fcdd49a36197037300904a2af542e0"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_5",
+      "bytes": 8192,
+      "git_blob_sha1": "c7d26ecb474c2182ed33b6b2ec50b910e4bc5264",
+      "sha256": "a5c25f8bd119c6bf3f9947fbf885b44d79f096fec0f63594598b9718f2aa96d1"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_6",
+      "bytes": 12288,
+      "git_blob_sha1": "0251b8f9b6cee08af909772de105a54ffe82c517",
+      "sha256": "a82d88eea92044f96f18155d9323ca0b3264a588bfe8430dbac42fd021ad2ca8"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_7",
+      "bytes": 12288,
+      "git_blob_sha1": "28a52f9e13dfeb4c93cbf9bfee953c64aebe325c",
+      "sha256": "e5e2b76f5b3f256fd7344ad581871b6b8d03bc364739c597df282de805733e20"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_8",
+      "bytes": 8192,
+      "git_blob_sha1": "5a11b7bd06de45ff464231f901d9f411ab0d8748",
+      "sha256": "455c875c95682047c1a39bea7cd59ae98dc00cd539be60490707ea53cfbb563e"
+    },
+    {
+      "path": "samples/end_to_end_sample/end_to_end_sample/ust/uid/1000/64-bit/ros2_9",
+      "bytes": 16384,
+      "git_blob_sha1": "0ebcd40dc431f53cf4aa58607459519e79323b33",
+      "sha256": "34235dbfd06e2842fa43afe2faff63d107ddd98022e5ec202c4bc86ccbac2587"
+    }
+  ],
+  "application_code": {
+    "url": "https://github.com/tier4/caret_demos/blob/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26/caret_demos/src/end_to_end_sample.cpp",
+    "sha256": "d1c52f852e58b2a8d83a448d30481e4d5a37882f6db164e18614064c98a48e68",
+    "evidence": "SensorDummy sets header.stamp to now() just before publishing an empty Image, following an artificial sleep. Filter and downstream nodes forward its stamp. A timer republishes the last cached message; ActuatorDummy sleeps and discards the payload. The drive topic provides a separate trigger, not the original sensor sample."
+  },
+  "architecture": {
+    "url": "https://github.com/tier4/caret_demos/blob/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26/samples/end_to_end_sample/architecture.yaml",
+    "sha256": "5a47a11669b3c6f4fbd46e675bcb18ac13ebec16c9c22a1bf8e51d7a0c477e6a"
+  },
+  "linkage": "Identify topic, publisher, subscriptions and callback handles from initialization. Build (topic,DDS source_stamp) using ordered rclcpp_publish and dds_bind_addr_to_stamp for the currently outstanding (thread,message buffer) pair. Dispatch carries DDS source_stamp and payload header message_timestamp. Check the header agrees and join dispatch, start and end using the callback handle and thread. The origin-topic nonzero header stamp is unique per publication, allowing final-topic callbacks to retain lineage across node boundaries and repeated republishes. Reused memory addresses are scoped to pending events.",
+  "clock_and_scope": "Duration arithmetic uses only Babeltrace event-clock nanoseconds from this one-host trace. ROS payload stamps and DDS source stamps are treated as equality keys; no cross-clock subtraction. In the updates CSV all times use the first /topic1 publication as origin. Publish-to-callback-start covers middleware, scheduling and code; it is not network-only transmission delay. Software age uses first recorded publication as a generation proxy and callback start as an availability proxy. ActuatorDummy never issues a physical command. Trace closure can account for missing messages, so counts are not a packet-loss rate.",
+  "reproduction": "Python 3 standard library plus Babeltrace 2 (verified using 2.0.4). Check out the pinned repository or download the 25 listed CTF and index files keeping their relative paths. Run python derive_caret_trace.py CHECKOUT OUTPUT. --babeltrace2 PATH overrides the executable. Retain decimal-second output at nanosecond precision. Actual operating-system, host, thread, and address identifiers are absent from derived CSVs.",
+  "search_log": [
+    {
+      "search": "ROS 2 message flow analysis traces and CARET reference system sample data",
+      "url": "https://github.com/christophebedard/ros2-message-flow-analysis/tree/2e27f3709ea56453082bc80b3d42bdcb639ead90",
+      "outcome": "Original Bédard et al. DOI 10.1016/j.robot.2022.104361, arXiv:2204.10208: inspected author experiment README, recursive tree and empty releases list. Includes procedures for multi-host RTAB-Map with RealSense and Autoware; original captured raw experiment traces were not found in that repository at the pinned commit. CARET sample is a separate package, not the data underlying the article."
+    },
+    {
+      "search": "TIER IV caret_demos sample end_to_end_sample and history of CTF metadata",
+      "url": "https://github.com/tier4/caret_demos/tree/0af6d5ba1c8d5debf2ee3b523d2e8219ce962d26/samples/end_to_end_sample",
+      "outcome": "Fixed trace introduction commit, all 25 trace inputs matched their Git blob, and historical program and architecture files were checked."
+    },
+    {
+      "search": "Eclipse ROS2 test trace metadata",
+      "url": "https://github.com/eclipse-tracecompass/tracecompass-test-traces/commit/d5fb44e62aadad67897c7b641ba926f8f13d6b2a",
+      "outcome": "Release author describes trace as a simple validation/test fixture; no mobile-robot claim or additional dataset counted."
+    }
+  ],
+  "coverage_and_checks": {
+    "ctf_file_count": 25,
+    "ros2_userspace_event_count": 2880,
+    "execution": "One trace only. All 47 /topic4 callbacks have a DDS-stamp-paired final publish and a source header linked to /topic1. Out of 49 original software sensor publications 40 different headers appear in sink callbacks. Seven repeats are new final-topic DDS publications carrying a previously received origin. A /topic2 publish with a DDS stamp lacks a corresponding callback in the trace, and one /topic3 rclcpp_publish lacks a DDS binding. No reason is imputed to either unmatched event.",
+    "age_definition": "At time t retain the maximum origin publication time over sink callbacks started by t. Integrate t minus this freshest origin over the first-to-last callback-start interval. For consecutive starts separated by h and age a at the earlier start, twice the integral is 2ah+h². Do not extrapolate beyond this interval. The scalar is a software availability proxy under dummy workload, not sensor exposure to actuator application.",
+    "validation": "All three derived CSVs reproduced byte-for-byte on a full second decode.",
+    "derived_sha256": {
+      "caret-sink-updates.csv": "aa9265979f6fc2019e645c4d34d1e914c74444c079f9b9dc3e1703d3ff9fdd57",
+      "caret-software-age.csv": "9b14016a1c8dcf8e439f1c30a4d7f99519aebb88e190266759e8c4f5a968fd4a",
+      "caret-topic-timing.csv": "db5cbf993a0463bada415731715d6f2e6ee813957d15c3519d6e67703e35cdc4"
+    }
+  }
+}

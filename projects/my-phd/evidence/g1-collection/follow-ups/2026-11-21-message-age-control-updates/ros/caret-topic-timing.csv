@@ -1,0 +1,6 @@
+topic,rclcpp_publish,dds_stamp_bound_publications,matched_callbacks,distinct_published_headers,distinct_received_headers,publish_to_start_min_ns,publish_to_start_median_ns,publish_to_start_max_ns,median_callback_duration_ns
+/topic1,49,49,49,49,49,149468,184578,204595,20192594
+/topic2,49,49,48,49,48,135280,3371687.5,39337438,20142314.0
+/topic3,42,41,41,42,41,136174,195253,43853995,20141450
+/topic4,47,47,47,40,40,130339,183233,199895,20136622
+/drive,49,49,49,49,49,137688,187694,17267834,20199012

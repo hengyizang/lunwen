@@ -1,0 +1,7 @@
+test,export_windows,retained_windows,retained_valid_delay_windows,excluded_last_minute_windows,one_way_delay_window_min_ms,one_way_delay_window_median_ms,one_way_delay_window_mean_ms,one_way_delay_window_p95_nearest_rank_ms,one_way_delay_window_max_ms,whole_export_final_estimated_error_ms,whole_export_final_maximum_error_ms
+1,142,142,142,0,71.5,171.5,174.211268,251.5,299.5,204.120,472.961
+2,182,152,152,30,132.333,482.9995,481.954743,648.0,690.0,238.187,1048.251
+3,142,142,142,0,179.25,493.625,493.315141,593.75,771.0,N/A,N/A
+4,143,143,142,0,178.333,488.416,484.034894,558.666,668.833,234.721,951.050
+5,141,141,141,0,142.333,452.0,448.515071,550.333,644.5,293.190,1037.358
+6,138,138,138,0,164.5,650.7495,635.625268,933.166,1116.166,617.828,3321.267

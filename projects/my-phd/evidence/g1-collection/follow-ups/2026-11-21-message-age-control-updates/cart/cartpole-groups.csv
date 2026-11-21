@@ -1,0 +1,5 @@
+mode,task,runs,recorded_rows,controller_executions,skipped_rows,skip_flag_disagreements,out_of_span_clock_rows,clock_invalid_pairs,gap_intervals,inferred_missing_grid_ticks,off_grid_intervals,continuous_execution_intervals,execution_intervals_across_gaps,one_tick_pairs_after_update,changed_Q_after_update,unchanged_Q_after_update_at_normalized_bound,one_tick_pairs_after_hold,changed_Q_after_hold,max_continuous_execution_interval_ms
+MPC,balancing,5,77815,77815,0,0,1,2,1421,2172,0,76387,1423,76387,75442,945,0,0,10.002
+MPC,trajectories,500,2120051,2120051,0,0,10,20,26840,29610,12,2092679,26872,2092679,2056787,35892,0,0,10.007
+SECLOC,balancing,5,79137,48678,30459,0,0,0,725,862,0,47950,723,47985,47268,717,30422,0,520.001
+SECLOC,trajectories,500,2126867,1475763,651104,342,1,2,16107,18839,12,1459192,16072,1459969,1431936,28032,650277,0,2990.0

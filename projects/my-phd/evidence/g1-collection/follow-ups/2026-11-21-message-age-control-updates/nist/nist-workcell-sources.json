@@ -1,0 +1,156 @@
+{
+  "date_utc": "2026-11-21",
+  "scope": "NIST two-robot workcell: distinguish the job decision, its poll transaction, application of the command at the robot controller, and sensor-information age.",
+  "releases": [
+    {
+      "doi": "10.18434/m32242",
+      "title": "Measurement and Processed Data From A Graph Database Approach to Wireless IIoT Work-cell Performance Evaluation",
+      "version_in_DataCite": "1.1.1",
+      "publication_year": 2020,
+      "creators": [
+        "Candell, Richard",
+        "Hany, Mohamed"
+      ],
+      "registry": {
+        "url": "https://api.datacite.org/dois/10.18434/M32242",
+        "bytes": 8049,
+        "sha256": "38769c455d1731bb6dedfd4ee2b9503ca748a9c415e0bdf02ba83405d13a2c08"
+      },
+      "catalogue": {
+        "url": "https://catalog.data.gov/dataset/measurement-and-processed-data-from-a-graph-database-approach-to-wireless-iiot-work-cell-p",
+        "bytes": 146852,
+        "sha256": "7d073dff4f3a57f09ed6a029b3bde07e53231410a8f013e27ef0afb9ea587efa"
+      },
+      "publisher_landing": "https://data.nist.gov/od/id/mds2-2242",
+      "catalogue_file_manifest": [
+        "https://data.nist.gov/od/ds/mds2-2242/CoaxChannel_GDB_Data.zip"
+      ],
+      "evidence_level": "Publisher metadata and official catalogue manifest verified. No experiment archive downloaded or checksum verified in this pass.",
+      "related_study": "10.1109/ICIT45562.2020.9067199 (explicit dataset-to-study link through DataCite and the federal catalogue). Kashef et al., 10.1115/1.4048205 (related workcell, full-text timing boundaries).",
+      "boundary": "The registered archive is described as processed CSV and network-capture files. The method paper reports synchronized network, PLC and robot events. Which fields or experimental cases occur in the public archive remains unverified.",
+      "licence": "NIST public data licence as linked from the official Data.gov catalogue: https://www.nist.gov/open/license . This batch publishes bibliographic records and factual method summaries only."
+    },
+    {
+      "doi": "10.18434/mds2-2361",
+      "title": "Process and robot data from a two robot workcell representative performing representative manufacturing operations.",
+      "version_in_DataCite": "1.1.0",
+      "publication_year": 2021,
+      "creators": [
+        "Brian A. Weiss"
+      ],
+      "registry": {
+        "url": "https://api.datacite.org/dois/10.18434/mds2-2361",
+        "bytes": 5162,
+        "sha256": "fba270653fd9cdb61aa1bdccfc901a3af02b8af36e9b1773b935d485d7c71c6b"
+      },
+      "catalogue": {
+        "url": "https://catalog.data.gov/dataset/process-and-robot-data-from-a-two-robot-workcell-representative-performing-representative-",
+        "bytes": 189625,
+        "sha256": "7f356c4cedc03f65001030331c79983b37b105c69210b16a04b17f71a90a35fe"
+      },
+      "publisher_landing": "https://data.nist.gov/od/id/mds2-2361",
+      "catalogue_file_manifest": [
+        "https://data.nist.gov/od/ds/mds2-2361/UseCaseTimeline.pdf",
+        "https://data.nist.gov/od/ds/mds2-2361/UR3RTDE.zip",
+        "https://data.nist.gov/od/ds/mds2-2361/UR5RTDE.zip",
+        "https://data.nist.gov/od/ds/mds2-2361/PLC%20Data.zip",
+        "https://data.nist.gov/od/ds/mds2-2361/Setup%20and%20Testplan.txt",
+        "https://data.nist.gov/od/ds/mds2-2361/README.txt",
+        "https://data.nist.gov/od/ds/mds2-2361/RobotVid.mp4"
+      ],
+      "evidence_level": "Publisher metadata and official catalogue manifest verified. No experiment archive downloaded or checksum verified in this pass.",
+      "related_study": "10.1115/MSEC2018-6617 (facility paper linked in the DOI metadata); distinct from the graph dataset.",
+      "boundary": "A process-monitoring workcell with material handling and a precision processing/drawing task. The federal catalogue describes 60 runs and separate controller and PLC files. These are source-reported, no run or event timestamps were inspected. No shared file or event key to the wireless transaction dataset was shown.",
+      "licence": "NIST public data licence as linked from the official Data.gov catalogue: https://www.nist.gov/open/license . This batch publishes bibliographic records and factual method summaries only."
+    }
+  ],
+  "papers_and_evidence": [
+    {
+      "doi": "10.1115/1.4048205",
+      "article_title": "Wireless Cyber-Physical Systems Performance Evaluation through a Graph Database Approach",
+      "full_text": {
+        "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC8201448/unicode",
+        "bytes": 129168,
+        "sha256": "6ef0096b40711b2629b6cdbd657eea7629398ebb7cb1c995f94f46dcf8fa72c9"
+      },
+      "locators": "Data Collection; graph data model; Results (Figs. 6, 8–14). NCBI BioC passage offsets 22218, 36183, 41919, 47205, 49933, 51421 and 52777.",
+      "results": "In the published comparison each run emulated 20 parts in about 12 minutes of network activity. Four communication conditions were compared. A roughly 120 ms robot program scan led to longer network transactions being offset by shorter waits for the next eligible controller update in the studied cases. No separate per-row clock synchronization error or independent physical-motion onset was recovered here. No raw measurement counts or sensor-sample AoI are inferred."
+    },
+    {
+      "doi": "10.1109/ICIT45562.2020.9067199",
+      "full_text": {
+        "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=928722",
+        "bytes": 2998186,
+        "sha256": "19dd194f6a824e9d513ca10212275c49950f63af58125c8846f66d25124062e8"
+      },
+      "locator": "NIST author copy, workcell and graph methods, Fig. 6. The data release explicitly refers to this conference paper."
+    },
+    {
+      "doi": "10.1115/MSEC2018-6617",
+      "full_text": {
+        "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=924910",
+        "bytes": 976368,
+        "sha256": "110e5b88306ca5a64435100f0ba4d30d579e1dbac2a7d134b3978465c082bc2f"
+      },
+      "locator": "Workcell Description; Process Monitoring and Diagnostics. The related but distinct NIST process dataset should not be used to augment counts for the wireless graph trials."
+    }
+  ],
+  "access_log": {
+    "queries": [
+      "NIST dual robot pick and place graph database data DOI wireless workcell",
+      "two robot workcell PLC RTDE record data NIST catalog",
+      "A Graph Database Approach to Wireless IIoT Work-cell Performance Evaluation"
+    ],
+    "read_successes": {
+      "da.json": {
+        "url": "https://api.datacite.org/dois/10.18434/M32242",
+        "bytes": 8049,
+        "sha256": "38769c455d1731bb6dedfd4ee2b9503ca748a9c415e0bdf02ba83405d13a2c08"
+      },
+      "db.json": {
+        "url": "https://api.datacite.org/dois/10.18434/mds2-2361",
+        "bytes": 5162,
+        "sha256": "fba270653fd9cdb61aa1bdccfc901a3af02b8af36e9b1773b935d485d7c71c6b"
+      },
+      "catalog-a.html": {
+        "url": "https://catalog.data.gov/dataset/measurement-and-processed-data-from-a-graph-database-approach-to-wireless-iiot-work-cell-p",
+        "bytes": 146852,
+        "sha256": "7d073dff4f3a57f09ed6a029b3bde07e53231410a8f013e27ef0afb9ea587efa"
+      },
+      "catalog-b.html": {
+        "url": "https://catalog.data.gov/dataset/process-and-robot-data-from-a-two-robot-workcell-representative-performing-representative-",
+        "bytes": 189625,
+        "sha256": "7f356c4cedc03f65001030331c79983b37b105c69210b16a04b17f71a90a35fe"
+      },
+      "nist-bioc.xml": {
+        "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC8201448/unicode",
+        "bytes": 129168,
+        "sha256": "6ef0096b40711b2629b6cdbd657eea7629398ebb7cb1c995f94f46dcf8fa72c9"
+      },
+      "graph.pdf": {
+        "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=928722",
+        "bytes": 2998186,
+        "sha256": "19dd194f6a824e9d513ca10212275c49950f63af58125c8846f66d25124062e8"
+      },
+      "workcell.pdf": {
+        "url": "https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=924910",
+        "bytes": 976368,
+        "sha256": "110e5b88306ca5a64435100f0ba4d30d579e1dbac2a7d134b3978465c082bc2f"
+      }
+    },
+    "archive_access": "NIST official data.nist.gov download URLs for the graph ZIP, PLC archive, related RTDE archives and document were tried. File endpoints timed out, including repeat attempts on the PLC archive, PDF and official SHA files. Public catalogue access is distinct from file verification.",
+    "tested_urls": [
+      "https://data.nist.gov/od/ds/mds2-2242/CoaxChannel_GDB_Data.zip",
+      "https://data.nist.gov/od/ds/mds2-2242/CoaxChannel_GDB_Data.zip.sha256",
+      "https://data.nist.gov/od/ds/mds2-2361/PLC%20Data.zip",
+      "https://data.nist.gov/od/ds/mds2-2361/PLC%20Data.zip.sha256",
+      "https://data.nist.gov/od/ds/mds2-2361/UseCaseTimeline.pdf",
+      "https://data.nist.gov/od/ds/mds2-2361/UR3RTDE.zip",
+      "https://data.nist.gov/od/ds/mds2-2361/UR5RTDE.zip"
+    ]
+  },
+  "history": {
+    "checked_head": "c4470bac4372e8472e1293a0fb2b3b45609f597e",
+    "checked": "Case-insensitive exact DOI, distinctive title fragments and repository identifiers checked in existing project evidence and the early baseline index before this supplementary batch. Neither dataset DOI matched."
+  }
+}

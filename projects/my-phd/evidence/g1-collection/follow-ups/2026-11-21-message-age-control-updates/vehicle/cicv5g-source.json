@@ -1,0 +1,233 @@
+{
+  "dataset": "5G communication delay dataset for cloud‑based vehicle planning and control",
+  "source_doi": "10.5281/zenodo.17475688",
+  "concept_doi": "10.5281/zenodo.17475687",
+  "version": "v1.0.0",
+  "publication_date": "2025-10-29",
+  "evidence_date_utc": "2026-11-21",
+  "authors": [
+    "Zhang, Xinrui",
+    "Xiong, Lu",
+    "Zhang, peizhi",
+    "Feng, Haojie",
+    "Huang, Junpeng",
+    "Wang, Xiurong",
+    "Tian, Mengjie",
+    "Li, Zhuoren",
+    "Yin, Dongxiao"
+  ],
+  "license": "CC BY 4.0, https://creativecommons.org/licenses/by/4.0/. Per-trial timing aggregates computed for G1; no positions, identities, raw packets or individual measurement timestamps republished.",
+  "archive": {
+    "url": "https://zenodo.org/api/records/17475688/files/zxr805/CICV5G-v1.0.0.zip/content",
+    "bytes": 128556327,
+    "publisher_md5_verified": "3551c5c0f4fed67a1a72c535a69e6ece",
+    "sha256": "cb3b587e1276714a52dfbfdcb69e15eb7a0bce82078e96a34920d6c9ae89b9c1",
+    "zip_root": "zxr805-CICV5G-ae05da3"
+  },
+  "git_release": "https://github.com/zxr805/CICV5G/tree/ae05da30d39f52c4f15682d728b6c0f7282d6c31",
+  "git_raw_base": "https://raw.githubusercontent.com/zxr805/CICV5G/ae05da30d39f52c4f15682d728b6c0f7282d6c31/",
+  "selected_input_files": [
+    {
+      "path": "README.md",
+      "size": 7281,
+      "git_blob": "4769ea0d3d9f11a10e99e299e542a9c74b73c82e",
+      "sha256": "a959ffbba696a662c2b6383b2463629b7384e21ccdcffa713d06c2555e124e1b"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n78/v30/all.txt",
+      "size": 874128,
+      "git_blob": "2610568d6389625568c01802c23631b9f9106878",
+      "sha256": "50145c454ac92e063b22e863c054472f502c54d48a7f7eafc404fc339720cfd1"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n78/v30/v2v_info-01.txt",
+      "size": 223257,
+      "git_blob": "5303f146e19fafefd311fcc22c01782ee3b00f50",
+      "sha256": "776eed25822d7652227d152874c7c2aa5ff85593ed3b2fd152e599c94cef9b6c"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n78/v30/v2v_info-02.txt",
+      "size": 222136,
+      "git_blob": "73f20fb7ec329bfd6e119c2eabe08e2dc77dfbb3",
+      "sha256": "8a47f32acedda7e0bc9dea5e9574685d192442110fd56a0884646a4db75806e4"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n78/v30/v2v_info-03.txt",
+      "size": 216661,
+      "git_blob": "851a09bdeb798d79f8f500481d1a621818621bb8",
+      "sha256": "cdc2ba9fd743cebddbfff92a2b9538b1e2deb126651918babd90449e7595d409"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n78/v30/v2v_info-04.txt",
+      "size": 212398,
+      "git_blob": "9d88d9ff0f7edcb1c76237e9cf7b8f20be19d389",
+      "sha256": "5603d0d176074eb7712154c8c270ec6a9988bc8e29686a78253b8aae60da8ca2"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n8/v30/all.txt",
+      "size": 870350,
+      "git_blob": "6dc55005a2f964bf541541f9b97520e3f2f11ae7",
+      "sha256": "e25a06ce1128572a3c9c9f08b85e5f9d1dbd61686b82889b2a4c3b49529e0345"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n8/v30/v2v_info-01.txt",
+      "size": 221741,
+      "git_blob": "46a5b34f9cf68b11867eb6e36da5ecfd82a2b798",
+      "sha256": "efe34245fb9e5b2ed57a02063373ec178245b5428515afc037e3d5b59f4a8413"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n8/v30/v2v_info-02.txt",
+      "size": 213827,
+      "git_blob": "2f82574a4bf28e893c52d549249acce90f3282b9",
+      "sha256": "45319daffb7d4689b107e0c7a5cc661947ab75a5ebe2d98f8649f31051e94f66"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n8/v30/v2v_info-03.txt",
+      "size": 222865,
+      "git_blob": "4ee6e0221a388ff489c92550f588c0277b1b7511",
+      "sha256": "b3647822da92289e3970831edd2b463db3ce98d5e4233194d1f1492b0cf720e2"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/100ms/n8/v30/v2v_info-04.txt",
+      "size": 212241,
+      "git_blob": "c151889bfc6db73854d5aa317ca297a6a7a94357",
+      "sha256": "9b3b5436b57dac8260992deb80ec29a01c4a817a521ff7fbdedfe2a71625bad9"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n78/v30/all.txt",
+      "size": 2404880,
+      "git_blob": "e3959df1ff8c50e7d15fd441e88e6ad24d5531d7",
+      "sha256": "9e3432d6b5cd725ab01d19008732dd2ff3a72b4ea47e1bfe88feebb8de07258e"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n78/v30/v2v_info-01.txt",
+      "size": 791519,
+      "git_blob": "625003d56b0630f7df581bd6f3159ba23fd27449",
+      "sha256": "1af3279af29f659ddfd9e74538906dd2d3c6a087fa8a438f42b4c035131fde79"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n78/v30/v2v_info-02.txt",
+      "size": 787024,
+      "git_blob": "0fac2de646f5e6d0920fe339a83b8775f68a39c7",
+      "sha256": "fb048e970a7444ab56f639eaca18dfa71b9b3fbcf611be088deb697f3d1ee0ac"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n78/v30/v2v_info-03.txt",
+      "size": 826553,
+      "git_blob": "90d55ae927c36bfaae502a614eaef4f4781a5f38",
+      "sha256": "d55b791030a2401dffbedfff9b619894266e95b74a188339748924bae41b27a4"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n8/v30/all.txt",
+      "size": 2396641,
+      "git_blob": "498ec0c9a1f2e4301a0cb6e62b5819f0b9cb8e50",
+      "sha256": "44c7495771c5d4df5f43e267a8755f827f60d7f0daef12e679622fc00b02a32f"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n8/v30/v2v_info-01.txt",
+      "size": 781190,
+      "git_blob": "d4b211659f1924644e35b54162a5e062a490835b",
+      "sha256": "78c6a96e446326ef675d7e231477e7718aa03dbf4c72507c879354d62827cd07"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n8/v30/v2v_info-02.txt",
+      "size": 800661,
+      "git_blob": "9ef0fa85327bc746b0f9c530948debddda4ee30d",
+      "sha256": "cf3a1c5e964d95ab785c4d46e257e78a969d044d1d13ec1695c39cfb6a74c7b0"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/10ms/n8/v30/v2v_info-03.txt",
+      "size": 815006,
+      "git_blob": "662f74249ef2cf9a972ac9998ada4d16f3614f8a",
+      "sha256": "274be0d78078f8ab851b0386eda89a4fca60d622b089d2a7652de012c7440af0"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n78/v30/all.txt",
+      "size": 1844101,
+      "git_blob": "c677d96977f51d948072a620346fa376ec1e6461",
+      "sha256": "df15dc2582a274e8896d8b2e58a3dd67cf00eab7b26f1901ed8dd55c99706397"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n78/v30/v2v_info-01.txt",
+      "size": 646891,
+      "git_blob": "10a82021e4eb589ecc83bf00e8354727d9397836",
+      "sha256": "c9b4688e6fc0a7ab8b4dccbc392ba1ca02ba2d59bc02dfb59c06818cd4126ece"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n78/v30/v2v_info-02.txt",
+      "size": 617797,
+      "git_blob": "d8ae0b7fd2a088e727ae092bf06a9a87696a4552",
+      "sha256": "adc1f809bd38f295bc98e8b6c51b51d6fb7eba5fa70a77d02209bbc31d3124fa"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n78/v30/v2v_info-03.txt",
+      "size": 579629,
+      "git_blob": "08c9c28545dfb001978f1c56c40c666894618e08",
+      "sha256": "00a57350f7f9ee40a39faaf6ebb8660a3f994e3e52e8ae4d211e0615b1973b8d"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n8/v30/all.txt",
+      "size": 1846410,
+      "git_blob": "1c6aeb55715d48cd5a25a5e321bdf9014a400a47",
+      "sha256": "15c0ada170e358828c799b2106a9723946187013fb5879803264abb283725114"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n8/v30/v2v_info-01.txt",
+      "size": 599374,
+      "git_blob": "ba212d1344f13b719d52fc186a5a2b69e26a6407",
+      "sha256": "c8016fe56938446a24edc61a07755553250ebb55694c144c4df5d627fee34a41"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n8/v30/v2v_info-02.txt",
+      "size": 649290,
+      "git_blob": "6bc5162432bf22b91dace37701116a2efafe1117",
+      "sha256": "c675f82a96fcfad8194750eee70116c8a9375a3adcbf30d8dada70097cef5249"
+    },
+    {
+      "path": "data/Urban road/3-Data transmission frequency/30ms/n8/v30/v2v_info-03.txt",
+      "size": 597962,
+      "git_blob": "4ca332382cf96d7ceb0858f32713f0bae756d975",
+      "sha256": "6bc9b19ef2b67a076ec5053661a0794ea7ac8e92116c72033781292cbf6094ec"
+    }
+  ],
+  "selection": "Entire urban data-transmission-frequency experiment (v30 directory label). Included all 20 per-run text files in 3 interval settings by 2 network labels. Six corresponding merged files were compared only, with all three timing columns identical in row order to the concatenated runs. No included run windows overlap. Standard 50 ms runs and other scenarios are outside this subset. Published totals >150,000 refer to the overall dataset. The readme and 26 timing files were verified independently against the archive and the immutable Git blob IDs.",
+  "measurement": "Real vehicle-to-network-to-vehicle MQTT echo. Both pub_time (publish) and sub_time (vehicle receives returned echo) are timestamped on the same onboard device in integer milliseconds. Across 106,582 complete rows, sub_time minus pub_time equals delay exactly. Millisecond storage does not establish timestamp accuracy. The dataset distinguishes the private network n8 and public network n78. Paired sign or count alone does not establish independence, physical route alignment or causality.",
+  "limits": "Cloud-side receipt/forwarding, sensor generation, application control decision and actuator use times are absent from this logging schema. Echo RTT is not one-way latency and is not the duration of a full control loop. Only completed cycles are visible; the text has no independent counter of attempted transmissions, so loss cannot be measured here from timestamp gaps. Timing spans are per run and include long pauses without imputing their cause. No clock comparison between cloud and vehicle is possible from these three time fields.",
+  "calculation": "Per-run median and nearest-rank p95 RTT include all completed rows. The adjacent pairs column counts cases where the next recorded publish precedes the preceding echo arrival (in the common integer-ms clock). The echo-age proxy treats publish time as creation and return of its echo as the update at that vehicle. For each nondecreasing arrival stream, integrate the elapsed time since publication of the most recently returned echo from first through last reception: sum_i [delay_i * (r_{i+1}-r_i) + (r_{i+1}-r_i)^2/2]. The integral is stored doubled as an integer, and divided by twice the time span for the mean. Zero-length intervals from timestamp ties contribute zero. No prior or post-run time and no hypothesized holds at controller application included.",
+  "primary_paper": {
+    "title": "5G communication delay dataset for cloud-based vehicle planning and control",
+    "doi": "10.1038/s41597-026-07239-7",
+    "full_text": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13260323/",
+    "xml": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13260323/fullTextXML",
+    "xml_sha256": "4f34e9086f4150a0e7d5f29fd8b5f39fb44b98ec85a022033861a4b6efbccbfa",
+    "locator": "Methods: experimental procedure, same-device timestamps, cloud echo; Data Records, Table 1; Technical Validation, Fig. 5. Article read as full text, not redistributed."
+  },
+  "history_check": {
+    "commit": "c4470bac4372e8472e1293a0fb2b3b45609f597e",
+    "keys": [
+      "CICV5G",
+      "17475688",
+      "17475687",
+      "5G communication delay dataset for cloud-based vehicle planning and control",
+      "10.1038/s41597-026-07239-7"
+    ],
+    "scope": "Initial and continuous project evidence, follow-ups and early baseline index. “CICV5G”, dataset DOI, article DOI and distinctive title had no match at screen."
+  },
+  "query_log": [
+    {
+      "source": "https://zenodo.org/api/records/17475688",
+      "query": "CICV5G field test, temporal schema, urban transmission-frequency comparison",
+      "sha256": "df8ffeac17abe3fa278a524ade3d8c5733e03edaf15e1163d6a2318a04fdda58"
+    },
+    {
+      "source": "https://api.github.com/repos/zxr805/CICV5G/git/trees/ae05da30d39f52c4f15682d728b6c0f7282d6c31?recursive=1",
+      "query": "urban data transmission frequency, all v2v_info repeats and all.txt timing counterparts; immutable release tree",
+      "sha256": "c4499488e9c11cd9017e064af4ce190441be17fa7d01e3523e6d3298dae16ce2"
+    },
+    {
+      "source": "https://api.crossref.org/works/10.1038/s41597-026-07239-7",
+      "query": "5G communication delay dataset cloud-based vehicle planning and control CICV5G Xinrui Zhang; followed matching paper and publisher DOI to open full text"
+    }
+  ],
+  "reproduction": "Python 3.9+ standard library. Save the fixed Zenodo archive from archive.url. Run python derive_cicv5g.py CICV5G-v1.0.0.zip cicv5g-echo-runs.csv. Only timing fields enter the analysis. No dependency on GitHub at execution time."
+}

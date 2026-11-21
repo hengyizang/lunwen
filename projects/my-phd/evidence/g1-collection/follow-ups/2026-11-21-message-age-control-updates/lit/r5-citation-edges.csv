@@ -1,0 +1,35 @@
+citing,cited,verification
+10.1016/j.robot.2022.104361,10.1109/lra.2022.3174346,Crossref deposited DOI + OpenAlex referenced_works + explicit full-text reference [12]
+10.1016/j.robot.2022.104361,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1109/rtss49844.2020.00030,Crossref deposited reference title + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1109/mfi52462.2021.9591166,Crossref deposited reference title + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1109/case49439.2021.9551447,Crossref deposited reference title + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1016/j.sysarc.2021.102341,Crossref deposited DOI + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1145/2968478.2968502,Crossref deposited DOI + OpenAlex referenced_works
+10.1016/j.robot.2022.104361,10.1145/1842733.1842747,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/lra.2022.3174346,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title + OpenAlex referenced_works
+10.1109/lra.2022.3174346,10.1109/mfi52462.2021.9591166,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/lra.2022.3174346,10.1145/1842733.1842747,Crossref deposited DOI + OpenAlex referenced_works
+10.4230/lipics.ecrts.2019.6,10.1145/2968478.2968502,OpenAlex referenced_works
+10.1109/rtss49844.2020.00030,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title + OpenAlex referenced_works
+10.1109/rtss49844.2020.00030,10.1145/2968478.2968502,Crossref deposited DOI + OpenAlex referenced_works
+10.4230/lipics.ecrts.2023.10,10.1109/rtss55097.2022.00015,OpenAlex referenced_works
+10.1109/rtcsa71153.2026.00038,10.1016/j.robot.2022.104361,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/rtcsa71153.2026.00038,10.1109/lra.2022.3174346,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/rtcsa71153.2026.00038,10.4230/lipics.ecrts.2023.10,Crossref deposited reference title + OpenAlex referenced_works
+10.1109/rtcsa71153.2026.00038,10.1016/j.sysarc.2021.102341,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/rtss55097.2022.00015,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title
+10.1109/rtss55097.2022.00015,10.1109/rtss49844.2020.00030,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/mfi52462.2021.9591166,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title + OpenAlex referenced_works
+10.1109/mfi52462.2021.9591166,10.1145/2968478.2968502,Crossref deposited DOI + OpenAlex referenced_works
+10.1109/case49439.2021.9551447,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title + OpenAlex referenced_works
+10.1109/case49439.2021.9551447,10.1145/2968478.2968502,Crossref deposited DOI + OpenAlex referenced_works
+10.1016/j.sysarc.2021.102341,10.4230/lipics.ecrts.2019.6,Crossref deposited reference title
+10.1016/j.sysarc.2021.102341,10.1145/2968478.2968502,Crossref deposited DOI + OpenAlex referenced_works
+10.48550/arxiv.2204.11778,10.1016/j.robot.2022.104361,OpenAlex referenced_works + explicit full-text reference [6]
+10.48550/arxiv.2204.11778,10.1109/lra.2022.3174346,OpenAlex referenced_works + explicit full-text reference [5]
+10.48550/arxiv.2204.11778,10.4230/lipics.ecrts.2019.6,OpenAlex referenced_works
+10.48550/arxiv.2204.11778,10.1109/rtss49844.2020.00030,OpenAlex referenced_works
+10.48550/arxiv.2204.11778,10.1145/2968478.2968502,OpenAlex referenced_works
+10.48550/arxiv.2204.11778,10.1145/1842733.1842747,OpenAlex referenced_works
+10.1115/1.4048205,10.1109/icit45562.2020.9067199,Crossref deposited reference title + OpenAlex referenced_works

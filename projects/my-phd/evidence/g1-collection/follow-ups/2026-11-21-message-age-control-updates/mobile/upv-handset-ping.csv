@@ -1,0 +1,13 @@
+archive_test_folder,ue,event_rows,rtt_values,velocity_values,rtt_and_velocity_same_row,distinct_rtt_clock_values,cross_scenario_use,ping_rtt_min_source_units,ping_rtt_median_source_units,ping_rtt_mean_source_units,ping_rtt_p95_nearest_rank_source_units,ping_rtt_max_source_units
+1,ASUS,11479,307,311,0,307,unresolved file/time mapping,8.0,804.0,796.18241,1072.0,1260.0
+1,S25,10837,299,302,0,299,unresolved file/time mapping,5.0,9.0,11.090301,31.0,49.0
+2,ASUS,11395,302,306,0,302,unresolved file/time mapping,8.0,315.0,303.94702,430.0,529.0
+2,S25,11627,307,310,0,307,unresolved file/time mapping,7.0,555.0,551.0,781.0,954.0
+3,ASUS,11062,298,300,0,298,as deposited; separate device clocks,8.0,1211.0,1162.459732,1513.0,1801.0
+3,S25,10950,292,295,0,292,as deposited; separate device clocks,8.0,651.0,635.195205,837.0,1024.0
+4,ASUS,10931,294,297,0,294,as deposited; separate device clocks,8.0,1242.5,1207.714286,1555.0,1882.0
+4,S25,10994,289,292,0,289,as deposited; separate device clocks,7.0,640.0,621.380623,847.0,1024.0
+5,ASUS,11114,293,297,0,293,as deposited; separate device clocks,8.0,803.0,788.515358,1027.0,1193.0
+5,S25,10908,289,292,0,289,as deposited; separate device clocks,6.0,571.0,548.941176,758.0,955.0
+6,ASUS,10983,294,298,0,294,as deposited; separate device clocks,7.0,445.5,429.605442,632.0,777.0
+6,S25,10919,290,293,0,290,as deposited; separate device clocks,6.0,565.5,559.155172,866.0,1420.0

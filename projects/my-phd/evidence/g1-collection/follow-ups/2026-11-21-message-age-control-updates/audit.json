@@ -1,0 +1,85 @@
+{
+  "checked_utc_date": "2026-11-21",
+  "prior_git_head": "86ebd18725dff9a1ca40fee7b9b28c1277d86c66",
+  "literature_catalogue_head": "86ebd18725dff9a1ca40fee7b9b28c1277d86c66",
+  "intervening_paths_checked_for_duplicate_works": [],
+  "dataset_screening": "Searched current and legacy text catalogues plus four prior follow-ups, by normalized release ID, concept DOI, source slug and/or title. NIST items are public catalogue leads only. Software execution, physical experiment and file retranscription receive separate grades.",
+  "history_file_count": 518,
+  "lookup_keys": {
+    "lapland": [
+      "10.5281/zenodo.18150618",
+      "Private 5G latency and data rate measurements",
+      "zenodo.org/records/18150617"
+    ],
+    "upv": [
+      "10.5281/zenodo.18410980",
+      "Remote Driving Dataset in UPV's 5G Private network (n40)",
+      "zenodo.org/records/18410979"
+    ],
+    "cicv5g": [
+      "10.5281/zenodo.17475688",
+      "10.5281/zenodo.17475687",
+      "5G communication delay dataset for cloud‑based vehicle planning and control"
+    ],
+    "caret": [
+      "tier4/caret_demos",
+      "end_to_end_sample/trace"
+    ],
+    "cartpole": [
+      "10.12795/11441/189931",
+      "Dataset of Physical cart-pole recordings under periodic and event-driven MPC",
+      "11441/189931"
+    ],
+    "10.18434/m32242": [
+      "10.18434/m32242",
+      "Measurement and Processed Data From A Graph Database Approach to Wireless IIoT Work-cell Performance Evaluation"
+    ],
+    "10.18434/mds2-2361": [
+      "10.18434/mds2-2361",
+      "Process and robot data from a two robot workcell representative performing representative manufacturing operations."
+    ]
+  },
+  "verified_source_releases": 5,
+  "catalogue_only": 2,
+  "distinct_papers": 22,
+  "new_papers": 22,
+  "directed_edges": 34,
+  "recomputed_tables": {
+    "ros/caret-software-age.csv": {
+      "rows": 1,
+      "sha256": "9b14016a1c8dcf8e439f1c30a4d7f99519aebb88e190266759e8c4f5a968fd4a"
+    },
+    "ros/caret-topic-timing.csv": {
+      "rows": 5,
+      "sha256": "db5cbf993a0463bada415731715d6f2e6ee813957d15c3519d6e67703e35cdc4"
+    },
+    "ros/caret-sink-updates.csv": {
+      "rows": 47,
+      "sha256": "aa9265979f6fc2019e645c4d34d1e914c74444c079f9b9dc3e1703d3ff9fdd57"
+    },
+    "vehicle/cicv5g-echo-runs.csv": {
+      "rows": 20,
+      "sha256": "148ec46dae6910a5eccc35a4dcd5320bbef219c147f5eb5e22c5ba37f032645c"
+    },
+    "mobile/upv-handset-ping.csv": {
+      "rows": 12,
+      "sha256": "dc6670db0dadfd7ea6cb206229e4ac05963d2f1fc130ff52bd0e31d48d7f6044"
+    },
+    "mobile/upv-network-windows.csv": {
+      "rows": 6,
+      "sha256": "83db557d3f1b1547370558666a8b011ccf0a3fe511dc117ffcc5aca21fad2c36"
+    },
+    "mobile/lapland-ros1-rtt.csv": {
+      "rows": 4,
+      "sha256": "3cf44bf7ec5bbee66fcf11d99da665c33ff1f554c2b6347bfc95e2abcaebcb74"
+    },
+    "cart/cartpole-runs.csv": {
+      "rows": 1010,
+      "sha256": "cdb0f587ad216b42d21504040d4577171477c3b54bd94f3311c314e666182798"
+    },
+    "cart/cartpole-groups.csv": {
+      "rows": 4,
+      "sha256": "9f8d963fd86a3ac4e9334be281f7297d69069caef4005b121ac2b51c61d4cc4e"
+    }
+  }
+}
