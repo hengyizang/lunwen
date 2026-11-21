@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34845711-hrc-architecture-3-x-raw",
+  "dataset_name": "HRC-Architecture 3.x: Raw, Hash-Manifested Run Records of the Pre-Registered Evaluation Campaigns",
+  "doi": "10.6084/m9.figshare.34845711.v1",
+  "landing_url": "https://figshare.com/articles/dataset/HRC-Architecture_3_x_Raw_Hash-Manifested_Run_Records_of_the_Pre-Registered_Evaluation_Campaigns/34845711/1",
+  "source_api_url": "https://api.figshare.com/v2/articles/34845711",
+  "access_date": "2026-11-21",
+  "round_number": 14,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "INVENTORY.csv",
+      "download_url": "https://ndownloader.figshare.com/files/70833282",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/70833282/INVENTORY.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T083512Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22INVENTORY.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=74fcc5e33ac482855579f6fa457db0ddc98204044ebd704f0a2300cdfe5bdef8",
+      "http_status": 200,
+      "bytes": 138345,
+      "publisher_checksum": "md5:20601b1554e4857a709f00e2c16ea056",
+      "verified_md5": "20601b1554e4857a709f00e2c16ea056",
+      "verified_sha256": "e20d46fa75ac98eb135276cf5b26aa428307fcea4ec5453b4963652a24fca999"
+    },
+    {
+      "file": "INDEX.csv",
+      "download_url": "https://ndownloader.figshare.com/files/70833285",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/70833285/INDEX.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T083514Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22INDEX.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=42aa180436e4d33ccb340d7b1e273461c1b00e78b24a889382cdf98318aa440a",
+      "http_status": 200,
+      "bytes": 187888,
+      "publisher_checksum": "md5:dba058e10113d4719f7721d168b18446",
+      "verified_md5": "dba058e10113d4719f7721d168b18446",
+      "verified_sha256": "6f70f6421b73ba49f61d5db6bc2c6d0cff26eb38de80098f91fbbff7ddb38d31"
+    },
+    {
+      "file": "git_tags.txt",
+      "download_url": "https://ndownloader.figshare.com/files/70833279",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/70833279/git_tags.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T083517Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22git_tags.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=e274aabdc89f8f6c9a4bdbd58614f59bb0bdd4aeeed059a8276f9d271e6e72b1",
+      "http_status": 200,
+      "bytes": 204,
+      "publisher_checksum": "md5:709665c40dcd5edd0a91b2938f9158fb",
+      "verified_md5": "709665c40dcd5edd0a91b2938f9158fb",
+      "verified_sha256": "fa0d18ef0b2831c8b57f4d767127386d00b4e628b0806596fc401953141775a5"
+    },
+    {
+      "file": "git_log.txt",
+      "download_url": "https://ndownloader.figshare.com/files/70833273",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/70833273/git_log.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T083519Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22git_log.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=b0d42f5d63d39adb2604145d210ec7977ea2387e5e22285030e2da2e63bbc02d",
+      "http_status": 200,
+      "bytes": 736,
+      "publisher_checksum": "md5:64490f603651ebe77be0033af1b9f190",
+      "verified_md5": "64490f603651ebe77be0033af1b9f190",
+      "verified_sha256": "d1441059f925425d8c4a8f6f0b376ad139264038ccdb72954e74b6e08f40d958"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34845711-hrc-architecture-3-x-raw",
+  "raw_total_bytes": 327173,
+  "raw_total_rows": 1358,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34845711-hrc-architecture-3-x-raw-cleaned.csv",
+  "cleaned_csv_sha256": "7c1e17a1903d82a2d6af1665b3802f9fd74f8a1a7e8e376ac76dd44ce3ef28f2",
+  "cleaned_rows": 20,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "INVENTORY.csv": {
+      "run_id": 0,
+      "experiment": 4,
+      "variant": 4,
+      "status": 4,
+      "start_utc": 4,
+      "cycles": 4,
+      "manifest_sha256": 0,
+      "archive": 0
+    },
+    "INDEX.csv": {
+      "run_id": 0,
+      "experiment": 0,
+      "variant": 0,
+      "status": 0,
+      "start_utc": 0,
+      "cycles": 0,
+      "manifest_sha256": 0,
+      "backups": 0
+    },
+    "git_tags.txt": {
+      "1a51a5710c9116593b219b16bae3c37fea5aacc5": 0,
+      "refs/tags/campaign-v3": 0
+    },
+    "git_log.txt": {
+      "a2ea7bc6c2d6ef91b55c1a8b400a1f77cafaefef 2026-10-28T16:44:19-03:00 paper_numbers.py: Python 3.10 compatibility (no backslash in f-string expression)": 0,
+      "output unchanged": 4
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

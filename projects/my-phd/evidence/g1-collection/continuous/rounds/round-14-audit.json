@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0",
+  "round": 14,
+  "completed_at": "2026-11-21T08:34:04Z",
+  "batch_label": "Broad Engineering R14: R2_Aerial_Actuator (2026)",
+  "base_head_sha": "7c7127f65cfc0062230136f0ae0f5ae784b7aad9",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 123,
+    "duplicates_skipped": 38,
+    "net_new": 85,
+    "new_reading_queue": 84,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t083404z-openalex-448f33440d",
+        "request_url": "https://api.openalex.org/works?search=quadrotor+actuator+saturation+trajectory+tracking&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "0f49dc8c4adbd56e45341993105a24d66cc79d3c167e37cbdef2c9020dcb6224",
+        "normalized_results_sha256": "13402dd901085692d012d314b870bde22fb1925c1a1eb45fe7d3b1cc00182d73"
+      },
+      {
+        "provider": "crossref",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t083405z-crossref-be1ed49d38",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=quadrotor+actuator+saturation+trajectory+tracking&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "2284588d52436f7d36805cd28a56c1f8496faf02b90f8cf7eb27485b4ad70281",
+        "normalized_results_sha256": "cd9f40d03bf1a3a176be05cba17135bb0788b133cf679c0b253a6262671e083e"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t083406z-europe-pmc-00a43bb0f3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=quadrotor+actuator+saturation+trajectory+tracking&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "6f4dd558b1c035c2c8b753723698da1ee9e24ed7c43a6b2609e523fb6ea58c17",
+        "normalized_results_sha256": "b091f04a04ba7eba4d5845d3168ab1014819341ea570c66900b03618aa3ecf54"
+      },
+      {
+        "provider": "hal",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t083409z-hal-359c45b335",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=quadrotor+actuator+saturation+trajectory+tracking&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "55922e40416067520553e19b8e89cf41cac879464a8f49768704d6e70e6b25d8",
+        "normalized_results_sha256": "3c19cec009d63ad2d62f369917c076a11c6937952b14b5b242ae14beae98520f"
+      },
+      {
+        "provider": "openalex",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t083411z-openalex-9a463c9c77",
+        "request_url": "https://api.openalex.org/works?search=multirotor+rotor+failure+control+allocation&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "5bcf185cdccf6028cbf4a016f6fa864ef17d5e9117ccb5c951212c2e8884d0af",
+        "normalized_results_sha256": "f17d581e90ccac0cf0896f00c5ebd7af44167d282d9f4c79c0f2b6bc712488a8"
+      },
+      {
+        "provider": "crossref",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t083413z-crossref-486dd1874d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multirotor+rotor+failure+control+allocation&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "708b4150a3942aa050c2932c2fda9ffc36529486088a934d6331b05b5aee8c12",
+        "normalized_results_sha256": "f0ae6c174ce5b9675cbb2b88c8173a37168a096b7db04c46251b901b1ad98036"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t083414z-europe-pmc-c3a125add5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multirotor+rotor+failure+control+allocation&pageSize=12&format=json",
+        "result_count": 6,
+        "response_sha256": "c4237f51359311116f1e31703860c8be19f102063214b924030217c2482eff5c",
+        "normalized_results_sha256": "48fc97b188c58955207b47a53ab946c15d81abe4a2d41d67a9a0df750e0016a7"
+      },
+      {
+        "provider": "hal",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t083417z-hal-754093b931",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=multirotor+rotor+failure+control+allocation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "36bcbf897dccf3152caefb53d2669503ee723277d00264720e326ada5fc2477d",
+        "normalized_results_sha256": "d219922617de66cd2ebac5c3ffe52b21ebea772aa0d69caf3e1bfe88122211a0"
+      },
+      {
+        "provider": "openalex",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t083418z-openalex-18ff9d336e",
+        "request_url": "https://api.openalex.org/works?search=reference+governor+quadrotor+constrained+control&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "b41f5c18a4141c876d8da4d3797b87d62e3966d071d01788bbca28e2ebb37672",
+        "normalized_results_sha256": "d0cddd52b6cbdb48a5d6b257fc3281cf5c515f2afbe317ddab73ed2a443cab28"
+      },
+      {
+        "provider": "crossref",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t083419z-crossref-f8f0c7e7a6",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=reference+governor+quadrotor+constrained+control&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "28c7e63464f29942afb1fe555f20f9986fcb4653613a91eb0bf37ba2be8107ef",
+        "normalized_results_sha256": "2436a4394aaba68d49c835a127d34802d37ee0bf30929f1f19161e25b1df32cc"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t083421z-europe-pmc-90ed0b4383",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=reference+governor+quadrotor+constrained+control&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "c8e68bd02a034c567061f14552b0c0b05a306758ec34745822f42c9a9688699b",
+        "normalized_results_sha256": "bdd0e1660fda139bc2b5f42e4c092f8e3f32fb8a51f7a30bcb6d65c30496fbc6"
+      },
+      {
+        "provider": "hal",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t083422z-hal-b0d4c47b2c",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=reference+governor+quadrotor+constrained+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "8938d6fa80a5e7319928c2668756ac92212b136bdde59dd6831601763254fab2",
+        "normalized_results_sha256": "435953b3d867b85fc4f8c12e59e96e9b6f081b7d7f1c0adf081b3ac983fbd738"
+      },
+      {
+        "provider": "openalex",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t083424z-openalex-c6dac4eb18",
+        "request_url": "https://api.openalex.org/works?search=nonlinear+MPC+quadrotor+thrust+constraint&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "8aa4487c18234d78d18cb8b12f1b3713d276e5dfdedcbef5375f77043904bc7e",
+        "normalized_results_sha256": "4022ce875891c6ec629c9fa72137d5b3d612f8ab91252f31addae5d80140fc97"
+      },
+      {
+        "provider": "crossref",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t083425z-crossref-b14bd08464",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=nonlinear+MPC+quadrotor+thrust+constraint&rows=12&filter=from-pub-date%3A2026-01-01%2Cuntil-pub-date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "23b7fb8ff0b37d56822afa35b48d9433c9fba2635f3802ce7c0e0a16a595f614",
+        "normalized_results_sha256": "eb3d4db9304cf2ed512240f1cdaceaaae2854e9739f72180c9cdf6627c223922"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t083427z-europe-pmc-ab867c264e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=nonlinear+MPC+quadrotor+thrust+constraint&pageSize=12&format=json",
+        "result_count": 9,
+        "response_sha256": "8abe0baa1053fb7c473fd0fa0b8e7c1d3ad092f7f23d129d84f8367053fa5f1c",
+        "normalized_results_sha256": "971ce7742b6a81499df166bca7d8d899ada17122c2f6692dbbbaf4a01f96ef08"
+      },
+      {
+        "provider": "hal",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t083429z-hal-488528465d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=nonlinear+MPC+quadrotor+thrust+constraint&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "5943be2067eba6b59c4d97ed998574905d452657db3870d87e127fd4b215e5f0"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/auteee67053.2025.11322247",
+        "receipt_id": "20261121t083430z-opencitations-eddc1c0a94",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.measurement.2025.119183",
+        "receipt_id": "20261121t083431z-opencitations-946817f3c1",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 211,
+    "off_topic_filtered": 101,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 110,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "topology optimization",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "topology optimization",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "topology optimization",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "structural vibration",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "structural vibration",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 15,
+    "cleaned": [
+      {
+        "slug": "figshare-34476927-data-sheet-1-a-vision-ba",
+        "key": "figshare:34476927",
+        "dataset_name": "Data Sheet 1_A vision-based closed-loop framework for adaptive ergonomic human-robot collaboration.csv",
+        "doi": "10.3389/frobt.2026.1948863.s003",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_A_vision-based_closed-loop_framework_for_adaptive_ergonomic_human-robot_collaboration_csv/34476927",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34476927-data-sheet-1-a-vision-ba-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34476927-data-sheet-1-a-vision-ba-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34476927_data_sheet_1_a_vision_ba.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 30,
+        "verified_sha256": "45ac02efcb333f1773ffd720cc2b047a2f001f6d50e7cb1f92336cc9179f7f4f"
+      },
+      {
+        "slug": "figshare-34476945-data-sheet-2-a-vision-ba",
+        "key": "figshare:34476945",
+        "dataset_name": "Data Sheet 2_A vision-based closed-loop framework for adaptive ergonomic human-robot collaboration.csv",
+        "doi": "10.3389/frobt.2026.1948863.s002",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_2_A_vision-based_closed-loop_framework_for_adaptive_ergonomic_human-robot_collaboration_csv/34476945",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34476945-data-sheet-2-a-vision-ba-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34476945-data-sheet-2-a-vision-ba-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34476945_data_sheet_2_a_vision_ba.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 30,
+        "verified_sha256": "8afa86e63d0a78ee9e59895695095e56de2335dd48ac991a4046296f7d4af7ee"
+      },
+      {
+        "slug": "figshare-34845711-hrc-architecture-3-x-raw",
+        "key": "figshare:34845711",
+        "dataset_name": "HRC-Architecture 3.x: Raw, Hash-Manifested Run Records of the Pre-Registered Evaluation Campaigns",
+        "doi": "10.6084/m9.figshare.34845711.v1",
+        "landing_url": "https://figshare.com/articles/dataset/HRC-Architecture_3_x_Raw_Hash-Manifested_Run_Records_of_the_Pre-Registered_Evaluation_Campaigns/34845711/1",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34845711-hrc-architecture-3-x-raw-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34845711-hrc-architecture-3-x-raw-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34845711_hrc_architecture_3_x_raw.py",
+        "cleaned_rows": 20,
+        "raw_total_rows": 1358,
+        "verified_sha256": "e20d46fa75ac98eb135276cf5b26aa428307fcea4ec5453b4963652a24fca999"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+        "url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

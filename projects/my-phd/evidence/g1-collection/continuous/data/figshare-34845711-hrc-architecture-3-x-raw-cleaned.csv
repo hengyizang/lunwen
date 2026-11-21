@@ -1,0 +1,21 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+INVENTORY.csv,run_id,categorical_or_text,678,678,0,678,,,,,,,"{""2026-10-12T15-05-38.917Z_ablation_A0_seed1_S1_idle"": 1, ""2026-10-12T15-16-40.834Z_ablation_A0_seed1_S1_load"": 1, ""2026-10-12T15-20-04.814Z_ablation_A0_seed..."
+INVENTORY.csv,experiment,categorical_or_text,678,674,4,7,,,,,,,"{""ablation"": 210, ""tuning"": 201, ""timing_campaign"": 120}"
+INVENTORY.csv,variant,categorical_or_text,678,674,4,673,,,,,,,"{""proposed_v0_seg01"": 2, ""A0_seed1_S1_idle"": 1, ""A0_seed1_S1_load"": 1}"
+INVENTORY.csv,status,categorical_or_text,678,674,4,2,,,,,,,"{""complete"": 673, ""interrupted"": 1}"
+INVENTORY.csv,start_utc,categorical_or_text,678,674,4,674,,,,,,,"{""2026-10-12T15:05:38.917Z"": 1, ""2026-10-12T15:16:40.834Z"": 1, ""2026-10-12T15:20:04.814Z"": 1}"
+INVENTORY.csv,cycles,numeric,678,674,4,21,2715,10000,60000,94150.7,60000,360000,108199
+INVENTORY.csv,manifest_sha256,categorical_or_text,678,678,0,678,,,,,,,"{""c073a52aea103153fce9700af05217e82343b0051f7f255de08c04eb32415765"": 1, ""f268d902d7654bcd6e0a610e7c333635a05c70b34e8fc67cdf8ba25389abc588"": 1, ""e5d5f97737091..."
+INVENTORY.csv,archive,categorical_or_text,678,678,0,8,,,,,,,"{""runs_ablation.tar.gz"": 210, ""runs_tuning.tar.gz"": 201, ""runs_timing_campaign.tar.gz"": 120}"
+INDEX.csv,run_id,categorical_or_text,674,674,0,674,,,,,,,"{""2026-10-12T15-05-38.917Z_ablation_A0_seed1_S1_idle"": 1, ""2026-10-12T15-16-40.834Z_ablation_A0_seed1_S1_load"": 1, ""2026-10-12T15-20-04.814Z_ablation_A0_seed..."
+INDEX.csv,experiment,categorical_or_text,674,674,0,7,,,,,,,"{""ablation"": 210, ""tuning"": 201, ""timing_campaign"": 120}"
+INDEX.csv,variant,categorical_or_text,674,674,0,673,,,,,,,"{""proposed_v0_seg01"": 2, ""A0_seed1_S1_idle"": 1, ""A0_seed1_S1_load"": 1}"
+INDEX.csv,status,categorical_or_text,674,674,0,2,,,,,,,"{""complete"": 673, ""interrupted"": 1}"
+INDEX.csv,start_utc,categorical_or_text,674,674,0,674,,,,,,,"{""2026-10-12T15:05:38.917Z"": 1, ""2026-10-12T15:16:40.834Z"": 1, ""2026-10-12T15:20:04.814Z"": 1}"
+INDEX.csv,cycles,numeric,674,674,0,21,2715,10000,60000,94150.7,60000,360000,108199
+INDEX.csv,manifest_sha256,categorical_or_text,674,674,0,674,,,,,,,"{""c073a52aea103153fce9700af05217e82343b0051f7f255de08c04eb32415765"": 1, ""f268d902d7654bcd6e0a610e7c333635a05c70b34e8fc67cdf8ba25389abc588"": 1, ""e5d5f97737091..."
+INDEX.csv,backups,categorical_or_text,674,674,0,2,,,,,,,"{""/mnt/e/hrc_backup_A: 6 verified, 0 mismatched; /mnt/c/hrc_backup_B: 6 verified, 0 mismatched; "": 673, ""/mnt/e/hrc_backup_A: FAILED (filesystem error: canno..."
+git_tags.txt,1a51a5710c9116593b219b16bae3c37fea5aacc5,categorical_or_text,2,2,0,2,,,,,,,"{""80b8f728fc047f9ce30e8c006dde8b1521c1228f"": 1, ""a2ea7bc6c2d6ef91b55c1a8b400a1f77cafaefef"": 1}"
+git_tags.txt,refs/tags/campaign-v3,categorical_or_text,2,2,0,2,,,,,,,"{""refs/tags/campaign-v3-compare"": 1, ""refs/tags/campaign-v3-report"": 1}"
+git_log.txt,a2ea7bc6c2d6ef91b55c1a8b400a1f77cafaefef 2026-10-28T16:44:19-03:00 paper_numbers.py: Python 3.10 compatibility (no backslash in f-string expression),categorical_or_text,4,4,0,4,,,,,,,"{""80b8f728fc047f9ce30e8c006dde8b1521c1228f 2026-10-26T20:50:57-03:00 Comparison campaign generated from the tuning selection (rule fixed at campaign-v3)"": 1,..."
+git_log.txt,output unchanged,categorical_or_text,4,0,4,0,,,,,,,{}

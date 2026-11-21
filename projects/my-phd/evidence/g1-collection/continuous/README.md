@@ -7,26 +7,26 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：13
-- **最近更新时间 (UTC)**：2026-11-21T08:29:10Z
-- **累计净新增文献** (`literature-new.csv`)：1268 条（已与基线 15,910 条去重）
+- **已完成轮次**：14
+- **最近更新时间 (UTC)**：2026-11-21T08:34:04Z
+- **累计净新增文献** (`literature-new.csv`)：1353 条（已与基线 15,910 条去重）
 - **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1142 条
-- **累计已完成确定性清洗数据集**：19 个
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1226 条
+- **累计已完成确定性清洗数据集**：22 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 57 | 47 |
-| `R2_Aerial_Actuator` | 77 | 37 |
-| `R5_MultiRobot_Comm` | 89 | 32 |
-| `Robotics_Embodied` | 380 | 266 |
-| `Mechanical_Physics_AI` | 389 | 370 |
-| `Mechatronics_PHM_Control` | 313 | 274 |
-| `Smart_Manufacturing` | 195 | 198 |
-| `Smart_Factory_DigitalTwin` | 134 | 62 |
+| `R1_Force_Contact` | 63 | 47 |
+| `R2_Aerial_Actuator` | 158 | 37 |
+| `R5_MultiRobot_Comm` | 91 | 32 |
+| `Robotics_Embodied` | 389 | 266 |
+| `Mechanical_Physics_AI` | 403 | 370 |
+| `Mechatronics_PHM_Control` | 346 | 274 |
+| `Smart_Manufacturing` | 196 | 198 |
+| `Smart_Factory_DigitalTwin` | 136 | 62 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 54 | 0 |
 | `R2` | 37 | 0 |
@@ -65,6 +65,9 @@
 | `dataverse-z1ohnl-replication-data-for-rol` | Replication Data for: Role of single chemical heterogeneities in ge... | 10.7910/dvn/z1ohnl | `summary_table` | 12 | `ff5918e2ede4` | [CSV](data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv) · [JSON](data/dataverse-z1ohnl-replication-data-for-rol-provenance.json) · [PY](data/derive_dataverse_z1ohnl_replication_data_for_rol.py) |
 | `dataverse-ekpfj2-replication-data-for-art` | Replication Data for: Artificial tactile and proprioceptive feedbac... | 10.7910/dvn/ekpfj2 | `cleaned_rows` | 14 | `24d19e803082` | [CSV](data/dataverse-ekpfj2-replication-data-for-art-cleaned.csv) · [JSON](data/dataverse-ekpfj2-replication-data-for-art-provenance.json) · [PY](data/derive_dataverse_ekpfj2_replication_data_for_art.py) |
 | `dataverse-k7igab-replication-data-for-ear` | Replication Data for: Early attentional processing and cortical rem... | 10.7910/dvn/k7igab | `summary_table` | 14 | `e3205034d9b3` | [CSV](data/dataverse-k7igab-replication-data-for-ear-cleaned.csv) · [JSON](data/dataverse-k7igab-replication-data-for-ear-provenance.json) · [PY](data/derive_dataverse_k7igab_replication_data_for_ear.py) |
+| `figshare-34476927-data-sheet-1-a-vision-ba` | Data Sheet 1_A vision-based closed-loop framework for adaptive ergo... | 10.3389/frobt.2026.1948863.s003 | `cleaned_rows` | 30 | `45ac02efcb33` | [CSV](data/figshare-34476927-data-sheet-1-a-vision-ba-cleaned.csv) · [JSON](data/figshare-34476927-data-sheet-1-a-vision-ba-provenance.json) · [PY](data/derive_figshare_34476927_data_sheet_1_a_vision_ba.py) |
+| `figshare-34476945-data-sheet-2-a-vision-ba` | Data Sheet 2_A vision-based closed-loop framework for adaptive ergo... | 10.3389/frobt.2026.1948863.s002 | `cleaned_rows` | 30 | `8afa86e63d0a` | [CSV](data/figshare-34476945-data-sheet-2-a-vision-ba-cleaned.csv) · [JSON](data/figshare-34476945-data-sheet-2-a-vision-ba-provenance.json) · [PY](data/derive_figshare_34476945_data_sheet_2_a_vision_ba.py) |
+| `figshare-34845711-hrc-architecture-3-x-raw` | HRC-Architecture 3.x: Raw, Hash-Manifested Run Records of the Pre-R... | 10.6084/m9.figshare.34845711.v1 | `summary_table` | 20 | `e20d46fa75ac` | [CSV](data/figshare-34845711-hrc-architecture-3-x-raw-cleaned.csv) · [JSON](data/figshare-34845711-hrc-architecture-3-x-raw-provenance.json) · [PY](data/derive_figshare_34845711_hrc_architecture_3_x_raw.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -83,3 +86,4 @@
 | 11 | 2026-11-21T08:19:12Z | Broad Engineering R11: Smart_Manufacturing / Smart_Factory_DigitalTwin | +148 | +38 | +1 | [round-11-audit.json](rounds/round-11-audit.json) |
 | 12 | 2026-11-21T08:24:12Z | Broad Engineering R12: Smart_Factory_DigitalTwin / R1_Force_Contact | +91 | +59 | +0 | [round-12-audit.json](rounds/round-12-audit.json) |
 | 13 | 2026-11-21T08:29:10Z | Broad Engineering R13: R1_Force_Contact (2026) | +59 | +46 | +3 | [round-13-audit.json](rounds/round-13-audit.json) |
+| 14 | 2026-11-21T08:34:04Z | Broad Engineering R14: R2_Aerial_Actuator (2026) | +85 | +0 | +3 | [round-14-audit.json](rounds/round-14-audit.json) |
