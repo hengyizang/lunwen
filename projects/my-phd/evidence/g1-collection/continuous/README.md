@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：25
-- **最近更新时间 (UTC)**：2026-11-21T09:29:02Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2577 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1255 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2238 条
-- **累计已完成确定性清洗数据集**：52 个
+- **已完成轮次**：26
+- **最近更新时间 (UTC)**：2026-11-21T09:34:02Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：2779 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1317 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2399 条
+- **累计已完成确定性清洗数据集**：54 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 124 | 51 |
-| `R2_Aerial_Actuator` | 365 | 45 |
-| `R5_MultiRobot_Comm` | 242 | 36 |
-| `Robotics_Embodied` | 1033 | 318 |
-| `Mechanical_Physics_AI` | 689 | 607 |
-| `Mechatronics_PHM_Control` | 564 | 394 |
-| `Smart_Manufacturing` | 227 | 282 |
-| `Smart_Factory_DigitalTwin` | 150 | 65 |
+| `R1_Force_Contact` | 124 | 53 |
+| `R2_Aerial_Actuator` | 365 | 46 |
+| `R5_MultiRobot_Comm` | 242 | 37 |
+| `Robotics_Embodied` | 1036 | 360 |
+| `Mechanical_Physics_AI` | 851 | 623 |
+| `Mechatronics_PHM_Control` | 589 | 407 |
+| `Smart_Manufacturing` | 237 | 282 |
+| `Smart_Factory_DigitalTwin` | 151 | 66 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 216 | 0 |
+| `Adjacent` | 238 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,8 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-j6ktrs-the-role-of-awareness-on` | The role of awareness on motor-sensory temporal recalibration | 10.7910/dvn/j6ktrs | `cleaned_rows` | 14 | `f6308de1e39d` | [CSV](data/dataverse-j6ktrs-the-role-of-awareness-on-cleaned.csv) · [JSON](data/dataverse-j6ktrs-the-role-of-awareness-on-provenance.json) · [PY](data/derive_dataverse_j6ktrs_the_role_of_awareness_on.py) |
-| `dataverse-qhfhyc-a-multi-sensory-inertial` | A Multi-Sensory Inertial Measurement Unit Dataset for Fetal Conditi... | 10.7910/dvn/qhfhyc | `summary_table` | 72 | `42a77bddfa85` | [CSV](data/dataverse-qhfhyc-a-multi-sensory-inertial-cleaned.csv) · [JSON](data/dataverse-qhfhyc-a-multi-sensory-inertial-provenance.json) · [PY](data/derive_dataverse_qhfhyc_a_multi_sensory_inertial.py) |
 | `dataverse-sgjlza-diodem-a-diverse-inertia` | DIODEM -- A Diverse Inertial and Optical Dataset of kinEmatic chain... | 10.7910/dvn/sgjlza | `cleaned_rows` | 358 | `55f52591a1d0` | [CSV](data/dataverse-sgjlza-diodem-a-diverse-inertia-cleaned.csv) · [JSON](data/dataverse-sgjlza-diodem-a-diverse-inertia-provenance.json) · [PY](data/derive_dataverse_sgjlza_diodem_a_diverse_inertia.py) |
 | `figshare-34691808-dataset-of-assessing-the` | Dataset of Assessing the Role of Robotic Process Automation in Buil... | 10.6084/m9.figshare.34691808.v1 | `cleaned_rows` | 146 | `398717537b87` | [CSV](data/figshare-34691808-dataset-of-assessing-the-cleaned.csv) · [JSON](data/figshare-34691808-dataset-of-assessing-the-provenance.json) · [PY](data/derive_figshare_34691808_dataset_of_assessing_the.py) |
 | `figshare-35038195-data-sheet-2-multimodal` | Data Sheet 2_Multimodal nondestructive evaluation for structural as... | 10.3389/fmech.2026.2040645.s001 | `summary_table` | 29 | `8d960eeec025` | [CSV](data/figshare-35038195-data-sheet-2-multimodal-cleaned.csv) · [JSON](data/figshare-35038195-data-sheet-2-multimodal-provenance.json) · [PY](data/derive_figshare_35038195_data_sheet_2_multimodal.py) |
@@ -71,12 +69,13 @@
 | `dataverse-qpuojh-close-box` | close_box | 10.7910/dvn/qpuojh | `summary_table` | 2 | `552f163cf7c1` | [CSV](data/dataverse-qpuojh-close-box-cleaned.csv) · [JSON](data/dataverse-qpuojh-close-box-provenance.json) · [PY](data/derive_dataverse_qpuojh_close_box.py) |
 | `dataverse-dozy6n-eval-dataset` | eval_dataset | 10.7910/dvn/dozy6n | `cleaned_rows` | 200 | `a522bf125f66` | [CSV](data/dataverse-dozy6n-eval-dataset-cleaned.csv) · [JSON](data/dataverse-dozy6n-eval-dataset-provenance.json) · [PY](data/derive_dataverse_dozy6n_eval_dataset.py) |
 | `dataverse-epu7uw-scoop-with-spatula` | scoop_with_spatula | 10.7910/dvn/epu7uw | `summary_table` | 2 | `2a2b5622df5f` | [CSV](data/dataverse-epu7uw-scoop-with-spatula-cleaned.csv) · [JSON](data/dataverse-epu7uw-scoop-with-spatula-provenance.json) · [PY](data/derive_dataverse_epu7uw_scoop_with_spatula.py) |
+| `figshare-32445474-supplementary-file-1-des` | Supplementary file 1_Design and experimental validation of a soft p... | 10.3389/frobt.2026.1839026.s002 | `summary_table` | 20 | `48dc9db6a962` | [CSV](data/figshare-32445474-supplementary-file-1-des-cleaned.csv) · [JSON](data/figshare-32445474-supplementary-file-1-des-provenance.json) · [PY](data/derive_figshare_32445474_supplementary_file_1_des.py) |
+| `figshare-34926150-dataset-for-surgeons-awa` | Dataset for: Surgeons’ Awareness, Attitudes, and Willingness to Ado... | 10.6084/m9.figshare.34926150.v2 | `cleaned_rows` | 408 | `3677633f0aa2` | [CSV](data/figshare-34926150-dataset-for-surgeons-awa-cleaned.csv) · [JSON](data/figshare-34926150-dataset-for-surgeons-awa-provenance.json) · [PY](data/derive_figshare_34926150_dataset_for_surgeons_awa.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 1 | 2026-11-21T07:31:26Z | R1/R2/R5 Gap Search + ICRA 2025 | +36 | +34 | +0 | [round-01-audit.json](rounds/round-01-audit.json) |
 | 2 | 2026-11-21T07:37:17Z | R1 Contact Assembly & Tactile + AAAI 2025 Robotics + Short Dataset Queries | +52 | +85 | +2 | [round-02-audit.json](rounds/round-02-audit.json) |
 | 3 | 2026-11-21T07:44:04Z | Broad Engineering R3: R2_Aerial_Actuator / R5_MultiRobot_Comm | +94 | +107 | +3 | [round-03-audit.json](rounds/round-03-audit.json) |
 | 4 | 2026-11-21T07:45:57Z | Broad Engineering R4: R5_MultiRobot_Comm | +93 | +92 | +2 | [round-04-audit.json](rounds/round-04-audit.json) |
@@ -101,3 +100,4 @@
 | 23 | 2026-11-21T09:19:02Z | Broad Engineering R23: Robotics_Embodied | +202 | +40 | +3 | [round-23-audit.json](rounds/round-23-audit.json) |
 | 24 | 2026-11-21T09:24:11Z | Broad Engineering R24: Robotics_Embodied | +157 | +53 | +1 | [round-24-audit.json](rounds/round-24-audit.json) |
 | 25 | 2026-11-21T09:29:02Z | Broad Engineering R25: Mechanical_Physics_AI | +117 | +72 | +3 | [round-25-audit.json](rounds/round-25-audit.json) |
+| 26 | 2026-11-21T09:34:02Z | Broad Engineering R26: Mechanical_Physics_AI | +202 | +62 | +2 | [round-26-audit.json](rounds/round-26-audit.json) |

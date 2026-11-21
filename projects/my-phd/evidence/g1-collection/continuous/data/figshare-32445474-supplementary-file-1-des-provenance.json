@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-32445474-supplementary-file-1-des",
+  "dataset_name": "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile therapy.zip",
+  "doi": "10.3389/frobt.2026.1839026.s002",
+  "landing_url": "https://frontiersin.figshare.com/articles/dataset/Supplementary_file_1_Design_and_experimental_validation_of_a_soft_pneumatic_robotic_device_for_preterm_infant_skin-to-skin_tactile_therapy_zip/32445474",
+  "source_api_url": "https://api.figshare.com/v2/articles/32445474",
+  "access_date": "2026-11-21",
+  "round_number": 26,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip",
+      "download_url": "https://ndownloader.figshare.com/files/65006907",
+      "final_url": "https://s3-eu-west-1.amazonaws.com/pstorage-frontiersin-54389059089340853/65006907/Supplementaryfile1_Designandexperimentalvalidationofasoftpneumaticroboticdeviceforpreterminfantskintoskintactiletherapy.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAINCDM4RBVVB6WR3Q/20261121/eu-west-1/s3/aws4_request&X-Amz-Date=20261121T093452Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&X-Amz-Signature=8dfbbc37fba20d7a48f757b0fbbd5cfdf389f152e8f310f54acd107578f0deba",
+      "http_status": 200,
+      "bytes": 49964,
+      "publisher_checksum": "md5:154fe10dc05a44bd99cc6259e0d4ae67",
+      "verified_md5": "154fe10dc05a44bd99cc6259e0d4ae67",
+      "verified_sha256": "48dc9db6a96267c386588bd6c7c7f8156163687bfbe128280f6197f6b0719c58"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-32445474-supplementary-file-1-des",
+  "raw_total_bytes": 49964,
+  "raw_total_rows": 4508,
+  "duplicate_rows_removed": 1181,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-32445474-supplementary-file-1-des-cleaned.csv",
+  "cleaned_csv_sha256": "763256e8885afaf6e9ef48a572d91779783183462fe98a1f4238aaed0a3b1074",
+  "cleaned_rows": 20,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::current_calibration_consolidated.csv": {
+      "PWM": 0,
+      "Corriente_ADC": 0,
+      "Corriente_real(A)": 0
+    },
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::force_pressure_current_consolidated.csv": {
+      "EV9": 0,
+      "PWM": 0,
+      "Presion_kPa": 0,
+      "Fuerza_N": 0,
+      "Corriente_A": 0
+    },
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::light_consolidated.csv": {
+      "Tiempo_ms": 0,
+      "Distancia_mm": 0,
+      "Fuerza_N": 0
+    },
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::moderate_consolidated.csv": {
+      "Tiempo_ms": 0,
+      "Distancia_mm": 0,
+      "Fuerza_N": 0
+    },
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::control1_light_patternB_25mm.csv": {
+      "t_ms": 0,
+      "intensidad": 0,
+      "pouch": 0,
+      "DeltaP": 0,
+      "PWM": 0,
+      "t_s": 0
+    }
+  },
+  "time_monotonicity": {
+    "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile thera.zip::control1_light_patternB_25mm.csv": {
+      "column": "t_s",
+      "numeric_samples": 149,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.05099999999999838,
+      "median_step": 0.0519999999999996,
+      "max_step": 0.057000000000000384
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

@@ -1,0 +1,339 @@
+{
+  "schema_version": "1.0",
+  "round": 26,
+  "completed_at": "2026-11-21T09:34:02Z",
+  "batch_label": "Broad Engineering R26: Mechanical_Physics_AI",
+  "base_head_sha": "5b047be6d9292efd73b3ea5294e943cf595334d5",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 208,
+    "duplicates_skipped": 6,
+    "net_new": 202,
+    "new_reading_queue": 161,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "infrared thermography defect mechanics",
+        "receipt_id": "20261121t093402z-openalex-cc11ccd3fa",
+        "request_url": "https://api.openalex.org/works?search=infrared+thermography+defect+mechanics&per-page=12",
+        "result_count": 12,
+        "response_sha256": "3db394a918db5ea41bcd794ee4faf00b87601500799dcb623d427132f35e8c89",
+        "normalized_results_sha256": "78c48985fad4d7f842c3b58460385ee83efc6d76212d93facc89a4e6cfa53f18"
+      },
+      {
+        "provider": "crossref",
+        "query": "infrared thermography defect mechanics",
+        "receipt_id": "20261121t093403z-crossref-9e81c0b061",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=infrared+thermography+defect+mechanics&rows=12",
+        "result_count": 12,
+        "response_sha256": "04987982b6f83198c83057839bdf14a67ff006b66dd131367488a99347a7b4c0",
+        "normalized_results_sha256": "cfa4896755fcb06ab3e7e5d4f437d5b595948bb83a52006a2be5a4733433b6f5"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "infrared thermography defect mechanics",
+        "receipt_id": "20261121t093404z-europe-pmc-c64b863b7e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=infrared+thermography+defect+mechanics&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "882b09cbe697da5b5a31f0e128e311d1a63f5cb98901e55f2bc174406870e700",
+        "normalized_results_sha256": "042c5ec286a165d551a8d44af93300cfbdda6c13d89cb19f956385a9e73cfe86"
+      },
+      {
+        "provider": "hal",
+        "query": "infrared thermography defect mechanics",
+        "receipt_id": "20261121t093406z-hal-13e484e7d4",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=infrared+thermography+defect+mechanics&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 9,
+        "response_sha256": "49cf43c3950bb4a8626415958c2db7344f9e0a26b16f3e180170f5055fadc0ee",
+        "normalized_results_sha256": "da1c3044b3a2ea8098de102d764c9ecf6957b3ce8a933e1f69d9cc810fd25467"
+      },
+      {
+        "provider": "openalex",
+        "query": "acoustic emission crack growth",
+        "receipt_id": "20261121t093408z-openalex-1f5053dd6a",
+        "request_url": "https://api.openalex.org/works?search=acoustic+emission+crack+growth&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6c42962a2a93141da27aca35d1a6b3f5c9605b9db49bb01611a395ea3a7bc4ac",
+        "normalized_results_sha256": "8d4dc32025e270a2ac62518ad1c7505f6de0f9998d56100588e2659d36a3f470"
+      },
+      {
+        "provider": "crossref",
+        "query": "acoustic emission crack growth",
+        "receipt_id": "20261121t093409z-crossref-170853daf5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=acoustic+emission+crack+growth&rows=12",
+        "result_count": 12,
+        "response_sha256": "2d12fbbd76dd26f90c0d20eec1c4437cc0e28085306b0cf666e24d544467f1a3",
+        "normalized_results_sha256": "4425a43547c33bc60c084a66bc5f34032db022c555c4c36e6a1437e56719c868"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "acoustic emission crack growth",
+        "receipt_id": "20261121t093411z-europe-pmc-0662430168",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=acoustic+emission+crack+growth&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "8af29ba452fa6c632d13e52609339bebfe2288a3a81d46ff8dee86ba90519cb2",
+        "normalized_results_sha256": "e35bb6b8d7381a144bc639b1ea4d00b56632c139b63cf678c9ae5f9d50a3f6bf"
+      },
+      {
+        "provider": "hal",
+        "query": "acoustic emission crack growth",
+        "receipt_id": "20261121t093425z-hal-52c7c0aa74",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=acoustic+emission+crack+growth&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "c635aa2e1e7c75acd9b0d4a594a8dd4cd41c6106ba2279d8b9e7239c4e8f495d",
+        "normalized_results_sha256": "f15278201ebb9f0a6d1c68791c7f50f99125fc457d79ee2da156dceede883d6e"
+      },
+      {
+        "provider": "openalex",
+        "query": "sheet metal springback prediction",
+        "receipt_id": "20261121t093427z-openalex-258caf0746",
+        "request_url": "https://api.openalex.org/works?search=sheet+metal+springback+prediction&per-page=12",
+        "result_count": 12,
+        "response_sha256": "682551ab9728befdd2d53c9d090774963ba9ee9a13d7f5ecfb670831fa93329b",
+        "normalized_results_sha256": "3ea5f46d1b9f3ebe9fcdcef59f989f9f7a661624f771fada839ff377a78ce62f"
+      },
+      {
+        "provider": "crossref",
+        "query": "sheet metal springback prediction",
+        "receipt_id": "20261121t093428z-crossref-01ab73f962",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=sheet+metal+springback+prediction&rows=12",
+        "result_count": 12,
+        "response_sha256": "43585c4361b72c719c337b985243a79179edb830ba08875e18f565e6bf70d220",
+        "normalized_results_sha256": "7220e4ef245e656e7bc5d2cae4909f0d7cab118014086440756519a634643271"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "sheet metal springback prediction",
+        "receipt_id": "20261121t093429z-europe-pmc-e56da2d8ba",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=sheet+metal+springback+prediction&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "364ddf611bcd99da097ff26f04438f9158a049b4a9c97715c745c4fb1dff417a",
+        "normalized_results_sha256": "a8870d7a96e23432ddf22730c3658241e6184dbe1dd6b7c831e3a94a8a35b253"
+      },
+      {
+        "provider": "hal",
+        "query": "sheet metal springback prediction",
+        "receipt_id": "20261121t093431z-hal-3d43f41dd1",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=sheet+metal+springback+prediction&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "be0938190de037d3c84f7c44f76c1de1f6554ffd40c6e73cecd160292e702e63",
+        "normalized_results_sha256": "05874a4ebe93e7c9e48c45082add76a95c9d157cd13a27a3e20f6e0e5b6f0067"
+      },
+      {
+        "provider": "openalex",
+        "query": "elastoplastic constitutive neural model",
+        "receipt_id": "20261121t093433z-openalex-3d86f6cce9",
+        "request_url": "https://api.openalex.org/works?search=elastoplastic+constitutive+neural+model&per-page=12",
+        "result_count": 12,
+        "response_sha256": "f830675160685785f2438857036d93b547fa8e34c5e3ffac06f21c3dd0a84ff0",
+        "normalized_results_sha256": "1a9b1e756630ffd397cb0152b02cd7285ba8d3b5a89bb86a9da5f7ecb87f2d20"
+      },
+      {
+        "provider": "crossref",
+        "query": "elastoplastic constitutive neural model",
+        "receipt_id": "20261121t093434z-crossref-f420d9a2c3",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=elastoplastic+constitutive+neural+model&rows=12",
+        "result_count": 12,
+        "response_sha256": "9f7eb117ca6fcedefd0fa018fbb5523a1696bf203c616626bfaeef9c141e3328",
+        "normalized_results_sha256": "d215afa67ae4d261717b684c3505f155bee2d39ec78613ffc57ad9ebef047230"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "elastoplastic constitutive neural model",
+        "receipt_id": "20261121t093436z-europe-pmc-874abc148e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=elastoplastic+constitutive+neural+model&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "4137768045d760c465f1cab7de7204189f1617150ef99924f392d4e3a0780609",
+        "normalized_results_sha256": "8269f76ba89479868ad7f7f2b6fd9a67dc1a986d938e98ac576e014f7bb1e326"
+      },
+      {
+        "provider": "hal",
+        "query": "elastoplastic constitutive neural model",
+        "receipt_id": "20261121t093441z-hal-a3f98a0233",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=elastoplastic+constitutive+neural+model&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 9,
+        "response_sha256": "96b2d872cbae5aa68c724727b03e43c7cf1215b42991f7b316fd6e22d29e0e25",
+        "normalized_results_sha256": "695f13fbf689e3f1ce491ac77514a96d12828f648e5a8bc723ca2c80c71bd260"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1186/s40510-024-00543-1",
+        "receipt_id": "20261121t093443z-opencitations-8a8dc5122d",
+        "result_count": 15,
+        "response_sha256": "66806633f322877eb5e1903e25456b97cb07943a11f3ff4b5db9468f8e039fb9"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ajodo.2024.07.007",
+        "receipt_id": "20261121t093444z-opencitations-b136a92f59",
+        "result_count": 7,
+        "response_sha256": "1beb341e0df1ed18da4b4872d98376836734556abbbe8e8a32e4e8ceae24f54e"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 214,
+    "off_topic_filtered": 121,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 31,
+    "net_new": 62,
+    "provider_statuses": [
+      {
+        "query": "prosthetic hand",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "prosthetic hand",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "prosthetic hand",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "prosthetic hand",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "prosthetic hand",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "myoelectric control",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "myoelectric control",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "myoelectric control",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "myoelectric control",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "myoelectric control",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "surgical robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surgical robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "surgical robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surgical robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "surgical robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "underwater auv",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "underwater auv",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "underwater auv",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "underwater auv",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "underwater auv",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-32445474-supplementary-file-1-des",
+        "key": "figshare:32445474",
+        "dataset_name": "Supplementary file 1_Design and experimental validation of a soft pneumatic robotic device for preterm infant skin-to-skin tactile therapy.zip",
+        "doi": "10.3389/frobt.2026.1839026.s002",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Supplementary_file_1_Design_and_experimental_validation_of_a_soft_pneumatic_robotic_device_for_preterm_infant_skin-to-skin_tactile_therapy_zip/32445474",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32445474-supplementary-file-1-des-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32445474-supplementary-file-1-des-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32445474_supplementary_file_1_des.py",
+        "cleaned_rows": 20,
+        "raw_total_rows": 4508,
+        "verified_sha256": "48dc9db6a96267c386588bd6c7c7f8156163687bfbe128280f6197f6b0719c58"
+      },
+      {
+        "slug": "figshare-34926150-dataset-for-surgeons-awa",
+        "key": "figshare:34926150",
+        "dataset_name": "Dataset for: Surgeons’ Awareness, Attitudes, and Willingness to Adopt Robotic-Assisted Surgery in Saudi Arabia: A Nationwide Cross-Sectional Survey",
+        "doi": "10.6084/m9.figshare.34926150.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Dataset_for_Surgeons_Awareness_Attitudes_and_Willingness_to_Adopt_Robotic-Assisted_Surgery_in_Saudi_Arabia_A_Nationwide_Cross-Sectional_Survey/34926150",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34926150-dataset-for-surgeons-awa-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34926150-dataset-for-surgeons-awa-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34926150_dataset_for_surgeons_awa.py",
+        "cleaned_rows": 408,
+        "raw_total_rows": 408,
+        "verified_sha256": "3677633f0aa24674d60db447d1d1373c9a83c04147c75dd589cb6a22c32513ea"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
