@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-kkejzf-the-event-related-potent",
+  "dataset_name": "The event-related potential of tactile stimulus recognition and brain activity in individuals with early- and late-onset visual impairment",
+  "doi": "10.7910/dvn/kkejzf",
+  "landing_url": "https://doi.org/10.7910/DVN/KKEJZF",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/KKEJZF",
+  "access_date": "2026-11-21",
+  "round_number": 15,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "C30.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10756616",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/KKEJZF/1939d62f7f0-8fc8bc6d1c9d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27C30.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T084023Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=04c92f905239d85b13162ad38729f2d3b9891f141a5a0f587fcd5abf8c2316dd",
+      "http_status": 200,
+      "bytes": 912,
+      "publisher_checksum": "md5:0d286f9a11a3ea5e64d9d56021035f6b",
+      "verified_md5": "0d286f9a11a3ea5e64d9d56021035f6b",
+      "verified_sha256": "a587c1166093bed66bb6627fb925ebe2a0c392e8a67d26b22e185f31d39b32b2"
+    },
+    {
+      "file": "EARLY6.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10756608",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/KKEJZF/1939d65f936-0a6acd082191?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27EARLY6.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T084025Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=1c6149b4e8fdf5cb15ce599357d2646a2b6b4545e86132aabe07f5fe3e3d6cbf",
+      "http_status": 200,
+      "bytes": 938,
+      "publisher_checksum": "md5:4e5a9da79ad713eedc2779d77fd7a743",
+      "verified_md5": "4e5a9da79ad713eedc2779d77fd7a743",
+      "verified_sha256": "1200c0a316aad34bf6e1113704ea82d95b0d021f5d279eb74104609cc944d2d4"
+    },
+    {
+      "file": "C33.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10756602",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/KKEJZF/1939d632233-188f3d161867?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27C33.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T084028Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=547a492f2ca035342e3ee5bc70a3a964c161836edf15cb7fca07a1eaa5e24790",
+      "http_status": 200,
+      "bytes": 946,
+      "publisher_checksum": "md5:1051503d197f262f238b37acf33afb28",
+      "verified_md5": "1051503d197f262f238b37acf33afb28",
+      "verified_sha256": "d8efbbddbfc88cd38198e3d47fe43bec493843edfac25cfc57bd903baa136f9f"
+    },
+    {
+      "file": "LATE19.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10756600",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/KKEJZF/1939d692088-93a2e20386b7?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27LATE19.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T084030Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=4dbfd0859947780874d817ec598e7c67484c19d2d17999f0784c89a83cc27111",
+      "http_status": 200,
+      "bytes": 1082,
+      "publisher_checksum": "md5:2eda2ebe34f3fb53aff0459ce537d2e8",
+      "verified_md5": "2eda2ebe34f3fb53aff0459ce537d2e8",
+      "verified_sha256": "27dc760f8459c9e63b0bc95fffad6dd47147aeca1954eccec0ddec9b65737e44"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-kkejzf-the-event-related-potent",
+  "raw_total_bytes": 3878,
+  "raw_total_rows": 61,
+  "duplicate_rows_removed": 4,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-kkejzf-the-event-related-potent-cleaned.csv",
+  "cleaned_csv_sha256": "2aba63a076c253b7dd56bdedafaf59714b446cca8713616995cf8dc477d9c618",
+  "cleaned_rows": 57,
+  "cleaned_cols": 5,
+  "null_counts_by_file": {
+    "EARLY6.txt": {
+      "3.": 0,
+      "3": 28,
+      "285": 47,
+      "375": 57
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

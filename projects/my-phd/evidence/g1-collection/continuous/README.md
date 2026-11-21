@@ -7,26 +7,26 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：14
-- **最近更新时间 (UTC)**：2026-11-21T08:34:04Z
-- **累计净新增文献** (`literature-new.csv`)：1353 条（已与基线 15,910 条去重）
+- **已完成轮次**：15
+- **最近更新时间 (UTC)**：2026-11-21T08:39:11Z
+- **累计净新增文献** (`literature-new.csv`)：1405 条（已与基线 15,910 条去重）
 - **累计净新增数据集** (`datasets-new.csv`)：872 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1226 条
-- **累计已完成确定性清洗数据集**：22 个
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1275 条
+- **累计已完成确定性清洗数据集**：24 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 63 | 47 |
-| `R2_Aerial_Actuator` | 158 | 37 |
-| `R5_MultiRobot_Comm` | 91 | 32 |
-| `Robotics_Embodied` | 389 | 266 |
-| `Mechanical_Physics_AI` | 403 | 370 |
-| `Mechatronics_PHM_Control` | 346 | 274 |
+| `R1_Force_Contact` | 64 | 47 |
+| `R2_Aerial_Actuator` | 169 | 37 |
+| `R5_MultiRobot_Comm` | 116 | 32 |
+| `Robotics_Embodied` | 423 | 266 |
+| `Mechanical_Physics_AI` | 413 | 370 |
+| `Mechatronics_PHM_Control` | 353 | 274 |
 | `Smart_Manufacturing` | 196 | 198 |
-| `Smart_Factory_DigitalTwin` | 136 | 62 |
+| `Smart_Factory_DigitalTwin` | 139 | 62 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 54 | 0 |
 | `R2` | 37 | 0 |
@@ -68,6 +68,8 @@
 | `figshare-34476927-data-sheet-1-a-vision-ba` | Data Sheet 1_A vision-based closed-loop framework for adaptive ergo... | 10.3389/frobt.2026.1948863.s003 | `cleaned_rows` | 30 | `45ac02efcb33` | [CSV](data/figshare-34476927-data-sheet-1-a-vision-ba-cleaned.csv) · [JSON](data/figshare-34476927-data-sheet-1-a-vision-ba-provenance.json) · [PY](data/derive_figshare_34476927_data_sheet_1_a_vision_ba.py) |
 | `figshare-34476945-data-sheet-2-a-vision-ba` | Data Sheet 2_A vision-based closed-loop framework for adaptive ergo... | 10.3389/frobt.2026.1948863.s002 | `cleaned_rows` | 30 | `8afa86e63d0a` | [CSV](data/figshare-34476945-data-sheet-2-a-vision-ba-cleaned.csv) · [JSON](data/figshare-34476945-data-sheet-2-a-vision-ba-provenance.json) · [PY](data/derive_figshare_34476945_data_sheet_2_a_vision_ba.py) |
 | `figshare-34845711-hrc-architecture-3-x-raw` | HRC-Architecture 3.x: Raw, Hash-Manifested Run Records of the Pre-R... | 10.6084/m9.figshare.34845711.v1 | `summary_table` | 20 | `e20d46fa75ac` | [CSV](data/figshare-34845711-hrc-architecture-3-x-raw-cleaned.csv) · [JSON](data/figshare-34845711-hrc-architecture-3-x-raw-provenance.json) · [PY](data/derive_figshare_34845711_hrc_architecture_3_x_raw.py) |
+| `dataverse-ueurvw-replication-data-for-mod` | Replication Data for: Modernising tactile acuity assessment; clinim... | 10.7910/dvn/ueurvw | `summary_table` | 150 | `8c989a7068b7` | [CSV](data/dataverse-ueurvw-replication-data-for-mod-cleaned.csv) · [JSON](data/dataverse-ueurvw-replication-data-for-mod-provenance.json) · [PY](data/derive_dataverse_ueurvw_replication_data_for_mod.py) |
+| `dataverse-kkejzf-the-event-related-potent` | The event-related potential of tactile stimulus recognition and bra... | 10.7910/dvn/kkejzf | `cleaned_rows` | 57 | `a587c1166093` | [CSV](data/dataverse-kkejzf-the-event-related-potent-cleaned.csv) · [JSON](data/dataverse-kkejzf-the-event-related-potent-provenance.json) · [PY](data/derive_dataverse_kkejzf_the_event_related_potent.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -87,3 +89,4 @@
 | 12 | 2026-11-21T08:24:12Z | Broad Engineering R12: Smart_Factory_DigitalTwin / R1_Force_Contact | +91 | +59 | +0 | [round-12-audit.json](rounds/round-12-audit.json) |
 | 13 | 2026-11-21T08:29:10Z | Broad Engineering R13: R1_Force_Contact (2026) | +59 | +46 | +3 | [round-13-audit.json](rounds/round-13-audit.json) |
 | 14 | 2026-11-21T08:34:04Z | Broad Engineering R14: R2_Aerial_Actuator (2026) | +85 | +0 | +3 | [round-14-audit.json](rounds/round-14-audit.json) |
+| 15 | 2026-11-21T08:39:11Z | Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026) | +52 | +0 | +2 | [round-15-audit.json](rounds/round-15-audit.json) |

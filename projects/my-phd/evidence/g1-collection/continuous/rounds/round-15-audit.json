@@ -1,0 +1,349 @@
+{
+  "schema_version": "1.0",
+  "round": 15,
+  "completed_at": "2026-11-21T08:39:11Z",
+  "batch_label": "Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026)",
+  "base_head_sha": "acd38b28ba6d476bb82e81840e9a22452ebc2d72",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 91,
+    "duplicates_skipped": 39,
+    "net_new": 52,
+    "new_reading_queue": 49,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t083911z-arxiv-cfe37959b3",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aaerial+AND+all%3Amanipulator+AND+all%3Adisturbance+AND+all%3Aobserver+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 5,
+        "response_sha256": "75249b6d8105e31b0c9babd47af015c424a4ab5764a1fbb9f10cd2cf3fe5dc6f",
+        "normalized_results_sha256": "8f2ac32f5a5fa7c127029d901fe66a2214f1deaf5a23d1bca05abb1d429f3fe2"
+      },
+      {
+        "provider": "openalex",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t083912z-openalex-2e09eb7d90",
+        "request_url": "https://api.openalex.org/works?search=aerial+manipulator+disturbance+observer+control&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "e98c72d41c618455425d03bc1431a44963abcd63373c96b6af98c632d6a6542e",
+        "normalized_results_sha256": "bb21dbcb16f7ae034bc0d62bc463ab4e22744f7e4f252ca3ee725071e5abb5b8"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t083914z-europe-pmc-2bb3f72942",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=aerial+manipulator+disturbance+observer+control&pageSize=12&format=json",
+        "result_count": 8,
+        "response_sha256": "163d3891911e2a719758e1816fc1e7c19f9f049e9da235914b3915250a1a8645",
+        "normalized_results_sha256": "ed443192ca810ffc10c19b34c743eab1165fc1f36c479a22c9de6b589d5ed54f"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t083919z-arxiv-f4ca2e3f65",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Amulti-robot+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Atimestamp%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "193edf34de6b2e69f8933ccfa2ade8061bb652cb872358719ed4b6c28493895c",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t083920z-openalex-542fb42f81",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+cooperative+localization+timestamp&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "b3ce05f9e8e3c4d4005f7fce73b9e63419e381eb3dceef8e10d157158a02a196",
+        "normalized_results_sha256": "c66615f87bae15f3691b945fe0528d29c7609ffee1f415991508e860c822804b"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t083921z-europe-pmc-6c2f310e04",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multi-robot+cooperative+localization+timestamp&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "cd51d5848a24d8de083726010ca0199a05bb578f6d8a6e454de21edff913034d",
+        "normalized_results_sha256": "1fa0aa1e0eb2d2e0ede77f064135ea90eac24de93fbf7716ed37289cd235b4fd"
+      },
+      {
+        "provider": "arxiv",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t083931z-arxiv-413b42cc0b",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aage+AND+all%3Aof+AND+all%3Ainformation+AND+all%3Awireless+AND+all%3Arobot+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "efa4238acae88ade930a3e2a67ff82592e613eac54c2cef9073630dcee7da789",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t083931z-openalex-7c4bdbddf0",
+        "request_url": "https://api.openalex.org/works?search=age+of+information+wireless+robot+control&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "583a7b1d5ad6178897de69e5de774dde8e46e645d7a57828829b4e5a4408843f",
+        "normalized_results_sha256": "f5ba400183d80ab1e2b6110ccafb4ff90b867229f923dd75bf0d297eb3a04440"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t083933z-europe-pmc-d53673ba74",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=age+of+information+wireless+robot+control&pageSize=12&format=json",
+        "result_count": 11,
+        "response_sha256": "13d96374e5aed4e4ed9d5530f42cb4945037b3bec6bf5e861235a246753bb491",
+        "normalized_results_sha256": "cd336643c84bfad0b508c08175aeba7754f68c0be736f6c6b4d8093e17697136"
+      },
+      {
+        "provider": "arxiv",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t083938z-arxiv-d1575b7632",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3AUWB+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Aclock+AND+all%3Adrift%29+AND+submittedDate%3A%5B202601010000+TO+202612312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "0e07983a62cf6e63ec9a4c4cb104772b8c2a434f645a9771404a000ad52b59cd",
+        "normalized_results_sha256": "e24ed67e3df4dc36ec88b52521b9249e682ad14339da3544c506c5ca45bb5600"
+      },
+      {
+        "provider": "openalex",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t083938z-openalex-8ef6d9c51c",
+        "request_url": "https://api.openalex.org/works?search=UWB+cooperative+localization+clock+drift&per-page=12&filter=from_publication_date%3A2026-01-01%2Cto_publication_date%3A2026-12-31",
+        "result_count": 12,
+        "response_sha256": "5f08f6787c795435e49da03e0b7da53560d3c3d255579e8032b82591f1416d5a",
+        "normalized_results_sha256": "83900529ea00e057445b9b40c34bd7e0c9e700492cbbc91d883e4672e09da155"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t083940z-europe-pmc-0cccd3cdc3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=UWB+cooperative+localization+clock+drift&pageSize=12&format=json",
+        "result_count": 7,
+        "response_sha256": "f2784941f0bcdb10a572d764f06f8a26bcd1326efa192f629a9d14074d62e755",
+        "normalized_results_sha256": "dad53c6aa703c8e845db24eabbd1113ed297110f49baa03bb2f4cce8cfde44c4"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/icuas69441.2026.11598692",
+        "receipt_id": "20261121t083945z-opencitations-61fdf2b2a9",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/lra.2025.3632070",
+        "receipt_id": "20261121t083946z-opencitations-1d813e7502",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 190,
+    "off_topic_filtered": 42,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 148,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "hydraulic actuator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "imu odometry",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "imu odometry",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "imu odometry",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "continuum robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "continuum robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "legged robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 11
+      },
+      {
+        "query": "legged robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-ueurvw-replication-data-for-mod",
+        "key": "dataverse:10.7910/dvn/ueurvw",
+        "dataset_name": "Replication Data for: Modernising tactile acuity assessment; clinimetrics of semi-automated tests and effects of age, sex and anthropometry on performance.",
+        "doi": "10.7910/dvn/ueurvw",
+        "landing_url": "https://doi.org/10.7910/DVN/UEURVW",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ueurvw-replication-data-for-mod-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ueurvw-replication-data-for-mod-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ueurvw_replication_data_for_mod.py",
+        "cleaned_rows": 150,
+        "raw_total_rows": 280,
+        "verified_sha256": "8c989a7068b7b86487f37fc9bf8ade9e7f36066dc2f5c03fc9ad02267ed83f75"
+      },
+      {
+        "slug": "dataverse-kkejzf-the-event-related-potent",
+        "key": "dataverse:10.7910/dvn/kkejzf",
+        "dataset_name": "The event-related potential of tactile stimulus recognition and brain activity in individuals with early- and late-onset visual impairment",
+        "doi": "10.7910/dvn/kkejzf",
+        "landing_url": "https://doi.org/10.7910/DVN/KKEJZF",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-kkejzf-the-event-related-potent-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-kkejzf-the-event-related-potent-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_kkejzf_the_event_related_potent.py",
+        "cleaned_rows": 57,
+        "raw_total_rows": 61,
+        "verified_sha256": "a587c1166093bed66bb6627fb925ebe2a0c392e8a67d26b22e185f31d39b32b2"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Open-Ended Creative and Tactile Activity in Adult Practice: A Survey of Practitioners, 2026",
+        "url": "https://doi.org/10.7910/DVN/M6JXED",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "Replication Data for: Feedback and Education Improve Human Detection of Image Manipulation on Social Media",
+        "url": "https://doi.org/10.7910/DVN/CKMBCG",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      },
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
