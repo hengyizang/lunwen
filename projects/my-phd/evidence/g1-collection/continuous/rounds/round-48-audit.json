@@ -1,0 +1,323 @@
+{
+  "schema_version": "1.0",
+  "round": 48,
+  "completed_at": "2026-11-21T12:24:05Z",
+  "batch_label": "Broad Engineering R48: R1_Force_Contact / R2_Aerial_Actuator",
+  "base_head_sha": "6c6b23b6c5f820a78a2d16362d2215600b78c1d4",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 223,
+    "duplicates_skipped": 49,
+    "net_new": 174,
+    "new_reading_queue": 79,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "force torque sensorless collision",
+        "receipt_id": "20261121t122405z-arxiv-25dc52dece",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aforce+AND+all%3Atorque+AND+all%3Asensorless+AND+all%3Acollision&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "7783718b86bfe7ba6d2f3baf51ea1e97a46d3950f1d37da2938b7b72f6b47d14",
+        "normalized_results_sha256": "72af07cb5690276d17d78a9963a07a06c176dca11a0f89f2bc22709cf8d679f5"
+      },
+      {
+        "provider": "openalex",
+        "query": "force torque sensorless collision",
+        "receipt_id": "20261121t122406z-openalex-c60766260f",
+        "request_url": "https://api.openalex.org/works?search=force+torque+sensorless+collision&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9b82b9a78ec8838715edd052a400553c0f7848695498be53680acb8d6f9136b5",
+        "normalized_results_sha256": "391bed74fe3b5dd1ec1d98143e39ece972a4541ab7deb7aa719ec4678091e0c8"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "force torque sensorless collision",
+        "receipt_id": "20261121t122408z-europe-pmc-3c0d32f5a5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=force+torque+sensorless+collision&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "7d8d2b4033b782975998807e16e4a9be465f6efc21d057272c4a9ddacd07c546",
+        "normalized_results_sha256": "04f057cac44ccdc2fed15db5065907341c7650a9937c6295a11adf65387ac4c3"
+      },
+      {
+        "provider": "arxiv",
+        "query": "robotic insertion compliance control",
+        "receipt_id": "20261121t122411z-arxiv-c433852180",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Ainsertion+AND+all%3Acompliance+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "3fbb33fe2b2dc651588a0e93aa2db52f80c281a142234cd0f570a1823de0a128",
+        "normalized_results_sha256": "7ee5abee2da5681e73f7583110b88d9dc9008ee17e0bc0659eb48b3e156052ee"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic insertion compliance control",
+        "receipt_id": "20261121t122412z-openalex-d23625f7e1",
+        "request_url": "https://api.openalex.org/works?search=robotic+insertion+compliance+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "e2fb331d95046e808e713767e1e0d5115941a224796647e38ed64d1439490fd3",
+        "normalized_results_sha256": "177e73fd355b217a2a7bee7819e75bc644adec1457d68c03074069668e993f17"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic insertion compliance control",
+        "receipt_id": "20261121t122414z-europe-pmc-4e06688ec4",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+insertion+compliance+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "203623aee74f8da6afcac7749bba8982831887a8100cc0954b07fe092f7b5bf1",
+        "normalized_results_sha256": "d5903ae285a3b7c0bc82cb8cfaa41c3491fee9346b67e6c0265d88bbb9e7e762"
+      },
+      {
+        "provider": "arxiv",
+        "query": "tactile skin robotic manipulation",
+        "receipt_id": "20261121t122419z-arxiv-1646cf541e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atactile+AND+all%3Askin+AND+all%3Arobotic+AND+all%3Amanipulation&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "af26c96f0fe5f508d765ad1225bc0aeabf163cd9ef4dcefe8c3078fc2370785e",
+        "normalized_results_sha256": "27f80ca711d56b64ead8f7badfff4c7dfe732683af247255bb1f469dd96b9ccf"
+      },
+      {
+        "provider": "openalex",
+        "query": "tactile skin robotic manipulation",
+        "receipt_id": "20261121t122420z-openalex-f374da2ec0",
+        "request_url": "https://api.openalex.org/works?search=tactile+skin+robotic+manipulation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2818e1b54a0b1983fd5f86f524e78ec1c3e8ad3aab07272f82f7c51a242f76f0",
+        "normalized_results_sha256": "ce226245144437c3e16a2496142ac8e6f0d293c50f28b1b517f61b69f90008fb"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "tactile skin robotic manipulation",
+        "receipt_id": "20261121t122422z-europe-pmc-b71dd20afa",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=tactile+skin+robotic+manipulation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "9ab99df5df488e4f283917c2ec4eea93f3186c4bd97043aa91717bd0ab8136aa",
+        "normalized_results_sha256": "96266187e0341cdb99e87426ad6ef52cfdb439b6641812c1284659162249e585"
+      },
+      {
+        "provider": "arxiv",
+        "query": "aerial manipulator impedance control",
+        "receipt_id": "20261121t122432z-arxiv-c6ba31b048",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aaerial+AND+all%3Amanipulator+AND+all%3Aimpedance+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "ea149134ed300e670494fb73b46f26e8aa3568778f7d25bfd656e7e478283c7c",
+        "normalized_results_sha256": "47128d55d93f6a74286fbd8be38e3444c98f1094a6dba138c555321e525dccb0"
+      },
+      {
+        "provider": "openalex",
+        "query": "aerial manipulator impedance control",
+        "receipt_id": "20261121t122435z-openalex-1497aaa221",
+        "request_url": "https://api.openalex.org/works?search=aerial+manipulator+impedance+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "78e41dc8c1f95db89d22f4e9c71ad91b2800537ff9b5b6e5ee1146fb8f82564b",
+        "normalized_results_sha256": "562f992ecaf199de20fd3c73d71d0448273b5ab13e70d650eefff0e00f0d20c0"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "aerial manipulator impedance control",
+        "receipt_id": "20261121t122437z-europe-pmc-4ce130fce4",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=aerial+manipulator+impedance+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "dce30a81ae6e97133ae26302e194cbf7a06f50622b0fc318218f3bc2605625a3",
+        "normalized_results_sha256": "b9858ea8f5a55b3fee845ed29402c28a66f64c745200e6ce987307378b3ccd0c"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/access.2023.3349379",
+        "receipt_id": "20261121t122448z-opencitations-0e0c453d30",
+        "result_count": 90,
+        "response_sha256": "d0e99bd6d702bcc27f30058430d37a948b1c0070a52b655621b1b0ae02ff5fa1"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/978-3-031-68438-8_3",
+        "receipt_id": "20261121t122450z-opencitations-9c181eac00",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 134,
+    "off_topic_filtered": 83,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 44,
+    "net_new": 7,
+    "provider_statuses": [
+      {
+        "query": "cooperative slam sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "cooperative slam sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cooperative slam sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cooperative slam sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "cooperative slam sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "battery manufacturing sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "battery manufacturing sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "battery manufacturing sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery manufacturing sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "battery manufacturing sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "remaining useful life sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "remaining useful life sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "remaining useful life sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "rotating machinery sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "rotating machinery sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "rotating machinery sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "rotating machinery sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 13,
+    "cleaned": [
+      {
+        "slug": "figshare-31646617-selective-laser-melting",
+        "key": "figshare:31646617",
+        "dataset_name": "Selective laser melting, Ti-6Al-4V, Additive manufacturing, Tensile properties,",
+        "doi": "10.6084/m9.figshare.31646617.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Selective_laser_melting_Ti-6Al-4V_Additive_manufacturing_Tensile_properties_/31646617",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31646617-selective-laser-melting-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-31646617-selective-laser-melting-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31646617_selective_laser_melting.py",
+        "cleaned_rows": 129,
+        "raw_total_rows": 129,
+        "verified_sha256": "bd1cf54731edffe1881ea8f9b2ea36eb9420c385bdf68c67187dcb5b3c2584ba"
+      },
+      {
+        "slug": "figshare-34808832-data-for-piam-a-physics",
+        "key": "figshare:34808832",
+        "dataset_name": "Data for: PiAM — A physics-informed adaptive multi-fidelity framework for residual deformation prediction in the LPBF process",
+        "doi": "10.6084/m9.figshare.34808832.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_for_PiAM_A_physics-informed_adaptive_multi-fidelity_framework_for_residual_deformation_prediction_in_the_LPBF_process/34808832",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34808832-data-for-piam-a-physics-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34808832-data-for-piam-a-physics-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34808832_data_for_piam_a_physics.py",
+        "cleaned_rows": 42,
+        "raw_total_rows": 41954,
+        "verified_sha256": "a01434913d7af8dac57c26cdf9364ae4674b2141bf995e2e6cef6d834d4fabd4"
+      },
+      {
+        "slug": "figshare-32789034-observation-of-twofold-d",
+        "key": "figshare:32789034",
+        "dataset_name": "Observation of twofold degenerate acoustic Landau levels and pseudospin-dependent transport",
+        "doi": "10.6084/m9.figshare.32789034.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Observation_of_two-fold_degenerate_acoustic_Landau_levels_and_pseudospin-dependent_transport/32789034",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32789034-observation-of-twofold-d-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32789034-observation-of-twofold-d-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32789034_observation_of_twofold_d.py",
+        "cleaned_rows": 16,
+        "raw_total_rows": 243,
+        "verified_sha256": "838fcd254e0725d895efbba757230ebf3da7d49b6cfdb12c08e8e82ccf635d78"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "cannot insert source_file, already exists"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

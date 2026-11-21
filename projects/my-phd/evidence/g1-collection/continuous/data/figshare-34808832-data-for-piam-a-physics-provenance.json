@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34808832-data-for-piam-a-physics",
+  "dataset_name": "Data for: PiAM — A physics-informed adaptive multi-fidelity framework for residual deformation prediction in the LPBF process",
+  "doi": "10.6084/m9.figshare.34808832.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_for_PiAM_A_physics-informed_adaptive_multi-fidelity_framework_for_residual_deformation_prediction_in_the_LPBF_process/34808832",
+  "source_api_url": "https://api.figshare.com/v2/articles/34808832",
+  "access_date": "2026-11-21",
+  "round_number": 48,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "PiAMDATA.zip",
+      "download_url": "https://ndownloader.figshare.com/files/70736205",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/70736205/PiAMDATA.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T122521Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22PiAMDATA.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=e9c0bd47640f23796b46c81caf77cb96181742c3df10fae7e9e9552867d095ec",
+      "http_status": 200,
+      "bytes": 24254846,
+      "publisher_checksum": "md5:aa504729cf26c2d584819ac69c250342",
+      "verified_md5": "aa504729cf26c2d584819ac69c250342",
+      "verified_sha256": "a01434913d7af8dac57c26cdf9364ae4674b2141bf995e2e6cef6d834d4fabd4"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34808832-data-for-piam-a-physics",
+  "raw_total_bytes": 24254846,
+  "raw_total_rows": 41954,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34808832-data-for-piam-a-physics-cleaned.csv",
+  "cleaned_csv_sha256": "b5b1dd0265c2494bcee511202adc79533348a52feb4a4258529503ce08052e85",
+  "cleaned_rows": 42,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "PiAMDATA.zip::final_layer_field_32layers.csv": {
+      "node_id": 0,
+      "x": 0,
+      "y": 0,
+      "z": 0,
+      "ANSYS_ux": 0,
+      "ANSYS_uy": 0,
+      "ANSYS_uz": 0,
+      "PiAM_ux": 0,
+      "PiAM_uy": 0,
+      "PiAM_uz": 0
+    },
+    "PiAMDATA.zip::mesh_elements_32layers.csv": {
+      "elem_id": 0,
+      "n1": 0,
+      "n2": 0,
+      "n3": 0,
+      "n4": 0,
+      "n5": 0,
+      "n6": 0,
+      "n7": 0,
+      "n8": 0
+    },
+    "PiAMDATA.zip::train_16layers_LF_HF_curves.csv": {
+      "layer": 0,
+      "LF_FEM_max_disp_mm": 0,
+      "ANSYS_max_disp_mm": 0
+    },
+    "PiAMDATA.zip::transfer_32layers_curves.csv": {
+      "layer": 0,
+      "LF_FEM_max_disp_mm": 0,
+      "ANSYS_max_disp_mm": 0,
+      "PiAM_prediction_mm": 0,
+      "physics_increment_only_mm": 0,
+      "network_increment_only_mm": 0,
+      "fusion_weight": 0,
+      "abs_err_mm": 0,
+      "rel_err_pct": 0,
+      "region": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-31646617-selective-laser-melting",
+  "dataset_name": "Selective laser melting, Ti-6Al-4V, Additive manufacturing, Tensile properties,",
+  "doi": "10.6084/m9.figshare.31646617.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Selective_laser_melting_Ti-6Al-4V_Additive_manufacturing_Tensile_properties_/31646617",
+  "source_api_url": "https://api.figshare.com/v2/articles/31646617",
+  "access_date": "2026-11-21",
+  "round_number": 48,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "data.csv",
+      "download_url": "https://ndownloader.figshare.com/files/62641654",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/62641654/data.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T122514Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22data.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=a8e22769514074b0e6b31c7d03572d9c026e9a914855fdfaa1194802e73dd78b",
+      "http_status": 200,
+      "bytes": 4832,
+      "publisher_checksum": "md5:18d2024dd2fb0ba74d993ae74b670bb8",
+      "verified_md5": "18d2024dd2fb0ba74d993ae74b670bb8",
+      "verified_sha256": "bd1cf54731edffe1881ea8f9b2ea36eb9420c385bdf68c67187dcb5b3c2584ba"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-31646617-selective-laser-melting",
+  "raw_total_bytes": 4832,
+  "raw_total_rows": 129,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-31646617-selective-laser-melting-cleaned.csv",
+  "cleaned_csv_sha256": "4dc6dbba07080cdc45bd68e1e71ad5df5dc773d15b8b7f43e1a27f14bfb19fcb",
+  "cleaned_rows": 129,
+  "cleaned_cols": 8,
+  "null_counts_by_file": {
+    "data.csv": {
+      "﻿Laser Power (W)": 0,
+      "Laser Scanning Speed (mm/s)": 0,
+      "Heat Treatment Temperature (°C)": 0,
+      "Heat Treatment Time (h)": 0,
+      "Volumetric Energy Density (VED, J/mm³)": 0,
+      "Tensile Strength (MPa)": 0,
+      "Elongation at Break (%)": 0
+    }
+  },
+  "time_monotonicity": {
+    "data.csv": {
+      "column": "Heat Treatment Time (h)",
+      "numeric_samples": 129,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -5.0,
+      "median_step": 0.0,
+      "max_step": 5.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
