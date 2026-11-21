@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0",
+  "round": 1,
+  "completed_at": "2026-11-21T07:31:26Z",
+  "batch_label": "R1/R2/R5 Gap Search + ICRA 2025",
+  "base_head_sha": "759fc57068f55e3224c19d691bc6625676fe9b19",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 66,
+    "duplicates_skipped": 30,
+    "net_new": 36,
+    "new_reading_queue": 32,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t073126z-arxiv-0a1d025066",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awrist+AND+all%3Aforce+AND+all%3Atorque+AND+all%3Asensor+AND+all%3Abias&start=0&max_results=10",
+        "result_count": 2,
+        "response_sha256": "02695fa46ae899dced150017202d5738aec3213c8282d38fe366e5a5805a878f",
+        "normalized_results_sha256": "9660307011627f352a46b665e18f112f19869c68c1dcbb5dec95abc65c1bd690"
+      },
+      {
+        "provider": "crossref",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t073127z-crossref-c7d34034e5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=wrist+force+torque+sensor+bias&rows=10",
+        "result_count": 10,
+        "response_sha256": "9ad863563d0e531da189b38f6b6db314b14c3596e40fe856340dd18d759dd26c",
+        "normalized_results_sha256": "63f2998c25e3194651df81c3ce37b34c2ec448e994d99b66d0624f375111d541"
+      },
+      {
+        "provider": "openalex",
+        "query": "wrist force torque sensor bias",
+        "receipt_id": "20261121t073129z-openalex-695e24d595",
+        "request_url": "https://api.openalex.org/works?search=wrist+force+torque+sensor+bias&per-page=10",
+        "result_count": 10,
+        "response_sha256": "0a8ea9ca839e7debb6ac47b22ff17f2c2ab1d3a405c899406889a1eeb84b359f",
+        "normalized_results_sha256": "06327841fd8d6d70fd0c66ea7fc7ae92c006462462346ae615fcf0bc519e88f2"
+      },
+      {
+        "provider": "arxiv",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t073130z-arxiv-3439e4db83",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aquadrotor+AND+all%3Aactuator+AND+all%3Asaturation+AND+all%3Atrajectory+AND+all%3Atracking&start=0&max_results=10",
+        "result_count": 4,
+        "response_sha256": "ea21278429e8166bb0069d4d53a9c37694c017019159f66bf62a57f41ec57b49",
+        "normalized_results_sha256": "5d88e9948841085fe7dce4df04320bd00ff87b5f61e148fe6b8c34e68ba15a2c"
+      },
+      {
+        "provider": "crossref",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t073131z-crossref-663f8538a7",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=quadrotor+actuator+saturation+trajectory+tracking&rows=10",
+        "result_count": 10,
+        "response_sha256": "2de348c032b34f0108597c362d35b2fb1ef187f3a22432190e944a92fe10ea9e",
+        "normalized_results_sha256": "cc9d2b5ad621fffbba26f27a1c68e32a592be888b6676757115f00baecec55db"
+      },
+      {
+        "provider": "openalex",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t073132z-openalex-681172b0cc",
+        "request_url": "https://api.openalex.org/works?search=quadrotor+actuator+saturation+trajectory+tracking&per-page=10",
+        "result_count": 10,
+        "response_sha256": "bba28b6cc0ee89f55bea25f0d335b117318ac9456540cdcf526ca96bd1ff82a6",
+        "normalized_results_sha256": "2674604ff41b9d3384558f58be2e3a7adc0f4d702637ebbc5f5cb7bd343de64f"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot cooperative localization asynchronous timestamp",
+        "receipt_id": "20261121t073133z-arxiv-4d889391eb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amulti-robot+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Aasynchronous+AND+all%3Atimestamp&start=0&max_results=10",
+        "result_count": 0,
+        "response_sha256": "e61c44556574606f78c5314041846a858d53f109d6127ce74275051792fb166a",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "multi-robot cooperative localization asynchronous timestamp",
+        "receipt_id": "20261121t073134z-crossref-cd1017ae33",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multi-robot+cooperative+localization+asynchronous+timestamp&rows=10",
+        "result_count": 10,
+        "response_sha256": "444385b971ae5e37e3ab5504314d0ccb2bf4c1ec5c9db207540638f6d962f1ec",
+        "normalized_results_sha256": "896e803edb8bd01b96e69bcde98403efd6ddbfab8ef494f46d9198a1c3ef267f"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot cooperative localization asynchronous timestamp",
+        "receipt_id": "20261121t073135z-openalex-0f60e9f893",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+cooperative+localization+asynchronous+timestamp&per-page=10",
+        "result_count": 10,
+        "response_sha256": "e974d421a80b16a49451080778bb240cee15789b4ccd03b44c44dc4629c61d8c",
+        "normalized_results_sha256": "c1faa9191f01ab08a60a1eb464de65466d5605ca91009c260c4ee0907650b188"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "dblp",
+        "query": "{'venue': 'conf/icra', 'year': 2025, 'offset': 0, 'limit': 25, 'transport': 'sparql'}",
+        "error": "DBLP search failed: Request failed for https://sparql.dblp.org/sparql?query=PREFIX+dblp%3A+%3Chttps%3A%2F%2Fdblp.org%2Frdf%2Fschema%23%3E%0ASELECT+%3Fpubl+%3Ftitle+%3Fyear+%3Fdoi+%3Fvenue+%3FdocumentType+%28GROUP_CONCAT%28DISTINCT+%3FauthorName%3B+SEPARATOR%3D%22%7C%22%29+AS+%3FauthorNames%29+WHERE+%7B%0A++%3Fpubl+a+dblp%3APublication+%3B+dblp%3Atitle+%3Ftitle+.%0A++OPTIONAL+%7B+%3Fpubl+dblp%3AyearOfPublication+%3Fyear+.+%7D%0A++OPTIONAL+%7B+%3Fpubl+dblp%3Adoi+%3Fdoi+.+%7D%0A++OPTIONAL+%7B+%3Fpubl+dblp%3ApublishedInStream+%3Fvenue+.+%7D%0A++OPTIONAL+%7B+%3Fpubl+dblp%3AauthoredBy+%3Fperson+.+%3Fperson+dblp%3AprimaryCreatorName+%3FauthorName+.+%7D%0A++OPTIONAL+%7B+%3Fpubl+a+%3FdocumentType+.+FILTER%28%3FdocumentType+IN+%28dblp%3AInproceedings%2C+dblp%3AArticle%2C+dblp%3ABook%2C+dblp%3AProceedings%29%29+%7D%0A++%3Fpubl+dblp%3ApublishedInStream+%3Chttps%3A%2F%2Fdblp.org%2Fstreams%2Fconf%2Ficra%3E+.+FILTER%28%3Fvenue+%3D+%3Chttps%3A%2F%2Fdblp.org%2Fstreams%2Fconf%2Ficra%3E%29%0A++%3Fpubl+a+dblp%3AInproceedings+.%0A++FILTER%28STR%28%3Fyear%29+%3D+%222025%22%29%0A++FILTER%28STR%28%3Fyear%29+%3E%3D+%222025%22%29%0A++FILTER%28STR%28%3Fyear%29+%3C%3D+%222025%22%29%0A%7D%0AGROUP+BY+%3Fpubl+%3Ftitle+%3Fyear+%3Fdoi+%3Fvenue+%3FdocumentType%0AORDER+BY+STR%28%3Fpubl%29%0ALIMIT+25: The read operation timed out"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 35,
+    "duplicates_skipped": 1,
+    "net_new": 34,
+    "provider_statuses": [
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "zenodo",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Cannot resolve public host 'zenodo.org': [Errno 11004] getaddrinfo failed"
+      },
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque sensor calibration contact assembly",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "zenodo",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Cannot resolve public host 'zenodo.org': [Errno 11004] getaddrinfo failed"
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight thrust motor saturation rotor force",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "zenodo",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Cannot resolve public host 'zenodo.org': [Errno 11004] getaddrinfo failed"
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot cooperative localization UWB communication timestamp",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 1,
+    "cleaned": [],
+    "cleaning_errors": [
+      {
+        "name": "Hardware-Rooted Protected Execution-Finality Using Scoped Non-Bearer Capabilities and Fail-Closed Finality Sinks",
+        "url": "https://zenodo.org/doi/10.5281/zenodo.22888528",
+        "error": "Cannot resolve public host 'zenodo.org': [Errno 11004] getaddrinfo failed"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "round_number": 1,
+  "total_new_literature": 36,
+  "total_new_datasets": 34,
+  "total_new_reading_queue": 32,
+  "cleaned_datasets": [],
+  "cleaned_datasets_meta": [],
+  "snowballed_dois": [],
+  "rounds_history": [
+    {
+      "round": 1,
+      "completed_at": "2026-11-21T07:31:26Z",
+      "batch_label": "R1/R2/R5 Gap Search + ICRA 2025",
+      "net_new_literature": 36,
+      "net_new_datasets": 34,
+      "cleaned_count": 0,
+      "cloud_dispatch_ready": false
+    }
+  ],
+  "updated_at": "2026-11-21T07:31:26Z"
+}

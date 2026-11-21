@@ -6,3 +6,4 @@
 - [数据发布、获取方式及使用限制](2026-11-21/datasets.csv)
 - [已下载核验并清洗的实测数据汇总](2026-11-21/data/README.md)
 - [可下载的文献总表](https://raw.githubusercontent.com/hengyizang/lunwen/refs/heads/cloud-state/my-phd/projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv)
+- [持续自动检索与清洗目录（新增文献、数据集与 QA 清洗表）](continuous/README.md)
