@@ -1,0 +1,17 @@
+split,contact_class,rows
+train,0,257
+train,1,257
+train,2,257
+train,3,257
+train,4,257
+train,5,257
+train,6,257
+train,7,257
+validation,0,20
+validation,1,20
+validation,2,20
+validation,3,20
+validation,4,20
+validation,5,20
+validation,6,20
+validation,7,19

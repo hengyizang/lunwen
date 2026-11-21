@@ -1,0 +1,254 @@
+{
+  "as_of_utc": "2026-11-21T09:07:01.132732+00:00",
+  "records": [
+    {
+      "title": "Dataset of Force-Torque and Colored Point Cloud Recordings Across Deformation, Insertion, and Sliding Tasks",
+      "record_doi": "10.5281/zenodo.22647706",
+      "concept_doi": "10.5281/zenodo.20797307",
+      "authors": [
+        "Anonymous"
+      ],
+      "metadata_url": "https://zenodo.org/api/records/22647706",
+      "metadata_sha256": "edeb93edd1c8820a8a121e40df0076023e2c677470e7cbe17681d760ef90ef5b",
+      "publication_date": "2026-09-07",
+      "access": "restricted",
+      "license_field": "cc-by-4.0",
+      "anonymous_file_entries": 0,
+      "access_evidence": "Public metadata describes five NetCDF files and physical UR5e interactions, including 21 peg types and 17 connector types. The record has restricted access, lists no anonymous file entries, and its files API returns HTTP 403.",
+      "evidence_scope": "Metadata only. The listed positions, forces, normal forces and times, and the length of 1000 samples are author-reported. No per-sample independent force or sensor-bias reference is documented. No raw data was requested from restricted file endpoints."
+    },
+    {
+      "title": "Standing Peg-in-Hole Insertion: Demonstrations, Trained Policies, Evaluation Episodes, and Simulation Environment",
+      "record_doi": "10.5281/zenodo.21768344",
+      "concept_doi": "10.5281/zenodo.21287317",
+      "authors": [
+        "Gu, Yejun",
+        "Yang, Zhiyuan",
+        "Zhu, Haiyue",
+        "Zhang, Jingbing",
+        "Liu, Jun"
+      ],
+      "metadata_url": "https://zenodo.org/api/records/21768344",
+      "metadata_sha256": "2094229faf9ed02b6d46692ea64b81b8db9317225757785dc13740eaa2abe4a8",
+      "publication_date": "2026-08-03",
+      "access": "open",
+      "license_field": "cc-by-4.0",
+      "anonymous_file_entries": 13,
+      "evidence_scope": "Open Isaac Sim reproducibility bundle. The assembly and camera models mimic UR5e hardware; all demonstration/evaluation data described here are simulation.",
+      "publisher_sha256_listing_entries": 10,
+      "file_metadata": [
+        {
+          "name": "evaluation_episodes.zip",
+          "size": 6712483534,
+          "publisher_md5": "md5:0057dc3c0d91396426f0a8a85b81c017",
+          "publisher_sha256_unverified": "2a3deb25b300191188d6ba37bb9855f6bd00ec42d3f80f882b2499101d115728"
+        },
+        {
+          "name": "evaluation_controls.zip",
+          "size": 2465465861,
+          "publisher_md5": "md5:13c92e137c7b3cf387b71cd449d45176",
+          "publisher_sha256_unverified": "6585c406c470414d1c1156a56aee432636478c0905bbb4da42da26aa459deddc"
+        },
+        {
+          "name": "model_diffusion_policy_200k.zip",
+          "size": 1042509921,
+          "publisher_md5": "md5:294573bd38dbf24737228aa34d3a7639",
+          "publisher_sha256_unverified": "50ae88a83896be9517f11b9bc4b3a134453b2e01dab804cb6318fcb8de4e4d5a"
+        },
+        {
+          "name": "demonstrations_standing_recovery2_depth.zip",
+          "size": 1627283383,
+          "publisher_md5": "md5:3b9b1c76791d6e9ce98ff0e428cc0707",
+          "publisher_sha256_unverified": "b32acb2dd9186713ce36c09fb2df28308cfb2766d1f264f655df7f5efaa9e28a"
+        },
+        {
+          "name": "demonstrations_standing_recovery2.zip",
+          "size": 1463694169,
+          "publisher_md5": "md5:0ca8af7308510249dd05278e70a53992",
+          "publisher_sha256_unverified": "9939e4826447271572a40b1a76793c28c1f0f06714c65d6c2bcf8c40bf5bab78"
+        },
+        {
+          "name": "model_pi05_30k.zip",
+          "size": 7056853748,
+          "publisher_md5": "md5:408364a366d671854573831ecef60326",
+          "publisher_sha256_unverified": "622ae26132a784f773a3e82c5a77961d7c8b1bcc450fb6703f5f166952cd7f10"
+        },
+        {
+          "name": "calibration_sensitivity.zip",
+          "size": 187616696,
+          "publisher_md5": "md5:329f22125e4f68a4e01b4d01d58d7c28",
+          "publisher_sha256_unverified": "b6b4ff1aded8ac74a281cb79932155142393a21035c462ea5c11ef11f8d34257"
+        },
+        {
+          "name": "model_grasp_pose_regressor.zip",
+          "size": 124982605,
+          "publisher_md5": "md5:10443327541e0e794507c95ad3cc4a97",
+          "publisher_sha256_unverified": "fc891b15c8f6046776eaa19de36df5e5925b337b5fa8e818527b55fe87f8ab1e"
+        },
+        {
+          "name": "LICENSE.txt",
+          "size": 1584,
+          "publisher_md5": "md5:334af90c0b2929dbcd994c53a3a70499",
+          "publisher_sha256_unverified": null
+        },
+        {
+          "name": "model_smolvla_40k.zip",
+          "size": 725925073,
+          "publisher_md5": "md5:19c093898cd9305f254317e9840e0de4",
+          "publisher_sha256_unverified": "b5b9e51d2231656e83ee8b73dc1d007149366bb9ffe947c5f8770d24692e6986"
+        },
+        {
+          "name": "code_and_assets.zip",
+          "size": 8662784,
+          "publisher_md5": "md5:7002022151e93a8782abe721991ac15d",
+          "publisher_sha256_unverified": "fb8d3ab58f46af360c883692ea928c365382a7b573c2c899e193c09cb05195a9"
+        },
+        {
+          "name": "README.md",
+          "size": 15448,
+          "publisher_md5": "md5:8b6daad23a4a929ee6478c7c4e584524",
+          "publisher_sha256_unverified": null
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 942,
+          "publisher_md5": "md5:62a4f08242b982b7d1603b519ac5fa64",
+          "publisher_sha256_unverified": null
+        }
+      ],
+      "verified_small_files": [
+        {
+          "name": "README.md",
+          "actual_sha256": "01b401970f0f50960a79be8bd18221b1e059cd8857e9824d859b6e74181a3ccf",
+          "publisher_md5_matched": true,
+          "bytes": 15448
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "actual_sha256": "e4fd0e1a03d74243697c9d197b5ad7b95b2394ae6eb059306bf45ce96af6afb4",
+          "publisher_md5_matched": true,
+          "bytes": 942
+        },
+        {
+          "name": "LICENSE.txt",
+          "actual_sha256": "590086841587d1c9f9818fc240f714842ae0273499b71b5782a9afa55a3dda12",
+          "publisher_md5_matched": true,
+          "bytes": 1584
+        }
+      ],
+      "evaluation_archive_check": {
+        "name": "evaluation_episodes.zip",
+        "entries_reported_by_archive": 185530,
+        "central_offset": 6679247476,
+        "central_size": 33235960,
+        "archive_bytes_advertised": 6712483534,
+        "status": "first 65536 bytes of central directory parsed; no member content read",
+        "complete_entries_in_prefix": 406,
+        "directory_entries_in_prefix": 8,
+        "central_prefix_sha256": "bfa4837e64b2e3b527c285b1b162e968b881e6cd655299e7fff27d5026b4eeb9",
+        "prefix_extension_counts": {
+          ".npz": 48,
+          ".json": 48,
+          ".png": 302
+        },
+        "sample_member_names": [
+          "evaluation_episodes/",
+          "evaluation_episodes/e2e_insert_dp/",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_045734_data.npz",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_045501_metadata.json",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_050703_metadata.json",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_044253_metadata.json",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_045827_metadata.json",
+          "evaluation_episodes/e2e_insert_dp/simulation_logs/ep_20260701_051129_data.npz",
+          "evaluation_episodes/e2e_insert_dp/simulation_images/ep_20260701_045415/d455_depth/depth_0015.png",
+          "evaluation_episodes/e2e_insert_dp/simulation_images/ep_20260701_045415/d455_depth/depth_0076.png"
+        ]
+      },
+      "declared_observations": "The publication describes 1,565 demonstrations and 197,190 frames; the archive directory observation below covers a separate evaluation archive. No demonstration episode, training asset or raw trajectory was opened.",
+      "training_signal_scope": {
+        "source": "https://zenodo.org/api/records/21768344/files/README.md/content",
+        "line_in_checked_readme": 23,
+        "authors_describe": "Training demonstrations have three RGB views, proprioception and 10-D absolute-pose actions. The release README explicitly lists no force/torque in this training data.",
+        "independent_access": "README inspected and checked against publisher MD5. No member signals examined."
+      }
+    }
+  ],
+  "http": [
+    {
+      "url": "https://zenodo.org/api/records/22647706",
+      "final_url": "https://zenodo.org/api/records/22647706",
+      "status": 200,
+      "range": null,
+      "content_range": null,
+      "read_bytes": 5695,
+      "response_sha256": "edeb93edd1c8820a8a121e40df0076023e2c677470e7cbe17681d760ef90ef5b"
+    },
+    {
+      "url": "https://zenodo.org/api/records/22647706/files",
+      "status": 403,
+      "read_bytes": 0
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344",
+      "final_url": "https://zenodo.org/api/records/21768344",
+      "status": 200,
+      "range": null,
+      "content_range": null,
+      "read_bytes": 9672,
+      "response_sha256": "2094229faf9ed02b6d46692ea64b81b8db9317225757785dc13740eaa2abe4a8"
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344/files/README.md/content",
+      "final_url": "https://zenodo.org/api/records/21768344/files/README.md/content",
+      "status": 200,
+      "range": null,
+      "content_range": null,
+      "read_bytes": 15448,
+      "response_sha256": "01b401970f0f50960a79be8bd18221b1e059cd8857e9824d859b6e74181a3ccf"
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344/files/SHA256SUMS.txt/content",
+      "final_url": "https://zenodo.org/api/records/21768344/files/SHA256SUMS.txt/content",
+      "status": 200,
+      "range": null,
+      "content_range": null,
+      "read_bytes": 942,
+      "response_sha256": "e4fd0e1a03d74243697c9d197b5ad7b95b2394ae6eb059306bf45ce96af6afb4"
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344/files/LICENSE.txt/content",
+      "final_url": "https://zenodo.org/api/records/21768344/files/LICENSE.txt/content",
+      "status": 200,
+      "range": null,
+      "content_range": null,
+      "read_bytes": 1584,
+      "response_sha256": "590086841587d1c9f9818fc240f714842ae0273499b71b5782a9afa55a3dda12"
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344/files/evaluation_episodes.zip/content",
+      "final_url": "https://zenodo.org/api/records/21768344/files/evaluation_episodes.zip/content",
+      "status": 206,
+      "range": [
+        6712417976,
+        6712483533
+      ],
+      "content_range": "bytes 6712417976-6712483533/6712483534",
+      "read_bytes": 65558,
+      "response_sha256": "e4ec5ed7e1c89bb6d1bfd53dfa520ba61d1d764ea4a835d97cca0463543f75c0"
+    },
+    {
+      "url": "https://zenodo.org/api/records/21768344/files/evaluation_episodes.zip/content",
+      "final_url": "https://zenodo.org/api/records/21768344/files/evaluation_episodes.zip/content",
+      "status": 206,
+      "range": [
+        6679247476,
+        6679313011
+      ],
+      "content_range": "bytes 6679247476-6679313011/6712483534",
+      "read_bytes": 65536,
+      "response_sha256": "bfa4837e64b2e3b527c285b1b162e968b881e6cd655299e7fff27d5026b4eeb9"
+    }
+  ],
+  "response_bytes_read_total": 164435
+}

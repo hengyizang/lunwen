@@ -1,0 +1,90 @@
+{
+  "title": "Dual arm peg-in-hole force/torque values during contact",
+  "author": "David Ortega (Mendeley creator; profile display name David Ortega-Aranda)",
+  "published": "2021-06-15",
+  "version": 1,
+  "doi": "10.17632/m7g93whs3t.1",
+  "official_dataset_url": "https://data.mendeley.com/datasets/m7g93whs3t/1",
+  "public_zip": "https://data.mendeley.com/public-api/zip/m7g93whs3t/download/1",
+  "versioned_file_inventory": "https://data.mendeley.com/public-api/datasets/m7g93whs3t/files?folder_id=root&version=1&$start=0&$limit=1000",
+  "inventory_accept_header": "application/vnd.mendeley-public-dataset.1+json",
+  "datacite_record": "https://api.datacite.org/dois/10.17632/m7g93whs3t.1",
+  "accessed_utc": "2026-11-21T09:06:45.851708+00:00",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "derived_tables_license": "CC BY 4.0; attribution David Ortega. Modified by deriving per-sensor force/moment magnitudes and class frequencies.",
+  "zip_bytes": 78130,
+  "observed_zip_sha256": "f1686ccb841f17b57f7ee58e163cd4726d1bb4188d39d59cdb847dd000711a74",
+  "publisher_file_checks": [
+    {
+      "filename": "data_ft_159.csv",
+      "publisher_file_id": "d0951d79-5004-49bd-96d5-c7f08d469f50",
+      "download_url": "https://data.mendeley.com/public-files/datasets/m7g93whs3t/files/d0951d79-5004-49bd-96d5-c7f08d469f50/file_downloaded",
+      "publisher_and_measured_sha256": "443b714fbd30416450af6a61f2e35dda0a7a3272c475e7855bd27db1a864712a",
+      "bytes": 17721,
+      "archive_crc32": "8e728d73"
+    },
+    {
+      "filename": "data_ft_2056.csv",
+      "publisher_file_id": "640c0022-eda2-4bd0-8d5a-452ee63f1203",
+      "download_url": "https://data.mendeley.com/public-files/datasets/m7g93whs3t/files/640c0022-eda2-4bd0-8d5a-452ee63f1203/file_downloaded",
+      "publisher_and_measured_sha256": "4cc4de8798fde10b93cc3e1136f7a1ee55e34b7dc87697157abfe4c31cb9123d",
+      "bytes": 225839,
+      "archive_crc32": "7667e28f"
+    }
+  ],
+  "observations": {
+    "train": {
+      "rows": 2056,
+      "unique_full_12_axis_numeric_vectors": 2056,
+      "counts_by_contact_label": {
+        "0": 257,
+        "1": 257,
+        "2": 257,
+        "3": 257,
+        "4": 257,
+        "5": 257,
+        "6": 257,
+        "7": 257
+      }
+    },
+    "validation": {
+      "rows": 159,
+      "unique_full_12_axis_numeric_vectors": 159,
+      "counts_by_contact_label": {
+        "0": 20,
+        "1": 20,
+        "2": 20,
+        "3": 20,
+        "4": 20,
+        "5": 20,
+        "6": 20,
+        "7": 19
+      }
+    }
+  },
+  "exact_cross_split_12_axis_vectors_shared": 0,
+  "unit_of_observation": "One row corresponds to one published example. Index resets for the second file. No time or trial ID in either CSV.",
+  "known_limitations": [
+    "Source metadata describes eight concentric misalignment/contact-state classes. The numeric labels do not establish an independent external contact-wrench or wrist-bias ground truth.",
+    "Physical units, frame alignment, per-axis calibration, per-sample contact timing and individual run boundaries are absent from the two CSV headers and publisher description. Magnitudes use native units.",
+    "No exact full-vector overlap between splits was found. Independence across time, trials and workpieces cannot be established."
+  ],
+  "method": "Within each sensor compute Euclidean magnitudes independently for three f axes and three m axes. Preserve official split, original zero-based row index and label y. No filtering, fitting, coordinate transformation or cross-sensor summation.",
+  "outputs": {
+    "dual-arm-class-counts.csv": {
+      "sha256": "083b6a5be0479c32cc760bcb84b2470a88a922efa571143d5e5f15dab17e0c8d",
+      "bytes": 249
+    },
+    "dual-arm-contact-magnitudes.csv": {
+      "sha256": "406125573578b85354c8444ec058f14720b7ef31f7d10cfb40b7ec0e2e628da1",
+      "bytes": 133884
+    }
+  },
+  "history_check": {
+    "historical_snapshot": "83374605c4f26c6756611b19bc90144929d44cd1",
+    "baseline": "2026-11-21/datasets.csv lists DOI and verifies metadata only.",
+    "continuous": "No DOI slug or exact title occurrence in frozen continuous/datasets-new.csv and continuous/queue-state.json (which enumerates cleaned releases).",
+    "increment": "File-level verification and derived measurements for an existing dataset. No new dataset identity is claimed."
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "source_article": {
+    "title": "Dual-Arm Peg-in-Hole Assembly Using DNN with Double Force/Torque Sensor",
+    "doi": "10.3390/app11156970",
+    "url": "https://www.mdpi.com/2076-3417/11/15/6970",
+    "data_availability": "Publisher Data Availability Statement explicitly links Mendeley version 1.",
+    "present_in_prior_literature_files": [
+      "2026-11-21/literature.csv"
+    ]
+  },
+  "as_of_utc": "2026-11-21T09:09:16.945280+00:00",
+  "prior_state_commit": "d0cba6708b802aa873696fa50b776aad5e5ea6d5",
+  "compared_catalogues": {
+    "2026-11-21/literature.csv": "f0463cf2633177f4cfc70dc24a9f694088e5e42890eeb1e53d84fe7e5d701995",
+    "continuous/literature-new-part-02.csv": "eaa88e77fc3178935dc6e638ac1d0d61593810240b6b25dd55e8d4700bb00eb5",
+    "continuous/literature-new.csv": "40f99f72dcf8e3355badb6369a2c3ccff78d79923dca12ae910d4c8994839868",
+    "continuous/reading-queue-new.csv": "1ade67b6eefe742b0628dcbb8eefbf37976b9e39c8b785e1d8ca9a4592bf5566"
+  },
+  "prior_project_baseline": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+  "additional_checked_index": "2026-11-21/citation-edges.csv; corrected identifiers preferred",
+  "backward_reference_rows": 38,
+  "backward_provider_doi_rows": 28,
+  "forward_index_count": 17,
+  "forward_rows_retrieved": 17,
+  "search_limit": "Forward query takes first 100 from OpenAlex. Backward query takes DOI-bearing references. English title-based screen for dual-arm robots, contact sensing, manipulation and assembly. No claim of comprehensive novelty or source support.",
+  "screened_out": {
+    "no direct industrial manipulation title signal": 14
+  },
+  "relationships_retained": 31,
+  "unmatched_distinct_doi_or_urls": 19,
+  "prior_match_rule": "Case-folded DOI or arXiv, exact URL or normalized title. Absence from snapshot is a catalog-level result; unlinked preprints, translations or differently titled records may exist.",
+  "requests": [
+    {
+      "url": "https://api.crossref.org/works/10.3390/app11156970",
+      "bytes": 15641,
+      "sha256": "63b689abcb38d12506c1a810737a8d9107381cde78d93d46cbcaf5bacc778614",
+      "retrieved_utc": "2026-11-21T09:09:01.023955+00:00"
+    },
+    {
+      "url": "https://api.crossref.org/works?filter=doi%3A10.1007%2Fs00170-018-2363-5%2Cdoi%3A10.1016%2Fj.robot.2012.07.005%2Cdoi%3A10.1007%2F978-3-319-78963-7_59%2Cdoi%3A10.1016%2Fj.procir.2014.10.078%2Cdoi%3A10.1109%2Frobio.2014.7090507%2Cdoi%3A10.3390%2Fs17092004%2Cdoi%3A10.1109%2Ficra.2016.7487161%2Cdoi%3A10.1109%2Ftase.2014.2333754%2Cdoi%3A10.1016%2Fj.cirp.2014.03.017%2Cdoi%3A10.1016%2Fj.cirp.2011.03.017%2Cdoi%3A10.1109%2Ficra.2016.7487588%2Cdoi%3A10.1115%2F1.4041331%2Cdoi%3A10.1109%2Firos.2017.8202244%2Cdoi%3A10.1108%2Faa-10-2018-0164%2Cdoi%3A10.1007%2Fbf00339665%2Cdoi%3A10.1109%2Frobot.1992.220143%2Cdoi%3A10.1109%2F70.488947%2Cdoi%3A10.1109%2Flra.2020.3010739%2Cdoi%3A10.1016%2Fj.ifacol.2015.06.295%2Cdoi%3A10.1007%2Fs41315-020-00138-z%2Cdoi%3A10.3389%2Ffrobt.2019.00099%2Cdoi%3A10.1007%2Fs00170-014-5803-x%2Cdoi%3A10.1109%2Ftie.2017.2682002%2Cdoi%3A10.1109%2Flra.2020.2972878%2Cdoi%3A10.1080%2F0951192052000288198%2Cdoi%3A10.1115%2Fdscc2015-9703%2Cdoi%3A10.1109%2Firos.2010.5652704%2Cdoi%3A10.1109%2Flra.2020.3000428&rows=28&select=DOI%2Ctitle%2Cauthor%2Cpublished%2Ccontainer-title%2Ctype",
+      "bytes": 25803,
+      "sha256": "83a5905cc6ce1c51901f6c02c0d4d399d5d126c4feef4be66660601e0eb452ce",
+      "retrieved_utc": "2026-11-21T09:09:01.326204+00:00"
+    },
+    {
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/app11156970?select=id,doi,title",
+      "bytes": 168,
+      "sha256": "5066fbda050e40d910ef5b1a755e5c3400acb2c7d4d1f5de2c03b77caa427ee0",
+      "retrieved_utc": "2026-11-21T09:09:01.643080+00:00"
+    },
+    {
+      "url": "https://api.openalex.org/works?filter=cites%3AW3189925280&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Cprimary_location%2Ctype%2Cids%2Cis_retracted",
+      "bytes": 114636,
+      "sha256": "6b751a2079124b9a93de675340778c213378053234a127c87d6fe0008641fb55",
+      "retrieved_utc": "2026-11-21T09:09:02.068116+00:00"
+    }
+  ],
+  "new_identifier_registry_check": {
+    "date_utc": "2026-11-21T09:10:51.153117+00:00",
+    "query": "https://api.crossref.org/works?filter=doi%3A10.1007%2Fs00170-018-2363-5%2Cdoi%3A10.1016%2Fj.robot.2012.07.005%2Cdoi%3A10.1007%2F978-3-319-78963-7_59%2Cdoi%3A10.1016%2Fj.procir.2014.10.078%2Cdoi%3A10.1109%2Ftase.2014.2333754%2Cdoi%3A10.1016%2Fj.cirp.2014.03.017%2Cdoi%3A10.1016%2Fj.cirp.2011.03.017%2Cdoi%3A10.1115%2F1.4041331%2Cdoi%3A10.1007%2Fs41315-020-00138-z%2Cdoi%3A10.3389%2Ffrobt.2019.00099%2Cdoi%3A10.1007%2Fs00170-014-5803-x%2Cdoi%3A10.1115%2Fdscc2015-9703%2Cdoi%3A10.1109%2Firos.2010.5652704%2Cdoi%3A10.1016%2Fj.procir.2024.10.099%2Cdoi%3A10.1016%2Fj.birob.2026.100332%2Cdoi%3A10.1016%2Fj.jmsy.2026.06.011%2Cdoi%3A10.1007%2F978-981-96-1467-7_34%2Cdoi%3A10.1007%2F978-981-96-1464-6_45%2Cdoi%3A10.1109%2Fcros66186.2025.11064863&rows=19&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+    "response_sha256": "ca99dd25782f6e52ae97c9b195409398d8bde60a5f6e31956473533cf2137098",
+    "checked": [
+      {
+        "doi": "10.1007/s00170-018-2363-5",
+        "registry_title": "Robotic assembly of threaded fasteners in a non-structured environment",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.robot.2012.07.005",
+        "registry_title": "Dual arm manipulation—A survey",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1007/978-3-319-78963-7_59",
+        "registry_title": "A Survey of Dual-Arm Robotic Issues on Assembly Tasks",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.procir.2014.10.078",
+        "registry_title": "Robotized Assembly Process Using Dual Arm Robot",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1109/tase.2014.2333754",
+        "registry_title": "A Sensor-Based Dual-Arm Tele-Robotic System",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.cirp.2014.03.017",
+        "registry_title": "Intuitive dual arm robot programming for assembly operations",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.cirp.2011.03.017",
+        "registry_title": "Dual arm robot for flexible and cooperative assembly",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1115/1.4041331",
+        "registry_title": "Learning-Based Variable Compliance Control for Robotic Assembly",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1007/s41315-020-00138-z",
+        "registry_title": "Model accelerated reinforcement learning for high precision robotic assembly",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.3389/frobt.2019.00099",
+        "registry_title": "Symbolic-Based Recognition of Contact States for Learning Assembly Skills",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1007/s00170-014-5803-x",
+        "registry_title": "Contact-state monitoring of force-guided robotic assembly tasks using expectation maximization-based Gaussian mixtures models",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1115/dscc2015-9703",
+        "registry_title": "A Learning-Based Framework for Robot Peg-Hole-Insertion",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1109/iros.2010.5652704",
+        "registry_title": "On contact models for assembly tasks: Experimental investigation beyond the peg-in-hole problem on the example of force-torque maps",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.procir.2024.10.099",
+        "registry_title": "AI-driven force torque control strategies for further automate flexible high-precision, contact-intensive assemblies",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.birob.2026.100332",
+        "registry_title": "Towards Industry 5.0: Emerging trends in dual-arm human–robot collaboration",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1016/j.jmsy.2026.06.011",
+        "registry_title": "A comprehensive review of robotic assembly of aerospace components",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1007/978-981-96-1467-7_34",
+        "registry_title": "Compliant Assembly of Electrical Connectors with Peg-Hole Fitting and Force-Inspired Contact Search",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1007/978-981-96-1464-6_45",
+        "registry_title": "A New Translational Blind-Search Strategy for Peg-in-Hole Assembly Considering Contacts on the Side Surface",
+        "normalized_title_match": true
+      },
+      {
+        "doi": "10.1109/cros66186.2025.11064863",
+        "registry_title": "A Survey of Sensing and Interaction in Robotic Assembly",
+        "normalized_title_match": true
+      }
+    ]
+  },
+  "increment_scope": "This follow-up upgrades three existing dataset identities: one public file set now acquired, and two version/access records checked. None count as a new dataset release. Citation-neighbour counts are reported separately from the unattended collector.",
+  "source_readings": [
+    {
+      "title": "Dual-Arm Peg-in-Hole Assembly Using DNN with Double Force/Torque Sensor",
+      "doi": "10.3390/app11156970",
+      "section": "Data Availability Statement",
+      "source": "https://www.mdpi.com/2076-3417/11/15/6970",
+      "observation": "Authors explicitly identify Mendeley release 10.17632/m7g93whs3t.1 as their study data."
+    },
+    {
+      "title": "Symbolic-Based Recognition of Contact States for Learning Assembly Skills",
+      "doi": "10.3389/frobt.2019.00099",
+      "section": "Discussion; passage on larger clearances",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7805827/",
+      "observation": "The authors report that with large clearance, partial contact-state changes can lack distinguishable force/torque variations. This motivates checking identifiability separately for each geometry."
+    }
+  ]
+}
