@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-24116583-dataset-robotic-sanding",
+  "dataset_name": "Dataset: Robotic Sanding MDF Roughness",
+  "doi": "10.6084/m9.figshare.24116583.v1",
+  "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_b_Robotic_Sanding_MDF_Roughness/24116583",
+  "source_api_url": "https://api.figshare.com/v2/articles/24116583",
+  "access_date": "2026-11-21",
+  "round_number": 34,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "processed_confocal_data_cR.csv",
+      "download_url": "https://ndownloader.figshare.com/files/42367233",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/42367233/processed_confocal_data_cR.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T101438Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22processed_confocal_data_cR.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=bb434e81f93627b3a4469b1f643f34e5a2c68a96892be8382a8769c49cc76d6f",
+      "http_status": 200,
+      "bytes": 62776,
+      "publisher_checksum": "md5:4df08e6c7cf8e1363e9b9bf65314019b",
+      "verified_md5": "4df08e6c7cf8e1363e9b9bf65314019b",
+      "verified_sha256": "551d8bbee4bafb6a3ad1f832f53cb33ee04b6a027eda35cd264a37ef36dd7ad6"
+    },
+    {
+      "file": "processed_stylus_data_R.csv",
+      "download_url": "https://ndownloader.figshare.com/files/42367236",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/42367236/processed_stylus_data_R.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T101440Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22processed_stylus_data_R.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=82e7d217c723605a4a9dc8bcc2d8f60f7bbe560cfd1a9cfb581c3dba955de608",
+      "http_status": 200,
+      "bytes": 86567,
+      "publisher_checksum": "md5:e60acff6ab5537c279b51dd47c7452f0",
+      "verified_md5": "e60acff6ab5537c279b51dd47c7452f0",
+      "verified_sha256": "cfd5e65795da6a479d08cc79d1f36dddb1e44d3d850273e074b6ad7db25e3d36"
+    },
+    {
+      "file": "samples_names.txt",
+      "download_url": "https://ndownloader.figshare.com/files/42367239",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/42367239/samples_names.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T101441Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22samples_names.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=acd7d8e0558c04f2848b055b103a0a29b9727d994fca29059d6e9412dbb52c2f",
+      "http_status": 200,
+      "bytes": 553,
+      "publisher_checksum": "md5:9cb7faa5d872c1d3592833177d853193",
+      "verified_md5": "9cb7faa5d872c1d3592833177d853193",
+      "verified_sha256": "777279801be0a06809af40992a2513e4e123c12d3b75c1afc17214b4ac166228"
+    },
+    {
+      "file": "RAW_Images.zip",
+      "download_url": "https://ndownloader.figshare.com/files/42367287",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/42367287/RAW_Images.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T101443Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22RAW_Images.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=93b0a80d356a98424849590db585566f8e6175c0123513651dbedaadc85a368e",
+      "http_status": 200,
+      "bytes": 6404996,
+      "publisher_checksum": "md5:9d4b3be6e2833fc464fbb0ff264eeb07",
+      "verified_md5": "9d4b3be6e2833fc464fbb0ff264eeb07",
+      "verified_sha256": "41ec175d2b2e7381fe7ea3e1c7565c1e5a06ee1023cdb681a04f8402bda53ca0"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-24116583-dataset-robotic-sanding",
+  "raw_total_bytes": 6554892,
+  "raw_total_rows": 904,
+  "duplicate_rows_removed": 8,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-24116583-dataset-robotic-sanding-cleaned.csv",
+  "cleaned_csv_sha256": "8e3ee3c304eafa2c13ba4f9bd2a2579e73e1cc0ac2d217ebb88315d21a59d69c",
+  "cleaned_rows": 33,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "processed_confocal_data_cR.csv": {
+      "val": 0,
+      "order": 0,
+      "image": 0,
+      "edge": 0,
+      "grit": 0,
+      "cRsk": 0,
+      "cRp": 0,
+      "cRz": 0,
+      "cRa": 0,
+      "cRsm": 0,
+      "entropy": 0,
+      "energy": 0,
+      "contrast": 0,
+      "correlation": 0,
+      "homog": 0
+    },
+    "processed_stylus_data_R.csv": {
+      "val": 0,
+      "order": 0,
+      "image": 0,
+      "edge": 0,
+      "grit": 0,
+      "Ra": 0,
+      "Rz": 0,
+      "Rp": 0,
+      "Rsk": 0,
+      "Rsm": 0,
+      "entropy": 0,
+      "energy": 0,
+      "contrast": 0,
+      "correlation": 0,
+      "homog": 0
+    },
+    "samples_names.txt": {
+      "Estimation": 1,
+      "Unnamed: 1": 2,
+      "Unnamed: 2": 29
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

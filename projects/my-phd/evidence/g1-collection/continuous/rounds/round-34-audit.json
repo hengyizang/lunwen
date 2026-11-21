@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 34,
+  "completed_at": "2026-11-21T10:14:04Z",
+  "batch_label": "Broad Engineering R34: Mechanical_Physics_AI",
+  "base_head_sha": "4f1e7d05005041fcdfcd6805a399587db7d416ab",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 132,
+    "duplicates_skipped": 24,
+    "net_new": 108,
+    "new_reading_queue": 107,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "surrogate modeling finite element",
+        "receipt_id": "20261121t101404z-arxiv-8d3fe1ca2b",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Asurrogate+AND+all%3Amodeling+AND+all%3Afinite+AND+all%3Aelement&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "d42b7a1f3adda9877dca3bb07a89782139dfacdffdec49c81e12395c66f77d97",
+        "normalized_results_sha256": "a44e8ff3893314d9cd74ce6682b4cf302b0b960d4dfb6f3982c44e32ecd1a943"
+      },
+      {
+        "provider": "crossref",
+        "query": "surrogate modeling finite element",
+        "receipt_id": "20261121t101405z-crossref-c3688feda0",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=surrogate+modeling+finite+element&rows=12",
+        "result_count": 12,
+        "response_sha256": "f61443a7d2618df3a8715a0844daf094c0ae0c1e25ff0b0b390d1c4741baf386",
+        "normalized_results_sha256": "b2a4acffd9640f9bf7cbfecb049f67fb9e3b8761c4cf032023cf63321e6a6563"
+      },
+      {
+        "provider": "openalex",
+        "query": "surrogate modeling finite element",
+        "receipt_id": "20261121t101406z-openalex-62c1ef5373",
+        "request_url": "https://api.openalex.org/works?search=surrogate+modeling+finite+element&per-page=12",
+        "result_count": 12,
+        "response_sha256": "7751baf8bdaec4d09f2c524d0c0418100a12167183522c44aff7f45a815ded6e",
+        "normalized_results_sha256": "0de3b8422befa2727329e730578fcded5ed1a632947129177a90c4d2ea12abc8"
+      },
+      {
+        "provider": "arxiv",
+        "query": "reduced order model mechanics",
+        "receipt_id": "20261121t101408z-arxiv-b799782cb6",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Areduced+AND+all%3Aorder+AND+all%3Amodel+AND+all%3Amechanics&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "bf1d22b9b75498a53d04ae8f0248b05d0c3a4e9ccb5fea6752a3ba94cb008d43",
+        "normalized_results_sha256": "ec46b2008a0b70f2a051aa3a198db49a80e7827fac62f8110f628df86a2d29d4"
+      },
+      {
+        "provider": "crossref",
+        "query": "reduced order model mechanics",
+        "receipt_id": "20261121t101409z-crossref-30484aa8fa",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=reduced+order+model+mechanics&rows=12",
+        "result_count": 12,
+        "response_sha256": "0ebd3c875e211618b3a984172f2006ac80cfbf77285eb8ad9cddcc89d3c0b8b4",
+        "normalized_results_sha256": "90932e55d1a4f9893a216813ae560b4520dce548b6b62c617411ad2ea2914b89"
+      },
+      {
+        "provider": "openalex",
+        "query": "reduced order model mechanics",
+        "receipt_id": "20261121t101411z-openalex-b76c29a3d4",
+        "request_url": "https://api.openalex.org/works?search=reduced+order+model+mechanics&per-page=12",
+        "result_count": 12,
+        "response_sha256": "eabf4415a9148bd8e8c67afbeacf383fd33a07118e5e45e049322cc45fa31bf1",
+        "normalized_results_sha256": "c9ebdb6301161f4a8bfbaac28fbede9e74ffaa8d26216a72e4dbeb919170dc0c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "peridynamics neural network fracture",
+        "receipt_id": "20261121t101413z-arxiv-d3aa85116e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aperidynamics+AND+all%3Aneural+AND+all%3Anetwork+AND+all%3Afracture&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "952e95c611214188f2bd1ffccc6bc0a4f182e5bd84775dcefe3fcb488f087f5c",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "peridynamics neural network fracture",
+        "receipt_id": "20261121t101414z-crossref-7e8bef463a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=peridynamics+neural+network+fracture&rows=12",
+        "result_count": 12,
+        "response_sha256": "b655df4637f4e780a93024b906d6f162d126af51964a2e5bd30e2c9bfea71d56",
+        "normalized_results_sha256": "1b7fc7238f7d188e22950ffda54ba769f01c1a136aef5a2ccaaccb84bfb302ca"
+      },
+      {
+        "provider": "openalex",
+        "query": "peridynamics neural network fracture",
+        "receipt_id": "20261121t101416z-openalex-33c33c49ba",
+        "request_url": "https://api.openalex.org/works?search=peridynamics+neural+network+fracture&per-page=12",
+        "result_count": 12,
+        "response_sha256": "98acec42c29a1da4f738b74066264cc00944555fa3ef503bf16fc4c72e2bc9de",
+        "normalized_results_sha256": "f4d37867acadb6b5dba88263d7cad6b33a505915a68e0de10f6408082731d188"
+      },
+      {
+        "provider": "arxiv",
+        "query": "phase field fracture learning",
+        "receipt_id": "20261121t101417z-arxiv-53c81fee05",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aphase+AND+all%3Afield+AND+all%3Afracture+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "2671732262953806a5a02cf508c4aa83b01c9d32219e7d3231e8c5e1d4842328",
+        "normalized_results_sha256": "89a101ce36fe2abbbbee5161f9cfcdb28f9bd3e073ed48677e2a049b1a4a12ca"
+      },
+      {
+        "provider": "crossref",
+        "query": "phase field fracture learning",
+        "receipt_id": "20261121t101418z-crossref-3e09278c79",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=phase+field+fracture+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "a29b3b974aae18fb920516244d88a2dccee84d14689cd21ff8d21c8425908967",
+        "normalized_results_sha256": "4c048757a8ed76cd43302b6a4b4d3f490f0495ab7bd24c7df8a036c12cf255eb"
+      },
+      {
+        "provider": "openalex",
+        "query": "phase field fracture learning",
+        "receipt_id": "20261121t101420z-openalex-51029e2fbd",
+        "request_url": "https://api.openalex.org/works?search=phase+field+fracture+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "59b73c09eb9a20e80bbcc11cde739eb7dbc0fce8a88787e30618c551d7040567",
+        "normalized_results_sha256": "84069095fe40cf901d7cd879665d5c3a4e04f529a859e36519196524719d25e9"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3389/fbioe.2026.2011948",
+        "receipt_id": "20261121t101422z-opencitations-61026685b7",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/mi17080934",
+        "receipt_id": "20261121t101423z-opencitations-3dee9611f4",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 139,
+    "off_topic_filtered": 77,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 32,
+    "net_new": 30,
+    "provider_statuses": [
+      {
+        "query": "factory energy",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "factory energy",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "factory energy",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "factory energy",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "factory energy",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic polishing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "robotic polishing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic polishing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic polishing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "robotic polishing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic sanding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "robotic sanding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic sanding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic sanding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "robotic sanding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic dispensing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic dispensing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic dispensing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic dispensing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "robotic dispensing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      }
+    ],
+    "probed_for_cleaning": 10,
+    "cleaned": [
+      {
+        "slug": "figshare-34950610-dataset-robotic-sanding",
+        "key": "figshare:34950610",
+        "dataset_name": "Dataset: Robotic Sanding Chilean Oak End-Grain Roughness",
+        "doi": "10.6084/m9.figshare.34950610.v1",
+        "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_b_Robotic_Sanding_Chilean_Oak_End-Grain_Roughness/34950610",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34950610-dataset-robotic-sanding-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34950610-dataset-robotic-sanding-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34950610_dataset_robotic_sanding.py",
+        "cleaned_rows": 14,
+        "raw_total_rows": 1284,
+        "verified_sha256": "8ce7afdc0306f38341b284d1cb31b3f00bae41a4927a514df134aa904fc5c75f"
+      },
+      {
+        "slug": "figshare-24116583-dataset-robotic-sanding",
+        "key": "figshare:24116583",
+        "dataset_name": "Dataset: Robotic Sanding MDF Roughness",
+        "doi": "10.6084/m9.figshare.24116583.v1",
+        "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_b_Robotic_Sanding_MDF_Roughness/24116583",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-24116583-dataset-robotic-sanding-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-24116583-dataset-robotic-sanding-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_24116583_dataset_robotic_sanding.py",
+        "cleaned_rows": 33,
+        "raw_total_rows": 904,
+        "verified_sha256": "551d8bbee4bafb6a3ad1f832f53cb33ee04b6a027eda35cd264a37ef36dd7ad6"
+      },
+      {
+        "slug": "figshare-25024495-optimization-of-a-hydrog",
+        "key": "figshare:25024495",
+        "dataset_name": "Optimization of a Hydrogen Exchange-Mass Spectrometry Robotic Liquid Handler Using Tracers",
+        "doi": "10.1021/acs.analchem.3c04186.s006",
+        "landing_url": "https://acs.figshare.com/articles/dataset/Optimization_of_a_Hydrogen_Exchange-Mass_Spectrometry_Robotic_Liquid_Handler_Using_Tracers/25024495",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-25024495-optimization-of-a-hydrog-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-25024495-optimization-of-a-hydrog-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_25024495_optimization_of_a_hydrog.py",
+        "cleaned_rows": 88,
+        "raw_total_rows": 88,
+        "verified_sha256": "9d05e14cdbecb059a07f79b3ad989892d2e273ecae929242e564a373bb2379e5"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

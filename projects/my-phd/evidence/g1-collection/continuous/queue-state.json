@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 33,
-  "total_new_literature": 3403,
-  "total_new_datasets": 1599,
-  "total_new_reading_queue": 2919,
+  "round_number": 34,
+  "total_new_literature": 3511,
+  "total_new_datasets": 1629,
+  "total_new_reading_queue": 3026,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -76,7 +76,10 @@
     "figshare:34066695",
     "dataverse:10.7910/dvn/getyap",
     "dataverse:10.7910/dvn/fs95y3",
-    "dataverse:10.7910/dvn/yuiynm"
+    "dataverse:10.7910/dvn/yuiynm",
+    "figshare:34950610",
+    "figshare:24116583",
+    "figshare:25024495"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1086,6 +1089,48 @@
       "cleaned_rows": 87,
       "raw_total_rows": 452,
       "verified_sha256": "d35d03d5c6fa812541732881d4d6de7bedc16f35c21961adc000b0ab46c2111b"
+    },
+    {
+      "slug": "figshare-34950610-dataset-robotic-sanding",
+      "key": "figshare:34950610",
+      "dataset_name": "Dataset: Robotic Sanding Chilean Oak End-Grain Roughness",
+      "doi": "10.6084/m9.figshare.34950610.v1",
+      "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_b_Robotic_Sanding_Chilean_Oak_End-Grain_Roughness/34950610",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34950610-dataset-robotic-sanding-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-34950610-dataset-robotic-sanding-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34950610_dataset_robotic_sanding.py",
+      "cleaned_rows": 14,
+      "raw_total_rows": 1284,
+      "verified_sha256": "8ce7afdc0306f38341b284d1cb31b3f00bae41a4927a514df134aa904fc5c75f"
+    },
+    {
+      "slug": "figshare-24116583-dataset-robotic-sanding",
+      "key": "figshare:24116583",
+      "dataset_name": "Dataset: Robotic Sanding MDF Roughness",
+      "doi": "10.6084/m9.figshare.24116583.v1",
+      "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_b_Robotic_Sanding_MDF_Roughness/24116583",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-24116583-dataset-robotic-sanding-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-24116583-dataset-robotic-sanding-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_24116583_dataset_robotic_sanding.py",
+      "cleaned_rows": 33,
+      "raw_total_rows": 904,
+      "verified_sha256": "551d8bbee4bafb6a3ad1f832f53cb33ee04b6a027eda35cd264a37ef36dd7ad6"
+    },
+    {
+      "slug": "figshare-25024495-optimization-of-a-hydrog",
+      "key": "figshare:25024495",
+      "dataset_name": "Optimization of a Hydrogen Exchange-Mass Spectrometry Robotic Liquid Handler Using Tracers",
+      "doi": "10.1021/acs.analchem.3c04186.s006",
+      "landing_url": "https://acs.figshare.com/articles/dataset/Optimization_of_a_Hydrogen_Exchange-Mass_Spectrometry_Robotic_Liquid_Handler_Using_Tracers/25024495",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-25024495-optimization-of-a-hydrog-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-25024495-optimization-of-a-hydrog-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_25024495_optimization_of_a_hydrog.py",
+      "cleaned_rows": 88,
+      "raw_total_rows": 88,
+      "verified_sha256": "9d05e14cdbecb059a07f79b3ad989892d2e273ecae929242e564a373bb2379e5"
     }
   ],
   "snowballed_dois": [
@@ -1135,6 +1180,7 @@
     "10.1371/journal.pone.0210058",
     "10.18178/ijmerr.15.1.65-79",
     "10.2139/ssrn.7447982",
+    "10.3389/fbioe.2026.2011948",
     "10.3389/fpsyg.2021.716976",
     "10.3390/app16041783",
     "10.3390/biomimetics10100650",
@@ -1142,6 +1188,7 @@
     "10.3390/jfmk11040391",
     "10.3390/machines12090658",
     "10.3390/machines13080659",
+    "10.3390/mi17080934",
     "10.3390/polym18212627",
     "10.3390/s24165441",
     "10.3390/s25030664",
@@ -1450,9 +1497,18 @@
       "net_new_datasets": 28,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 34,
+      "completed_at": "2026-11-21T10:14:04Z",
+      "batch_label": "Broad Engineering R34: Mechanical_Physics_AI",
+      "net_new_literature": 108,
+      "net_new_datasets": 30,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T10:09:02Z",
+  "updated_at": "2026-11-21T10:14:04Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -1460,26 +1516,26 @@
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 387,
-    "Mechanical_Physics_AI": 970,
-    "Mechatronics_PHM_Control": 770,
-    "Robotics_Embodied": 1061,
+    "Mechanical_Physics_AI": 1074,
+    "Mechatronics_PHM_Control": 804,
+    "Robotics_Embodied": 1062,
     "R5_MultiRobot_Comm": 244,
     "R1_Force_Contact": 140,
-    "Smart_Manufacturing": 491,
+    "Smart_Manufacturing": 492,
     "Smart_Factory_DigitalTwin": 201
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 702,
-    "Mechatronics_PHM_Control": 516,
-    "Smart_Manufacturing": 307,
-    "Robotics_Embodied": 464,
+    "Mechanical_Physics_AI": 715,
+    "Mechatronics_PHM_Control": 518,
+    "Smart_Manufacturing": 309,
+    "Robotics_Embodied": 485,
     "R5_MultiRobot_Comm": 77,
     "Smart_Factory_DigitalTwin": 71,
     "R2_Aerial_Actuator": 83,
-    "R1_Force_Contact": 57
+    "R1_Force_Contact": 58
   },
   "probed_uncleanable_keys": [
     "dataverse:10.7910/dvn/1vt6fz",
@@ -1542,6 +1598,7 @@
     "dataverse:10.7910/dvn/yu0dps",
     "dataverse:10.7910/dvn/zfjcet",
     "figshare:11833950",
+    "figshare:11881506",
     "figshare:11920611",
     "figshare:1244582",
     "figshare:13684228",
@@ -1573,11 +1630,14 @@
     "figshare:29153054",
     "figshare:29206820",
     "figshare:29484611",
+    "figshare:29828711",
     "figshare:29973763",
     "figshare:30004816",
     "figshare:30004819",
+    "figshare:30046103",
     "figshare:30075854",
     "figshare:30114158",
+    "figshare:30196478",
     "figshare:30465092",
     "figshare:30730229",
     "figshare:30730391",
@@ -1667,6 +1727,7 @@
     "figshare:34743448",
     "figshare:34781844",
     "figshare:34781994",
+    "figshare:34787268",
     "figshare:34810693",
     "figshare:34812915",
     "figshare:34826340",
