@@ -1,0 +1,2122 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "cao-strawson",
+  "title": "Brushless motor and propeller tests on an RC Benchmark 1520 thrust test stand",
+  "creator": "PengCheng Cao and James Strawson",
+  "repository": "StrawsonDesign/motor_propeller_testing",
+  "commit": "7031418317178b832b0be474a997f6da18f83a40",
+  "rights": "Root MIT license covers software and associated documentation. A separate grant for measurements is not stated. Only original aggregates are distributed.",
+  "evidence": "File-level comparison of 208 raw sweeps and their 208 publisher-edited versions. The README states that rebound samples were overwritten. Each row reports a command in microseconds and force, current and voltage on the bench. No torque signal is present.",
+  "history_keys": [
+    "StrawsonDesign/motor_propeller_testing",
+    "7031418317178b832b0be474a997f6da18f83a40",
+    "PengCheng Cao and James Strawson"
+  ],
+  "files": [
+    {
+      "path": "Import_Plot_experiment.m",
+      "git_blob": "6307859632f62ac23c0cc914d95fa092183e6c92",
+      "bytes": 806
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "ab602974d200aa6849e6ad8220951ef9a78d9f08",
+      "bytes": 1057
+    },
+    {
+      "path": "README.md",
+      "git_blob": "aba8e421a99bf63d8ed96faa2824713015408d23",
+      "bytes": 813
+    },
+    {
+      "path": "Run_This.m",
+      "git_blob": "3f4787ca5878424ed69cc342700c051a0c6890f1",
+      "bytes": 7390
+    },
+    {
+      "path": "modifieddata/a1_11.csv",
+      "git_blob": "e3a676862d10d4ff7b69b157949d2500d5304a9a",
+      "bytes": 1175
+    },
+    {
+      "path": "modifieddata/a1_7.csv",
+      "git_blob": "03b6146bc40b18f642e67ed4b5728a714095939b",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/a2_11.csv",
+      "git_blob": "332233dfe53d306b69b8d7f9ac6aa81fe440989d",
+      "bytes": 1167
+    },
+    {
+      "path": "modifieddata/a2_7.csv",
+      "git_blob": "b054e9811bc12d3e577f898987028ce8d6d9a56c",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/a3_11.csv",
+      "git_blob": "058ce3de475bd42bd3dc32be82611f71b713daeb",
+      "bytes": 1174
+    },
+    {
+      "path": "modifieddata/a3_7.csv",
+      "git_blob": "003903210f3b582ebaaeace365fb7ade94b8f92b",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/a4_11.csv",
+      "git_blob": "20a58f9d3bbd4b7a33dcc73c403c55b6308c5f53",
+      "bytes": 1166
+    },
+    {
+      "path": "modifieddata/a4_7.csv",
+      "git_blob": "9f0492ef468e2f5479538497c558fbd955589079",
+      "bytes": 1574
+    },
+    {
+      "path": "modifieddata/a5_11.csv",
+      "git_blob": "3832d0f5f46b7dffdade085234f9a9326f5d1aca",
+      "bytes": 1182
+    },
+    {
+      "path": "modifieddata/a5_7.csv",
+      "git_blob": "4df6675e9a6950856c4d3a3ea76dfe65244bb6e7",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/a6_11.csv",
+      "git_blob": "27b131d2f195b43f2369f4add9850e6e007f5a99",
+      "bytes": 1187
+    },
+    {
+      "path": "modifieddata/a6_7.csv",
+      "git_blob": "9365a0f4d541d2f478f413f1d6f137b8c5706d91",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/a7_11.csv",
+      "git_blob": "d953ec52174034b2c89cf4a996006661d85fcdaf",
+      "bytes": 1177
+    },
+    {
+      "path": "modifieddata/a7_7.csv",
+      "git_blob": "da16c724b64d72013586b4a290a8c3c5c7246186",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/a8_11.csv",
+      "git_blob": "1cb4baaad0c8df8b45c465076495001dae76b535",
+      "bytes": 1183
+    },
+    {
+      "path": "modifieddata/a8_7.csv",
+      "git_blob": "7a36b2b5f42c42562f83857f00f2f40371b8825a",
+      "bytes": 1584
+    },
+    {
+      "path": "modifieddata/b1_11.csv",
+      "git_blob": "869bbf7c18c868b8107f305341f1821637921ace",
+      "bytes": 1183
+    },
+    {
+      "path": "modifieddata/b1_7.csv",
+      "git_blob": "3ad83b4028a1531cd6902cc8e93878b17e57ad64",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/b2_11.csv",
+      "git_blob": "f5003603d9f5b6603da85f79c4b0acf330e96c96",
+      "bytes": 1175
+    },
+    {
+      "path": "modifieddata/b2_7.csv",
+      "git_blob": "9899dd5ca31db5b73b05af259494a67cb785c8b9",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/b3_11.csv",
+      "git_blob": "692d92d3c6c195841a4186429bbd22279b1addb6",
+      "bytes": 1171
+    },
+    {
+      "path": "modifieddata/b3_7.csv",
+      "git_blob": "b98467675ece7ca1a31733a50d5f1c2ea300e16d",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/b4_11.csv",
+      "git_blob": "5680cef05ab18c29e831d67ec54e1dfb35a2dcde",
+      "bytes": 1174
+    },
+    {
+      "path": "modifieddata/b4_7.csv",
+      "git_blob": "5acb7ae1587605d4e40eca91afe59e294cb113d5",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/b5_11.csv",
+      "git_blob": "f17f7cdca26cba3c925c535217730a17e4672f68",
+      "bytes": 1175
+    },
+    {
+      "path": "modifieddata/b5_7.csv",
+      "git_blob": "8b3be0d2be9dfac9d967579ad1296a1b9803162d",
+      "bytes": 1570
+    },
+    {
+      "path": "modifieddata/b6_11.csv",
+      "git_blob": "eb4a286a8b11cc749d4f88b6b0e7d511b29b8af7",
+      "bytes": 1173
+    },
+    {
+      "path": "modifieddata/b6_7.csv",
+      "git_blob": "5271c5f72eec896d80179ddf406ec54d48ed20fe",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/b7_11.csv",
+      "git_blob": "f85050a59a58bdbf7281c7849d308908eb54f05f",
+      "bytes": 1615
+    },
+    {
+      "path": "modifieddata/b7_7.csv",
+      "git_blob": "7f44968d7bac56a8b0323feca0103363cce14f22",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/b8_11.csv",
+      "git_blob": "f01d87d321f58d7a6578801deac12acbc649842f",
+      "bytes": 1172
+    },
+    {
+      "path": "modifieddata/b8_7.csv",
+      "git_blob": "762f04d0daee07d19c0c01092f09d973e6e81b38",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/c1_11.csv",
+      "git_blob": "4404feff0baee9c484cd328dd416e638aa3f8f4e",
+      "bytes": 1186
+    },
+    {
+      "path": "modifieddata/c1_7.csv",
+      "git_blob": "c991ac0d2c1b20271d92956b809e348c55fd9587",
+      "bytes": 1591
+    },
+    {
+      "path": "modifieddata/c2_11.csv",
+      "git_blob": "8d80f2c64767ecaee2ae189df17d197a519d5273",
+      "bytes": 1184
+    },
+    {
+      "path": "modifieddata/c2_7.csv",
+      "git_blob": "50be0c8e543f0a04ae904b020372c6b07e45edb2",
+      "bytes": 1580
+    },
+    {
+      "path": "modifieddata/c3_11.csv",
+      "git_blob": "dad2c7244c669c5dde890cfb400f0d13c8a53d8b",
+      "bytes": 1187
+    },
+    {
+      "path": "modifieddata/c3_7.csv",
+      "git_blob": "3bf433c0ef0f460c6594abfd0106abe7052acae8",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/c4_11.csv",
+      "git_blob": "411c6e0912976230db9bc72a1e9dc75852c50550",
+      "bytes": 1178
+    },
+    {
+      "path": "modifieddata/c4_7.csv",
+      "git_blob": "3950ecb7e370d928b59612bd4881f2d63585b0ae",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/c5_11.csv",
+      "git_blob": "4aa870928f34c87d421afbe6cbbc46cc379229e4",
+      "bytes": 1177
+    },
+    {
+      "path": "modifieddata/c5_7.csv",
+      "git_blob": "9f24f1d85c93e84faf5f9441157a0b3871b9bb0c",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/c6_11.csv",
+      "git_blob": "df2f31f891641a383fba4f2836f3aa0ffd8d0858",
+      "bytes": 1182
+    },
+    {
+      "path": "modifieddata/c6_7.csv",
+      "git_blob": "72106e9ab60703442698ba1ff2e5f68df457f660",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/c7_11.csv",
+      "git_blob": "3410e8e0d0d9b1f7c2d9f52ee9922efdc2496aaf",
+      "bytes": 1187
+    },
+    {
+      "path": "modifieddata/c7_7.csv",
+      "git_blob": "f39770538e63d29d54d290d172da9f5fc144c8b5",
+      "bytes": 1578
+    },
+    {
+      "path": "modifieddata/c8_11.csv",
+      "git_blob": "86f0047f1d9fe36ff2eb26596b1263f89eb53be4",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/c8_7.csv",
+      "git_blob": "bcc9401d85685fc5c269565d079a43a86f54c586",
+      "bytes": 1582
+    },
+    {
+      "path": "modifieddata/d1_11.csv",
+      "git_blob": "97a63b3ad1981522cd1cb4c25795573868db3a4e",
+      "bytes": 1595
+    },
+    {
+      "path": "modifieddata/d1_7.csv",
+      "git_blob": "2cddffff4df2436bab98c80d1d2e8a6945968796",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/d2_11.csv",
+      "git_blob": "f70730d7851661c6272a33f40bd16e9d0f4e163b",
+      "bytes": 1598
+    },
+    {
+      "path": "modifieddata/d2_7.csv",
+      "git_blob": "e274067572cdf29a9705843fa18fcc2c41e71825",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/d3_11.csv",
+      "git_blob": "7dd252955cf341aa7eb53dd651c4f5a6c1746e19",
+      "bytes": 1614
+    },
+    {
+      "path": "modifieddata/d3_7.csv",
+      "git_blob": "a36df293fbb38c2913531834a01e314546b3ff72",
+      "bytes": 1580
+    },
+    {
+      "path": "modifieddata/d4_11.csv",
+      "git_blob": "f2bd62550aa9fb78e4c33be662c3a20f6d869105",
+      "bytes": 1596
+    },
+    {
+      "path": "modifieddata/d4_7.csv",
+      "git_blob": "8292fc8ad296131f3ba742715b1b38f3ba8752d7",
+      "bytes": 1593
+    },
+    {
+      "path": "modifieddata/d5_11.csv",
+      "git_blob": "2a10ca884b610afb59bad3e97eff6bf48d3c5ecb",
+      "bytes": 1602
+    },
+    {
+      "path": "modifieddata/d5_7.csv",
+      "git_blob": "ac913ee5ec6da429cbc9f1a91948503ce279a7aa",
+      "bytes": 1602
+    },
+    {
+      "path": "modifieddata/d6_11.csv",
+      "git_blob": "63dae363624dbabf44c90147c21f3b8354925714",
+      "bytes": 1614
+    },
+    {
+      "path": "modifieddata/d6_7.csv",
+      "git_blob": "9decd7c303a854993589cd81c2e8eb187e202a0e",
+      "bytes": 1584
+    },
+    {
+      "path": "modifieddata/d7_11.csv",
+      "git_blob": "4972c44f44bc384ed90f42b21554dd01480e3a15",
+      "bytes": 1608
+    },
+    {
+      "path": "modifieddata/d7_7.csv",
+      "git_blob": "b648d5ac6609bf36cc8748d89342d9e55371e59e",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/d8_11.csv",
+      "git_blob": "29ac3ab559b1d309e53b462a00c766430e7c8342",
+      "bytes": 1598
+    },
+    {
+      "path": "modifieddata/d8_7.csv",
+      "git_blob": "0be53ddce41f92da554c41bbf5a8532b0898f591",
+      "bytes": 1582
+    },
+    {
+      "path": "modifieddata/e1_11.csv",
+      "git_blob": "331b5973c11399031d82c7d077f6d774710dafd8",
+      "bytes": 1621
+    },
+    {
+      "path": "modifieddata/e1_7.csv",
+      "git_blob": "d6c5979e47fd67f86fbace9d95be132374bc61b9",
+      "bytes": 1593
+    },
+    {
+      "path": "modifieddata/e2_11.csv",
+      "git_blob": "bf09566104a823875ed5ed6827542c4f0298fe81",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/e2_7.csv",
+      "git_blob": "43ddc933504717166b050226596d4c7be22c7fe8",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/e3_11.csv",
+      "git_blob": "0b8aee027a0f890a023c694ac007e48eaed3913e",
+      "bytes": 1617
+    },
+    {
+      "path": "modifieddata/e3_7.csv",
+      "git_blob": "994bb1561414a5768a918d67df09752fef002add",
+      "bytes": 1589
+    },
+    {
+      "path": "modifieddata/e4_11.csv",
+      "git_blob": "dd20421ba708162ca52e3f419ec417871234a01e",
+      "bytes": 1594
+    },
+    {
+      "path": "modifieddata/e4_7.csv",
+      "git_blob": "5d16a78b0f857d9bc3e4bbc1bb7da1b228bcc1ed",
+      "bytes": 1582
+    },
+    {
+      "path": "modifieddata/e5_11.csv",
+      "git_blob": "93c9e6f2717af8684cd8cd33a2893d59db78974a",
+      "bytes": 1175
+    },
+    {
+      "path": "modifieddata/e5_7.csv",
+      "git_blob": "633dda52aa570cce00dcbd9f6fd2ab45cc135913",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/e6_11.csv",
+      "git_blob": "4a537572ec48fd8035b2c99a1d14ba41ff6210ff",
+      "bytes": 1619
+    },
+    {
+      "path": "modifieddata/e6_7.csv",
+      "git_blob": "78967675f893bcc4250ca2b04e5ecf8cefab4b45",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/e7_11.csv",
+      "git_blob": "51144aaf66e75340639a49f633c52cdb23d1f83d",
+      "bytes": 1180
+    },
+    {
+      "path": "modifieddata/e7_7.csv",
+      "git_blob": "b9bfc8eaa5d7313189c00c952893684920864de5",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/e8_11.csv",
+      "git_blob": "dc3ca75df5250da8b04acff35733367c3ca212b2",
+      "bytes": 1182
+    },
+    {
+      "path": "modifieddata/e8_7.csv",
+      "git_blob": "01204c258f0ce86b37041585f922c6226b0603c0",
+      "bytes": 1576
+    },
+    {
+      "path": "modifieddata/f1_11.csv",
+      "git_blob": "7ecec0fe0022c7b473f487f76a7dbb75a2c2f993",
+      "bytes": 1595
+    },
+    {
+      "path": "modifieddata/f1_7.csv",
+      "git_blob": "eac31ddb63fb57fbc3c6c52a29be2b172f742d7b",
+      "bytes": 1610
+    },
+    {
+      "path": "modifieddata/f2_11.csv",
+      "git_blob": "debc9c227b7bdbac4ba015a0cd036b3bfe92cf61",
+      "bytes": 1622
+    },
+    {
+      "path": "modifieddata/f2_7.csv",
+      "git_blob": "be2b8fe4a584e897580e05715de5fcb0cb9fde28",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/f3_11.csv",
+      "git_blob": "2b8eda0869789e4cdb22335bb22107b3b19c1d3d",
+      "bytes": 1615
+    },
+    {
+      "path": "modifieddata/f3_7.csv",
+      "git_blob": "303b309063c12862f3a10a26c6cd1fd9bd37d5ca",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/f4_11.csv",
+      "git_blob": "162b1f19367893d6ff57ef3d2d0d7ee63c9cc40a",
+      "bytes": 1613
+    },
+    {
+      "path": "modifieddata/f4_7.csv",
+      "git_blob": "9b7490d1b083a4030777cf01bd99eebacbd3e2b5",
+      "bytes": 1613
+    },
+    {
+      "path": "modifieddata/f5_11.csv",
+      "git_blob": "18f2766d4f38563489fa978e9d5263656d3d8012",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/f5_7.csv",
+      "git_blob": "6e320d1e99e80782f7dcd4abfb46590913d63de2",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/f6_11.csv",
+      "git_blob": "d5acf73d9387bd8e68eff71a439f847a096a263f",
+      "bytes": 1611
+    },
+    {
+      "path": "modifieddata/f6_7.csv",
+      "git_blob": "17f627eccb16ff89829fdc898d626c12bf9a7810",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/f7_11.csv",
+      "git_blob": "49ce9e2512142072d96256f9015e63d73e972891",
+      "bytes": 1618
+    },
+    {
+      "path": "modifieddata/f7_7.csv",
+      "git_blob": "3a984b95404fb626bce1d5cac2d7682f692b7717",
+      "bytes": 1580
+    },
+    {
+      "path": "modifieddata/f8_11.csv",
+      "git_blob": "b0383c3dbe4d81b5b1dbfdc964528e797a2b33b9",
+      "bytes": 1593
+    },
+    {
+      "path": "modifieddata/f8_7.csv",
+      "git_blob": "132c576dfa57448211e4b4cf482b9b1ef14fa8ce",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/g1_11.csv",
+      "git_blob": "e20dba2bbdbce2bfffbf149cb8fd0f93c640eac4",
+      "bytes": 1612
+    },
+    {
+      "path": "modifieddata/g1_7.csv",
+      "git_blob": "8c4986cdf654efe5687a925c4c2a2011feb708d0",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/g2_11.csv",
+      "git_blob": "214cfded29a49fbc7e07ba47a8e47df36eaf006a",
+      "bytes": 1617
+    },
+    {
+      "path": "modifieddata/g2_7.csv",
+      "git_blob": "d6620a4097be5bca2941a23591207d3315de7791",
+      "bytes": 1591
+    },
+    {
+      "path": "modifieddata/g3_11.csv",
+      "git_blob": "674e8e3db3f9599e53e3ef360f24cdb084f7c3f1",
+      "bytes": 1621
+    },
+    {
+      "path": "modifieddata/g3_7.csv",
+      "git_blob": "0193388e4dee7e130dab1ebcbe9d67a1f46f5e35",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/g4_11.csv",
+      "git_blob": "67f6859feba0b4d2aa1e2663caa7e455420b0f8d",
+      "bytes": 1621
+    },
+    {
+      "path": "modifieddata/g4_7.csv",
+      "git_blob": "0b91b1ee44cebbeb6856ccfe5422248a28a5d2df",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/g5_11.csv",
+      "git_blob": "d14f8d2c8c0b9163a481cf86614e15a5bc6419b1",
+      "bytes": 1613
+    },
+    {
+      "path": "modifieddata/g5_7.csv",
+      "git_blob": "ce0c35eb877e7e1c2105080673e189c5ce2796a8",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/g6_11.csv",
+      "git_blob": "3f529713ee5dad0565d74c33b48432c8a29d6764",
+      "bytes": 1611
+    },
+    {
+      "path": "modifieddata/g6_7.csv",
+      "git_blob": "1fa7b81a6532ff81ef9f9bfc61265f314861fcfd",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/g7_11.csv",
+      "git_blob": "e80699cb9f38b640c8eb3132e0de5b30ecb0d762",
+      "bytes": 1610
+    },
+    {
+      "path": "modifieddata/g7_7.csv",
+      "git_blob": "ef9b27b2036b9189b0c0f50678db2fce48dcfaf1",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/g8_11.csv",
+      "git_blob": "8a0853a6efa5c6b8599ee5521486375d9d4c7d7f",
+      "bytes": 1614
+    },
+    {
+      "path": "modifieddata/g8_7.csv",
+      "git_blob": "31c356a8a8e2df6c4010ed172f187651cf453738",
+      "bytes": 1584
+    },
+    {
+      "path": "modifieddata/h1_11.csv",
+      "git_blob": "11ae7dc36c0a173378bdf543a6e6f3e55504e562",
+      "bytes": 1620
+    },
+    {
+      "path": "modifieddata/h1_7.csv",
+      "git_blob": "c83175c50c54280f0e2379ff4698d7ce544da684",
+      "bytes": 1570
+    },
+    {
+      "path": "modifieddata/h2_11.csv",
+      "git_blob": "b72108fa26bd2ec21b3109537fc2e7ee82614486",
+      "bytes": 1600
+    },
+    {
+      "path": "modifieddata/h2_7.csv",
+      "git_blob": "a771a7e9135a3ff03306fb1fb686924bf2294643",
+      "bytes": 1574
+    },
+    {
+      "path": "modifieddata/h3_11.csv",
+      "git_blob": "6d86fe534e4d5e58751e2a9e006de3e7c94e68e6",
+      "bytes": 1611
+    },
+    {
+      "path": "modifieddata/h3_7.csv",
+      "git_blob": "6f3e3b89d0e4aa58bf24d754b7c4b0d516379e81",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/h4_11.csv",
+      "git_blob": "72866ae8cd2845af1a547d537f596ddba0edc5d4",
+      "bytes": 1606
+    },
+    {
+      "path": "modifieddata/h4_7.csv",
+      "git_blob": "14540cac22f37412d46f3eab7e0423c63edb67aa",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/h5_11.csv",
+      "git_blob": "5c95919c9ebae6047c79e818dad650de89db902d",
+      "bytes": 1620
+    },
+    {
+      "path": "modifieddata/h5_7.csv",
+      "git_blob": "97102333796019693e3f6c4850d14821c089301e",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/h6_11.csv",
+      "git_blob": "7bb6307ac320ccff8b79f3d02e20743261743ee4",
+      "bytes": 1614
+    },
+    {
+      "path": "modifieddata/h6_7.csv",
+      "git_blob": "6024fa444e3f341407bb57ce14969b7a60246cb8",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/h7_11.csv",
+      "git_blob": "a85b18988be1912dc991228af3f6815a14f9ae16",
+      "bytes": 1598
+    },
+    {
+      "path": "modifieddata/h7_7.csv",
+      "git_blob": "b4579c46b92d07184ba7c867b40a392d428cfe27",
+      "bytes": 1564
+    },
+    {
+      "path": "modifieddata/h8_11.csv",
+      "git_blob": "f9c50dd00b937b24dfee0ad75131f6abf3d9779d",
+      "bytes": 1606
+    },
+    {
+      "path": "modifieddata/h8_7.csv",
+      "git_blob": "7c886bc7d044c557c706256c358ca924a05203e4",
+      "bytes": 1572
+    },
+    {
+      "path": "modifieddata/i1_11.csv",
+      "git_blob": "d346b9a147ed75d0af83a42061b5b446a5e199bb",
+      "bytes": 1599
+    },
+    {
+      "path": "modifieddata/i1_7.csv",
+      "git_blob": "35aa4d46bb501ad40456ce9a325025eac25821fb",
+      "bytes": 1591
+    },
+    {
+      "path": "modifieddata/i2_11.csv",
+      "git_blob": "cfbdcace42e4557699e4a0860f074eedd4c11e3e",
+      "bytes": 1603
+    },
+    {
+      "path": "modifieddata/i2_7.csv",
+      "git_blob": "a781f9236bd1f4bb16191e3e68c8d344a598cb16",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/i3_11.csv",
+      "git_blob": "c440ba8dfab7ccc11a445541c5ffd85bafbe549e",
+      "bytes": 1600
+    },
+    {
+      "path": "modifieddata/i3_7.csv",
+      "git_blob": "68666282e0cc565acf40b03619173443e87089d3",
+      "bytes": 1584
+    },
+    {
+      "path": "modifieddata/i4_11.csv",
+      "git_blob": "2bc4765f06cd5f7c70e1c543348c0a9b1d695759",
+      "bytes": 1596
+    },
+    {
+      "path": "modifieddata/i4_7.csv",
+      "git_blob": "e8ba63fd362c5d48b0435b7cc2adb89c24ec1973",
+      "bytes": 1589
+    },
+    {
+      "path": "modifieddata/i5_11.csv",
+      "git_blob": "7152b1ca2852ec7f77cd63c8f6916a34dcddc92d",
+      "bytes": 1171
+    },
+    {
+      "path": "modifieddata/i5_7.csv",
+      "git_blob": "c192d0d805a6ad16d9ee384ec6719a8830fb666b",
+      "bytes": 1573
+    },
+    {
+      "path": "modifieddata/i6_11.csv",
+      "git_blob": "8368b004a2b0c7ec18eecdfe6f586cb1ca408a6b",
+      "bytes": 1599
+    },
+    {
+      "path": "modifieddata/i6_7.csv",
+      "git_blob": "9d6f842bc10234822f4753bfbbba6af607b80ccb",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/i7_11.csv",
+      "git_blob": "7c28519fc68c41fba35ce798a227bbe6d1bad512",
+      "bytes": 1600
+    },
+    {
+      "path": "modifieddata/i7_7.csv",
+      "git_blob": "dea374793e41a0859c4dab34e7271e43d804d2e4",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/i8_11.csv",
+      "git_blob": "f9147769c0af76f256ff28d4b9e3c49fd949c183",
+      "bytes": 1614
+    },
+    {
+      "path": "modifieddata/i8_7.csv",
+      "git_blob": "92dc00d2db60f91c2216b0f5f963ec32b25a2068",
+      "bytes": 1576
+    },
+    {
+      "path": "modifieddata/j1_11.csv",
+      "git_blob": "0238b62907b8aa4c0971cd26f7cc66b5ab230b6c",
+      "bytes": 1186
+    },
+    {
+      "path": "modifieddata/j1_7.csv",
+      "git_blob": "a8e2d107a35e0830e8d2582e1d3e8494c44257cc",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/j2_11.csv",
+      "git_blob": "e043cefefe5c91b94654e83c23c88acffd6056a7",
+      "bytes": 1181
+    },
+    {
+      "path": "modifieddata/j2_7.csv",
+      "git_blob": "4822f372305b05b2e9e464839a222ec36eb8e903",
+      "bytes": 1580
+    },
+    {
+      "path": "modifieddata/j3_11.csv",
+      "git_blob": "6937b52122b6f96b68968f56b88828e78cf13fa5",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/j3_7.csv",
+      "git_blob": "8e2daff033f9abc263cf17d2d09bc1e7bd878114",
+      "bytes": 1592
+    },
+    {
+      "path": "modifieddata/j4_11.csv",
+      "git_blob": "f107e2d140803a5d9d089a890b2f9d4326c200a7",
+      "bytes": 1625
+    },
+    {
+      "path": "modifieddata/j4_7.csv",
+      "git_blob": "ec050a86fe73410b85e62ad00a0ef0ff27d5a70b",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/j5_11.csv",
+      "git_blob": "6e23dd6a8f11da9f6a903fef96bf90afa29119b4",
+      "bytes": 1180
+    },
+    {
+      "path": "modifieddata/j5_7.csv",
+      "git_blob": "8d35179e53ae224e7393427f6981f06f187e2046",
+      "bytes": 1578
+    },
+    {
+      "path": "modifieddata/j6_11.csv",
+      "git_blob": "850320c39e936f19b15d50a39c4465b426a7c6ac",
+      "bytes": 1183
+    },
+    {
+      "path": "modifieddata/j6_7.csv",
+      "git_blob": "607c9c31e06c8947ecbac8b50b9c493c744005bd",
+      "bytes": 1586
+    },
+    {
+      "path": "modifieddata/j7_11.csv",
+      "git_blob": "bb416074fad5d0588fa5272c81b6464624be4305",
+      "bytes": 1189
+    },
+    {
+      "path": "modifieddata/j7_7.csv",
+      "git_blob": "7a1c497fdb578bf69fade76092d8d284a748ee52",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/j8_11.csv",
+      "git_blob": "7c9d08bb4e20a9a775db0447bda2adc7da89bbf8",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/j8_7.csv",
+      "git_blob": "5854833b3593bc9d267f887bceec8fefcb3f4b81",
+      "bytes": 1585
+    },
+    {
+      "path": "modifieddata/k1_11.csv",
+      "git_blob": "89c1804eae97060c036d6c00cdaa05050cc2ac9e",
+      "bytes": 1177
+    },
+    {
+      "path": "modifieddata/k1_7.csv",
+      "git_blob": "e0d0fa1dfd13d34901ad168ebc6cb8432f54c99d",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/k2_11.csv",
+      "git_blob": "9b8704fc99581ea822fb46570644282c5353fc0e",
+      "bytes": 1180
+    },
+    {
+      "path": "modifieddata/k2_7.csv",
+      "git_blob": "ff2cda701ca942379cfb9df50f488192a07c9ab3",
+      "bytes": 1589
+    },
+    {
+      "path": "modifieddata/k3_11.csv",
+      "git_blob": "35478586761d074f6fa387e15960085cadd4b22b",
+      "bytes": 1180
+    },
+    {
+      "path": "modifieddata/k3_7.csv",
+      "git_blob": "65155bc0a3a7612aeae5ad09c7a71e0b3180bf05",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/k4_11.csv",
+      "git_blob": "200a51431459955defdc03c3407d2f02aa9750b6",
+      "bytes": 1190
+    },
+    {
+      "path": "modifieddata/k4_7.csv",
+      "git_blob": "44d8ffb6f9cec7eb060d207aca1ef4caaf447f3b",
+      "bytes": 1584
+    },
+    {
+      "path": "modifieddata/k5_11.csv",
+      "git_blob": "0ee7b18f96a4eda8e0d4489ff7e9dcfebe4c4b9d",
+      "bytes": 1184
+    },
+    {
+      "path": "modifieddata/k5_7.csv",
+      "git_blob": "7c232206e26d7e5de6df5bbd34906f904ee85ebc",
+      "bytes": 1582
+    },
+    {
+      "path": "modifieddata/k6_11.csv",
+      "git_blob": "89918baaa43fa66a707542d4e7e11e8130af8b64",
+      "bytes": 1190
+    },
+    {
+      "path": "modifieddata/k6_7.csv",
+      "git_blob": "e8e80f72401309a48985aee66347c5f507ba370d",
+      "bytes": 1589
+    },
+    {
+      "path": "modifieddata/k7_11.csv",
+      "git_blob": "cb93d9e7af6607a2c96e0739cff762d8ab45ca2a",
+      "bytes": 1181
+    },
+    {
+      "path": "modifieddata/k7_7.csv",
+      "git_blob": "50ad94ae9bd7a670fa9adf815812bdda0815948d",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/k8_11.csv",
+      "git_blob": "0faa55b4958f22e1ea0ce1de475824d1ec625d01",
+      "bytes": 1174
+    },
+    {
+      "path": "modifieddata/k8_7.csv",
+      "git_blob": "960f4cd6977dc5c8b525248d0a1e85d740a89e5a",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/l1_11.csv",
+      "git_blob": "6dac67580f2d4a6aff669cf44819123095055e35",
+      "bytes": 1175
+    },
+    {
+      "path": "modifieddata/l1_7.csv",
+      "git_blob": "e12487aea0c65a81444e950f18e2b899dde9268a",
+      "bytes": 1567
+    },
+    {
+      "path": "modifieddata/l2_11.csv",
+      "git_blob": "b623e39ad69e5e09eec41b58b265765c2d0d614a",
+      "bytes": 1169
+    },
+    {
+      "path": "modifieddata/l2_7.csv",
+      "git_blob": "305205e8deaa65256fa7f36ff04de309a3102d71",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/l3_11.csv",
+      "git_blob": "7b5f4d599e9a6067ce43c7b5cc0f62ce1d65866d",
+      "bytes": 1579
+    },
+    {
+      "path": "modifieddata/l3_7.csv",
+      "git_blob": "8eb3105b99016f1f133ee619f8f22596490fda27",
+      "bytes": 1595
+    },
+    {
+      "path": "modifieddata/l4_11.csv",
+      "git_blob": "e66e6549a4c18db21cc03ec2fa0725ba927e856b",
+      "bytes": 1596
+    },
+    {
+      "path": "modifieddata/l4_7.csv",
+      "git_blob": "ce358b874c445d0ebd7fa7cbf6332d3db55626f2",
+      "bytes": 1566
+    },
+    {
+      "path": "modifieddata/l5_11.csv",
+      "git_blob": "d585559bd786671a16fc73179cdabc0a1588154b",
+      "bytes": 1186
+    },
+    {
+      "path": "modifieddata/l5_7.csv",
+      "git_blob": "ea4ee631fc6ecc8f2093415106220a69b2156dba",
+      "bytes": 1587
+    },
+    {
+      "path": "modifieddata/l6_11.csv",
+      "git_blob": "a569c91d59928ad807737f99aa746f262310ec34",
+      "bytes": 1173
+    },
+    {
+      "path": "modifieddata/l6_7.csv",
+      "git_blob": "4ccb08515da7eb703bea46535057762499e8113a",
+      "bytes": 1583
+    },
+    {
+      "path": "modifieddata/l7_11.csv",
+      "git_blob": "cb6063169246a498ca808082f728214566253bf6",
+      "bytes": 1185
+    },
+    {
+      "path": "modifieddata/l7_7.csv",
+      "git_blob": "659b435b888b176afab09da9f757550401fa194e",
+      "bytes": 1570
+    },
+    {
+      "path": "modifieddata/l8_11.csv",
+      "git_blob": "c1363e83af4116b451c77ae449d8f8677c6d4ea9",
+      "bytes": 1173
+    },
+    {
+      "path": "modifieddata/l8_7.csv",
+      "git_blob": "83a190e997e1729f2413820bb131d4afc5617779",
+      "bytes": 1568
+    },
+    {
+      "path": "modifieddata/m1_11.csv",
+      "git_blob": "b4edc939eee7f4782370eef7c5b54edf5feb8f0b",
+      "bytes": 1599
+    },
+    {
+      "path": "modifieddata/m1_7.csv",
+      "git_blob": "c4865d1ce090d8dacc8a37dcbdb0dbe065423192",
+      "bytes": 1590
+    },
+    {
+      "path": "modifieddata/m2_11.csv",
+      "git_blob": "a338a5be4757b0222928e56b47975f090142ca6f",
+      "bytes": 1606
+    },
+    {
+      "path": "modifieddata/m2_7.csv",
+      "git_blob": "f0312332b3818df05d9523d4f6bef13141ef9fd0",
+      "bytes": 1591
+    },
+    {
+      "path": "modifieddata/m3_11.csv",
+      "git_blob": "bd2813007d5b43fd96087baa7b91a4e96b83c8b1",
+      "bytes": 1610
+    },
+    {
+      "path": "modifieddata/m3_7.csv",
+      "git_blob": "06c6d4bc2b6d2244d530d89099b174b302a927e3",
+      "bytes": 1588
+    },
+    {
+      "path": "modifieddata/m4_11.csv",
+      "git_blob": "b4e479473af761a51c15661f4ef6b0c2c28037f3",
+      "bytes": 1606
+    },
+    {
+      "path": "modifieddata/m4_7.csv",
+      "git_blob": "207a3c220b6a612052d3efef0455dcae6519432e",
+      "bytes": 1595
+    },
+    {
+      "path": "modifieddata/m5_11.csv",
+      "git_blob": "acefb22ee354fe555b58eaaa18c46c97cf6fc4ae",
+      "bytes": 1620
+    },
+    {
+      "path": "modifieddata/m5_7.csv",
+      "git_blob": "851404e443d19e223aff1558efcdda297bd884f7",
+      "bytes": 1597
+    },
+    {
+      "path": "modifieddata/m6_11.csv",
+      "git_blob": "0e9e8e8a8c52ce01fe01e1cb1f746520dc62df8e",
+      "bytes": 1602
+    },
+    {
+      "path": "modifieddata/m6_7.csv",
+      "git_blob": "22ed1cb6db62bbb88144f0033a2c321edeb99f26",
+      "bytes": 1605
+    },
+    {
+      "path": "modifieddata/m7_11.csv",
+      "git_blob": "f5fab5c6b36e5630f4f4f5a4892b5046f627e16c",
+      "bytes": 1612
+    },
+    {
+      "path": "modifieddata/m7_7.csv",
+      "git_blob": "80e5cb9a4c30751e1d8d7c1407e9900a428f9b28",
+      "bytes": 1598
+    },
+    {
+      "path": "modifieddata/m8_11.csv",
+      "git_blob": "5c687aab24b92e4cb2d3ac61a96153729c84154a",
+      "bytes": 1620
+    },
+    {
+      "path": "modifieddata/m8_7.csv",
+      "git_blob": "32bac89969033ddc24be52b8a011a86587b0fdd7",
+      "bytes": 1596
+    },
+    {
+      "path": "rawdata/a1_11.csv",
+      "git_blob": "0ddeef502c588402ad3aa01af93189b45d67d6a7",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/a1_7.csv",
+      "git_blob": "03b6146bc40b18f642e67ed4b5728a714095939b",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/a2_11.csv",
+      "git_blob": "737c97cdb15276829d059fd3f9359258132d03e0",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/a2_7.csv",
+      "git_blob": "b054e9811bc12d3e577f898987028ce8d6d9a56c",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/a3_11.csv",
+      "git_blob": "73789980e87a66f028132bf87f92f900cb4f0771",
+      "bytes": 1618
+    },
+    {
+      "path": "rawdata/a3_7.csv",
+      "git_blob": "003903210f3b582ebaaeace365fb7ade94b8f92b",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/a4_11.csv",
+      "git_blob": "94a9bb8aa98172c5a8b80ad022a102b9e965499a",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/a4_7.csv",
+      "git_blob": "9f0492ef468e2f5479538497c558fbd955589079",
+      "bytes": 1574
+    },
+    {
+      "path": "rawdata/a5_11.csv",
+      "git_blob": "56f2c43e492e93d60e2850d9bb6cc1a9634cb0d8",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/a5_7.csv",
+      "git_blob": "4df6675e9a6950856c4d3a3ea76dfe65244bb6e7",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/a6_11.csv",
+      "git_blob": "59b16a1332ad42dd0dbc2efe6d65ee8543827f13",
+      "bytes": 1623
+    },
+    {
+      "path": "rawdata/a6_7.csv",
+      "git_blob": "9365a0f4d541d2f478f413f1d6f137b8c5706d91",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/a7_11.csv",
+      "git_blob": "5c274b87e418beab73fbd20aaa9789eef2095972",
+      "bytes": 1623
+    },
+    {
+      "path": "rawdata/a7_7.csv",
+      "git_blob": "da16c724b64d72013586b4a290a8c3c5c7246186",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/a8_11.csv",
+      "git_blob": "8fb53d694c8ffafd9f99eb32d5e44572c22fa97f",
+      "bytes": 1615
+    },
+    {
+      "path": "rawdata/a8_7.csv",
+      "git_blob": "7a36b2b5f42c42562f83857f00f2f40371b8825a",
+      "bytes": 1584
+    },
+    {
+      "path": "rawdata/b1_11.csv",
+      "git_blob": "52214011c667ecd12d685be893846344fd737284",
+      "bytes": 1616
+    },
+    {
+      "path": "rawdata/b1_7.csv",
+      "git_blob": "3ad83b4028a1531cd6902cc8e93878b17e57ad64",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/b2_11.csv",
+      "git_blob": "f03f1badb6848c4835b72dc032eadcb2f9d92e06",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/b2_7.csv",
+      "git_blob": "9899dd5ca31db5b73b05af259494a67cb785c8b9",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/b3_11.csv",
+      "git_blob": "6fea1a83cc8ca409f1f0d7720da733d98ea25bb7",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/b3_7.csv",
+      "git_blob": "b98467675ece7ca1a31733a50d5f1c2ea300e16d",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/b4_11.csv",
+      "git_blob": "dd38384ec2dbfa7e1ca1b847c96e83444289de78",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/b4_7.csv",
+      "git_blob": "5acb7ae1587605d4e40eca91afe59e294cb113d5",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/b5_11.csv",
+      "git_blob": "31f17b84db63ea58fdfc74660d20710f857b1e16",
+      "bytes": 1594
+    },
+    {
+      "path": "rawdata/b5_7.csv",
+      "git_blob": "8b3be0d2be9dfac9d967579ad1296a1b9803162d",
+      "bytes": 1570
+    },
+    {
+      "path": "rawdata/b6_11.csv",
+      "git_blob": "e4de9139556417a1d5f2b0ece01fca34f2b33e0f",
+      "bytes": 1600
+    },
+    {
+      "path": "rawdata/b6_7.csv",
+      "git_blob": "5271c5f72eec896d80179ddf406ec54d48ed20fe",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/b7_11.csv",
+      "git_blob": "f85050a59a58bdbf7281c7849d308908eb54f05f",
+      "bytes": 1615
+    },
+    {
+      "path": "rawdata/b7_7.csv",
+      "git_blob": "7f44968d7bac56a8b0323feca0103363cce14f22",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/b8_11.csv",
+      "git_blob": "10416981aebd1c917d6c3d79ca8a8b92142f0c56",
+      "bytes": 1596
+    },
+    {
+      "path": "rawdata/b8_7.csv",
+      "git_blob": "762f04d0daee07d19c0c01092f09d973e6e81b38",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/c1_11.csv",
+      "git_blob": "c939af757de701921e94b296b2521b6bcdf9aee6",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/c1_7.csv",
+      "git_blob": "c991ac0d2c1b20271d92956b809e348c55fd9587",
+      "bytes": 1591
+    },
+    {
+      "path": "rawdata/c2_11.csv",
+      "git_blob": "36439a3b964571337fe3d09b6feba1e01d3767b7",
+      "bytes": 1603
+    },
+    {
+      "path": "rawdata/c2_7.csv",
+      "git_blob": "50be0c8e543f0a04ae904b020372c6b07e45edb2",
+      "bytes": 1580
+    },
+    {
+      "path": "rawdata/c3_11.csv",
+      "git_blob": "5599f517ff0030c8c79a00f27113a5c6790d9442",
+      "bytes": 1616
+    },
+    {
+      "path": "rawdata/c3_7.csv",
+      "git_blob": "3bf433c0ef0f460c6594abfd0106abe7052acae8",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/c4_11.csv",
+      "git_blob": "b28632ee00aec50359e9513655bf86041aa63da2",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/c4_7.csv",
+      "git_blob": "3950ecb7e370d928b59612bd4881f2d63585b0ae",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/c5_11.csv",
+      "git_blob": "40fb6bc53594c367c44fc4995b88c51ccf2ba985",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/c5_7.csv",
+      "git_blob": "9f24f1d85c93e84faf5f9441157a0b3871b9bb0c",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/c6_11.csv",
+      "git_blob": "a457b1ef356ae0d1959c36a7b6f04a6c8cf3650e",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/c6_7.csv",
+      "git_blob": "72106e9ab60703442698ba1ff2e5f68df457f660",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/c7_11.csv",
+      "git_blob": "647f92ec2bfdc366bb098f379e3136d0092f84a5",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/c7_7.csv",
+      "git_blob": "f39770538e63d29d54d290d172da9f5fc144c8b5",
+      "bytes": 1578
+    },
+    {
+      "path": "rawdata/c8_11.csv",
+      "git_blob": "905db6af0d17be192839f0757bcb7c1c3e5bca41",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/c8_7.csv",
+      "git_blob": "bcc9401d85685fc5c269565d079a43a86f54c586",
+      "bytes": 1582
+    },
+    {
+      "path": "rawdata/d1_11.csv",
+      "git_blob": "97a63b3ad1981522cd1cb4c25795573868db3a4e",
+      "bytes": 1595
+    },
+    {
+      "path": "rawdata/d1_7.csv",
+      "git_blob": "2cddffff4df2436bab98c80d1d2e8a6945968796",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/d2_11.csv",
+      "git_blob": "f70730d7851661c6272a33f40bd16e9d0f4e163b",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/d2_7.csv",
+      "git_blob": "e274067572cdf29a9705843fa18fcc2c41e71825",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/d3_11.csv",
+      "git_blob": "7dd252955cf341aa7eb53dd651c4f5a6c1746e19",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/d3_7.csv",
+      "git_blob": "a36df293fbb38c2913531834a01e314546b3ff72",
+      "bytes": 1580
+    },
+    {
+      "path": "rawdata/d4_11.csv",
+      "git_blob": "f2bd62550aa9fb78e4c33be662c3a20f6d869105",
+      "bytes": 1596
+    },
+    {
+      "path": "rawdata/d4_7.csv",
+      "git_blob": "8292fc8ad296131f3ba742715b1b38f3ba8752d7",
+      "bytes": 1593
+    },
+    {
+      "path": "rawdata/d5_11.csv",
+      "git_blob": "2a10ca884b610afb59bad3e97eff6bf48d3c5ecb",
+      "bytes": 1602
+    },
+    {
+      "path": "rawdata/d5_7.csv",
+      "git_blob": "ac913ee5ec6da429cbc9f1a91948503ce279a7aa",
+      "bytes": 1602
+    },
+    {
+      "path": "rawdata/d6_11.csv",
+      "git_blob": "63dae363624dbabf44c90147c21f3b8354925714",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/d6_7.csv",
+      "git_blob": "9decd7c303a854993589cd81c2e8eb187e202a0e",
+      "bytes": 1584
+    },
+    {
+      "path": "rawdata/d7_11.csv",
+      "git_blob": "4972c44f44bc384ed90f42b21554dd01480e3a15",
+      "bytes": 1608
+    },
+    {
+      "path": "rawdata/d7_7.csv",
+      "git_blob": "b648d5ac6609bf36cc8748d89342d9e55371e59e",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/d8_11.csv",
+      "git_blob": "29ac3ab559b1d309e53b462a00c766430e7c8342",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/d8_7.csv",
+      "git_blob": "0be53ddce41f92da554c41bbf5a8532b0898f591",
+      "bytes": 1582
+    },
+    {
+      "path": "rawdata/e1_11.csv",
+      "git_blob": "331b5973c11399031d82c7d077f6d774710dafd8",
+      "bytes": 1621
+    },
+    {
+      "path": "rawdata/e1_7.csv",
+      "git_blob": "d6c5979e47fd67f86fbace9d95be132374bc61b9",
+      "bytes": 1593
+    },
+    {
+      "path": "rawdata/e2_11.csv",
+      "git_blob": "9739eb0df6a1a6556e4bb91963ce403aa04206ac",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/e2_7.csv",
+      "git_blob": "43ddc933504717166b050226596d4c7be22c7fe8",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/e3_11.csv",
+      "git_blob": "0b8aee027a0f890a023c694ac007e48eaed3913e",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/e3_7.csv",
+      "git_blob": "994bb1561414a5768a918d67df09752fef002add",
+      "bytes": 1589
+    },
+    {
+      "path": "rawdata/e4_11.csv",
+      "git_blob": "dd20421ba708162ca52e3f419ec417871234a01e",
+      "bytes": 1594
+    },
+    {
+      "path": "rawdata/e4_7.csv",
+      "git_blob": "5d16a78b0f857d9bc3e4bbc1bb7da1b228bcc1ed",
+      "bytes": 1582
+    },
+    {
+      "path": "rawdata/e5_11.csv",
+      "git_blob": "790c16439336df3a3dd79a033f78e1595d87e22a",
+      "bytes": 1599
+    },
+    {
+      "path": "rawdata/e5_7.csv",
+      "git_blob": "633dda52aa570cce00dcbd9f6fd2ab45cc135913",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/e6_11.csv",
+      "git_blob": "4a537572ec48fd8035b2c99a1d14ba41ff6210ff",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/e6_7.csv",
+      "git_blob": "78967675f893bcc4250ca2b04e5ecf8cefab4b45",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/e7_11.csv",
+      "git_blob": "70c2557c135230daa559a8eb4c49c3bc05cb6177",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/e7_7.csv",
+      "git_blob": "b9bfc8eaa5d7313189c00c952893684920864de5",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/e8_11.csv",
+      "git_blob": "94a746c4976f5b0e7bb6f156b335e1b7160d1106",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/e8_7.csv",
+      "git_blob": "01204c258f0ce86b37041585f922c6226b0603c0",
+      "bytes": 1576
+    },
+    {
+      "path": "rawdata/f1_11.csv",
+      "git_blob": "7ecec0fe0022c7b473f487f76a7dbb75a2c2f993",
+      "bytes": 1595
+    },
+    {
+      "path": "rawdata/f1_7.csv",
+      "git_blob": "eac31ddb63fb57fbc3c6c52a29be2b172f742d7b",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/f2_11.csv",
+      "git_blob": "debc9c227b7bdbac4ba015a0cd036b3bfe92cf61",
+      "bytes": 1622
+    },
+    {
+      "path": "rawdata/f2_7.csv",
+      "git_blob": "be2b8fe4a584e897580e05715de5fcb0cb9fde28",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/f3_11.csv",
+      "git_blob": "2b8eda0869789e4cdb22335bb22107b3b19c1d3d",
+      "bytes": 1615
+    },
+    {
+      "path": "rawdata/f3_7.csv",
+      "git_blob": "303b309063c12862f3a10a26c6cd1fd9bd37d5ca",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/f4_11.csv",
+      "git_blob": "162b1f19367893d6ff57ef3d2d0d7ee63c9cc40a",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/f4_7.csv",
+      "git_blob": "9b7490d1b083a4030777cf01bd99eebacbd3e2b5",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/f5_11.csv",
+      "git_blob": "3037a4fec3b799b1edf3fa4bb7810bec796acd49",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/f5_7.csv",
+      "git_blob": "6e320d1e99e80782f7dcd4abfb46590913d63de2",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/f6_11.csv",
+      "git_blob": "d5acf73d9387bd8e68eff71a439f847a096a263f",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/f6_7.csv",
+      "git_blob": "17f627eccb16ff89829fdc898d626c12bf9a7810",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/f7_11.csv",
+      "git_blob": "49ce9e2512142072d96256f9015e63d73e972891",
+      "bytes": 1618
+    },
+    {
+      "path": "rawdata/f7_7.csv",
+      "git_blob": "3a984b95404fb626bce1d5cac2d7682f692b7717",
+      "bytes": 1580
+    },
+    {
+      "path": "rawdata/f8_11.csv",
+      "git_blob": "b0383c3dbe4d81b5b1dbfdc964528e797a2b33b9",
+      "bytes": 1593
+    },
+    {
+      "path": "rawdata/f8_7.csv",
+      "git_blob": "132c576dfa57448211e4b4cf482b9b1ef14fa8ce",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/g1_11.csv",
+      "git_blob": "e20dba2bbdbce2bfffbf149cb8fd0f93c640eac4",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/g1_7.csv",
+      "git_blob": "8c4986cdf654efe5687a925c4c2a2011feb708d0",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/g2_11.csv",
+      "git_blob": "214cfded29a49fbc7e07ba47a8e47df36eaf006a",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/g2_7.csv",
+      "git_blob": "d6620a4097be5bca2941a23591207d3315de7791",
+      "bytes": 1591
+    },
+    {
+      "path": "rawdata/g3_11.csv",
+      "git_blob": "674e8e3db3f9599e53e3ef360f24cdb084f7c3f1",
+      "bytes": 1621
+    },
+    {
+      "path": "rawdata/g3_7.csv",
+      "git_blob": "0193388e4dee7e130dab1ebcbe9d67a1f46f5e35",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/g4_11.csv",
+      "git_blob": "67f6859feba0b4d2aa1e2663caa7e455420b0f8d",
+      "bytes": 1621
+    },
+    {
+      "path": "rawdata/g4_7.csv",
+      "git_blob": "0b91b1ee44cebbeb6856ccfe5422248a28a5d2df",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/g5_11.csv",
+      "git_blob": "d14f8d2c8c0b9163a481cf86614e15a5bc6419b1",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/g5_7.csv",
+      "git_blob": "ce0c35eb877e7e1c2105080673e189c5ce2796a8",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/g6_11.csv",
+      "git_blob": "3f529713ee5dad0565d74c33b48432c8a29d6764",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/g6_7.csv",
+      "git_blob": "1fa7b81a6532ff81ef9f9bfc61265f314861fcfd",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/g7_11.csv",
+      "git_blob": "e80699cb9f38b640c8eb3132e0de5b30ecb0d762",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/g7_7.csv",
+      "git_blob": "ef9b27b2036b9189b0c0f50678db2fce48dcfaf1",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/g8_11.csv",
+      "git_blob": "8a0853a6efa5c6b8599ee5521486375d9d4c7d7f",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/g8_7.csv",
+      "git_blob": "31c356a8a8e2df6c4010ed172f187651cf453738",
+      "bytes": 1584
+    },
+    {
+      "path": "rawdata/h1_11.csv",
+      "git_blob": "11ae7dc36c0a173378bdf543a6e6f3e55504e562",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/h1_7.csv",
+      "git_blob": "c83175c50c54280f0e2379ff4698d7ce544da684",
+      "bytes": 1570
+    },
+    {
+      "path": "rawdata/h2_11.csv",
+      "git_blob": "b72108fa26bd2ec21b3109537fc2e7ee82614486",
+      "bytes": 1600
+    },
+    {
+      "path": "rawdata/h2_7.csv",
+      "git_blob": "a771a7e9135a3ff03306fb1fb686924bf2294643",
+      "bytes": 1574
+    },
+    {
+      "path": "rawdata/h3_11.csv",
+      "git_blob": "6d86fe534e4d5e58751e2a9e006de3e7c94e68e6",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/h3_7.csv",
+      "git_blob": "6f3e3b89d0e4aa58bf24d754b7c4b0d516379e81",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/h4_11.csv",
+      "git_blob": "72866ae8cd2845af1a547d537f596ddba0edc5d4",
+      "bytes": 1606
+    },
+    {
+      "path": "rawdata/h4_7.csv",
+      "git_blob": "14540cac22f37412d46f3eab7e0423c63edb67aa",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/h5_11.csv",
+      "git_blob": "5c95919c9ebae6047c79e818dad650de89db902d",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/h5_7.csv",
+      "git_blob": "97102333796019693e3f6c4850d14821c089301e",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/h6_11.csv",
+      "git_blob": "7bb6307ac320ccff8b79f3d02e20743261743ee4",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/h6_7.csv",
+      "git_blob": "6024fa444e3f341407bb57ce14969b7a60246cb8",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/h7_11.csv",
+      "git_blob": "a85b18988be1912dc991228af3f6815a14f9ae16",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/h7_7.csv",
+      "git_blob": "b4579c46b92d07184ba7c867b40a392d428cfe27",
+      "bytes": 1564
+    },
+    {
+      "path": "rawdata/h8_11.csv",
+      "git_blob": "f9c50dd00b937b24dfee0ad75131f6abf3d9779d",
+      "bytes": 1606
+    },
+    {
+      "path": "rawdata/h8_7.csv",
+      "git_blob": "7c886bc7d044c557c706256c358ca924a05203e4",
+      "bytes": 1572
+    },
+    {
+      "path": "rawdata/i1_11.csv",
+      "git_blob": "d346b9a147ed75d0af83a42061b5b446a5e199bb",
+      "bytes": 1599
+    },
+    {
+      "path": "rawdata/i1_7.csv",
+      "git_blob": "35aa4d46bb501ad40456ce9a325025eac25821fb",
+      "bytes": 1591
+    },
+    {
+      "path": "rawdata/i2_11.csv",
+      "git_blob": "cfbdcace42e4557699e4a0860f074eedd4c11e3e",
+      "bytes": 1603
+    },
+    {
+      "path": "rawdata/i2_7.csv",
+      "git_blob": "a781f9236bd1f4bb16191e3e68c8d344a598cb16",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/i3_11.csv",
+      "git_blob": "c440ba8dfab7ccc11a445541c5ffd85bafbe549e",
+      "bytes": 1600
+    },
+    {
+      "path": "rawdata/i3_7.csv",
+      "git_blob": "68666282e0cc565acf40b03619173443e87089d3",
+      "bytes": 1584
+    },
+    {
+      "path": "rawdata/i4_11.csv",
+      "git_blob": "2bc4765f06cd5f7c70e1c543348c0a9b1d695759",
+      "bytes": 1596
+    },
+    {
+      "path": "rawdata/i4_7.csv",
+      "git_blob": "e8ba63fd362c5d48b0435b7cc2adb89c24ec1973",
+      "bytes": 1589
+    },
+    {
+      "path": "rawdata/i5_11.csv",
+      "git_blob": "e04498309a3323192ad750cc20810f8b176fd20e",
+      "bytes": 1602
+    },
+    {
+      "path": "rawdata/i5_7.csv",
+      "git_blob": "c192d0d805a6ad16d9ee384ec6719a8830fb666b",
+      "bytes": 1573
+    },
+    {
+      "path": "rawdata/i6_11.csv",
+      "git_blob": "8368b004a2b0c7ec18eecdfe6f586cb1ca408a6b",
+      "bytes": 1599
+    },
+    {
+      "path": "rawdata/i6_7.csv",
+      "git_blob": "9d6f842bc10234822f4753bfbbba6af607b80ccb",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/i7_11.csv",
+      "git_blob": "7c28519fc68c41fba35ce798a227bbe6d1bad512",
+      "bytes": 1600
+    },
+    {
+      "path": "rawdata/i7_7.csv",
+      "git_blob": "dea374793e41a0859c4dab34e7271e43d804d2e4",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/i8_11.csv",
+      "git_blob": "f9147769c0af76f256ff28d4b9e3c49fd949c183",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/i8_7.csv",
+      "git_blob": "92dc00d2db60f91c2216b0f5f963ec32b25a2068",
+      "bytes": 1576
+    },
+    {
+      "path": "rawdata/j1_11.csv",
+      "git_blob": "a25472fd5b794904a4eb96033387a1a88cd6f37d",
+      "bytes": 1615
+    },
+    {
+      "path": "rawdata/j1_7.csv",
+      "git_blob": "a8e2d107a35e0830e8d2582e1d3e8494c44257cc",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/j2_11.csv",
+      "git_blob": "329c015dacc14bc0a52edacea072781b10bafefe",
+      "bytes": 1608
+    },
+    {
+      "path": "rawdata/j2_7.csv",
+      "git_blob": "4822f372305b05b2e9e464839a222ec36eb8e903",
+      "bytes": 1580
+    },
+    {
+      "path": "rawdata/j3_11.csv",
+      "git_blob": "a8573ee2429a820da098ddd1f0e72ea3d4ecc944",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/j3_7.csv",
+      "git_blob": "8e2daff033f9abc263cf17d2d09bc1e7bd878114",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/j4_11.csv",
+      "git_blob": "f107e2d140803a5d9d089a890b2f9d4326c200a7",
+      "bytes": 1625
+    },
+    {
+      "path": "rawdata/j4_7.csv",
+      "git_blob": "ec050a86fe73410b85e62ad00a0ef0ff27d5a70b",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/j5_11.csv",
+      "git_blob": "fa571ff7e8fcdf29e95d553a1ed6bcb270e1129c",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/j5_7.csv",
+      "git_blob": "8d35179e53ae224e7393427f6981f06f187e2046",
+      "bytes": 1578
+    },
+    {
+      "path": "rawdata/j6_11.csv",
+      "git_blob": "5e955d3135c15b4e769ee588b5268c776962e83e",
+      "bytes": 1617
+    },
+    {
+      "path": "rawdata/j6_7.csv",
+      "git_blob": "607c9c31e06c8947ecbac8b50b9c493c744005bd",
+      "bytes": 1586
+    },
+    {
+      "path": "rawdata/j7_11.csv",
+      "git_blob": "0a80361b6d95a01d145f2acc425f061d59c410fa",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/j7_7.csv",
+      "git_blob": "7a1c497fdb578bf69fade76092d8d284a748ee52",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/j8_11.csv",
+      "git_blob": "3270821a8973fdc1872b76a266326ead386e9f0d",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/j8_7.csv",
+      "git_blob": "5854833b3593bc9d267f887bceec8fefcb3f4b81",
+      "bytes": 1585
+    },
+    {
+      "path": "rawdata/k1_11.csv",
+      "git_blob": "33bb9963be02440a4f6a7c0517da0676ea823239",
+      "bytes": 1619
+    },
+    {
+      "path": "rawdata/k1_7.csv",
+      "git_blob": "e0d0fa1dfd13d34901ad168ebc6cb8432f54c99d",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/k2_11.csv",
+      "git_blob": "5b3d733f3cfdaf0d91aa90c98106b4c82088549e",
+      "bytes": 1623
+    },
+    {
+      "path": "rawdata/k2_7.csv",
+      "git_blob": "ff2cda701ca942379cfb9df50f488192a07c9ab3",
+      "bytes": 1589
+    },
+    {
+      "path": "rawdata/k3_11.csv",
+      "git_blob": "cab4786b9c7d26d2a9412cad39b60b8b9984f6c7",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/k3_7.csv",
+      "git_blob": "65155bc0a3a7612aeae5ad09c7a71e0b3180bf05",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/k4_11.csv",
+      "git_blob": "a545a82aecc5de36dcd43c7fad0a8cfac7c31932",
+      "bytes": 1614
+    },
+    {
+      "path": "rawdata/k4_7.csv",
+      "git_blob": "44d8ffb6f9cec7eb060d207aca1ef4caaf447f3b",
+      "bytes": 1584
+    },
+    {
+      "path": "rawdata/k5_11.csv",
+      "git_blob": "89610f166d49bc42eb5aba8d1bbe9734f0f21e45",
+      "bytes": 1613
+    },
+    {
+      "path": "rawdata/k5_7.csv",
+      "git_blob": "7c232206e26d7e5de6df5bbd34906f904ee85ebc",
+      "bytes": 1582
+    },
+    {
+      "path": "rawdata/k6_11.csv",
+      "git_blob": "901c1cc2f79217547fe7d064c6c44ccf5cea7cc9",
+      "bytes": 1616
+    },
+    {
+      "path": "rawdata/k6_7.csv",
+      "git_blob": "e8e80f72401309a48985aee66347c5f507ba370d",
+      "bytes": 1589
+    },
+    {
+      "path": "rawdata/k7_11.csv",
+      "git_blob": "b9d0e44ce48ddc50a5bc86841c9dac8a6ef04e77",
+      "bytes": 1611
+    },
+    {
+      "path": "rawdata/k7_7.csv",
+      "git_blob": "50ad94ae9bd7a670fa9adf815812bdda0815948d",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/k8_11.csv",
+      "git_blob": "bd2984edcae1f4bf7e27c24240d812792c39abeb",
+      "bytes": 1616
+    },
+    {
+      "path": "rawdata/k8_7.csv",
+      "git_blob": "960f4cd6977dc5c8b525248d0a1e85d740a89e5a",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/l1_11.csv",
+      "git_blob": "ef498264f7f67b36ac1e15def9652d816d456060",
+      "bytes": 1601
+    },
+    {
+      "path": "rawdata/l1_7.csv",
+      "git_blob": "e12487aea0c65a81444e950f18e2b899dde9268a",
+      "bytes": 1567
+    },
+    {
+      "path": "rawdata/l2_11.csv",
+      "git_blob": "9498f303d216c4d1fe983cfe7827bc2674d0b480",
+      "bytes": 1592
+    },
+    {
+      "path": "rawdata/l2_7.csv",
+      "git_blob": "305205e8deaa65256fa7f36ff04de309a3102d71",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/l3_11.csv",
+      "git_blob": "7b5f4d599e9a6067ce43c7b5cc0f62ce1d65866d",
+      "bytes": 1579
+    },
+    {
+      "path": "rawdata/l3_7.csv",
+      "git_blob": "8eb3105b99016f1f133ee619f8f22596490fda27",
+      "bytes": 1595
+    },
+    {
+      "path": "rawdata/l4_11.csv",
+      "git_blob": "e66e6549a4c18db21cc03ec2fa0725ba927e856b",
+      "bytes": 1596
+    },
+    {
+      "path": "rawdata/l4_7.csv",
+      "git_blob": "ce358b874c445d0ebd7fa7cbf6332d3db55626f2",
+      "bytes": 1566
+    },
+    {
+      "path": "rawdata/l5_11.csv",
+      "git_blob": "9d5e1f13a5cf54221aabd89eabbb28bb380aa12b",
+      "bytes": 1621
+    },
+    {
+      "path": "rawdata/l5_7.csv",
+      "git_blob": "ea4ee631fc6ecc8f2093415106220a69b2156dba",
+      "bytes": 1587
+    },
+    {
+      "path": "rawdata/l6_11.csv",
+      "git_blob": "b68f836597b4b9edb3518c1dd942f7927e8530dd",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/l6_7.csv",
+      "git_blob": "4ccb08515da7eb703bea46535057762499e8113a",
+      "bytes": 1583
+    },
+    {
+      "path": "rawdata/l7_11.csv",
+      "git_blob": "56e1e1eaff1537f681120b9a37b9583ebfa4d7e8",
+      "bytes": 1621
+    },
+    {
+      "path": "rawdata/l7_7.csv",
+      "git_blob": "659b435b888b176afab09da9f757550401fa194e",
+      "bytes": 1570
+    },
+    {
+      "path": "rawdata/l8_11.csv",
+      "git_blob": "ad4667f33911cf76d93bee064e056f6586fb643d",
+      "bytes": 1595
+    },
+    {
+      "path": "rawdata/l8_7.csv",
+      "git_blob": "83a190e997e1729f2413820bb131d4afc5617779",
+      "bytes": 1568
+    },
+    {
+      "path": "rawdata/m1_11.csv",
+      "git_blob": "b4edc939eee7f4782370eef7c5b54edf5feb8f0b",
+      "bytes": 1599
+    },
+    {
+      "path": "rawdata/m1_7.csv",
+      "git_blob": "c4865d1ce090d8dacc8a37dcbdb0dbe065423192",
+      "bytes": 1590
+    },
+    {
+      "path": "rawdata/m2_11.csv",
+      "git_blob": "a338a5be4757b0222928e56b47975f090142ca6f",
+      "bytes": 1606
+    },
+    {
+      "path": "rawdata/m2_7.csv",
+      "git_blob": "f0312332b3818df05d9523d4f6bef13141ef9fd0",
+      "bytes": 1591
+    },
+    {
+      "path": "rawdata/m3_11.csv",
+      "git_blob": "bd2813007d5b43fd96087baa7b91a4e96b83c8b1",
+      "bytes": 1610
+    },
+    {
+      "path": "rawdata/m3_7.csv",
+      "git_blob": "06c6d4bc2b6d2244d530d89099b174b302a927e3",
+      "bytes": 1588
+    },
+    {
+      "path": "rawdata/m4_11.csv",
+      "git_blob": "b4e479473af761a51c15661f4ef6b0c2c28037f3",
+      "bytes": 1606
+    },
+    {
+      "path": "rawdata/m4_7.csv",
+      "git_blob": "207a3c220b6a612052d3efef0455dcae6519432e",
+      "bytes": 1595
+    },
+    {
+      "path": "rawdata/m5_11.csv",
+      "git_blob": "acefb22ee354fe555b58eaaa18c46c97cf6fc4ae",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/m5_7.csv",
+      "git_blob": "851404e443d19e223aff1558efcdda297bd884f7",
+      "bytes": 1597
+    },
+    {
+      "path": "rawdata/m6_11.csv",
+      "git_blob": "0e9e8e8a8c52ce01fe01e1cb1f746520dc62df8e",
+      "bytes": 1602
+    },
+    {
+      "path": "rawdata/m6_7.csv",
+      "git_blob": "22ed1cb6db62bbb88144f0033a2c321edeb99f26",
+      "bytes": 1605
+    },
+    {
+      "path": "rawdata/m7_11.csv",
+      "git_blob": "f5fab5c6b36e5630f4f4f5a4892b5046f627e16c",
+      "bytes": 1612
+    },
+    {
+      "path": "rawdata/m7_7.csv",
+      "git_blob": "80e5cb9a4c30751e1d8d7c1407e9900a428f9b28",
+      "bytes": 1598
+    },
+    {
+      "path": "rawdata/m8_11.csv",
+      "git_blob": "5c687aab24b92e4cb2d3ac61a96153729c84154a",
+      "bytes": 1620
+    },
+    {
+      "path": "rawdata/m8_7.csv",
+      "git_blob": "32bac89969033ddc24be52b8a011a86587b0fdd7",
+      "bytes": 1596
+    }
+  ],
+  "landing": "https://github.com/StrawsonDesign/motor_propeller_testing/tree/7031418317178b832b0be474a997f6da18f83a40",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/StrawsonDesign/motor_propeller_testing/blob/7031418317178b832b0be474a997f6da18f83a40/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

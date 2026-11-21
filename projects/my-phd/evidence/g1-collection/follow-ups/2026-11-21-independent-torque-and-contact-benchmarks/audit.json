@@ -1,0 +1,377 @@
+{
+  "verified_at": "2026-11-21 UTC",
+  "gate": "G1",
+  "stage": "topic-intelligence",
+  "status": "awaiting_work",
+  "parent_commit": "103ca4b1128171e3b808fe56082bf65630d6ff14",
+  "parent_tree": "a18a0018ae50300f852b2b68ca395e5196bfcee0",
+  "prior_numbered_rounds": 55,
+  "prior_followups": 12,
+  "prior_state_check": {
+    "previous_commit_vs_branch": "identical",
+    "previous_run": "published and read back",
+    "actions_in_progress": 0,
+    "actions_queued": 0,
+    "automation": "existing hourly task enabled",
+    "queries": [
+      "https://api.github.com/repos/hengyizang/lunwen/actions/runs?status=in_progress&per_page=10",
+      "https://api.github.com/repos/hengyizang/lunwen/actions/runs?status=queued&per_page=10"
+    ]
+  },
+  "history_scope": {
+    "indexed_evidence_paths": 1266,
+    "read_evidence_paths": 1263,
+    "read_extra_early_paths": 7,
+    "early_revision": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+    "early_paths": [
+      "early@ab7d82f/projects/my-phd/data/discovery-broad-auto-20261101T080436670556Z.json",
+      "early@ab7d82f/projects/my-phd/data/discovery-broad-auto-20261108T082426952293Z.json",
+      "early@ab7d82f/projects/my-phd/data/discovery-broad-auto-20261108T111810282362Z.json",
+      "early@ab7d82f/projects/my-phd/data/manifests/archive/nist-mds2-3662-v1.0.1-measurements.json",
+      "early@ab7d82f/projects/my-phd/data/manifests/archive/nist-mds2-3662-v1.0.1-scan-strategy.json",
+      "early@ab7d82f/projects/my-phd/evidence/dataset-search-log.jsonl",
+      "early@ab7d82f/projects/my-phd/program/topic-leads.json"
+    ],
+    "catalogue_path_count": 31,
+    "catalogue_rows_with_titles": 28500,
+    "checks": "Screened the frozen catalogue, all numbered rounds, all prior follow-ups, text provenance and reading queues. Queried ID/version aliases and folded titles, then compared token overlap and author strings across tabular catalogues. Data counts distinguish a known article from the first release-file evidence for its data. Each match retains actual paths and query keys.",
+    "excluded_archive_payloads": [
+      {
+        "path": "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz",
+        "git_blob": "b64c5c677bcba898212d8a650b95dadfbe94a641",
+        "bytes": 3675019
+      },
+      {
+        "path": "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz",
+        "git_blob": "5511907e256c7eb3024c9c4707f3e0d22527290b",
+        "bytes": 1544665
+      },
+      {
+        "path": "projects/my-phd/evidence/g1-collection/2026-11-21/data/r1-offset-timeseries.csv.gz",
+        "git_blob": "d007959e01acbfad2b87a7a3c114d947c1d3fc27",
+        "bytes": 1467941
+      }
+    ],
+    "limit": "The remote Git tree enumerated all paths. Three large gzip payloads (two historical provider-return archives and one wrist numerical series) did not return binary content through these interfaces. Their Git object IDs were inventoried. The complete saved publication and data catalogues were read, including the 7.7 MB frozen bibliography. Novelty below means new to the checked historical records, not unpublished or unseen by any search engine.",
+    "gzip_decoded": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/r2-nanobench-derived.csv.gz",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/data/r5-ftm-frame-derived.csv.gz"
+    ],
+    "plan": "No stage approvals or topic selection. This is a retrieval and source-validation batch."
+  },
+  "checks": {
+    "openexo": [
+      [
+        "ankle",
+        1,
+        0,
+        455,
+        28,
+        83,
+        28.18
+      ],
+      [
+        "ankle",
+        2,
+        1371,
+        462,
+        28,
+        66,
+        28.22
+      ],
+      [
+        "ankle",
+        3,
+        2722,
+        450,
+        28,
+        87,
+        27.75
+      ],
+      [
+        "ankle",
+        4,
+        4062,
+        461,
+        28,
+        66,
+        28
+      ],
+      [
+        "ankle",
+        5,
+        5440,
+        467,
+        28,
+        79,
+        28.48
+      ],
+      [
+        "ankle",
+        6,
+        6803,
+        452,
+        28,
+        81,
+        27.96
+      ],
+      [
+        "hip",
+        1,
+        0,
+        899,
+        6,
+        8,
+        6.75
+      ],
+      [
+        "hip",
+        2,
+        1781,
+        886,
+        6,
+        5,
+        6.19
+      ],
+      [
+        "hip",
+        3,
+        3553,
+        927,
+        6,
+        7,
+        6.86
+      ],
+      [
+        "hip",
+        4,
+        5348,
+        913,
+        6,
+        0,
+        6.13
+      ],
+      [
+        "hip",
+        5,
+        7131,
+        912,
+        6,
+        5,
+        6.12
+      ],
+      [
+        "hip",
+        6,
+        8915,
+        923,
+        6,
+        7,
+        6.99
+      ]
+    ],
+    "cao_strawson": {
+      "runs": 208,
+      "uniqueBlobs": 258,
+      "total": 2288,
+      "rawEqual": 0,
+      "editedEqual": 82,
+      "rawDeclines": 122,
+      "modifiedTests": 50,
+      "peakCopies": 82
+    },
+    "magnus": {
+      "records": 18067,
+      "files": 140,
+      "scenarios": 7,
+      "positive": 13479,
+      "disagreements": 0
+    },
+    "runtime": "The managed shell did not start. Numeric extraction, independent checks and the Git readback ran through the available JavaScript runtime and the GitHub connector. Supplied Python readers are reproduction paths; this run did not execute Python."
+  },
+  "batch": {
+    "data_sources": 20,
+    "new_data_sources": 16,
+    "historical_source_extensions": 4,
+    "data_status": {
+      "new_release_previously_indexed_article": 1,
+      "new_release": 15,
+      "extended_existing_release": 3,
+      "extended_existing_lead": 1
+    },
+    "source_evidence": {
+      "measured-files": 13,
+      "file-catalog-and-readme": 2,
+      "published-measurement-series": 1,
+      "file-manifest": 2,
+      "published-measurement-table": 1,
+      "calibration-parameters": 1
+    },
+    "papers": 30,
+    "new_papers": 18,
+    "historical_papers": 12,
+    "paper_levels": {
+      "full text": 30
+    },
+    "verified_directed_citations": 16,
+    "exclusions": [
+      {
+        "id": "10.25835/6khpt790",
+        "decision": "The entire earlier 760,307-row Hannover archive audit is stronger than this pass’s catalogue check. Omitted the redundant data record from the batch. Literature evidence remains eligible.",
+        "prior": "2026-11-21-fastener-seating-and-torque-references/contact/parallel-contact-source.json"
+      },
+      {
+        "id": "10.4121/13625951",
+        "decision": "The earlier Dyrac batch verified 24 input files. Its catalogue recheck is retained only as a cross-reference in sources.json and not counted in datasets.csv.",
+        "prior": "2026-11-21-drive-current-and-feedback/sea/dyrac-source.json"
+      }
+    ],
+    "meaning": "A data source can be a set of physical captures, a tabulated physical measurement, an example coefficient file, or a release manifest. Evidence_level and scope mark the distinctions. Numeric thresholds documented in code are not labelled as observed physical saturation.",
+    "supporting_tables": 28
+  },
+  "tables": [
+    {
+      "path": "dynamometer/bldc-load-comparison.csv",
+      "rows": 3,
+      "git_blob_sha1": "4ff4dc44e3a84ca9e8c5fa92744edc60a30fa25d"
+    },
+    {
+      "path": "dynamometer/bldc-source-files.csv",
+      "rows": 10,
+      "git_blob_sha1": "f755f18ffc4e5e9b0a01fa8b4fd717a854c6b5c5"
+    },
+    {
+      "path": "dynamometer/bldc-speed-comparison.csv",
+      "rows": 1,
+      "git_blob_sha1": "93665d54df3fa95766750849da95242e5718f626"
+    },
+    {
+      "path": "dynamometer/odrive-operating-points.csv",
+      "rows": 1,
+      "git_blob_sha1": "011a9151a31593751a06d47cf81978b013c6d56f"
+    },
+    {
+      "path": "dynamometer/steering-bench-runs.csv",
+      "rows": 135,
+      "git_blob_sha1": "ac08a446e3c2f8f27e2cc00223f0613a097b79b7"
+    },
+    {
+      "path": "dynamometer/steering-static-calibration.csv",
+      "rows": 1,
+      "git_blob_sha1": "7b4773a5e0108f96802425d5c6b5735dacaeed2f"
+    },
+    {
+      "path": "fingertip/fingertip-axis-errors.csv",
+      "rows": 18,
+      "git_blob_sha1": "5e0136350d60fad900b724f3e191ea602b9ef73e"
+    },
+    {
+      "path": "exo/openexo-step-pulses.csv",
+      "rows": 12,
+      "git_blob_sha1": "72fc4eec3a9b5cde401d82ccbf9b7e5a5e3c87a5"
+    },
+    {
+      "path": "exo/openexo-walking.csv",
+      "rows": 6,
+      "git_blob_sha1": "71a77a4d2e5458d15f7a93a67b47b1c88721e7fd"
+    },
+    {
+      "path": "dyno/manjate-steady.csv",
+      "rows": 1,
+      "git_blob_sha1": "cb651ac6689092c5efa55e77f615170497331c35"
+    },
+    {
+      "path": "dyno/manjate-step-groups.csv",
+      "rows": 6,
+      "git_blob_sha1": "ebf626fa6ec1fe6947b412547526b38d601767d4"
+    },
+    {
+      "path": "dyno/manjate-sweeps.csv",
+      "rows": 6,
+      "git_blob_sha1": "b3e637031b4788aaa12c26341427384001a1c7c3"
+    },
+    {
+      "path": "dyno/manjate-trials.csv",
+      "rows": 19,
+      "git_blob_sha1": "c58fdb3842c1e97ac62dcebacde90a3dd771ee1f"
+    },
+    {
+      "path": "dyno/mcc-motor-archive-pointers.csv",
+      "rows": 2,
+      "git_blob_sha1": "d1dad0f9f4c9e3d9f7dec450d90c091923343d22"
+    },
+    {
+      "path": "thrust/bench-traces.csv",
+      "rows": 18,
+      "git_blob_sha1": "ccab8ba69e2965d6780f4aa69afbf34bc69b2234"
+    },
+    {
+      "path": "thrust/cao-strawson-edits.csv",
+      "rows": 208,
+      "git_blob_sha1": "593063e4859eddff9965b2230c85cd95552ff44f"
+    },
+    {
+      "path": "thrust/legacy-sweep.csv",
+      "rows": 1,
+      "git_blob_sha1": "213dd52a3768e21a203cc7fde01f9f86cb5c9bfe"
+    },
+    {
+      "path": "thrust/map-input-overlap.csv",
+      "rows": 5,
+      "git_blob_sha1": "79b7219672f88458f446da1f06e80a4b3c9875e2"
+    },
+    {
+      "path": "thrust/repeated-pulse.csv",
+      "rows": 21,
+      "git_blob_sha1": "75a707f71afd136ac806bf6a23c8c8a7e719034e"
+    },
+    {
+      "path": "thrust/trimmed-rows.csv",
+      "rows": 2,
+      "git_blob_sha1": "c6eff30eddcbacf2801bc865f85a713c1c97339e"
+    },
+    {
+      "path": "contact-calibration/digit-fsr-knots.csv",
+      "rows": 40,
+      "git_blob_sha1": "336baf692e85a98153b754c1af23cc82331ade31"
+    },
+    {
+      "path": "contact-calibration/openft-output-span.csv",
+      "rows": 6,
+      "git_blob_sha1": "7797c06cb0d362cb153479438aa4d21a2ee6ec50"
+    },
+    {
+      "path": "elastic-references/shaft-files.csv",
+      "rows": 5,
+      "git_blob_sha1": "9f1d24b3382503378c0beb3d4839596393a61e6d"
+    },
+    {
+      "path": "grip/grasp-live-feedback.csv",
+      "rows": 16,
+      "git_blob_sha1": "3f4cf1cea0de018eeffec176caa4fe7a0a460117"
+    },
+    {
+      "path": "grip/grasp-loadcell-support.csv",
+      "rows": 20,
+      "git_blob_sha1": "2f164ad7ddc44bf2957d9402cff25cb5fef38e3d"
+    },
+    {
+      "path": "cutting/fixture-files.csv",
+      "rows": 180,
+      "git_blob_sha1": "ca9b4206015248b4c2c8c9168e7e32872d2af8cb"
+    },
+    {
+      "path": "cutting/paired-first-trials.csv",
+      "rows": 12,
+      "git_blob_sha1": "29cc34dea10e677b41d8204d45db07dbf5f2b3bb"
+    },
+    {
+      "path": "literature/comparisons.csv",
+      "rows": 8,
+      "git_blob_sha1": "a72122ed331de75bdbfca8ff7110faba3c668bda"
+    }
+  ],
+  "interpretation_of_queries": "Each release retains its actual search path and sources. The Franka software inspection is a source-definition check without an associated lab capture, and is excluded from the dataset count."
+}

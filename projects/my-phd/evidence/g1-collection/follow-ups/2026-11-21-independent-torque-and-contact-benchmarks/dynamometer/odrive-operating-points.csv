@@ -1,0 +1,2 @@
+rows,finite_19_columns,distinct_positive_speed_requests,measured_speed_opposite_request,zero_input_current,zero_input_power,min_torque_Nmm,max_torque_Nmm,min_absorber_speed_rad_s,max_absorber_speed_rad_s,min_speed_request_rad_s,max_speed_request_rad_s
+344,344,41,343,344,344,-1457.2,-0.4,-400.273160,566.988107,10.471975,406.883898

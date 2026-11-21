@@ -1,0 +1,32 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "bitcraze",
+  "title": "PWM to Thrust — Crazyflie 2.x legacy physical bench table",
+  "creator": "Bitcraze",
+  "repository": "bitcraze/crazyflie-firmware",
+  "commit": "d794c5ca081d19aa1e1bbcb6fd4a3711784fb8b1",
+  "rights": "Repository identified as GPL-3.0 by GitHub. No separate raw table redistribution grant relied upon. Only original aggregates are distributed.",
+  "evidence": "Old measurements (2015), Thrust measurement subsection has a 16-point table. Thrust and current read manually from a scale and multimeter during four-second steps. PWM, voltage and RPM logged. The 2021 stand description and modern optional ATI torque collection are later protocols and do not supply measured shaft torque for this older table.",
+  "history_keys": [
+    "docs/functional-areas/pwm-to-thrust.md",
+    "bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust",
+    "PWM to Thrust"
+  ],
+  "files": [
+    {
+      "path": "docs/functional-areas/pwm-to-thrust.md",
+      "git_blob": "abab5825219eba4877e6e948618dad9af8f9c80c",
+      "bytes": 7816
+    },
+    {
+      "path": "tools/system_id/README.md",
+      "git_blob": "586c5836cf5a4e1e25fa745d4074f2b09ad8a5d7",
+      "bytes": 7547
+    }
+  ],
+  "landing": "https://github.com/bitcraze/crazyflie-firmware/tree/d794c5ca081d19aa1e1bbcb6fd4a3711784fb8b1",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/bitcraze/crazyflie-firmware/blob/d794c5ca081d19aa1e1bbcb6fd4a3711784fb8b1/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

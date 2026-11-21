@@ -1,0 +1,7 @@
+drive,author_sweep,plateaus,finite_efficiency_plateaus,lowest_command_pct,highest_command_pct,highest_command_thrust_g
+FEC,Sweep 1,19,19,5,95,246.9
+FEC,Sweep 3,19,19,5,95,266.4
+FEC,Sweep 4,19,19,5,95,262.6
+FOC,Sweep 1,19,18,5,95,306.4
+FOC,Sweep 2,19,18,5,95,309
+FOC,Sweep 3,19,18,5,95,312.1

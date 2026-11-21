@@ -1,0 +1,61 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "gestelt",
+  "title": "Gestelt — NUSwarm and Flywoo bench measurements in the physical-platform parameter collection",
+  "creator": "Temasek-Dynamics; John Tan et al. (companion publication)",
+  "repository": "Temasek-Dynamics/gestelt",
+  "commit": "71b462eccd6f457976fca1c736ee96b5f335d373",
+  "rights": "Public repository, no root license found in fixed tree. Only original aggregates are distributed.",
+  "evidence": "Four bench CSV files. Names mark edited, consolidated and trimmed variants. Count row identity across variants before interpreting them as separate experiments. Force is in kgf. Optical speed can use -1 as a recorded value. Calibration and timestamps absent from the files.",
+  "history_keys": [
+    "Temasek-Dynamics/gestelt",
+    "nuswarm_9_12_consolidated",
+    "18_9_23_flywoo_nin1404",
+    "10.1109/ICCA62789.2024.10591863"
+  ],
+  "companion": {
+    "title": "Gestelt: A Framework for Accelerating the Sim-To-Real Transition for Swarm UAVs",
+    "authors": "John Tan, Tianchen Sun, Feng Lin, Rodney Teo and Boo Cheong Khoo",
+    "year": 2024,
+    "doi": "10.1109/ICCA62789.2024.10591863",
+    "url": "https://ieeexplore.ieee.org/document/10591863",
+    "level": "Publisher abstract and repository README. Source of the framework identity. No claim that article reports the cleaned file comparison."
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "git_blob": "ac02304674373222e7bae4f633518466de95cf64",
+      "bytes": 13935
+    },
+    {
+      "path": "gestelt_utils/radxa_utils/parameter_calculations/calculate_motor_constant.py",
+      "git_blob": "0783a525ef26f4e7607e87b41894183f5fc8f222",
+      "bytes": 606
+    },
+    {
+      "path": "gestelt_utils/radxa_utils/parameter_calculations/thrust_data/18_9_23_flywoo_nin1404_bench_test_cleaned.csv",
+      "git_blob": "4a5bc9912100a5c9535c93c72f02276d43c3d7cb",
+      "bytes": 2570
+    },
+    {
+      "path": "gestelt_utils/radxa_utils/parameter_calculations/thrust_data/18_9_23_flywoo_nin1404_bench_test_cleaned_wo_top_vals.csv",
+      "git_blob": "05d418eed89f8b885d1a52a560385bae3aaef058",
+      "bytes": 2388
+    },
+    {
+      "path": "gestelt_utils/radxa_utils/parameter_calculations/thrust_data/nuswarm_9_12_consolidated.csv",
+      "git_blob": "2edf459924fc4b7bab5ca626d0e7f06a6226736c",
+      "bytes": 8523
+    },
+    {
+      "path": "gestelt_utils/radxa_utils/parameter_calculations/thrust_data/nuswarm_9_12_consolidated_clean.csv",
+      "git_blob": "0fd4ce84e8b1c603baf619b23eb3faa03cffc680",
+      "bytes": 8311
+    }
+  ],
+  "landing": "https://github.com/Temasek-Dynamics/gestelt/tree/71b462eccd6f457976fca1c736ee96b5f335d373",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/Temasek-Dynamics/gestelt/blob/71b462eccd6f457976fca1c736ee96b5f335d373/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

@@ -1,0 +1,146 @@
+{
+  "retrieved_utc_date": "2026-11-21",
+  "scope": "Closed-loop actuator saturation, sensor placement and load-side validation. Wrist/fingertip and wearable companion articles tied to public data are included to specify the origin of their reference channels.",
+  "method": "Free web search, followed by DOI/specific-title resolution, author or institutional copies, opens and in-document finds, figure/section and bibliography checks. The queries are a search log, not a systematic-review denominator.",
+  "queries": [
+    "robot actuator testing torque bandwidth saturation load side torque sensor torque reference series elastic actuator dynamometer torque bandwidth amplitudes force control experiment saturation torque transducer",
+    "torque bandwidth motor saturation current limits large force bandwidth series elastic actuator torque sensor dynamometer torque actuator experimental frequency sweep torque amplitudes torque sensor proprioceptive",
+    "\"What is the torque bandwidth of this actuator\" torque sensor experiment author DOI",
+    "\"An experimental study of the sensorized strain wave gear RT1-T\" DOI",
+    "\"Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility\" DOI authors",
+    "\"Design and Experimental Characterisation of a Novel Quasi-Direct Drive Actuator\" pdf institutional repository torque author frequency",
+    "\"Toward Reproducible Actuator Characterization\" \"LR-2\" \"P90\" torque bandwidth measured Hz reference available",
+    "\"OpenExo\" Williams Cuddeback Fang \"GitHub\" OpenExo repository OpenExo project data OSF zenodo Science robotics",
+    "\"10.1126/scirobotics.adi8852\" author Github calibration actuator torque measurement dynamic",
+    "robot torque saturation unconstrained torque limited torque reference load cell saturation series elastic actuator dynamometer experimental antiwindup experimental torque sensor command clipped",
+    "\"Estimating human joint moments unifies exoskeleton control\" \"0.142\" moment RMSE 35",
+    "\"Toward Reproducible Actuator Characterization\" 1228.5 P90 peak mechanical 1 second 0.25",
+    "10.1016/j.ohx.2026.e00799",
+    "10.1016/j.dib.2026.112583 MCC5",
+    "10.1016/j.dib.2024.110453",
+    "IMAV 2025 12 thrust map variable pitch thrust map IMAV2025-12",
+    "arXiv 2007.11167 cutting force",
+    "arXiv 2308.09650 full author",
+    "arXiv 2308.09656 full author",
+    "\"Multi-mode fault diagnosis datasets of three-phase asynchronous motor\" \"110453\" \"6s3dggj9mw\" torque sensor Reference",
+    "\"An open-source BLDC motor test bed\" Kurniawan Zenodo DOI \"calibration\" 2026 GitHub load cell telemetry",
+    "\"10.1109/TRO.2019.2930915\" torque dataset torque sensor calibration",
+    "\"10.1017/wtc.2024.19\" torque sensor",
+    "\"A dynamic robotic actuator with variable physical stiffness and damping\" Aiple Schiele 10.1109 TMECH journal 2020",
+    "Aran Mohammad Hannover collision clamping reaction parallel robots dataset benchmark data archive \"DOI\" 2308.09650 2308.09656 2023 data repository",
+    "\"Towards Human-Robot Collaboration with Parallel Robots\" \"10.1109\" Mohammad Schappler ICRA dataset force contact arxiv"
+  ],
+  "screened_literature_records": 30,
+  "full_text_records": 30,
+  "within_batch_work_to_work_edges": 16,
+  "units": "Hz, Nm, N/mm, W, ms unless noted. Original casing of titles is preserved. Keys use lowercase DOI, normalized archive IDs for theses, and a separate arXiv alias. Non-DOI conference papers use the identifier printed in the proceedings. A preprint-specific DOI with no confirmed journal alias is marked explicitly.",
+  "comparisons": "comparisons.csv contains only arithmetic derived from a paper's rounded published scalar values. No sample-level input/output streams are included. All ratios are within-paper. Computed comparisons are not pooled estimates.",
+  "publish_scope": "Bibliographic metadata, original descriptions, reference pointers and calculated quantities only. Source paper PDFs, figure images, participant files and repository archives are not redistributed here.",
+  "paper_dataset_relations": [
+    {
+      "record_id": "10.1126/scirobotics.adt1591",
+      "archive_doi": "10.5281/zenodo.14624972",
+      "url": "https://doi.org/10.5281/zenodo.14624972",
+      "relation": "Paper points to author archive",
+      "locator": "data availability"
+    },
+    {
+      "record_id": "10.1126/scirobotics.adi8852",
+      "archive_doi": "10.5061/dryad.8kprr4xsv",
+      "url": "https://doi.org/10.5061/dryad.8kprr4xsv",
+      "relation": "Paper points to author data archive",
+      "locator": "p. 12, Data and materials availability"
+    },
+    {
+      "record_id": "10.1038/s41467-025-60861-8",
+      "archive_doi": "10.5281/zenodo.15553350",
+      "url": "https://doi.org/10.5281/zenodo.15553350",
+      "relation": "Paper points to author release",
+      "locator": "Data and Code availability, reference [45]"
+    },
+    {
+      "record_id": "10.1016/j.ohx.2026.e00799",
+      "archive_doi": "10.5281/zenodo.20035899",
+      "url": "https://doi.org/10.5281/zenodo.20035899",
+      "relation": "paper-reported archive",
+      "locator": "Specifications table and source repository section. https://github.com/uun3406/BLDC-TestBed-HardwareX currently also names 10.5281/zenodo.18689715. Version equivalence is not assumed."
+    },
+    {
+      "record_id": "10.1016/j.dib.2026.112583",
+      "archive_doi": "10.17632/6s3dggj9mw.1",
+      "url": "https://data.mendeley.com/datasets/6s3dggj9mw/1",
+      "relation": "paper points to data, version 1",
+      "locator": "Specifications Table and Data accessibility"
+    },
+    {
+      "record_id": "10.1016/j.dib.2024.110453",
+      "archive_doi": "10.17632/p92gj2732w.1",
+      "url": "https://data.mendeley.com/datasets/p92gj2732w/1",
+      "relation": "paper points to data, version 1",
+      "locator": "Specifications Table and Data accessibility"
+    },
+    {
+      "record_id": "imav:2025-12",
+      "archive_doi": "",
+      "url": "https://github.com/aerostack2/thrust_map_estimation",
+      "relation": "paper points to code and test-processing repository",
+      "locator": "PDF p. 98, footnote 1, README describes stand and flight workflows"
+    },
+    {
+      "record_id": "10.1109/iros45743.2020.9341446",
+      "archive_doi": "",
+      "url": "https://github.com/McGill-AML/aml_robot_cutting_dataset",
+      "relation": "paper points to robot cutting data repository",
+      "locator": "PDF p. 2 footnote, README lists robot_data, ft_sensor_data and processed data, with separate clocks"
+    },
+    {
+      "record_id": "10.1109/iros55552.2023.10342345",
+      "archive_doi": "10.25835/6khpt790",
+      "url": "https://doi.org/10.25835/6khpt790",
+      "relation": "2025 archive explicitly points to 2023 article for tasks 1 and 2",
+      "locator": "Archive catalog https://research.uni-hannover.de/en/datasets/datasets-for-classification-and-regression-in-human-robot-interac/ assigns regression and collided-body classification to the article"
+    },
+    {
+      "record_id": "10.1109/iros55552.2023.10341581",
+      "archive_doi": "10.25835/6khpt790",
+      "url": "https://doi.org/10.25835/6khpt790",
+      "relation": "2025 archive explicitly points to 2023 article for task 3",
+      "locator": "Same archive catalog assigns contact type classification (collision versus clamping) to this article"
+    }
+  ],
+  "selection_notes": [
+    {
+      "candidate": "10.1115/DETC2017-68074",
+      "result": "Related shorter conference publication, kept out of this table to avoid double-counting the UCLA thesis experiments. The thesis retains its own repository identifier."
+    },
+    {
+      "candidate": "10.1073/pnas.2521406123",
+      "result": "Screened supplement descriptions. S1–S4 provide geometry. No verified public command, limiter and independent wrench time series. Do not treat geometry or associated code as streamed output measurements."
+    },
+    {
+      "candidate": "10.3390/act15060301",
+      "result": "Full-text paper with physical experiments and tabulated measures. Its explicit no-new-data statement does not establish downloadable raw recordings."
+    },
+    {
+      "candidate": "10.3390/act14090443 and 10.1017/wtc.2023.20",
+      "result": "Authors make raw data available on request. Neither is counted as a verified free downloadable raw file."
+    },
+    {
+      "candidate": "10.1177/16878132261468589",
+      "result": "Retained as a numerical-only counterexample. Its ±80 Nm clipping does not supply physical drive saturation evidence."
+    },
+    {
+      "candidate": "10.1109/TII.2023.3332112",
+      "result": "Both MCC data descriptors list the work in their Related research article field. The IEEE abstract reports evaluation using the Tennessee Eastman process, so this entry is not evidence that the algorithm consumed the MCC motor or gearbox CSVs."
+    },
+    {
+      "candidate": "arXiv:1906.07669v2",
+      "result": "The TU Delft thesis, ch. 3, describes journal submission, not journal publication. Used the official arXiv DOI and version date. https://research.tudelft.nl/files/86856723/dissertation_Manuel_Aiple_screen.pdf"
+    },
+    {
+      "candidate": "IMAV2025-12",
+      "result": "Use title and byline from PDF. The expanded names in the proceedings BibTeX differ for more than one author; the author order and paper ID match."
+    }
+  ],
+  "unresolved_gap": "The collection includes physical saturation observations, separate load-side sensing and model/fixture-derived references. No study here establishes an unrestricted file containing synchronous unclipped demand, applied limited command, and independently measured joint shaft torque during saturation."
+}

@@ -1,0 +1,120 @@
+{
+  "title": "naubiomech/OpenExo: OpenExo",
+  "authors": [
+    "Chance Cuddeback",
+    "Jack R. Williams",
+    "Shanpu Fang"
+  ],
+  "doi": "10.5281/zenodo.14624972",
+  "landing": "https://zenodo.org/records/14624972",
+  "version": "v1.0.1, 2025-01-09",
+  "fixed_commit": "908c71e588f756c246f1cde1a6029c20f028f7cb",
+  "repository": "naubiomech/OpenExo",
+  "fixed_tree": "https://github.com/naubiomech/OpenExo/tree/908c71e588f756c246f1cde1a6029c20f028f7cb",
+  "accessed_utc": "2026-11-21",
+  "grade": "Measured files, decoded from the pinned companion repository; publisher full text and original analysis notebooks inspected.",
+  "archive": {
+    "name": "naubiomech/OpenExo-v1.0.1.zip",
+    "publisher_md5": "75092adf3e817b20e6af8fcd0a8c5450",
+    "verification": "Registration only for the ZIP. Nine individual pinned Git files checked by recomputing their Git blob SHA-1."
+  },
+  "rights": "Versioned LICENSE.md designates CERN-OHL-P v2.0 for hardware and LGPL v3.0 for software. It does not specify a separate raw experimental data license. This batch contains original aggregates and links.",
+  "inputs": [
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Ankle/RMSE/RMSE.mlx",
+      "bytes": 22880,
+      "git_blob_sha1": "adc1c569a081bf5ed906fb38f4fec56c3bfb3836",
+      "read": "analysis instructions decoded from matlab/document.xml"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Ankle/RMSE/Walk_Test.xlsx",
+      "bytes": 237810,
+      "git_blob_sha1": "9a56f37c71ef3324b52b1d4a4fff77e6fa4320f5",
+      "read": "workbook decoded, complete left command and measured channels read"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Ankle/Step_Response/AnkleStep.mat",
+      "bytes": 34712,
+      "git_blob_sha1": "a30e53e517ff5c704f3c35522710cc57c365e2b8",
+      "read": "MATLAB matrix decoded, all values read"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Ankle/Step_Response/Step_Response_Analysis.mlx",
+      "bytes": 6993,
+      "git_blob_sha1": "912898cbcdac50a3f504f65d04691c9c60dea082",
+      "read": "analysis instructions decoded from matlab/document.xml"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Duration_Test_Results.xlsx",
+      "bytes": 21220,
+      "git_blob_sha1": "10e71829002bd3097f2c83404852d0753c986e5a",
+      "read": "archive decoded for workbook structure"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Hip/RMSE/Analysis_Code.mlx",
+      "bytes": 25727,
+      "git_blob_sha1": "cbd0b46f87f857c2b12c3cf70fd95cac4d6a1925",
+      "read": "analysis instructions decoded from matlab/document.xml"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Hip/RMSE/Walk_Test.xlsx",
+      "bytes": 215696,
+      "git_blob_sha1": "9e21f3a59f62d2a35857aa137bd67d3f795f497e",
+      "read": "workbook decoded, complete left command and measured channels read"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Hip/Step_Response/Step.mat",
+      "bytes": 39280,
+      "git_blob_sha1": "3a5775b9b54d09934f2da01c81a14c84460c2c97",
+      "read": "MATLAB matrix decoded, all values read"
+    },
+    {
+      "path": "OpenExo_Publication_Data/Publication_Data/Engineering/Hip/Step_Response/Step_Response_Analysis.mlx",
+      "bytes": 19436,
+      "git_blob_sha1": "a3eb5bd58304c90240f1f61e18df70ddc23933fc",
+      "read": "analysis instructions decoded from matlab/document.xml"
+    }
+  ],
+  "companion": {
+    "title": "OpenExo: An open-source modular exoskeleton to augment human function",
+    "authors": [
+      "Jack R. Williams",
+      "Chance F. Cuddeback",
+      "Shanpu Fang",
+      "Daniel Colley",
+      "Noah Enlow",
+      "Payton Cox",
+      "Paul Pridham",
+      "Zachary F. Lerner"
+    ],
+    "doi": "10.1126/scirobotics.adt1591",
+    "issued": "2025-06-25",
+    "venue": "Science Robotics 10(103), eadt1591",
+    "source": "https://doi.org/10.1126/scirobotics.adt1591",
+    "alias": "10.1101/2024.10.02.616295",
+    "metadata": "https://pubmed.ncbi.nlm.nih.gov/40561045/",
+    "locator": "Engineering validation, Benchtop testing, Fig. 3A–B and Data and materials availability. Article p. 5 identifies the 6 Nm hip step as open loop, the 28 Nm ankle step as closed loop, and the bench hip hardware as modified with an inline torque transducer."
+  },
+  "history": {
+    "keys": [
+      "10.5281/zenodo.14624972",
+      "naubiomech/OpenExo",
+      "OpenExo: An open-source modular exoskeleton to augment human function",
+      "10.1126/scirobotics.adt1591",
+      "10.1101/2024.10.02.616295",
+      "Williams Cuddeback Fang Colley"
+    ]
+  },
+  "interpretation": {
+    "step": "AnkleStep.mat and Step.mat encode ordered 100/200/300 triplets for prescribed torque, measured torque and within-cycle clock. Both channels are sign-reversed for ankle per the source notebooks. Keep all six nonzero command runs per joint, including the run that starts at the first observed row. Thresholds use the first observed samples reaching 10% and 90% of prescribed torque. Zero measured rise means both thresholds crossed between the same samples. Time in ms is local to each pulse.",
+    "walking": "Use every finite same-column value of LTorque and LSetP and the same ankle sign convention. The walking records are separate from the bench. The published analysis uses additional gait segmentation and selection. Our pooled errors include the low-assistance and zero-command portions.",
+    "limitations": "There is no identified upstream pre-clamp command plus downstream applied command in these four source files. Inline torque measurement and an open/closed-loop comparison do not establish a saturation episode. Fig. 3 reports averaged traces and distinct filtering/selection. Raw pulsewise threshold ranges should not be interpreted as a contradiction."
+  },
+  "access": [
+    "https://zenodo.org/records/14624972",
+    "https://github.com/naubiomech/OpenExo/commit/6424cb2525959e3755984d36aad99a5da54b8fda",
+    "https://github.com/naubiomech/OpenExo/tree/908c71e588f756c246f1cde1a6029c20f028f7cb/OpenExo_Publication_Data/Publication_Data/Engineering"
+  ],
+  "reproduce": "python openexo_reader.py <download-cache> <output-folder> (Python 3, SciPy and openpyxl). Reads the fixed GitHub versions and rejects changed bytes.",
+  "license_record": "https://github.com/naubiomech/OpenExo/blob/908c71e588f756c246f1cde1a6029c20f028f7cb/LICENSE.md"
+}

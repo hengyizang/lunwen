@@ -1,0 +1,242 @@
+{
+  "title": "Estimating human joint moments unifies exoskeleton control and reduces user effort",
+  "authors": [
+    "Dean Molinaro"
+  ],
+  "doi": "10.5061/dryad.8kprr4xsv",
+  "version": "Dryad release 2024-03-21, mirrored by Zenodo record 10849318 v1",
+  "accessed_utc": "2026-11-21",
+  "landing": "https://doi.org/10.5061/dryad.8kprr4xsv",
+  "mirror": "https://zenodo.org/records/10849318",
+  "grade": "Deposited file catalogue and downloaded author README; measurement files listed, participant sample values not decoded.",
+  "rights": "Dryad datasets are published under CC0. https://datadryad.org/help/guides/reuse",
+  "readme_url": "https://zenodo.org/records/10849318/files/README.md?download=1",
+  "file_manifest": [
+    {
+      "filename": "AB01.zip",
+      "published_md5": "ad9b26aad3b6aac483431d60dd9ef3e4",
+      "rounded_size": "92.8 MB"
+    },
+    {
+      "filename": "AB02.zip",
+      "published_md5": "88a95b80b8f190e5e9e47736a241ace7",
+      "rounded_size": "77.8 MB"
+    },
+    {
+      "filename": "AB03.zip",
+      "published_md5": "8350ff2b0c8c3ab534c8971993b1a288",
+      "rounded_size": "71.9 MB"
+    },
+    {
+      "filename": "AB04.zip",
+      "published_md5": "0934448ad967e239f36f62251c9245a5",
+      "rounded_size": "93.4 MB"
+    },
+    {
+      "filename": "AB05.zip",
+      "published_md5": "847ada52ba4af59c33efad6d5fc2975a",
+      "rounded_size": "65.8 MB"
+    },
+    {
+      "filename": "AB06.zip",
+      "published_md5": "2ae6e17843457833ba840ae253b27c85",
+      "rounded_size": "81.8 MB"
+    },
+    {
+      "filename": "AB07.zip",
+      "published_md5": "03679a121078f6edb14c9512fadf3835",
+      "rounded_size": "75.9 MB"
+    },
+    {
+      "filename": "AB08.zip",
+      "published_md5": "0b8888a65c5e408ae75440ef78278d5f",
+      "rounded_size": "75.6 MB"
+    },
+    {
+      "filename": "AB09.zip",
+      "published_md5": "c0d37eedcf6e5aaf5eb2336a96e24410",
+      "rounded_size": "75.3 MB"
+    },
+    {
+      "filename": "AB10.zip",
+      "published_md5": "c341969d0a696cf477a81fb27d1fbf4b",
+      "rounded_size": "56.9 MB"
+    },
+    {
+      "filename": "AB11.zip",
+      "published_md5": "455d2360efb93fd2c9d8330c299d8300",
+      "rounded_size": "58.6 MB"
+    },
+    {
+      "filename": "AB12.zip",
+      "published_md5": "e1186adeebb59db1052077b0c650f212",
+      "rounded_size": "53.9 MB"
+    },
+    {
+      "filename": "AB13.zip",
+      "published_md5": "270bb5fab9891ff21607315a96f0d64c",
+      "rounded_size": "55.6 MB"
+    },
+    {
+      "filename": "AB14.zip",
+      "published_md5": "e02db1d4fc78b460ddae9e1446237124",
+      "rounded_size": "53.7 MB"
+    },
+    {
+      "filename": "AB15.zip",
+      "published_md5": "800526ac8a4578992e718ab0b2bd2cdd",
+      "rounded_size": "59.8 MB"
+    },
+    {
+      "filename": "AB16.zip",
+      "published_md5": "3dbd3c979443ec03af6da5ce01b9be39",
+      "rounded_size": "61.0 MB"
+    },
+    {
+      "filename": "AB17.zip",
+      "published_md5": "fa26e918458e475bdd4df845360f6230",
+      "rounded_size": "59.3 MB"
+    },
+    {
+      "filename": "AB18.zip",
+      "published_md5": "cb7b6516c602acb4d57491bf8f152d14",
+      "rounded_size": "58.1 MB"
+    },
+    {
+      "filename": "AB19.zip",
+      "published_md5": "eb5750ddf17b8dba214460ca9483e5fe",
+      "rounded_size": "58.9 MB"
+    },
+    {
+      "filename": "AB20.zip",
+      "published_md5": "0edf88f9194a1efee2910698cf3acd8b",
+      "rounded_size": "65.9 MB"
+    },
+    {
+      "filename": "AB21.zip",
+      "published_md5": "b0bedf65449d3a9749962eeb1e3051c6",
+      "rounded_size": "67.2 MB"
+    },
+    {
+      "filename": "AB22.zip",
+      "published_md5": "13a9f0861cbb2a6f53bd8abb51d78bb9",
+      "rounded_size": "65.5 MB"
+    },
+    {
+      "filename": "AB23.zip",
+      "published_md5": "110b73e4e9274c0ab8906b2f2a31dc1b",
+      "rounded_size": "66.2 MB"
+    },
+    {
+      "filename": "AB24.zip",
+      "published_md5": "a13f879c92f0c32df87737e9b66ed23a",
+      "rounded_size": "68.4 MB"
+    },
+    {
+      "filename": "AB25.zip",
+      "published_md5": "97655dd4f53eb560858f2ad358106b6b",
+      "rounded_size": "76.0 MB"
+    },
+    {
+      "filename": "AB26.zip",
+      "published_md5": "1aba6a7539a982d4a7aa8423a200de79",
+      "rounded_size": "70.5 MB"
+    },
+    {
+      "filename": "AB27.zip",
+      "published_md5": "ed37bb053e45c90b12cf4ddc6c0d80b2",
+      "rounded_size": "70.0 MB"
+    },
+    {
+      "filename": "AB28.zip",
+      "published_md5": "8416e11f56f2d5a14676c004c0b39f31",
+      "rounded_size": "67.2 MB"
+    },
+    {
+      "filename": "AB29.zip",
+      "published_md5": "6e3da904960f350398d1c41908ffe925",
+      "rounded_size": "70.1 MB"
+    },
+    {
+      "filename": "AB30.zip",
+      "published_md5": "490c90bd8adffc627f40d11c548a19f0",
+      "rounded_size": "81.6 MB"
+    },
+    {
+      "filename": "AB31.zip",
+      "published_md5": "ef0eaf267b2a2d26c1bbf6064c1294e8",
+      "rounded_size": "78.9 MB"
+    },
+    {
+      "filename": "AB32.zip",
+      "published_md5": "8f0c641d09d2a9653bcd7a0547c9ed93",
+      "rounded_size": "78.2 MB"
+    },
+    {
+      "filename": "AB33.zip",
+      "published_md5": "b66b88cec28cdbc6b5bb7878cbed6d65",
+      "rounded_size": "78.2 MB"
+    },
+    {
+      "filename": "AB34.zip",
+      "published_md5": "cb276eb71c91900fc03d0f32a6be7e1a",
+      "rounded_size": "86.7 MB"
+    },
+    {
+      "filename": "README.md",
+      "published_md5": "dba9429b36f861d5c5315fec952f7b0d",
+      "rounded_size": "10.3 kB"
+    }
+  ],
+  "manifest_note": "MD5 values and rounded sizes transcribed from Zenodo file declarations. No local rehash of the 34 ZIP files.",
+  "channels": [
+    {
+      "file": "exo.csv",
+      "fields": "trq_cmd_l/r",
+      "meaning": "actuator command"
+    },
+    {
+      "file": "exo.csv",
+      "fields": "trq_mea_l/r",
+      "meaning": "measured motor current multiplied by motor torque constant and gear ratio; a drive-side torque estimate"
+    },
+    {
+      "file": "exo.csv",
+      "fields": "trq_est_l/r",
+      "meaning": "neural-network estimate of human hip moment"
+    },
+    {
+      "file": "grf.csv",
+      "fields": "3D ground reaction force / centre of pressure",
+      "meaning": "force plate measured ground loads"
+    },
+    {
+      "file": "moment.csv",
+      "fields": "left/right hip, knee and ankle moments",
+      "meaning": "human joint moments from inverse dynamics"
+    }
+  ],
+  "limitations": "The release describes synchronized 200 Hz series. Author README missing-data notes report both current-derived torque readings missing in all trials for AB10–AB14 due to a logging bug. TCN hip moment estimates are absent for BT and ET trials. Force plate gaps can invalidate inverse dynamics. For AB01–AB09, exo records with IMU acquisition slower than 20 ms are marked missing after resampling. These files cannot establish independent actuator shaft torque or identify pre- and post-limiter commands.",
+  "history": {
+    "keys": [
+      "10.5061/dryad.8kprr4xsv",
+      "zenodo.org/records/10849318",
+      "Estimating human joint moments unifies exoskeleton control and reduces user effort",
+      "Estimating human joint moments unifies exoskeleton control, reducing user effort",
+      "10.1126/scirobotics.adi8852"
+    ]
+  },
+  "companion": {
+    "authors": [
+      "Dean D. Molinaro",
+      "Inseung Kang",
+      "Aaron J. Young"
+    ],
+    "title": "Estimating human joint moments unifies exoskeleton control, reducing user effort",
+    "doi": "10.1126/scirobotics.adi8852",
+    "issued": "2024-03-20",
+    "venue": "Science Robotics 9(88), eadi8852",
+    "source": "https://pubmed.ncbi.nlm.nih.gov/38507475/",
+    "grade": "Author abstract and publication metadata. Signal semantics and missingness were checked in the data README."
+  }
+}

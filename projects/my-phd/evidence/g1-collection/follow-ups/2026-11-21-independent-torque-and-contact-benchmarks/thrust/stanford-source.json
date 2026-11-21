@@ -1,0 +1,92 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "stanford",
+  "title": "Stanford Multi-Robot Systems Lab test stand records in quadrotor_sim",
+  "creator": "Stanford Multi-Robot Systems Lab",
+  "repository": "StanfordMSL/quadrotor_sim",
+  "commit": "cdb737b1f00ff99c49cec031d568921a36d5592c",
+  "rights": "Public GitHub repository. No root license found in the fixed tree. Only original aggregates are distributed.",
+  "evidence": "Six experimental RCbenchmark-formatted torque/thrust captures and a ramp test acquisition script accompany a simulation repository. A second folder repeats exactly the same six CSV blobs. Source electrical speed in rad/s and thrust in kgf. Calibration records are not attached to these CSVs.",
+  "history_keys": [
+    "StanfordMSL/quadrotor_sim",
+    "RampTest_2021-08-19_001845",
+    "cdb737b1f00ff99c49cec031d568921a36d5592c"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "git_blob": "68d6b9d11341913f66b0c5bfa560c7ddb26bbeb6",
+      "bytes": 44
+    },
+    {
+      "path": "misc/sysID/RampTest_2021-08-19_001845.csv",
+      "git_blob": "365cb261dd9a148f28776501f473bdcf1da523b4",
+      "bytes": 40479
+    },
+    {
+      "path": "misc/sysID/StepsTestV2_2021-08-18_234659.csv",
+      "git_blob": "fe78e7406c73a7fbd60ec2c49b7a567cd4669e05",
+      "bytes": 1845
+    },
+    {
+      "path": "misc/sysID/StepsTestV2_2021-08-19_000609.csv",
+      "git_blob": "85f981d14ba3a7d39760c5fda8c004a579df7a27",
+      "bytes": 2469
+    },
+    {
+      "path": "misc/sysID/StepsTestV2_2021-08-19_001131.csv",
+      "git_blob": "72b925cf0e4c6c3d0508a1469398156190fef6dd",
+      "bytes": 4558
+    },
+    {
+      "path": "misc/sysID/StepsTest_2021-08-18_235051.csv",
+      "git_blob": "1351fbc34d8cb8a2c588b4c0aaeea1f8f0b89357",
+      "bytes": 12246
+    },
+    {
+      "path": "misc/sysID/StepsTest_2021-08-18_235945.csv",
+      "git_blob": "7674926203b5597aa6a4c8cb2725e0447b84545b",
+      "bytes": 6143
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/RampTest_2021-08-19_001845.csv",
+      "git_blob": "365cb261dd9a148f28776501f473bdcf1da523b4",
+      "bytes": 40479
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/StepsTestV2_2021-08-18_234659.csv",
+      "git_blob": "fe78e7406c73a7fbd60ec2c49b7a567cd4669e05",
+      "bytes": 1845
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/StepsTestV2_2021-08-19_000609.csv",
+      "git_blob": "85f981d14ba3a7d39760c5fda8c004a579df7a27",
+      "bytes": 2469
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/StepsTestV2_2021-08-19_001131.csv",
+      "git_blob": "72b925cf0e4c6c3d0508a1469398156190fef6dd",
+      "bytes": 4558
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/StepsTest_2021-08-18_235051.csv",
+      "git_blob": "1351fbc34d8cb8a2c588b4c0aaeea1f8f0b89357",
+      "bytes": 12246
+    },
+    {
+      "path": "misc/sysID/data/thrust_stand/StepsTest_2021-08-18_235945.csv",
+      "git_blob": "7674926203b5597aa6a4c8cb2725e0447b84545b",
+      "bytes": 6143
+    },
+    {
+      "path": "misc/sysID/model_motor_v3.js",
+      "git_blob": "f1d312dc63388dcaaa3ec75721e5e1ad015ff2e6",
+      "bytes": 2845
+    }
+  ],
+  "landing": "https://github.com/StanfordMSL/quadrotor_sim/tree/cdb737b1f00ff99c49cec031d568921a36d5592c",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/StanfordMSL/quadrotor_sim/blob/cdb737b1f00ff99c49cec031d568921a36d5592c/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

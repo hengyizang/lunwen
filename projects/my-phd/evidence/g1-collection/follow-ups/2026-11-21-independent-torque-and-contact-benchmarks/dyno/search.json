@@ -1,0 +1,36 @@
+{
+  "retrieval_utc": "2026-11-21",
+  "topic": "R2 physical torque/current/force endpoints and limits",
+  "searches": [
+    {
+      "service": "GitHub repository search",
+      "query": "motor dynamometer load cell csv in:readme",
+      "screened": [
+        "ItsMeAech/pmsm-foc-fec-dynamometer (two numeric HTML dashboards verified)",
+        "blueteef/bldc-motor-test-rig (load cell listed as pending)",
+        "awarebosanko/Motor-Dynameter (assembly and calibration listed as pending)"
+      ]
+    },
+    {
+      "service": "GitHub repository search",
+      "query": "\"torque tracking\" \"dataset\" actuator in:readme",
+      "screened": [
+        "MaximeSabbah/fer_mujoco_sysid (README explicitly says all current campaigns simulated)",
+        "GLembrez/torque-tracking-ML (training dataset generated in MuJoCo)"
+      ]
+    },
+    {
+      "service": "Public web search",
+      "query": "precision gearbox hysteresis torque angular displacement dataset robotics torque sensor strain wave gear open data repository experiment",
+      "screened": [
+        "MCC5-THU gearbox, linked motor collection and Mendeley records",
+        "Schuller et al. RT1-T primary paper (raw data via authors; bibliography handled separately in the batch)"
+      ]
+    }
+  ],
+  "version_handling": [
+    "Both Manjate HTML reports duplicate the FEC data block. An owner-reported excluded sweep and one glitch correction are documented in the merged dashboard.",
+    "MCC5 gearbox V1 and V2 form one release family. The project reports torque polarity corrected in V2.",
+    "MCC5 motor preprint and final publication are one article; the Mendeley record and author-linked HF repository form one dataset family."
+  ]
+}

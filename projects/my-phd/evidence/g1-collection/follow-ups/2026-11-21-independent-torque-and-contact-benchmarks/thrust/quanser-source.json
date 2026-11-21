@@ -1,0 +1,42 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "quanser",
+  "title": "QDrone1 Cobra 2208 motor parametrization — physical StepsTest",
+  "creator": "Quanser Consulting Inc.",
+  "repository": "quanser/Quanser_Academic_Resources",
+  "commit": "6adbceff7d2630ef35f61ddc7370be387bf03f4d",
+  "rights": "Root BSD-3-Clause software license, copyright 2025 Quanser Consulting Inc. No additional CSV-specific license identified. Only original aggregate statistics are distributed.",
+  "evidence": "One stepped CSV recorded in 2021 has repeated ESC pulse sequences and signed thrust in N, torque in N·m, electrical and optical speed in rad/s. In the companion MATLAB file, a motor torque constant is calculated from nominal KV while Motor_torque uses Torque_data. These definitions should not be conflated.",
+  "history_keys": [
+    "StepsTest_2021-10-20_114905",
+    "QDrone1_Cobra_Motor_Parametrization",
+    "quanser/Quanser_Academic_Resources"
+  ],
+  "files": [
+    {
+      "path": "3_user_manuals/qdrone/Drone Parametrization/Cobra_2208/QDrone1_Cobra_Motor_Parametrization.m",
+      "git_blob": "78de55d9e6173946592ad54306870da4d6f88f1c",
+      "bytes": 8031
+    },
+    {
+      "path": "3_user_manuals/qdrone/Drone Parametrization/Cobra_2208/StepsTest_2021-10-20_114905.csv",
+      "git_blob": "5476156765979315f9b663fe81935f6245bca29e",
+      "bytes": 11596
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "2d162705298cf152b0fda19f6598e43838bb339a",
+      "bytes": 1509
+    },
+    {
+      "path": "README.md",
+      "git_blob": "72bdc2cb069fb21063c8c0caab7cb77ab9d31f7c",
+      "bytes": 3605
+    }
+  ],
+  "landing": "https://github.com/quanser/Quanser_Academic_Resources/tree/6adbceff7d2630ef35f61ddc7370be387bf03f4d",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/quanser/Quanser_Academic_Resources/blob/6adbceff7d2630ef35f61ddc7370be387bf03f4d/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

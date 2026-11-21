@@ -1,0 +1,753 @@
+{
+  "repository": "JCamiloD06/load-dependent-steering-mpc",
+  "version": "2804e024cc5384aeb49a2fada341d9b707eac009",
+  "verified_utc": "2026-11-21",
+  "landing": "https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009",
+  "title": "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control",
+  "authors": [
+    "Juan Camilo Díaz-López",
+    "Jesús Alberto Lastra-Robles",
+    "Francisco Javier Burgos-Flórez"
+  ],
+  "history_keys": [
+    "JCamiloD06/load-dependent-steering-mpc",
+    "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control",
+    "HERMES 69296",
+    "2804e024cc5384aeb49a2fada341d9b707eac009"
+  ],
+  "license": "Dataset and documentation CC BY 4.0 per fixed README. Code and hardware codebase MIT per README.",
+  "queries": [
+    "open source robot actuator dynamometer testbench data logs motor output torque github load cell quasi direct drive characterization dataset",
+    "GitHub robot actuator motor dynamometer transmission efficiency torque sensor harmonic cycloidal test data CSV robot gear actuator benchmark",
+    "open leg actuator characterization torque bandwidth sample data series elastic actuator experiment supplementary data bandwidth GIM6010 AK80 GitHub"
+  ],
+  "evidence": "Full pinned repository tree, every bench test CSV (135), static calibration and software that generates/consumes these records. HIL trajectory files were inventoried but their values were not inspected. This is a repository record, without a peer-reviewed publication identifier verified here.",
+  "findings": [
+    "Five test families respectively have 3610/2372/4808/11964/3004 numeric rows. All 25758 core rows have finite time, position request, speed response, Iq and torque readback. Maximum absolute difference between torque readback and 0.55 × Iq is at most 0.00007501 Nm. No selected row has |Iq| ≥10 A. The 11 static calibration levels show the same calculation to 0.0000651 Nm.",
+    "The 25 test-5 runs include five replicates per labeled load. On the +50 degree commanded segment the within-run maximum positive speed has medians of 381.875/385.625/386.250/385.000/396.250 degrees/s across the five load levels 0/0.5/1/1.5/2 Nm. This statistic has no monotonic decline.",
+    "In the producer, torque_cmd_Nm records the unsigned nominal condition throughout each run. At the step the code passes negative load as opposing feedforward. The per-sample voltage and current and optical-encoder response are useful; the signed actuator net torque and unconstrained torque are not recorded.",
+    "The current-to-torque calculation is explicit in odrive_ascii_interface.py. process_phase1_bench_data.m lines 538–539 assign tau_stall_est=2.45 and gamma_est=4.5 as constants."
+  ],
+  "limits": [
+    "The readback shares the current signal used to compute it and cannot validate a shaft-torque calibration on its own. Rate-limited behavior and a physical torque ceiling require additional evidence.",
+    "Readme identifies the bench acquisitions as physical; the acquisition interface can also run serial or mock mode. The static calibration header says COM3, while individual dynamic CSV files have no serial/mock flag.",
+    "Forward peaks use the +50° step subset, not the MATLAB full-file peak or a fitted speed ceiling."
+  ],
+  "outputs": [
+    "steering-bench-runs.csv",
+    "steering-static-calibration.csv"
+  ],
+  "source_files": [
+    {
+      "path": "README.md",
+      "git_blob_sha1": "cdca206683c7c28a2ac699c2905c4fc40c7a8f1c",
+      "bytes": 14204
+    },
+    {
+      "path": "data/raw/bench_phase1/calibration_finalff_torque.csv",
+      "git_blob_sha1": "f30498f0c14045716d1dd9d8f0950a588dea3bc3",
+      "bytes": 889
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+30deg_rep01.csv",
+      "git_blob_sha1": "551196b86498ba2ffdbdd4233e1da713cbcef72b",
+      "bytes": 8860
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+30deg_rep02.csv",
+      "git_blob_sha1": "c15a8cef97a2b0f2194ac77c2444a14e49267362",
+      "bytes": 8965
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+30deg_rep03.csv",
+      "git_blob_sha1": "a6687c85b22c866b7d8d4fccc8f16dd116de68c2",
+      "bytes": 8974
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+30deg_rep04.csv",
+      "git_blob_sha1": "1875c4859b61a18004e4de90c4b666c0aa81f3e6",
+      "bytes": 9103
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+30deg_rep05.csv",
+      "git_blob_sha1": "d81eba3901763a114180f16ce3acb01986e63e34",
+      "bytes": 8977
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+45deg_rep01.csv",
+      "git_blob_sha1": "d1b9e68be8d179b74fca07b3acf8ab22012bd250",
+      "bytes": 8968
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+45deg_rep02.csv",
+      "git_blob_sha1": "12dddcbafdac01728889f3d084d517448809b910",
+      "bytes": 8969
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+45deg_rep03.csv",
+      "git_blob_sha1": "dad397cd5ece171ec6678467cfe8a2dc4c6bbcf2",
+      "bytes": 8897
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+45deg_rep04.csv",
+      "git_blob_sha1": "aa850e825e5ab6647edcf6241124861c8d78e758",
+      "bytes": 9047
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+45deg_rep05.csv",
+      "git_blob_sha1": "65bd9faf7a2c0ddf892ed30187933367569b700e",
+      "bytes": 9041
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+60deg_rep01.csv",
+      "git_blob_sha1": "bac0060872c5155eaec077338254e583da93a3ce",
+      "bytes": 8903
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+60deg_rep02.csv",
+      "git_blob_sha1": "875bd82805a1433929f9bda7f84ed02ec80a1d87",
+      "bytes": 8911
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+60deg_rep03.csv",
+      "git_blob_sha1": "c04803ffa1329119991df4840533d773a5ce8063",
+      "bytes": 8833
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+60deg_rep04.csv",
+      "git_blob_sha1": "24a7423f9a59b35714fd86736ce62898167e9349",
+      "bytes": 8910
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_+60deg_rep05.csv",
+      "git_blob_sha1": "35bb9de63ee23edc3a73223ae30ab1c36a220f4a",
+      "bytes": 8972
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-30deg_rep01.csv",
+      "git_blob_sha1": "b9f247c1b1b1cc711fed67244fee5039394a4cbf",
+      "bytes": 9501
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-30deg_rep02.csv",
+      "git_blob_sha1": "7753d0861969f2bec31029b1369c5801e302aca7",
+      "bytes": 9445
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-30deg_rep03.csv",
+      "git_blob_sha1": "ca3fe7847d405889d2f19e85e82168530cc80aed",
+      "bytes": 9455
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-30deg_rep04.csv",
+      "git_blob_sha1": "974edbfcabb864063c1c7221a4799b49091964fb",
+      "bytes": 9462
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-30deg_rep05.csv",
+      "git_blob_sha1": "34f79c2126b139dddaed66c10efcb970a0ce4e04",
+      "bytes": 9389
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-45deg_rep01.csv",
+      "git_blob_sha1": "9a46d79b52821b8406e4e771a4b100c0cb79a6c2",
+      "bytes": 9483
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-45deg_rep02.csv",
+      "git_blob_sha1": "87134f7c3e3e9e212b8ad19b5c11e5df401461e4",
+      "bytes": 9397
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-45deg_rep03.csv",
+      "git_blob_sha1": "892d11218752a204c7a088097f80145b294a1797",
+      "bytes": 9475
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-45deg_rep04.csv",
+      "git_blob_sha1": "85c7baa2f8ca4604257fcd0049691d5e189ff9f1",
+      "bytes": 9473
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-45deg_rep05.csv",
+      "git_blob_sha1": "4f4c8e5529548bf880e619deee7a120bfdbe8eae",
+      "bytes": 9542
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-60deg_rep01.csv",
+      "git_blob_sha1": "e06145e2e63a2167ad1dca99d0ed839522c4f4bb",
+      "bytes": 9515
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-60deg_rep02.csv",
+      "git_blob_sha1": "a75c118b6c5a16601442a9abde7199a59d6af371",
+      "bytes": 9514
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-60deg_rep03.csv",
+      "git_blob_sha1": "7e351a2c41f63314f74f3985f9f238101c6cd056",
+      "bytes": 9423
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-60deg_rep04.csv",
+      "git_blob_sha1": "30697ed7f2589a55688b4931fce85e6069ffb3be",
+      "bytes": 9502
+    },
+    {
+      "path": "data/raw/bench_phase1/test1_inertia_friction/t1_step_-60deg_rep05.csv",
+      "git_blob_sha1": "a591fdb93b76ed8d323fa6e5bed4cd7f504f00bc",
+      "bytes": 9503
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+10deg_rep01.csv",
+      "git_blob_sha1": "440c47f29a11fedfd11166d8e8dd962f5a28be56",
+      "bytes": 5945
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+10deg_rep02.csv",
+      "git_blob_sha1": "37890470d6f9d568f894f05d4d9273d01f3a9c95",
+      "bytes": 5981
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+10deg_rep03.csv",
+      "git_blob_sha1": "4cdd9a035c0c8d00cd699cf59551cebb709c9150",
+      "bytes": 5969
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+10deg_rep04.csv",
+      "git_blob_sha1": "69111004f58ceae31c8e151ee926a01a9725790d",
+      "bytes": 5894
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+10deg_rep05.csv",
+      "git_blob_sha1": "a9bfda36fb2cc407adba9444670c65755b15b4ab",
+      "bytes": 5981
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+15deg_rep01.csv",
+      "git_blob_sha1": "bd1b304ef30d824431bea60d91d2fe92c64ed775",
+      "bytes": 5984
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+15deg_rep02.csv",
+      "git_blob_sha1": "92b76fcb6b0bf2a1a61c47cc9f01f5f861dc701e",
+      "bytes": 6143
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+15deg_rep03.csv",
+      "git_blob_sha1": "99f35ee9c900de56332c6de43fa03506870abffb",
+      "bytes": 5992
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+15deg_rep04.csv",
+      "git_blob_sha1": "6a212be155f6d5441bfd42118a0cda751e1da022",
+      "bytes": 6148
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+15deg_rep05.csv",
+      "git_blob_sha1": "09beee261c072299784b388a4a61357e97ee1ff3",
+      "bytes": 6073
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+20deg_rep01.csv",
+      "git_blob_sha1": "43b16076dddefc4a2f1daa0b0639668e6f8d3d49",
+      "bytes": 5999
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+20deg_rep02.csv",
+      "git_blob_sha1": "f4ea24b87e007a662074ab60cfd5d1bb05620447",
+      "bytes": 6074
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+20deg_rep03.csv",
+      "git_blob_sha1": "6f2c2afa7eb67b1231dd0e2fb0924ac71c82a1f2",
+      "bytes": 6074
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+20deg_rep04.csv",
+      "git_blob_sha1": "a449a43aad8d644a3d37f4fa273fcc57e51bff17",
+      "bytes": 6070
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_+20deg_rep05.csv",
+      "git_blob_sha1": "00e67af61cf22d34054eca8e30cbd01ea1b02d8f",
+      "bytes": 5932
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-10deg_rep01.csv",
+      "git_blob_sha1": "eb5c9da8eecc2962b5f8496b176d69604d97f55f",
+      "bytes": 6143
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-10deg_rep02.csv",
+      "git_blob_sha1": "d2fa0f94484db9c96cf97ad8bd4ca6ccd51f7747",
+      "bytes": 6106
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-10deg_rep03.csv",
+      "git_blob_sha1": "1c69502450cdc6c1777053718a463554449efb7d",
+      "bytes": 6178
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-10deg_rep04.csv",
+      "git_blob_sha1": "61a5b41e587dd65b5843a44fc1d1429c83559093",
+      "bytes": 6185
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-10deg_rep05.csv",
+      "git_blob_sha1": "0e34c7412c3fb8ccf4ae1449d9cb477388b32abd",
+      "bytes": 6180
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-15deg_rep01.csv",
+      "git_blob_sha1": "78a68a4e65e8f87c385e2e274789fedadf470db0",
+      "bytes": 6230
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-15deg_rep02.csv",
+      "git_blob_sha1": "9c570f30c20dd9fabfdc8a64036b4b341da42620",
+      "bytes": 6322
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-15deg_rep03.csv",
+      "git_blob_sha1": "fb40a0ed883ec51beb0863e8a4cac200963a1ce4",
+      "bytes": 6317
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-15deg_rep04.csv",
+      "git_blob_sha1": "dcab37b5697d667c61fa881817e080d1d5ec4287",
+      "bytes": 6318
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-15deg_rep05.csv",
+      "git_blob_sha1": "14a25de2923699bcc5164b93830cb409acca18a4",
+      "bytes": 6234
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-20deg_rep01.csv",
+      "git_blob_sha1": "8e466e57d271198e5a29cf0d7ae2a5687d5c89f7",
+      "bytes": 6216
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-20deg_rep02.csv",
+      "git_blob_sha1": "444fa96d5f12e66d01d75048b80b61305d04cb60",
+      "bytes": 6195
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-20deg_rep03.csv",
+      "git_blob_sha1": "45689a735cc3695acdc042be4a0ac5f18297da41",
+      "bytes": 6275
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-20deg_rep04.csv",
+      "git_blob_sha1": "4e15808b1bd69144cfcf6e76e2e8b37243dc57d4",
+      "bytes": 6262
+    },
+    {
+      "path": "data/raw/bench_phase1/test2_time_delay/t2_pulse_-20deg_rep05.csv",
+      "git_blob_sha1": "0a74d13bec270f4307495d7fea15cbe2fd41d1f4",
+      "bytes": 6033
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+25deg_rep01.csv",
+      "git_blob_sha1": "93d3455df467df251bd98e3cdf27f7df5d4e8317",
+      "bytes": 8941
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+25deg_rep02.csv",
+      "git_blob_sha1": "6f8b76c387a60daff3dbc1b22ffed30be277fbd9",
+      "bytes": 9015
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+25deg_rep03.csv",
+      "git_blob_sha1": "339b73673020a4c4b555e4d4fa7830b340ff3650",
+      "bytes": 9021
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+25deg_rep04.csv",
+      "git_blob_sha1": "9ecf6a2e4551486c5bf5efd21aa9365e92146959",
+      "bytes": 8872
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+25deg_rep05.csv",
+      "git_blob_sha1": "fac20d9c820ba202a0af4f113efe471d4b7ba985",
+      "bytes": 8949
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+40deg_rep01.csv",
+      "git_blob_sha1": "788bbb2a1f7e676045ed8697635186f9f3653622",
+      "bytes": 8812
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+40deg_rep02.csv",
+      "git_blob_sha1": "612b176d62b06dc6757db43491e86368881b5ef2",
+      "bytes": 8919
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+40deg_rep03.csv",
+      "git_blob_sha1": "5eb567e400c7b117bab0e5b2c81fde546e1f3e2c",
+      "bytes": 8991
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+40deg_rep04.csv",
+      "git_blob_sha1": "8ae44926564a0c4b2a35fd323dd6844560b812f0",
+      "bytes": 9059
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+40deg_rep05.csv",
+      "git_blob_sha1": "811e11b63193d0c92da4987726c6dbba9b358e6c",
+      "bytes": 8970
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+55deg_rep01.csv",
+      "git_blob_sha1": "07913473a2f14a886e6a915d510156795d14ebba",
+      "bytes": 8895
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+55deg_rep02.csv",
+      "git_blob_sha1": "eb68fd436d1c83140f98adebbfa4c2df5ad15302",
+      "bytes": 8841
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+55deg_rep03.csv",
+      "git_blob_sha1": "82c1c7f480ccd6a2e899a92128fc157c5674862d",
+      "bytes": 8906
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+55deg_rep04.csv",
+      "git_blob_sha1": "20d0b61022ab940da6626e19b3a62bddf3bb0e66",
+      "bytes": 8995
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+55deg_rep05.csv",
+      "git_blob_sha1": "b0d7bd402f30c9fea4e0aa1239d7288d93d01bc1",
+      "bytes": 9055
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+70deg_rep01.csv",
+      "git_blob_sha1": "1acd746a2dd444591f673b211a92d2a4f2681d25",
+      "bytes": 9127
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+70deg_rep02.csv",
+      "git_blob_sha1": "424088cbb075e5007259c3816e2df2f0dd3239c6",
+      "bytes": 9064
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+70deg_rep03.csv",
+      "git_blob_sha1": "7425675e9e24750311458da5f27234cf8827b106",
+      "bytes": 8923
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+70deg_rep04.csv",
+      "git_blob_sha1": "97326072403b609c9e362af1cf20aef5d00e192d",
+      "bytes": 8979
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_+70deg_rep05.csv",
+      "git_blob_sha1": "baf57ba4403d7f859d13d3a503b3d7b6691bb60e",
+      "bytes": 8975
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-25deg_rep01.csv",
+      "git_blob_sha1": "1100306f8f0ac4e573ae8eb29e628452d27136fe",
+      "bytes": 9479
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-25deg_rep02.csv",
+      "git_blob_sha1": "1df19cedd5af9d35121c9175f4ba55ba3d41698f",
+      "bytes": 9338
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-25deg_rep03.csv",
+      "git_blob_sha1": "298bc701bac5676892df535420a851f6e3cd5a06",
+      "bytes": 9422
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-25deg_rep04.csv",
+      "git_blob_sha1": "5688396d4137459a89bd153a660afa858d12c412",
+      "bytes": 9344
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-25deg_rep05.csv",
+      "git_blob_sha1": "d57858475738732e6d275562b3df6b22c8b70258",
+      "bytes": 9352
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-40deg_rep01.csv",
+      "git_blob_sha1": "f67f329e674e4559c82d72080ce35fe1a5749dc1",
+      "bytes": 9490
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-40deg_rep02.csv",
+      "git_blob_sha1": "7ba8b482a89f674141a389a7df589ec843716836",
+      "bytes": 9290
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-40deg_rep03.csv",
+      "git_blob_sha1": "a6eaee2047effcd53876006d5bee676159dfa016",
+      "bytes": 9473
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-40deg_rep04.csv",
+      "git_blob_sha1": "6c43d47dfa61dbb067b89b516f1589770c5773f1",
+      "bytes": 9455
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-40deg_rep05.csv",
+      "git_blob_sha1": "07b1c5f015c95987aa9c3e48a238acf20c38135c",
+      "bytes": 9539
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-55deg_rep01.csv",
+      "git_blob_sha1": "c3f4e3b4db93aeea607cc0b188f5267522bb0adc",
+      "bytes": 9400
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-55deg_rep02.csv",
+      "git_blob_sha1": "2b7bd5e114042bfbd17a38cbcf9dfea981951ff5",
+      "bytes": 9483
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-55deg_rep03.csv",
+      "git_blob_sha1": "ce685e69fa75b41534fb83ff016a620f5fb76530",
+      "bytes": 9331
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-55deg_rep04.csv",
+      "git_blob_sha1": "ab4044989b688d851868c3a2a45584e1c678b327",
+      "bytes": 9400
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-55deg_rep05.csv",
+      "git_blob_sha1": "b8e60aeb48c7315073ea951db38e1616582c3fd1",
+      "bytes": 9477
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-70deg_rep01.csv",
+      "git_blob_sha1": "168d9d99cb00a5b1ca90fb7093f0bc5cee0c609a",
+      "bytes": 9411
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-70deg_rep02.csv",
+      "git_blob_sha1": "e75c93f0cb56665282373b09c87cc6925db38183",
+      "bytes": 9474
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-70deg_rep03.csv",
+      "git_blob_sha1": "34cca6e3d1588e3925871569f785bda4dff371f6",
+      "bytes": 9486
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-70deg_rep04.csv",
+      "git_blob_sha1": "fe75fc8f473576df1d2b4a02f2c8a5c9c93a368c",
+      "bytes": 9397
+    },
+    {
+      "path": "data/raw/bench_phase1/test3_rate_saturation/t3_step_-70deg_rep05.csv",
+      "git_blob_sha1": "5a9985d803619c9a3ed48fc1676263de382e422d",
+      "bytes": 9493
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_large_20deg_rep01.csv",
+      "git_blob_sha1": "70deac2558e15dbed939df6e61e753c26b75041d",
+      "bytes": 93170
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_large_20deg_rep02.csv",
+      "git_blob_sha1": "d03743068baad7b4f9c90199791cacd94dc40d66",
+      "bytes": 90645
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_large_20deg_rep03.csv",
+      "git_blob_sha1": "568416e160c74bd489079aecc23e7d9cc902fb7e",
+      "bytes": 90609
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_large_20deg_rep04.csv",
+      "git_blob_sha1": "5bc83bd891ab97d1758919fee0405c857f432464",
+      "bytes": 91008
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_large_20deg_rep05.csv",
+      "git_blob_sha1": "8d02e58857fe14486d0cac1cfe15ed4dd768cc90",
+      "bytes": 90755
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_small_10deg_rep01.csv",
+      "git_blob_sha1": "31d8fd1a3ddad00302cccfea9f3dfc9a3ff896da",
+      "bytes": 92001
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_small_10deg_rep02.csv",
+      "git_blob_sha1": "e50a696ba58d899aaa306e5117c95a99e2d9f3a4",
+      "bytes": 92058
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_small_10deg_rep03.csv",
+      "git_blob_sha1": "e12928e0990dcfd7eb69076eb1128ff201a306f1",
+      "bytes": 91716
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_small_10deg_rep04.csv",
+      "git_blob_sha1": "137a965ba64def2f8951d1fa29625ff10590bb2a",
+      "bytes": 92125
+    },
+    {
+      "path": "data/raw/bench_phase1/test4_frequency_chirp/t4_small_10deg_rep05.csv",
+      "git_blob_sha1": "03d2e7cd9f63ba539a107a6ec7fab9c072005887",
+      "bytes": 91989
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.0Nm_rep01.csv",
+      "git_blob_sha1": "a57f0fc41c0b170cf1b11ebc29bf18cf35be0a80",
+      "bytes": 9216
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.0Nm_rep02.csv",
+      "git_blob_sha1": "b033eba87e2ef9d3351412624d1b705ff58c0ea6",
+      "bytes": 9305
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.0Nm_rep03.csv",
+      "git_blob_sha1": "52d21dc57e403aa5e9a163005246e12363a59f87",
+      "bytes": 9071
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.0Nm_rep04.csv",
+      "git_blob_sha1": "1c3a53ce4bbb44fc01ee0b56bb6e16db71d09fca",
+      "bytes": 9202
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.0Nm_rep05.csv",
+      "git_blob_sha1": "c7a880feb44f1da3bfd1718fb2dda28cb6fad49a",
+      "bytes": 9379
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.5Nm_rep01.csv",
+      "git_blob_sha1": "034ae66ec7959f2f82cbdf4ecd10e52e13226d75",
+      "bytes": 9381
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.5Nm_rep02.csv",
+      "git_blob_sha1": "967f7ee8fc856730d0308f0d7e8966605a08e2da",
+      "bytes": 9203
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.5Nm_rep03.csv",
+      "git_blob_sha1": "2d07e5238f0236fbb8f3826a56dce46fbb6a36a3",
+      "bytes": 9153
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.5Nm_rep04.csv",
+      "git_blob_sha1": "943a1c1aa9f1b4482bf735385765e01dd244d2bf",
+      "bytes": 9299
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_0.5Nm_rep05.csv",
+      "git_blob_sha1": "20d34da7c578e288ac18f0b8d47fe4bae84eda1e",
+      "bytes": 9214
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.0Nm_rep01.csv",
+      "git_blob_sha1": "5509030b060ccf841d5d1675bb8614d310136fe1",
+      "bytes": 9291
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.0Nm_rep02.csv",
+      "git_blob_sha1": "c51061d06244e0cb47dea063aaa4db049ec9e1d9",
+      "bytes": 9297
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.0Nm_rep03.csv",
+      "git_blob_sha1": "85a87e1b3a127511f854d9a233038ee28350fecd",
+      "bytes": 9294
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.0Nm_rep04.csv",
+      "git_blob_sha1": "2c9669da6a345b224618c27262db780b77c28511",
+      "bytes": 9227
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.0Nm_rep05.csv",
+      "git_blob_sha1": "1b4714344f21569807a579e06669c51ed68d3621",
+      "bytes": 9289
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.5Nm_rep01.csv",
+      "git_blob_sha1": "f101aab74135899d763a55f95777ca6ab380407e",
+      "bytes": 9131
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.5Nm_rep02.csv",
+      "git_blob_sha1": "8e0040c7ae904164c731d41d905f05c6a66e241a",
+      "bytes": 9222
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.5Nm_rep03.csv",
+      "git_blob_sha1": "559aed6a39aae53fa082820da634ce422e899a00",
+      "bytes": 9225
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.5Nm_rep04.csv",
+      "git_blob_sha1": "3d3ef1b06d2ce75cdb124b7e9514d2ff22e01e18",
+      "bytes": 9304
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_1.5Nm_rep05.csv",
+      "git_blob_sha1": "8e1f23e8adc2ad25e71d1faab65c58dee0a44ac7",
+      "bytes": 9147
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_2.0Nm_rep01.csv",
+      "git_blob_sha1": "e01c3d080a780191234086dc70e5cd952f509a06",
+      "bytes": 9075
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_2.0Nm_rep02.csv",
+      "git_blob_sha1": "ccedcac6037c137cf0a90f064cea506c41dde624",
+      "bytes": 9209
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_2.0Nm_rep03.csv",
+      "git_blob_sha1": "db34fc01d831e8067c4d4fbf533af7a0d00077da",
+      "bytes": 9306
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_2.0Nm_rep04.csv",
+      "git_blob_sha1": "f4a74199c4b5124bed92dd82f58e5d8035c7daa7",
+      "bytes": 9223
+    },
+    {
+      "path": "data/raw/bench_phase1/test5_torque_speed_load/t5_load_2.0Nm_rep05.csv",
+      "git_blob_sha1": "e04109a456f54aeb9e3dba34d359e5381919c73f",
+      "bytes": 9154
+    },
+    {
+      "path": "scripts/bench/calibrate_finalff_torque.py",
+      "git_blob_sha1": "97991fb7db64874ca58d610fd016db6d46a7e142",
+      "bytes": 9921
+    },
+    {
+      "path": "scripts/bench/odrive_ascii_interface.py",
+      "git_blob_sha1": "209a61242310da531b22382ecd0da08221c4bc25",
+      "bytes": 21498
+    },
+    {
+      "path": "scripts/bench/run_phase1_battery.py",
+      "git_blob_sha1": "c8365a737898732e4ee8666303fb8d8d29baa4ba",
+      "bytes": 20269
+    },
+    {
+      "path": "scripts/matlab/process_phase1_bench_data.m",
+      "git_blob_sha1": "9ec4ae61363f8b0170c7644e5998c64f0f1a9853",
+      "bytes": 30422
+    },
+    {
+      "path": "scripts/matlab/process_phase2_capacity_envelope.m",
+      "git_blob_sha1": "01c1a11b735dd2839a51fd4f9553ab3b57a35c28",
+      "bytes": 17138
+    }
+  ],
+  "source_url_template": "https://raw.githubusercontent.com/JCamiloD06/load-dependent-steering-mpc/2804e024cc5384aeb49a2fada341d9b707eac009/{path}"
+}

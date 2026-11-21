@@ -1,0 +1,39 @@
+{
+  "accessed_utc": "2026-11-21",
+  "queries": [
+    {
+      "service": "public web",
+      "query": "series elastic actuator torque tracking experimental data exoskeleton dynamometer dataset github data MATLAB torque load cell reference"
+    },
+    {
+      "service": "public web",
+      "query": "\"OpenExo\" \"data\" exoskeleton bench testing torque step response data github zenodo OpenExo dataset benchmark walking Lab"
+    },
+    {
+      "service": "public web",
+      "query": "\"Estimating human joint moments\" exo.csv GitHub downloadable sample trq cmd data Github"
+    },
+    {
+      "service": "GitHub commit search",
+      "query": "Publication Data, repository naubiomech/OpenExo",
+      "resolved_at": [
+        "6424cb2525959e3755984d36aad99a5da54b8fda",
+        "908c71e588f756c246f1cde1a6029c20f028f7cb"
+      ]
+    },
+    {
+      "service": "public web",
+      "query": "\"OpenExo\" \"28\" \"rise time\" Williams exoskeleton benchtop 6 Nm 28 Nm Fig 3 ankle hip DOI open source transducer steps extension flexion"
+    },
+    {
+      "service": "GitHub fixed files",
+      "query": "Tag v1.0.1, OpenExo_Publication_Data/Publication_Data/Engineering. Enumerated nine selected files via source commits and decoded all nine."
+    }
+  ],
+  "selection": [
+    "OpenExo is a physical positive example of a prescribed torque and transducer reading in different control modes.",
+    "Molinaro is a control case for misleading torque-field names and participant-wide missing measurements. Dryad and Zenodo list the same release.",
+    "Palagi et al. 10.5281/zenodo.10722488 lists a conference PDF and video. Excluded from the measured data-release count.",
+    "Harvard-Slade-Lab/OpenHi-P-Exo has load-cell calibration and feedback firmware at 7d0a915e1408003911bc0665762726ae9219f359; its README assigns participant study data to the article supplement. Not treated as a new measured dataset in this bundle."
+  ]
+}

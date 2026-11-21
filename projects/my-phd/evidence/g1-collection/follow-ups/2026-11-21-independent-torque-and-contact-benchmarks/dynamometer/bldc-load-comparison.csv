@@ -1,0 +1,4 @@
+load_condition,mechanical_Nm,electrical_Nm,electrical_minus_mechanical_Nm,abs_gap_pct_of_mechanical,source_difference_percent
+Light 25%,1.18,1.15,-0.030,2.54237,2.6
+Medium 50%,3.76,3.65,-0.110,2.92553,3.0
+Heavy 75%,6.52,6.21,-0.310,4.75460,5.0

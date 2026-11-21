@@ -1,0 +1,66 @@
+{
+  "title": "Multi-mode Fault Diagnosis Datasets of Three-phase Asynchronous Motor Under Variable Working Conditions",
+  "creators": [
+    "Shijin Chen",
+    "Zeyi Liu",
+    "Chenyang Li",
+    "Dongliang Zou",
+    "Xiao He",
+    "Donghua Zhou"
+  ],
+  "landing": "https://data.mendeley.com/datasets/6s3dggj9mw/1",
+  "doi": "10.17632/6s3dggj9mw.1",
+  "date_accessed": "2026-11-21",
+  "version": "Mendeley V1 (2026-01-06). Public mirror tree at 897bc5d2504980418249f98e733bfd7f61056186",
+  "history_keys": [
+    "10.17632/6s3dggj9mw",
+    "6s3dggj9mw",
+    "liuzy0708/MCC5-THU-Motor-Benchmark-Datasets",
+    "Samlzy/MCC5-THU-Motor",
+    "10.1016/j.dib.2026.112583",
+    "2601.02278",
+    "Multi-mode Fault Diagnosis Datasets of Three-phase Asynchronous Motor Under Variable Working Conditions"
+  ],
+  "rights": "Canonical Mendeley record specifies CC BY 4.0 for the dataset. The Hugging Face card and GitHub project display MIT. Cite the canonical terms when using data. Only bibliographic facts, documentation notes and pointer metadata are included here.",
+  "evidence_level": "Read author README and both actual Git LFS pointer texts. The publisher links to two ZIP downloads. Archive byte lengths and SHA-256 are declarations in the pointers, not locally verified hashes of 12.7 GB of downloaded files. CSV values were not inspected.",
+  "author_documentation": {
+    "url": "https://github.com/liuzy0708/MCC5-THU-Motor-Benchmark-Datasets/blob/b0c3568881cf1291b8b0c48c68755ca184b53714/README.md",
+    "git_blob": "1f67b551b033a927b2a063cacef646c00a658cea",
+    "locations": [
+      "Data Description",
+      "Data Content (8 Columns)",
+      "File Naming Convention",
+      "Experimental Setup"
+    ]
+  },
+  "article": {
+    "doi": "10.1016/j.dib.2026.112583",
+    "alternative": "arXiv:2601.02278",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41767183/",
+    "primary": "https://doi.org/10.1016/j.dib.2026.112583",
+    "evidence": "Publisher abstract, PubMed identity, references and author README. PubMed references include the 2024 gearbox data article (PMID 38711742)."
+  },
+  "mirror_commit": "897bc5d2504980418249f98e733bfd7f61056186",
+  "files": [
+    {
+      "path": "MCC5-THU Motor_speed_circulation.zip",
+      "bytes_in_pointer": 6202740516,
+      "sha256_in_pointer": "b82afc81667b4c08261b22b366020b49c3d312d92eb3256a7af08846020f4bc3",
+      "observed_pointer_url": "https://huggingface.co/datasets/Samlzy/MCC5-THU-Motor/raw/main/MCC5-THU%20Motor_speed_circulation.zip",
+      "versioned_download": "https://huggingface.co/datasets/Samlzy/MCC5-THU-Motor/resolve/897bc5d2504980418249f98e733bfd7f61056186/MCC5-THU%20Motor_speed_circulation.zip"
+    },
+    {
+      "path": "MCC5-THU Motor_torque_circulation.zip",
+      "bytes_in_pointer": 6513549892,
+      "sha256_in_pointer": "cf5007378e4a28e6d7cc100bf56f144166cadb6a2607fbf38614bbfd0b8af0fb",
+      "observed_pointer_url": "https://huggingface.co/datasets/Samlzy/MCC5-THU-Motor/raw/main/MCC5-THU%20Motor_torque_circulation.zip",
+      "versioned_download": "https://huggingface.co/datasets/Samlzy/MCC5-THU-Motor/resolve/897bc5d2504980418249f98e733bfd7f61056186/MCC5-THU%20Motor_torque_circulation.zip"
+    }
+  ],
+  "setup": "Authors report 282 ninety-second records, 12.8 kHz, eight synchronous channels. A gearbox input-shaft torque sensor is separate from the three phase-current clamps; current columns have a scale of 0.1 A. Key phase is dimensionless. Three vibration axes complete the schema.",
+  "limitations": [
+    "Nominal operating conditions are distributed as file names/profiles, not established as logged per-row commanded/limited motor current. Raw cross-channel agreement, archive member count and shape remain unchecked.",
+    "The gearbox and motor studies are related through the MCC5/THU team and apparatus family. Their counts do not establish two independent replications of one control experiment."
+  ],
+  "query": "Follow related dataset link from fixed gearbox author README; compare canonical Mendeley V1, HF tree, both raw LFS pointers, and author GitHub schema. Publisher query: Multi-mode fault diagnosis datasets of three-phase asynchronous motor under variable working conditions DOI 2026 Chen Liu."
+}

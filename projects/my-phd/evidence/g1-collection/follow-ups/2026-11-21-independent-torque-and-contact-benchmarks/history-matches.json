@@ -1,0 +1,777 @@
+{
+  "parent": "103ca4b1128171e3b808fe56082bf65630d6ff14",
+  "release_status": {
+    "dynamometer/bldc": {
+      "status": "new_release_previously_indexed_article",
+      "reason": "Previous hits identify the HardwareX paper in the bibliography and reading queue. The matched historical records do not catalogue this data repository or its archive DOI.",
+      "keys": [
+        "uun3406/BLDC-TestBed-HardwareX",
+        "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories",
+        "10.1016/j.ohx.2026.e00799",
+        "10.5281/zenodo.20035899",
+        "10.5281/zenodo.18689715",
+        "PMC13241881",
+        "An Open-Source BLDC Motor Test Bed Utilizing ESC Telemetry for Cost-Effective Educational Laboratories",
+        "e5da3e5536a11dbe173d8ce2db644902c3ccb8c1",
+        "https://github.com/uun3406/BLDC-TestBed-HardwareX/tree/e5da3e5536a11dbe173d8ce2db644902c3ccb8c1"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv": [
+          "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories",
+          "10.1016/j.ohx.2026.e00799",
+          "An Open-Source BLDC Motor Test Bed Utilizing ESC Telemetry for Cost-Effective Educational Laboratories"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories",
+          "10.1016/j.ohx.2026.e00799",
+          "An Open-Source BLDC Motor Test Bed Utilizing ESC Telemetry for Cost-Effective Educational Laboratories"
+        ]
+      }
+    },
+    "dynamometer/odrive": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Capo01/odrive_based_electric_motor_dynamometer",
+        "Odrive based electric motor dynamometer",
+        "Odrive D5065 270kv",
+        "6dd779a2e6fa051afdd1029ffeb238182de755a8",
+        "https://github.com/Capo01/odrive_based_electric_motor_dynamometer/tree/6dd779a2e6fa051afdd1029ffeb238182de755a8"
+      ],
+      "prior_evidence": {}
+    },
+    "dynamometer/steering": {
+      "status": "extended_existing_release",
+      "reason": "Earlier audit inspected 25 Test 5 files (3,004 rows). This check covers 135 dynamic files in five test families and a separate static table.",
+      "keys": [
+        "JCamiloD06/load-dependent-steering-mpc",
+        "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control",
+        "HERMES 69296",
+        "2804e024cc5384aeb49a2fada341d9b707eac009",
+        "https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/audit.json": [
+          "JCamiloD06/load-dependent-steering-mpc",
+          "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/datasets.csv": [
+          "JCamiloD06/load-dependent-steering-mpc",
+          "2804e024cc5384aeb49a2fada341d9b707eac009",
+          "https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/steer/steering-step-source.json": [
+          "JCamiloD06/load-dependent-steering-mpc",
+          "Experimental Characterization of Load-Dependent Steering Capability and Its Integration into Predictive Path Tracking Control",
+          "2804e024cc5384aeb49a2fada341d9b707eac009",
+          "https://github.com/JCamiloD06/load-dependent-steering-mpc/tree/2804e024cc5384aeb49a2fada341d9b707eac009"
+        ]
+      }
+    },
+    "fingertip/fingertip": {
+      "status": "extended_existing_release",
+      "reason": "The previous file-level audit already used the MAT, the frozen model and the figure workbook. New statistics separate 48 all-zero targets from 370 others and report axes separately. Full-matrix scores are a reproduction.",
+      "keys": [
+        "10.5281/zenodo.15553350",
+        "10.1038/s41467-025-60861-8",
+        "mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations",
+        "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+        "0c688b315ceb58adc37b70ff3ee8800a02045c74",
+        "https://zenodo.org/records/15553350"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/audit.json": [
+          "10.5281/zenodo.15553350"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/datasets.csv": [
+          "10.5281/zenodo.15553350"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/reference/fingertip-source.json": [
+          "10.5281/zenodo.15553350",
+          "10.1038/s41467-025-60861-8",
+          "mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ]
+      }
+    },
+    "exo/molinaro": {
+      "status": "extended_existing_release",
+      "reason": "The earlier catalogue row identified this dataset. This pass verifies the mirrored record, named download files, current-derived torque definition and AB10–AB14 feedback loss in the README.",
+      "keys": [
+        "10.5061/dryad.8kprr4xsv",
+        "zenodo.org/records/10849318",
+        "Estimating human joint moments unifies exoskeleton control and reduces user effort",
+        "Estimating human joint moments unifies exoskeleton control, reducing user effort",
+        "10.1126/scirobotics.adi8852",
+        "https://doi.org/10.5061/dryad.8kprr4xsv"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv": [
+          "10.5061/dryad.8kprr4xsv",
+          "Estimating human joint moments unifies exoskeleton control and reduces user effort"
+        ]
+      }
+    },
+    "exo/openexo": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.5281/zenodo.14624972",
+        "naubiomech/OpenExo",
+        "OpenExo: An open-source modular exoskeleton to augment human function",
+        "10.1126/scirobotics.adt1591",
+        "10.1101/2024.10.02.616295",
+        "Williams Cuddeback Fang Colley",
+        "naubiomech/OpenExo: OpenExo",
+        "908c71e588f756c246f1cde1a6029c20f028f7cb",
+        "https://zenodo.org/records/14624972"
+      ],
+      "prior_evidence": {}
+    },
+    "dyno/manjate": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "ItsMeAech/pmsm-foc-fec-dynamometer",
+        "361663949df83a58f5a65bb132a995604912df3b",
+        "PMSM FOC vs. FEC",
+        "Manjate",
+        "PMSM FOC vs. FEC — Thrust Dynamometer Comparison",
+        "https://github.com/ItsMeAech/pmsm-foc-fec-dynamometer/tree/361663949df83a58f5a65bb132a995604912df3b"
+      ],
+      "prior_evidence": {}
+    },
+    "dyno/mcc-gearbox": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.17632/p92gj2732w",
+        "p92gj2732w",
+        "liuzy0708/MCC5-THU-Gearbox-Benchmark-Datasets",
+        "Multi-mode Fault Diagnosis Datasets of Gearbox Under Variable Working Conditions",
+        "2403.12521",
+        "10.1016/j.dib.2024.110453",
+        "10.17632/p92gj2732w.2",
+        "https://data.mendeley.com/datasets/p92gj2732w/2"
+      ],
+      "prior_evidence": {}
+    },
+    "dyno/mcc-motor": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.17632/6s3dggj9mw",
+        "6s3dggj9mw",
+        "liuzy0708/MCC5-THU-Motor-Benchmark-Datasets",
+        "Samlzy/MCC5-THU-Motor",
+        "10.1016/j.dib.2026.112583",
+        "2601.02278",
+        "Multi-mode Fault Diagnosis Datasets of Three-phase Asynchronous Motor Under Variable Working Conditions",
+        "10.17632/6s3dggj9mw.1",
+        "https://data.mendeley.com/datasets/6s3dggj9mw/1"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/aerostack": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "aerostack2/thrust_map_estimation",
+        "xNova-TM-SR.csv",
+        "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles",
+        "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles — xNova bench files",
+        "cd178f64fe54f8721566a9d346138bddb8bdc041",
+        "https://github.com/aerostack2/thrust_map_estimation/tree/cd178f64fe54f8721566a9d346138bddb8bdc041"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/bitcraze": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "docs/functional-areas/pwm-to-thrust.md",
+        "bitcraze.io/documentation/repository/crazyflie-firmware/master/functional-areas/pwm-to-thrust",
+        "PWM to Thrust",
+        "PWM to Thrust — Crazyflie 2.x legacy physical bench table",
+        "d794c5ca081d19aa1e1bbcb6fd4a3711784fb8b1",
+        "https://github.com/bitcraze/crazyflie-firmware/tree/d794c5ca081d19aa1e1bbcb6fd4a3711784fb8b1"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/cao-strawson": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "StrawsonDesign/motor_propeller_testing",
+        "7031418317178b832b0be474a997f6da18f83a40",
+        "PengCheng Cao and James Strawson",
+        "Brushless motor and propeller tests on an RC Benchmark 1520 thrust test stand",
+        "https://github.com/StrawsonDesign/motor_propeller_testing/tree/7031418317178b832b0be474a997f6da18f83a40"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/gestelt": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Temasek-Dynamics/gestelt",
+        "nuswarm_9_12_consolidated",
+        "18_9_23_flywoo_nin1404",
+        "10.1109/ICCA62789.2024.10591863",
+        "Gestelt — NUSwarm and Flywoo bench measurements in the physical-platform parameter collection",
+        "71b462eccd6f457976fca1c736ee96b5f335d373",
+        "https://github.com/Temasek-Dynamics/gestelt/tree/71b462eccd6f457976fca1c736ee96b5f335d373"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/quanser": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "StepsTest_2021-10-20_114905",
+        "QDrone1_Cobra_Motor_Parametrization",
+        "quanser/Quanser_Academic_Resources",
+        "QDrone1 Cobra 2208 motor parametrization — physical StepsTest",
+        "6adbceff7d2630ef35f61ddc7370be387bf03f4d",
+        "https://github.com/quanser/Quanser_Academic_Resources/tree/6adbceff7d2630ef35f61ddc7370be387bf03f4d"
+      ],
+      "prior_evidence": {}
+    },
+    "thrust/stanford": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "StanfordMSL/quadrotor_sim",
+        "RampTest_2021-08-19_001845",
+        "cdb737b1f00ff99c49cec031d568921a36d5592c",
+        "Stanford Multi-Robot Systems Lab test stand records in quadrotor_sim",
+        "https://github.com/StanfordMSL/quadrotor_sim/tree/cdb737b1f00ff99c49cec031d568921a36d5592c"
+      ],
+      "prior_evidence": {}
+    },
+    "contact-calibration/digit-fsr": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "gemixin/digit-force-calibration",
+        "59ef5ef32f28cdfbeec47ae707a8075460e008fb",
+        "Digit-Force-Calibration",
+        "Digit-Force-Calibration: force-sensing resistor on the rear of a DIGIT optical sensor",
+        "https://github.com/gemixin/digit-force-calibration"
+      ],
+      "prior_evidence": {}
+    },
+    "contact-calibration/openft": {
+      "status": "extended_existing_lead",
+      "reason": "An earlier search log rejected this same revision as a source of paired calibration traces. This pass inspects the actual example coefficient file and calculates each output’s range over the specified input box.",
+      "keys": [
+        "dimensionalOS/openFT-sensor",
+        "876b60efbf6483fe401966c4d9fde0a9755bbc94",
+        "openft_calibration_20250813_104335.csv",
+        "OpenFT Sensor example calibration matrix for a six-axis Hall-effect force/torque sensor",
+        "https://github.com/dimensionalOS/openFT-sensor"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/temp/ironcub-source.json": [
+          "dimensionalOS/openFT-sensor",
+          "876b60efbf6483fe401966c4d9fde0a9755bbc94"
+        ]
+      }
+    },
+    "grip/magnus": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "tomasBGC/magnus-hand",
+        "ebc230abaeb7add5af39e6a18e0e0819ee12d6ea",
+        "Magnus Hand: Low-Cost 3D-Printed Magnetic Tactile Fingertips for an Open-Source Dexterous Hand",
+        "Tomás Costa Magnus Hand",
+        "https://github.com/tomasBGC/magnus-hand/tree/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea"
+      ],
+      "prior_evidence": {}
+    },
+    "cutting/cutting": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "McGill-AML/aml_robot_cutting_dataset",
+        "sahandrez/aml_robot_cutting_dataset",
+        "AML Robot Cutting Dataset",
+        "2007.11167",
+        "10.1109/IROS45743.2020.9341446",
+        "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference",
+        "62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+        "https://github.com/McGill-AML/aml_robot_cutting_dataset"
+      ],
+      "prior_evidence": {}
+    },
+    "elastic-references/flack": {
+      "status": "new_release",
+      "reason": "No matching specific release identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Aligned segmentation and coiling data for 'Coiling in Flexible Shaft Torque Models as a Solution for Reliable Remote Actuation'",
+        "10.5281/zenodo.22108526",
+        "https://zenodo.org/records/22108526",
+        "10.5281/zenodo.22096159",
+        "J-Flack/Coiling-from-Vicon-Markers"
+      ],
+      "prior_evidence": {}
+    }
+  },
+  "work_status": {
+    "10.3389/frobt.2024.1416360": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.3389/frobt.2024.1416360",
+        "An experimental study of the sensorized strain wave gear RT1-T and its capabilities for torque control in robotic joints"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+          "10.3389/frobt.2024.1416360",
+          "An experimental study of the sensorized strain wave gear RT1-T and its capabilities for torque control in robotic joints"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+          "10.3389/frobt.2024.1416360"
+        ]
+      }
+    },
+    "10.1109/icra57147.2024.10611567": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/icra57147.2024.10611567",
+        "Design and Experimental Characterisation of a Novel Quasi-Direct Drive Actuator for Highly Dynamic Robotic Applications"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+          "10.1109/icra57147.2024.10611567",
+          "Design and Experimental Characterisation of a Novel Quasi-Direct Drive Actuator for Highly Dynamic Robotic Applications"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+          "Design and Experimental Characterisation of a Novel Quasi-Direct Drive Actuator for Highly Dynamic Robotic Applications"
+        ]
+      }
+    },
+    "10.3390/act15060301": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.3390/act15060301",
+        "Toward Reproducible Actuator Characterization: A Comprehensive Framework for Robotics Applications"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/iros.2017.8206351": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1109/iros.2017.8206351",
+        "What is the torque bandwidth of this actuator?"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/tcst.2021.3059284": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/tcst.2021.3059284",
+        "1902.05346",
+        "Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/citation-edges.csv": [
+          "10.1109/tcst.2021.3059284"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv": [
+          "10.1109/tcst.2021.3059284",
+          "1902.05346",
+          "Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/search.json": [
+          "10.1109/tcst.2021.3059284",
+          "1902.05346"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/README.md": [
+          "1902.05346"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/citation-edges.csv": [
+          "10.1109/tcst.2021.3059284"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv": [
+          "10.1109/tcst.2021.3059284",
+          "1902.05346",
+          "Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json": [
+          "10.1109/tcst.2021.3059284",
+          "1902.05346",
+          "Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility"
+        ]
+      }
+    },
+    "10.3390/act9010006": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.3390/act9010006",
+        "Design, Modelling and Control of Novel Series-Elastic Actuators for Industrial Robots"
+      ],
+      "prior_evidence": {}
+    },
+    "10.3389/fnbot.2019.00017": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.3389/fnbot.2019.00017",
+        "Development, Analysis, and Control of Series Elastic Actuator-Driven Robot Leg"
+      ],
+      "prior_evidence": {}
+    },
+    "ucla:0kt98977": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Experimental Validation of Unlumped Model and Design Implications of its Bandwidth Manifold for Rotary Series Elastic Actuators",
+        "ucla:0kt98977"
+      ],
+      "prior_evidence": {}
+    },
+    "10.3390/act6030026": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.3390/act6030026",
+        "Generalization of Series Elastic Actuator Configurations and Dynamic Behavior Comparison"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/tmech.2013.2270435": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/tmech.2013.2270435",
+        "Design and Control Considerations for High-Performance Series Elastic Actuators"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/citation-edges.csv": [
+          "10.1109/tmech.2013.2270435"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv": [
+          "10.1109/tmech.2013.2270435",
+          "Design and Control Considerations for High-Performance Series Elastic Actuators"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/citation-edges.csv": [
+          "10.1109/tmech.2013.2270435"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv": [
+          "10.1109/tmech.2013.2270435",
+          "Design and Control Considerations for High-Performance Series Elastic Actuators"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json": [
+          "10.1109/tmech.2013.2270435",
+          "Design and Control Considerations for High-Performance Series Elastic Actuators"
+        ]
+      }
+    },
+    "10.3390/act14090443": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.3390/act14090443",
+        "Design and Evaluation of a Torque-Controlled Ankle Exoskeleton Using the Small-Scale Hydrostatic Actuator: miniHydrA"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1017/wtc.2023.20": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1017/wtc.2023.20",
+        "Series-elastic actuator with two degree-of-freedom PID control improves torque control in a powered knee exoskeleton"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/citation-edges.csv": [
+          "10.1017/wtc.2023.20"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv": [
+          "10.1017/wtc.2023.20",
+          "Series-elastic actuator with two degree-of-freedom PID control improves torque control in a powered knee exoskeleton"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json": [
+          "10.1017/wtc.2023.20"
+        ]
+      }
+    },
+    "10.1126/scirobotics.adt1591": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1126/scirobotics.adt1591",
+        "OpenExo: An open-source modular exoskeleton to augment human function",
+        "10.1101/2024.10.02.616295"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1126/scirobotics.adi8852": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1126/scirobotics.adi8852",
+        "Estimating human joint moments unifies exoskeleton control, reducing user effort"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1038/s41467-025-60861-8": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1038/s41467-025-60861-8",
+        "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/reference/fingertip-source.json": [
+          "10.1038/s41467-025-60861-8",
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+        ]
+      }
+    },
+    "oclc:898068566": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Compliant Running and Step Climbing of the Scout II Platform",
+        "oclc:898068566"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1177/16878132261468589": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1177/16878132261468589",
+        "Transformed-domain predefined-time sliding mode control for actuator-constrained trajectory tracking of uncertain robotic manipulators"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/tro.2016.2640183": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/tro.2016.2640183",
+        "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/citation-edges.csv": [
+          "10.1109/tro.2016.2640183"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv": [
+          "10.1109/tro.2016.2640183",
+          "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/search.json": [
+          "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots"
+        ]
+      }
+    },
+    "cmu:cmu-ri-tr-16-39": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "Design for 3D Agility and Virtual Compliance using Proprioceptive Force Control in Dynamic Legged Robots",
+        "cmu:cmu-ri-tr-16-39"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1016/j.ohx.2026.e00799": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1016/j.ohx.2026.e00799",
+        "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv": [
+          "10.1016/j.ohx.2026.e00799",
+          "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "10.1016/j.ohx.2026.e00799",
+          "An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories"
+        ]
+      }
+    },
+    "10.1016/j.dib.2026.112583": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1016/j.dib.2026.112583",
+        "2601.02278",
+        "Multi-mode fault diagnosis datasets of three-phase asynchronous motor under variable working conditions"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1016/j.dib.2024.110453": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1016/j.dib.2024.110453",
+        "2403.12521",
+        "Multi-mode fault diagnosis datasets of gearbox under variable working conditions"
+      ],
+      "prior_evidence": {}
+    },
+    "imav:2025-12": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles",
+        "imav:2025-12"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/iros45743.2020.9341446": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1109/iros45743.2020.9341446",
+        "2007.11167",
+        "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference"
+      ],
+      "prior_evidence": {}
+    },
+    "10.1109/iros55552.2023.10342345": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/iros55552.2023.10342345",
+        "2308.09650",
+        "Collision Isolation and Identification Using Proprioceptive Sensing for Parallel Robots to Enable Human-Robot Collaboration"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-fastener-seating-and-torque-references/audit.json": [
+          "10.1109/iros55552.2023.10342345",
+          "2308.09650"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-fastener-seating-and-torque-references/contact/parallel-contact-source.json": [
+          "10.1109/iros55552.2023.10342345",
+          "2308.09650"
+        ]
+      }
+    },
+    "10.1109/iros55552.2023.10341581": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/iros55552.2023.10341581",
+        "2308.09656",
+        "Safe Collision and Clamping Reaction for Parallel Robots During Human-Robot Collaboration"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-fastener-seating-and-torque-references/audit.json": [
+          "10.1109/iros55552.2023.10341581"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-fastener-seating-and-torque-references/contact/parallel-contact-source.json": [
+          "10.1109/iros55552.2023.10341581"
+        ]
+      }
+    },
+    "10.1109/tro.2019.2930915": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.1109/tro.2019.2930915",
+        "An Elbow Exoskeleton for Upper Limb Rehabilitation with Series Elastic Actuator and Cable-driven Differential"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/citation-edges.csv": [
+          "10.1109/tro.2019.2930915"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv": [
+          "10.1109/tro.2019.2930915",
+          "An Elbow Exoskeleton for Upper Limb Rehabilitation with Series Elastic Actuator and Cable-driven Differential"
+        ]
+      }
+    },
+    "10.1017/wtc.2024.19": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1017/wtc.2024.19",
+        "Design and evaluation of AE4W: An active and flexible shaft-driven shoulder exoskeleton for workers"
+      ],
+      "prior_evidence": {}
+    },
+    "10.48550/arxiv.1906.07669": {
+      "status": "historical_work",
+      "reason": "DOI, arXiv, work identifier, alias or normalized title occurred in prior evidence.",
+      "keys": [
+        "10.48550/arxiv.1906.07669",
+        "1906.07669",
+        "A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping"
+      ],
+      "prior_evidence": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv": [
+          "10.48550/arxiv.1906.07669",
+          "1906.07669",
+          "A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json": [
+          "10.48550/arxiv.1906.07669",
+          "1906.07669"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/sea/dyrac-source.json": [
+          "1906.07669",
+          "A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping"
+        ]
+      }
+    },
+    "10.1109/icra48891.2023.10161217": {
+      "status": "new_work",
+      "reason": "No matching work identifiers or normalized title among the historical materials read.",
+      "keys": [
+        "10.1109/icra48891.2023.10161217",
+        "2308.09633",
+        "Towards Human-Robot Collaboration with Parallel Robots by Kinetostatic Analysis, Impedance Control and Contact Detection"
+      ],
+      "prior_evidence": {}
+    }
+  },
+  "review_of_similar_titles": {}
+}

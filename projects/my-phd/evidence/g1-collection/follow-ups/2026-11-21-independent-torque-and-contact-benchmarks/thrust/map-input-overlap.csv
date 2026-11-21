@@ -1,0 +1,6 @@
+fixture,timed_file,timed_rows,combined_rows,multiset_intersection_rows,does_source_default_comma_reader_parse_combined
+MR,xNova-MR-ramp.csv,564,2930,564,true
+MR,xNova-MR-steps.csv,681,2930,681,true
+SR,xNova-SR-ramp.csv,135,11826,135,false
+SR,xNova-SR-steps-up.csv,377,11826,0,false
+SR,xNova-SR-steps.csv,681,11826,639,false

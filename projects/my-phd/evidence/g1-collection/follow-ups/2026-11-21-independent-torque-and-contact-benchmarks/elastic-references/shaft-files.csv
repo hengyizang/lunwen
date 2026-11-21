@@ -1,0 +1,6 @@
+file,code_shaft_id,diameter_mm,zenodo_description_length_mm,v2_code_label_length_mm,v2_free_length_mm,zenodo_size_MB,publisher_md5,source_download
+5mmData.mat,5mm,5,380,454,414,890.4,fd342cc8adfaa4a1a9ec1d8d3b0e2412,https://zenodo.org/records/22108526/files/5mmData.mat?download=1
+6mmLData.mat,6mm_l,6,560,544,504,905,582f9f1eb7c86eca23f73dd6ca192720,https://zenodo.org/records/22108526/files/6mmLData.mat?download=1
+6mmMData.mat,6mm_m,6,470,470,430,890.6,e058449422de6c2cfe69dbc5aa5f8f06,https://zenodo.org/records/22108526/files/6mmMData.mat?download=1
+6mmSData.mat,6mm_s,6,380,386,346,869,35ae187acd856325c05d01fb07021eb5,https://zenodo.org/records/22108526/files/6mmSData.mat?download=1
+8mmData.mat,8mm,8,380,435,395,862.9,3a05e59836613105e0f8055f9d3171c1,https://zenodo.org/records/22108526/files/8mmData.mat?download=1

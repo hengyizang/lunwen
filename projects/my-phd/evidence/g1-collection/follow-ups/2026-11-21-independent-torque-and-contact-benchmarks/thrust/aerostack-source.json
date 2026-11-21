@@ -1,0 +1,90 @@
+{
+  "schema": "g1-physical-bench-source/v1",
+  "accessed_utc": "2026-11-21",
+  "id": "aerostack",
+  "title": "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles — xNova bench files",
+  "creator": "Francisco J. Anguita, Rafael Perez-Segui, Carmen DR.Pita-Romero, Miguel Fernandez-Cortizas, Javier Melero-Deza, Pascual Campoy",
+  "repository": "aerostack2/thrust_map_estimation",
+  "commit": "cd178f64fe54f8721566a9d346138bddb8bdc041",
+  "rights": "Public research repository, no root license found in fixed tree. Use source links and independently computed summaries.",
+  "evidence": "Bench files cover single-rotor and multirotor fixtures. Five timestamped logged CSVs plus two six-column map inputs. Comparisons measure row-level support and potential overlap. The author script data_assemble uses the comma default and skips files on failure. filter_data flips recorded thrust sign and applies strict inequalities. One map-input CSV uses semicolon delimiters.",
+  "history_keys": [
+    "aerostack2/thrust_map_estimation",
+    "xNova-TM-SR.csv",
+    "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles"
+  ],
+  "companion": {
+    "url": "https://www.imavs.org/papers/2025/12.pdf",
+    "title": "A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles",
+    "year": 2025,
+    "identifier": "IMAV2025-12",
+    "locator": "pp. 98–99, Table 1 and Fig. 1, distinct thrust command, throttle mapping and ESC outputs.",
+    "relationship": "Matching study title and author list. Fixed code README describes paper as in progress. Proceedings PDF verified."
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "git_blob": "4d278311d251d7abaa5ec91c99954e0a0240e97c",
+      "bytes": 1778
+    },
+    {
+      "path": "thrust_stand/RCbenchmark/README.md",
+      "git_blob": "b36d4c62ac1d70ea494b2ea83723ea513a163720",
+      "bytes": 1406
+    },
+    {
+      "path": "thrust_stand/README.md",
+      "git_blob": "196fd41bc176b544972585af63be06b324b18ce6",
+      "bytes": 3565
+    },
+    {
+      "path": "thrust_stand/config/default_config.yaml",
+      "git_blob": "7624c99d8c54b0cc2ee724e75f61916403c06498",
+      "bytes": 966
+    },
+    {
+      "path": "thrust_stand/data/multirotor/xNova-MR-ramp.csv",
+      "git_blob": "7156af9e13beeecc42e5cfa8e8a686ac74d5b602",
+      "bytes": 111129
+    },
+    {
+      "path": "thrust_stand/data/multirotor/xNova-MR-steps.csv",
+      "git_blob": "2f035103fb524126477183d5cbfc3dccb2f925e5",
+      "bytes": 131760
+    },
+    {
+      "path": "thrust_stand/data/multirotor/xNova-TM-MR.csv",
+      "git_blob": "fa609cf92c3c1748fd9209e92e7197c470d01e93",
+      "bytes": 277280
+    },
+    {
+      "path": "thrust_stand/data/single_rotor/xNova-SR-ramp.csv",
+      "git_blob": "0b74397e3b0834e5a27d3815c650228f6dfa0063",
+      "bytes": 27765
+    },
+    {
+      "path": "thrust_stand/data/single_rotor/xNova-SR-steps-up.csv",
+      "git_blob": "676718acad4a4b77e734332052c884e3dd4c5aa1",
+      "bytes": 54294
+    },
+    {
+      "path": "thrust_stand/data/single_rotor/xNova-SR-steps.csv",
+      "git_blob": "b301cfd1182803728588612a930f7d16d76f5145",
+      "bytes": 131740
+    },
+    {
+      "path": "thrust_stand/data/single_rotor/xNova-TM-SR.csv",
+      "git_blob": "5cdcf47a579ba06fafae2d12cde7b287a6bf1da9",
+      "bytes": 743773
+    },
+    {
+      "path": "thrust_stand/thrust_map_utils.py",
+      "git_blob": "423c1b09c3c381fe9078faa87cc215c4fe2c2eb3",
+      "bytes": 5963
+    }
+  ],
+  "landing": "https://github.com/aerostack2/thrust_map_estimation/tree/cd178f64fe54f8721566a9d346138bddb8bdc041",
+  "fixed_file_url_rule": "Append each file path, percent-encoded one segment at a time, to https://github.com/aerostack2/thrust_map_estimation/blob/cd178f64fe54f8721566a9d346138bddb8bdc041/",
+  "scope": "Bench-level inspection of command and independent physical measurements for R2. No flight deployment or controller optimization.",
+  "joined_input_boundary": "These sources do not establish an upstream unclamped torque demand, its post-limiter command and an independently calibrated shaft torque on a common time base."
+}

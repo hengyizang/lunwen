@@ -1,0 +1,63 @@
+{
+  "source": "Franka ROS example controllers and JointTorqueComparison schema",
+  "kind": "Software signal definitions and negative search result; excluded from counts of data releases and papers.",
+  "version": "ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98",
+  "retrieved_utc": "2026-11-21",
+  "rights": "Franka Robotics GmbH. The two tracked example controllers and headers identify Apache-2.0. Only new explanations and pinned references are included.",
+  "queries": [
+    "\"torque saturation\" \"load cell\" \"data\" actuator test bench series elastic actuator commanded output torque saturation experiment current limit open source data traces",
+    "robot torque saturation unconstrained torque limited torque reference load cell \"saturation\" series elastic actuator dynamometer experimental antiwindup experimental torque sensor command clipped",
+    "\"torque_setpoint\" \"load cell\" motor calibration dataset quasi direct drive open source torque sensor experimental performance actuator",
+    "\"saturateTorqueRate\" Franka data recorded measured desired torque before saturation ROS bag experiment force torque dataset",
+    "Franka \"tau_d_calculated\" \"tau_d_saturated\" publish torque_debug measured torque CSV records",
+    "Franka ATI force torque sensor peg data wrist assembly rosbag externally measured load cell paired reference Zenodo assembly",
+    "force torque calibration dataset temperature drift ATI robot GitHub load cell wrist calibration raw temperature measurement dataset",
+    "force torque sensor temperature compensation dataset robot strain gauge six axis iCub calibration thermal drift code data github recordings experiments",
+    "six axis force torque calibration matrix reference weights data raw voltage GitHub robot wrist force torque data in situ calibration"
+  ],
+  "sources": [
+    {
+      "path": "franka_example_controllers/include/franka_example_controllers/force_example_controller.h",
+      "git_blob_sha1": "3778a19958e407b6df5d18120db474349b494d3a",
+      "url": "https://github.com/frankarobotics/franka_ros/blob/ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98/franka_example_controllers/include/franka_example_controllers/force_example_controller.h"
+    },
+    {
+      "path": "franka_example_controllers/include/franka_example_controllers/joint_impedance_example_controller.h",
+      "git_blob_sha1": "3561787460983a0d1436966b14019a5c43af08b5",
+      "url": "https://github.com/frankarobotics/franka_ros/blob/ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98/franka_example_controllers/include/franka_example_controllers/joint_impedance_example_controller.h"
+    },
+    {
+      "path": "franka_example_controllers/msg/JointTorqueComparison.msg",
+      "git_blob_sha1": "c5197324ed2d16df92985ebe664fe9cc96da1d00",
+      "url": "https://github.com/frankarobotics/franka_ros/blob/ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98/franka_example_controllers/msg/JointTorqueComparison.msg"
+    },
+    {
+      "path": "franka_example_controllers/src/force_example_controller.cpp",
+      "git_blob_sha1": "7864d4987b410cd22e6a2ce506df087d79a8aa87",
+      "url": "https://github.com/frankarobotics/franka_ros/blob/ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98/franka_example_controllers/src/force_example_controller.cpp"
+    },
+    {
+      "path": "franka_example_controllers/src/joint_impedance_example_controller.cpp",
+      "git_blob_sha1": "74097ec7aac9c10514b687fd683e4b1d26885e20",
+      "url": "https://github.com/frankarobotics/franka_ros/blob/ddd2fffd9de44b02ad15b4bbb2bfa2cec4d60d98/franka_example_controllers/src/joint_impedance_example_controller.cpp"
+    }
+  ],
+  "findings": [
+    {
+      "component": "joint_impedance_example_controller.cpp",
+      "lines": "64–69, 163–196, 200–208",
+      "meaning": "The controller computes seven unrestricted requests, clips each change relative to robot_state.tau_J_d and passes the clipped vector to setCommand. The diagnostic publisher defaults to 30 Hz and reports the last cycle’s clipped vector plus model gravity alongside the current measured joint torque. An individual publication depends on the rate trigger and publisher lock. No unrestricted request appears in the message."
+    },
+    {
+      "component": "JointTorqueComparison.msg; joint_impedance_example_controller.cpp",
+      "lines": "message fields 1–4; producer 178–191",
+      "meaning": "The scalar named root_mean_square_error sums abs(error_i)/7 across the seven joints. The name therefore describes a different statistic than the implemented mean absolute error. A retained bag can recompute both from tau_error."
+    },
+    {
+      "component": "force_example_controller.cpp; force_example_controller.h",
+      "lines": "90–94, 102–121, 138–146; header line 51",
+      "meaning": "On entry the residual between joint sensor readings and modeled gravity sets the initial offset. During updates those terms feed the PI calculation. Each axis of the torque request is then constrained to the previous desired value plus or minus 1.0 Nm per update. This software rate limit alone gives no observed hardware-rail events."
+    }
+  ],
+  "scope": "No matching measurement file was identified by these particular code searches. The interface describes producers for this exact revision. It does not establish what another controller, log or firmware actually published."
+}

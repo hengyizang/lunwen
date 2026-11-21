@@ -1,0 +1,93 @@
+{
+  "sources": [
+    "cao-strawson",
+    "stanford",
+    "quanser",
+    "aerostack",
+    "gestelt",
+    "bitcraze"
+  ],
+  "reproduction": "node recompute.mjs OUTPUT_DIRECTORY [CACHE_DIRECTORY] (Node 20+, internet access, public GitHub raw files). Compare generated CSV bytes to the tracked CSVs. Git object IDs identify the source bytes, including differing line endings.",
+  "searches": [
+    {
+      "engine": "Public web search",
+      "query": "site:github.com thrust stand data csv Torque Thrust Voltage Current motor brushless drone RCbenchmark dataset propeller pwm github",
+      "retained": [
+        "cao-strawson"
+      ]
+    },
+    {
+      "engine": "Public web search",
+      "query": "crazyflie thrust stand motor torque raw data pwm test dataset bitcraze thrust csv CF2 motor thrust measurement github",
+      "retained": [
+        "bitcraze"
+      ]
+    },
+    {
+      "engine": "GitHub code search REST",
+      "query": "\"Motor Optical Speed\" \"Torque\" extension:csv",
+      "snapshot_total": 208,
+      "inspected_page_size": 35,
+      "url": "https://api.github.com/search/code?q=%22Motor%20Optical%20Speed%22%20%22Torque%22%20extension%3Acsv&per_page=35",
+      "retained": [
+        "stanford",
+        "quanser",
+        "gestelt"
+      ]
+    },
+    {
+      "engine": "GitHub code search REST",
+      "query": "\"ESC signal\" \"Thrust\" \"Torque\" extension:csv",
+      "snapshot_total": 180,
+      "inspected_page_size": 35,
+      "url": "https://api.github.com/search/code?q=%22ESC%20signal%22%20%22Thrust%22%20%22Torque%22%20extension%3Acsv&per_page=35",
+      "retained": [
+        "aerostack"
+      ]
+    },
+    {
+      "engine": "Public web search",
+      "query": "\"A Comparative Study on Thrust Map Estimation\" Francisco Anguita DOI IROS article thrust map 2026; \"Gestelt\" Tan Sun Khoo 10591863 DOI 2024",
+      "retained": [
+        "aerostack published proceedings PDF, which supersedes README in-progress label",
+        "gestelt IEEE abstract and DOI"
+      ]
+    }
+  ],
+  "screened_context": [
+    {
+      "title": "Experimental study on efficient propulsion system for multicopter UAV design applications",
+      "doi": "10.1016/j.rineng.2023.101555",
+      "decision": "Publisher states data available on request; no public file evidence established here."
+    },
+    {
+      "title": "Design of sliding mode-based nonlinear control systems with nonlinear full-order state observers for underactuated coupled systems",
+      "creator": "Ahmad Riyad Firdaus (2018), University of Sheffield PhD thesis",
+      "landing": "https://etheses.whiterose.ac.uk/id/eprint/20897/",
+      "reference": "uk.bl.ethos.749485",
+      "decision": "Table 3.6 in Section 3.6 shows pulse width, duty, thrust, torque, voltage and current for a physical RC Benchmark 1580. Treated as a located full-text neighbor. Archive specifies CC BY-NC-ND 2.5. No numerical table republication or separate release count."
+    },
+    {
+      "repository": "avenhaus/thrust_stand",
+      "commit": "a1eb40a2b01369353d996fd5389337baf81a9d95",
+      "decision": "Firmware, design and web interface found; no measured CSV in the inspected tree."
+    },
+    {
+      "title": "Keeping Thrust Consistent as the Battery Drains (Marcel Rath, 2025)",
+      "landing": "https://www.bitcraze.io/2025/10/keeping-thrust-consistent-as-the-battery-drains/",
+      "decision": "Publisher describes later static and dynamic verification; GitHub PR #1526 includes plots. These later protocol results are distinct from the 2015 table."
+    }
+  ],
+  "counts": {
+    "releases_or_source_collections": 6,
+    "derived_tables": 6,
+    "table_rows": {
+      "cao-strawson-edits.csv": 208,
+      "bench-traces.csv": 18,
+      "map-input-overlap.csv": 5,
+      "repeated-pulse.csv": 21,
+      "trimmed-rows.csv": 2,
+      "legacy-sweep.csv": 1
+    }
+  }
+}

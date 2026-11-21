@@ -1,0 +1,7 @@
+joint,selection,finite_left_pairs,command_min_Nm,command_max_Nm,measured_min_Nm,measured_max_Nm,mean_measured_minus_command_Nm,rmse_Nm
+ankle,all,4849,0,36.61,-8.78,31.73,-0.104923,2.403377
+ankle,nonzero_command,1292,0.03,36.61,-8.78,31.73,-0.955031,4.362216
+ankle,zero_command,3557,0,0,-8.57,12.01,0.20386,0.981057
+hip,all,4618,-4.09,3.39,-4.84,3.95,0.017622,0.25292
+hip,nonzero_command,2970,-4.09,3.39,-4.84,3.95,0.033953,0.30797
+hip,zero_command,1648,0,0,-0.58,0.49,-0.011808,0.091227

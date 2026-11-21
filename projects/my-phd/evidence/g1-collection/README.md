@@ -19,3 +19,4 @@
 - [R1 螺纹装配就位、夹紧力与独立力矩参照](follow-ups/2026-11-21-fastener-seating-and-torque-references/README.md)
 - [R5 双端通信记录、时钟与实测编队响应](follow-ups/2026-11-21-paired-network-and-motion-records/README.md)
 - [R2 执行器请求、限幅与实测反馈，含 R1 腕部接触校准](follow-ups/2026-11-21-command-limits-and-measured-effort/README.md)
+- [R2 独立力矩台架与 R1 接触测力参照](follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/README.md)

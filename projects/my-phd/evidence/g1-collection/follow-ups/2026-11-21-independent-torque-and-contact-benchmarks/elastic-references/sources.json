@@ -1,0 +1,113 @@
+{
+  "checked_utc": "2026-11-21",
+  "records": [
+    {
+      "key": "chen-casas-lum-2019-elbow-sea",
+      "type": "article",
+      "authors": [
+        "Tianyao Chen",
+        "Rafael Casas",
+        "Peter S. Lum"
+      ],
+      "title": "An Elbow Exoskeleton for Upper Limb Rehabilitation With Series Elastic Actuator and Cable-Driven Differential",
+      "issued": 2019,
+      "venue": "IEEE Transactions on Robotics 35(6), 1464–1474",
+      "doi": "10.1109/TRO.2019.2930915",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6953725/",
+      "evidence": "全文证据，作者稿，FE and SP Bandwidth 及图 6(c)",
+      "measurement": "独立 ATI Gamma 六轴传感器连接刚性工作台与前臂环，测屈伸与旋前旋后输出。闭环力矩激励从 0.01 Hz 扫到 15 Hz，两个轴的幅值分别为 5.5 和 5.6 Nm。屈伸通道在共振区触及串联弹簧行程止挡，作者因此限制试验幅值。",
+      "qualification": "机械止挡限制了所能测试的指令幅值。电流限幅、功率电子削顶及逐样本双路数据均未验证。",
+      "rights": "PMC 可免费阅读作者稿，本文仅记录事实、引文与定位。未定位公开作者实验文件。"
+    },
+    {
+      "key": "rossini-2025-ae4w",
+      "type": "article",
+      "authors": [
+        "Marco Rossini",
+        "Sander De Bock",
+        "Vincent Ducastel",
+        "Gabriël Van De Velde",
+        "Kevin De Pauw",
+        "Tom Verstraten",
+        "Dirk Lefeber",
+        "Joost Geeroms",
+        "Carlos Rodriguez-Guerrero"
+      ],
+      "title": "Design and evaluation of AE4W: An active and flexible shaft-driven shoulder exoskeleton for workers",
+      "issued": 2025,
+      "venue": "Wearable Technologies 6, e12",
+      "doi": "10.1017/wtc.2024.19",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11896670/",
+      "evidence": "全文证据，图 6 和 §§2.3.2–2.3.3、§3.1.3、Data availability statement",
+      "measurement": "台架输出传感器由两个磁编码器的角差测碳纤维梁挠度。作者使用量程 20 Nm 的 ETH Messtechnik DRBK 作为独立基准，实施 12 个 −10 至 +10 Nm 的静态加载/卸载循环。另一项准静态试验在齿轮箱输入、输出分别接 2、20 Nm 的商用传感器，在 0.05 Hz 和 0.1–0.6 Nm 输入幅值下同步测量，报告力矩比 10.7 和效率 71%。",
+      "qualification": "两个试验的通道和幅值分别记录。校准加载范围和传感器量程不能证明执行器在该处饱和。",
+      "rights": "论文 CC BY 4.0。论文声明实验数据需向通讯作者邮件索取。"
+    },
+    {
+      "key": "aiple-gregoor-schiele-dyrac",
+      "type": "preprint",
+      "authors": [
+        "Manuel Aiple",
+        "Wouter Gregoor",
+        "André Schiele"
+      ],
+      "title": "A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping",
+      "issued": 2019,
+      "version": "arXiv v2, 2020-08-05",
+      "arxiv": "1906.07669",
+      "doi": "10.48550/arXiv.1906.07669",
+      "source": "https://arxiv.org/abs/1906.07669v2",
+      "fulltext": "https://arxiv.org/pdf/1906.07669v2",
+      "evidence": "全文证据，图 10–14 和 §4",
+      "measurement": "固定电机 1 后对输出轴施加外力矩，输出轴 ATI Gamma 的 z 轴标定范围 ±10 Nm。图 10–12 共用一次组实验。图 11–12 将滞回环取中心线后简化，可用作汇总证据。小、大刚度阶跃达到 90% 的时间为 50 和 120 ms。",
+      "qualification": "标定量程与控制器限幅不同，论文图的简化数据不能充当原始同步扭矩样本。数据目录见单列记录。",
+      "rights": "arXiv 作者稿可免费阅读。保留来源链接。"
+    },
+    {
+      "key": "aiple-2021-dyrac-data",
+      "type": "dataset",
+      "authors": [
+        "Manuel Aiple"
+      ],
+      "title": "Solidworks model and system identification data of the Dynamic Robotic Actuator (Dyrac)",
+      "issued": 2021,
+      "date": "2021-01-26",
+      "venue": "TU Delft – 4TU.ResearchData",
+      "doi": "10.4121/13625951",
+      "source": "https://research.tudelft.nl/en/datasets/solidworks-model-and-system-identification-data-of-the-dynamic-ro/",
+      "evidence": "机构数据目录，原始文件尚未验证",
+      "relation": "同名原型、相同刚度变化时间和阻尼范围对应 arXiv:1906.07669v2。",
+      "qualification": "目录显示 CAD 与辨识数据。4TU 文件列表未成功解析，无法从该条确定原始双路力矩、文件名或阈值事件。",
+      "rights": "目录可免费阅读。数据许可与逐文件可用性待核。",
+      "history_decision": "Existing release with complete source-level verification in the earlier G1 batch, retained here as a cross-reference only. Excluded from this batch’s data-source count.",
+      "prior_file_evidence": "https://github.com/hengyizang/lunwen/blob/103ca4b1128171e3b808fe56082bf65630d6ff14/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/sea/dyrac-source.json"
+    },
+    {
+      "key": "flack-2026-aligned-shafts",
+      "type": "dataset",
+      "authors": [
+        "James Flack"
+      ],
+      "title": "Aligned segmentation and coiling data for 'Coiling in Flexible Shaft Torque Models as a Solution for Reliable Remote Actuation'",
+      "issued": 2026,
+      "version": "Zenodo v1, 2026-08-26",
+      "doi": "10.5281/zenodo.22108526",
+      "source": "https://zenodo.org/records/22108526",
+      "evidence": "已核验数据清单、仓库变量说明和处理代码。MAT 大文件未逐字节读取。",
+      "channels": "五种轴的已对齐 VICON 标记点与 Beckhoff 控制台记录。beckhoffAligned.torsion 为施加扭转角（度），bend 为弯曲角，输出力矩 T(Nm) = −dtz。另存 lag、分段索引、中心线。",
+      "qualification": "单一输出力矩加几何和角度观测。未确认独立厂商关节力矩、限流阈值或削顶事件。原始相机导出和未对齐控制器文件需联系作者。",
+      "rights": "Zenodo 标记公开并列出下载入口。页面 Rights 栏未渲染具体许可，因此只收录清单、变量及发布方校验和，不转载 MAT。",
+      "companion_software_collection_doi": "10.5281/zenodo.22096159",
+      "code_version": "v2.0.0; f1fe148f54725211ba5e06b3e60e2907c1b136b9",
+      "code_urls": [
+        "https://github.com/J-Flack/Coiling-from-Vicon-Markers/blob/f1fe148f54725211ba5e06b3e60e2907c1b136b9/README.md",
+        "https://github.com/J-Flack/Coiling-from-Vicon-Markers/blob/f1fe148f54725211ba5e06b3e60e2907c1b136b9/data/README.md",
+        "https://github.com/J-Flack/Coiling-from-Vicon-Markers/blob/f1fe148f54725211ba5e06b3e60e2907c1b136b9/coiling/coil_config.m",
+        "https://github.com/J-Flack/Coiling-from-Vicon-Markers/blob/f1fe148f54725211ba5e06b3e60e2907c1b136b9/coiling/coil_extractTrials.m",
+        "https://github.com/J-Flack/Coiling-from-Vicon-Markers/blob/f1fe148f54725211ba5e06b3e60e2907c1b136b9/LICENSE.txt"
+      ],
+      "code_rights": "MIT，仅覆盖软件。",
+      "version_qualification": "数据说明列 TMECH-02-2026-23825；软件 v2 README 列 TMECH-08-2026-25593 并标为在审。软件引用 J. Flack、M. Wu、T. Verstraten 为稿件作者，数据集登记创作者为 James Flack。软件默认每轴取 3 个 0.125 Hz 慢速重复，末尾短重复 4 不纳入。"
+    }
+  ]
+}

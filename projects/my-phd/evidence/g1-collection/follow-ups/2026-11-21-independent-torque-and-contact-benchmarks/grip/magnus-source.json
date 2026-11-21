@@ -1,0 +1,97 @@
+{
+  "title": "Magnus Hand: Low-Cost 3D-Printed Magnetic Tactile Fingertips for an Open-Source Dexterous Hand",
+  "creator": "Tomás Costa, Institute for Manufacturing, University of Cambridge",
+  "landing": "https://github.com/tomasBGC/magnus-hand/tree/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea",
+  "version": "ebc230abaeb7add5af39e6a18e0e0819ee12d6ea",
+  "source_date": "2026-11-20",
+  "retrieved_utc": "2026-11-21",
+  "history_keys": [
+    "tomasBGC/magnus-hand",
+    "ebc230abaeb7add5af39e6a18e0e0819ee12d6ea",
+    "Magnus Hand: Low-Cost 3D-Printed Magnetic Tactile Fingertips for an Open-Source Dexterous Hand",
+    "Tomás Costa Magnus Hand"
+  ],
+  "level": "Full numeric file evidence. The complete calibration CSV, two live recording files and the September metadata were decoded. The two derived tables were reproduced from the complete source arrays.",
+  "rights": "CC BY 4.0 for data, documentation and hardware unless a file declares otherwise. Software has a separate MIT license. Attribution belongs to Tomás Costa. This folder contains original summaries and analysis code.",
+  "files": [
+    {
+      "path": "data/load_cell_dataset.csv",
+      "git_blob": "0de939a80af87a2cfa0425d046eae33234f80d6f",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/load_cell_dataset.csv"
+    },
+    {
+      "path": "data/closed_loop/slip_detection_live_verification.json",
+      "git_blob": "86d8acd71dda6c81e0aba1f741a7f3111e80e45d",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/closed_loop/slip_detection_live_verification.json"
+    },
+    {
+      "path": "data/closed_loop/eflesh_test_20260908T121329Z grasp test.csv",
+      "git_blob": "5e7b0f04462f73877ddbe1618a0e6bbedccc8e20",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/closed_loop/eflesh_test_20260908T121329Z%20grasp%20test.csv"
+    },
+    {
+      "path": "data/closed_loop/eflesh_test_20260908T121329Z grasp test_meta.json",
+      "git_blob": "71485f2868cc071105b28afe19fc90a6f0a63617",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/closed_loop/eflesh_test_20260908T121329Z%20grasp%20test_meta.json"
+    },
+    {
+      "path": "data/README.md",
+      "git_blob": "83e3b1a58ca4f3e6d81e75060b7aefbe8b43f32e",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/README.md"
+    },
+    {
+      "path": "data/closed_loop/README.md",
+      "git_blob": "3b4751aaf56f8adaea5f0ef139f73636fbf4e463",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/data/closed_loop/README.md"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "47cf59828d3af93b6ee141890ec69f0892006216",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/README.md"
+    },
+    {
+      "path": "LICENSE-HARDWARE-DOCS-DATA.md",
+      "git_blob": "1f9cc7049b4b2c6f8deaf6820c907acf87fce96b",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/LICENSE-HARDWARE-DOCS-DATA.md"
+    },
+    {
+      "path": "software/model_v1/grasping_dashboard/build_load_cell_dataset.py",
+      "git_blob": "0e36a4e8656814e4227d375c2b35e6349528a8ed",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/software/model_v1/grasping_dashboard/build_load_cell_dataset.py"
+    },
+    {
+      "path": "software/model_v1/hand_control_gui.py",
+      "git_blob": "df8f746f1e1c80142e16a47eb6e89ae5e07b1782",
+      "source": "https://github.com/tomasBGC/magnus-hand/blob/ebc230abaeb7add5af39e6a18e0e0819ee12d6ea/software/model_v1/hand_control_gui.py"
+    }
+  ],
+  "method": [
+    "The calibration CSV retains verified steady holding ticks for the specific finger facing a physically separate load cell in each grasp. Group by nominal level and facing finger, count distinct source_file identifiers as repetitions, and compute order-statistic medians on the recorded Force channel. ALL aggregates reuse the four finger groups. Contact is a deterministic label derived at 0.3 N by the producer.",
+    "Both live recordings log inferred force before and after contact gating, contact decisions and slip events. The July controller state gives the terminal closure percentages for two fingers; September CSV includes per-finger position percentage. These fields do not establish independent encoder measurement. Compare numeric and binary fields separately for each finger and phase. The July all-phase rows overlap its grip and hold partitions."
+  ],
+  "findings": [
+    "18,067 holding ticks in 140 grasp repetitions and seven combinations of fingers. Each of the four nominal levels has 35 repetitions. Light spans −0.113463 to 1.631728 N; medium spans 0.747463 to 2.267101 N. These are labels of nominal grip intensity and do not specify numeric force requests.",
+    "41 light-level ticks on the ring finger fell below the contact-label threshold. All 18,067 labels match a 0.3 N threshold on the independent load cell. No independent per-finger force for the other fingers can be reconstructed.",
+    "21 July: 524 ticks; 8 September: 323 ticks. For the middle finger, displayed force is zero despite raw inferred force over 0.3 N and contact=false on 461 and 174 ticks respectively. In September 8 further middle-finger ticks have contact=false with displayed force nonzero. A gated value should not be substituted for independently measured contact force.",
+    "The July and September recordings contain 21 and 81 finger-level slip-event flags respectively. With no independent slip or force ground truth in those live files, flagged ticks cannot be interpreted as verified slip events or tracking error."
+  ],
+  "scope_limits": [
+    "The independently measured force belongs to the hold-phase calibration data; the live grasp recordings contain controller-model outputs. No per-tick common force target, independent load-cell trace and actual clipped position command were found within either live file.",
+    "Current producer code distinguishes an inferred-force target stop from a safety position stop and caps requested closure increments. The saved terminal state marks done without the cause. The November code snapshot does not by itself prove which gate stopped the July or September hardware.",
+    "The repository reports the July object as an empty water bottle from the operator’s account; the September object is unspecified. The two live runs do not establish performance across objects."
+  ],
+  "search": [
+    {
+      "query": "GitHub repository search: gripper \"load cell\" \"dataset\" force in:readme",
+      "selection": "tomasBGC/magnus-hand"
+    },
+    {
+      "query": "GitHub repository search: gripper \"force tracking\" in:readme",
+      "exclusions": [
+        "langxin11/parallel_gripper_tactile documents simulated force traces.",
+        "john7030157/omega80-matlab generates synthetic image datasets and lists collecting images with load-cell ground truth as future work."
+      ]
+    }
+  ],
+  "reproduce": "node derive-grasp.mjs OUT [LOCAL_MAGNUS_HAND_REPO]"
+}

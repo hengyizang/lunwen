@@ -1,0 +1,71 @@
+{
+  "title": "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+  "paper_authors": [
+    "Qian Mao",
+    "Zijian Liao",
+    "Shiqiang Liu",
+    "Jinfeng Yuan",
+    "Rong Zhu"
+  ],
+  "doi": "10.5281/zenodo.15553350",
+  "landing": "https://zenodo.org/records/15553350",
+  "source_code": "https://github.com/mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations/tree/0c688b315ceb58adc37b70ff3ee8800a02045c74",
+  "version": "0c688b315ceb58adc37b70ff3ee8800a02045c74",
+  "retrieved_utc": "2026-11-21",
+  "public_release": "Zenodo lists a 43.3 kB MATLAB archive with publisher MD5 5a1f55365e34690f7ef63f9c8c56c2a3. This audit read the GitHub source files. Byte equivalence with the archive was not checked.",
+  "rights": "Public GitHub files and Zenodo record. A file-reuse license could not be confirmed from the inspected GitHub README or retrieved repository listings. Share original aggregate errors and links. No source matrix or trained weights are redistributed.",
+  "history": {
+    "keys": [
+      "10.5281/zenodo.15553350",
+      "10.1038/s41467-025-60861-8",
+      "mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations",
+      "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+    ]
+  },
+  "queries": [
+    "six-axis calibration dataset force torque measurements github Zenodo force-torque transducer characterization bench multi-axis calibration data six axis",
+    "GitHub repository search user:mq-0109, then pinned README.md / data.mat / six_force.m via GitHub Contents API",
+    "Companion DOI and author checks through Nature PDF, PMC12214963 and PubMed 40595584"
+  ],
+  "inputs": [
+    {
+      "file": "data.mat",
+      "git_blob": "57de5f168601282dc5117f0b1852e6cd976187d9",
+      "bytes": 35220,
+      "url": "https://raw.githubusercontent.com/mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations/0c688b315ceb58adc37b70ff3ee8800a02045c74/data.mat"
+    },
+    {
+      "file": "README.md",
+      "git_blob": "6ca97c152fe34d66fc275000cb1b0909bd801c4a",
+      "url": "https://raw.githubusercontent.com/mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations/0c688b315ceb58adc37b70ff3ee8800a02045c74/README.md"
+    },
+    {
+      "file": "six_force.m",
+      "git_blob": "690ff6d3b04a0cf605f75fc7696a1a16d7b784cf",
+      "url": "https://raw.githubusercontent.com/mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations/0c688b315ceb58adc37b70ff3ee8800a02045c74/six_force.m"
+    }
+  ],
+  "evidence_level": "Decoded data and exported model, plus full-text primary article.",
+  "companion": {
+    "doi": "10.1038/s41467-025-60861-8",
+    "year": 2025,
+    "venue": "Nature Communications 16, 5693",
+    "url": "https://www.nature.com/articles/s41467-025-60861-8.pdf",
+    "locator": "Methods, Calibration of the six-axis force sensor; Fig. 3b–g, sensing performance; Fig. 4a–c, child-resistant bottle-cap manipulation. Data availability cites Zenodo and GitHub."
+  },
+  "protocol": "A motorized z stage and SH-50 scalar force gauge (0.01 N resolution) load a sensor on an inclined plane and turntable. Position and direction vary across loads. No independent six-axis transducer time series, torque request or downstream limited command is supplied in the inspected matrix. The article separately reports a robotic bottle-opening experiment.",
+  "measurements": "MATLAB v5 file has variable data, 418 rows, 14 columns. Eight input voltages precede three force and three moment labels. All 418 sample vectors are distinct and there are 371 distinct six-axis target vectors, including 48 rows with all six target entries exactly zero.",
+  "verification": "MAT v5 binary, zlib-compressed matrix element and native double data were decoded. Model coefficients were parsed from the distributed MATLAB function. Input mapminmax normalization precedes two tanh layers of widths 20 and 10 and a linear six-output layer. Inverse mapminmax recovers labels in their native units. Each MAE/RMSE is evaluated within the designated row subset. Python reference reader uses scipy.io.loadmat and NumPy.",
+  "limits": [
+    "The file carries no acquisition times, gauge position history or row-level split membership. The paper describes a 40/10/50 training/validation/test division. Whole-file errors characterize this published matrix and network, and cannot reconstruct an independent test set.",
+    "Results text and Fig. 3 report compressive normal loads with decreasing negative signs. The matrix has Fz between 0 and 14.18123164 N. The discussion also uses a positive 0–15 N range. Preserve the channel convention when joining other sources.",
+    "Zero labels allow endpoint reconstruction error checks. Without elapsed time, orientation or per-session tare information, these rows cannot identify temporal wrist-sensor bias drift. The matrix contains calibration points. Time-resolved unscrewing commands, contact events and outcomes from the demonstration are not labels in it."
+  ],
+  "reproduce": "python derive_fingertip.py OUTPUT",
+  "output": "fingertip-axis-errors.csv",
+  "prior_archive_rights": {
+    "license": "CC BY 4.0 according to the previous same-release Zenodo metadata audit.",
+    "source": "https://github.com/hengyizang/lunwen/blob/103ca4b1128171e3b808fe56082bf65630d6ff14/projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/reference/fingertip-source.json",
+    "scope": "The current source-code mirror was inspected independently. This project retains links and original aggregate results."
+  }
+}

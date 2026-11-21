@@ -1,0 +1,7 @@
+drive,step_from_pct,step_to_pct,repetitions,electrical_samples,displayed_force_samples,min_bus_V,max_bus_A,below_12V_count
+FEC,20,30,3,745,67,13.97,1.72,0
+FEC,20,60,3,744,65,13.71,12.13,0
+FEC,20,80,3,744,45,10.57,17.36,5
+FOC,20,30,4,795,88,13.5,1.47,0
+FOC,20,60,3,601,65,13.5,6.8,0
+FOC,20,80,3,597,66,13.5,8.87,0

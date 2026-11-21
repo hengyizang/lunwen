@@ -1,0 +1,2 @@
+source,numeric_rows,manual_reading_step_seconds,first_thrust_g,last_thrust_g,supply_drop_V,first_current_A,last_current_A,last_logged_pwm_pct,rows_off_nominal_6p25_pct_grid,logged_off_grid_pwm_pct
+bitcraze,16,4,0,57.9,0.710000000,0.24,4.44,93.75,1,43.25

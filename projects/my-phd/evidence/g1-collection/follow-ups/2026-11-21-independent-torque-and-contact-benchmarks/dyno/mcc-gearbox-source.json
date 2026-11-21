@@ -1,0 +1,47 @@
+{
+  "title": "Multi-mode Fault Diagnosis Datasets of Gearbox Under Variable Working Conditions",
+  "creators": [
+    "Shijin Chen",
+    "Zeyi Liu",
+    "Xiao He",
+    "Dongliang Zou",
+    "Donghua Zhou"
+  ],
+  "landing": "https://data.mendeley.com/datasets/p92gj2732w/2",
+  "doi": "10.17632/p92gj2732w.2",
+  "date_accessed": "2026-11-21",
+  "version": "V2 (2024-04-09)",
+  "history_keys": [
+    "10.17632/p92gj2732w",
+    "p92gj2732w",
+    "liuzy0708/MCC5-THU-Gearbox-Benchmark-Datasets",
+    "Multi-mode Fault Diagnosis Datasets of Gearbox Under Variable Working Conditions",
+    "2403.12521",
+    "10.1016/j.dib.2024.110453"
+  ],
+  "rights": "Mendeley Data specifies CC BY 4.0. The GitHub README describes a separate MIT license for the project. Only original catalogue notes are included.",
+  "evidence_level": "Dataset landing, fixed author README and companion full text, including an explicit sign correction. No raw time-series payload decoded in this session.",
+  "author_documentation": {
+    "url": "https://github.com/liuzy0708/MCC5-THU-Gearbox-Benchmark-Datasets/blob/7d6de76ac8f12e02859db3f8291ceb20cf43fdc8/README.md",
+    "git_blob": "e1244b96fe58aefc7359c2673530c2db73e669c6",
+    "locations": [
+      "Data Content",
+      "Usage",
+      "Remark"
+    ]
+  },
+  "article": {
+    "doi": "10.1016/j.dib.2024.110453",
+    "title": "Multi-mode fault diagnosis datasets of gearbox under variable working conditions",
+    "alternative": "arXiv:2403.12521v2",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11070670/",
+    "location": "Specifications Table names dataset V1. Table 2 identifies the torque channel, Fig. 2 gives the nominal profiles, Fig. 3(a) gives one measured input-shaft torque trace, and Table 6 gives example load conditions."
+  },
+  "setup": "A 2.2 kW induction motor drives a two-stage gearbox. A magnetic powder brake loads the output shaft; an S2001 measures input-shaft torque. The paper reports 240 time series at 12.8 kHz for 60 s. The eight columns include a key-phase signal, torque and two three-axis accelerometers. There is no per-sample clock column.",
+  "quality": [
+    "Author README states that V1 reversed torque polarity and V2 fixes it. The published paper cites V1, while the current author repository points to V2. Deduplicate these versions and retain version-specific polarity information.",
+    "The approximate factor of six used in the plotting example scales input-side torque to the output load scale. It cannot yield an independently observed output-shaft torque or an instantaneous transmission-efficiency estimate.",
+    "The published load/speed profiles and file names encode nominal setpoints. Per-row pre-saturation drive requests, clipped commands and actual brake-side torque are not established."
+  ],
+  "query": "Web: precision gearbox hysteresis torque angular displacement dataset robotics torque sensor strain wave gear open data repository experiment. Follow author GitHub README and Mendeley DOI to the primary data article."
+}

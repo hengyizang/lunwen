@@ -1,0 +1,60 @@
+{
+  "title": "OpenFT Sensor example calibration matrix for a six-axis Hall-effect force/torque sensor",
+  "landing": "https://github.com/dimensionalOS/openFT-sensor",
+  "version": "876b60efbf6483fe401966c4d9fde0a9755bbc94",
+  "retrieved_utc": "2026-11-21",
+  "authors": [
+    "dimensionalOS (repository owner)"
+  ],
+  "history": {
+    "keys": [
+      "dimensionalOS/openFT-sensor",
+      "876b60efbf6483fe401966c4d9fde0a9755bbc94",
+      "openft_calibration_20250813_104335.csv"
+    ]
+  },
+  "rights": "Public repository. README calls it open-source and refers readers to a license or maintainer; the complete pinned tree has no license file. Only original numerical summaries and links are included.",
+  "evidence_level": "Versioned calibration artifact and fitting script, rather than original physical signal data.",
+  "sources": [
+    {
+      "path": "README.md",
+      "git_blob": "ba3178c5ea27133cbcf9747bdc126a8da1457d53",
+      "bytes": 6246,
+      "url": "https://raw.githubusercontent.com/dimensionalOS/openFT-sensor/876b60efbf6483fe401966c4d9fde0a9755bbc94/README.md"
+    },
+    {
+      "path": "software/calibration/CALIBRATION_GUIDE.md",
+      "git_blob": "44fe2b8177a9456090e13f33faafcbd74a5ce91b",
+      "bytes": 4311,
+      "url": "https://raw.githubusercontent.com/dimensionalOS/openFT-sensor/876b60efbf6483fe401966c4d9fde0a9755bbc94/software/calibration/CALIBRATION_GUIDE.md"
+    },
+    {
+      "path": "software/calibration/calc_calibration_matrix.py",
+      "git_blob": "cdd3dbe3694051e029802db47bf4b18285bac729",
+      "bytes": 17812,
+      "url": "https://raw.githubusercontent.com/dimensionalOS/openFT-sensor/876b60efbf6483fe401966c4d9fde0a9755bbc94/software/calibration/calc_calibration_matrix.py"
+    },
+    {
+      "path": "software/calibration/ft_calibration.json",
+      "git_blob": "dd149a28799d9b500332865345c3269e90ba58cc",
+      "bytes": 3172,
+      "url": "https://raw.githubusercontent.com/dimensionalOS/openFT-sensor/876b60efbf6483fe401966c4d9fde0a9755bbc94/software/calibration/ft_calibration.json"
+    }
+  ],
+  "protocol": "The guide suggests pairing a calibrated reference transducer or weights with lever arms to the sixteen Hall channels. The shipped affine matrix has six output rows and six intercepts. Its metadata names 160 fit samples and a source CSV. The complete 25-file tree omits that CSV, and the example gives no provenance that resolves which reference instrument was actually used.",
+  "method": "For each output compute the L1 coefficient norm and min/max affine values over an independently varied synthetic box using the README troubleshooting range of 9000–21000 ADC units per Hall input. Bounds follow analytically from coefficient signs. Combinations at box corners may be mechanically unreachable.",
+  "results": "The Mz row has coefficient L1 norm 1.00127510e-21 with bias -1.50767317e-19. Even over the entire documented example input box its possible output span is only 1.20153012e-17 native moment units. By contrast the computed spans for the other moment outputs are 3098.29 and 2491.74 in native units. This identifies a near-flat channel of this example affine map.",
+  "limits": [
+    "No ground-truth training labels, held-out errors, physical moment sweep, or unit calibration are supplied for this coefficient audit. A near-flat fitted axis alone cannot determine whether the sensor hardware is insensitive, the recorded reference lacked excitation, or some other pipeline step produced the map.",
+    "The intercept is a regression coefficient. It is not a measured zero-load wrist bias. The synthetic ADC box is a numerical sensitivity check, not an observed force range."
+  ],
+  "queries": [
+    "six-axis force torque calibration dataset ATI github sensor CSV forces torques",
+    "GitHub complete pinned tree and CALIBRATION_GUIDE.md, fit_calibration matrix, README troubleshooting",
+    "exact-filename search openft_calibration_20250813_104335.csv returned no public hits"
+  ],
+  "outputs": [
+    "openft-output-span.csv",
+    "derive_calibrations.py"
+  ]
+}

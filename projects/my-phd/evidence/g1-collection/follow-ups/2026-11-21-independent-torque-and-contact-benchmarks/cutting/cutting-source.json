@@ -1,0 +1,266 @@
+{
+  "title": "AML Robot Cutting Dataset",
+  "landing": "https://github.com/McGill-AML/aml_robot_cutting_dataset",
+  "release": "https://github.com/McGill-AML/aml_robot_cutting_dataset/tree/62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+  "version": "62fae2c2294c1f3d63ea860b3aa9c60810a307eb",
+  "authors": [
+    "Sahand Rezaei-Shoshtari",
+    "David Meger",
+    "Inna Sharf (associated study)"
+  ],
+  "retrieved_utc": "2026-11-21",
+  "rights": "BSD 3-Clause repository license, copyright 2020 Sahand Rezaei-Shoshtari. Raw recordings and author code remain at the source. This batch contains attributed descriptive aggregates and original analysis code.",
+  "history": {
+    "keys": [
+      "McGill-AML/aml_robot_cutting_dataset",
+      "sahandrez/aml_robot_cutting_dataset",
+      "AML Robot Cutting Dataset",
+      "2007.11167",
+      "10.1109/IROS45743.2020.9341446",
+      "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference"
+    ]
+  },
+  "companion": {
+    "title": "Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference",
+    "authors": [
+      "Sahand Rezaei-Shoshtari",
+      "David Meger",
+      "Inna Sharf"
+    ],
+    "doi": "10.1109/IROS45743.2020.9341446",
+    "arxiv": "2007.11167",
+    "fulltext": "https://arxiv.org/pdf/2007.11167",
+    "publication": "2020 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)"
+  },
+  "sources": [
+    {
+      "path": "LICENSE",
+      "git_blob": "5a6814d04046be0709f1bf6802bd0c9d5354983b",
+      "bytes": 1531
+    },
+    {
+      "path": "README.md",
+      "git_blob": "c2f1db79cc2a8a7646645f0510bf24b449f0f2f9",
+      "bytes": 5548
+    },
+    {
+      "path": "aml_robot_cutting/process_data.py",
+      "git_blob": "5541963cc5f2ab1a2f42d75441600d69081ff50d",
+      "bytes": 1423
+    },
+    {
+      "path": "aml_robot_cutting/robot_data_helper.py",
+      "git_blob": "74673c41f695d4e509c88d47bdc52d07c2bda470",
+      "bytes": 8074
+    }
+  ],
+  "tree_url": "https://api.github.com/repos/McGill-AML/aml_robot_cutting_dataset/git/trees/62fae2c2294c1f3d63ea860b3aa9c60810a307eb?recursive=1",
+  "paired_member_receipts": [
+    {
+      "path": "robot_data/cut_1/cut_1_1.bag",
+      "git_blob": "48c0771f22cbdf19965a497cefc9516f07be7c9c",
+      "bytes": 491012
+    },
+    {
+      "path": "ft_sensor_data/cut_1/cut_1_1.csv",
+      "git_blob": "0f46606ca264a542cd7879ffb9e31a07e3da1ef1",
+      "bytes": 508595
+    },
+    {
+      "path": "data/cut_1/cut_1_1/joint_1.csv",
+      "git_blob": "e61abef8b9423c35d09648ea2aa715b60a343ae2",
+      "bytes": 4391
+    },
+    {
+      "path": "robot_data/cut_2/cut_2_1.bag",
+      "git_blob": "5b0bf4e4cc84b6340e214900fea032d482cfb753",
+      "bytes": 442602
+    },
+    {
+      "path": "ft_sensor_data/cut_2/cut_2_1.csv",
+      "git_blob": "2298af315fabb98f840c3943a8a84b2f781ca0de",
+      "bytes": 387720
+    },
+    {
+      "path": "data/cut_2/cut_2_1/joint_1.csv",
+      "git_blob": "82a03d62eede9cc47f76abc789072cd09c95683f",
+      "bytes": 6572
+    },
+    {
+      "path": "robot_data/cut_3/cut_3_1.bag",
+      "git_blob": "32a5629d409ada355d3a13a0460b6c009ba8c4d9",
+      "bytes": 362207
+    },
+    {
+      "path": "ft_sensor_data/cut_3/cut_3_1.csv",
+      "git_blob": "c0a4abdfbf7faa5304cea25287c4a22cbc937527",
+      "bytes": 225489
+    },
+    {
+      "path": "data/cut_3/cut_3_1/joint_1.csv",
+      "git_blob": "fd5ecfa8708595747bd7ae12cea40ba1b65f4c43",
+      "bytes": 4239
+    },
+    {
+      "path": "robot_data/cut_4/cut_4_1.bag",
+      "git_blob": "cf0f48956f79750310f380d5faea7052f0e3522c",
+      "bytes": 543189
+    },
+    {
+      "path": "ft_sensor_data/cut_4/cut_4_1.csv",
+      "git_blob": "e34ec02038c17c24d2d375503078121ef2d45553",
+      "bytes": 369804
+    },
+    {
+      "path": "data/cut_4/cut_4_1/joint_1.csv",
+      "git_blob": "30ce7567ce134d036a8b132d3b476047f606934e",
+      "bytes": 10445
+    },
+    {
+      "path": "robot_data/cut_5/cut_5_1.bag",
+      "git_blob": "5d4025cb06208dc12060e4e672ec736efcd84b8d",
+      "bytes": 560348
+    },
+    {
+      "path": "ft_sensor_data/cut_5/cut_5_1.csv",
+      "git_blob": "12e96e90a4ba7de9971b1b0ae5f134c44ded6479",
+      "bytes": 426923
+    },
+    {
+      "path": "data/cut_5/cut_5_1/joint_1.csv",
+      "git_blob": "e1d00f599b388cb6a70dd90a0f5df4db25041da8",
+      "bytes": 15001
+    },
+    {
+      "path": "robot_data/cut_6/cut_6_1.bag",
+      "git_blob": "214b37df519c6b303c8a7fb2b8e1f6595baa8c44",
+      "bytes": 562939
+    },
+    {
+      "path": "ft_sensor_data/cut_6/cut_6_1.csv",
+      "git_blob": "722fd9c0392fa28d50b1d245b6aa11fb493a0086",
+      "bytes": 446803
+    },
+    {
+      "path": "data/cut_6/cut_6_1/joint_1.csv",
+      "git_blob": "719349ded254377197e7b038f3fb44ec14fc5501",
+      "bytes": 5089
+    },
+    {
+      "path": "robot_data/cut_7/cut_7_1.bag",
+      "git_blob": "5bb0e4d9aa84bb2e2151da42f85059c091db5595",
+      "bytes": 409782
+    },
+    {
+      "path": "ft_sensor_data/cut_7/cut_7_1.csv",
+      "git_blob": "3bf5ce112da3e7c23bf2adc1a9cb17aad31e3042",
+      "bytes": 574666
+    },
+    {
+      "path": "data/cut_7/cut_7_1/joint_1.csv",
+      "git_blob": "283e25b2d302166503e3209a855b2c5f17a9593d",
+      "bytes": 9037
+    },
+    {
+      "path": "robot_data/cut_8/cut_8_1.bag",
+      "git_blob": "8cd2d473e98e15960bdae835784f5a759ed9c67f",
+      "bytes": 444151
+    },
+    {
+      "path": "ft_sensor_data/cut_8/cut_8_1.csv",
+      "git_blob": "0aa36dc14a413bba025656a594c5a63dd0fb9cfe",
+      "bytes": 252004
+    },
+    {
+      "path": "data/cut_8/cut_8_1/joint_1.csv",
+      "git_blob": "c4e1aa5b8ebb351f4204ee6996b1fdd1356759b4",
+      "bytes": 10389
+    },
+    {
+      "path": "robot_data/cut_9/cut_9_1.bag",
+      "git_blob": "e69be878611935cc460a8f3d042845ce0cb04e33",
+      "bytes": 432315
+    },
+    {
+      "path": "ft_sensor_data/cut_9/cut_9_1.csv",
+      "git_blob": "05710d9f63c3850c72cd7be3335b625e82631fd8",
+      "bytes": 295815
+    },
+    {
+      "path": "data/cut_9/cut_9_1/joint_1.csv",
+      "git_blob": "68d6b0d7593d88787e395c9b55d1d77618202feb",
+      "bytes": 10814
+    },
+    {
+      "path": "robot_data/cut_10/cut_10_1.bag",
+      "git_blob": "c61178fff06967c1308372d0f46c49bbefec943d",
+      "bytes": 446684
+    },
+    {
+      "path": "ft_sensor_data/cut_10/cut_10_1.csv",
+      "git_blob": "76f30a330c1bd727fc90bc92a2a3d24f4e1abf14",
+      "bytes": 289760
+    },
+    {
+      "path": "data/cut_10/cut_10_1/joint_1.csv",
+      "git_blob": "d51496ce7863d55ac16917c05ab2dc025bb43c78",
+      "bytes": 10910
+    },
+    {
+      "path": "robot_data/cut_11/cut_11_1.bag",
+      "git_blob": "542bb5a263879179ce28913c4832e0ad965e55d4",
+      "bytes": 473463
+    },
+    {
+      "path": "ft_sensor_data/cut_11/cut_11_1.csv",
+      "git_blob": "ebef9a95db297db452da1d354a5ace8ba6f39346",
+      "bytes": 373585
+    },
+    {
+      "path": "data/cut_11/cut_11_1/joint_1.csv",
+      "git_blob": "7a0c1c8f6f9d9f1eb41c29def1fc845572c1c28d",
+      "bytes": 9228
+    },
+    {
+      "path": "robot_data/cut_12/cut_12_1.bag",
+      "git_blob": "02c0fea63722f1c1d26680ff21bb00dc1f4f517b",
+      "bytes": 405536
+    },
+    {
+      "path": "ft_sensor_data/cut_12/cut_12_1.csv",
+      "git_blob": "38e7ea294fba7257d599a7ca6d6f92c2d6cbf11e",
+      "bytes": 405219
+    },
+    {
+      "path": "data/cut_12/cut_12_1/joint_1.csv",
+      "git_blob": "7655e55adb80cda2ee64c6eb423c3ed327a633ab",
+      "bytes": 9416
+    }
+  ],
+  "fixture_member_receipts": "fixture-files.csv",
+  "evidence_level": "Native uncompressed ROS1 messages decoded for one trial per specimen. Full numeric fixture data decoded in 179 CSVs. The 13,710,042-byte cut_1_11.csv is indexed by immutable Git blob ID and size; the source connector closed its transport on a full read.",
+  "protocol": "A six-joint Kinova Jaco 2 operates in joystick Cartesian velocity control during wood contact. An independently mounted ATI Mini40 measures the reaction at the specimen fixture. Each of 12 specimens has 15 cuts. The robot records actual and compensated joint torques, its own reported tool wrench, and position or velocity command-related topics. The fixture is recorded on its own acquisition system.",
+  "scope": "180 bagfiles, 180 fixture CSVs and 1080 processed joint CSVs in the complete release inventory. Read first numbered trial per specimen in all three representations (bag, fixture, joint1). Record the bag storage timestamps for the ROS tool wrench and nominal fixture duration from the README 200 Hz rate. Analyze all 179 fixture files successfully read and retain the full 180-file inventory, regardless of numerical outcome.",
+  "observations": [
+    "Across the 12 paired trial IDs the robot logged 2612 tool wrench messages and the fixture logged 82557 rows. In all 12 trials the nominal duration of the ATI file exceeded the ROS tool-wrench span. The author README explicitly warns that clocks were not synchronized.",
+    "Across 179 complete fixture files 981948 rows had finite first six channels. Column 7 was nonfinite in all 579905 decoded rows for specimens 6–12 and column 8 was 1500. For specimens 1–5 column 7 was finite, had repeated adjacent decreases, and column 8 was fixed at 1000. These auxiliary fields do not constitute a usable monotonic time axis.",
+    "All 74 decoded fixture files for specimens 1–5 have peak norm of the first three raw channels at least 16.108366. For all 105 decoded files from specimens 6–12 that peak is at most 1.771054. This scale shift co-varies with the last column and specimen IDs. Frame calibration, unit convention or causal material effect cannot be inferred from that split.",
+    "RobotDataHelper labels cutting from a five-row rolling standard deviation of joint torque. A conjunction over joint indices 0,2,3,4 is used, and the first label is set to zero. These processed labels are derived from the robot torque channels. They do not independently verify fixture contact."
+  ],
+  "limits": [
+    "The fixture CSVs lack a header and the seventh and eighth numeric columns have no unit or timestamp definition in the inspected source. Fixture maxima in the table are source-number norms; no conversion was applied. The README describes the first six as force/torque. The robot tool frame and fixture frame are distinct. No samplewise robot-versus-fixture error is reported.",
+    "A shared trial number permits trial-level comparison. It gives no identified absolute clock shift, cross-frame alignment, or separate preload baseline.",
+    "Cartesian velocity and joint or Cartesian pose commands do not expose before/after motor effort limiting. A constant seventh torque slot on a six-joint arm is not an independent load sensor.",
+    "Source README cites 5 materials at 5 thickness levels, with only 12 realized combinations. The first five specimen IDs are all LVL. Therefore channel distribution differences are confounded with the specimen selection and fixture recording convention."
+  ],
+  "reproduce": "python derive_cutting.py OUTPUT --cache RAW reproduces the published 179-file analysis, retaining the original unread file as inventory. Pass --include-outstanding to additionally read cut_1_11.csv when the full source is available.",
+  "queries": [
+    "physical robot contact wrist force torque dataset independent cutting force sensor github",
+    "McGill-AML/aml_robot_cutting_dataset official README, fixed recursive Git tree and three acquisition directories; compare earlier owner alias sahandrez/aml_robot_cutting_dataset",
+    "Followed author-linked citation arXiv:2007.11167 and verified corresponding IROS DOI."
+  ],
+  "outputs": [
+    "fixture-files.csv",
+    "paired-first-trials.csv"
+  ]
+}

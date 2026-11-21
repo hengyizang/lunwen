@@ -1,0 +1,80 @@
+{
+  "repository": "Capo01/odrive_based_electric_motor_dynamometer",
+  "version": "6dd779a2e6fa051afdd1029ffeb238182de755a8",
+  "verified_utc": "2026-11-21",
+  "landing": "https://github.com/Capo01/odrive_based_electric_motor_dynamometer/tree/6dd779a2e6fa051afdd1029ffeb238182de755a8",
+  "title": "Odrive based electric motor dynamometer",
+  "authors": [
+    "R. Parsons (name in dyno_functions.py)",
+    "Capo01 (release account)"
+  ],
+  "history_keys": [
+    "Capo01/odrive_based_electric_motor_dynamometer",
+    "Odrive based electric motor dynamometer",
+    "Odrive D5065 270kv",
+    "6dd779a2e6fa051afdd1029ffeb238182de755a8"
+  ],
+  "license": "GPL-3.0 repository license. The data directory has no separate license statement. Included below are original descriptive statistics and source references.",
+  "evidence": "Full Git CSV objects and logger, sensor conversion and parameter code read at fixed commit. Run header dated 2019-05-11.",
+  "queries": [
+    "open source robot actuator dynamometer testbench data logs motor output torque github load cell quasi direct drive characterization dataset",
+    "GitHub robot actuator motor dynamometer transmission efficiency torque sensor harmonic cycloidal test data CSV robot gear actuator benchmark"
+  ],
+  "findings": [
+    "Both odrive_data.csv paths are one 106043-byte Git object. All 344 data rows have 19 finite fields. Absorber measuring-arm load-cell torque ranges from −1457.2 to −0.4 N mm.",
+    "The 41 distinct test-motor speed setpoints are positive. The opposing absorber encoder has negative speed in 343/344 rows. Raw signs and encoder endpoints are retained. All input-current and input-power entries are zero."
+  ],
+  "limits": [
+    "load-cell torque is mechanical reaction torque on the absorber pivot arm; source conversion uses 0.1 m lever. The two sides have different encoder definitions.",
+    "No time stamp per row or unrestricted/limited torque pair. The logger queries each field in turn, then takes the arithmetic mean of ten readings. Input power in this CSV cannot support pointwise electrical efficiency.",
+    "A repository preliminary test table; no calibration uncertainty certificate or independent dynamic clock alignment verified."
+  ],
+  "raw_paths": [
+    "Odrive motor testing procedure/Motor Data/Odrive D5065 270kv/odrive_data.csv",
+    "Odrive motor testing procedure/odrive_data.csv"
+  ],
+  "outputs": [
+    "odrive-operating-points.csv"
+  ],
+  "source_files": [
+    {
+      "path": "Arduino/Load_cell_moving_median/Load_cell_moving_median.ino",
+      "git_blob_sha1": "0218d06a8b0cbf0b8a7bccd58b8a35bdb39d1477",
+      "bytes": 5676
+    },
+    {
+      "path": "LICENSE",
+      "git_blob_sha1": "f288702d2fa16d3cdf0035b15a9fcbc552cd88e7",
+      "bytes": 35149
+    },
+    {
+      "path": "Odrive motor testing procedure/Motor Data/Odrive D5065 270kv/odrive_data.csv",
+      "git_blob_sha1": "41fe145e8b86e7bd8d128dc2d04015bd2e0b84dd",
+      "bytes": 106043
+    },
+    {
+      "path": "Odrive motor testing procedure/dyno_functions.py",
+      "git_blob_sha1": "e588316971891d9e1c84342440846127fc28d0bb",
+      "bytes": 22778
+    },
+    {
+      "path": "Odrive motor testing procedure/dyno_parameters.py",
+      "git_blob_sha1": "a60b4b7907ba8e6e17e6d8b7d3afe3c5173d5e89",
+      "bytes": 10643
+    },
+    {
+      "path": "Odrive motor testing procedure/odrive_data.csv",
+      "git_blob_sha1": "41fe145e8b86e7bd8d128dc2d04015bd2e0b84dd",
+      "bytes": 106043
+    },
+    {
+      "path": "README.md",
+      "git_blob_sha1": "5d2147bba12dc28163809a1f207e1bc166a8640f",
+      "bytes": 2714
+    }
+  ],
+  "source_url_template": "https://raw.githubusercontent.com/Capo01/odrive_based_electric_motor_dynamometer/6dd779a2e6fa051afdd1029ffeb238182de755a8/{path}",
+  "search_exclusions": [
+    "earosenfeld/robot-test-bench describes a numerical emulator and simulated motor models; excluded from these physical source counts."
+  ]
+}

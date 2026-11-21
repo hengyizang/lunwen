@@ -1,0 +1,31 @@
+record_id,history_status,new_to_bibliography,evidence_level,prior_matching_path_count,keys
+10.3389/frobt.2024.1416360,historical_work,false,full text,2,10.3389/frobt.2024.1416360 | An experimental study of the sensorized strain wave gear RT1-T and its capabilities for torque control in robotic joints
+10.1109/icra57147.2024.10611567,historical_work,false,full text,2,10.1109/icra57147.2024.10611567 | Design and Experimental Characterisation of a Novel Quasi-Direct Drive Actuator for Highly Dynamic Robotic Applications
+10.3390/act15060301,new_work,true,full text,0,10.3390/act15060301 | Toward Reproducible Actuator Characterization: A Comprehensive Framework for Robotics Applications
+10.1109/iros.2017.8206351,new_work,true,full text,0,10.1109/iros.2017.8206351 | What is the torque bandwidth of this actuator?
+10.1109/tcst.2021.3059284,historical_work,false,full text,7,10.1109/tcst.2021.3059284 | 1902.05346 | Performance Analysis of Series Elastic Actuator Based on Maximum Torque Transmissibility
+10.3390/act9010006,new_work,true,full text,0,"10.3390/act9010006 | Design, Modelling and Control of Novel Series-Elastic Actuators for Industrial Robots"
+10.3389/fnbot.2019.00017,new_work,true,full text,0,"10.3389/fnbot.2019.00017 | Development, Analysis, and Control of Series Elastic Actuator-Driven Robot Leg"
+ucla:0kt98977,new_work,true,full text,0,Experimental Validation of Unlumped Model and Design Implications of its Bandwidth Manifold for Rotary Series Elastic Actuators | ucla:0kt98977
+10.3390/act6030026,new_work,true,full text,0,10.3390/act6030026 | Generalization of Series Elastic Actuator Configurations and Dynamic Behavior Comparison
+10.1109/tmech.2013.2270435,historical_work,false,full text,5,10.1109/tmech.2013.2270435 | Design and Control Considerations for High-Performance Series Elastic Actuators
+10.3390/act14090443,new_work,true,full text,0,10.3390/act14090443 | Design and Evaluation of a Torque-Controlled Ankle Exoskeleton Using the Small-Scale Hydrostatic Actuator: miniHydrA
+10.1017/wtc.2023.20,historical_work,false,full text,3,10.1017/wtc.2023.20 | Series-elastic actuator with two degree-of-freedom PID control improves torque control in a powered knee exoskeleton
+10.1126/scirobotics.adt1591,new_work,true,full text,0,10.1126/scirobotics.adt1591 | OpenExo: An open-source modular exoskeleton to augment human function | 10.1101/2024.10.02.616295
+10.1126/scirobotics.adi8852,new_work,true,full text,0,"10.1126/scirobotics.adi8852 | Estimating human joint moments unifies exoskeleton control, reducing user effort"
+10.1038/s41467-025-60861-8,historical_work,false,full text,6,"10.1038/s41467-025-60861-8 | An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations"
+oclc:898068566,new_work,true,full text,0,Compliant Running and Step Climbing of the Scout II Platform | oclc:898068566
+10.1177/16878132261468589,new_work,true,full text,0,10.1177/16878132261468589 | Transformed-domain predefined-time sliding mode control for actuator-constrained trajectory tracking of uncertain robotic manipulators
+10.1109/tro.2016.2640183,historical_work,false,full text,3,10.1109/tro.2016.2640183 | Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots
+cmu:cmu-ri-tr-16-39,new_work,true,full text,0,Design for 3D Agility and Virtual Compliance using Proprioceptive Force Control in Dynamic Legged Robots | cmu:cmu-ri-tr-16-39
+10.1016/j.ohx.2026.e00799,historical_work,false,full text,2,10.1016/j.ohx.2026.e00799 | An open-source BLDC motor test bed utilizing ESC telemetry for cost-effective educational laboratories
+10.1016/j.dib.2026.112583,new_work,true,full text,0,10.1016/j.dib.2026.112583 | 2601.02278 | Multi-mode fault diagnosis datasets of three-phase asynchronous motor under variable working conditions
+10.1016/j.dib.2024.110453,new_work,true,full text,0,10.1016/j.dib.2024.110453 | 2403.12521 | Multi-mode fault diagnosis datasets of gearbox under variable working conditions
+imav:2025-12,new_work,true,full text,0,A Comparative Study on Thrust Map Estimation for Multirotor Aerial Vehicles | imav:2025-12
+10.1109/iros45743.2020.9341446,new_work,true,full text,0,10.1109/iros45743.2020.9341446 | 2007.11167 | Learning the Latent Space of Robot Dynamics for Cutting Interaction Inference
+10.1109/iros55552.2023.10342345,historical_work,false,full text,2,10.1109/iros55552.2023.10342345 | 2308.09650 | Collision Isolation and Identification Using Proprioceptive Sensing for Parallel Robots to Enable Human-Robot Collaboration
+10.1109/iros55552.2023.10341581,historical_work,false,full text,2,10.1109/iros55552.2023.10341581 | 2308.09656 | Safe Collision and Clamping Reaction for Parallel Robots During Human-Robot Collaboration
+10.1109/tro.2019.2930915,historical_work,false,full text,2,10.1109/tro.2019.2930915 | An Elbow Exoskeleton for Upper Limb Rehabilitation with Series Elastic Actuator and Cable-driven Differential
+10.1017/wtc.2024.19,new_work,true,full text,0,10.1017/wtc.2024.19 | Design and evaluation of AE4W: An active and flexible shaft-driven shoulder exoskeleton for workers
+10.48550/arxiv.1906.07669,historical_work,false,full text,3,10.48550/arxiv.1906.07669 | 1906.07669 | A Dynamic Robotic Actuator with Variable Physical Stiffness and Damping
+10.1109/icra48891.2023.10161217,new_work,true,full text,0,"10.1109/icra48891.2023.10161217 | 2308.09633 | Towards Human-Robot Collaboration with Parallel Robots by Kinetostatic Analysis, Impedance Control and Contact Detection"
