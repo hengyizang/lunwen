@@ -39,17 +39,24 @@ class ProductionConfigurationTests(unittest.TestCase):
         self.assertTrue(PRODUCTION_KEYS <= {spec["key_setting"] for spec in ai_providers.PRODUCTION_PROVIDERS.values()})
         self.assertFalse(any(name.startswith("UUAPI") for name in env))
 
-    def test_each_missing_production_credential_fails_without_disclosing_other_credentials(self):
+    def test_only_selected_model_credentials_are_required_and_secrets_are_redacted(self):
+        selected="DR_OS_CHEAPAI_GPT_PRO_KEY"
         for name in sorted(PRODUCTION_KEYS):
-            env = production_environment(); env.pop(name)
-            with self.subTest(name=name), patch.dict(os.environ, env, clear=True):
-                errors = cloud_continuation.configuration_errors(env)
-                self.assertTrue(errors)
-                self.assertIn(name, " ".join(errors))
-                self.assertNotIn("UUAPI", " ".join(errors))
+            env=production_environment();env.pop(name)
+            with self.subTest(name=name),patch.dict(os.environ,env,clear=True):
+                errors=cloud_continuation.configuration_errors(env)
+                self.assertEqual(bool(errors),name==selected)
+                if errors:self.assertIn(name," ".join(errors))
                 for value in env.values():
-                    if value.startswith("synthetic-production-"):
-                        self.assertNotIn(value, " ".join(errors))
+                    if value.startswith("synthetic-production-"):self.assertNotIn(value," ".join(errors))
+        with tempfile.TemporaryDirectory() as directory:
+            project=Path(directory)
+            researchctl.write_json(project/"program/review-policy.json",{"enabled":True})
+            env={selected:"synthetic-writer-only"}
+            env["DR_OS_ROUTING_PROFILE"]="production"
+            self.assertTrue(cloud_continuation.configuration_errors(env,project=project))
+            researchctl.write_json(project/"program/review-policy.json",{"enabled":False})
+            self.assertEqual(cloud_continuation.configuration_errors(env,project=project),[])
 
     def test_exact_production_quotes_cannot_be_replaced_by_empty_or_legacy_prices(self):
         for price in ("{}", '{"gpt-6.1-sol":{"input_per_million":1,"output_per_million":1}}'):
@@ -93,7 +100,7 @@ class ProductionContinuationTests(unittest.TestCase):
             with self.subTest(value=value), patch("scripts.model_runtime.call") as paid_call:
                 decision = cloud_continuation.evaluate("my-phd", env)
                 self.assertTrue(decision["should_run"])
-                self.assertEqual(decision["reason"], "current_stage_work_allowed")
+                self.assertEqual(decision["reason"], "current_task_work_allowed")
                 paid_call.assert_not_called()
         self.assertTrue(cloud_continuation.evaluate("my-phd", {**self.env, "DR_OS_AUTOMATIC_RESEARCH_ENABLED": "true"})["should_run"])
 
@@ -112,7 +119,7 @@ class ProductionContinuationTests(unittest.TestCase):
                 self.assertFalse(report["provider_authentication_verified"])
                 self.assertFalse(report["scientific_completion_verified"])
                 self.assertEqual(report["budget"], {"authorized_ceiling_cny": 300, "spent_cny": 12.5, "reserved_cny": 0, "remaining_cny": 287.5})
-                self.assertEqual({row["provider"] for row in report["providers"]}, set(ai_providers.PRODUCTION_PROVIDERS))
+                self.assertEqual({row["provider"] for row in report["providers"]}, {"cheapai-gpt-pro"})
                 for key in PRODUCTION_KEYS:
                     self.assertNotIn(self.env[key], json.dumps(report))
             paid_call.assert_not_called(); grant.assert_not_called(); catalog.assert_not_called(); network.assert_not_called()
@@ -131,7 +138,7 @@ class ProductionContinuationTests(unittest.TestCase):
         researchctl.write_json(self.project / cloud_continuation.POLICY, self.policy)
         state = researchctl.load_state("my-phd"); state["status"] = "awaiting_approval"
         researchctl.write_json(self.project / "state/run.json", state)
-        self.assertEqual(cloud_continuation.evaluate("my-phd", env)["reason"], "human_gate_pending")
+        self.assertEqual(cloud_continuation.evaluate("my-phd", env)["reason"], "current_task_work_allowed")
         self.assertEqual(model_spend.read(self.project)["authorized_ceiling_cny"], 300)
 
     def test_existing_unknown_charge_reservation_counts_without_blocking_remaining_budget(self):
@@ -156,15 +163,15 @@ class ProductionContinuationTests(unittest.TestCase):
         self.assertFalse((self.project / model_spend.FILE).exists())
 
     def test_cycle_command_selects_production_roles_without_mutating_budget_or_policy(self):
-        before = [(self.project / path).read_bytes() for path in (model_spend.FILE, cloud_continuation.POLICY, Path("state/run.json"))]
+        before = [(self.project / path).read_bytes() for path in (model_spend.FILE, cloud_continuation.POLICY)]
         with patch.object(cloud_job, "ROOT", self.root):
             command = cloud_job.cycle_command({"action": "cycle"}, "my-phd")
-        self.assertIn("cheapai-gpt-pro", command)
-        self.assertIn("codekey-kiro-enterprise", command)
+        self.assertNotIn("--writer-provider", command)
+        self.assertNotIn("--critic-provider", command)
         self.assertFalse(any("uuapi" in item for item in command))
         self.assertEqual(os.environ["DR_OS_REQUIRE_MODEL_AUTH"], "1")
         self.assertEqual(os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"], "1")
-        self.assertEqual(before, [(self.project / path).read_bytes() for path in (model_spend.FILE, cloud_continuation.POLICY, Path("state/run.json"))])
+        self.assertEqual(before, [(self.project / path).read_bytes() for path in (model_spend.FILE, cloud_continuation.POLICY)])
 
 
 class ProductionSecretContainmentTests(unittest.TestCase):

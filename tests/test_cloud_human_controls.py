@@ -258,7 +258,7 @@ class CloudHumanControlTests(unittest.TestCase):
         after = acceptance.review("ready", gate="G5")["review_sha256"]
         self.assertNotEqual(before, after)
 
-    def test_cloud_dispatch_restores_data_and_never_runs_a_paid_command(self):
+    def test_decision_uses_stored_evidence_without_network_acquisition(self):
         runtime = self.root / ".runtime"
         runtime.mkdir()
         with patch.object(cloud_job, "ROOT", self.root), patch.object(cloud_job, "RUNTIME", runtime), \
@@ -280,7 +280,7 @@ class CloudHumanControlTests(unittest.TestCase):
             self.assertEqual(researchctl.load_state(self.project.name)["approvals"][-1]["decision_type"], "deterministic")
             self.assertEqual(before, cp.sha(self.project / "state/model-spend-control.json"))
             self.assertEqual(restore.call_count, 2)
-            self.assertEqual(acquire.call_count, 2)
+            acquire.assert_not_called()
             self.assertEqual(persist.call_count, 2)
             command.assert_not_called()
 

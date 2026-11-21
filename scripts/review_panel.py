@@ -1,4 +1,4 @@
-"""Three mutually blind source views; frozen findings are never votes or acceptance odds."""
+"""Optional source-isolated reviews; frozen findings are never votes or acceptance odds."""
 from __future__ import annotations
 
 import base64
@@ -38,21 +38,27 @@ def request_path(paper):
     return f"papers/{paper}/reviews/panel-inputs.json"
 
 
+def requested(project, paper):
+    """A missing request is not an unfinished review or a submission blocker."""
+    path = project / request_path(paper)
+    return path.is_file() and read(path).get("enabled", True) is not False
+
+
 def contract(paper):
-    return ("Submission checkpoint: prepare " + request_path(paper) + " with paper_id and views. Each view is an array of "
+    return ("When an independent source review is useful, prepare " + request_path(paper) + " with paper_id and one or more selected views. Each view is an array of "
         "{kind,path,sha256,start_line,end_line}; use actual scientific sources and exact line ranges, never prior reviews or preferred verdicts. "
-        "Required kinds by view: " + json.dumps({key: sorted(value) for key, value in VIEWS.items()}) +
+        "Allowed source kinds by view: " + json.dumps({key: sorted(value) for key, value in VIEWS.items()}) +
         ". Selections must be actual canonical manuscript sections or exact extracts of those sections; labels and filenames do not establish scope. "
         "For canonical DOCX use start_paragraph/end_paragraph and :P pointers; other text sources use lines. "
-        "figure_one may instead bind the canonical first figure's PNG/JPEG by path/sha256. Include both complete canonical preregistration.json "
+        "figure_one may instead bind the canonical first figure's PNG/JPEG by path/sha256. When reviewing protocol compliance, include the complete canonical preregistration.json "
         "and its hash-bound scientific protocol as protocol rows: experiment-evidence-plan.json for empirical studies, study-protocol.json "
-        "for Meta analysis or formal theory. A freeze receipt alone is not the scientific protocol. Only a validated frozen theory route "
+        "for Meta analysis or formal theory. A freeze receipt alone is not the scientific protocol. A declared theory route "
         "uses domain={methods,results}, statistics={protocol,formal_proof}, and editorial={title,abstract,headline_claim} plus figure_one "
-        "when the manuscript has a first figure. formal_proof selections must cover every complete frozen proof source; do not invent "
+        "when the manuscript has a first figure. formal_proof selections must identify complete declared proof sources; do not invent "
         "numeric tables or figure values for pure theory. A panel request cannot declare a route or waive empirical materials. "
         "numeric files must be the manuscript's actual table/figure sources. Keep complete registered outcomes in the separate archive; "
         "select manuscript materials by scientific relevance and retain material contrary evidence. "
-        "These are three different source views, not three copies of the full manuscript. Existing protected panel reports are immutable; "
+        "Selected views must contain distinct relevant sources. Model family and the number of views do not establish independence or validity. Existing protected panel reports are immutable; "
         "Keep ordinary scientific source-task selections configured; this final panel neither executes those tasks nor reads their payloads or prior judgments. "
         "respond to a prior concern in this file's dispositions:[{finding_id,status:maintained|addressed|disagreed,rationale,evidence:[{path,sha256}]}]. "
         "A withdrawal or changed answer requires actual new evidence and an explanation; model agreement is not evidence.")
@@ -133,7 +139,7 @@ def _canonical_scope(project, paper):
                 fragments[kind].append(_normal(text))
 
     if canonical.suffix == ".tex":
-        from scripts.tex_sources import expand, ASSET_SUFFIXES
+        from scripts.tex_sources import expand, resolve_graphic
         expanded = expand(canonical, root=canonical.parent)
         for target in expanded.files:
             bind(target)
@@ -168,12 +174,15 @@ def _canonical_scope(project, paper):
                 name = marker[2].strip()
                 if not name or any(char in name for char in "\\$#\x00"):
                     raise ValueError("panel needs a literal canonical figure/table source locator")
-                suffixes = [""] if Path(name).suffix else sorted(ASSET_SUFFIXES) if marker[1] == "includegraphics" else [".csv", ".tsv", ".json"]
-                targets = {path_in(project, (base / (name + suffix)).resolve().relative_to(project.resolve()).as_posix())
-                           for base in graphic_dirs for suffix in suffixes if (base / (name + suffix)).is_file()}
-                if len(targets) != 1:
-                    raise ValueError("panel cannot resolve a unique canonical figure/table source: " + name)
-                target = targets.pop()
+                if marker[1] == "includegraphics":
+                    target = resolve_graphic(name, working=canonical.parent, paper=project / "papers" / paper, text=text)
+                else:
+                    suffixes = [""] if Path(name).suffix else [".csv", ".tsv", ".json"]
+                    targets = {path_in(project, (base / (name + suffix)).resolve().relative_to(project.resolve()).as_posix())
+                               for base in graphic_dirs for suffix in suffixes if (base / (name + suffix)).is_file()}
+                    if len(targets) != 1:
+                        raise ValueError("panel cannot resolve a unique canonical table source: " + name)
+                    target = targets.pop()
                 relative = bind(target)
                 if marker[1] == "includegraphics":
                     images.setdefault(relative, set()).update(kinds)
@@ -403,20 +412,12 @@ def _data_text(text, suffix):
 
 
 def _study_material(project, paper):
-    """Use the actual frozen study route; panel labels cannot waive evidence."""
-    from scripts import study_routes, research_quality
-    from scripts.paper_execution import approval
+    """Locate actual study material; review itself needs no stage approval."""
+    from scripts import study_routes
     route = study_routes.route(project, paper)
     protocol = f"papers/{paper}/" + ("experiment-evidence-plan.json" if route == "empirical" else study_routes.PROTOCOL)
     formal = {}
-    if route != "empirical":
-        registration = path_in(project, f"papers/{paper}/preregistration.json")
-        errors = research_quality.validate_preregistration(read(registration), paper, project)
-        if errors:
-            raise ValueError("panel study preregistration is not current: " + "; ".join(errors))
-        decision = approval(project, "G3", paper) or {}
-        if decision.get("frozen_protocol_sha256", {}).get(registration.relative_to(project).as_posix()) != sha(registration):
-            raise ValueError("panel study preregistration differs from the G3 protocol decision")
+    if route != "empirical" and (project / protocol).is_file():
         value = read(path_in(project, protocol))
         if route == "theory":
             formal = {row["source"]: row["sha256"] for row in value["theorems"]}
@@ -426,11 +427,22 @@ def _study_material(project, paper):
 def prepare(project, paper):
     target = path_in(project, request_path(paper))
     spec = read(target)
-    if spec.get("paper_id") != paper or set(spec.get("views", {})) != set(VIEWS):
-        raise ValueError("panel needs its paper and three distinct declared source views")
-    route, scientific_protocol, formal = _study_material(project, paper)
+    if set(spec) - {"paper_id", "views", "enabled", "dispositions"}:
+        raise ValueError("panel request cannot declare a study route or unsupported controls")
+    if "enabled" in spec and type(spec["enabled"]) is not bool:
+        raise ValueError("panel enabled must be a boolean")
+    selected = spec.get("views", {})
+    if (spec.get("paper_id") != paper or not isinstance(selected, dict) or not selected
+            or not set(selected) <= set(VIEWS)):
+        raise ValueError("panel needs its paper and one or more declared source views")
+    route, scientific_protocol, formal = (None, None, {})
+    if "statistics" in selected or (project / f"papers/{paper}/study-protocol.json").is_file():
+        route, scientific_protocol, formal = _study_material(project, paper)
     fragments, locations, images, data, canonical_inputs, canonical, paragraphs = _canonical_scope(project, paper)
-    views = VIEWS
+    views = {seat: set(required) for seat, required in VIEWS.items()}
+    has_figure = bool(fragments["figure_one"] or any("figure_one" in roles for roles in images.values()))
+    if not has_figure:
+        views["editorial"].discard("figure_one")
     if route == "theory":
         has_figure = bool(fragments["figure_one"] or any("figure_one" in roles for roles in images.values()))
         views = {"domain": {"methods", "results"},
@@ -439,6 +451,8 @@ def prepare(project, paper):
     result = {"paper_id": paper, "request": {"path": request_path(paper), "sha256": sha(target)}, "views": {}}
     material_views = set()
     for seat, required in views.items():
+        if seat not in selected:
+            continue
         entries, blocks, bindings, attachments, kinds = spec["views"][seat], [], [], [], set()
         material_contents = set()
         if not isinstance(entries, list) or not 1 <= len(entries) <= 30:
@@ -510,27 +524,24 @@ def prepare(project, paper):
                 blocks.append(json.dumps(binding) + "\n" + selected_text)
                 material_contents.add(digest(re.sub(r"\s+", " ", selected_text).strip()))
             bindings.append(binding)
-        if kinds != required:
-            raise ValueError("panel " + seat + " is missing view-specific scientific material")
-        if seat == "statistics":
+        if seat == "statistics" and "protocol" in kinds:
             protocol_sources = {row["path"]:row["sha256"] for row in bindings if row["kind"] == "protocol"}
             registration = f"papers/{paper}/preregistration.json"
             plan = scientific_protocol
-            if set(protocol_sources) != {registration, plan}:
-                raise ValueError("panel statistics needs both the complete frozen preregistration and its actual " + Path(plan).name + " protocol")
-            if {"path":plan, "sha256":protocol_sources[plan]} not in read(path_in(project, registration))["files"]:
+            if (registration in protocol_sources and plan in protocol_sources
+                    and {"path":plan, "sha256":protocol_sources[plan]} not in read(path_in(project, registration))["files"]):
                 raise ValueError("panel scientific protocol differs from the frozen preregistration binding")
-            if route == "theory" and {row["path"] for row in bindings if row["kind"] == "formal_proof"} != set(formal):
-                raise ValueError("panel statistics must read every frozen formal proof source")
         text = "\n\n".join(blocks)
         if len(text.encode()) > 150_000:
             raise ValueError("panel view exceeds its bound; select precise sources, never silently truncate")
         material_views.add(digest(sorted(material_contents)))
         result["views"][seat] = {"sources": bindings, "sha256": digest(bindings), "text": text, "attachments": attachments}
-    if len({digest(sorted(set((r["path"], r.get("start_line", 0), r.get("end_line", 0)) for r in view["sources"])))
-            for view in result["views"].values()}) != 3:
+    if len({digest(sorted(set((r["path"], r.get("start_line", 0), r.get("end_line", 0),
+                              r.get("start_paragraph", 0), r.get("end_paragraph", 0),
+                              r.get("selected_text_sha256", "")) for r in view["sources"])))
+            for view in result["views"].values()}) != len(selected):
         raise ValueError("the panel cannot receive identical views under different labels")
-    if len(material_views) != len(VIEWS):
+    if len(material_views) != len(selected):
         raise ValueError("the panel cannot receive identical material contents under different paths or labels")
     # Ordinary source tasks have their own protected observations. Preparing
     # them here would both disclose unscoped material and entangle G5's required
@@ -592,9 +603,9 @@ def _frozen(project, paper):
     if sha(manifest_path) != pointer["sha256"]:
         raise ValueError("frozen panel manifest changed")
     manifest = read(manifest_path)
-    if (manifest.get("paper_id") != paper or set(manifest.get("receipts", {})) != set(VIEWS)
+    if (manifest.get("paper_id") != paper or not manifest.get("receipts") or not set(manifest["receipts"]) <= set(VIEWS)
             or manifest.get("gate_authority") is not False or manifest.get("scientific_completion_verified") is not False):
-        raise ValueError("panel must retain all three frozen independent reports")
+        raise ValueError("panel must retain its selected frozen reports")
     families, result = set(), []
     for seat, binding in manifest["receipts"].items():
         target = path_in(project, binding["path"])
@@ -621,15 +632,14 @@ def _frozen(project, paper):
             if not set(value) - ({"view", "findings", "uncertainty"} | RESPONSE_FIELDS):
                 value = {key: item for key, item in value.items() if key not in RESPONSE_FIELDS}
         result.append({"receipt": receipt, "response": _response(value, seat)})
-    if len(families) != 3:
-        raise ValueError("panel needs three genuinely different critic families")
     return manifest, result
 
 
 def responses(project, paper):
     packet = prepare(project, paper)
     manifest, result = _frozen(project, paper)
-    if any(row["receipt"]["view_sha256"] != packet["views"][row["receipt"]["role"]]["sha256"] for row in result):
+    if (set(manifest["receipts"]) != set(packet["views"]) or
+            any(row["receipt"]["view_sha256"] != packet["views"][row["receipt"]["role"]]["sha256"] for row in result)):
         raise ValueError("panel input or scientific views changed; old judgments are historical")
     return result
 
@@ -652,6 +662,8 @@ def author_context(project, paper):
 
 def submission_errors(project, paper):
     """B response coverage only; opinion severity never certifies scientific truth."""
+    if not requested(project, paper):
+        return []
     try:
         responses(project, paper)
         manifest, _ = _frozen(project, paper)
@@ -666,7 +678,7 @@ def submission_errors(project, paper):
         return (["submission panel author response needs rationale and current evidence for: " + ", ".join(missing)]
                 if missing else [])
     except (OSError, ValueError, KeyError, TypeError, ET.ParseError, zipfile.BadZipFile) as exc:
-        return ["submission three-model panel: " + str(exc)]
+        return ["optional source review: " + str(exc)]
 
 
 def _pointer_in_view(pointer, sources):
@@ -688,13 +700,15 @@ def _pointer_in_view(pointer, sources):
 
 
 def run(project, paper, run_id, *, writer_family="openai"):
-    """Freeze three actual opinions; partial attempts are retained and never replayed."""
+    """Review only explicitly selected views; an absent request makes no call."""
+    if not requested(project, paper):
+        return {"status": "not_requested", "paid_calls": 0, "findings": [], "actual_routes": {}, "usage": {},
+                "record_errors": [], "source_task_execution": "not_performed_by_final_panel",
+                "gate_authority": False, "scientific_completion_verified": False}
     review_receipts._cloud()
-    from scripts.research_phase import requires_submission
     state = read(project / "state/run.json")
-    if (state.get("active_paper") != paper or state.get("stage") != "writing-and-review"
-            or not requires_submission(project)):
-        raise ValueError("the panel is limited to the active final submission checkpoint")
+    if state.get("active_paper") != paper:
+        raise ValueError("panel source request must belong to the active paper")
     if not isinstance(run_id, str) or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", run_id):
         raise ValueError("panel requires a safe actual invocation ID")
     packet = prepare(project, paper)
@@ -702,7 +716,8 @@ def run(project, paper, run_id, *, writer_family="openai"):
     latest = project / PREFIX / paper / "latest.json"
     if latest.exists():
         previous, old = _frozen(project, paper)  # Corruption is never a cache miss.
-        if all(row["receipt"]["view_sha256"] == packet["views"][row["receipt"]["role"]]["sha256"] for row in old):
+        if (set(previous["receipts"]) == set(packet["views"]) and
+                all(row["receipt"]["view_sha256"] == packet["views"][row["receipt"]["role"]]["sha256"] for row in old)):
             known = {row["finding_id"] for row in [*previous.get("prior_findings", []), *previous["findings"]]}
             if any(row["finding_id"] not in known for row in packet["dispositions"]):
                 raise ValueError("panel disposition refers to an unobserved finding")
@@ -718,9 +733,7 @@ def run(project, paper, run_id, *, writer_family="openai"):
     known = {row["finding_id"] for row in prior_findings}
     if any(row["finding_id"] not in known for row in packet["dispositions"]):
         raise ValueError("panel disposition refers to an unobserved finding")
-    routes = {seat: model_routing.select("writing-and-review", "independent-critic-panel-" + seat) for seat in VIEWS}
-    if len({row["family"] for row in routes.values()}) != 3 or any(row["family"] == writer_family for row in routes.values()):
-        raise ValueError("panel routes must use three different non-writer families")
+    routes = {seat: model_routing.select("writing-and-review", "independent-critic-panel-" + seat) for seat in packet["views"]}
     for route in routes.values():
         model_runtime.preflight_route(route["provider"], model=route["model"])
     directory.mkdir(parents=True, exist_ok=False)
@@ -794,7 +807,7 @@ def run(project, paper, run_id, *, writer_family="openai"):
         write(path, manifest)
         write(latest, {"path":path.relative_to(project).as_posix(),"sha256":sha(path)})
         record(project, [path, latest], MODULE)
-        return {"status":"three_frozen_independent_views", "paid_calls":calls, "findings":frozen,
+        return {"status":"frozen_selected_views", "paid_calls":calls, "findings":frozen,
             "manifest":read(latest), "actual_routes":actual_routes, "usage":usage,
             "record_errors":submission_errors(project, paper), "source_task_execution":packet["source_task_execution"],
             "gate_authority":False, "scientific_completion_verified":False}

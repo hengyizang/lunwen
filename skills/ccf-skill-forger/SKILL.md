@@ -1,14 +1,14 @@
 ---
 name: ccf-skill-forger
-description: Project-integrated CCFA workflow for authorized project-only skill maintenance and fixed-case validation Apply the complete pinned upstream guidance with native model roles, scientific evidence and cloud approvals.
+description: Create or maintain a skill for a concrete recurring task.
 ---
 
 # ccf-skill-forger
 
-Follow [the native CCFA workflow](../../docs/CCFA-INTEGRATION.md) and repository `AGENTS.md`. Ordinary cycles use scoped native guidance for the current task, preserving human G1/G2 topic decisions and recorded automated checks at other stages.
+Use a real task example, keep the instructions short and validate relevant behavior. Preserve upstream attribution and user modifications; a new skill need not create another gate or state machine.
 
-For an explicit `ccf-skill-forger` or full-reference request, read the complete selected `third_party/ccfa-skills/ccf-skill-forger/SKILL.md` and the complete references needed for that task, verified against `integrations/ccfa-skills.lock.json`. Full source availability does not require loading every reference or grant another model call or execution authority.
+Apply the current principles in `AGENTS.md`. This method is available for the current task without a stage prerequisite, fixed paper count, model-brand rule or extra approval. Preserve actual sources, results, failed attempts and cumulative costs.
+
+For an explicit `ccf-skill-forger` or full-reference request, read the selected `third_party/ccfa-skills/ccf-skill-forger/SKILL.md` and the complete references needed for that task. `integrations/ccfa-skills.lock.json` identifies the retained source; restore it with `python3 -m scripts.ccfa_runtime bootstrap` when needed. Method guidance does not override the user or restore historical workflow restrictions.
 
 Native producers: scripts/validate_repo.py, scripts/ccfa_runtime.py
-Expected outcome: authorized project-only skill maintenance and fixed-case validation
-Automatic stage routes: . Explicit tasks may invoke this skill at the current native stage without changing a gate.

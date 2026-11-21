@@ -39,8 +39,7 @@ class ProductionPolicyTests(unittest.TestCase):
                 self.assertEqual(ai_providers.PRODUCTION_PROVIDERS, providers)
                 local.unlink()
                 self.assertEqual(model_routing.load_policy(), (baseline, baseline_hash))
-                with self.assertRaises(ai_providers.ProviderError):
-                    ai_providers.production_endpoint("codekey-codex-pro", model)
+                self.assertEqual(ai_providers.production_endpoint("codekey-codex-pro", model), "https://codekey.ai/v1/responses")
 
     def test_local_model_override_hash_tracks_effective_identity(self):
         _, baseline_hash = model_routing.load_policy()
@@ -72,36 +71,26 @@ class ProductionPolicyTests(unittest.TestCase):
                 local.unlink()
                 self.assertEqual(model_routing.load_policy(), baseline)
 
-    def test_all_six_stages_have_exactly_five_separated_roles(self):
+    def test_stage_routes_only_recommend_writer_and_requested_roles_are_optional(self):
         policy, digest = model_routing.load_policy()
-        self.assertEqual(len(policy["stage_routes"]), 6)
         self.assertEqual(len(digest), 64)
-        for stage in policy["stage_routes"]:
-            routes = model_routing.cycle_routes(stage)
-            self.assertEqual(set(routes), set(model_routing.CYCLE_ROLES))
-            self.assertEqual(routes["persistent-writer"]["family"], "openai")
-            self.assertEqual(routes["persistent-remediator"]["family"], "openai")
-            for role in model_routing.READ_ONLY_ROLES:
-                self.assertEqual(routes[role]["family"], "anthropic")
-                self.assertFalse(routes[role]["persistent_output"])
-            self.assertEqual(routes["independent-critic-final"]["model_key"], "opus")
-            self.assertTrue(routes["independent-critic-initial"]["fresh_required"])
-            self.assertTrue(routes["independent-critic-final"]["fresh_required"])
+        for stage, configured in policy["stage_routes"].items():
+            self.assertEqual(set(configured), {"persistent-writer"})
+            routes = model_routing.cycle_routes(stage, roles=["persistent-writer"])
+            self.assertEqual(set(routes), {"persistent-writer"})
+        self.assertTrue(model_routing.select("any-context", "independent-critic-final")["fresh_required"])
 
-    def test_core_scientific_stages_use_astra_and_opus(self):
-        for stage in ("topic-intelligence", "paper-architecture", "experiment-design"):
-            with self.subTest(stage=stage):
-                routes = model_routing.cycle_routes(stage)
-                self.assertEqual(routes["persistent-writer"]["model"], "gpt-6-astra")
-                self.assertEqual(routes["persistent-remediator"]["model"], "gpt-6-astra")
-                self.assertEqual(routes["semantic-planner"]["model"], "claude-opus-5-5")
+    def test_stage_defaults_do_not_restrict_explicit_writer_family(self):
+        for stage in model_routing.APPROVED_STAGES:
+            route = model_routing.select(stage, "persistent-writer", requested_provider="codekey-kiro-enterprise")
+            self.assertEqual(route["family"], "anthropic")
+            self.assertTrue(route["persistent_output"])
 
-    def test_normal_writing_uses_sol_but_core_story_escalates_existing_roles(self):
-        self.assertEqual(model_routing.select("writing-and-review", "persistent-writer")["model_key"], "sol")
-        routes = model_routing.cycle_routes("writing-and-review", "core-story")
-        self.assertEqual(len(routes), 5)
-        self.assertEqual(routes["persistent-writer"]["model_key"], "astra")
-        self.assertEqual(routes["semantic-planner"]["model_key"], "opus")
+    def test_task_label_does_not_override_selected_model_or_add_roles(self):
+        ordinary = model_routing.cycle_routes("writing-and-review", roles=["persistent-writer"])
+        critical = model_routing.cycle_routes("writing-and-review", "core-story", roles=["persistent-writer"])
+        self.assertEqual(critical["persistent-writer"]["model"], ordinary["persistent-writer"]["model"])
+        self.assertEqual(set(critical), {"persistent-writer"})
 
     def test_luna_is_medium_source_extraction_only(self):
         route = model_routing.select("auxiliary", "metadata-extraction")
@@ -146,9 +135,9 @@ class ProductionPolicyTests(unittest.TestCase):
                 with model_routing.g1_transport_validation_route(project, "a" * 64):
                     selected = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
                     for role, route in selected.items():
-                        self.assertEqual(route["model"], original[role]["model"])
+                        self.assertEqual(route["model"], "gpt-6-astra" if role in model_routing.WRITER_ROLES else "claude-opus-5-5")
                         self.assertEqual(route["reasoning_effort"], "high")
-                        self.assertEqual(route["validation_scope"]["production_route"], original[role])
+                        self.assertEqual(route["validation_scope"]["production_route"]["stage"], "topic-intelligence")
                         self.assertTrue(route["temporary_validation_only"])
                     self.assertEqual(selected["persistent-writer"]["provider"], "codekey-codex-pro")
                     self.assertEqual(selected["independent-critic-initial"]["provider"], original["independent-critic-initial"]["provider"])
@@ -171,16 +160,14 @@ class ProductionPolicyTests(unittest.TestCase):
                     with model_routing.g1_transport_validation_route(project, "a" * 64):
                         pass
 
-    def test_unknown_stage_role_or_critical_task_fails_closed(self):
-        for args in (("unknown-stage", "persistent-writer"), ("intake", "unknown-role"),
-                     ("intake", "persistent-writer", "undocumented-cheap-task")):
-            with self.subTest(args=args), self.assertRaises(ValueError):
-                model_routing.select(*args)
+    def test_new_context_and_task_roles_use_configured_defaults(self):
+        for args in (("new-topic", "persistent-writer"), ("intake", "new-role"),
+                     ("intake", "persistent-writer", "new-task")):
+            self.assertIn(model_routing.select(*args)["provider"], ai_providers.PROVIDERS)
 
     def test_explicit_g1_roster_keeps_critical_identities_scoped_and_source_bound(self):
         providers = ("codekey-codex-pro", "codekey-codex-pro", "codekey-gemini")
-        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
-            api_orchestrator.validate_roles(*providers)
+        api_orchestrator.validate_roles(*providers)
         original = model_routing.cycle_routes("topic-intelligence", "scientific-judgment")
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
             project = Path(directory)
@@ -201,20 +188,18 @@ class ProductionPolicyTests(unittest.TestCase):
                             ("codekey-gemini", "gemini-4-argon", "google") if critic else ("codekey-codex-pro", "gpt-6-astra", "openai"))
                         self.assertEqual(route["reasoning_effort"], "high")
                         self.assertEqual(route["task_kind"], "scientific-judgment")
-                        self.assertEqual(route["validation_scope"]["production_route"], original[role])
+                        self.assertEqual(route["validation_scope"]["production_route"]["stage"], "topic-intelligence")
                         self.assertEqual(route["validation_scope"]["validation_roster"], "astra-argon")
                         self.assertEqual(route["persistent_output"], role in model_routing.WRITER_ROLES)
                         self.assertEqual(route["fresh_required"], critic)
                         self.assertEqual(route.get("response_streaming", False), not critic)
                         self.assertTrue(route["validation_scope"]["response_streaming"])
-                    with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
-                        api_orchestrator.validate_roles("openai", "codekey-codex-pro", "codekey-gemini")
+                    api_orchestrator.validate_roles("openai", "codekey-codex-pro", "codekey-gemini")
                     with ThreadPoolExecutor(max_workers=1) as pool:
                         self.assertIsNone(pool.submit(model_routing.g1_transport_validation_roster).result())
                         self.assertFalse(pool.submit(model_routing.g1_response_streaming_active).result())
                         self.assertEqual(pool.submit(model_routing.cycle_routes, "topic-intelligence", "scientific-judgment").result(), original)
-                        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
-                            pool.submit(api_orchestrator.validate_roles, *providers).result()
+                        pool.submit(api_orchestrator.validate_roles, *providers).result()
                     model_routing.resolve_call("topic-intelligence", "semantic-planner", "openai", project_root=project)
                     with self.assertRaisesRegex(ValueError, "additional paid helpers"):
                         model_routing.resolve_call("topic-intelligence", "semantic-planner", "openai", project_root=project)
@@ -225,97 +210,71 @@ class ProductionPolicyTests(unittest.TestCase):
         self.assertIsNone(model_routing.g1_transport_validation_roster())
         self.assertFalse(model_routing.g1_response_streaming_active())
         self.assertEqual(model_routing.cycle_routes("topic-intelligence", "scientific-judgment"), original)
-        with self.assertRaisesRegex(ValueError, "Claude/Anthropic"):
-            api_orchestrator.validate_roles(*providers)
+        api_orchestrator.validate_roles(*providers)
 
-    def test_explicit_model_or_effort_cannot_mislabel_the_route(self):
-        with self.assertRaisesRegex(ValueError, "model conflicts"):
-            model_routing.resolve_call("experiment-design", "persistent-writer", "openai", model="gpt-5.6-luna")
-        with self.assertRaisesRegex(ValueError, "effort conflicts"):
-            model_routing.resolve_call("auxiliary", "metadata-extraction", "openai", reasoning_effort="high")
+    def test_explicit_model_and_effort_are_recorded_as_requested(self):
+        route = model_routing.resolve_call("experiment-design", "persistent-writer", "cheapai-gpt-discount",
+                                          model="gpt-5.6-luna", reasoning_effort="low")
+        self.assertEqual((route["provider"], route["model"], route["reasoning_effort"]),
+                         ("cheapai-gpt-discount", "gpt-5.6-luna", "low"))
+        self.assertTrue(route["explicit_selection"])
 
-    def test_probe_accepts_only_exact_production_provider_model_pair(self):
-        route = model_routing.select("health", "endpoint-health", requested_provider="cheapai-gpt-pro", requested_model="gpt-6-astra")
-        self.assertEqual(route["model_key"], "astra")
-        with self.assertRaisesRegex(ValueError, "outside the approved"):
-            model_routing.select("health", "endpoint-health", requested_provider="cheapai-gpt-discount", requested_model="gpt-6-astra")
-        with self.assertRaises(ValueError):
-            model_routing.select("intake", "endpoint-health", requested_provider="cheapai-gpt-pro")
+    def test_probe_preserves_exact_identity_without_role_or_catalog_allowlist(self):
+        route = model_routing.select("intake", "endpoint-health", requested_provider="cheapai-gpt-discount", requested_model="future-exact-model")
+        self.assertEqual((route["provider"], route["model"]), ("cheapai-gpt-discount", "future-exact-model"))
+        self.assertLessEqual(route["max_output_tokens"], 256)
 
-    def test_policy_cannot_promote_luna_to_scientific_writer_or_screening(self):
+    def test_small_model_may_be_selected_for_writing_or_screening(self):
         policy, _ = model_routing.load_policy()
-        for mutation in ("writer", "screening"):
-            changed = json.loads(json.dumps(policy))
-            if mutation == "writer":
-                changed["stage_routes"]["intake"]["persistent-writer"] = "luna"
-            else:
-                changed["auxiliary_routes"]["screening-assist"]["model_key"] = "luna"
-            with tempfile.TemporaryDirectory() as directory:
-                source = Path(directory) / "policy.json"
-                source.write_text(json.dumps(changed), encoding="utf-8")
-                with patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG": str(source)}), self.assertRaises(ValueError):
+        policy["stage_routes"]["intake"]["persistent-writer"] = "luna"
+        policy["auxiliary_routes"]["screening-assist"]["model_key"] = "luna"
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/"policy.json"; source.write_text(json.dumps(policy))
+            with patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG":str(source)}):
+                self.assertEqual(model_routing.select("intake","persistent-writer")["model_key"],"luna")
+                self.assertEqual(model_routing.select("auxiliary","screening-assist")["model_key"],"luna")
+
+    def test_false_family_and_unknown_alias_still_fail_configuration_validation(self):
+        baseline, _ = model_routing.load_policy()
+        for change in ("family", "alias", "cap"):
+            policy=copy.deepcopy(baseline)
+            if change=="family":policy["models"]["sonnet"]["family"]="openai"
+            if change=="alias":policy["default_routes"]["writer"]="missing-alias"
+            if change=="cap":policy["models"]["sol"]["max_output_tokens"]=True
+            with tempfile.TemporaryDirectory() as folder:
+                source=Path(folder)/"policy.json";source.write_text(json.dumps(policy))
+                with patch.dict(os.environ,{"DR_OS_ROUTING_CONFIG":str(source)}),self.assertRaises(ValueError):
                     model_routing.load_policy()
 
-    def test_declared_family_or_named_model_key_cannot_hide_a_downgrade(self):
-        policy, _ = model_routing.load_policy()
-        invalid = []
-        value = json.loads(json.dumps(policy)); value["models"]["astra"] = dict(value["models"]["luna"]); invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["models"]["astra"]["model"] = "gpt-6.1-sol"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["models"]["astra"]["provider"] = "codekey-kiro-enterprise"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["models"]["astra"]["provider"] = "openai"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["models"]["sonnet"]["family"] = "openai"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["models"]["astra"]["reasoning_effort"] = "medium"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["stage_routes"]["topic-intelligence"]["persistent-writer"] = "sol"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["stage_routes"]["experiment-design"]["semantic-planner"] = "sonnet"; invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["stage_routes"]["intake"]["independent-critic-final"] = "sonnet"; invalid.append(value)
-        for index, value in enumerate(invalid):
-            with tempfile.TemporaryDirectory() as directory:
-                source = Path(directory) / "policy.json"; source.write_text(json.dumps(value), encoding="utf-8")
-                with self.subTest(index=index), patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG": str(source)}), self.assertRaises(ValueError):
-                    model_routing.load_policy()
+    def test_same_family_panel_and_arbitrary_model_roster_are_valid(self):
+        policy={"schema_version":"1.0","models":{"one":{"provider":"anthropic","model":"actual-model",
+                "family":"anthropic","reasoning_effort":None,"max_output_tokens":2000}},"default_model":"one",
+                "panel_routes":{"independent-critic-panel-domain":"one","independent-critic-panel-editorial":"one"}}
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/"policy.json";source.write_text(json.dumps(policy))
+            with patch.dict(os.environ,{"DR_OS_ROUTING_CONFIG":str(source)}):
+                self.assertEqual(len(model_routing.load_policy()[0]["models"]),1)
+                for role in ("persistent-writer","independent-critic-panel-domain","independent-critic-panel-editorial"):
+                    self.assertEqual(model_routing.select("arbitrary",role)["model"],"actual-model")
 
-    def test_auxiliary_role_cannot_be_downgraded_or_repurposed_through_custom_policy(self):
-        policy, _ = model_routing.load_policy()
-        assignments = {"scientific-judgment": "deepseek", "evidence-synthesis": "deepseek",
-                       "independent-critique": "argon", "reader-translation": "luna",
-                       "metadata-extraction": "sol", "multimodal-inspection": "astra"}
-        for role, replacement in assignments.items():
-            changed = json.loads(json.dumps(policy))
-            changed["auxiliary_routes"][role]["model_key"] = replacement
-            with tempfile.TemporaryDirectory() as directory:
-                source = Path(directory) / "policy.json"; source.write_text(json.dumps(changed), encoding="utf-8")
-                with self.subTest(role=role, replacement=replacement), patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG": str(source)}), self.assertRaises(ValueError):
-                    model_routing.load_policy()
+    def test_local_model_alias_may_be_added_without_changing_global_catalog(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/"models.json"
+            source.write_text(json.dumps({"models":{"new-alias":{"provider":"codekey-kimi","model":"actual-new-id"}}}))
+            with patch.object(model_routing,"LOCAL_MODEL_OVERRIDES",source):
+                policy,_=model_routing.load_policy()
+                self.assertEqual(policy["models"]["new-alias"]["family"],"moonshot")
+            self.assertNotIn("actual-new-id",ai_providers.PRODUCTION_PROVIDERS["codekey-kimi"]["models"])
 
-    def test_critical_and_health_task_boundaries_are_fixed_even_in_custom_policy(self):
-        policy, _ = model_routing.load_policy()
-        mutations = [
-            ("critical_tasks", policy["critical_tasks"] + ["metadata-extraction"]),
-            ("critical_tasks", [item for item in policy["critical_tasks"] if item != "core-story"]),
-            ("health_roles", policy["health_roles"] + ["persistent-writer"]),
-            ("health_roles", ["endpoint-health", "endpoint-health", "model-signature"]),
-            ("health_roles", "endpoint-health"),
-            ("health_stages", policy["health_stages"] + ["writing-and-review"]),
-            ("auxiliary_stages", policy["auxiliary_stages"] + ["health"]),
-        ]
-        for field, replacement in mutations:
-            changed = json.loads(json.dumps(policy)); changed[field] = replacement
-            with tempfile.TemporaryDirectory() as directory:
-                source = Path(directory) / "policy.json"; source.write_text(json.dumps(changed), encoding="utf-8")
-                with self.subTest(field=field, replacement=replacement), patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG": str(source)}), self.assertRaises(ValueError):
-                    model_routing.load_policy()
-
-    def test_no_stage_or_auxiliary_role_can_be_added_or_silently_removed(self):
-        policy, _ = model_routing.load_policy()
-        invalid = []
-        value = json.loads(json.dumps(policy)); value["stage_routes"].pop("intake"); invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["auxiliary_routes"].pop("reader-qa"); invalid.append(value)
-        value = json.loads(json.dumps(policy)); value["auxiliary_routes"]["unreviewed-task"] = dict(value["auxiliary_routes"]["metadata-extraction"]); invalid.append(value)
-        for index, changed in enumerate(invalid):
-            with tempfile.TemporaryDirectory() as directory:
-                source = Path(directory) / "policy.json"; source.write_text(json.dumps(changed), encoding="utf-8")
-                with self.subTest(index=index), patch.dict(os.environ, {"DR_OS_ROUTING_CONFIG": str(source)}), self.assertRaises(ValueError):
-                    model_routing.load_policy()
+    def test_optional_stage_and_auxiliary_mappings_can_be_removed_or_extended(self):
+        policy,_=model_routing.load_policy()
+        policy["stage_routes"]={}
+        policy["auxiliary_routes"]={"custom-task":{"model_key":"deepseek","max_output_tokens":1000}}
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/"policy.json";source.write_text(json.dumps(policy))
+            with patch.dict(os.environ,{"DR_OS_ROUTING_CONFIG":str(source)}):
+                self.assertEqual(model_routing.select("new-context","custom-task")["family"],"deepseek")
+                self.assertEqual(model_routing.select("new-context","writer")["model_key"],"sol")
 
     def test_unknown_or_missing_profile_does_not_silently_activate_production(self):
         with patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "legacy"}, clear=True):
@@ -327,33 +286,29 @@ class ProductionPolicyTests(unittest.TestCase):
 
 
 class ProductionAuxiliaryTests(unittest.TestCase):
-    def test_missing_final_opus_quote_blocks_before_planner_spend(self):
-        checked = []
-
-        def preflight(provider, model=None):
-            checked.append((provider, model))
-            if model == "claude-opus-5-5":
-                raise ValueError("final critic quote is missing")
-            return {"provider": provider, "model": model}
-
-        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}, clear=True), \
-                patch("scripts.api_orchestrator.require_current_stage"), \
-                patch("scripts.api_orchestrator.project_root", return_value=Path(directory)), \
-                patch("scripts.scientific_scope.validate", return_value=[]), \
-                patch("scripts.cloud_research_steps.before_cycle", return_value={"control_only": False}), \
-                patch("scripts.api_orchestrator.prepare_discovery_evidence", return_value=(json.dumps({"literature": {"receipts": ["synthetic-search-receipt"]}}), {})), \
-                patch("scripts.api_orchestrator.model_runtime.preflight_route", side_effect=preflight), \
-                patch("scripts.api_orchestrator.model_runtime.call") as paid_call:
-            with self.assertRaisesRegex(ValueError, "final critic quote is missing"):
-                api_orchestrator.run_cycle("fixture", "topic-intelligence", "anthropic", "openai", "anthropic", "", "")
-            paid_call.assert_not_called()
-            self.assertIn(("codekey-kiro-enterprise", "claude-opus-5-5"), checked)
+    def test_only_requested_optional_routes_are_preflighted(self):
+        checked=[]
+        def preflight(provider,model=None):
+            checked.append(model)
+            if model=="claude-opus-5-5":raise ValueError("requested final critic quote is missing")
+        with tempfile.TemporaryDirectory() as folder,patch.dict(os.environ,{"DR_OS_ROUTING_PROFILE":"production"},clear=True), \
+             patch.object(api_orchestrator,"ROOT",Path(folder)), \
+             patch("scripts.cloud_research_steps.before_cycle",return_value={"control_only":False}), \
+             patch("scripts.cloud_research_steps.after_write",return_value={}), \
+             patch("scripts.model_runtime.preflight_route",side_effect=preflight), \
+             patch("scripts.model_runtime.call") as paid:
+            state=Path(folder)/"projects/fixture/state/run.json"
+            state.parent.mkdir(parents=True);state.write_text(json.dumps({"stage":"research"}))
+            with self.assertRaisesRegex(ValueError,"final critic quote"):
+                api_orchestrator.run_cycle("fixture","research",planning=True,review=True,remediate=True)
+            paid.assert_not_called()
+            self.assertIn("claude-opus-5-5",checked)
 
     def test_screening_never_uses_cheap_price_sort_or_luna(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}, clear=True), \
                 patch("scripts.task_router.model_runtime.cost_cny", return_value=0.3), \
                 patch("scripts.task_router.model_runtime.budget_status", return_value={"project_remaining": 1, "paper_remaining": None}):
-            info = task_router.plan(Path(directory), "screening-assist", "openai", "Keep all supplied source records")
+            info = task_router.plan(Path(directory), "screening-assist", None, "Keep all supplied source records")
             self.assertEqual(info["model"], "gpt-6.1-sol")
             self.assertEqual(info["reasoning_effort"], "high")
             self.assertEqual(info["candidate_count"], 1)
@@ -364,7 +319,7 @@ class ProductionAuxiliaryTests(unittest.TestCase):
                 patch("scripts.task_router._health", return_value={("cheapai-gpt-discount", "gpt-5.6-luna"): "failed"}), \
                 patch("scripts.task_router.model_runtime.call") as paid_call:
             with self.assertRaisesRegex(ValueError, "recently failed"):
-                task_router.run(Path(directory), "metadata-extraction", "openai", "Source S1: sample size unknown",
+                task_router.run(Path(directory), "metadata-extraction", None, "Source S1: sample size unknown",
                                 source_contract={"sources": [{"source_id": "S1", "text": "sample size unknown", "locator": "p2"}], "fields": ["n"]})
             paid_call.assert_not_called()
 
@@ -377,7 +332,7 @@ class ProductionAuxiliaryTests(unittest.TestCase):
                 patch("scripts.task_router.model_runtime.budget_status", return_value={"project_remaining": 1, "paper_remaining": None}), \
                 patch("scripts.task_router.model_runtime.call", return_value=result) as call:
             contract = {"sources": [{"source_id": "S1", "text": "sample size unknown", "locator": "p2"}], "fields": ["n"]}
-            response = task_router.run(Path(directory), "metadata-extraction", "openai", "Source S1: sample size unknown", source_contract=contract)
+            response = task_router.run(Path(directory), "metadata-extraction", None, "Source S1: sample size unknown", source_contract=contract)
             request = call.call_args.kwargs
             self.assertEqual(request["provider"], "cheapai-gpt-discount")
             self.assertEqual(request["reasoning_effort"], "medium")
@@ -385,7 +340,7 @@ class ProductionAuxiliaryTests(unittest.TestCase):
             self.assertIn("Task boundary:", request["prompt"])
             receipt = json.loads((Path(directory) / response["result"]).read_text(encoding="utf-8"))
             self.assertFalse(receipt["automatic_acceptance"])
-            self.assertTrue(receipt["not_manuscript_or_evidence"])
+            self.assertFalse(receipt["scientific_completion_verified"])
 
     def test_multimodal_requires_attachments_before_a_paid_request(self):
         with tempfile.TemporaryDirectory() as directory, patch("scripts.task_router.plan", return_value={}), \

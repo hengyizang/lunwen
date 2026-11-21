@@ -668,7 +668,7 @@ def _openalex_abstract(value: Any) -> str | None:
     if not isinstance(value, dict):
         return None
     positioned = [(position, word) for word, positions in value.items() if isinstance(positions, list)
-                  for position in positions if type(position) is int and 0 <= position < 20000]
+                  for position in positions if type(position) is int and position >= 0]
     return " ".join(str(word) for _, word in sorted(positioned)) or None
 
 
@@ -1365,7 +1365,7 @@ def screen_receipt(
     return record
 
 
-def validate_search_evidence(project: Path, records: list[dict[str, Any]]) -> list[str]:
+def validate_search_evidence(project: Path, records: list[dict[str, Any]], *, require_screening: bool = False) -> list[str]:
     errors: list[str] = []
     try:
         ledger_values = read_jsonl(project / "evidence" / "literature-api-ledger.jsonl")
@@ -1431,7 +1431,8 @@ def validate_search_evidence(project: Path, records: list[dict[str, Any]]) -> li
         if unknown:
             errors.append(f"{prefix} includes IDs absent from the executed result: {', '.join(unknown)}")
         if not isinstance(record.get("screened_by"), str) or not record["screened_by"].strip():
-            errors.append(f"{prefix} requires a recorded screening decision")
+            if require_screening:
+                errors.append(f"{prefix} requires a recorded screening decision")
         elif record["screened_by"].startswith("model:"):
             from scripts.literature_model_screening import verify
             errors.extend(f"{prefix}: {issue}" for issue in verify(project, record))
@@ -1472,6 +1473,7 @@ def parser() -> argparse.ArgumentParser:
     screen.add_argument("--actor", required=True)
     validate = sub.add_parser("validate")
     validate.add_argument("--project", required=True)
+    validate.add_argument("--systematic", action="store_true", help="Require recorded inclusion/exclusion decisions for a formal systematic review")
     return root
 
 
@@ -1526,7 +1528,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             print(json.dumps(record, ensure_ascii=False, indent=2))
         else:
             records = read_jsonl(project / "evidence" / "search-log.jsonl")
-            errors = validate_search_evidence(project, records)
+            errors = validate_search_evidence(project, records, require_screening=args.systematic)
             print(json.dumps({"status": "pass" if not errors else "block", "errors": errors}, indent=2))
             return 1 if errors else 0
     except (LiteratureEvidenceError, OSError, json.JSONDecodeError) as exc:

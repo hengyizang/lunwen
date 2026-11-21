@@ -89,6 +89,23 @@ class ReadingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "source changed"):
             reading.build_index(self.project, "a")
 
+    def test_long_chinese_text_is_not_silently_omitted(self):
+        long_sentence = "原始方法" * 1500 + "。"
+        self.add(text="第一句。第二句！" + long_sentence)
+        self.build()
+        index = reading.build_index(self.project, "a")
+        self.assertEqual([s["quote"] for s in index["sentences"]], ["第一句。", "第二句！", long_sentence])
+        self.assertEqual(index["overlong_segments_not_indexed"], 0)
+
+    def test_explicit_coverage_keeps_all_sources_beyond_automatic_shortlist(self):
+        identifiers = ["source%02d" % i for i in range(31)]
+        for identifier in identifiers:
+            self.add(identifier)
+        self.build()
+        result = reading.coverage(self.project, {"question": "Inspect all explicitly selected studies",
+                                  "paper_ids": identifiers, "limit": 1, "dimensions": ["methods"]})
+        self.assertEqual([p["paper_id"] for p in result["papers"]], identifiers)
+
     def test_two_registered_versions_remain_separate_evidence_sources(self):
         self.add("preprint", "Preprint reports a gain.")
         self.add("published", "Published version reports no gain.")
@@ -225,10 +242,10 @@ class ReadingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "entities"):
             reading._positioned_pages(b'<!ENTITY x "unsafe"><page/>')
 
-    def test_pdf_positioning_requires_explicit_cloud_execution(self):
+    def test_pdf_positioning_requires_the_explicit_original_source(self):
         paper = {"reader": {"path": "evidence/readers/a.md"}, "source": {"path": "evidence/sources/a.pdf"}}
-        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "", "GITHUB_ACTIONS": ""}):
-            with self.assertRaisesRegex(ValueError, "authorized cloud runner"):
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "", "GITHUB_ACTIONS": ""}), patch.object(reading.shutil, "which", return_value="pdftotext"):
+            with self.assertRaisesRegex(ValueError, "artifact is missing"):
                 reading._pdf_positions(self.project, paper, [])
 
     def test_located_material_is_not_attributed_reading_and_missing_appendix_is_retained(self):

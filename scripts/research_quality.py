@@ -124,8 +124,13 @@ def _manifest_map(project: Path) -> dict[str, dict[str, Any]]:
                 )
             manifests[dataset_id] = item
     if enabled(project):
-        contract = _load_json(project / "papers" / selected(project) / "paper-contract.json")
-        wanted = set(contract.get("datasets", []))
+        contract_path = project / "papers" / selected(project) / "paper-contract.json"
+        if contract_path.is_file():
+            wanted = set(_load_json(contract_path).get("datasets", []))
+        else:
+            plan = _load_json(experiment_path(project, "experiments/plan.json"))
+            hashes = {i["sha256"] for r in plan.get("runs", []) for i in r.get("inputs", [])}
+            wanted = {key for key, row in manifests.items() if row.get("download", {}).get("sha256") in hashes}
         return {key: row for key, row in manifests.items() if key in wanted}
     return manifests
 
@@ -722,8 +727,17 @@ def _profile_non_tabular(
     unknown = [path.relative_to(root).as_posix() for path in files if path.suffix.lower() not in recognized]
     if unknown:
         blockers.append(f"{len(unknown)} file(s) have no reviewed content handler")
+    metadata_only = bool(audio_files or hdf_files or parquet_files)
+    if metadata_only:
+        warnings.append("WAV/HDF5/Parquet profiles inspect metadata; payload values and scientific suitability remain unverified")
+    scope = {"inventory": "all file bytes hashed", "tabular": "rows up to the declared maximum",
+             "images": "format integrity and dimensions", "wav": "headers only",
+             "numpy": "array shapes, types and numeric finiteness", "hdf5": "dataset metadata only",
+             "parquet": "schema and row-group metadata only", "scientific_validity_verified": False}
     return {
-        "complete_scan": True,
+        "complete_scan": not blockers and not metadata_only,
+        "inventory_complete": True,
+        "scan_scope": scope,
         "file_count": len(files),
         "formats": dict(formats),
         "handlers": handlers,
@@ -1780,22 +1794,35 @@ def _validate_comparison_values(item, prefix, tolerances, errors, *, baseline):
     fields = ("reference_value", "observed_value") if baseline else ("original_value", "reproduction_value")
     for key in (*fields, "absolute_tolerance"):
         value = item.get(key)
-        if not isinstance(value, (int, float)) or isinstance(value, bool):
-            errors.append(f"{prefix}.{key} must be numeric")
+        if not _finite(value):
+            errors.append(f"{prefix}.{key} must be finite numeric")
     if baseline and (item.get("comparable_protocol") is not True or item.get("within_tolerance") is not True):
         errors.append(f"{prefix} must use a comparable protocol and reproduce within tolerance")
     elif not baseline and item.get("within_tolerance") is not True:
         errors.append(f"{prefix}.within_tolerance must be true")
     left, right, tolerance = (item.get(key) for key in (*fields, "absolute_tolerance"))
-    if all(isinstance(value, (int, float)) and not isinstance(value, bool) for value in (left, right, tolerance)):
+    if all(_finite(value) for value in (left, right, tolerance)):
         if tolerance < 0 or abs(float(left) - float(right)) > float(tolerance):
             errors.append(f"{prefix} numeric values exceed the declared absolute tolerance")
     metric = item.get("metric")
-    if isinstance(metric, str) and metric in tolerances and isinstance(tolerance, (int, float)):
+    if isinstance(metric, str) and metric in tolerances and _finite(tolerance):
         if not math.isclose(float(tolerance), tolerances[metric], rel_tol=0.0, abs_tol=1e-12):
             errors.append(f"{prefix}.absolute_tolerance differs from the G3 preregistration")
     elif isinstance(metric, str):
         errors.append(f"{prefix}.metric has no G3-predeclared tolerance")
+
+
+def _validate_comparison_sources(project, item, prefix, sources, errors):
+    """Reported numbers never override the selected executor output bytes."""
+    from scripts.result_values import extract
+    for field, outputs in sources.items():
+        try:
+            actual = extract(project, item.get(field.removesuffix("_value") + "_source"), outputs=outputs)
+            declared = item.get(field)
+            if type(declared) not in (int, float) or not math.isfinite(declared) or declared != actual:
+                errors.append(f"{prefix}.{field} differs from the actual source value")
+        except (OSError, ValueError, KeyError, TypeError, IndexError, OverflowError) as exc:
+            errors.append(f"{prefix}.{field} source: {exc}")
 
 
 @paper_scoped
@@ -1858,6 +1885,8 @@ def validate_baseline_reproduction(
         expected_evidence = _attempt_output_pairs(
             project, selected, f"{prefix}.attempt_ids", errors
         )
+        _validate_comparison_sources(project, entry, prefix,
+            {"reference_value": None, "observed_value": expected_evidence}, errors)
         _validate_evidence_files(
             project,
             entry.get("evidence_files"),
@@ -1977,6 +2006,8 @@ def validate_clean_room_reproduction(
         }
         if source_commit and selected_commits != {source_commit}:
             errors.append("isolation.source_commit must match every selected registry run")
+    original_outputs = _attempt_output_pairs(project, original_entries, "original attempts", errors)
+    reproduction_outputs = _attempt_output_pairs(project, reproduction_entries, "reproduction attempts", errors)
     comparisons = report.get("metric_comparisons")
     if not isinstance(comparisons, list) or not comparisons:
         errors.append("metric_comparisons must be non-empty")
@@ -1988,6 +2019,8 @@ def validate_clean_room_reproduction(
             continue
         _text(item.get("metric"), f"{prefix}.metric", errors)
         _validate_comparison_values(item, prefix, tolerances, errors, baseline=False)
+        _validate_comparison_sources(project, item, prefix,
+            {"original_value": original_outputs, "reproduction_value": reproduction_outputs}, errors)
     comparison_metrics = {
         str(item.get("metric")) for item in comparisons if isinstance(item, dict) and item.get("metric")
     }

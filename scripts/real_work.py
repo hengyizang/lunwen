@@ -1,14 +1,8 @@
 #!/usr/bin/env python3
-"""Real-work-first entry point for the Doctoral Research OS.
+"""Compatibility helpers for the default task-based research workflow.
 
-The full protocol stays intact and is the default. This module adds an
-explicitly opted-in ``DR_OS_WORK_PROFILE=minimal`` profile that keeps only the
-checks which actually prevent fabrication, and records the ceremonial,
-format-migration and calibration checks as visible non-blocking observations.
-
-It never authors scientific content on the owner's behalf. Human topic
-decisions stay human: every command that changes a gate requires ``--actor``.
-No third-party imports are required; only the Python standard library.
+Use researchctl work/add-paper and autopilot start/resume for normal work.
+These helpers preserve existing material and never fabricate decisions or evidence.
 """
 from __future__ import annotations
 
@@ -42,12 +36,8 @@ def load_config() -> dict[str, Any]:
 
 
 def profile_enabled(gate: str | None = None) -> bool:
-    if os.environ.get(PROFILE_ENV, "").strip().lower() not in PROFILE_VALUES:
-        return False
-    if gate is None:
-        return True
-    gates = load_config().get("enabled_gates", ["G1"])
-    return isinstance(gates, list) and gate in gates
+    """The single normal workflow is research-first; the old opt-in is retired."""
+    return True
 
 
 def project_dir(slug: str) -> Path:
@@ -77,117 +67,30 @@ def read_state(slug: str) -> dict[str, Any]:
     return state
 
 
-def hard_conditions(slug: str, gate: str = "G1") -> list[tuple[str, bool]]:
-    """The three checks that actually prevent a fabricated doctoral decision."""
-    project = project_dir(slug)
-    shortlist = read_json(project / "program" / "topic-shortlist.json") or {}
-    candidates = shortlist.get("candidates") or shortlist.get("topics") or []
-    core = read_json(project / "program" / "core-thesis.json") or {}
-    decision = project / "program" / "topic-decision.md"
-    return [
-        ("owner-written program/topic-decision.md",
-         nonempty(decision) and PLACEHOLDER not in decision.read_text(encoding="utf-8") if nonempty(decision) else False),
-        ("at least three real topic candidates",
-         isinstance(candidates, list) and len(candidates) >= 3),
-        ("one doctoral_question in program/core-thesis.json",
-         bool(str(core.get("doctoral_question", "")).strip())),
-    ]
+def hard_conditions(slug: str, gate: str = "G1") -> list[tuple[str,bool]]:
+    """Compatibility input diagnostics, not a three-field scientific clearance."""
+    state=read_state(slug);paper=state.get("active_paper","P01")
+    return [("readable project state",True),("selected paper exists",(project_dir(slug)/"papers"/str(paper)).is_dir())]
 
 
 def cmd_status(args: argparse.Namespace) -> int:
-    state = read_state(args.project)
-    gate = state.get("gate")
-    print(f"project      : {args.project}")
-    print(f"stage        : {state.get('stage')}  (gate={gate}, status={state.get('status')})")
-    print(f"approved     : {', '.join(state.get('approved_gates', [])) or '(none)'}")
-    print(f"profile      : {'minimal (real-work-first)' if profile_enabled(gate) else 'full protocol (default)'}")
-    if gate == "G1":
-        print("\nG1 hard conditions (the only blocking checks under the minimal profile):")
-        for label, ok in hard_conditions(args.project, "G1"):
-            print(f"  [{'x' if ok else ' '}] {label}")
-        missing = [label for label, ok in hard_conditions(args.project, "G1") if not ok]
-        if missing:
-            print(f"\nnext: fill {len(missing)} missing item(s), then run")
-            print(f"  python -m scripts.real_work bootstrap-g1 --project {args.project}")
-        else:
-            print("\nnext: record the real human decision (one command):")
-            print(f'  python -m scripts.real_work decide --project {args.project} --actor "Your Name" --note "..."')
-    else:
-        print("\nnext: use the existing control plane")
-        print(f"  python -m scripts.researchctl gate-check --project {args.project}")
-    print("\nFull protocol (all checks, unchanged): python -m scripts.researchctl gate-check --project "
-          + args.project)
+    from scripts import researchctl
+    researchctl.print_status(argparse.Namespace(project=args.project,json=False,legacy_checks=False))
     return 0
 
 
 def cmd_bootstrap_g1(args: argparse.Namespace) -> int:
-    """Create the *empty* G1 skeleton. Never writes scientific content."""
-    project = project_dir(args.project)
-    program = project / "program"
-    program.mkdir(parents=True, exist_ok=True)
-    created: list[str] = []
-    shortlist_path = program / "topic-shortlist.json"
-    if not shortlist_path.is_file() or args.force:
-        candidates = []
-        log = project / "evidence" / "search-log.jsonl"
-        real_refs: list[str] = []
-        if log.is_file():
-            for line in log.read_text(encoding="utf-8", errors="ignore").splitlines()[:40]:
-                try:
-                    row = json.loads(line)
-                except ValueError:
-                    continue
-                ref = row.get("evidence_receipt_id")
-                if isinstance(ref, str) and ref not in real_refs:
-                    real_refs.append(ref)
-        for index in range(1, 4):
-            candidates.append({
-                "candidate_id": f"C{index}",
-                "title": "",
-                "owner_rationale": "",
-                "main_risk": "",
-                "supporting_receipt_ids": real_refs[:3],
-                "status": PLACEHOLDER,
-            })
-        shortlist_path.write_text(json.dumps({
-            "schema_version": "1.0",
-            "generated_by": "scripts.real_work.bootstrap-g1",
-            "generated_at": _now(),
-            "note": "Skeleton only. Titles, rationale and risks must be written by the owner. Receipt IDs are copied from existing real search logs and are not evidence of a decision.",
-            "candidates": candidates,
-        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        created.append("program/topic-shortlist.json")
-    decision_path = program / "topic-decision.md"
-    if not decision_path.is_file() or args.force:
-        decision_path.write_text(
-            "# Doctoral topic decision\n\n"
-            f"Status: {PLACEHOLDER}\n\n"
-            "Owner: ______________________    Date: ____________\n\n"
-            "## Chosen candidate\n\n(Write which of C1/C2/C3 you choose and why.)\n\n"
-            "## Strongest rival and why it was not chosen\n\n(Required: keep the disagreement visible.)\n\n"
-            "## Main risk and how it will be tested\n\n(Owner's own words.)\n\n"
-            "## What is still unknown\n\n(Do not claim saturation or novelty.)\n",
-            encoding="utf-8")
-        created.append("program/topic-decision.md")
-    core_path = program / "core-thesis.json"
-    if not core_path.is_file() or args.force:
-        core_path.write_text(json.dumps({
-            "schema_version": "1.0",
-            "doctoral_question": "",
-            "distinct_contribution": "",
-            "falsification_conditions": [],
-            "status": PLACEHOLDER,
-            "note": "Owner-authored. The control plane never fills these fields.",
-        }, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-        created.append("program/core-thesis.json")
-    if created:
-        print("Created empty skeleton (no scientific content was generated):")
-        for item in created:
-            print("  - " + item)
-    else:
-        print("Existing G1 material left untouched. Use --force only if you intend to replace it.")
-    print("\nFill in the three files above, then run:")
-    print(f"  python -m scripts.real_work status --project {args.project}")
+    """Create optional empty working notes without inventing candidate quotas."""
+    project=project_dir(args.project);program=project/"program";program.mkdir(parents=True,exist_ok=True)
+    files={"topic-shortlist.json":{"schema_version":"1.0","candidates":[],"selection_decision":None},
+           "core-thesis.json":{"schema_version":"1.0","doctoral_question":"","distinct_contribution":"","falsification_conditions":[]},
+           "topic-decision.md":"# Research direction\n\n"+PLACEHOLDER+"\n"}
+    for name,value in files.items():
+        target=program/name
+        if target.exists() and not args.force:continue
+        target.write_text(value if isinstance(value,str) else json.dumps(value,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    print("Optional empty notes prepared; existing material was preserved unless --force was explicitly selected.")
+    print("Continue with the actual research question; no candidate count or approval form is required.")
     return 0
 
 
@@ -200,69 +103,26 @@ def _run_ctl(args: list[str], env: dict[str, str]) -> tuple[int, str]:
 
 
 def cmd_decide(args: argparse.Namespace) -> int:
-    """One command: verify real human input, then check -> ready -> approve -> advance."""
-    actor = args.actor.strip()
-    if not actor or actor == "deterministic-control-plane":
-        raise SystemExit("--actor must name the real human making the topic decision")
-    state = read_state(args.project)
-    if state.get("gate") != "G1":
-        raise SystemExit(f"current gate is {state.get('gate')}, not G1; this command handles the G1 decision")
-    missing = [label for label, ok in hard_conditions(args.project, "G1") if not ok]
-    if missing:
-        raise SystemExit("real human input is still missing: " + "; ".join(missing))
-    env = dict(os.environ)
-    env[PROFILE_ENV] = "minimal"
-    steps = [
-        ["gate-check", "--project", args.project],
-        ["ready", "--project", args.project, "--note", args.note],
-        ["approve", "--project", args.project, "--gate", "G1", "--actor", actor, "--note", args.note],
-        ["advance", "--project", args.project],
-    ]
-    for step in steps:
-        code, output = _run_ctl(step, env)
-        print(f"$ researchctl {' '.join(step[:2])} ... -> rc={code}")
-        if output:
-            for line in output.splitlines()[:8]:
-                print("    " + line)
-        if code != 0:
-            print(f"\nStopped at {step[0]}. Nothing was fabricated; the full protocol is still available.")
-            return code
-    print("\nG1 decision recorded and project advanced. The remaining 80+ full-protocol observations")
-    print("were recorded as non-blocking (see docs/REAL-WORK-QUICKSTART.md).")
+    """Record an existing user decision without a gate transition ceremony."""
+    from scripts import researchctl
+    actor=args.actor.strip()
+    if not actor or actor=="deterministic-control-plane":raise SystemExit("--actor must name the actual decision maker")
+    path=project_dir(args.project)/"program/topic-decision.md"
+    decision=args.note.strip() or (path.read_text(encoding="utf-8").strip() if path.is_file() else "")
+    if not decision or PLACEHOLDER in decision:raise SystemExit("Supply the actual topic decision in --note or program/topic-decision.md")
+    state=researchctl.load_state(args.project)
+    state.setdefault("history",[]).append({"at":_now(),"event":"research_direction_recorded","actor":actor,
+        "decision":decision,"scientific_approval_granted":False})
+    researchctl.save_state(args.project,state)
+    researchctl.select_work(args.project,decision)
+    print("Recorded the research direction. Continue the selected task with autopilot resume.")
     return 0
 
 
 def cmd_check_real(args: argparse.Namespace) -> int:
-    """List what is genuinely missing for a real (non-synthetic) run. Never raises."""
-    checks: list[tuple[str, bool, str]] = []
-    try:
-        import jsonschema  # noqa: F401
-        checks.append(("jsonschema installed (removes 2 G1 'validator unavailable' errors)", True, ""))
-    except ImportError:
-        checks.append(("jsonschema installed", False, "python -m pip install jsonschema"))
-    keys = [
-        "DR_OS_CHEAPAI_GPT_PRO_KEY", "DR_OS_CHEAPAI_GPT_DISCOUNT_KEY",
-        "DR_OS_CODEKEY_KIRO_ENTERPRISE_KEY", "DR_OS_CODEKEY_DEEPSEEK_KEY",
-        "DR_OS_CODEKEY_GEMINI_KEY",
-    ]
-    present = [k for k in keys if os.environ.get(k)]
-    checks.append((f"model API keys present ({len(present)}/{len(keys)})", bool(present),
-                   "export the key for the providers you actually use; keys never enter the repo"))
-    checks.append(("config/model-routing.local.json with real model IDs", LOCAL_MODELS.is_file(),
-                   "python -m scripts.real_work configure-models --sol <real-id> --opus <real-id> ..."))
-    checks.append(("real-work profile enabled", profile_enabled(),
-                   "export DR_OS_WORK_PROFILE=minimal  (or use the decide command, which sets it)"))
-    state = read_state(args.project)
-    checks.append(("G0 approved", "G0" in state.get("approved_gates", []), ""))
-    print("Real-run readiness (gaps are listed, not errors):\n")
-    gaps = 0
-    for label, ok, fix in checks:
-        print(f"  [{'x' if ok else ' '}] {label}")
-        if not ok:
-            gaps += 1
-            if fix:
-                print(f"        fix: {fix}")
-    print(f"\n{len(checks) - gaps}/{len(checks)} ready. A real run needs keys + real model IDs + G0.")
+    """Inspect the selected model route and existing budget, without live calls."""
+    from scripts.cloud_continuation import startup_report
+    print(json.dumps(startup_report(args.project),ensure_ascii=False,indent=2))
     return 0
 
 
@@ -296,7 +156,7 @@ def cmd_split_screening(args: argparse.Namespace) -> int:
 
     Purely mechanical: rows and columns are copied verbatim. The four owner
     columns (human_decision, human_reason, screened_by, screened_at) are never
-    filled, reordered into a decision, or inferred. A model may not screen.
+    filled, reordered into a decision, or inferred. Existing model or human decisions retain their recorded provenance.
     """
     import csv
 
@@ -351,7 +211,7 @@ def cmd_split_screening(args: argparse.Namespace) -> int:
         "",
         "Work through one batch at a time and fill the four owner columns yourself.",
         "Then run `literature_evidence screen --actor \"Your Name\"` with the completed",
-        "records. The control plane never accepts a model-authored screening decision.",
+        "records. Source-bound model screening and human screening are both supported; retain the actual actor.",
         "",
     ]
     (outdir / "INDEX.md").write_text("\n".join(index), encoding="utf-8")
@@ -361,90 +221,22 @@ def cmd_split_screening(args: argparse.Namespace) -> int:
 
 
 def cmd_prepare_decision(args: argparse.Namespace) -> int:
-    """Compress *existing* real material into one owner decision sheet.
-
-    Reads only files that already exist. It never invents a candidate, a score,
-    a risk or a recommendation, and never fills in any field that belongs to
-    the owner. The point is to make the human decision cheap, not to make it.
-    """
-    project = project_dir(args.project)
-    program = project / "program"
-    shortlist = read_json(program / "topic-shortlist.json") or {}
-    candidates = shortlist.get("candidates") or shortlist.get("topics") or []
-    core = read_json(program / "core-thesis.json") or {}
-    decision_path = program / "topic-decision.md"
-    decision_text = ""
-    if nonempty(decision_path):
-        decision_text = decision_path.read_text(encoding="utf-8")
-    screening = project / "reports" / "g1-human-screening-sheet.csv"
-    screening_rows = 0
-    if screening.is_file():
-        try:
-            screening_rows = max(0, len(screening.read_text(encoding="utf-8").splitlines()) - 1)
-        except OSError:
-            screening_rows = 0
-    pending_confirmation = "待负责人确认" in decision_text or "awaiting" in decision_text.lower()
-
-    lines = [
-        "# G1 decision sheet (one page)",
-        "",
-        f"Generated by `scripts.real_work prepare-decision` at {_now()}.",
-        "All facts below are copied from existing project files. Nothing here is a new",
-        "scientific claim, a recommendation, or a recorded approval.",
-        "",
-        "## 1. What is already on file",
-        "",
-        f"- Doctoral question (program/core-thesis.json): {str(core.get('doctoral_question', '')).strip() or '(not filled)'}",
-        f"- Candidates in program/topic-shortlist.json: {len(candidates)}",
-    ]
-    for item in candidates:
-        if isinstance(item, dict):
-            cid = item.get("candidate_id") or item.get("id") or "?"
-            title = item.get("title") or item.get("name") or "(no title recorded)"
-            lines.append(f"  - {cid}: {title}")
-    lines += [
-        f"- selection_decision: {json.dumps(shortlist.get('selection_decision'), ensure_ascii=False)}"
-        + ("  <-- no candidate has been chosen yet" if not shortlist.get("selection_decision") else ""),
-        f"- program/topic-decision.md: {'present, marked as a proposal awaiting owner confirmation' if pending_confirmation else 'present'}",
-        f"- reports/g1-human-screening-sheet.csv: {screening_rows} rows awaiting a named human decision",
-        "",
-        "Reference material (read, not restated here): program/direction-ranking.json,",
-        "program/originality-audit.json, program/novelty-claim-matrix.json,",
-        "program/hypothesis-register.json, and section 4 of program/topic-decision.md",
-        "(which lists the evidence limitations you must weigh).",
-        "",
-        "## 2. The three fields only you can fill",
-        "",
-        "1. Chosen candidate id: ______________________",
-        "2. Strongest rival id and why it was not chosen: ______________________",
-        "3. Main risk and how you will test it: ______________________",
-        "",
-        "Owner: ______________________    Date: ____________",
-        "",
-        "## 3. Still outstanding before a real G1 approval",
-        "",
-        f"- [ ] Named human screening of the {screening_rows} search rows (`screened_by` is never filled by a model)",
-        "- [ ] Link the 11 closest prior works to their retrieval records",
-        "- [ ] A real independent critique receipt (needs working model keys)",
-        "- [ ] quality-G1.json and reviews/decision-log.md",
-        "",
-        "The real-work profile lowers the ceremonial blockers, not these human ones.",
-        "",
-        "## 4. After you have filled in the three fields",
-        "",
-        "Write your choice into program/topic-shortlist.json (selection_decision) and",
-        "program/topic-decision.md, then run:",
-        "",
-        f'  python -m scripts.real_work decide --project {args.project} --actor "Your Name" --note "..."',
-        "",
-        "That command records YOUR decision; it does not make one.",
-        "",
-    ]
-    out = project / "reports" / "G1-DECISION-SHEET.md"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Wrote {out.relative_to(ROOT)} ({len(lines)} lines, no new scientific content).")
-    print("Fill in the three owner fields in section 2, then run the decide command shown in section 4.")
+    """Summarize existing questions and source locations without new assertions."""
+    project=project_dir(args.project);program=project/"program"
+    shortlist=read_json(program/"topic-shortlist.json") or {}
+    core=read_json(program/"core-thesis.json") or {}
+    lines=["# Current research direction", "", "This view copies existing material; it makes no scientific or approval decision.", "",
+           "Question: "+str(core.get("doctoral_question") or "(not yet recorded)"), "", "Existing candidates:"]
+    for item in shortlist.get("candidates",[]) or []:
+        if isinstance(item,dict):lines.append("- "+str(item.get("candidate_id",item.get("id","?")))+": "+str(item.get("title") or item.get("name") or "(no title recorded)"))
+    lines.extend(["", "Selection on file: "+json.dumps(shortlist.get("selection_decision"),ensure_ascii=False), "", "Existing material:"])
+    for relative in ("program/topic-decision.md","program/hypothesis-register.json","evidence/search-log.jsonl","program/research-notebook.json"):
+        if (project/relative).is_file():lines.append("- "+relative)
+    lines.extend(["", "Choose the next useful reading, derivation, experiment or writing task. Use independent review when it would resolve an actual uncertainty.", "",
+                  f"python -m scripts.autopilot resume --project {args.project} --context 'the next research task'", ""])
+    output=project/"reports/G1-DECISION-SHEET.md";output.parent.mkdir(parents=True,exist_ok=True)
+    output.write_text("\n".join(lines),encoding="utf-8")
+    print(f"Wrote {output.relative_to(ROOT)} from existing material.")
     return 0
 
 
@@ -457,22 +249,22 @@ def cmd_full_check(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    root = argparse.ArgumentParser(description="Real-work-first entry point (opt-in minimal profile)")
+    root = argparse.ArgumentParser(description="Compatibility helpers for the default research task workflow")
     cmd = root.add_subparsers(dest="command", required=True)
 
-    p = cmd.add_parser("status", help="current stage and the few things actually blocking real work")
+    p = cmd.add_parser("status", help="current research task and budget")
     p.add_argument("--project", required=True)
     p.set_defaults(func=cmd_status)
 
-    p = cmd.add_parser("bootstrap-g1", help="create the EMPTY G1 skeleton for a new project")
+    p = cmd.add_parser("bootstrap-g1", help="prepare optional empty research notes")
     p.add_argument("--project", required=True)
     p.add_argument("--force", action="store_true", help="replace existing material (destructive)")
     p.set_defaults(func=cmd_bootstrap_g1)
 
-    p = cmd.add_parser("decide", help="record a real human G1 decision in one command")
+    p = cmd.add_parser("decide", help="record an actual user direction without gate transitions")
     p.add_argument("--project", required=True)
     p.add_argument("--actor", required=True, help="name of the human making the decision")
-    p.add_argument("--note", default="Owner topic decision recorded via real_work.decide")
+    p.add_argument("--note", default="")
     p.set_defaults(func=cmd_decide)
 
     p = cmd.add_parser("check-real", help="list gaps for a real (non-synthetic) run")
@@ -494,7 +286,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--project", required=True)
     p.set_defaults(func=cmd_prepare_decision)
 
-    p = cmd.add_parser("full-check", help="run the unchanged full protocol gate-check")
+    p = cmd.add_parser("full-check", help="run explicit legacy gate diagnostics (not a work prerequisite)")
     p.add_argument("--project", required=True)
     p.set_defaults(func=cmd_full_check)
     return root

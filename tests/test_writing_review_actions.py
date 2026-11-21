@@ -11,6 +11,19 @@ from scripts.research_artifacts import sha, write
 
 
 class WritingReviewActionTests(unittest.TestCase):
+    def test_source_bound_editorial_action_can_name_paper_beyond_six(self):
+        from jsonschema import validate
+        import json
+        source = self.text("papers/P07/manuscript/main.md", "# Results\nThe bounded observation needs clearer wording.\n")
+        action = self.action()
+        action["categories"] = ["unclear_exposition"]
+        action["scope"].update(paper_ids=["P07"], claim_ids=[])
+        action["locations"] = [self.anchor(source)]
+        validate(action, json.loads((Path(actions.__file__).parents[1] / "schemas/writing-review-action.schema.json").read_text()))
+        result = actions.assess(self.project, action, paper_ids=["P07"])
+        self.assertEqual(result["definition"]["scope"]["paper_ids"], ["P07"])
+        self.assertFalse(result["scientific_resolution_verified"])
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)

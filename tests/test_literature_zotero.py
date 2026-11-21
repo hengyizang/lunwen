@@ -64,6 +64,30 @@ class ZoteroCloudTests(unittest.TestCase):
         self.assertEqual(len(result["items"]), 101)
         self.assertEqual(len(result["receipts"]), 2)
 
+    def test_three_incremental_syncs_keep_history_and_validate_each_snapshot(self):
+        write(self.project / "program/literature-zotero.json", self.spec)
+        for version in (1, 2, 3):
+            def fetch(url, auth):
+                if "/deleted?" in url:
+                    return b'{"items": []}', version, None
+                return json.dumps([item(version=version, title=f"Version {version}")]).encode(), version, 1
+            zotero.build(self.project, self.spec, fetch=fetch)
+            self.assertEqual(zotero.validate_saved_report(self.project)["library_version"], version)
+        history = self.project / zotero.OUTPUT / "public/history"
+        self.assertEqual({read(p)["library_version"] for p in history.glob("*.json")}, {1, 2})
+
+    def test_failed_incremental_pagination_does_not_damage_the_previous_snapshot(self):
+        write(self.project / "program/literature-zotero.json", self.spec)
+        zotero.build(self.project, self.spec, fetch=lambda *_: (json.dumps([item()]).encode(), 1, 1))
+        calls = []
+        def fetch(url, auth):
+            calls.append(url)
+            rows = [item(f"A{i:07d}") for i in range(100)] if len(calls) == 1 else [item("B1234567")]
+            return json.dumps(rows).encode(), len(calls) + 1, 101
+        with self.assertRaisesRegex(ValueError, "changed during"):
+            zotero.build(self.project, self.spec, fetch=fetch)
+        self.assertEqual(zotero.validate_saved_report(self.project)["library_version"], 1)
+
     def test_export_import_hash_binding_and_tamper(self):
         path = self.project / "evidence/imports/zotero.json"
         write(path, {"items": [item()]})
@@ -103,10 +127,9 @@ class ZoteroCloudTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 zotero.build(self.project, {**self.spec, **change})
 
-    def test_cloud_required_and_outputs_cannot_be_edited(self):
-        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), self.assertRaisesRegex(ValueError, "cloud"):
-            zotero.build(self.project, self.spec)
-        zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))
+    def test_local_host_supported_and_outputs_cannot_be_edited(self):
+        with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
+            zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))
         (self.project / zotero.OUTPUT / "public/index.html").write_text("changed")
         with self.assertRaisesRegex(ValueError, "changed"):
             zotero.build(self.project, self.spec, fetch=lambda *a: (b"[]", 1, 0))

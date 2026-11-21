@@ -100,7 +100,9 @@
       "maxLength": 300
     },
     "paper_count": {
-      "const": 6
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 99
     },
     "context": {
       "type": "string",
@@ -123,8 +125,7 @@
     },
     "question": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 2000
+      "maxLength": 4000
     },
     "settings": {
       "enum": [
@@ -258,8 +259,7 @@
     },
     "task_kind": {
       "type": "string",
-      "minLength": 1,
-      "maxLength": 120
+      "pattern": "^[a-z][a-z0-9_-]{0,79}$"
     },
     "task_profile": {
       "type": "object",
@@ -297,6 +297,22 @@
         "codekey-kiro-enterprise",
         "codekey-kiro-standard"
       ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "plan": {
+      "type": "boolean"
+    },
+    "review": {
+      "type": "boolean"
+    },
+    "remediate": {
+      "type": "boolean"
     }
   },
   "allOf": [
@@ -706,8 +722,13 @@
             "actor",
             "allow_paid",
             "context",
+            "paper_id",
+            "plan",
             "project",
+            "remediate",
+            "review",
             "schema_version",
+            "sources",
             "stage",
             "task_kind",
             "task_profile"
@@ -733,6 +754,7 @@
             "allow_paid",
             "paper_count",
             "project",
+            "question",
             "schema_version"
           ]
         }

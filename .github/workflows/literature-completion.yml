@@ -30,6 +30,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - name: Install CPU and PDF runtime without provider credentials
         run: |
           python -m pip install --disable-pip-version-check '.[reader,figure-retrieval]' 'paper-qa==2026.08.12' 'Pillow>=10,<13' 'reportlab>=4,<5'

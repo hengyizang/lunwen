@@ -287,6 +287,7 @@ class PrimaryRecoveryTests(unittest.TestCase):
         from tests.research_cycle_fixtures import pending_decision, independent_audit
         self.free_failed_protocol()
         self.machine_retirement_proposal()
+        self.put("program/review-policy.json", {"enabled": True, "stages": ["experiment-execution"]})
         stage, cycle = "experiment-execution", "machine-diagnosis"
         pending_decision(self.project, stage, cycle, "P01")
         invocations = []
@@ -370,7 +371,7 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.assertEqual(cloud_progress.external_blockers(self.project, []), [])
         self.assertIsNone(recovery._approval(self.project, failed))
         self.put("state/experiment-execution-lease.json", {"status": "running", "synthetic_fixture": True})
-        self.assertTrue(cloud_progress.external_blockers(self.project, []))
+        self.assertEqual(recovery.failure_control_status(self.project)["status"], "blocked")
 
     def test_successful_negative_outcome_never_becomes_automatic_failed_protocol(self):
         self.plan["runs"][0].update(estimated_cost_usd=0, argv=[sys.executable, "-c",
@@ -413,7 +414,7 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.assertEqual(recovery.histories(self.project)[0]["proposal"]["prior_outcomes_seen"], True)
         self.assertAlmostEqual(recovery.historical_cost(self.project), 0.2)
         self.assertIn("new run IDs", " ".join(recovery.gate_errors(self.project, "G3")))
-        with self.assertRaisesRegex(runner.ExperimentError, "open G4"):
+        with self.assertRaisesRegex(runner.ExperimentError, "Frozen protocol|new run IDs"):
             self.execute()
         self.amend(phase="confirmatory")
         self.assertIn("phase", " ".join(recovery.gate_errors(self.project, "G3")))
@@ -485,7 +486,7 @@ class PrimaryRecoveryTests(unittest.TestCase):
         self.freeze()
         self.assertEqual(self.execute()["status"], "failed")
         source.write_text("# Changed before explicit retirement.\n", encoding="utf-8")
-        with self.assertRaisesRegex(recovery.RecoveryError, "frozen input is missing or changed"):
+        with self.assertRaisesRegex(recovery.RecoveryError, "frozen input"):
             self.retire()
         self.assertFalse((self.project / "experiments/history/v001").exists())
         self.assertEqual(self.read("state/run.json")["gate"], "G4")

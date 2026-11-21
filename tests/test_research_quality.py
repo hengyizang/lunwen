@@ -333,7 +333,7 @@ class ResearchQualityTests(unittest.TestCase):
             self.assertTrue(any("current dataset manifest" in issue
                                 for issue in quality.validate_data_quality_report(reports["d1"], "d1", project)))
 
-    def test_non_tabular_wav_is_content_scanned(self) -> None:
+    def test_wav_profile_identifies_header_scan_without_claiming_payload_validation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = self.make_project(Path(directory))
             audio = project / "data" / "raw" / "signal.wav"
@@ -354,6 +354,9 @@ class ResearchQualityTests(unittest.TestCase):
             )
             self.assertEqual(report["status"], "pass")
             profile = report["non_tabular_profile"]
+            self.assertFalse(profile["complete_scan"])
+            self.assertTrue(profile["inventory_complete"])
+            self.assertEqual(profile["scan_scope"]["wav"], "headers only")
             self.assertEqual(profile["profiles"][0]["kind"], "wav_audio")
             self.assertEqual(profile["profiles"][0]["sample_rates"], {"8000": 1})
 
@@ -625,7 +628,7 @@ class ResearchQualityTests(unittest.TestCase):
                 json.dumps(preregistration), encoding="utf-8"
             )
             evidence = project / "experiments" / "metrics.json"
-            evidence.write_text('{"metric": 0.8}', encoding="utf-8")
+            evidence.write_text(json.dumps({'metric': 0.8, 'domain': 0.79, 'recent': 0.81, 'reference_recent': 0.82}), encoding="utf-8")
             registry = [
                 {"run_id": "base-domain", "attempt_id": "a1", "paper_id": "P01", "status": "succeeded", "cwd": "env-a", "git_commit": "a" * 40, "runtime": {"python": "3.12", "platform": "linux-a"}},
                 {"run_id": "base-recent", "attempt_id": "a2", "paper_id": "P01", "status": "succeeded", "cwd": "env-a", "git_commit": "a" * 40, "runtime": {"python": "3.12", "platform": "linux-a"}},
@@ -668,7 +671,14 @@ class ResearchQualityTests(unittest.TestCase):
                     {"baseline_id": "B2", "class": "strong_recent", "metric": "F1", "reference_source_url": "https://example.org/b2", "reference_value": 0.82, "observed_value": 0.81, "absolute_tolerance": 0.02, "comparable_protocol": True, "within_tolerance": True, "run_ids": ["base-recent"], "attempt_ids": ["a2"], "evidence_files": evidence_files, "comparison_notes": "Locked split."},
                 ],
             }
+            def source(key):
+                return {**evidence_files[0], "selector": {"json_pointer": "/" + key}}
+            baseline["baselines"][0].update(reference_source=source("metric"), observed_source=source("domain"))
+            baseline["baselines"][1].update(reference_source=source("reference_recent"), observed_source=source("recent"))
             self.assertEqual(validate_baseline_reproduction(baseline, "P01", project, registry), [])
+            false_numbers = copy.deepcopy(baseline)
+            false_numbers["baselines"][0]["observed_value"] = 0.81
+            self.assertTrue(any("actual source value" in e for e in validate_baseline_reproduction(false_numbers, "P01", project, registry)))
             self.assertEqual(validate_baseline_reproduction({**baseline, "human_review_required": False}, "P01", project, registry), [])
             clean = {
                 "schema_version": "1.0", "paper_id": "P01", "status": "pass", "human_review_required": True,
@@ -687,6 +697,7 @@ class ResearchQualityTests(unittest.TestCase):
                 "metric_comparisons": [{"metric": "F1", "original_value": 0.80, "reproduction_value": 0.79, "absolute_tolerance": 0.02, "within_tolerance": True}],
                 "evidence_files": evidence_files,
             }
+            clean["metric_comparisons"][0].update(original_source=source("metric"), reproduction_source=source("domain"))
             self.assertEqual(validate_clean_room_reproduction(clean, "P01", project, registry), [])
             self.assertEqual(validate_clean_room_reproduction({**clean, "human_review_required": False}, "P01", project, registry), [])
             same_environment = copy.deepcopy(registry)

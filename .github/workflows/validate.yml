@@ -31,6 +31,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Select affected execution acceptance
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      experiment_evidence: ${{ steps.paths.outputs.experiment_evidence }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: paths
+        name: Detect experiment and evidence changes
+        env:
+          DR_OS_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          DR_OS_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          python3 - <<'PYTHON'
+          import fnmatch, os, subprocess
+          paths = subprocess.check_output([
+              'git', 'diff', '--name-only', os.environ['DR_OS_BASE_SHA'], os.environ['DR_OS_HEAD_SHA'],
+          ], text=True).splitlines()
+          patterns = (
+              '.github/workflows/validate.yml', '.github/actions/setup-runtime/*',
+              'scripts/experiment*.py', 'scripts/container*.py', 'scripts/results_validation.py',
+              'scripts/research_quality.py', 'scripts/source_scope.py', 'scripts/result_values.py',
+              'scripts/scientific_numbers.py', 'scripts/operating_constraints.py',
+              'scripts/output_provenance.py', 'scripts/research_artifacts.py',
+              'scripts/empirical*.py', 'scripts/statistical_reporting.py', 'scripts/study_routes.py',
+              'scripts/baseline*.py', 'scripts/clean_room*.py', 'scripts/researchctl.py',
+              'schemas/*experiment*', 'schemas/*reproduction*', 'config/*experiment*',
+              'tests/test_experiment*.py', 'tests/test_container*.py', 'tests/test_execution_protocols.py',
+              'tests/test_results_validation.py', 'tests/test_scientific_result_bindings.py',
+              'tests/test_empirical*.py', 'tests/test_research_quality.py', 'docker/*',
+          )
+          affected = any(fnmatch.fnmatch(path, pattern) for path in paths for pattern in patterns)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print('experiment_evidence=' + str(affected).lower(), file=output)
+          PYTHON
+
   fast-tests:
     name: Fast deterministic feedback
     runs-on: ubuntu-latest
@@ -43,11 +85,13 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[figures,reader,research-quality]", "reportlab>=4,<5"]'
       - name: Run the measured fast partition
         run: python scripts/run_tests.py fast
 
   study-routes:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     name: Meta analysis and formal theory on cloud CPU
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -59,6 +103,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[research-quality]"]'
       - name: Run actual isolated Meta calculations and Lean kernel checks
         env:
@@ -74,6 +119,7 @@ jobs:
           retention-days: 14
 
   statistical-watermark-cpu:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     name: Configured statistical watermark detector on CPU
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -99,6 +145,7 @@ jobs:
         run: python -m unittest tests.test_statistical_watermarks -v
 
   cloud-produce:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     name: Cloud executor and checkpoint
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -110,6 +157,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - name: Execute synthetic negative and failed runs with the real Docker executor
         run: python -m scripts.cloud_pipeline_acceptance produce --directory artifacts/cloud-pipeline
       - name: Transfer exact checkpoint to an independent runner
@@ -142,6 +190,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - uses: actions/download-artifact@v8
         with:
           name: cloud-pipeline-transfer
@@ -158,6 +207,7 @@ jobs:
           retention-days: 14
 
   cloud-human-controls:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     name: Cloud human review controls
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -169,6 +219,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[research-quality]"]'
       - name: Exercise actual human control functions on synthetic evidence
         run: python -m scripts.cloud_human_acceptance --directory artifacts/cloud-human-controls
@@ -182,6 +233,8 @@ jobs:
           retention-days: 14
 
   experiment-evidence:
+    needs: changes
+    if: always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || needs.changes.outputs.experiment_evidence == 'true')
     name: Experiment design and statistical evidence
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -193,6 +246,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[research-quality]"]'
       - name: Execute synthetic paired studies and failed pilot with the real Docker executor
         run: python -m scripts.experiment_evidence_acceptance --directory artifacts/experiment-evidence
@@ -213,7 +267,8 @@ jobs:
           retention-days: 14
 
   gateway-startup:
-    name: Gateway startup and five-role cycle
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    name: Gateway transport and recorded research calls
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -224,6 +279,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - name: Exercise production routing and durable budgets with synthetic HTTP
         run: python -m scripts.gateway_acceptance --directory artifacts/gateway-startup
       - name: Verify lossless context, request reuse and fresh reviews without model credentials
@@ -238,6 +294,7 @@ jobs:
           retention-days: 14
 
   cloud-recovery:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     name: Automatic recovery safety and fault injection
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -249,6 +306,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
       - name: Inject engineering faults without paid calls or production state
         run: python -m scripts.cloud_recovery_acceptance --output artifacts/cloud-recovery/acceptance.json
       - name: Preserve scoped recovery acceptance evidence
@@ -283,6 +341,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "${{ matrix.python-version }}"
+          ccfa: 'true'
           packages: '[".[figures,reader,research-quality]", "reportlab>=4,<5"]'
       - name: Remaining tests and cross-version compatibility
         run: python scripts/run_tests.py ${{ matrix.suite }}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Human-gated Doctoral Research OS state manager with publication-quality floors."""
+"""Research tasks, gradually formed papers, and compatible historical records."""
 from __future__ import annotations
 import argparse,hashlib,json,os,re,sys
 from pathlib import Path
@@ -35,6 +35,54 @@ def load_state(slug):
         state["paper_statuses"]={f"P{n:02d}":("submission_ready" if state.get("gate") is None else "active" if f"P{n:02d}"==active else "planned") for n in range(1,count+1)}; state["schema_version"]="2.0"
     return state
 def save_state(slug,state): state["updated_at"]=now(); write_json(state_path(slug),state)
+def current_work(slug):
+    """Describe the next task without advancing or approving historical gates."""
+    state=load_state(slug)
+    work=state.get("current_work",{})
+    if not isinstance(work,dict):raise ResearchCtlError("current_work must be an object")
+    stage=work.get("stage") or state["stage"]
+    if stage in {"intake","submission-ready"}:stage="topic-intelligence" if stage=="intake" else "writing-and-review"
+    if stage not in {row["name"] for row in STAGES[:-1]}:raise ResearchCtlError("Unknown research task stage")
+    paper=validate_paper_id(str(state.get("active_paper","P01")))
+    task=work.get("task","")
+    if not isinstance(task,str):raise ResearchCtlError("Research task must be text")
+    if not task:
+        path=project_dir(slug)/"intake/constraints.json"
+        value=read_json(path) if path.is_file() else {}
+        task=value.get("research_goal") or ""
+    return {"project":slug,"stage":stage,"gate":next(row["gate"] for row in STAGES if row["name"]==stage),
+            "paper_id":paper,"task":task,"status":work.get("status","active"),
+            "legacy_stage":state["stage"],"legacy_status":state.get("status")}
+
+
+def select_work(slug, task="", paper_id=None, stage=None):
+    """Select authorized work; never invent scientific approvals or alter results."""
+    state=load_state(slug);current=current_work(slug)
+    if not isinstance(task,str):raise ResearchCtlError("Research task must be text")
+    paper=validate_paper_id(paper_id or current["paper_id"])
+    target=project_dir(slug)/"papers"/paper
+    if not target.is_dir() or target.is_symlink():raise ResearchCtlError(f"Unknown paper: {paper}; use add-paper first")
+    selected_stage=stage or current["stage"]
+    index=next((i for i,row in enumerate(STAGES[:-1]) if row["name"]==selected_stage),None)
+    if index is None:raise ResearchCtlError("Unknown research task stage")
+    description=task.strip() or current["task"]
+    work={"task":description,"stage":selected_stage,"paper_id":paper,"status":"active"}
+    if state.get("current_work") == work and state.get("active_paper")==paper:return current_work(slug)
+    state.setdefault("history",[]).append({"at":now(),"event":"research_task_selected",
+        "paper_id":paper,"stage":selected_stage,"task":description,"previous_stage":state["stage"],
+        "previous_status":state.get("status"),"scientific_approval_granted":False})
+    state.update(current_work=work,active_paper=paper,stage=selected_stage,gate=STAGES[index]["gate"],
+                 stage_index=index,status="awaiting_work")
+    # A prior ready snapshot remains in history; it is not an authority for new work.
+    state.pop("ready_gate",None);state.pop("ready_artifact_sha256",None)
+    save_state(slug,state)
+    return current_work(slug)
+
+
+def select_work_command(args):
+    print(json.dumps(select_work(args.project,args.task,args.paper,args.stage),ensure_ascii=False,indent=2))
+
+
 def nonempty(path): return path.is_file() and path.stat().st_size>0
 def load_nonempty_json(path,errors):
     if not nonempty(path):errors.append(f"missing or empty: {path}");return None
@@ -130,43 +178,90 @@ def _observe(warnings, label, check):
 
 
 def paper_scientific_errors(project, pid, *, _documents=None):
-    """A: factual evidence and preservation checks shared by both writing phases."""
-    from scripts import manuscript_audit,statistical_reporting,revision_integrity,figure_provenance,manuscript_hygiene,literature_source_tasks
-    from scripts.research_phase import requires_submission
-    paper=project/"papers"/pid;errors=[]
-    for label,check in (
-        ("paper-facts",lambda:manuscript_audit.validate_saved_report(paper)),
-        ("full-text citation support",lambda:literature_source_tasks.integrity_errors(project,pid,require_support=requires_submission(project,paper_id=pid))),
-        ("statistical reporting",lambda:statistical_reporting.validate_saved_report(project,pid)),
-        ("revision integrity",lambda:revision_integrity.validate_saved_report(paper,include_ledger=False,_documents=_documents)),
-        ("figure provenance",lambda:figure_provenance.validate_figure_provenance(project,paper,include_visual=False)),
-        ("preserved originals",lambda:manuscript_hygiene.integrity_errors(project,pid))):
-        try:errors.extend(f"{pid} {label}: {issue}" for issue in check())
-        except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:errors.append(f"{pid} {label}: {exc}")
-    if not any(nonempty(paper/"manuscript"/name) for name in ("main.tex","main.docx")):
-        errors.append(f"{pid} requires a scientific manuscript")
+    """Check actual manuscript/evidence contradictions, without requiring ledgers.
+
+    Optional claim and statistical maps are checked when supplied. Their absence
+    does not mean scientific support has been verified.
+    """
+    from scripts import manuscript_audit, statistical_reporting, revision_integrity, figure_provenance, manuscript_hygiene, literature_source_tasks
+    from scripts import citation_audit
+    from scripts.ref_verify_adapter import canonical_manuscript
+    paper = project / "papers" / pid
+    errors = []
+    documents = _documents if _documents is not None else {}
+    try:
+        main = canonical_manuscript(paper, error_type=ValueError)
+        from scripts.submission_package import safe_file
+        safe_file(main, paper)
+        before = citation_audit.manuscript_digest(main)
+        if main.suffix.lower() == ".docx":
+            document = revision_integrity.word_source(main, documents)
+            revision_integrity.scientific_text(main, document=document)
+            keys, mapping_errors = citation_audit.docx_citation_keys(main)
+            errors.extend(f"{pid} Word citation mapping: {issue}" for issue in mapping_errors)
+        else:
+            keys = citation_audit.tex_citation_keys(main)
+        if keys:
+            bibliography = paper / "manuscript/references.bib"
+            available = {row["key"] for row in citation_audit.parse_bibtex(bibliography.read_text(encoding="utf-8"))}
+            if keys - available:
+                errors.append(f"{pid} manuscript cites missing bibliography keys: " + ", ".join(sorted(keys - available)))
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        return [f"{pid} manuscript: {exc}"]
+    checks = [
+        ("full-text citation evidence", lambda: literature_source_tasks.integrity_errors(project, pid, require_support=False)),
+        ("selected figure provenance", lambda: figure_provenance.validate_figure_provenance(project, paper, include_visual=False)),
+        ("preserved originals", lambda: manuscript_hygiene.integrity_errors(project, pid)),
+    ]
+    facts = paper / "reviews/paper-facts.json"
+    if facts.is_file():
+        checks.append(("paper-facts", lambda: manuscript_audit.audit(project, main, facts)["errors"]))
+    if (paper / "statistical-reporting-map.json").is_file():
+        checks.append(("statistical reporting", lambda: statistical_reporting.audit(project, pid)["errors"]))
+    for label, check in checks:
+        try:
+            errors.extend(f"{pid} {label}: {issue}" for issue in check())
+        except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+            errors.append(f"{pid} {label}: {exc}")
+    try:
+        revision_integrity.verify_word_sources(documents)
+        if before != citation_audit.manuscript_digest(main):
+            errors.append(f"{pid} manuscript changed during scientific inspection")
+    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        errors.append(f"{pid} manuscript inspection: {exc}")
     return errors
 
 
-def paper_observations(project,pid,warnings,*,_documents=None):
-    """C: diagnostics never acquire data, call a model or grant scientific approval."""
-    if warnings is None:return
-    from scripts import academic_style,manuscript_hygiene,manuscript_language,statistical_watermarks,figure_layout,figure_provenance,revision_trace,revision_ledger,docx_revision,manuscript_docx,automated_visual_review,reviewer_rounds
-    paper=project/"papers"/pid
-    for label,check in (
-        ("academic style",lambda:academic_style.validate_saved_audit(paper)),
-        ("manuscript hygiene",lambda:manuscript_hygiene.validate_saved_report(project,pid)),
-        ("language observation",lambda:manuscript_language.analyze_submission(paper).get("errors",[])),
-        ("watermark observation",lambda:statistical_watermarks.validate_saved_report(project,pid)),
-        ("figure layout",lambda:figure_layout.validate_saved_figures(paper)),
-        ("figure appearance",lambda:figure_provenance.visual_observations(project,paper)),
-        ("manuscript appearance",lambda:manuscript_docx.visual_observations(paper) if (paper/"manuscript/main.docx").is_file()
-            else automated_visual_review.verify(project,pid,f"papers/{pid}/manuscript/main.tex") if (paper/"manuscript/main.tex").is_file() else []),
-        ("revision trace",lambda:revision_trace.validate_saved_report(paper,_documents=_documents)),
-        ("edit ledger",lambda:revision_ledger.validate_saved_report(project,pid,require_when_changed=True,_documents=_documents)),
-        ("Word revisions",lambda:docx_revision.validate_saved_report(project,pid,_documents=_documents)),
-        ("concern cards",lambda:reviewer_rounds.validate_concern_response(paper))):
-        _observe(warnings,f"{pid} {label}",check)
+def paper_observations(project, pid, warnings, *, _documents=None):
+    """Only requested diagnostics are observations; none certify science or block export."""
+    if warnings is None:
+        return
+    from scripts import academic_style, manuscript_hygiene, manuscript_language, statistical_watermarks, figure_layout, figure_provenance, revision_trace, revision_ledger, docx_revision, manuscript_docx, automated_visual_review, reviewer_rounds, revision_integrity
+    paper = project / "papers" / pid
+    documents = _documents if _documents is not None else {}
+    checks = [("language observation", lambda: manuscript_language.analyze_submission(paper).get("errors", []))]
+    optional = (
+        ("reviews/academic-style.json", "academic style", lambda: academic_style.validate_saved_audit(paper)),
+        ("reviews/statistical-watermarks.json", "watermark observation", lambda: statistical_watermarks.validate_saved_report(project, pid)),
+        ("figures/figure-provenance.json", "figure appearance", lambda: figure_provenance.visual_observations(project, paper)),
+        ("reviews/revision-trace.json", "revision trace", lambda: revision_trace.validate_saved_report(paper, _documents=documents)),
+        ("reviews/revision-ledger.json", "edit ledger", lambda: revision_ledger.validate_saved_report(project, pid, require_when_changed=False, _documents=documents)),
+        ("reviews/docx-revision.json", "Word revisions", lambda: docx_revision.validate_saved_report(project, pid, _documents=documents)),
+        ("reviews/revision-integrity.json", "revision comparison", lambda: revision_integrity.audit(paper, include_ledger=False, _documents=documents)["errors"]),
+        ("reviews/concern-response.json", "concern cards", lambda: reviewer_rounds.validate_concern_response(paper)),
+        ("reviews/docx-build.json", "Word appearance", lambda: manuscript_docx.visual_observations(paper)),
+        ("reviews/revision-render.json", "manuscript appearance", lambda: automated_visual_review.verify(project, pid,
+            f"papers/{pid}/manuscript/main.docx" if (paper / "manuscript/main.docx").is_file() else f"papers/{pid}/manuscript/main.tex")),
+    )
+    checks.extend((label, check) for relative, label, check in optional if (paper / relative).is_file())
+    for label, check in checks:
+        _observe(warnings, f"{pid} {label}", check)
+    if not (paper / "reviews/paper-facts.json").is_file():
+        warnings.append(f"{pid} claim support has not been assessed by a declared fact-to-source audit")
+    try:
+        revision_integrity.verify_word_sources(documents)
+    except (OSError, ValueError) as exc:
+        warnings.append(f"{pid} inspection changed: {exc}")
 
 
 def _real_work_minimal(gate):
@@ -186,23 +281,8 @@ def _minimal_hard_errors(slug,gate):
 
 
 def gate_errors(slug,gate,*,warnings=None):
-    """Full protocol by default; the opt-in real-work profile lowers ceremony only.
-
-    Nothing is faked: the hard checks below still require the owner's written
-    decision, three real candidates and one doctoral question, and G1/G2
-    approvals still need a named human --actor. Ceremonial, format-migration,
-    calibration and optional-validator checks become visible observations
-    instead of blockers. G2-G5 keep the full protocol until explicitly enabled
-    in config/real-work.json.
-    """
-    if _real_work_minimal(gate):
-        if warnings is not None:
-            warnings.append(
-                "real-work profile: ceremonial/format/calibration checks are non-blocking; "
-                f"run `python -m scripts.real_work full-check --project {slug}` to see the full protocol")
-        return _minimal_hard_errors(slug,gate)
+    """Compatibility diagnostics, never a prerequisite for selecting research work."""
     return _full_gate_errors(slug,gate,warnings=warnings)
-
 
 def _full_gate_errors(slug,gate,*,warnings=None):
     project=project_dir(slug);errors=[]
@@ -489,8 +569,6 @@ def _full_gate_errors(slug,gate,*,warnings=None):
         from scripts.research_phase import exploratory,requires_submission,SUBMISSION_PENDING
         try:
             prereg=read_json(paper/"preregistration.json") if (paper/"preregistration.json").is_file() else {}
-            if exploratory(project,pid) or prereg.get("research_phase")=="exploratory":
-                return errors+[f"{pid}: exploratory observations cannot enter G5; return to a reviewed confirmatory G3 protocol"]
         except (OSError,ValueError,KeyError,TypeError) as exc:return errors+[f"{pid} research phase: {exc}"]
         from scripts.supplemental_experiments import internal_errors
         errors.extend("internal follow-up: "+issue for issue in internal_errors(project,pid))
@@ -554,20 +632,32 @@ def paper_artifact_hash(slug,paper_id):
     from scripts.supplemental_experiments import internal_binding
     d.update(json.dumps(internal_binding(project_dir(slug),paper_id),sort_keys=True,separators=(",",":")).encode())
     return d.hexdigest()
+def _initialize_paper(dest,pid,count,minimum_q1=0,question=""):
+    paper=dest/"papers"/pid
+    if paper.exists():raise ResearchCtlError(f"Paper already exists: {pid}")
+    n=int(pid[1:])
+    negative_result_plan={"informative_if_unsupported":"","precision_limitations":"","stop_rule":"","claim_boundary":""}
+    for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
+    from scripts.research_identity import template as research_identity_template
+    write_json(paper/"research-identity.json",research_identity_template(pid))
+    try:
+        from scripts.venue_policy import default_target
+    except ImportError:
+        from venue_policy import default_target
+    write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":question,"distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","cloud_feasibility":{"current_paper_cloud_executable":False,"no_future_lab_dependency":False,"data_access_plan":"","cloud_execution_plan":"","evidence_and_claim_scope":""},"originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"negative_result_plan":negative_result_plan,"scientific_bindings":{"schema_version":"1.0","hypotheses":[],"falsification_conditions":[]},"dependencies":[],"dependency_bindings":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
+    write_text(paper/"reviews"/"citation-claims.jsonl","")
+    write_text(paper/"reviews"/"response-matrix.csv","comment_id,commitment_id,fulfillment_status,location,revised_text,unfulfilled_rationale\n")
+
 def initialize(args):
     slug=validate_slug(args.project);dest=project_dir(slug)
     if dest.exists():raise ResearchCtlError(f"Project already exists: {dest}")
-    defaults=read_json(DEFAULTS_PATH);count=args.paper_count if args.paper_count is not None else int(defaults["paper_count"])
+    defaults=read_json(DEFAULTS_PATH);count=args.paper_count if args.paper_count is not None else 1
     portfolio=defaults.get("venue_portfolio",{}) if isinstance(defaults.get("venue_portfolio"),dict) else {}
-    minimum_q1=int(portfolio.get("minimum_q1_papers",3))
-    if not 1<=count<=20:raise ResearchCtlError("paper-count must be between 1 and 20")
-    if count!=6:
-        if getattr(args,"command",None)=="init" or os.environ.get("DR_OS_ROUTING_PROFILE")=="production" or os.environ.get("DR_OS_ROUTING_CONFIG"):
-            raise ResearchCtlError("The supported doctoral workflow requires exactly six papers.")
-        print("Non-six-paper initialization is a partial low-level fixture; the complete doctoral workflow supports six papers only.")
+    minimum_q1=int(portfolio.get("minimum_q1_papers") or 0)
+    if not 1<=count<=99:raise ResearchCtlError("paper-count must be between 1 and 99")
     for rel in ["state","intake","program","evidence/claude-science","data/raw","data/processed","data/quality","experiments/runs","claims","reports","reviews/codex","reviews/independent"]:(dest/rel).mkdir(parents=True,exist_ok=True)
     write_json(dest/"intake"/"constraints.json",{"schema_version":"1.1","status":"needs_user_input","execution_mode":"cloud_only","research_goal":None,"researcher_background":None,"available_skills":[],"preferred_domains":[],"candidate_application_routes":[],"time_horizon_years":None,"target_submission_ready_date":None,"weekly_hours":None,"cash_budget_usd":None,"model_api_budget_cny":None,"cloud_compute_budget_usd":None,"local_compute":{"gpu":None,"ram_gb":None,"storage_gb":None},"equipment":"No institutional laboratory assumed","data_constraint":"Prefer public or authorized datasets","topic_quality_requirements":{"novelty_evidence_required":True,"doctoral_depth_required":True,"original_contribution_required":True,"current_papers_cloud_feasible_required":True},"ranking_weights":{"funded_position_supply":None,"job_market_and_salary":None,"future_growth_potential":None,"phd_position_competition":None,"job_market_competition":None,"background_fit":None,"application_route_fit":None},"excluded_domains":[],"ethics_or_legal_constraints":[],"notes":[],"human_review_required":True})
-    write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"GitHub Actions Linux runner","orchestrator":"Codex control and API-first cloud orchestrator","semantic_planner":"Claude/Anthropic read-only","persistent_writer":"OpenAI/Codex","independent_auditor":"model family different from persistent writer","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
+    write_json(dest/"intake"/"capabilities.json",{"schema_version":"1.0","status":"unverified","os":"GitHub Actions Linux runner","orchestrator":"Codex control and API-first cloud orchestrator","semantic_planner":"task-selected when useful","persistent_writer":"configured capable model","independent_auditor":"task-selected independent review when requested","evidence_workbench":"Claude Science export contract","checked_at":None,"environment_report":None})
     write_json(dest/"state"/"output-provenance.json",{"schema_version":"1.0","files":{}})
     from scripts.research_increments import initialize as initialize_increments
     initialize_increments(dest)
@@ -601,31 +691,49 @@ def initialize(args):
         write_text(dest / rel, "")
     write_text(dest/"claims/claim-evidence.csv","claim_id,paper_id,claim,evidence_ids,analysis_ids,comparison_ids,support,uncertainty,status\n")
     for n in range(1,count+1):
-        pid=f"P{n:02d}";paper=dest/"papers"/pid
-        for rel in ["manuscript","figures","tables","supplement","submission-materials","reviews","experiments","style"]:(paper/rel).mkdir(parents=True,exist_ok=True)
-        from scripts.research_identity import template as research_identity_template
-        write_json(paper/"research-identity.json",research_identity_template(pid))
-        try:
-            from scripts.venue_policy import default_target
-        except ImportError:
-            from venue_policy import default_target
-        write_json(paper/"paper-contract.json",{"schema_version":"2.0","paper_id":pid,"writing_language":"en","target_jcr_quartile":default_target(n,count,minimum_q1),"working_title":"","research_question":"","distinct_contribution":"","relationship_to_core":"","relationship_to_extension":"","cloud_feasibility":{"current_paper_cloud_executable":False,"no_future_lab_dependency":False,"data_access_plan":"","cloud_execution_plan":"","evidence_and_claim_scope":""},"originality_boundary":{"novel_elements":[],"reused_elements":[],"closest_prior_work_ids":[],"differentiation":"","claim_limitations":""},"hypotheses":[],"datasets":[],"planned_experiments":{"design_ids":[],"baseline_classes":[],"ablations":[],"primary_evaluation":"","statistical_plan":"","external_validity_plan":"","reproducibility_plan":""},"falsification_conditions":[],"negative_result_plan":negative_result_plan,"scientific_bindings":{"schema_version":"1.0","hypotheses":[],"falsification_conditions":[]},"dependencies":[],"dependency_bindings":[],"independence":{"unique_claim_ids":[],"shared_assets":[],"overlap_with_other_papers":[],"why_not_merge":""},"target_venues":[],"status":"draft"})
-        write_text(paper/"reviews"/"citation-claims.jsonl","")
-        write_text(paper/"reviews"/"response-matrix.csv","comment_id,commitment_id,fulfillment_status,location,revised_text,unfulfilled_rationale\n")
+        _initialize_paper(dest,f"P{n:02d}",count,minimum_q1,getattr(args,"question","") if n==1 else "")
     state={"schema_version":"2.0","project":slug,"created_at":now(),"updated_at":now(),"stage_index":0,"stage":"intake","gate":"G0","status":"awaiting_work","active_paper":"P01","paper_count":count,"paper_statuses":{f"P{n:02d}":"active" if n==1 else "planned" for n in range(1,count+1)},"approved_gates":[],"approvals":[],"history":[{"at":now(),"event":"project_initialized","stage":"intake"}]};save_state(slug,state)
+    question=getattr(args,"question","").strip()
+    if question:
+        constraints=read_json(dest/"intake/constraints.json");constraints["research_goal"]=question;write_json(dest/"intake/constraints.json",constraints)
+        core=read_json(dest/"program/core-thesis.json");core["doctoral_question"]=question;write_json(dest/"program/core-thesis.json",core)
+        write_text(dest/"program/topic.md",question+"\n")
     venue_id=args.venue or defaults.get("trial_venue")
     if venue_id:set_venue_values(slug,"P01",venue_id)
     print(f"Initialized {dest}")
+def add_paper(args):
+    state=load_state(args.project);project=project_dir(args.project)
+    existing=[path.name for path in (project/"papers").glob("P[0-9][0-9]") if path.is_dir()]
+    next_number=max([int(pid[1:]) for pid in existing],default=0)+1
+    if next_number>99:raise ResearchCtlError("This project already has 99 papers")
+    pid=f"P{next_number:02d}"
+    _initialize_paper(project,pid,next_number,question=getattr(args,"question","").strip())
+    state["paper_count"]=next_number
+    state.setdefault("paper_statuses",{})[pid]="planned"
+    state.setdefault("history",[]).append({"at":now(),"event":"paper_added","paper_id":pid,"scientific_approval_granted":False})
+    save_state(args.project,state)
+    if getattr(args,"select",False):select_work(args.project,paper_id=pid)
+    print(json.dumps({"project":args.project,"paper_id":pid,"selected":getattr(args,"select",False)},ensure_ascii=False))
+
+
 def print_status(args):
-    state=load_state(args.project);warnings=[];errors=gate_errors(args.project,state["gate"],warnings=warnings);out={**state,"gate_ready":not errors and state["gate"] is not None,"gate_errors":errors,"gate_warnings":warnings,"gate_error_groups":summarize_gate_errors(errors)}
-    if state["gate"]=="G0":
-        from scripts.intake_validation import guidance
-        out["intake_guidance"]=guidance(read_json(project_dir(args.project)/"intake/constraints.json"))
+    state=load_state(args.project);work=current_work(args.project)
+    from scripts import model_spend
+    spend=model_spend.read(project_dir(args.project))
+    out={**state,"current_work":work,"budget":None if spend is None else {
+        "authorized_ceiling_cny":spend["authorized_ceiling_cny"],"spent_cny":spend["spent_cny"],
+        "reserved_cny":model_spend.reserved(spend)},"legacy_checks_requested":bool(getattr(args,"legacy_checks",False))}
+    if out["legacy_checks_requested"]:
+        warnings=[];errors=gate_errors(args.project,state["gate"],warnings=warnings)
+        out.update(gate_ready=not errors and state["gate"] is not None,gate_errors=errors,gate_warnings=warnings,
+                   gate_error_groups=summarize_gate_errors(errors))
     if args.json:print(json.dumps(out,ensure_ascii=False,indent=2));return
-    print(f"Project: {state['project']}\nStage:   {state['stage']}\nGate:    {state['gate'] or '-'}\nStatus:  {state['status']}\nReady:   {'yes' if not errors else 'no'}")
-    print_gate_error_groups(out["gate_error_groups"])
-    for warning in warnings:print("  warning: "+warning)
-    for item in out.get("intake_guidance",{}).get("questions",[]):print("  intake: "+item["question"])
+    print(f"Project: {state['project']}\nPaper:   {work['paper_id']}\nTask:    {work['task'] or '(choose the next useful research action)'}\nStatus:  {work['status']}")
+    if out["budget"]:print("Budget:  "+json.dumps(out["budget"],ensure_ascii=False))
+    if out["legacy_checks_requested"]:
+        print_gate_error_groups(out["gate_error_groups"])
+        for warning in out["gate_warnings"]:print("  observation: "+warning)
+
 def print_gate_error_groups(groups):
     summary=f"{len(groups)} issue group(s), {sum(group['count'] for group in groups)} check messages"
     if groups:print(f"Checks: {summary}")
@@ -744,8 +852,10 @@ def set_venue(args):load_state(args.project);set_venue_values(args.project,args.
 def list_stages(_):print(json.dumps(STAGES,indent=2))
 def parser():
     root=argparse.ArgumentParser(description=__doc__);cmd=root.add_subparsers(dest="command",required=True)
-    p=cmd.add_parser("init");p.add_argument("--project",required=True);p.add_argument("--paper-count",type=int);p.add_argument("--venue",default=None);p.set_defaults(func=initialize)
-    p=cmd.add_parser("status");p.add_argument("--project",required=True);p.add_argument("--json",action="store_true");p.set_defaults(func=print_status)
+    p=cmd.add_parser("init");p.add_argument("--project",required=True);p.add_argument("--paper-count",type=int);p.add_argument("--venue",default=None);p.add_argument("--question",default="");p.set_defaults(func=initialize)
+    p=cmd.add_parser("status");p.add_argument("--project",required=True);p.add_argument("--json",action="store_true");p.add_argument("--legacy-checks",action="store_true");p.set_defaults(func=print_status)
+    p=cmd.add_parser("work");p.add_argument("--project",required=True);p.add_argument("--task",default="");p.add_argument("--paper");p.add_argument("--stage",choices=[row["name"] for row in STAGES[:-1]]);p.set_defaults(func=select_work_command)
+    p=cmd.add_parser("add-paper");p.add_argument("--project",required=True);p.add_argument("--question",default="");p.add_argument("--select",action="store_true");p.set_defaults(func=add_paper)
     p=cmd.add_parser("gate-check");p.add_argument("--project",required=True);p.add_argument("--gate");p.set_defaults(func=check_gate)
     p=cmd.add_parser("ready");p.add_argument("--project",required=True);p.add_argument("--note",default="");p.set_defaults(func=mark_ready)
     p=cmd.add_parser("reopen");p.add_argument("--project",required=True);p.add_argument("--note",required=True);p.set_defaults(func=reopen)

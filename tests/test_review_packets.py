@@ -76,6 +76,35 @@ def visual_fixture(project):
 
 
 class ReviewPacketTests(unittest.TestCase):
+    def test_current_human_inspection_needs_no_duplicate_machine_review(self):
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary); packet = visual_fixture(project); packets.refresh(project)
+            checks = {key: True for key in packet["artifacts"][0]["checklist"]}
+            value = {"rater_id": "reviewer-b", "independent": True, "independence_note": "Independent rendered PDF inspection",
+                     "inspections": [{"artifact_id": "main-pdf", "checks": checks, "note": "Inspected current rendered material"}]}
+            path, receipt = packets.create_confirmation(project, "visual-one", "Owner", value); write(path, receipt)
+            with patch("scripts.automated_visual_review.verify", return_value=["No optional model inspection"]):
+                self.assertEqual(packets.validate_gate_reviews(project, "P01"), [])
+                self.assertEqual(packets.audit(project)["packets"][0]["review_status"], "human_observations_recorded")
+
+    def test_named_reviewer_can_correct_a_mistaken_observation_with_preserved_history(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            project = Path(temporary); packet = visual_fixture(project); packets.refresh(project)
+            checks = {key: True for key in packet["artifacts"][0]["checklist"]}
+            value = {"rater_id": "reviewer-b", "independent": True, "independence_note": "Independent rendered PDF inspection",
+                     "inspections": [{"artifact_id": "main-pdf", "checks": {**checks, "math_symbols": False}, "note": "Suspected symbol issue"}]}
+            path, receipt = packets.create_confirmation(project, "visual-one", "Owner", value); write(path, receipt)
+            prior = receipt["attempts"][0]["attempt_sha256"]
+            value["inspections"][0]["checks"] = checks
+            value.update(correction_of=prior, correction_reason="The symbol is defined correctly in the inspected source; the first flag was mistaken.")
+            path, receipt = packets.create_confirmation(project, "visual-one", "Owner", value); write(path, receipt)
+            self.assertEqual(packets.validate_gate_reviews(project, "P01"), [])
+            attempts = packets.audit(project)["packets"][0]["confirmations"][0]["attempts"]
+            self.assertEqual(len(attempts), 2)
+            self.assertTrue(attempts[0]["superseded"])
+            self.assertFalse(attempts[0]["judgments"]["inspections"][0]["checks"]["math_symbols"])
+
     def test_blind_labels_stable_and_private_metadata_never_enters_materials(self):
         with tempfile.TemporaryDirectory() as temporary:
             project = Path(temporary)

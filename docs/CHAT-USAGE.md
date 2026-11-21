@@ -1,90 +1,51 @@
-# 只用 Codex 聊天框管理论文项目
+# 在聊天中推进研究
 
-最自然的用法是在 Codex 中打开本仓库，然后直接说研究目标。Codex 负责读取状态、
-调用确定性脚本、安排外部模型、检查证据与闸门；长篇写作和修订由配置的 GPT API
-承担。Claude 只做不可发表的规划与独立审查，不能写正文、图表文字或任何最终
-投稿产物。
+在 Codex、Claude 或当前可用的助手中打开仓库，直接给出研究问题、已有材料和希望得到的成果。助手读取相关证据，选择工具，完成实际工作并继续；模型品牌不限制谁能写正文。需要独立复核时再安排相应任务。
 
-## API 兼容命令入口
+## 可以直接这样说
 
-`autopilot.py` 保留以下命令，并复用正式 API 科研周期和既有累计预算：
+- “从这个问题开始一个项目，先读最接近的原始工作，形成可检验的研究问题。”
+- “继续 P01，核对已有结果，完成能被证据支持的结果与讨论部分。”
+- “比较这两种解释，找一个成本合适、能区分它们的试验。”
+- “审查这组实验的独立单位、数据泄漏和不确定性；保留失败与不利结果。”
+- “把已有结果做成图表并检查实际渲染，给我可编辑源文件。”
+- “按这个目标期刊整理投稿包，核对文件和引用。”
 
-```bash
-python3 scripts/autopilot.py start --project my-phd --context '研究目标与约束'
-python3 scripts/autopilot.py resume --project my-phd
-python3 scripts/autopilot.py plan --project my-phd
-```
+候选数、论文数、方法、语言和交付格式由课题与用户目标决定。可以边读、边试、边写；探索、确认性检验、原文事实与推断应如实区分。未读的全文、尚未运行的实验和缺失结果不能写成已完成。
 
-`plan` 不发请求、不写状态；`start` 不覆盖既有项目。生产配置保留当前模型、
-角色和推理档位；非生产 API 配置可显式指定三个 `--*-provider`。
-旧 Claude Code/Codex 本地订阅进程、即时工具与任意 shell 后端已经退休。
-历史 `scripts/start.sh --cli` 别名现在也执行 API 调用，不使用本地订阅。
-`--claude-mode`、`--timeout`、`--max-output-bytes`、`--claude-max-budget-usd`
-会给出迁移错误；字节不会换算成 token。输出上限使用
-`--max-output-tokens` 和 `--control-max-output-tokens`，传输超时使用现有 API
-路由配置。实际费用、失败预留和模型身份记录在既有 API 用量账本中；旧进程
-日志由 Git 和原项目历史保留。实验仍只能使用冻结协议下的执行器，不自动投稿。
-
-首次使用时先在 Windows PowerShell 从仓库根目录 `D:\ad\lunwen` 运行 `scripts\install-d-drive.ps1`。它把项目环境和缓存放在 D 盘，并检查 WSL2 与 Docker Desktop 的大体积数据没有留在 C 盘。项目 `.mcp.json` 注册的 `doctoral-research-os` 提供四个零成本只读工具：`research_context` 一次完成项目发现、自然语言路由、状态与下一步聚合，`research_projects` 列出项目，`research_route` 单独路由，`research_status` 单独读取阶段。它们都不能启动付费调用、批准闸门或投稿。
-
-## 推荐说法
-
-首次开始：
-
-> 请在这个仓库中创建六篇论文项目。目标是至少三篇当前 JCR Q1，其余至少 Q2，
-> 全部 SCI/SCIE 且 JIF 大于 1。我的研究约束是……请先完成 G0，不要替我批准闸门。
-
-继续工作：
-
-> 请读取当前项目状态，继续下一个尚未完成的步骤。先告诉我会发生哪些计费调用；
-> 完成后检查所有确定性闸门，不要自动批准或投稿。
-
-检查质量：
-
-> 请审查六篇论文当前的证据、实验、统计功效、引文、区分度、期刊匹配和模型费用，
-> 把阻断项按严重程度排序。不要修改文件。
-
-运行已批准实验：
-
-> G3 已由我具名批准。请只运行批准清单中的实验，保存哈希、环境和失败记录，并用
-> 本地 Python 从真实结果生成英文出版级图表。
-
-最终打包：
-
-> 请对 P01 执行 G5 最终检查。若且仅若当前投稿阶段全部检查、自动 G5 决定与既有 G1/G2 选题决定有效，生成本地投稿包；
-> 不要登录期刊网站或替我提交。
-
-## Codex 会怎样节约额度
-
-- 优先读取 `state/run.json`、结构化清单和失败报告，不反复重读整个仓库。
-- 聊天入口优先调用一次 `research_context`；只有需要展开细节时才读取具体 Skill 和产物，避免重复消耗上下文。
-- 用本地脚本完成哈希、数据质量、统计验证、绘图、引文检查和打包。
-- 只把当前论文的完整内容发给写作模型；其他论文只发送研究合同，以保留六篇之间
-  的约束和区分度。
-- 规划和独立审查默认最多输出 4,000 tokens；GPT 写作/修订默认最多 12,000。
-- 只有端点、模型、协议、参数、system prompt 和用户 prompt 全部完全相同时才使用
-  零成本缓存，不用相似缓存冒充新审查。
-- 项目与单篇硬预算默认分别为 300 元和 60 元；达到上限会在调用前阻断。
-- 辅助任务按最低质量层、科研风险、24 小时端点健康和精确人民币单价路由；高风险科学判断不会仅按最低价格选择。
-
-查看实际费用不产生模型调用：
+## 对应命令
 
 ```bash
-python3 scripts/api_orchestrator.py cost my-phd
-python3 scripts/api_orchestrator.py cost my-phd --paper P01
+python3 -m scripts.researchctl init --project my-research --question '当前研究问题'
+python3 -m scripts.researchctl work --project my-research --paper P01 --task '核对最近工作并设计下一项检验'
+python3 -m scripts.researchctl status --project my-research --json
+python3 -m scripts.autopilot plan --project my-research --context '根据现有证据继续'
 ```
 
-直接说“帮 P01 画 ROC/箱线/火山图，先画像并核对数据”“把 P01 的方法流程做成可编辑架构图”“从已执行的检索回执做系统综述筛选和 PRISMA”“导入 D 盘 Zotero/Obsidian 文件夹”“把 D 盘合法持有的 PDF 按页做阅读卡片（需要时付费翻译）”“根据核对过的原文和页码做一份可编辑组会 PPT”“核对 P01 的 paper-facts、理论测量链和数学符号”“把审稿意见拆成 concern cards 和编辑摘要”“把 Markdown 转成有实际渲染和自动视觉检查的 Word 主稿”“先估算一次低成本抽取任务”等，Codex 会先经 MCP 零成本路由，再使用对应 Skill 和确定性脚本。详细格式和命令见 [`NEW-CAPABILITIES.md`](NEW-CAPABILITIES.md)。
+以上用于建立、记录或查看任务，不调用付费模型。配置了可用端点、模型与实际项目额度后，可以运行：
 
-当你明确要求、且当前 ChatGPT Work/桌面浏览器可用时，可以人工登录网页工具、导出合法文件，再由脚本导入并记录哈希。ChatGPT 网页版不是后台 API，不复用 Cookie 或绕过验证码；Codex CLI 不自动共享网页会话。GPT Image 插图须标为概念插图，公开 AI 使用声明可由作者编辑。
+```bash
+python3 -m scripts.autopilot start --project my-research --context '根据现有证据继续'
+python3 -m scripts.autopilot resume --project my-research --paper P01 --context '完成当前任务'
+```
 
-如果正文被截断，应提高写作上限或拆分任务，不应为了省 token 接受残缺论文。费用
-优化的顺序是减少重复上下文、复用确定性计算、使用精确缓存，最后才是缩短必要输出。
+`start` 兼容已有项目；`resume` 接续当前工作。`--stage` 是兼容任务标签，不是必须先通过的科研审批。新项目默认一篇；新证据形成独立贡献时，用 `researchctl add-paper --project my-research --question '新问题'` 追加。
 
-## 凭据与人工边界
+普通工作无需切换 `DR_OS_WORK_PROFILE`，也不要求先执行 G0–G5。`gate-check/ready/approve/advance` 和 `real_work` 工具保留用于旧记录与特定操作，见[兼容说明](REAL-WORK-QUICKSTART.md)。
 
-API key 只通过 Dashboard 当前进程或 WSL2 环境变量输入，不要粘贴进聊天、提交到
-Git，也不要创建仓库 `.env`。SciencePro 没有正式 API 时，由用户自己登录和完成
-验证码/双重验证，再把合法导出的文件交给导入脚本；Codex 不复用 Cookie、不逆向
-隐藏接口。当前 JCR 分区、科学解释、作者责任、最终 PDF/DOCX 检查和所有
-投稿动作始终由具名研究者确认。
+## 材料、工具和费用
+
+提供当前任务所需的原文、数据或准确路径即可。项目中的其他文件不会因存在而自动算作已读。大材料应按科学问题选取完整相关部分，记录范围并保留原始材料；不能为节省上下文删去改变解释的反证。
+
+MCP 的 `research_context`、`research_projects`、`research_route`、`research_status` 可用于发现项目和查看下一步；它们本身不启动付费模型。确定性脚本负责可复现的计算、解析、绘图与文件转换，模型用于需要判断的工作。选择当前可用的本地或云环境；D 盘、WSL2、GitHub runner 和全部可选包都不是聊天前提。
+
+沿用实际授权和累计额度，不为每个已授权步骤重新询问。创建项目不授予支出，历史默认金额不是余额。计费凭据和未知费用状态按真实账本处理，失败调用也保留；额度不足时继续可完成的免费工作。费用查看不调用模型：
+
+```bash
+python3 -m scripts.api_orchestrator cost my-research
+python3 -m scripts.api_orchestrator cost my-research --paper P01
+```
+
+密钥通过实际运行环境提供，不写入论文或 Git。已有会话授权不会由技能文本扩张；代外部发布或提交需要实际用户授权。生成本地包、完成软件测试、模型给出好评，分别只说明相应工作完成。
+
+常用方法见 [skills](../skills/)、[工作流程](../references/workflow.md)和[科研诚信](../references/research-integrity.md)。历史日期文档保留其当时的事实，不用于推断今日服务状态或新增审批。

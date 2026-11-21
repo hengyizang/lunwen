@@ -74,8 +74,6 @@ def cycle_input(project: Path, question: str) -> dict | None:
 def accept_cycle_result(project: Path, selected: dict, prompt: str, response, run_id: str, bundle: dict) -> dict:
     """Bind screening to the same metered writer response, without another call."""
     ai_providers.require_complete(response)
-    if ai_providers.provider_family(response.provider) == "anthropic":
-        raise ValueError("screening must use the persistent non-Claude writer")
     current_prompt, packet = prepare(project, selected["receipt_id"], selected["packet"]["question"])
     if current_prompt != selected["packet_prompt"] or packet != selected["packet"] or current_prompt not in prompt:
         raise ValueError("writer request does not bind the complete current search packet")

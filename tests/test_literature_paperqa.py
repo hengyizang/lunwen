@@ -78,7 +78,7 @@ class PaperQABridgeTests(WorkbenchFixture):
             bad = copy.deepcopy(self.spec)
             bad["semantic"]["sha256"] = "0" * 64
             write(self.project / bridge.REQUEST, bad)
-            with self.assertRaisesRegex(ValueError, "exact current semantic"):
+            with self.assertRaisesRegex(ValueError, "semantic report binding changed"):
                 bridge.refresh(self.project)
             bad = copy.deepcopy(self.spec)
             bad["retrieval"]["question"] = "What grows in the garden?"

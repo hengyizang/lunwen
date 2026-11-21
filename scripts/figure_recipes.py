@@ -217,9 +217,11 @@ def draw(ax: Any, panel: dict[str, Any], frame: Any, np: Any, pd: Any,
                 raise ValueError("stacked_bar needs one row per category and group")
             baseline = np.zeros(len(categories))
             for index, (name, group) in enumerate(groups):
-                vals = group.set_index(group[x].astype(str))[y].reindex(categories).fillna(0).to_numpy(dtype=float)
+                # Absent category/group pairs and explicitly missing values
+                # are unknown measurements, not observed zero contributions.
+                vals = pd.to_numeric(group.set_index(group[x].astype(str))[y], errors="raise").reindex(categories).to_numpy(dtype=float)
                 if not np.isfinite(vals).all() or np.any(vals < 0):
-                    raise ValueError("stacked values must be nonnegative and finite")
+                    raise ValueError("stacked values must be nonnegative and finite; missing cells require explicit source values, not zero imputation")
                 ax.bar(categories, vals, bottom=baseline, color=palette[index], label=str(name)); baseline += vals
         else:
             if frame[x].astype(str).duplicated().any():

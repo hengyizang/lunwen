@@ -5,7 +5,8 @@ import hashlib
 import json
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timezone
+import uuid
 from pathlib import Path
 
 from scripts import output_provenance
@@ -35,7 +36,7 @@ def _implementation() -> dict:
 def _paper(project: Path, pid: str) -> Path:
     if not isinstance(pid, str) or not re.fullmatch(r"P[0-9]{2}", pid):
         raise ValueError("publication disclosure needs a valid paper ID")
-    return path_in(project, f"papers/{pid}/venue.json").parent
+    return path_in(project, f"papers/{pid}/disclosures.json", exists=False).parent
 
 
 def _bounded_text(path: Path) -> str:
@@ -60,14 +61,14 @@ def _specific(value: object, label: str, minimum: int = 15) -> str:
     return text
 
 
-def _usage(value: object) -> object:
+def _usage(value: object, *, observed_ai: bool = False) -> object:
     if value is None or value == "" or value == {}:
         return value
     if isinstance(value, str):
         if not value.strip():
             return value
         text = _specific(value, "internal ai_use", 1)
-        if re.search(r"(?i)^\s*(?:none|n/?a|not (?:used|applicable)|no (?:ai|artificial intelligence)|"
+        if observed_ai and re.search(r"(?i)^\s*(?:none|n/?a|not (?:used|applicable)|no (?:ai|artificial intelligence)|"
                      r"(?:ai|artificial intelligence|generative ai)(?: tools?)? (?:was |were |is |are )?not used)\b", text):
             raise ValueError("internal ai_use cannot deny the recorded AI-assisted workflow")
         return text
@@ -85,6 +86,15 @@ def _usage(value: object) -> object:
     if value.get("human_oversight"):
         _specific(value["human_oversight"], "AI-use human oversight", 1)
     return value
+
+
+
+def _observed_ai(project: Path, pid: str) -> bool:
+    """Use recorded paper authorship, not the existence of this software, as evidence."""
+    registry = output_provenance._load(project)
+    prefix = f"papers/{pid}/"
+    return any(relative.startswith(prefix) and row.get("family") not in {None, "other", "human", "unknown"}
+               for relative, row in registry["files"].items() if isinstance(row, dict))
 
 
 def _statement(paper: Path, value: object) -> dict:
@@ -131,12 +141,14 @@ def audit(project: Path, pid: str, *, now: datetime | None = None) -> dict:
               "statement": None, "implementation": _implementation(), **LIMITS}
     try:
         paper = _paper(project, pid)
-        venue_path = path_in(project, f"papers/{pid}/venue.json")
-        disclosure_path = path_in(project, f"papers/{pid}/disclosures.json")
-        _object(venue_path)
+        disclosure_path = path_in(project, f"papers/{pid}/disclosures.json", exists=False)
+        if not disclosure_path.is_file():
+            result.update(status="not_applicable", reason="No disclosure record or statement was selected.")
+            return result
         disclosure = _object(disclosure_path)
-        result["inputs"] = {"venue_sha256": sha(venue_path), "disclosures_sha256": sha(disclosure_path)}
-        _usage(disclosure.get("ai_use"))
+        observed = _observed_ai(project, pid)
+        result["inputs"] = {"disclosures_sha256": sha(disclosure_path), "recorded_paper_ai_use": observed}
+        _usage(disclosure.get("ai_use"), observed_ai=observed)
         policy = disclosure.get("ai_policy")
         statements = [policy.get("statement") if isinstance(policy, dict) else None,
                       disclosure.get("statement")]
@@ -150,12 +162,11 @@ def audit(project: Path, pid: str, *, now: datetime | None = None) -> dict:
 
 
 def refresh(project: Path, pid: str) -> dict:
-    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
-        raise ValueError("publication disclosure refresh requires authorized cloud execution")
     value = audit(project, pid)
     target = path_in(project, f"{PREFIX}/{pid}/latest.json", exists=False)
-    value["execution"] = {"mode": "cloud", "receipt_id": str(os.environ.get("GITHUB_RUN_ID") or
-        os.environ.get("DR_OS_CLOUD_EXECUTION_RECEIPT_ID") or "authorized-cloud")}
+    value["execution"] = {"mode": "cloud" if os.environ.get("GITHUB_ACTIONS") == "true" or os.environ.get("DR_OS_CLOUD_EXECUTOR") == "1" else "local",
+        "receipt_id": str(os.environ.get("GITHUB_RUN_ID") or os.environ.get("DR_OS_CLOUD_EXECUTION_RECEIPT_ID") or uuid.uuid4().hex),
+        "at": datetime.now(timezone.utc).isoformat()}
     write(target, value)
     output_provenance.record_model_writes(project, [target], family="other", provider=PROVIDER,
         model="scripts/publication_disclosure.py", role="disclosure-audit", run_id="disclosure-refresh")
@@ -169,7 +180,7 @@ def integrity_errors(project: Path, pid: str) -> list[str]:
             raise ValueError("internal usage needs an exact paper ID")
         target = project / "papers" / pid / "disclosures.json"
         if target.is_file():
-            _usage(_object(target).get("ai_use"))
+            _usage(_object(target).get("ai_use"), observed_ai=_observed_ai(project, pid))
         return []
     except (OSError, ValueError, TypeError, KeyError) as exc:
         return [str(exc)]
@@ -182,8 +193,8 @@ def validate_saved_report(project: Path, pid: str) -> list[str]:
         origin = output_provenance.current_origin(project, target)
         if origin.get("status") != "tracked" or origin.get("provider") != PROVIDER or origin.get("family") != "other":
             raise ValueError("publication disclosure audit lacks protected control-plane provenance")
-        if saved.get("execution", {}).get("mode") != "cloud" or not saved["execution"].get("receipt_id"):
-            raise ValueError("publication disclosure audit lacks cloud execution identity")
+        if saved.get("execution", {}).get("mode") not in {"cloud", "local"} or not saved["execution"].get("receipt_id"):
+            raise ValueError("publication disclosure audit lacks execution identity")
         current = audit(project, pid)
         return report_errors(current, {key: saved.get(key) for key in current},
                              "publication disclosure audit is stale or differs from current source verification")

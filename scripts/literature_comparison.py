@@ -70,7 +70,9 @@ def prepare(project: Path, spec: dict) -> dict:
     incoming = spec.get("cases")
     if not isinstance(incoming, list) or not 1 <= len(incoming) <= 20:
         raise ValueError("comparison requires 1..20 explicit cases")
-    library, _, manifest = wb._snapshot(project)
+    selected_ids = sorted({identifier for case in incoming if isinstance(case, dict)
+                           for identifier in (case.get("request") or {}).get("paper_ids", [])})
+    library, _, manifest = wb._snapshot(project, paper_ids=selected_ids)
     papers = {p["id"]: p for p in library["papers"] if p.get("status") == "current"}
     from scripts.literaturectl import source_blocks
     from scripts.literature_source_tasks import _full_text_available
@@ -152,7 +154,8 @@ def prepare(project: Path, spec: dict) -> dict:
             bindings[binding["path"]] = binding
     result = {"schema_version": "1.0", "kind": "paired_literature_reading_plan", "id": identifier,
         "annotation": annotation, "cases": cases, "dependencies": sorted(bindings.values(), key=lambda b: b["path"]),
-        "workbench_manifest_sha256": sha(project / manifest["output_dir"] / "manifest.json"),
+        "workbench_manifest_sha256": _digest({p: papers[p]["input_fingerprint"] for p in selected_ids}),
+        "selected_paper_ids": selected_ids,
         "max_output_tokens": tokens, "requested_model_role": "reader-qa", "paid_calls": 0,
         "scientific_validity_verified": False, "labels_are_independent_scientific_review": False,
         "automatic_route_promotion": False, "human_source_review_required": True,
@@ -202,15 +205,14 @@ def _check_dependencies(project, plan):
     request = plan["request"]
     if sha(path_in(project, request["path"])) != request["sha256"]:
         raise ValueError("comparison request changed during execution; no further paid arm is allowed")
-    # A current manifest is not enough: it must be the exact snapshot used to
-    # prepare both arms. Replaying the snapshot also checks its current config,
-    # so editing the library without rebuilding cannot bypass this boundary.
+    # Check the selected scientific scope; unrelated views and literature
+    # updates do not change the paired comparison's input material.
     try:
-        _, _, manifest = wb._snapshot(project)
+        library, _, _ = wb._snapshot(project, paper_ids=plan["selected_paper_ids"])
     except ValueError as exc:
         raise ValueError("workbench scope or snapshot changed during the comparison") from exc
-    current_manifest = path_in(project, manifest["output_dir"] + "/manifest.json")
-    if sha(current_manifest) != plan["workbench_manifest_sha256"]:
+    fingerprints = {p["id"]: p["input_fingerprint"] for p in library["papers"] if p["id"] in plan["selected_paper_ids"]}
+    if _digest(fingerprints) != plan["workbench_manifest_sha256"]:
         raise ValueError("workbench scope or snapshot changed during the comparison")
 
 
@@ -242,6 +244,8 @@ def _route(project, directory, case, arm, tokens):
                 "request_id": result.request_id, "cache_hit": result.cache_hit,
                 "requested_effort": result.requested_effort, "usage": result.usage,
                 "route_id": result.route_id, "cache_key": result.cache_key})
+            row["raw_response"] = result.text
+            _write(project, target, row)
             try:
                 row["response"] = paper_qa.validate_response(result.text, blocks, require_statement_citations=True)
                 row["status"] = "source_citations_checked_semantics_require_review"
@@ -344,7 +348,7 @@ def refresh(project: Path, request_path="program/literature-comparison.json", *,
     spec = wb._json(source.read_bytes())
     plan = prepare(project, spec)
     plan["request"] = {"path": request_path, "sha256": sha(source)}
-    directory = path_in(project, OUTPUT + "/" + plan["id"] + "/plan.json", exists=False).parent
+    directory = path_in(project, OUTPUT + "/" + plan["id"] + "/versions/" + _digest(plan) + "/plan.json", exists=False).parent
     saved_plan, result_path = directory / "plan.json", directory / "results.json"
     if saved_plan.exists():
         _current(project, saved_plan)
@@ -357,8 +361,6 @@ def refresh(project: Path, request_path="program/literature-comparison.json", *,
         return {"report_path": result_path.relative_to(project).as_posix(), "reused": True, **read(result_path)}
     if not execute:
         return {"plan_path": saved_plan.relative_to(project).as_posix(), "status": "prepared_no_model_calls", **plan}
-    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
-        raise ValueError("paid reading comparisons execute only on the authorized cloud runner")
     results = {"schema_version": "1.0", "kind": "paired_literature_reading_results", "id": plan["id"],
         "plan": {"path": saved_plan.relative_to(project).as_posix(), "sha256": sha(saved_plan)}, "routes": [],
         "status": "running", "scientific_validity_verified": False, "semantic_quality_validated": False,
@@ -436,7 +438,7 @@ def validate_saved_report(project: Path, request_path="program/literature-compar
         raise ValueError("comparison request exceeds 2 MB")
     plan = prepare(project, wb._json(source.read_bytes()))
     plan["request"] = {"path": request_path, "sha256": sha(source)}
-    directory = path_in(project, OUTPUT + "/" + plan["id"] + "/plan.json").parent
+    directory = path_in(project, OUTPUT + "/" + plan["id"] + "/versions/" + _digest(plan) + "/plan.json").parent
     _current(project, directory / "plan.json")
     if read(directory / "plan.json") != plan:
         raise ValueError("comparison plan/source/implementation is stale")

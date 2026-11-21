@@ -272,10 +272,7 @@ def run_automatic_discovery(
         fetcher=fetcher,
     )
     successful_calls = sum(1 for item in report["providers"] if item.get("status") == "ok")
-    if successful_calls == 0:
-        raise AutomaticDataDiscoveryError(
-            "all approved dataset sources failed; the model cycle was stopped before paid calls"
-        )
+    report["status"] = "complete" if successful_calls == len(report["providers"]) else "partial" if successful_calls else "sources_unavailable"
     apply_automatic_screening(report)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     output = project_root / "data" / f"discovery-broad-auto-{stamp}.json"
@@ -286,6 +283,7 @@ def run_automatic_discovery(
     summary = report["automatic_screening_summary"]
     return {
         "report_path": output.relative_to(project_root).as_posix(),
+        "status": report["status"],
         "queries": queries,
         "provider_calls": len(report["providers"]),
         "successful_provider_calls": successful_calls,

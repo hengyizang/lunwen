@@ -139,7 +139,8 @@ class LiteratureEvidenceTests(unittest.TestCase):
                 fetcher=self.openalex_response,
             )
             records = [json.loads(line) for line in (project / "evidence" / "search-log.jsonl").read_text().splitlines()]
-            self.assertTrue(any("recorded screening decision" in item for item in validate_search_evidence(project, records)))
+            self.assertEqual(validate_search_evidence(project, records), [])
+            self.assertTrue(any("recorded screening decision" in item for item in validate_search_evidence(project, records, require_screening=True)))
             record = screen_receipt(
                 project,
                 receipt["receipt_id"],

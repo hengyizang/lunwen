@@ -13,6 +13,23 @@ from scripts import figure_layout
 
 
 class PublicationFigureTests(unittest.TestCase):
+    def test_scatter_renders_actual_offsets_and_legend_without_line_only_arguments(self):
+        from scripts import publication_figures as figures
+        with tempfile.TemporaryDirectory() as directory:
+            project, path, spec = self.panel_fixture(directory)
+            spec["panels"] = [{**spec["panels"][0], "kind": "scatter"}]
+            spec["formats"] = ["svg", "pdf"]
+            path.write_text(json.dumps(spec))
+            observed = []
+            original = figures._draw_standard
+            def draw(ax, panel, frame, np):
+                original(ax, panel, frame, np)
+                observed.extend(ax.collections[0].get_offsets().tolist())
+            with patch.object(figures, "_draw_standard", side_effect=draw):
+                report = render(project, path)
+            self.assertEqual(observed, [[1.0, 0.4], [2.0, 0.7]])
+            self.assertEqual({row["format"] for row in report["outputs"]}, {"pdf", "svg"})
+
     def panel_fixture(self, directory):
         project = Path(directory)
         folder = project / "papers/P01/figures"

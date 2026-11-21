@@ -162,7 +162,7 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
                 patch("scripts.ai_providers.urllib.request.urlopen", side_effect=transport), \
                 patch.object(socket.socket, "connect", side_effect=AssertionError("external network forbidden")):
             manifest = api_orchestrator.run_cycle(SLUG, "topic-intelligence", "uuapi-anthropic",
-                "uuapi-openai", "uuapi-anthropic", "", "", automatic_data=False)
+                "uuapi-openai", "uuapi-anthropic", "", "", automatic_data=False, planning=True, review=True, remediate=True)
             # The final settled balance must survive the runner too.
             cloud_checkpoint.sync_billing(project)
             control = model_spend.read(project)
@@ -180,21 +180,21 @@ def run_case(directory: Path, *, separate: bool, protocol: str,
             provenance = json.loads((project / "state/output-provenance.json").read_text())
             recorded = provenance["files"]["program/topic.md"]
             assert recorded["family"] == "openai" and recorded["role"] == "persistent-remediator"
-            assert manifest["independent_audit"]["final_verdict"] == "pass-with-conditions"
-            for name, audit in manifest["provider_audit"].items():
+            assert manifest["independent_audit"]["verdict"] == "pass-with-conditions"
+            for audit in manifest["calls"]:
                 assert audit["requested_model"] == audit["reported_model"] and audit["request_id"]
             for path in project.rglob("*"):
                 if path.is_file():
                     cloud_checkpoint.check_file(path, project)
             # Keep auditable artifacts with placeholder keys excluded by check_file.
             for relative in ("state/run.json", "state/model-spend-control.json", "state/model-usage.jsonl",
-                             "state/output-provenance.json", "reviews/decision-log.md", "program/topic.md"):
+                             "state/output-provenance.json", "program/topic.md"):
                 destination = directory / relative
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(project / relative, destination)
             write(directory / "manifest.json", manifest)
-            review_dir = project / "reviews/independent"
-            shutil.copytree(review_dir, directory / "reviews/independent")
+            run_dir = project / "api_runs" / manifest["run_id"]
+            shutil.copytree(run_dir, directory / "api_runs" / manifest["run_id"])
         receipt = {
             "schema_version": "1.0", "scope": "software only; synthetic model and discovery responses",
             "separate_gateways": separate, "openai_protocol": protocol, "chat_token_field": token_field,

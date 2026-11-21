@@ -17,6 +17,7 @@ import platform
 import signal
 import shutil
 import zipfile
+import uuid
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -425,47 +426,60 @@ def project_compute_ceiling(project: Path, budget: dict[str, Any]) -> float:
     return float(min(values))
 
 
-def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[dict[str, Any], float]:
-    state = read_json(project / "state" / "run.json")
-    from scripts.scientific_scope import validate as scope_errors
-    errors = scope_errors(project, "G4")
+def _prepare_execution(project: Path, plan_path: Path, budget_path: Path) -> dict:
+    """Seal actual executable inputs before launch; workflow labels grant no authority."""
+    from scripts.paper_execution import approval as paper_approval, plan_errors, enabled, selected, prepare_datasets
+    from scripts.research_phase import exposure_errors, design_errors
+    from scripts.research_artifacts import write, record
+    from scripts import research_quality as quality
+    root = compute_project(project)
+    if root != project:
+        parts = project.relative_to(root).parts
+        control = root / "state/supplemental-experiments" / parts[2] / parts[3] / (parts[4] + ".json")
+        if control.is_file() and read_json(control).get("retirement"):
+            raise ExperimentError("retired supplemental protocol cannot execute again")
+    plan = read_json(plan_path)
+    errors = validate_plan(plan) + plan_errors(project, plan) + exposure_errors(project, plan)
     if errors:
         raise ExperimentError("; ".join(errors))
-    if (
-        state.get("stage") != "experiment-execution"
-        or state.get("gate") != "G4"
-        or state.get("status") != "awaiting_work"
-    ):
-        raise ExperimentError(
-            "Experiments may run only during the open G4 experiment-execution stage"
-        )
-    from scripts.paper_execution import approval as paper_approval, plan_errors
-    approval = paper_approval(project, "G3")
-    if not approval:
-        raise ExperimentError("G3 has no recorded checked protocol seal")
-    expected_plan = approval.get("experiment_plan_sha256")
-    expected_budget = approval.get("experiment_budget_sha256")
-    if not expected_plan or not expected_budget:
-        raise ExperimentError("G3 seal predates the executable plan contract; rerun the current G3 checks and sealing")
-    if sha256_file(plan_path) != expected_plan or sha256_file(budget_path) != expected_budget:
-        raise ExperimentError("Experiment plan or budget changed after G3 approval")
-    plan = read_json(plan_path)
-    from scripts.research_phase import exposure_errors
-    errors = validate_plan(plan) + plan_errors(project, plan) + exposure_errors(project, plan)
-    from scripts.research_phase import exploratory, design_errors
-    if exploratory(project):
+    if enabled(project):
+        prepare_datasets(project)
+    if plan.get("research_phase", "confirmatory") == "exploratory":
         errors.extend(design_errors(project))
     if errors:
         raise ExperimentError("; ".join(errors))
     budget = read_json(budget_path)
     ceiling = project_compute_ceiling(project, budget)
-    frozen = approval.get("frozen_protocol_sha256")
+    plan_hash, budget_hash = sha256_file(plan_path), sha256_file(budget_path)
+    legacy = paper_approval(project, "G3")
+    if legacy:
+        if (legacy.get("experiment_plan_sha256") != plan_hash
+                or legacy.get("experiment_budget_sha256") != budget_hash):
+            raise ExperimentError("Experiment plan or budget changed after G3 approval")
+    frozen = legacy.get("frozen_protocol_sha256", {}) if legacy else {}
     required = {f"papers/{run['paper_id']}/preregistration.json" for run in plan["runs"]}
-    if not isinstance(frozen, dict) or not required <= set(frozen):
-        raise ExperimentError("G3 seal has no frozen protocol hashes; rerun the current G3 checks and sealing")
+    if legacy and not required <= set(frozen):
+        raise ExperimentError("G3 seal has no frozen protocol hashes")
+    snapshot_path = resolve_inside(project, "experiments/protocols/" + plan_hash + ".json", "execution snapshot")
+    existing = read_json(snapshot_path) if snapshot_path.is_file() else None
+    if existing and (existing.get("experiment_plan_sha256") != plan_hash
+                     or existing.get("experiment_budget_sha256") != budget_hash
+                     or existing.get("plan") != plan or existing.get("budget") != budget):
+        raise ExperimentError("Execution snapshot changed; retain the old protocol and declare a new version")
+    # A new confirmatory protocol receives the substantive design checks, even
+    # when no administrative stage or review label has been assigned.
+    if not legacy and not existing and plan.get("research_phase", "confirmatory") == "confirmatory":
+        checks = quality.validate_g3_quality(project, require_preregistration=False)
+        if checks:
+            raise ExperimentError("confirmatory design: " + "; ".join(checks))
     for relative in sorted(required):
         path = resolve_inside(project, relative, "frozen protocol")
-        if not path.is_file() or sha256_file(path) != frozen[relative]:
+        paper = Path(relative).parts[1]
+        if not path.exists() and not legacy:
+            protocol = quality.create_preregistration(project, paper, "deterministic-control-plane", automated=True)
+            write(path, protocol)
+            record(project, [path], "scripts/experiment_runner.py")
+        if not path.is_file() or (legacy and sha256_file(path) != frozen[relative]):
             raise ExperimentError("Frozen protocol changed after G3 approval")
         protocol = read_json(path)
         files = protocol.get("files")
@@ -474,7 +488,17 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
         for item in files:
             locked = resolve_inside(project, item["path"], "preregistered input")
             if not locked.is_file() or sha256_file(locked) != item.get("sha256"):
-                raise ExperimentError("Preregistered input changed after G3 approval")
+                raise ExperimentError("Preregistered input changed after protocol freezing")
+        if not legacy:
+            checks = quality.validate_preregistration(protocol, paper, project)
+            if checks:
+                raise ExperimentError("; ".join(checks))
+        frozen[relative] = sha256_file(path)
+    for run in plan["runs"]:
+        for item in run["inputs"]:
+            target = resolve_inside(project, item["path"], "run input")
+            if not target.is_file() or sha256_file(target).lower() != item["sha256"].lower():
+                raise ExperimentError("Declared run input is missing or changed: " + item["path"])
     from scripts.primary_recovery import gate_errors
     recovery_errors = gate_errors(project, "G4")
     if recovery_errors:
@@ -485,7 +509,35 @@ def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[di
             preflight_run(project, run)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             raise ExperimentError("empirical input preflight failed: " + str(exc)) from exc
-    return plan, ceiling
+    if existing:
+        if existing.get("frozen_protocol_sha256") != frozen:
+            raise ExperimentError("Frozen protocol differs from the execution snapshot")
+        return existing
+    snapshot = {"schema_version": "1.0", "kind": "execution_protocol", "created_at": now(),
+                "actor": "deterministic-control-plane", "research_phase": plan.get("research_phase", "confirmatory"),
+                "experiment_plan_sha256": plan_hash, "experiment_budget_sha256": budget_hash,
+                "frozen_protocol_sha256": frozen, "plan": plan, "budget": budget,
+                "scientific_validity_verified": False}
+    write(snapshot_path, snapshot)
+    record(project, [snapshot_path], "scripts/experiment_runner.py")
+    return snapshot
+
+
+def prepare_execution(project: Path, paper_id: str | None = None) -> dict:
+    """Prepare the selected paper without changing stage, gate or approval state."""
+    from scripts.paper_execution import enabled, scope
+    if paper_id is not None and enabled(project):
+        with scope(project, paper_id):
+            return _prepare_execution(project, experiment_path(project, "experiments/plan.json"),
+                                      experiment_path(project, "experiments/budget.json"))
+    return _prepare_execution(project, experiment_path(project, "experiments/plan.json"),
+                              experiment_path(project, "experiments/budget.json"))
+
+
+def approved_plan(project: Path, plan_path: Path, budget_path: Path) -> tuple[dict[str, Any], float]:
+    """Compatibility entry: validate inputs and create/reuse an execution snapshot."""
+    snapshot = _prepare_execution(project, plan_path, budget_path)
+    return snapshot["plan"], project_compute_ceiling(project, snapshot["budget"])
 
 
 def safe_environment(run_id: str, seed: int) -> dict[str, str]:
@@ -616,7 +668,8 @@ def execution_command(
     relative_cwd = cwd.relative_to(project).as_posix()
     workdir = "/workspace" if relative_cwd == "." else f"/workspace/{relative_cwd}"
     command = [
-        isolation["engine"], "run", "--rm", "--user", container_user(), "--network=none", "--read-only",
+        isolation["engine"], "run", "--rm", "--name", "lunwen-attempt-" + uuid.uuid4().hex,
+        "--user", container_user(), "--network=none", "--read-only",
         "--tmpfs", "/tmp:rw,nosuid,nodev,noexec,size=512m", "--security-opt", "no-new-privileges",
         "--cap-drop=ALL", "--pids-limit=256",
         "-v", f"{project.resolve()}:/workspace:ro", "-w", workdir,
@@ -633,11 +686,11 @@ def execution_command(
         source = resolve_inside(project, value, f"{run['run_id']}.expected_outputs")
         if "," in str(source) or ":" in value or "\\" in value:
             raise ExperimentError("container output path contains mount delimiters")
-        source.parent.mkdir(parents=True, exist_ok=True)
         # Only named output files are writable; the model-authored script cannot
         # alter approvals, budgets, the registry, code or another result file.
-        source.touch(exist_ok=True)
         command.extend(["--mount", f"type=bind,src={source},dst=/workspace/{Path(value).as_posix()}"])
+    slots = {"run_id": run["run_id"], "paths": run["expected_outputs"]}
+    command.extend(["-e", "RESEARCH_OS_OUTPUT_SLOTS=" + json.dumps(slots, separators=(",", ":"))])
     for key in ("RESEARCH_OS_RUN_ID", "RESEARCH_OS_SEED", "PYTHONHASHSEED"):
         command.extend(["-e", f"{key}={environment[key]}"])
     if run.get("runtime"):
@@ -652,6 +705,31 @@ def execution_command(
             command.extend(["-e", "PATH=/opt/research-runtime/bin:/usr/local/bin:/usr/bin:/bin"])
     command.extend([isolation["image"], *run["argv"]])
     return command, project, environment
+
+
+def prepare_output_slots(project: Path, run: dict) -> None:
+    """Create only this attempt's empty bind mounts after prior outputs are saved."""
+    if run["isolation"]["kind"] != "container":
+        return
+    for relative in run["expected_outputs"]:
+        path = resolve_inside(project, relative, "output slot")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open("xb"):
+            pass
+
+
+def cleanup_container(command: list[str], environment: dict) -> None:
+    """Stop this exact daemon-side container, including after a CLI timeout."""
+    if len(command) < 2 or command[1] != "run" or "--name" not in command:
+        return
+    name = command[command.index("--name") + 1]
+    if not re.fullmatch(r"lunwen-attempt-[0-9a-f]{32}", name):
+        raise ExperimentError("unrecognized attempt container identity")
+    removal = [command[0], "rm", "-f", *(["--ignore"] if command[0] == "podman" else []), name]
+    result = subprocess.run(removal, env=environment,
+                            stdin=subprocess.DEVNULL, capture_output=True, timeout=30, check=False)
+    if result.returncode and "no such container" not in result.stderr.decode("utf-8", errors="replace").lower():
+        raise ProcessTreeTerminationError("could not confirm cleanup of attempt container " + name)
 
 
 def read_capped(path: Path, limit: int = MAX_LOG_BYTES) -> tuple[str, bool]:
@@ -976,6 +1054,7 @@ def run_one(
         isolation["reviewed_runtime"] = run["runtime"]
     with tempfile.NamedTemporaryFile("w+b") as stdout, tempfile.NamedTemporaryFile("w+b") as stderr:
         try:
+            prepare_output_slots(project, run)
             command, execution_cwd, execution_environment = execution_command(
                 project, cwd, run, environment
             )
@@ -1015,13 +1094,19 @@ def run_one(
                 else:
                     status = "succeeded" if exit_code == 0 else "failed"
             finally:
-                if job is not None:
-                    try:
+                try:
+                    if job is not None:
                         # A parent exiting successfully must not leave workers
                         # changing files after the executor seals its receipt.
-                        job.terminate()
-                    finally:
-                        job.close()
+                        try:
+                            job.terminate()
+                        finally:
+                            job.close()
+                    elif os.name != "nt":
+                        terminate_process_tree(process)
+                finally:
+                    if run["isolation"]["kind"] == "container":
+                        cleanup_container(command, execution_environment)
         except ProcessTreeTerminationError:
             raise
         except (OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:

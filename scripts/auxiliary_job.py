@@ -251,7 +251,7 @@ def run_g1_transport_validation(project, destination, request, *, execute=False)
             report["budget_before"] = model_runtime.budget_status(project)
             write(destination, report)
             report["result"] = api_orchestrator.run_cycle(project.name, "topic-intelligence", "anthropic", "openai", "anthropic",
-                request["prompt"], "", max_output_tokens=12000, control_max_output_tokens=control_tokens, automatic_data=True,
+                request["prompt"], "", max_output_tokens=12000, control_max_output_tokens=control_tokens, automatic_data=True, planning=True, review=True, remediate=True,
                 task_kind="scientific-judgment", task_profile=request["task_profile"])
             check_inputs()
             after = read(project / "state/run.json")

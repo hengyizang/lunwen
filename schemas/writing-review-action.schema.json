@@ -7,7 +7,7 @@
   "properties": {
     "categories": {"type": "array", "minItems": 1, "maxItems": 10, "uniqueItems": true, "items": {"enum": ["empty_evaluation", "missing_evidence", "inference_gap", "unclear_contribution_comparison", "unclear_mechanism", "unsupported_generality", "experimental_description_gap", "unclear_exposition", "redundant_framing", "terminology_inconsistency"]}},
     "scope": {"type": "object", "additionalProperties": false, "required": ["paper_ids", "claim_ids", "sections", "boundary"], "properties": {
-      "paper_ids": {"type": "array", "minItems": 1, "maxItems": 6, "uniqueItems": true, "items": {"type": "string", "pattern": "^P0[1-6]$"}},
+      "paper_ids": {"type": "array", "minItems": 1, "maxItems": 99, "uniqueItems": true, "items": {"type": "string", "pattern": "^P[0-9]{2}$"}},
       "claim_ids": {"type": "array", "maxItems": 50, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
       "sections": {"type": "array", "minItems": 1, "maxItems": 30, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
       "boundary": {"$ref": "#/$defs/text"}}},

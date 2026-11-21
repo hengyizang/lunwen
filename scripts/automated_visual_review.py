@@ -33,10 +33,10 @@ def _ref(project: Path, path: Path) -> dict:
 
 def _owned(project: Path, path: Path, *, provider: str | None = None, module: str | None = None) -> None:
     origin = output_provenance.current_origin(project, path)
-    if (origin.get("status") != "tracked" or origin.get("family") == "anthropic"
+    if (origin.get("status") != "tracked"
             or (provider and origin.get("provider") != provider)
             or (module and origin.get("model") != module)):
-        raise ValueError("visual source lacks current executor/non-Claude provenance: " + path.name)
+        raise ValueError("visual source lacks current execution provenance: " + path.name)
 
 
 def _paper(project: Path, paper_id: str, target: str) -> tuple[Path, Path]:
@@ -251,13 +251,17 @@ def execute(project: Path, paper_id: str, target: str) -> dict:
         raise ValueError("visual review requires the active open writing stage")
     packet = prepare(project, paper_id, target, create=True)
     destination = _receipt(project, paper_id, target)
+    protocol_attempts = 0
     if destination.exists():
         _owned(project, destination, provider="deterministic-control-plane", module=MODULE)
         previous = read(destination)
         if previous.get("packet") == packet:
-            # A failed unchanged layout needs a real edit, not repeated paid votes.
             _ledger_match(project, previous)
-            return previous
+            protocol_attempts = previous.get("protocol_attempts", 1)
+            # A malformed response contains no visual judgment. One subsequent
+            # explicitly requested retry is allowed; valid judgments are reused.
+            if previous.get("status") != "invalid_response" or protocol_attempts >= 2:
+                return previous
     route = model_routing.select("auxiliary", "multimodal-inspection")
     source = path_in(project, packet["attachment"]["path"])
     attachment = {"mime_type": packet["attachment"]["mime_type"], "filename": source.name,
@@ -280,7 +284,8 @@ def execute(project: Path, paper_id: str, target: str) -> dict:
     value = {"schema_version": "1.0", "packet": packet, "run_id": run_id,
              "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(), "response": result.text,
              "request_id": result.request_id, "reported_model": result.reported_model, "provider": result.provider,
-             "pages": pages, "status": status, "human_review": False, "scientific_validation": False}
+             "pages": pages, "status": status, "protocol_attempts": protocol_attempts + 1,
+             "human_review": False, "scientific_validation": False}
     if response_error:value["response_error"] = response_error
     _ledger_match(project, value)
     if destination.exists():
@@ -330,7 +335,9 @@ def run(project: Path, paper_id: str) -> dict:
         if prepare(project, paper_id, relative) != packet:
             raise ValueError("a declared visual target changed before execution")
         previous=_receipt(project,paper_id,relative)
-        reusable=previous.is_file() and read(previous).get("packet")==packet
+        previous_value = read(previous) if previous.is_file() else {}
+        reusable = previous_value.get("packet") == packet and (
+            previous_value.get("status") != "invalid_response" or previous_value.get("protocol_attempts", 1) >= 2)
         if not reusable and new_requests>=5:
             result["pending"].append(relative)
             continue

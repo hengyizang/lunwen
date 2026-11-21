@@ -92,15 +92,14 @@ class RequestedModelEndpointTests(unittest.TestCase):
             {"thinkingLevel": "HIGH"})
         transport.assert_called_once()
 
-    def test_helper_never_authorizes_an_unlisted_id_or_cross_provider_model(self):
-        with patch.object(ai_providers, "_production_request") as transport:
-            for provider, model in ((PROVIDER, BASE + "-low"),
-                                    (PROVIDER, HIGH + "/../" + BASE),
-                                    (PROVIDER, "gpt-6.1-sol"),
-                                    ("unconfigured-provider", HIGH)):
-                with self.subTest(provider=provider, model=model):
-                    with self.assertRaises(ai_providers.ProviderError):
-                        ai_providers.production_endpoint(provider, model)
+    def test_exact_id_is_configuration_not_spending_authority_or_catalog_allowlist(self):
+        with patch.object(ai_providers,"_production_request") as transport:
+            for model in (BASE+"-future","configured-custom-id"):
+                endpoint=ai_providers.production_endpoint(PROVIDER,model)
+                self.assertIn(model,endpoint)
+            for provider,model in (("unconfigured-provider",HIGH),(PROVIDER,"bad id"),(PROVIDER,"")):
+                with self.assertRaises(ai_providers.ProviderError):
+                    ai_providers.production_endpoint(provider,model)
             transport.assert_not_called()
 
     def test_legacy_runtime_configuration_keeps_its_existing_endpoint(self):

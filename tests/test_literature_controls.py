@@ -92,12 +92,11 @@ class LiteratureControlTests(unittest.TestCase):
         self.save_config()
         return pdf, reader, receipt, mapping, self.project / manifest_relative
 
-    def test_cloud_guard_stops_dispatch_before_any_operation(self):
+    def test_local_host_can_dispatch_public_literature_operations(self):
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "", "DR_OS_CLOUD_EXECUTOR": ""}), \
              patch("scripts.literature_assets.resolve") as acquire:
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                control.execute_operation(self.project, {"action": "literature_resolve", "url": "https://public.example/a"})
-            acquire.assert_not_called()
+            control.execute_operation(self.project, {"action": "literature_resolve", "url": "https://public.example/a"})
+            acquire.assert_called_once()
 
     def test_prepare_makes_no_paid_call_and_records_deterministic_request(self):
         with patch.object(model_runtime, "call", side_effect=AssertionError("no paid request")) as call:
@@ -108,6 +107,30 @@ class LiteratureControlTests(unittest.TestCase):
         self.assertFalse((self.project / "literature/cards").exists())
         request = next((self.project / "reports/literature-analysis/W1").glob("*.request.json"))
         self.assertEqual(output_provenance.current_origin(self.project, request)["family"], "other")
+
+    def test_long_analysis_preserves_all_blocks_and_reuses_completed_batches(self):
+        self.source_path.write_text("".join("Source line %05d reports a measured method and an uncertainty.\n" % i for i in range(2400)), encoding="utf-8")
+        self.paper["source"]["sha256"] = sha(self.source_path)
+        self.save_config()
+        expected, _ = control.source_blocks(self.project, self.paper)
+        seen = []
+        def answer(*args, **kwargs):
+            blocks = json.loads(kwargs["prompt"].split("ORIGINAL_SOURCE_BLOCKS:\n", 1)[1])
+            seen.extend(blocks)
+            return self.result(self.card(blocks=blocks))
+        with patch.object(model_runtime, "authorized_calls", return_value=nullcontext()), \
+             patch.object(model_runtime, "call", side_effect=answer) as call:
+            result = control.analyze(self.project, "W1", execute=True)
+            self.assertGreater(result["total_batches"], 1)
+            self.assertTrue(result["all_selected_source_blocks_processed"])
+            calls = call.call_count
+            again = control.analyze(self.project, "W1", execute=True)
+            self.assertEqual(call.call_count, calls)
+        self.assertEqual(seen, expected)
+        self.assertTrue(all(b["batch_cache_hit"] for b in again["batches"]))
+        card = read(self.project / result["card"]["path"])
+        self.assertEqual(len(card["fields"]["methods"]), result["total_batches"])
+        self.assertTrue(all((self.project / b["raw_response"]["path"]).is_file() for b in result["batches"]))
 
     def test_only_explicit_boolean_enables_analysis_and_token_ceiling_is_bounded(self):
         with patch.object(model_runtime, "call") as call:
@@ -190,15 +213,14 @@ class LiteratureControlTests(unittest.TestCase):
         self.assertIn(self.paper["manifest"], {item["path"] for item in bindings})
         self.assertTrue(any(item["path"].endswith(".source-map.json") for item in bindings))
 
-    def test_untracked_or_claude_native_receipt_is_rejected_before_paid_call(self):
+    def test_receipt_requires_provenance_independent_of_model_brand(self):
         _, _, receipt, _, _ = self.authorized_pdf(track=False)
         with patch.object(model_runtime, "call") as call:
             with self.assertRaisesRegex(ValueError, "provenance"):
                 control.analyze(self.project, "W1", execute=True)
             output_provenance.record_model_writes(self.project, [receipt], family="anthropic",
                 provider="anthropic", model="fixture-critic", role="audit-only", run_id="fixture")
-            with self.assertRaisesRegex(ValueError, "provenance"):
-                control.analyze(self.project, "W1", execute=True)
+            self.assertEqual(control.analyze(self.project, "W1")["status"], "prepared_no_model_call")
             call.assert_not_called()
 
     def test_strict_card_schema_and_source_quote_locations(self):
@@ -278,8 +300,7 @@ class LiteratureControlTests(unittest.TestCase):
         self.assertEqual(read(receipt)["status"], "rejected_do_not_use")
 
     def test_model_identity_noncompletion_and_malformed_json_are_rejected_with_receipt(self):
-        cases = [{"provider": "anthropic", "model": "fixture-critic", "reported_model": "fixture-critic"},
-                 {"reported_model": None}, {"reported_model": "different-model"}, {"completion_status": "incomplete"},
+        cases = [{"reported_model": None}, {"reported_model": "different-model"}, {"completion_status": "incomplete"},
                  {"text": '{"schema_version":"1.0","schema_version":"1.0"}'},
                  {"text": '{"fields":NaN}'},
                  {"text": "not JSON"}]

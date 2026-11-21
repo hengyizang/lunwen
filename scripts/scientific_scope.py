@@ -1,4 +1,4 @@
-"""Human-sealed doctoral scope; amendments reopen scientific gates, never waive them."""
+"""Versioned scientific intent and historical decisions, independent of task permission."""
 from __future__ import annotations
 
 import hashlib
@@ -31,51 +31,65 @@ def _owned(project, target):
         raise ValueError("scientific scope lacks current protected human-controller provenance")
 
 
-def projection(project: Path, gate: str) -> dict:
-    """Freeze scientific meaning, while leaving statuses, evidence and writing progress editable."""
-    if gate not in {"G1", "G2"}:
-        raise ValueError("only G1/G2 define doctoral scientific scope")
-    state = read(project / "state/run.json")
-    count = state.get("paper_count")
-    if type(count) is not int or not 1 <= count <= 20:
-        raise ValueError("declared paper count required")
-    core = read(path_in(project, "program/core-thesis.json"))
-    extension = read(path_in(project, "program/extension-thesis.json"))
-    core_fields = ("theme_id", "doctoral_question", "distinct_contribution", "planned_paper_ids", "falsification_conditions")
-    extension_fields = (*core_fields, "mechanism_or_rationale", "independent_evidence_plan", "boundary_conditions", "relationship_to_core")
-    for obj in (core, extension):
-        if not isinstance(obj.get("doctoral_question"), str) or not obj["doctoral_question"].strip():
-            raise ValueError("a real declared doctoral question is required before scope approval")
-    result = {"paper_count": count, "core": {k: core.get(k) for k in core_fields},
-              "extension": {k: extension.get(k) for k in extension_fields}}
-    if gate == "G2":
-        mapping = read(path_in(project, "program/paper-map.json"))
-        rows = mapping.get("papers")
-        expected = {f"P{n:02d}" for n in range(1, count + 1)}
-        if not isinstance(rows, list) or any(not isinstance(r, dict) for r in rows) or {r.get("paper_id") for r in rows} != expected or len(rows) != count:
-            raise ValueError("scientific mapping must cover every declared paper exactly once")
-        synthesis = mapping.get("thesis_synthesis")
-        result["paper_map"] = {"papers": sorted(rows, key=lambda r: r["paper_id"]),
-                               "pairwise_distinctness": sorted(mapping.get("pairwise_distinctness", []), key=lambda r: (r.get("paper_a", ""), r.get("paper_b", ""))),
-                               # Measured outcomes are progress, not a new topic vote.
-                               "thesis_synthesis": {key: value for key, value in synthesis.items()
-                                                    if key != "evidence_alignment"} if isinstance(synthesis, dict) else synthesis}
-        fields = ("paper_id", "working_title", "research_question", "distinct_contribution", "relationship_to_core", "relationship_to_extension",
-                  "falsification_conditions", "dependencies", "independence", "target_jcr_quartile")
-        result["paper_contracts"] = []
-        for pid in sorted(expected):
-            contract = read(path_in(project, f"papers/{pid}/paper-contract.json"))
-            row = {k: contract.get(k) for k in fields}
-            if isinstance(contract.get("scientific_bindings"), dict):
-                # Topic authority covers the hypothesis and endpoint identity.
-                # G3 freezes aggregation, margins and other experiment details.
-                row["hypothesis_outcomes"] = [{key: h.get(key) for key in ("id", "statement", "primary_outcome")}
-                                               for h in contract.get("hypotheses", []) if isinstance(h, dict)]
-                row["primary_metrics"] = [{key: h.get(key) for key in ("hypothesis_id", "primary_metric")}
-                                          for h in contract["scientific_bindings"].get("hypotheses", []) if isinstance(h, dict)]
-            boundary = contract.get("originality_boundary", {})
-            row["originality_boundary"] = {k: boundary.get(k) for k in ("novel_elements", "reused_elements", "differentiation", "claim_limitations")}
-            result["paper_contracts"].append(row)
+def _optional(project, relative):
+    target=path_in(project,relative,exists=False)
+    return read(target) if target.is_file() else {}
+
+
+def _meaning(value, paper_id=None):
+    """Compare scientific intent, not titles, ranking targets or portfolio size."""
+    core_fields=("theme_id","doctoral_question","distinct_contribution","falsification_conditions")
+    extension_fields=(*core_fields,"mechanism_or_rationale","independent_evidence_plan","boundary_conditions","relationship_to_core")
+    result={"core":{key:value.get("core",{}).get(key) for key in core_fields},
+            "extension":{key:value.get("extension",{}).get(key) for key in extension_fields}}
+    if "paper_contracts" in value:
+        fields=("paper_id","research_question","distinct_contribution","relationship_to_core","relationship_to_extension",
+                "falsification_conditions","dependencies","independence","hypothesis_outcomes","primary_metrics","originality_boundary")
+        result["paper_contracts"]=[{key:row.get(key) for key in fields} for row in value["paper_contracts"]
+                                   if paper_id is None or row.get("paper_id")==paper_id]
+        mapping=value.get("paper_map",{})
+        map_fields=("paper_id","theme_id","research_question","distinct_contribution","contribution","claim_ids","dependencies")
+        result["paper_map"]={"papers":[{key:row.get(key) for key in map_fields}
+            for row in mapping.get("papers",[]) if paper_id is None or row.get("paper_id")==paper_id]}
+    return result
+
+
+def projection(project: Path, gate: str, paper_id: str | None = None) -> dict:
+    """Describe existing questions; undeclared papers never become prerequisites."""
+    if gate not in {"G1","G2"}:raise ValueError("only G1/G2 describe historical topic scope")
+    value={"core":_optional(project,"program/core-thesis.json"),
+           "extension":_optional(project,"program/extension-thesis.json")}
+    if gate=="G2":
+        mapping=_optional(project,"program/paper-map.json")
+        rows=mapping.get("papers",[])
+        if not isinstance(rows,list) or any(not isinstance(row,dict) for row in rows):
+            raise ValueError("paper mapping must be a list of objects")
+        value["paper_map"]={"papers":sorted(rows,key=lambda row:str(row.get("paper_id","")))}
+        value["paper_contracts"]=[]
+        for path in sorted((project/"papers").glob("P[0-9][0-9]/paper-contract.json")):
+            contract=read(path_in(project,path.relative_to(project).as_posix()))
+            row=dict(contract)
+            if isinstance(contract.get("scientific_bindings"),dict):
+                row["hypothesis_outcomes"]=[{key:h.get(key) for key in ("id","statement","primary_outcome")}
+                    for h in contract.get("hypotheses",[]) if isinstance(h,dict)]
+                row["primary_metrics"]=[{key:h.get(key) for key in ("hypothesis_id","primary_metric")}
+                    for h in contract["scientific_bindings"].get("hypotheses",[]) if isinstance(h,dict)]
+            boundary=contract.get("originality_boundary",{})
+            row["originality_boundary"]={key:boundary.get(key) for key in ("novel_elements","reused_elements","closest_prior_work_ids","differentiation","claim_limitations")}
+            value["paper_contracts"].append(row)
+    return _meaning(value,paper_id)
+
+
+def changes(project: Path, paper_id: str | None = None) -> list[dict]:
+    """Expose changed scientific intent without freezing unrelated research."""
+    result=[]
+    for gate in ("G1","G2"):
+        target=path_in(project,f"{PREFIX}/{gate}.json",exists=False)
+        if not target.is_file():continue
+        original=read(target)
+        before=_meaning(original.get("projection",{}),paper_id)
+        after=projection(project,gate,paper_id)
+        if before!=after:result.append({"gate":gate,"paper_id":paper_id,"before":before,"after":after})
     return result
 
 
@@ -159,49 +173,21 @@ def _supplemental_scope(project: Path, state: dict, gate: str) -> list[str]:
 
 
 def validate(project: Path, gate: str, paper_id: str | None = None) -> list[str]:
-    if gate not in GATES or gate == "G0":
-        return []
+    """Validate retained records, not eligibility to read, experiment or write."""
     try:
-        state = read(project / "state/run.json")
+        state=read(project/"state/run.json")
         if state.get("supplemental_context") is not None:
-            return _supplemental_scope(project, state, gate)
-        pending = _pending(project)
-        if pending and GATES.index(gate) > GATES.index(pending["gate"]):
-            raise ValueError("scientific amendment must pass fresh " + pending["gate"] + " scientific review and human approval first")
-        for prior_gate in ("G1", "G2"):
-            if GATES.index(gate) < GATES.index(prior_gate):
-                continue
-            approved = prior_gate in state.get("approved_gates", [])
-            target = path_in(project, f"{PREFIX}/{prior_gate}.json", exists=False)
-            if pending and GATES.index(prior_gate) >= GATES.index(pending["gate"]):
-                if prior_gate == pending["gate"] and _digest(projection(project, prior_gate)) != pending["proposed_projection_sha256"]:
-                    raise ValueError("scope changed after the named human amendment authorization")
-                continue
-            if not approved:
-                if GATES.index(gate) > GATES.index(prior_gate):
-                    raise ValueError("later work requires human-approved " + prior_gate + " scientific scope")
-                continue
-            if not target.exists():
-                raise ValueError("approved " + prior_gate + " lacks a protected scope seal; do not silently bless legacy artifacts")
-            _owned(project, target)
-            seal = read(target)
-            if seal.get("gate") != prior_gate or seal.get("projection") != projection(project, prior_gate):
-                raise ValueError("approved " + prior_gate + " doctoral question or paper mapping changed; request an explicit human scope amendment")
-            if prior_gate == "G2":
-                approval = seal.get("approval", {})
-                votes = approval.get("paper_topic_approvals")
-                expected = {f"P{n:02d}" for n in range(1, state["paper_count"] + 1)}
-                if (not isinstance(votes, list) or len(votes) != len(expected)
-                    or any(not isinstance(v, dict) or not isinstance(v.get("actor"), str) or not v["actor"].strip()
-                           or v.get("artifact_sha256") != approval.get("artifact_sha256") for v in votes)
-                    or {v.get("paper_id") for v in votes} != expected):
-                    raise ValueError("G2 requires an individual human topic approval for every paper")
-            if not any(a.get("gate") == prior_gate and a.get("artifact_sha256") == seal.get("approval", {}).get("artifact_sha256")
-                       and a.get("actor") == seal.get("actor") for a in state.get("approvals", [])):
-                raise ValueError("scope seal lacks its named original human approval")
+            return _supplemental_scope(project,state,gate)
+        for prior in ("G1","G2"):
+            target=path_in(project,f"{PREFIX}/{prior}.json",exists=False)
+            if not target.is_file():continue  # No invented seal for legacy or new work.
+            _owned(project,target)
+            seal=read(target)
+            if seal.get("gate")!=prior or seal.get("projection_sha256")!=_digest(seal.get("projection")):
+                raise ValueError("retained scientific scope record is inconsistent")
         return []
-    except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
-        return ["approved scientific scope: " + str(exc)]
+    except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:
+        return ["scientific scope record: "+str(exc)]
 
 
 def seal_approval(project: Path, gate: str, actor: str, approval: dict) -> None:
@@ -282,7 +268,7 @@ def prepare_amendment(project: Path, source: str, actor: str) -> dict:
     return {"schema_version": "1.0", "id": proposal["id"], "gate": proposal["gate"], "actor": actor,
             "source": {"path": source, "sha256": sha(target)}, "reason": proposal["reason"],
             "old_seal_sha256": sha(seal), "proposed_projection_sha256": _digest(proposal["proposed_projection"]),
-            "effect": "reopen_scientific_gate_requires_fresh_reviews_and_human_reapproval", "scientific_completion_verified": False}
+            "effect": "record_changed_scientific_intent_without_resetting_other_work", "scientific_completion_verified": False}
 
 
 def apply_amendment(project: Path, source: str, actor: str, review_sha256: str, run_id: str, note: str) -> dict:
@@ -293,32 +279,22 @@ def apply_amendment(project: Path, source: str, actor: str, review_sha256: str, 
     if receipt.exists():
         raise ValueError("scope amendment IDs cannot overwrite history")
     value = {**prepared, "cloud_review_sha256": review_sha256, "source_run_id": run_id, "note": note,
-             "status": "awaiting_reapproval", "created_at": datetime.now(timezone.utc).isoformat()}
+             "status": "recorded", "created_at": datetime.now(timezone.utc).isoformat()}
     write(receipt, value)
     pending = path_in(project, f"{PREFIX}/pending-amendment.json", exists=False)
     write(pending, value)
     record(project, [receipt, pending], MODULE)
-    state_path = path_in(project, "state/run.json")
-    state = read(state_path)
-    index = GATES.index(prepared["gate"])
-    state["approved_gates"] = [g for g in state.get("approved_gates", []) if g.split(":")[0] in GATES[:index]]
-    state.update(stage_index=index, stage={"G1": "topic-intelligence", "G2": "paper-architecture"}[prepared["gate"]],
-                 gate=prepared["gate"], status="awaiting_work")
-    state.pop("ready_gate", None)
-    state.pop("ready_artifact_sha256", None)
-    for pid in state.get("paper_statuses", {}):
-        state["paper_statuses"][pid] = "pending"
-    state["active_paper"] = "P01"
-    state.setdefault("history", []).append({"at": value["created_at"], "event": "human_scientific_scope_amendment",
-        "gate": prepared["gate"], "actor": actor, "receipt": receipt.relative_to(project).as_posix(),
-        "prior_approvals_preserved": True, "new_experiments_authorized": False})
-    write(state_path, state)
+    state_path=path_in(project,"state/run.json");state=read(state_path)
+    # Preserve original decisions and execution status. A new topic record is not
+    # permission to overwrite frozen inputs or to rerun an observed experiment.
+    state.setdefault("history",[]).append({"at":value["created_at"],"event":"scientific_scope_amendment",
+        "gate":prepared["gate"],"actor":actor,"receipt":receipt.relative_to(project).as_posix(),
+        "prior_approvals_preserved":True,"new_experiments_authorized":False})
+    write(state_path,state)
     return value
 
 
 def review_binding(project: Path, paper_id: str | None = None) -> dict:
-    files = []
-    for name in ("G1.json", "G2.json", "pending-amendment.json"):
-        target = path_in(project, f"{PREFIX}/{name}", exists=False)
-        files.append({"path": target.relative_to(project).as_posix(), "sha256": sha(target) if target.is_file() else None})
-    return {"files": files, "implementation_sha256": sha(Path(__file__))}
+    # Meaningful changes to this paper can stale its review. A title, another
+    # paper or unrelated implementation file cannot invalidate its evidence.
+    return {"schema_version":"2.0","scope":projection(project,"G2",paper_id)}

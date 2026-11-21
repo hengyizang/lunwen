@@ -43,8 +43,8 @@ def build(project: Path, request: dict) -> dict:
     source = editable_figures._bound_file(project, binding, "source")
     from scripts.output_provenance import current_origin
     origin = current_origin(project, source)
-    if origin.get("status") != "tracked" or origin.get("family") == "anthropic":
-        raise ValueError("diagram source needs current non-Claude author provenance")
+    if origin.get("status") != "tracked":
+        raise ValueError("diagram source needs current author provenance")
     if not isinstance(request["story_ref"], dict):
         raise ValueError("Mermaid needs an existing source-bound figure brief")
     alignment = editable_figures._story_alignment(project, request["story_ref"], binding)

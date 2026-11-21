@@ -63,7 +63,7 @@ class AutomatedVisualReviewTests(unittest.TestCase):
         self.rows[0]["attachments"][0]["sha256"] = "0" * 64
         self.assertTrue(visual.verify(self.project, "P01", target))
 
-    def test_unknown_or_malformed_reply_blocks_without_repeated_paid_calls(self):
+    def test_unknown_judgment_is_reused_but_invalid_protocol_gets_one_explicit_retry(self):
         target = self.target.relative_to(self.project).as_posix()
         self.outcome = "unknown"
         self.assertEqual(visual.execute(self.project, "P01", target)["status"], "fail")
@@ -76,6 +76,19 @@ class AutomatedVisualReviewTests(unittest.TestCase):
         result = visual.execute(self.project, "P01", target)
         self.assertEqual(result["status"], "invalid_response")
         self.assertEqual(visual.execute(self.project, "P01", target)["status"], "invalid_response")
+        self.assertEqual(self.calls, 3)
+        self.assertEqual(visual.execute(self.project, "P01", target)["status"], "invalid_response")
+        self.assertEqual(self.calls, 3)
+        history = list((self.project / "state/automated-visual-reviews/P01/history").glob("*.json"))
+        self.assertTrue(any(read(path).get("status") == "invalid_response" for path in history))
+
+    def test_invalid_protocol_retry_can_produce_a_current_verified_review(self):
+        target = self.target.relative_to(self.project).as_posix()
+        self.bad_response = True
+        self.assertEqual(visual.execute(self.project, "P01", target)["status"], "invalid_response")
+        self.bad_response = False
+        self.assertEqual(visual.execute(self.project, "P01", target)["status"], "pass")
+        self.assertEqual(visual.verify(self.project, "P01", target), [])
         self.assertEqual(self.calls, 2)
 
     def test_every_actual_pdf_page_is_required(self):

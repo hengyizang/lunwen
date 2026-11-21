@@ -1,6 +1,7 @@
 """Synthetic numerical references and counterexamples, run only by cloud CI."""
 import copy
 import csv
+import json
 import importlib.util
 import math
 import os
@@ -186,3 +187,18 @@ class EmpiricalRuntimeTests(unittest.TestCase):
         self.data.write_bytes(self.data.read_bytes() + b"\n")
         with self.assertRaisesRegex(ValueError, "hash changed"):
             self.calculate()
+
+    def test_executor_owned_empty_mount_is_writable_but_prior_results_are_preserved(self):
+        output = self.project / self.spec["output"]
+        output.parent.mkdir(parents=True, exist_ok=True); output.touch()
+        args = ["runtime", "--design", "papers/P01/empirical-design.json", "--data", self.card["data"]["path"],
+                "--spec", self.spec["id"], "--output", self.spec["output"]]
+        environment = {"RESEARCH_OS_RUN_ID": self.spec["run_id"],
+                       "RESEARCH_OS_OUTPUT_SLOTS": json.dumps({"run_id": self.spec["run_id"], "paths": [self.spec["output"]]})}
+        with patch.object(sys, "argv", args), patch.object(runtime.Path, "cwd", return_value=self.project), patch.dict(os.environ, environment):
+            runtime.main()
+            original = output.read_bytes()
+            self.assertTrue(json.loads(original)["n_observations"])
+            with self.assertRaisesRegex(ValueError, "never overwrite"):
+                runtime.main()
+            self.assertEqual(output.read_bytes(), original)

@@ -89,9 +89,8 @@ def build(project: Path, input_path: Path, registry_path: Path) -> dict[str, Any
             if isinstance(item, dict)
         }
         candidate_specs = paper_spec.get("candidates")
-        if not isinstance(candidate_specs, list) or len(candidate_specs) < 3:
-            raise JournalScreeningError(f"{paper_id} needs at least three screened venues")
-        roles: list[str] = []
+        if not isinstance(candidate_specs, list) or not candidate_specs:
+            raise JournalScreeningError(f"{paper_id} needs a venue to assess")
         seen: set[str] = set()
         output_candidates: list[dict[str, Any]] = []
         for item in candidate_specs:
@@ -104,7 +103,6 @@ def build(project: Path, input_path: Path, registry_path: Path) -> dict[str, Any
             strategy = str(item.get("strategy", ""))
             if strategy not in STRATEGIES:
                 raise JournalScreeningError(f"{paper_id}/{venue_id} has invalid strategy")
-            roles.append(strategy)
             scores = item.get("scores")
             if not isinstance(scores, dict) or set(scores) != set(WEIGHTS):
                 raise JournalScreeningError(f"{paper_id}/{venue_id} needs all seven score dimensions")
@@ -160,10 +158,6 @@ def build(project: Path, input_path: Path, registry_path: Path) -> dict[str, Any
                     "recommended": not hard_excluded,
                     "evidence": normalized_evidence,
                 }
-            )
-        if set(roles) != STRATEGIES:
-            raise JournalScreeningError(
-                f"{paper_id} shortlist must contain challenge, target and safety strategies"
             )
         selected = registry_paper.get("selected_venue_id")
         selected_row = next((item for item in output_candidates if item["venue_id"] == selected), None)

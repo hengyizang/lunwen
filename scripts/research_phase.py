@@ -74,18 +74,17 @@ def writing_contract(project: Path, stage: str) -> str:
         return ""
     selected = disposition_stage(project, stage)
     if selected == "experiment-design":
-        return "Review the pending supplemental protocol only; preserve its experiment-design checks. A protocol verdict cannot pass parent G5."
+        return "Review the selected supplemental protocol using its actual inputs and prospective or exploratory scope. Keep its results distinct from the original study."
     if selected == "scientific-writing":
-        return ("G5 SCIENTIFIC WRITING: resolve the consequential unknown using actual results, primary citations and the claim/argument record. "
+        return ("SCIENTIFIC WRITING: resolve the consequential unknown using actual results, primary citations and the claim/argument record. "
                 "Revise Methods, Results and the bounded contribution as evidence warrants. Retain complete adverse outcomes in the separate archive and preserve scientific disagreement. "
                 "Build an evidence-led narrative around the strongest supported contribution. Keep complete registered outcomes in the separate experiment archive, including negative/null/adverse results; manuscripts need not reproduce all comparisons or logs. Preserve evidence relevant to the actual conclusion. "
                 "Retain original hypotheses and outcomes; do not misrepresent selected evidence or conclusions because findings are unfavorable or contentious. State material limitations once where they change interpretation. "
-                "Justify comparison scope before results and retain fixed evaluation criteria. Label post-hoc interpretations honestly; new tests still need normal approval. "
+                "Justify comparison scope before results and retain fixed evaluation criteria. Label post-hoc interpretations honestly; new confirmatory tests need a prospective protocol; exploratory tests retain their observed status. "
                 "Assess facts, references, statistical interpretation and argument; give dispositions only for actual findings. "
-                "Submission formatting and venue/package preparation are deferred; CFH/H/AD remain optional observations. "
-                "After current source-bound scientific checks and the recorded research decision, the existing controller records entry into submission preparation. Advisory opinions do not authorize that transition. "
-                "That transition cannot pass G5; the next G5 cycle must satisfy all final submission requirements. Never edit a frozen contract to switch phase.")
-    return "G5 SUBMISSION PREPARATION: complete the three-view blind panel and source-bound venue, rendering, truthful internal provenance and package checks once for the unchanged final snapshot. Public AI-use statements are author-editable. Editorial observations remain optional; opinions and scores do not prove scientific validity."
+                "Prepare venue formatting and packages when that is the selected task. Editorial observations are optional. "
+                "Use only checks relevant to the current claim and materials, and preserve frozen scientific inputs when changing the writing task.")
+    return "SUBMISSION PREPARATION: check the actual venue requirements, rendering, source fidelity and package for the final snapshot. Seek independent review where it can resolve an uncertainty. Public AI-use statements are author-editable. Editorial observations remain optional; opinions and scores do not prove scientific validity."
 
 
 def stage_rules(project: Path | None, stage: str, role: str = "writer", root: Path | None = None) -> str:
@@ -95,7 +94,7 @@ def stage_rules(project: Path | None, stage: str, role: str = "writer", root: Pa
     selected_root=root or Path(__file__).resolve().parents[1]
     policy=scientific_reasoning.load_policy(selected_root)
     if stage not in scientific_reasoning.STAGES:
-        return policy["common"] + "\nAdministrative G0 intake uses planner -> writer only. Collect current owner context without inventing an approval or research outcome."
+        return policy["common"] + "\nUse the selected task and available evidence. Collect missing context without inventing a research outcome."
     selected_role="writer" if role=="remediator" else role
     parts=[policy["common"],policy["roles"].get(selected_role,policy["roles"]["writer"])]
     pending=project is not None and stage=="writing-and-review" and disposition_stage(project,stage)=="experiment-design"
@@ -148,10 +147,10 @@ def plan_errors(plan: dict) -> list[str]:
         declaration = plan.get("exploration")
         if not isinstance(declaration, dict):
             return ["exploratory plans need their actual unknown and discriminating test"]
-        for field in ("unknown", "discriminating_test", "continue_if", "revise_if", "stop_if", "claim_limit"):
+        for field in ("unknown", "discriminating_test"):
             if not isinstance(declaration.get(field), str) or not declaration[field].strip():
                 errors.append("exploration." + field + " must describe the research decision")
-        if type(declaration.get("prior_outcomes_seen")) is not bool:
+        if "prior_outcomes_seen" in declaration and type(declaration["prior_outcomes_seen"]) is not bool:
             errors.append("exploration.prior_outcomes_seen must declare actual prior exposure")
     return errors
 
@@ -226,7 +225,11 @@ def design_errors(project: Path) -> list[str]:
         manifests = quality._manifest_map(project)
         wanted = set()
         for paper in papers:
-            wanted.update(read(project / "papers" / paper / "paper-contract.json").get("datasets", []))
+            contract = project / "papers" / paper / "paper-contract.json"
+            if contract.is_file():
+                wanted.update(read(contract).get("datasets", []))
+            else:
+                wanted.update(manifests)
         if wanted != set(manifests):
             errors.append("exploratory dataset snapshots must exactly match the paper's declared datasets")
         raw_hashes = set()
@@ -249,7 +252,9 @@ def design_errors(project: Path) -> list[str]:
             errors.append("declare every selected original dataset as an exact exploratory run input")
         budget = read(artifact_path(project, "experiments/budget.json"))
         try:
-            runner.compute_budget_authority(project, budget, plan)
+            ceiling = runner.project_compute_ceiling(project, budget)
+            if sum(r["estimated_cost_usd"] for r in plan["runs"]) > ceiling:
+                errors.append("exploratory estimates exceed the project total compute ceiling")
         except runner.ExperimentError as exc:
             errors.append(str(exc))
         return errors
@@ -263,8 +268,8 @@ def preregistration_inputs(project: Path, paper_id: str) -> list[Path]:
     from scripts.paper_execution import artifact_path, dataset_snapshot
     plan = read(artifact_path(project, "experiments/plan.json", paper_id))
     sources = {artifact_path(project, "experiments/plan.json", paper_id),
-               artifact_path(project, "experiments/budget.json", paper_id),
-               project / "papers" / paper_id / "paper-contract.json", dataset_snapshot(project, paper_id)}
+               artifact_path(project, "experiments/budget.json", paper_id)}
+    sources.update(p for p in (project / "papers" / paper_id / "paper-contract.json", dataset_snapshot(project, paper_id)) if p.is_file())
     for run in plan["runs"]:
         if run["paper_id"] == paper_id:
             sources.update(path_in(project, item["path"]) for item in run["inputs"])
@@ -340,7 +345,7 @@ def exploration_execution(project: Path, plan: dict, registry: list[dict]) -> di
 def build_report(project: Path, paper_id: str) -> dict:
     """Inventory actual exploratory observations; never infer claim support."""
     from scripts.research_artifacts import read, sha
-    from scripts.paper_execution import artifact_path, approval
+    from scripts.paper_execution import artifact_path, protocol_seal
     from scripts import research_quality as quality
     report = {"schema_version": "1.0", "paper_id": paper_id, "research_phase": "exploratory",
               "status": "blocked", "scientific_completion_verified": False,
@@ -353,7 +358,7 @@ def build_report(project: Path, paper_id: str) -> dict:
             raise ValueError("exploratory observations need the original exploratory plan")
         errors.extend(design_errors(project))
         prereg_path = project / "papers" / paper_id / "preregistration.json"
-        sealed = approval(project, "G3", paper_id) or {}
+        sealed = protocol_seal(project, paper_id) or {}
         if sealed.get("experiment_plan_sha256") != sha(plan_path) or sealed.get("frozen_protocol_sha256", {}).get(
                 f"papers/{paper_id}/preregistration.json") != sha(prereg_path):
             errors.append("exploratory observations need their exact G3 protocol seal")
@@ -381,8 +386,8 @@ def archive_and_reopen(project: Path) -> None:
     from scripts.paper_execution import artifact_path, selected, enabled
     state_path = project / "state/run.json"
     state = read(state_path)
-    if state.get("gate") != "G4" or state.get("status") != "approved" or not exploratory(project):
-        raise ValueError("only a checked exploratory G4 can return to a new G3")
+    if not exploratory(project):
+        raise ValueError("only an exploratory protocol can be archived as exploration")
     if (project / "state/experiment-execution-lease.json").exists():
         raise ValueError("an unresolved execution lease cannot be archived or reset")
     paper = selected(project) if enabled(project) else state["active_paper"]
@@ -397,6 +402,10 @@ def archive_and_reopen(project: Path) -> None:
     frozen = project / "papers" / paper / "preregistration.json"
     sources = {plan_path, artifact_path(project, "experiments/budget.json"), registry_path, frozen,
                project / "papers" / paper / "experiment-evidence.json"}
+    write(project / "papers" / paper / "experiment-evidence.json", report)
+    snapshot = project / "experiments/protocols" / (sha(plan_path) + ".json")
+    if snapshot.is_file():
+        sources.add(snapshot)
     sources.update(project / item["path"] for item in read(frozen)["files"] if "raw" not in Path(item["path"]).parts)
     for item in report["observations"]:
         directory = project / "experiments/runs" / item["attempt_id"]

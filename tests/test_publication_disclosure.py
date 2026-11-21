@@ -138,6 +138,8 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.assertEqual(self.audit()["status"], "pass")
 
     def test_false_nonuse_and_fabricated_template_records_still_fail(self):
+        disclosure.output_provenance.record_model_writes(self.project,[self.manuscript],family="anthropic",
+            provider="anthropic",model="synthetic",role="writer",run_id="fixture")
         for value in ("not used", "No AI was used in preparation of this entire research manuscript.",
                 "During preparation we used [NAME OF TOOL] for [REASON]."):
             with self.subTest(value=value):
@@ -241,9 +243,10 @@ class PublicationDisclosureTests(unittest.TestCase):
         self.save()
         self.assertEqual(self.audit()["status"], "pass")
 
-    def test_refresh_is_cloud_only_feedback_and_binding_are_read_only(self):
+    def test_local_refresh_records_actual_execution_and_feedback_is_read_only(self):
         self.assertEqual(disclosure.prompt_feedback(self.project, "P01")["status"], "pass")
         self.assertIsNone(disclosure.review_binding(self.project, "P01")["sha256"])
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "0"}):
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                disclosure.refresh(self.project, "P01")
+            result=disclosure.refresh(self.project, "P01")
+            self.assertEqual(result["execution"]["mode"],"local")
+            self.assertEqual(disclosure.validate_saved_report(self.project,"P01"),[])

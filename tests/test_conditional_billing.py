@@ -82,7 +82,7 @@ def call(project, **changes):
 
 
 class ConditionalQuoteTests(unittest.TestCase):
-    def test_group_identity_changes_cache_and_ledger_without_changing_inference(self):
+    def test_group_change_reuses_inference_and_records_current_billing_identity(self):
         other_identity = {**IDENTITY, "group": "premium"}
         prices = document(quote(), quote(group="premium", input_per_million=4))
         with tempfile.TemporaryDirectory() as directory:
@@ -92,10 +92,11 @@ class ConditionalQuoteTests(unittest.TestCase):
                 first = call(project)
                 first_key = first.cache_key
                 second = call(project, billing_identity=other_identity)
-                self.assertNotEqual(first_key, second.cache_key)
+                self.assertEqual(first_key, second.cache_key)
+                self.assertTrue(second.cache_hit)
                 third = call(project, billing_identity=other_identity)
                 self.assertTrue(third.cache_hit)
-                self.assertEqual(transport.call_count, 2)
+                self.assertEqual(transport.call_count, 1)
                 for invocation in transport.call_args_list:
                     self.assertEqual(invocation.kwargs["model"], None)
                     self.assertNotIn("billing_identity", invocation.kwargs)
@@ -184,7 +185,7 @@ class ConditionalQuoteTests(unittest.TestCase):
             transport.assert_called_once()
             self.assertEqual(model_spend.read(project)["spent_cny"], 0.0004)
 
-    def test_provider_environment_identity_and_price_version_are_cache_bound(self):
+    def test_price_update_reuses_the_recorded_response(self):
         prices = document(quote())
         extra = {"DR_OS_MODEL_BILLING_IDENTITY_JSON": json.dumps({PROVIDER: IDENTITY})}
         with tempfile.TemporaryDirectory() as directory:
@@ -196,8 +197,9 @@ class ConditionalQuoteTests(unittest.TestCase):
             changed = document(quote(price_version="new-receipt"))
             with runtime(changed, extra=extra) as transport:
                 second = call(project, billing_identity=None)
-                self.assertNotEqual(first_key, second.cache_key)
-                transport.assert_called_once()
+                self.assertEqual(first_key, second.cache_key)
+                self.assertTrue(second.cache_hit)
+                transport.assert_not_called()
 
 
 class CacheWriteBillingTests(unittest.TestCase):

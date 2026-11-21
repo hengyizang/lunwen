@@ -1,6 +1,6 @@
 {
   "name": "doctoral-research-os",
-  "description": "API-first, human-gated, reproducible doctoral research workflow spanning topic intelligence, public data, experiments, journal formatting, writing, revision, adversarial review and manual submission packaging.",
+  "description": "Research-first workflow for literature, data, experiments, writing, review and delivery, using task-appropriate tools and truthful evidence.",
   "version": "2.3.0",
   "author": {
     "name": "Hengyi Zang"

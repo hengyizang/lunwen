@@ -1,8 +1,22 @@
 name: Native TeX source-package acceptance
 on:
   pull_request:
+    paths:
+      - '.github/workflows/completeness-repairs.yml'
+      - '.github/actions/setup-runtime/**'
+      - 'scripts/tex_sources.py'
+      - 'scripts/submission_package.py'
+      - 'scripts/venue_compliance.py'
+      - 'tests/test_tex_sources.py'
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/completeness-repairs.yml'
+      - '.github/actions/setup-runtime/**'
+      - 'scripts/tex_sources.py'
+      - 'scripts/submission_package.py'
+      - 'scripts/venue_compliance.py'
+      - 'tests/test_tex_sources.py'
   workflow_dispatch:
 permissions:
   contents: read

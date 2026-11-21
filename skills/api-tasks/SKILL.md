@@ -1,10 +1,10 @@
 ---
 name: api-tasks
-description: Route bounded auxiliary extraction, formatting, screening, synthesis and independent critique to priced external models while Codex manages checks and human gates.
+description: Use a capable model for a bounded research task within the existing budget.
 ---
 
-# API tasks
+# Api Tasks
 
-Use `scripts/task_router.py` first without `--execute` to show family, minimum quality tier, task risk, healthy candidates, token ceiling and estimated CNY charge. Declare alternates in `DR_OS_ROUTING_CANDIDATES_JSON` and exact model-specific prices in `DR_OS_MODEL_PRICING_JSON`; a model failing a paid, explicit `scripts/model_health.py --execute` probe is excluded for 24 hours. Low-risk extraction/formatting may prefer a cheaper qualifying model; high-risk scientific judgment/critique prioritizes quality and independent family constraints. Execute only the chosen bounded auxiliary job with `--execute`; its output is held in protected `api_runs/` and is not a verified citation, experimental result or manuscript.
+Choose the task, relevant source material and an appropriate configured model. Use `scripts/task_router.py` for a bounded API operation when useful, inspect its plan and retain actual responses and costs. Reuse prior authorization; do not require a separate approval for each call or prohibit a model from persistent writing. Metadata extraction is not semantic claim verification.
 
-Use `scripts/api_orchestrator.py cycle` for the full G0–G5 planner/writer/independent-critic flow. Preserve Claude as internal read-only planner/critic and GPT/OpenAI as the persistent writer. Do not silently switch model identity, provider protocol, reviewer family, gate status or requested publication artifact to a cheap tier. Cache only byte-identical prompts.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

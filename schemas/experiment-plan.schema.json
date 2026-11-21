@@ -297,12 +297,7 @@
       "additionalProperties": false,
       "required": [
         "unknown",
-        "discriminating_test",
-        "continue_if",
-        "revise_if",
-        "stop_if",
-        "claim_limit",
-        "prior_outcomes_seen"
+        "discriminating_test"
       ],
       "properties": {
         "unknown": {

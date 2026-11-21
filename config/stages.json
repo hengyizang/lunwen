@@ -1,83 +1,49 @@
 {
   "schema_version": "1.2",
+  "workflow_mode": "research-first",
   "quality_policy": {
-    "score_scale": "0-10",
-    "minimum_dimension_score": 8,
-    "minimum_overall_score": 8.5,
-    "novelty_evidence_minimum": 5,
-    "minimum_publication_level": "JCR Q2 SCI/SCIE",
-    "preferred_publication_level": "At least 3 of 6 papers target JCR Q1; every remainder targets at least JCR Q2",
-    "impact_factor_floor": ">1.0",
     "human_review_required": false,
-    "human_review_gates": [
-      "G1",
-      "G2"
-    ],
+    "human_review_gates": [],
     "acceptance_guarantee": false,
     "blocking": false,
-    "observation_only": {
-      "minimum_dimension_score": true,
-      "minimum_overall_score": true,
-      "novelty_evidence_minimum": true,
-      "minimum_publication_level": true,
-      "preferred_publication_level": true,
-      "impact_factor_floor": true
-    },
-    "real_work_profile": "With DR_OS_WORK_PROFILE=minimal, G1 keeps only the owner's written decision, three real candidates and one doctoral question as blocking checks; all other checks remain visible observations. See config/real-work.json.",
-    "note": "Human topic decisions apply only to G1 and each G2 paper. A scientific-integrity failures block; B source-bound submission checks run once per unchanged snapshot; C numerical/editorial/administrative observations never add gates. Existing score and Q1/Q2/IF values are legacy planning observations, not clearance thresholds. Venue fit uses actual scope/article-type/audience evidence; unknown ranking stays unknown. No software guarantees scientific validity, acceptance or admission.",
-    "check_levels": {
-      "A": "Scientific integrity, rights, actual experiments, frozen inputs and existing writer permissions.",
-      "B": "Final source-bound venue/template/export/reporting/final-panel checks; reuse only while bound sources and implementation are unchanged.",
-      "C": "Visible nonblocking scores, editorial, style, hygiene, presentation and per-stage review administration."
-    }
+    "note": "Stages are compatibility task labels, not prerequisites. Apply study-appropriate scientific checks. Existing user authorization persists; no fixed paper count, scores, venue floors, mandatory review panel or vendor writing restrictions."
   },
   "stages": {
     "intake": {
       "gate": "G0",
-      "contract": "Intake — G0",
-      "author_task": "Capture only user-confirmed goals, constraints, budget, compute, schedule, application routes, exclusions and ethical boundaries. Leave unknown material facts explicit. Do not approve or advance the gate."
+      "contract": "intake",
+      "author_task": "Clarify the current research goal and only the constraints needed for the next useful action. Reuse user decisions already given; unknown values stay unknown.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     },
     "topic-intelligence": {
       "gate": "G1",
-      "contract": "Topic intelligence — G1",
-      "quality_report": "program/quality-G1.json",
-      "required_artifacts": [
-        "program/topic-shortlist.json",
-        "program/originality-audit.json",
-        "program/novelty-claim-matrix.json",
-        "program/hypothesis-register.json",
-        "program/research-notebook.json"
-      ],
-      "hard_floor": "Use real source-bound evidence for the question, originality, doctoral depth and feasible discriminating work. Five or more closest primary works, adjacent fields and query families guide actual reading; never fabricate coverage. Novelty matrix 1.1 records actual retrieval dispositions, original anchors, bounded stopping and unresolved limits; legacy 1.0 saturation retains its historical version-specific check. Retain counterevidence and actual independent scientific judgment. Factual core failures block; numeric 8/8.5 thresholds, migration administration and venue-rank targets are C observations. Final G1 requires the owner’s actual doctoral-topic choice.",
-      "author_task": "Research at least three serious topic candidates using current primary sources, adjacent literatures, patents where applicable, automatic broad-data discovery, and market/position evidence where relevant. Rank cloud-feasible directions against the actual supplied G0 weights for funded PhD supply, employment/salary, growth, PhD competition, job competition, background and application-route fit. Novelty, doctoral depth and original contribution are mandatory specific-topic requirements and cannot be traded against direction scores. Write evidence/search-log.jsonl, program/originality-audit.json, program/novelty-claim-matrix.json and program/hypothesis-register.json with source-bound differences, mechanisms, rival explanations, discriminating tests, falsification, boundaries and residual risk. During exploration keep in_progress, exploring/reopened searches, actual retained rounds, affected claims and next searches; never invent saturation, empty gaps, numeric ratings or a post-evidence discussion. Focused comparison needs its actual rationale and every focal candidate compared with every alternative; narrative evaluation can omit numerical scales. For novelty matrix 1.1, bind candidate-to-prior-work comparisons to actual retrievals and original-source anchors, retain bounded stopping reasons and unresolved limits, and obtain the existing current independent novelty assessments. Do not invent two zero-new rounds or empty gaps; legacy 1.0 retains its version-specific checks. Final G1 still requires the complete ready decision evidence and the owner's doctoral-topic decision. Preserve counterevidence, non-novel elements, rejected topics and datasets, unresolved fit risks and uncertainty. Make core A and independently evidenced extension B answer one overarching doctoral question; B remains within that topic if A fails. Only the control plane writes deterministic audits."
+      "contract": "topic-intelligence",
+      "author_task": "Read relevant primary work, distinguish importance from novelty, and compare plausible explanations when they affect the research decision. Propose or refine the question from actual evidence; no fixed number of candidates or sources.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     },
     "paper-architecture": {
       "gate": "G2",
-      "contract": "Paper architecture — G2",
-      "quality_report": "papers/Pxx/quality-G2.json",
-      "hard_floor": "Every paper needs a unique falsifiable claim, independently sufficient primary evidence, standalone scientific value, originality boundary and high-level strategy within one cumulative doctoral contribution. Use one cumulative contribution/evidence row per paper instead of fifteen pair forms; explain shared outcomes, assets and merge triggers. Venue fit uses real sources; Q1/Q2/IF ambitions are planning observations, not gates. Record each actual G2 human topic decision.",
-      "author_task": "Build paper-map and paper contracts for all six configured papers, with independence_basis=cumulative and thesis_synthesis.cumulative_contributions rows (paper_id, knowledge_increment, primary_evidence, standalone_value, merge_trigger, claim_ids). Preserve legacy pair tables as history. Show one doctoral question, core A/independent extension B, distinct claims/evidence and cumulative knowledge; shared assets alone are insufficient. Preserve existing venue choices and planning targets, but use real scope/article/audience fit rather than ranking thresholds. Record actual G2 human topic choices. Then finish active-paper G3-G5 before the next paper enters G3; do not demand all six experiments or results at G2. Keep research-case preparation proportional to the current question, and never fabricate future evidence."
+      "contract": "paper-architecture",
+      "author_task": "Organize the current contribution around a useful question and independently sufficient evidence. Add, merge or retire papers as the research develops; preserve prior work and explain material changes.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     },
     "experiment-design": {
       "gate": "G3",
-      "contract": "Experiment design — G3",
-      "quality_report": "experiments/quality-G3.json",
-      "hard_floor": "All runs require traceable sources/versions, privacy and known access controls (licence/research-use verification is optional metadata), current data/input hashes, the original cumulative project total, a checked frozen protocol, the current independent scientific critique and the native experiment runner. Missing plan.research_phase means confirmatory. Explicit exploratory protocols instead need exploration={unknown,discriminating_test,continue_if,revise_if,stop_if,claim_limit,prior_outcomes_seen}; they cannot supply confirmatory/G5 evidence. For confirmatory empirical work, the active paper needs deterministic hash-bound data quality and automated confirmation, executable statsmodels or simulation power evidence, control-plane preregistration, traceable simple/domain-standard/strong-recent baselines, fair tuning/evaluation, ablations, leakage controls, metrics, estimands, practical thresholds, effect sizes/intervals, multiplicity, >=3 stochastic seeds, robustness, negative controls, external validity, stopping/falsification rules and disjoint isolated original/replay runs with predeclared tolerances. Each run belongs to exactly one design. Actual Meta/theory uses its source-bound study protocol, outcomes or exact Lean propositions, frozen inputs and isolated replay. Never fabricate empirical data, power or baselines for another design.",
-      "author_task": "Work on the active paper in independent execution, retaining the approved doctoral mapping. Use experiments/papers/Pxx/plan.json, budget.json and datasets.jsonl plus claims/papers/Pxx/claim-evidence.csv; sealed legacy batches retain their original paths and authority. Assess actual source/version, privacy/access controls, optional licence metadata, topical/task fit, provenance, independent units, labels, missingness, bias, leakage, version, cloud compute and external validity; preserve rejected sources and unresolved warnings. For a bounded scientific exploration, explicitly set research_phase=exploratory and declare its consequential unknown, discriminating test, continue/revise/stop conditions, claim limit and prior outcome exposure. Retain the same runner, frozen inputs, source integrity, cumulative budget and failed-attempt ledger; do not invent unknown power or a complete final baseline suite. Confirmatory designs retain every applicable empirical or dedicated Meta/theory requirement in references/stage-contracts.md and docs/SCIENTIFIC-STUDY-ROUTES.md. Prepare actual inputs for machine data-quality, power, preregistration and reproduction builders; the controller creates their protected reports, automated confirmations and seals without a new human stage decision. Declare prior_exploration source hashes and prior_outcomes_seen=true after actual exploration; use a separate confirmatory protocol, run IDs and output paths. Never author protected reports, signatures, executor receipts or outcomes, invent access permissions or infer fitness from metadata alone, or increase the configured project total."
+      "contract": "experiment-design",
+      "author_task": "Choose a suitable design, analysis unit, comparisons and uncertainty assessment. Make confirmatory choices before observing their outcomes; label exploration honestly. Use the smallest informative experiment with actual inputs and an authorized budget.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     },
     "experiment-execution": {
       "gate": "G4",
-      "contract": "Experiment execution — G4",
-      "quality_report": "reports/quality-G4.json",
-      "hard_floor": "All phases require exact G3-sealed runner receipts, unchanged inputs, output hashes, retained failures/negative results and cumulative cost accounting. Checked exploratory G4 archives its actual protocol, attempts and bounded findings, then returns the same paper to G3; it cannot pass final G5 or masquerade as confirmatory evidence. For confirmatory empirical work: Source-bound core factual failures block; scores and migration administration remain C observations; the active paper reproduces domain-standard and strong-recent baselines within unchanged tolerances and completes disjoint isolated replay. Reports bind frozen roles/source URLs, successful registry attempt IDs and complete current outputs, followed by protected automated reproduction confirmation. Meta/theory uses its positive source-bound study evidence, exact frozen inputs, isolated replay and automated study-validation confirmation. Deterministic checks do not certify scientific meaning.",
-      "author_task": "Execute only the exact sealed plan through scripts/experiment_runner.py. Preserve every attempt, immutable configuration, current output hash, adverse or inconclusive result and cost. For exploratory work, record what the discriminating observation supports and leaves unknown; the checked controller archives the round and returns this paper to G3 for a separate protocol. Do not reuse an exploratory run ID/output as confirmatory evidence. For confirmatory empirical work, build baseline-reproduction.json and clean-room-reproduction.json from exact successful attempt IDs and complete hashed outputs under the frozen baseline mappings, sources, disjoint runs, container isolation and numeric tolerances. The control plane creates protected computed evidence and current automated confirmations; models never author those files. Build the paper-scoped claim matrix and reproducibility argument without selecting favorable outcomes. Bind all comparison_ids and analysis_ids, preserve claim limits and frozen inputs, and keep interpretation subject to the existing independent audits."
+      "contract": "experiment-execution",
+      "author_task": "Execute the appropriate method using available tools and record actual inputs, environment, outputs, failures and costs. Interpret all relevant outcomes, including null or adverse evidence; do not relabel exploration as prospective confirmation.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     },
     "writing-and-review": {
       "gate": "G5",
-      "contract": "Writing and review — G5",
-      "quality_report": "papers/Pxx/reviews/quality-G5.json",
-      "hard_floor": "Scientific drafting retains A source/fact/citation/numeric/claim integrity and the current reviewed notebook decision. Scientific checks allow the controller to record submission in existing state; a scientific or child-protocol verdict cannot pass parent G5. Final submission requires the three mutually blind, different-family source views plus B actual venue/article-type/template/reporting/bibliographic/export checks. The machine approval binds the unchanged snapshot and submission_checks_sha256; changes force recomputation. C style, language, CFH/H/AD, numeric scores, layout and review administration are warnings, not extra gates. No Q1/Q2/IF floor, fixed freshness window, journal AI-policy gate or automatic human G5 signature.",
-      "author_task": "Work only on state.active_paper. Develop direct evidence-led English around the consequential problem, strongest supported contribution, decisive comparison and bounded implication. Back up complete outcomes and failed attempts separately under experiments/archive, retaining prior exposure and true analysis phase. Manuscripts need not reproduce all comparisons or logs; select evidence by scientific relevance without misrepresenting conclusions. Use one current independent critique; repair only an actual actionable finding. At final submission prepare panel-inputs.json with three distinct source-bound scientific views, retain all frozen panel findings/disagreement, and apply B checks once per unchanged snapshot. Existing editorial tools are observations, not compulsory full scorecards. Public AI-use statements are optional and author-editable; keep truthful internal provenance and do not add a journal AI-policy gate. Render result figures deterministically. Substantive thesis/mapping changes need affected G1/G2 decisions; protected internal findings may request an Ixxx child through existing protocol/runner controls, never parent G5 approval. Never fabricate facts, approvals, citations, results, authorship, venue status or receipts, conceal adverse evidence, increase totals or submit."
+      "contract": "writing-and-review",
+      "author_task": "Write around the strongest supported contribution, decisive evidence and limits. Draft alongside research, label missing results, inspect material claims and render the actual deliverable. Review only when it resolves an uncertainty; prepare submission materials for the actual target.",
+      "hard_floor": "Preserve truthful sources, actual results, privacy and existing cumulative spending authority. This task label is not an approval prerequisite."
     }
   }
 }

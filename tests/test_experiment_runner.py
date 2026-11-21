@@ -426,8 +426,7 @@ class ExperimentRunnerTests(unittest.TestCase):
         process.kill.assert_called_once()
         process.wait.assert_called_once()
 
-    @unittest.skipUnless(os.name == "nt", "Windows process tree test")
-    def test_windows_successful_parent_cannot_leave_a_background_writer(self) -> None:
+    def test_successful_parent_cannot_leave_a_background_writer(self) -> None:
         project = self.project()
         plan_path = project / "experiments/plan.json"
         plan = json.loads(plan_path.read_text(encoding="utf-8"))

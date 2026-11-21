@@ -288,11 +288,18 @@ def main():
     paper = design.get("paper_id", "")
     if (args.design != f"papers/{paper}/empirical-design.json" or args.data != design.get("data", {}).get("path")
             or args.output != spec.get("output") or not args.output.startswith(f"papers/{paper}/results/")
-            or output.suffix != ".json" or output.exists() or output in {design_path, data_path, Path(__file__)}):
+            or output.suffix != ".json" or output in {design_path, data_path, Path(__file__)}):
+        raise ValueError("use the exact registered new results output; never overwrite inputs or prior attempts")
+    slots = json.loads(os.environ.get("RESEARCH_OS_OUTPUT_SLOTS", "{}"))
+    mounted = (isinstance(slots, dict) and slots.get("run_id") == spec["run_id"]
+               and args.output in slots.get("paths", []))
+    if output.exists() and (not mounted or not output.is_file() or output.stat().st_size != 0):
         raise ValueError("use the exact registered new results output; never overwrite inputs or prior attempts")
     result = calculate(design, spec, data_path, design_path=design_path)
     output.parent.mkdir(parents=True, exist_ok=True)
-    with output.open("x", encoding="utf-8") as handle:
+    with output.open("r+" if mounted and output.exists() else "x+", encoding="utf-8") as handle:
+        if handle.read(1):
+            raise ValueError("executor output slot is no longer empty")
         handle.write(json.dumps(result, indent=2, allow_nan=False) + "\n")
 
 

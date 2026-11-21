@@ -48,8 +48,7 @@ class CCFAModelHandoffTests(unittest.TestCase):
         return runtime.prepare(self.project, request)
 
     def assert_role_boundaries(self, name, prompt):
-        self.assertIn("CCFA PROJECT ADAPTER", prompt)
-        self.assertEqual(prompt.count("native core preflight"), 1)
+        self.assertIn("CCFA SELECTED SKILLS:", prompt)
         for binding in runtime.humanization_policy_receipt()["sources"]:
             self.assertIn(binding["path"], prompt)
             self.assertIn(binding["sha256"], prompt)

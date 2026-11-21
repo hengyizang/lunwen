@@ -182,16 +182,21 @@ def authorize_data(project: Path, relative: str, expected_sha256: str, actor: st
     return values["manifests"][relative]
 
 
-def acquire_data(project: Path) -> dict:
+def acquire_data(project: Path, *, required_inputs: list[str] | None = None) -> dict:
     authorizations = read(project / AUTHORIZATIONS, {}).get("manifests", {})
     acquired, blockers = [], []
     manifests = sorted((project / "data/manifests").glob("*.json"))
     for manifest_path in manifests:
         relative = manifest_path.relative_to(project).as_posix()
         auth = authorizations.get(relative, {})
+        if required_inputs is not None:
+            metadata=read(manifest_path,{})
+            prefix="data/raw/"+str(metadata.get("dataset_id",""))+"/"
+            if not any(value==relative or value.startswith(prefix) for value in required_inputs):
+                continue
         manifest = dataset_fetch.load_manifest(manifest_path)
         from scripts.paper_execution import enabled,selected
-        if enabled(project):
+        if required_inputs is None and enabled(project):
             contract = read(project / "papers" / selected(project) / "paper-contract.json")
             if manifest.get("dataset_id") not in contract.get("datasets",[]):
                 continue
@@ -235,9 +240,10 @@ def _cloud_run_eligible(project: Path, run: dict) -> bool:
     from scripts.empirical_workflow import cloud_outputs_allowed
     from scripts.cloud_runtime import execution_window
     isolation = run.get("isolation", {})
-    return (isolation.get("kind") == "container" and isolation.get("engine") == "docker"
-            and run["timeout_seconds"] <= execution_window()["max_run_timeout_seconds"]
-            and not experiment_runner.resource_errors(run) and cloud_outputs_allowed(project, run))
+    cloud=os.environ.get("GITHUB_ACTIONS")=="true" or os.environ.get("DR_OS_CLOUD_EXECUTOR")=="1"
+    return ((not cloud or (isolation.get("kind")=="container" and isolation.get("engine")=="docker"
+            and run["timeout_seconds"] <= execution_window()["max_run_timeout_seconds"]))
+            and not experiment_runner.resource_errors(run) and cloud_outputs_allowed(project,run))
 
 
 def resume_experiments(project: Path) -> dict:
@@ -313,10 +319,12 @@ def resume_experiments(project: Path) -> dict:
             "blockers": [] if result["status"] == "succeeded" else [{"kind": "experiment_inspection", "attempt_ids": [result["attempt_id"]]}]}
 
 
-def before_cycle(project: Path, stage: str) -> dict:
+def _before_execution_cycle(project: Path, stage: str) -> dict:
     report = {"schema_version": "1.0", "stage": stage, "blockers": [], "control_only": False}
-    if stage in {"topic-intelligence", "experiment-design", "experiment-execution", "writing-and-review"}:
-        report["data"] = acquire_data(project)
+    if stage in {"experiment-execution", "writing-and-review"}:
+        plan=read(experiment_path(project,"experiments/plan.json"),{})
+        required=[item.get("path","") if isinstance(item,dict) else item for run in plan.get("runs",[]) for item in run.get("inputs",[])]
+        report["data"] = acquire_data(project,required_inputs=required if stage=="experiment-execution" else None)
         report["blockers"].extend(report["data"]["blockers"])
     if stage == "writing-and-review" and not report["blockers"]:
         from scripts import supplemental_experiments as supplemental
@@ -379,71 +387,126 @@ def before_cycle(project: Path, stage: str) -> dict:
     return report
 
 
-def after_write(project: Path, stage: str) -> dict:
+def request_experiments(project: Path) -> dict:
+    """Execute the next real planned attempt, obtaining its required inputs first."""
+    return _before_execution_cycle(project,"experiment-execution")
+
+
+def request_supplemental(project: Path) -> dict:
+    """Compatibility operation for an explicitly selected supplemental protocol."""
+    return _before_execution_cycle(project,"writing-and-review")
+
+
+def before_cycle(project: Path, stage: str) -> dict:
+    """Prepare only the selected task; unrelated missing data cannot stop writing."""
+    from scripts.cloud_progress import digest
+    state=read(project/"state/run.json",{})
+    if stage=="experiment-execution" and experiment_path(project,"experiments/plan.json").is_file():
+        report=request_experiments(project)
+    else:
+        report={"schema_version":"1.0","stage":stage,"blockers":[],"control_only":False}
+    report["task_scope"]=digest(state.get("current_work",{}))
+    write(project/REPORT,report)
+    return report
+
+
+def _operation_inputs(project: Path, operation: dict) -> dict:
+    """Hash actual referenced files, recursively including request/spec inputs."""
+    from scripts.research_operations import handler
+    bindings={}
+    def visit(value,key=""):
+        if key in {"output","outputs","output_path","output_directory"}:return
+        if isinstance(value,dict):
+            for field,item in value.items():visit(item,field)
+        elif isinstance(value,list):
+            for item in value:visit(item,key)
+        elif isinstance(value,str):
+            try:target=path_in(project,value)
+            except (ValueError,OSError,RuntimeError):return
+            if not target.is_file() or target.is_symlink() or value in bindings:return
+            bindings[value]=cloud_checkpoint.sha(target)
+            if target.suffix==".json":
+                try:visit(read(target))
+                except (ValueError,UnicodeError):pass
+    visit(operation)
+    selected=handler(operation.get("action"))
+    default=getattr(selected,"default",None)
+    if isinstance(default,str):visit(default)
+    if operation.get("action") in {"run_experiments","run_supplemental"}:
+        visit(experiment_path(project,"experiments/plan.json").relative_to(project).as_posix())
+        visit(experiment_path(project,"experiments/budget.json").relative_to(project).as_posix())
+    return bindings
+
+
+def after_write(project: Path, stage: str, *, invocation_id: str | None = None) -> dict:
     """Run declared deterministic builders; never treat model output as a receipt."""
     from scripts import research_quality
     report = read(project / REPORT, {})
     if report.get("stage") != stage:
         report = {"schema_version": "1.0", "stage": stage, "blockers": []}
     report["operation_errors"] = []
-    from scripts.supplemental_experiments import proposal_pending,automatic_confirmation
-    from scripts.research_phase import exploratory, requires_submission
-    protocol_only=stage=="writing-and-review" and proposal_pending(project)
-    exploring=stage in {"experiment-design","experiment-execution"} and exploratory(project)
-    if stage == "experiment-design":
-        from scripts.paper_execution import prepare_datasets
-        try:
-            prepare_datasets(project)
-        except (ValueError, OSError, KeyError, TypeError) as exc:
-            report["operation_errors"].append({"action": "dataset_snapshot", "error": str(exc)[:700]})
-    if stage == "topic-intelligence":
-        from scripts import direction_evidence
-        try:
-            report["direction_ranking"] = direction_evidence.refresh(project)
-        except (ValueError, OSError, RuntimeError, KeyError, TypeError) as exc:
-            report["operation_errors"].append({"action": "direction_ranking", "error": str(exc)[:700]})
+    report["executed_operations"]=[]
+    report["skipped_operations"]=[]
+    report["operation_results"]=[]
+    from uuid import uuid4
+    invocation_id=invocation_id or os.environ.get("GITHUB_RUN_ID") or uuid4().hex
     queue = read(project / "program/cloud-operations.json", {"operations": []})
     operations = queue.get("operations", [])
     if not isinstance(operations, list) or len(operations) > 16:
         raise ResearchStepError("cloud-operations needs an array of at most 16 operations")
-    if sum(op.get("action") == "direction_search" for op in operations) > 1:
+    if sum(isinstance(op,dict) and op.get("action") == "direction_search" for op in operations) > 1:
         raise ResearchStepError("at most one direction_search operation (three queries) per cycle")
     cache_path = project / "state/cloud-operations-cache.json"
     cache = read(cache_path, {})
+    completed=cache.setdefault("completed_requests",{})
     for operation in operations:
-        if operation.get("stage") != stage:
+        if not isinstance(operation,dict):
+            report["operation_errors"].append({"action":None,"error":"operation must be an object"})
             continue
         action = operation.get("action")
-        if protocol_only and action!="supplemental_prepare":
-            continue
-        if exploring and action in {"power", "empirical_design", "empirical_reporting", "method_tools"}:
-            continue
-        if stage=="writing-and-review" and not requires_submission(project) and action in {
-                "docx", "compile_tex", "journal_dossiers", "journal_sources"}:
+        if operation.get("enabled") is False:
             continue
         operation_sha = hashlib.sha256(json.dumps(operation, sort_keys=True).encode()).hexdigest()
+        inputs=_operation_inputs(project,operation)
+        previous=completed.get(operation_sha,{})
+        if previous.get("inputs")==inputs and (previous.get("complete") or previous.get("invocation_id")==invocation_id):
+            report["skipped_operations"].append({"action":action,"request_sha256":operation_sha})
+            report["operation_errors"].extend(previous.get("errors",[]))
+            continue
+        errors_before=len(report["operation_errors"]);blockers_before=len(report.get("blockers",[]))
+        complete=True
         try:
+            if action in {"data_quality","data_contract","empirical_design","study_prepare"}:
+                from scripts.paper_execution import prepare_datasets
+                prepare_datasets(project)
+            if action in {"run_experiments","run_supplemental"}:
+                result=request_experiments(project) if action=="run_experiments" else request_supplemental(project)
+                report["operation_results"].append({"action":action,"result":result})
+                pending=result.get("experiments",{}).get("pending_runs",0)
+                complete=not pending and not result.get("blockers")
+                if result.get("blockers"):report["blockers"].extend(result["blockers"])
+                continue
             if run_builder(project, operation, stage):
                 continue
-            if action == "data_contract" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+            if action == "data_contract":
                 from scripts.data_contracts import refresh
                 result = refresh(project, operation["dataset_id"])
                 if result["errors"]:
                     raise ResearchStepError("; ".join(result["errors"]))
-            elif action == "empirical_design" and stage in {"experiment-design", "experiment-execution", "writing-and-review"}:
+            elif action == "empirical_design":
                 from scripts.empirical_design import refresh
                 result = refresh(project, operation["paper_id"])
                 if result["status"] == "not_configured" or result["errors"]:
                     raise ResearchStepError("empirical design requires complete current inputs: " + "; ".join(result["errors"]))
-            elif action == "empirical_reporting" and stage in {"experiment-execution", "writing-and-review"}:
+            elif action == "empirical_reporting":
                 from scripts.empirical_reporting import refresh
                 result = refresh(project, operation["paper_id"], require_mapping=stage == "writing-and-review")
                 if result["errors"]:
                     raise ResearchStepError("; ".join(result["errors"]))
-            elif action == "economic_data" and stage in {"topic-intelligence", "experiment-design"}:
+            elif action == "economic_data":
                 from scripts.economic_data import execute
                 execute(project, operation["request_id"], allow_observations=operation.get("allow_observations") is True)
-            elif action == "data_quality" and stage == "experiment-design":
+            elif action == "data_quality":
                 identifier = operation["dataset_id"]
                 if not re.fullmatch(r"[a-z0-9][a-z0-9._-]{0,100}", identifier):
                     raise ResearchStepError("invalid dataset identifier")
@@ -460,7 +523,7 @@ def after_write(project: Path, stage: str) -> dict:
                     split_column=operation.get("split_column"), group_column=operation.get("group_column"))
                 write(output, result)
                 cache[str(output.relative_to(project))] = operation_sha
-            elif action == "power" and stage == "experiment-design":
+            elif action == "power":
                 paper = operation["paper_id"]
                 if not re.fullmatch(r"P[0-9]{2}", paper):
                     raise ResearchStepError("invalid paper ID")
@@ -473,18 +536,18 @@ def after_write(project: Path, stage: str) -> dict:
                 result = research_quality.create_power_report(project, paper, **args, groups=operation.get("groups", 2))
                 write(output, result)
                 cache[str(output.relative_to(project))] = operation_sha
-            elif action == "derive_figure_data" and stage == "writing-and-review":
+            elif action == "derive_figure_data":
                 from scripts.figure_provenance import derive
                 request = read(path_in(project, operation["spec"]))
                 if set(request) != {"output", "transform", "source_run_ids"}:
                     raise ResearchStepError("figure-data spec needs output, transform and source_run_ids")
                 derive(project, operation["paper_id"], request["output"], request["transform"], request["source_run_ids"])
-            elif action == "render_figure" and stage == "writing-and-review":
+            elif action == "render_figure":
                 from scripts.publication_figures import render
                 rendered=render(project, path_in(project, operation["spec"]))
                 from scripts.figure_provenance import register_rendered_figures
                 register_rendered_figures(project,rendered)
-            elif action == "read_paper" and stage == "topic-intelligence":
+            elif action == "read_paper":
                 from scripts.paper_reader import build, reusable_reader
                 source = path_in(project, operation["pdf"])
                 output = path_in(project, operation["output"])
@@ -504,11 +567,11 @@ def after_write(project: Path, stage: str) -> dict:
                     build(project, source, output, max_pages=operation.get("max_pages", 30), translate=False, pages=operation.get("pages"))
                 elif not reusable_reader(project, source, output, max_pages=operation.get("max_pages", 30), pages=operation.get("pages")):
                     raise ResearchStepError("cached reader is stale or its page scope changed; preserve it and request a new source-bound output path")
-            elif action == "docx" and stage == "writing-and-review":
+            elif action == "docx":
                 from scripts.manuscript_docx import build
                 source, metadata = path_in(project, operation["source"]), path_in(project, operation["metadata"])
                 build(project, source, metadata, path_in(project, operation["output"]), prefer_pandoc=False)
-            elif action == "citation_audit" and stage == "writing-and-review":
+            elif action == "citation_audit":
                 from scripts.citation_audit import audit
                 from scripts.research_artifacts import record
                 paper = operation["paper_id"]
@@ -526,34 +589,34 @@ def after_write(project: Path, stage: str) -> dict:
                 record(project, [output], "scripts/citation_audit.py")
                 if result["status"] != "pass":
                     raise ResearchStepError("citation audit has unresolved references")
-            elif action == "research_increments" and stage != "intake":
+            elif action == "research_increments":
                 from scripts.research_increments import initialize, refresh, scientific_audit
                 initialize(project)
                 result = refresh(project)
                 if scientific_audit(result)["errors"]:
                     raise ResearchStepError("research increments blocked: " + json.dumps(scientific_audit(result)["errors"])[:2000])
-            elif action == "increments_inventory" and stage == "writing-and-review":
+            elif action == "increments_inventory":
                 from scripts.incremental_writing import inventory
                 from scripts.research_artifacts import record
                 output = project / "reports/research-increments" / ("inventory-" + operation["paper_id"] + ".json")
                 write(output, inventory(project, operation["paper_id"]))
                 record(project, [output], "incremental-source-inventory")
-            elif action == "research_extensions" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+            elif action == "research_extensions":
                 from scripts.research_extensions import refresh
                 result = refresh(project)
                 if result.get("errors"):
                     raise ResearchStepError("research extensions blocked: " + "; ".join(result["errors"]))
-            elif action == "evidence_context" and stage in {"topic-intelligence", "paper-architecture", "experiment-design", "experiment-execution", "writing-and-review"}:
+            elif action == "evidence_context":
                 from scripts.evidence_context import refresh
                 refresh(project, stage, task=operation.get("task_id"))
-            elif action == "retrieve_evidence" and stage != "intake":
+            elif action == "retrieve_evidence":
                 from scripts.evidence_retrieval import refresh, REPORT as retrieval_report
                 result = refresh(project)
                 report["retrieval"] = {"path": retrieval_report,
                     "candidates": [{k: row[k] for k in ("path", "sha256", "start_line", "end_line")}
                                    for row in result["results"]],
                     "automatic_source_exclusion": False, "paid_calls": 0}
-            elif action == "watermark_cleanup" and stage == "writing-and-review":
+            elif action == "watermark_cleanup":
                 from scripts.watermark_cleanup import build, validate_saved_report
                 from scripts.manuscript_hygiene import applied_cleanup
                 auto_receipt = applied_cleanup(project, operation["paper_id"], operation["source"], operation["expected_sha256"])
@@ -572,20 +635,20 @@ def after_write(project: Path, stage: str) -> dict:
             elif action in {"ccfa_task", "ccfa_task_clear", "ccfa_science", "ccfa_humanization"}:
                 from scripts.ccfa_runtime import execute
                 report.setdefault("ccfa", []).append({"action": action, "result": execute(project, operation)})
-            elif action in AUTOMATED_OPERATIONS and stage != "intake":
+            elif action in AUTOMATED_OPERATIONS:
                 from scripts.literaturectl import execute_operation
                 result = execute_operation(project, operation)
                 report.setdefault("literature_workbench", []).append({"action": action, "result": result})
-            elif action == "citation_graph" and stage == "topic-intelligence":
+            elif action == "citation_graph":
                 ledger = literature_evidence.read_jsonl(project / "evidence/literature-api-ledger.jsonl")
                 if not any(r.get("mode") == "citation_graph" and r.get("query") == operation["doi"]
                            and r.get("direction") == operation["direction"] and fresh(r, project) for r in ledger):
                     literature_evidence.execute_citation_graph(project, operation["doi"], direction=operation["direction"],
                         date_range="all indexed years", filters="citation chaining; pending human screening")
-            elif action == "triage_leads" and stage == "topic-intelligence":
+            elif action == "triage_leads":
                 from scripts.lead_triage import triage
                 triage(project, operation["receipt_id"], operation["provider"], operation.get("limit", 5))
-            elif action == "direction_search" and stage == "topic-intelligence":
+            elif action == "direction_search":
                 from scripts.web_research import search
                 queries = operation["queries"]
                 if not isinstance(queries, list) or not 1 <= len(queries) <= 3:
@@ -593,12 +656,14 @@ def after_write(project: Path, stage: str) -> dict:
                 for query in queries:
                     search(query, project_root=project)
             else:
-                raise ResearchStepError("operation is unsupported in this stage; no arbitrary commands or approvals are allowed")
+                raise ResearchStepError("unsupported research operation; select a registered tool with its actual inputs")
         except (ValueError, OSError, RuntimeError, KeyError, TypeError, ImportError) as exc:
             report["operation_errors"].append({"action": action, "error": str(exc)[:700]})
-    if stage=="writing-and-review":
-        paper=read(project/"state/run.json",{}).get("active_paper")
-        if paper:report["supplemental_confirmation"]=automatic_confirmation(project,paper,"post-write-check")
+        finally:
+            succeeded=len(report["operation_errors"])==errors_before and len(report.get("blockers",[]))==blockers_before
+            completed[operation_sha]={"inputs":inputs,"complete":bool(succeeded and complete and inputs),"invocation_id":invocation_id,"errors":report["operation_errors"][errors_before:]}
+            report["executed_operations"].append({"action":action,"request_sha256":operation_sha,"completed":bool(succeeded and complete)})
+            write(cache_path,cache)
     write(project / REPORT, report)
     write(cache_path, cache)
     return report

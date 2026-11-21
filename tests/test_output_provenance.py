@@ -27,12 +27,10 @@ class OutputProvenanceTests(unittest.TestCase):
             artifacts[0].write_text("Changed fixture")
             self.assertEqual(output_provenance.provenance_report(project, artifacts)[0]["status"], "modified_after_record")
             record("anthropic")
-            with self.assertRaises(output_provenance.ProvenanceError):
-                output_provenance.require_final_origins(project, artifacts)
-            with self.assertRaises(output_provenance.ProvenanceError):
-                output_provenance.reject_current_anthropic_outputs(project, artifacts)
+            self.assertTrue(all(row["family"] == "anthropic" for row in output_provenance.require_final_origins(project, artifacts)))
+            output_provenance.reject_current_anthropic_outputs(project, artifacts)
 
-    def test_current_anthropic_hash_is_blocked(self) -> None:
+    def test_current_anthropic_origin_is_retained_without_a_brand_ban(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             project = Path(temp) / "project"
             artifact = project / "papers" / "P01" / "manuscript" / "main.tex"
@@ -47,10 +45,8 @@ class OutputProvenanceTests(unittest.TestCase):
                 role="persistent-writer",
                 run_id="run-1",
             )
-            with self.assertRaises(output_provenance.ProvenanceError):
-                output_provenance.reject_current_anthropic_outputs(
-                    project, [artifact]
-                )
+            output_provenance.reject_current_anthropic_outputs(project, [artifact])
+            self.assertEqual(output_provenance.current_origin(project, artifact)["family"], "anthropic")
 
     def test_human_or_local_edit_invalidates_old_model_hash(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -74,9 +70,9 @@ class OutputProvenanceTests(unittest.TestCase):
                 "modified_after_record",
             )
 
-    def test_final_origin_rejects_untracked_and_accepts_human_attestation(self) -> None:
+    def test_unknown_origin_stays_unknown_until_an_actual_attestation(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             project=Path(temp)/"project";artifact=project/"papers"/"P01"/"manuscript"/"main.tex";artifact.parent.mkdir(parents=True);artifact.write_text("Human text",encoding="utf-8")
-            with self.assertRaises(output_provenance.ProvenanceError):output_provenance.require_final_origins(project,[artifact])
+            self.assertEqual(output_provenance.require_final_origins(project,[artifact])[0]["status"],"untracked")
             output_provenance.attest_human_files(project,[artifact],actor="Researcher",note="Independently reviewed and not Claude-derived")
             output_provenance.require_final_origins(project,[artifact])

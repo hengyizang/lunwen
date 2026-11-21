@@ -41,12 +41,12 @@ EXTRA = {
     **{action: fields | cloud_human_controls.DECISIONS.get(action, set()) | {"expected_sha256", "note"}
        for action, fields in cloud_human_controls.SELECTORS.items()},
     "preflight": {"billing_provider"}, "acceptance": set(), "free_jev_probe": set(),
-    "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count"},
+    "bocha_jev_probe": {"live", "free_policy_checked_on"}, "init": {"paper_count", "question"},
     "status": set(), "authorize_budget": {"new_ceiling_cny"},
     "reconcile_budget": {"reservation_id", "actual_cost_cny", "evidence_note"},
     "authorize_data": {"manifest", "expected_sha256"},
     "resume": {"expected_sha256", "repair_note"},
-    "cycle": {"context", "stage", "task_kind", "task_profile"},
+    "cycle": {"context", "stage", "paper_id", "task_kind", "task_profile", "plan", "review", "remediate", "sources"},
     "continuation": set(),
     "routing_status": set(),
     "set_routing_profile": {"stage", "task_profile", "expected_profile_sha256"},
@@ -128,8 +128,22 @@ def validate_request(value: object) -> dict:
                 raise CloudJobError("authorize an exact data/manifests/*.json file")
         elif not isinstance(value.get("repair_note"), str) or not 10 <= len(value["repair_note"].strip()) <= 500:
             raise CloudJobError("resume needs a 10–500 character explanation of the inspected repair")
-    if action == "init" and (type(value.get("paper_count", 6)) is not int or value.get("paper_count", 6) != 6):
-        raise CloudJobError("the supported doctoral workflow requires exactly six papers")
+    if action == "init" and (type(value.get("paper_count", 1)) is not int or not 1 <= value.get("paper_count", 1) <= 99):
+        raise CloudJobError("paper_count must be an integer from 1 to 99")
+    if action == "init" and (not isinstance(value.get("question", ""), str) or len(value.get("question", "")) > 4000):
+        raise CloudJobError("question must be at most 4000 characters")
+    if action == "cycle":
+        if "paper_id" in value and not re.fullmatch(r"P(?!00)[0-9]{2}", str(value["paper_id"])):
+            raise CloudJobError("invalid paper identifier")
+        if any(type(value.get(flag, False)) is not bool for flag in ("plan", "review", "remediate")):
+            raise CloudJobError("plan, review and remediate must be boolean")
+        if value.get("remediate") and not value.get("review"):
+            raise CloudJobError("remediation requires review")
+        if "sources" in value:
+            if not isinstance(value["sources"], list):
+                raise CloudJobError("sources must be a list of project paths")
+            for source in value["sources"]:
+                project_relative(source)
     if action == "bocha_jev_probe":
         if type(value.get("live", False)) is not bool:
             raise CloudJobError("live must be a boolean")
@@ -144,11 +158,9 @@ def validate_request(value: object) -> dict:
         if "stage" in value and (not isinstance(value["stage"], str)
                 or value["stage"] not in {s["name"] for s in researchctl.STAGES if s["gate"]}):
             raise CloudJobError("invalid stage")
-        if "task_kind" in value:
-            from scripts import model_routing
-            policy, _ = model_routing.load_policy()
-            if value["task_kind"] not in policy["critical_tasks"]:
-                raise CloudJobError("task_kind must name an approved critical scientific task")
+        if "task_kind" in value and (not isinstance(value["task_kind"], str)
+                                         or not re.fullmatch(r"[a-z][a-z0-9_-]{0,79}", value["task_kind"])):
+            raise CloudJobError("invalid task kind")
         if "task_profile" in value:
             from scripts import dynamic_routing
             try:
@@ -176,10 +188,9 @@ def validate_request(value: object) -> dict:
         if not isinstance(value.get("expected_profile_sha256"), str) or not re.fullmatch(r"[a-f0-9]{64}", value["expected_profile_sha256"]):
             raise CloudJobError("the exact reviewed routing profile SHA-256 is required")
         policy, _ = model_routing.load_policy()
-        if not isinstance(value.get("stage"), str) or value["stage"] not in {*policy["stage_routes"], "auxiliary"}:
-            raise CloudJobError("unsupported routing acceptance stage")
-        if not isinstance(value.get("role"), str) or value["role"] not in {*model_routing.CYCLE_ROLES, *policy["auxiliary_routes"], *policy["critical_tasks"]}:
-            raise CloudJobError("unsupported routing acceptance role")
+        for field in ("stage", "role"):
+            if not isinstance(value.get(field), str) or not re.fullmatch(r"[a-z][a-z0-9_-]{0,79}", value[field]):
+                raise CloudJobError("invalid routing acceptance " + field)
     if action == "paperqa":
         if not isinstance(value.get("question"), str) or not 0 < len(value["question"].strip()) <= 2000:
             raise CloudJobError("a question of at most 2000 characters is required")
@@ -342,7 +353,7 @@ def persist_state(slug: str, worktree: Path, branch: str, run_id: str) -> list[s
         return []
     current = {p.relative_to(source) for p in files}
     for old in selected_files(dest):
-        if old.relative_to(dest) not in current:
+        if old.relative_to(dest) not in current and not cloud_checkpoint.research_source(old.relative_to(dest).as_posix()):
             old.unlink()  # Git history retains prior evidence; current state mirrors the run.
     for file in files:
         copy = dest / file.relative_to(source)
@@ -446,9 +457,11 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
             worktree, branch = restore_state(slug)
             os.environ["DR_OS_STATE_WORKTREE"] = str(worktree)
             os.environ["DR_OS_STATE_BRANCH"] = branch
-            if action in {"status", "cycle", "continuation", "review_dossier", "literature", *cloud_human_controls.ACTIONS}:
-                from scripts.cloud_research_steps import acquire_data
-                acquire_data(ROOT / "projects" / slug)
+        project_path = ROOT / "projects" / slug
+        if (action in {"cycle", "continuation"} and (project_path / "reports/ccfa-tasks/active.json").is_file()
+                and json.loads((project_path / "reports/ccfa-tasks/active.json").read_text()).get("path")):
+            from scripts.ccfa_runtime import bootstrap
+            bootstrap()
         project_exists = (ROOT / "projects" / slug / "state" / "run.json").is_file()
         phase = "control"
         if action == "preflight":
@@ -492,7 +505,7 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
         elif action == "init":
             if project_exists:
                 raise CloudJobError("project already exists; use status or cycle")
-            if logged_command(["scripts/researchctl.py", "init", "--project", slug, "--paper-count", str(job.get("paper_count", 6))]):
+            if logged_command(["scripts/researchctl.py", "init", "--project", slug, "--paper-count", str(job.get("paper_count", 1)), "--question", job.get("question", "")]):
                 status = "failed"
         else:
             if not project_exists:
@@ -591,16 +604,6 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                         progress = saved_progress(ROOT / "projects" / slug, record_baseline=True)
                         if progress.get("input_comparison"):
                             continuation_decision = cloud_continuation.evaluate(slug)
-                    quality_waits = {"current_stage_work_allowed", "external_input_required", "cumulative_budget_boundary",
-                                     "configuration_pending"}
-                    if (continuation_decision.get("reason") in quality_waits and continuation_decision.get("actor") == job["actor"]
-                            and continuation_decision.get("gate") in {"G3", "G4"}):
-                        from scripts.automated_quality import checked_run
-                        quality_result = checked_run(ROOT / "projects" / slug, continuation_decision["stage"])
-                        logs.append(json.dumps(quality_result, ensure_ascii=False))
-                        continuation_decision = cloud_continuation.evaluate(slug)
-                    if continuation_decision.get("actor") == job["actor"] and cloud_continuation.transition_ready_gate(slug, continuation_decision):
-                        continuation_decision = cloud_continuation.evaluate(slug)
                     cloud_continuation.checkpoint(slug, continuation_decision, run_id)
                     detail = f"Continuation: `{continuation_decision['reason']}`.\n\n"
                     logs.append(json.dumps(continuation_decision, ensure_ascii=False, indent=2))
@@ -610,10 +613,11 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
                     if action == "continuation" and job["actor"] != continuation_decision["actor"]:
                         raise CloudJobError("continuation actor must match the recorded owner confirmation")
                     cmd = cycle_command(job, slug)
-                    from scripts.cloud_runtime import prepare as prepare_runtime
-                    phase = "environment"
-                    prepare_runtime(ROOT / "projects" / slug)
-                    phase = "control"
+                    if len(cmd) > 3 and cmd[3] == "experiment-execution":
+                        from scripts.cloud_runtime import prepare as prepare_runtime
+                        phase = "environment"
+                        prepare_runtime(ROOT / "projects" / slug)
+                        phase = "control"
                     from scripts.cloud_progress import snapshot
                     progress_before = snapshot(slug)
             elif action == "auxiliary":
@@ -759,46 +763,38 @@ def run_job(job: dict, run_id: str, *, owner_authorization: dict | None = None) 
 
 def cycle_command(job: dict, slug: str) -> list[str]:
     from scripts.cloud_progress import pause_reason
+    work = researchctl.select_work(slug, task=job.get("context", ""), paper_id=job.get("paper_id"),
+                                   stage=job.get("stage"))
     pause = pause_reason(slug)
     if pause:
         raise CloudJobError("Continuation needs external input or an inspected repair: " + pause["reason"])
     control = model_spend.read(ROOT / "projects" / slug, required=True)
     if not control or control["authorized_ceiling_cny"] - control["spent_cny"] - model_spend.reserved(control) <= 0:
         raise CloudJobError("the cumulative model spending ceiling has no remaining capacity")
-    errors = cloud_continuation.configuration_errors(os.environ)
-    if errors:
-        raise CloudJobError("Gateway configuration pending: " + "; ".join(errors))
-    state = researchctl.load_state(slug)
-    if state["status"] in {"awaiting_approval", "approved"} or state["gate"] is None:
-        raise CloudJobError("current gate requires human review or is already approved")
-    if job.get("stage", state["stage"]) != state["stage"]:
-        raise CloudJobError("requested stage does not match persisted current stage")
-    context = job.get("context", "")
-    if job["action"] == "continuation":
-        context = ("Continue the owner-confirmed current stage toward the six-paper requirements. "
-                   "Read the frozen intake constraints and existing evidence, initial/final audits and decision log; "
-                   "repair remaining evidence and quality gaps without repeating completed work. "
-                   "Preserve negative results. Use only cloud-authorized data and the cumulative approved budget. "
-                   "Do not approve or advance a human gate, change spending authority, or auto-submit. "
-                   "Keep Claude read-only and OpenAI as the persistent author. The October 7 target does not lower any requirement.")
+    stage = work["stage"]
+    context = work.get("task") or (
+        "Use the existing sources and results to advance the current research question. "
+        "Record the evidence, including negative results, and update the manuscript where relevant.")
     os.environ["DR_OS_REQUIRE_MODEL_AUTH"] = "1"
     os.environ["DR_OS_REQUIRE_REMOTE_RESERVATION"] = "1"
-    production = os.environ.get("DR_OS_ROUTING_PROFILE")=="production"
-    command = ["scripts/api_orchestrator.py", "cycle", slug, state["stage"],
-            "--planner-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic",
-            "--writer-provider", "cheapai-gpt-pro" if production else "uuapi-openai",
-            "--critic-provider", "codekey-kiro-enterprise" if production else "uuapi-anthropic", "--context", context]
+    production = os.environ.get("DR_OS_ROUTING_PROFILE") == "production"
+    command = ["scripts/api_orchestrator.py", "cycle", slug, stage, "--context", context]
     task_profile = job.get("task_profile")
     if job["action"] == "continuation" and production:
-        task_profile = cloud_continuation.task_profile(ROOT / "projects" / slug, state["stage"])
+        task_profile = cloud_continuation.task_profile(ROOT / "projects" / slug, stage)
     if task_profile is not None:
         from scripts import dynamic_routing
         try:
-            task_profile = dynamic_routing.validate_profile(task_profile, stage=state["stage"],
+            task_profile = dynamic_routing.validate_profile(task_profile, stage=stage,
                                                            role="persistent-writer")
         except (TypeError, ValueError) as exc:
             raise CloudJobError(f"invalid task_profile: {exc}") from exc
         command += ["--task-profile", json.dumps(task_profile, separators=(",", ":"))]
+    for flag in ("plan", "review", "remediate"):
+        if job.get(flag):
+            command.append("--" + flag)
+    for source in job.get("sources", []):
+        command.extend(["--source", source])
     if job.get("task_kind"):
         command += ["--task-kind", job["task_kind"]]
     return command

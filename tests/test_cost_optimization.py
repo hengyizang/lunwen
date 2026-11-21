@@ -73,10 +73,12 @@ class LosslessContextTests(unittest.TestCase):
             write(project / "papers/P01/manuscript/main.tex", "Current manuscript")
             write(project / "papers/P02/paper-contract.json", {"claim": "independent"})
             with patch.object(api, "ROOT", root):
-                text = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=True)
+                text = api.project_snapshot("demo", stage="writing-and-review", exclude_reviews=True,
+                    source_paths=["evidence/contrary.md", "evidence/result.json", "papers/P01/manuscript/main.tex",
+                                  "state/model-spend-control.json", "intake/constraints.json", "papers/P02/paper-contract.json"])
             for required in ("REGISTERED_NEGATIVE_RESULT", "Current manuscript", "authorized_ceiling_cny", "compute_ceiling", "independent"):
                 self.assertIn(required, text)
-            marker = f"--- FILE evidence/result.json sha256={hashlib.sha256(source.read_bytes()).hexdigest()} representation=json-whitespace-compacted ---\n"
+            marker = f"--- FILE evidence/result.json sha256={hashlib.sha256(source.read_bytes()).hexdigest()} ---\n"
             self.assertEqual(json.loads(text.split(marker, 1)[1].split("\n--- END FILE ---", 1)[0]), result)
             self.assertNotIn("OLD_PREFERRED_VERDICT", text)
             self.assertNotIn("BILLING_TRACE_ONLY", text)
@@ -88,10 +90,10 @@ class LosslessContextTests(unittest.TestCase):
             write(root / "projects/demo/evidence/negative.md", "negative observation " * 100)
             with patch.object(api, "ROOT", root), patch.object(api, "MAX_SNAPSHOT_FILE_BYTES", 100):
                 with self.assertRaisesRegex(ValueError, "source ranges"):
-                    api.project_snapshot("demo", stage="topic-intelligence")
+                    api.project_snapshot("demo", stage="topic-intelligence", source_paths=["evidence/negative.md"])
             with patch.object(api, "ROOT", root), patch.object(api, "MAX_SNAPSHOT_TOTAL_BYTES", 100):
-                with self.assertRaisesRegex(ValueError, "never silently omit"):
-                    api.project_snapshot("demo", stage="topic-intelligence")
+                with self.assertRaisesRegex(ValueError, "byte limit"):
+                    api.project_snapshot("demo", stage="topic-intelligence", source_paths=["evidence/negative.md"])
 
     def test_duplicate_snippets_keep_both_stances_and_full_counterevidence(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -127,7 +129,7 @@ class LosslessContextTests(unittest.TestCase):
         topic = api.stage_writing_instructions("topic-intelligence")
         design = api.stage_writing_instructions("experiment-design")
         writing = api.stage_writing_instructions("writing-and-review")
-        for required in ("recorded owner-supplied G0 weights", "closest works", "citation chaining", "rejection"):
+        for required in ("closest works", "citation chaining", "rejection"):
             self.assertIn(required, topic)
         self.assertNotIn("human-confirmed G0 weights", topic)
         for required in ("strong", "negative controls", "stopping rules", "power", "preregistration", "clean-room"):

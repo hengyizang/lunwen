@@ -73,6 +73,13 @@ class LiteratureFeedbackTests(unittest.TestCase):
         self.assertFalse(first["gate_approved"])
         self.assertEqual(first["paid_model_calls"], 0)
         self.assertEqual(first["plan"]["sha256"], self.plan_hash)
+
+    def test_feedback_accepts_safe_paper_ids_beyond_a_fixed_six(self):
+        event = self.event(paper_ids=["P07", "replication-2026"])
+        result = self.record(event)
+        self.assertEqual(result["paper_ids"], ["P07", "replication-2026"])
+        from scripts.research_artifacts import schema_errors
+        self.assertEqual(schema_errors(event, "literature-feedback.schema.json"), [])
         with self.assertRaisesRegex(ValueError, "immutable"):
             self.record(self.event(reason="Changed observation under an existing event ID"))
 

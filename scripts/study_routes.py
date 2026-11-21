@@ -249,8 +249,6 @@ def validate_protocol(project, paper_id):
 
 @paper_scoped
 def prepare_runtime(project, paper_id):
-    state = read(project / "state/run.json")
-    need(state.get("gate") == "G3" and state.get("status") == "awaiting_work", "runtime preparation requires an open G3")
     kind = route(project, paper_id)
     value = read(protocol_path(project, paper_id))
     need(kind in {"meta_analysis", "theory"}, "unsupported study route")
@@ -339,8 +337,8 @@ def build_report(project, paper_id):
         errors = results_validation.validate_registry(project, read(plan_path), registry)
         prereg = project / "papers" / paper_id / "preregistration.json"
         read(project / "state/run.json")
-        from scripts.paper_execution import approval as paper_approval
-        approval = paper_approval(project,"G3",paper_id) or {}
+        from scripts.paper_execution import protocol_seal
+        approval = protocol_seal(project, paper_id) or {}
         need(approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(prereg), "study preregistration differs from the G3 protocol decision")
         errors += quality.validate_preregistration(read(prereg), paper_id, project)
         need(not errors, "; ".join(errors))
@@ -479,7 +477,8 @@ def reporting_audit(project, paper_id, *, manuscript_project=None, mapping_name=
                 need(set(row["values"]) == set(fields), "Meta reporting must include count, estimate, uncertainty, heterogeneity and adjusted test")
                 for key, value in fields.items():
                     rendered = row["values"][key]
-                    need(isinstance(rendered, str) and re.search(r"(?<![\w.])" + re.escape(rendered) + r"(?!\w|\.\d)", row["excerpt"])
+                    from scripts.scientific_numbers import number_in_text
+                    need(isinstance(rendered, str) and number_in_text(row["excerpt"], rendered)
                          and math.isclose(float(rendered), value, rel_tol=1e-4, abs_tol=5e-6), "reported statistic differs from computed " + key)
             else:
                 need(normalized(result["proof"]["natural_language_statement"]) in normalized(row["excerpt"]), "manuscript must state the registered theorem obligation")

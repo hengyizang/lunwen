@@ -84,6 +84,24 @@ def check_file(path: Path, project: Path) -> None:
             tail = data[-overlap:] if overlap else b""
 
 
+def research_source(rel: str) -> bool:
+    """Public source materials that should stay on the project branch."""
+    return (rel.startswith(("evidence/literature/", "literature/", "data/manifests/"))
+            or rel in {"data/datasets.jsonl", "evidence/dataset-search-log.jsonl",
+                       "evidence/literature-api-ledger.jsonl"}
+            or (rel.startswith("data/discovery-") and rel.endswith(".json")))
+
+
+def durable_source(rel: str) -> bool:
+    # Keep public bibliographic/data records in Git. Full texts and binary
+    # assets continue to use their existing distribution and storage rules.
+    return research_source(rel) and Path(rel).suffix.lower() in {".json", ".jsonl", ".csv", ".tsv", ".bib", ".xml"}
+
+
+def archive_state(rel: str) -> bool:
+    return rel in ARCHIVE_STATE_LOGS or rel.startswith("state/citation-metadata/")
+
+
 def inventory(project: Path) -> list[dict]:
     if not project.exists():
         return []
@@ -105,11 +123,15 @@ def inventory(project: Path) -> list[dict]:
                                    "data/processed/", "data/processed-preview/")) or rel in ARCHIVE_STATE_LOGS
         in_git = (not internal and path.suffix.lower() in GIT_SUFFIXES and size <= GIT_FILE_LIMIT
                   and (rel == MANIFEST or used_git + size <= GIT_TOTAL_LIMIT))
-        if rel.startswith("state/") and rel not in ARCHIVE_STATE_LOGS and not rel.startswith("state/citation-metadata/") and not in_git:
+        if durable_source(rel):
+            if size >= 100 * 1024 * 1024:
+                raise CheckpointError(f"source exceeds the GitHub file limit: {rel}; retain it in Git LFS or link its repository copy")
+            in_git = True
+        if rel.startswith("state/") and not archive_state(rel) and not in_git:
             raise CheckpointError("control state exceeds the Git checkpoint limit; archive cannot replace authority")
-        if in_git:
+        if in_git and not durable_source(rel):
             used_git += size
-        else:
+        elif not in_git:
             used_archive += size
         entries.append({"path": rel, "bytes": size, "sha256": sha(path), "storage": "git" if in_git else "artifact"})
     if used_archive > ARCHIVE_LIMIT:
@@ -189,7 +211,7 @@ def sync_billing(project: Path) -> None:
     if git("diff", "--cached", "--name-only", "--", rel).stdout.strip():
         git("-c", "user.name=research-cloud", "-c", "user.email=research-cloud@users.noreply.github.com",
             "commit", "-m", "Reserve approved research API cost before transport", "--", rel)
-        git("push", "origin", f"HEAD:refs/heads/{branch}")
+    git("push", "origin", f"HEAD:refs/heads/{branch}")
 
 
 def sync_experiment_reservation(project: Path, *, completed: bool) -> None:
@@ -269,7 +291,7 @@ def restore(project: Path, archive: Path | None = None) -> None:
             raise CheckpointError("checkpoint archive hash changed")
         expected = {relative(item["path"]): item for item in files}
         if (len(expected) != len(files) or any(excluded(p) for p in expected)
-                or any(p.startswith("state/") and p not in ARCHIVE_STATE_LOGS for p in expected)):
+                or any(p.startswith("state/") and not archive_state(p) for p in expected)):
             raise CheckpointError("duplicate or forbidden checkpoint entries")
         prepared = []
         total = 0

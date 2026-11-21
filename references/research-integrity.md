@@ -1,76 +1,24 @@
 # Research integrity
 
-Apply these rules to every stage.
+Scientific claims need appropriate evidence. Use these principles during actual work; they are not a requirement to create a complete administrative dossier before starting.
 
-## Prohibited shortcuts
+- Never invent citations, data, experiments, outputs, statistical quantities, reviews, authorship or submission status. Label synthetic fixtures and planned work accurately.
+- Preserve original data, source versions and actual attempts, including failed, negative and inconclusive outcomes. Do not select seeds, samples or specifications because they produce favorable findings.
+- Connect important manuscript claims and displayed values to the original source or actual analysis. Distinguish source identity, supplied text, reading scope and semantic support. A DOI, checksum or completed form proves none of the latter by itself.
+- Check the design's independent units, estimand, assumptions, leakage, fair comparisons and uncertainty. No single model verdict, p-value or venue rank certifies scientific value.
+- Set confirmatory choices before seeing outcomes; record deviations and prior exposure. Explore freely within the actual authorization and describe exploratory conclusions honestly.
+- Keep credentials and private material out of public artifacts. Observe known access restrictions and actual data/redistribution obligations; do not invent permission. Unknown licence metadata does not itself create a blanket research stop.
 
-- No fabricated or placeholder citations presented as real.
-- No synthetic observations presented as collected real-world data.
-- No invented experiment outputs, p-values, confidence intervals, effect sizes or reviewer comments.
-- No hidden exclusion of seeds, samples, datasets, baselines or metrics because results are unfavorable.
-- No copying a publisher template or article beyond its permitted use.
-- No bypassing authentication, robots controls, rate limits, paywalls, CAPTCHAs or data-use restrictions.
-- No claim that journal acceptance, degree credit, early completion, or admission is guaranteed.
+## Evidence that is useful to retain
 
-## Required provenance
+For data, retain the original source/version, access context, analysis unit, relevant transformations, exclusions and split construction. For executed work, retain code/environment, inputs, commands or configurations, outputs, failures and costs. Use identifiers and hashes where they help retrieve or distinguish evidence; do not duplicate information across ledgers.
 
-For each dataset, preserve title, provider, canonical URL, version, access time, license, checksum, unit of analysis, exclusions, transformations and split construction.
+For novelty, explain the nearest relevant work, exact proposed difference, counterevidence and remaining search limits. The number of papers read is not a proof of originality. Read the material needed for the claim; abstract-only knowledge remains abstract-only.
 
-For each result, preserve code revision, environment, command/config, seed, input dataset versions, output hashes, runtime and compute cost.
+## Writing and assistance
 
-For each material claim, preserve evidence IDs, source locations, analysis IDs, uncertainty and scope limits.
+All capable models may contribute persistent writing, analysis and code. Preserve actual assistance and source history rather than enforcing vendor authorship rules or disguising provenance. Accountable human authors retain responsibility under the actual publication setting.
 
-For each novelty claim, preserve what was already known, at least three closest
-works, the exact proposed difference, counterevidence, a falsification test,
-boundary conditions, residual risk and the search-saturation record. “No paper
-was found” is not evidence of originality.
+Write the strongest supported contribution clearly. Include contrary findings that affect its interpretation or scope, and retain complete outcomes separately. Presentation may depend on relevance, adequacy and venue space; unfavorable direction alone is not a reason to hide evidence. State material limitations specifically, without repeated generic disclaimers.
 
-For each selected dataset, run a local hash-bound quality audit before G3. A
-clean checksum does not establish representativeness, unbiased labels, valid
-sampling or lawful use; those remain separate scientific and human judgments.
-
-Freeze the confirmatory plan before G4. Any later change must be logged and
-labeled as a protocol deviation or exploratory analysis. Reproduction evidence
-must use successful registered runs and current output hashes; do not type a
-passing status into a report when numeric tolerances are exceeded.
-
-## AI authorship boundary
-
-AI tools are assistants, not accountable authors. Actual authors retain responsibility for citations, methods, results, wording and authorship criteria. The automated workflow does not impose a journal AI-policy gate or invent author review. Public AI-use statements are optional and author-editable; internal model and source records remain truthful.
-
-Claude is restricted to non-publishable semantic planning and internal independent audits. Codex/OpenAI must independently write all persistent project text, and deterministic local tools must render charts from recorded data. The control plane records model-family and file-hash provenance and blocks a current Anthropic-authored file from submission packaging. This technical boundary does not remove any journal, university or funder disclosure obligation.
-
-Natural academic-style revision may remove stock phrasing, repetition and weak
-argument transitions, but it must preserve supported meaning, numbers, equations,
-citations and uncertainty. Do not optimize against an AI-detector score, claim
-human-only authorship, or use paraphrasing to conceal assistance. The applicable
-journal, university and funder disclosure rules remain controlling.
-
-## Claim-forward reporting without selective reporting
-
-Lead the abstract, discussion and conclusion with the strongest supported
-contribution, its decisive evidence and bounded value. Reframe around a better
-supported contribution when warranted; preserve original hypotheses, outcomes
-and actual analysis phases using the existing claim/argument and revision records. A
-secondary, exploratory, null or unfavorable result need not become a headline
-conclusion unless it materially changes the primary claim, validity, safety or
-scope. It must still remain locatable in the results, supplement and registered
-evidence trail with its uncertainty and interpretation intact.
-
-Do not delete, soften or demote an experiment because its result is unfavorable
-or likely to attract criticism. Main-text versus supplement placement may depend
-only on predeclared role, relevance, statistical adequacy, redundancy and venue
-space. Record the placement rationale and cross-reference the supplement from
-the main manuscript. A primary outcome, falsification test, required baseline,
-material robustness failure or result that changes interpretation stays visible
-in the main text regardless of direction.
-
-State material limitations once, specifically and without apology, next to the
-claim they qualify or in the designated methods/discussion/limitations section.
-Remove generic caveats and repeated defenses against hypothetical objections;
-never remove a limitation that affects validity, interpretation, scope, research
-design, safety, ethics or correct use of the result.
-
-## Corrections
-
-Never erase an adverse result or audit finding. Supersede it with a dated correction and retain the original in history.
+A substantive correction retains the original evidence and explains what changed. A superseded or inapplicable review issue can be closed with its reason; its history need not become a permanent obstacle. A prepared manuscript or package is not an external submission, and software tests do not establish acceptance, degree credit or scientific completion.

@@ -45,44 +45,36 @@ class EditorialIntegrationTests(unittest.TestCase):
             academic_style.report_path(manuscript.parent.parent).write_text(json.dumps(report), encoding="utf-8")
             self.assertTrue(academic_style.validate_saved_audit(manuscript.parent.parent))
 
-    @patch("scripts.research_phase.writing_phase",return_value="submission")
-    def test_shared_writer_roles_receive_optional_observations_in_submission_phase(self, phase):
-        api_prompt = api_orchestrator.writer_prompt("missing-project", "writing-and-review", "")
-        api_remediation = api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}")
-        api_critic = api_orchestrator.critic_prompt("missing-project", "writing-and-review", "")
-        for value in (api_prompt, api_remediation,   api_critic, ):
+    def test_shared_writer_roles_do_not_implicitly_run_optional_editorial_methods(self):
+        with patch("scripts.ccfa_runtime.editorial_method_guidance", side_effect=AssertionError("No implicit editorial bundle")):
+            prompts = [api_orchestrator.writer_prompt("missing-project", "writing-and-review", "Draft a discussion"),
+                api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "Correct one source", "{}"),
+                api_orchestrator.critic_prompt("missing-project", "writing-and-review", "Review the evidence")]
+        for prompt in prompts:
             for code in ("H01", "H26", "AD01", "AD08"):
-                self.assertIn(code, value)
-            self.assertIn("Empty or partial observation lists are valid", value)
-            self.assertNotIn("Apply every CFH", value)
-            self.assertNotIn("as the two editorial passes", value)
-        for value in (api_prompt, api_remediation,  ):
-            self.assertIn("watermark_cleanup", value)
-        for value in (api_critic, ):
-            self.assertIn("read-only independent adversarial scientific reviewer", value)
-            self.assertNotIn("In remediation notes", value)
-            self.assertIn("Use actual scientific sources and relevant observations in a read-only independent review.", value)
-        self.assertNotIn("Inspect protected_signals", api_prompt)
+                self.assertNotIn(code, prompt)
+            self.assertNotIn("watermark_cleanup", prompt)
         self.assertNotIn("H26", api_orchestrator.editorial_prompt_contract("topic-intelligence"))
 
-
-    def test_evidence_led_narrative_reaches_all_existing_g5_roles(self):
-        prompts = [
-            api_orchestrator.writer_prompt("missing-project", "writing-and-review", ""),
-            api_orchestrator.remediation_prompt("missing-project", "writing-and-review", "", "{}"),
-            api_orchestrator.critic_prompt("missing-project", "writing-and-review", "secret-preferred-verdict"),
-        ]
-        for prompt in prompts:
-            with self.subTest(role=prompt[:80]):
-                for instruction in (
-                    "evidence-led narrative", "strongest supported contribution",
-                    "before results", "normal approval", "post-hoc",
-                    "fixed evaluation criteria", "negative/null/adverse results",
-                ):
-                    self.assertIn(instruction, prompt.lower())
-                self.assertNotIn("Lead the abstract and conclusion with the preregistered primary finding", prompt)
-                self.assertNotIn("secret-preferred-verdict", prompt)
-        # Narrative quality and independent science review do not require style scorecards.
+    def test_scientific_review_receives_current_evidence_without_preferred_verdict(self):
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            source = project / "papers/P01/manuscript/main.md"
+            source.parent.mkdir(parents=True)
+            body = "Effect -0.24, interval [-0.41, -0.07]; an adverse replication remains unresolved."
+            source.write_text(body)
+            previous = project / "papers/P01/reviews/previous.md"
+            previous.parent.mkdir()
+            previous.write_text("PREVIOUS_VERDICT_SHOULD_NOT_LEAK")
+            selected = [source.relative_to(project).as_posix(), previous.relative_to(project).as_posix()]
+            with patch.object(api_orchestrator, "project_root", return_value=project):
+                critic = api_orchestrator.critic_prompt("fixture", "writing-and-review", "secret-preferred-verdict", source_paths=selected)
+                writer = api_orchestrator.writer_prompt("fixture", "writing-and-review", "Explain the actual evidence", source_paths=selected[:1])
+            for prompt in (critic, writer):
+                self.assertEqual(prompt.count(body), 1)
+                self.assertIn(hashlib.sha256(source.read_bytes()).hexdigest(), prompt)
+            self.assertNotIn("secret-preferred-verdict", critic)
+            self.assertNotIn("PREVIOUS_VERDICT_SHOULD_NOT_LEAK", critic)
 
     def test_retired_legacy_reports_never_supply_a_claimed_mechanical_or_semantic_pass(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(api_orchestrator, "ROOT", Path(directory)):

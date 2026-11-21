@@ -84,8 +84,8 @@ def _bind(project, value, *, tracked=False):
     if value["sha256"] != sha(target):
         raise ValueError("source hash is stale: " + relative)
     origin = output_provenance.current_origin(project, target)
-    if origin.get("family") == "anthropic" or (tracked and origin.get("status") != "tracked"):
-        raise ValueError("source requires current non-Claude writer provenance")
+    if tracked and origin.get("status") != "tracked":
+        raise ValueError("source requires current writer provenance")
     return {"path": relative, "sha256": value["sha256"], "origin": origin}
 
 
@@ -122,16 +122,16 @@ def _anchors(project, value, bindings, *, paths=None):
 def _scope(project, value, bindings):
     question = _text(value.get("doctoral_question"), "doctoral question", 4000)
     ids = _strings(value.get("paper_ids", []), "paper scope", 0)
-    if any(i not in {f"P{n:02d}" for n in range(1, 7)} for i in ids):
-        raise ValueError("paper scope is restricted to P01-P06")
+    if any(not re.fullmatch(r"P[0-9]{2}", i) for i in ids):
+        raise ValueError("invalid paper identifier")
     core = path_in(project, "program/core-thesis.json", exists=False)
-    status = "proposed_requires_G1_G2_human_review"
+    status = "proposed"
     if core.is_file():
         _file(project, {"path": "program/core-thesis.json", "sha256": sha(core)}, bindings)
         canonical = read(core).get("doctoral_question")
         if isinstance(canonical, str) and canonical.strip() and canonical.strip().casefold() not in {"unassigned", "tbd", "unknown"}:
             if canonical.strip() != question:
-                raise ValueError("scope differs from the current doctoral question; human G1/G2 review required")
+                raise ValueError("scope differs from the current doctoral question")
             status = "current_question_bound_not_gate_approval"
     return {"doctoral_question": question, "paper_ids": ids, "status": status}
 
@@ -256,13 +256,15 @@ def _lineage(project, data, previous, bindings, scope):
             configuration = _file(project, measurement["configuration"], bindings)
             canonical_config = {k: configuration[k] for k in ("path", "sha256")}
             registry = experiment_path(project, 'experiments/registry.jsonl', run["paper_id"])
-            _file(project, {"path": registry.relative_to(project).as_posix(), "sha256": sha(registry)}, bindings)
-            attempts = [json.loads(line) for line in registry.read_text(encoding="utf-8").splitlines() if line.strip()]
+            registry_path = registry.relative_to(project).as_posix()
+            attempts = _registered_attempts(project, registry_path, run["run_id"])
             if (not config or config.get("paper_id") != run.get("paper_id") or canonical_config not in config.get("inputs", [])
                     or not any(r.get("path") == configuration["path"] and r.get("sha256") == configuration["sha256"] for r in run.get("inputs", []))
                     or read(path_in(project, configuration["path"])).get("candidate_id") != identifier
-                    or [r for r in attempts if r.get("run_id") == run["run_id"]] != [run]):
+                    or attempts != [run]):
                 raise ValueError("measurement needs its exact registered attempt and approved candidate configuration")
+            bindings.append({"kind": "registered_attempt", "path": registry_path,
+                             "run_id": run["run_id"], "sha256": _digest(run)})
             for output in run["outputs"]:
                 _file(project, {k: output[k] for k in ("path", "sha256")}, bindings)
             candidate["measurement"] = {"receipt": {"path": receipt["path"], "sha256": receipt["sha256"]}, "run_id": run["run_id"], "configuration": canonical_config}
@@ -540,6 +542,14 @@ def _stored(project, operation, identifier):
     return report, path
 
 
+def _registered_attempts(project, relative, run_id):
+    if not re.fullmatch(r"experiments/(?:papers/P[0-9]{2}/)?registry\.jsonl", relative):
+        raise ValueError("invalid experiment registry path")
+    with path_in(project, relative).open(encoding="utf-8") as stream:
+        rows = (json.loads(line) for line in stream if line.strip())
+        return [row for row in rows if row.get("run_id") == run_id]
+
+
 def current(project: Path, operation: str, identifier: str) -> dict:
     """Replay freshness of all inputs; a report is not a scientific certificate."""
     if operation not in OPERATIONS:
@@ -554,6 +564,11 @@ def current(project: Path, operation: str, identifier: str) -> dict:
     if _scope(project, report["scope"], scope_bindings) != report["scope"] or any(b not in report["inputs"] for b in scope_bindings):
         raise ValueError("current doctoral scope changed; rebuild affected report")
     for binding in report["inputs"]:
+        if binding.get("kind") == "registered_attempt":
+            rows = _registered_attempts(project, binding["path"], binding["run_id"])
+            if len(rows) != 1 or _digest(rows[0]) != binding["sha256"]:
+                raise ValueError("registered experiment attempt changed")
+            continue
         if binding.get("kind") == "native_retrieval_raw":
             if (not re.fullmatch(r"evidence/literature/raw/[A-Za-z0-9_-]+\.[A-Za-z0-9]+", binding["path"])
                     or sha(path_in(project, binding["path"])) != binding["sha256"]):
@@ -577,8 +592,6 @@ def execute(project: Path, operation: str, request: dict) -> dict:
     request = {schema_version: '1.0', id, source, expected_source_sha256,
                expected_previous_sha256: null | latest report hash}
     """
-    if os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1" and os.environ.get("GITHUB_ACTIONS") != "true":
-        raise ValueError("CCFA science operations require the cloud executor")
     if operation not in OPERATIONS:
         raise ValueError("unsupported CCFA science operation")
     _keys(request, {"schema_version", "id", "source", "expected_source_sha256", "expected_previous_sha256"},

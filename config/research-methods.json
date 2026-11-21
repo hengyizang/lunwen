@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "reviewed_at": "2026-10-29",
+  "reviewed_at": "2026-11-21",
   "source_ids": [
     "kdense-topic-methods",
     "kdense-brainstorming-20261029",
@@ -30,7 +30,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/research-task-prompts.md",
-      "sha256": "9d814d266892033365697b07ed7b2af8e7dbdcd78654a92b7d6553ab8b78c227",
+      "sha256": "f1e9f5bcd890023ad8c8aa4cd94b6944a6f8b8602489cd310d33cd0790e956a4",
       "source_ids": [
         "ars-codex",
         "paperai-reading",
@@ -48,7 +48,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/literature-reading.md",
-      "sha256": "52e7b137c2889afdaebfad2ba18043c3a36cda7a44c8077b276febc03d773fa8",
+      "sha256": "b6951a0c67894fcd05632d1bd80f34a32c6437ef8a05281a7daddb91593eb950",
       "source_ids": [
         "paperqa2",
         "paperai-reading",
@@ -68,7 +68,7 @@
         "experiment-design"
       ],
       "path": "references/research-methods/topic-hypotheses.md",
-      "sha256": "fa0e5644694676095d37404cf658ce2eff278813a20ea02c6d402280eac60027",
+      "sha256": "944e24287061d22f3e377a156822a4d14c7e7411351d6d8a93e5ce3f04512375",
       "source_ids": [
         "kdense-topic-methods",
         "kdense-brainstorming-20261029",
@@ -81,7 +81,7 @@
         "topic-intelligence"
       ],
       "path": "references/research-methods/paper-cards.md",
-      "sha256": "ba40e4b7936b55e78f149db30a0d28354df6b4ae8c47d758b2b872703daef9ab",
+      "sha256": "8807d71954387be41b90d38dad205e5e43a9f3cb2ba9c828eeaa341b8a91f2da",
       "source_ids": [
         "nature-skills",
         "kdense-topic-methods"
@@ -97,7 +97,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/evidence-arguments.md",
-      "sha256": "79a5ca6e81e91fcaeb9c343478506fc0fa1b172a9102d307ae2d47675d26e447",
+      "sha256": "3b84457a4b3eaf8f1ced2d7aa667919ec120ad6448d44ddf1b39dc25a26d2222",
       "source_ids": [
         "paperspine",
         "ars-codex",
@@ -113,7 +113,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/empirical-data.md",
-      "sha256": "97490b71c750a05df581868a11a2846a84b53b3d54a006c99891c69559dc38d6",
+      "sha256": "826f00d2e90a69309857605b5f8d52a68a24d866d51d58763d15e3ebab037242",
       "source_ids": [
         "auto-empirical-methods",
         "econ-data-methods"
@@ -125,7 +125,7 @@
         "writing-and-review"
       ],
       "path": "references/research-methods/submission-review.md",
-      "sha256": "2c115bd3aa088b378c756e3c679a193f122bbcd039cd29c02ed8c051ebe2db29",
+      "sha256": "db33c8183ba2bde589eed6d318363b21c793d7a19380809ff3c78e1cd942151e",
       "source_ids": [
         "kdense-topic-methods",
         "academic-research-skills",

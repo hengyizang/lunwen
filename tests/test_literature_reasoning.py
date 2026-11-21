@@ -98,8 +98,7 @@ class LiteratureReasoningTests(unittest.TestCase):
         self.build()
         plan = reasoning.itinerary(self.project, "calibration", topic_id="calibration", paper_id="P02")
         self.assertEqual(plan["selected_paper_ids"], ["b"])
-        with self.assertRaisesRegex(ValueError, "requires its topic scope"):
-            reasoning.itinerary(self.project, "calibration", paper_id="P02")
+        self.assertEqual(reasoning.itinerary(self.project, "calibration", paper_id="P02")["selected_paper_ids"], ["b"])
 
     def test_progress_append_adaptation_repeat_and_no_approval(self):
         a = self.add(fields={"methods": 2})
@@ -235,7 +234,7 @@ class LiteratureReasoningTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "out-of-scope"):
             reasoning.comparison_packet(self.project, ["a", "b"])
         candidate["fields"] = {}
-        candidate["paper_ids"] = ["P07"]
+        candidate["paper_ids"] = ["../P07"]
         self.semantic_config(a, candidates=[candidate])
-        with self.assertRaisesRegex(ValueError, "P01-P06"):
+        with self.assertRaisesRegex(ValueError, "safe paper IDs"):
             reasoning.comparison_packet(self.project, ["a", "b"])

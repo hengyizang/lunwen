@@ -191,8 +191,12 @@ def read_json(path: Path) -> dict[str, Any]:
 
 
 def manuscript_tree_sha256(manuscript: Path) -> str:
-    digest=hashlib.sha256();root=manuscript.parent
-    files=sorted(path for path in root.rglob("*") if path.is_file() and not path.is_symlink())
+    digest=hashlib.sha256();root=manuscript.parent.parent
+    if manuscript.suffix.lower() == ".tex":
+        from scripts.tex_sources import dependencies
+        files = dependencies(manuscript, paper=root)
+    else:
+        files = [manuscript]
     for path in files:
         relative=path.relative_to(root).as_posix();digest.update(relative.encode());digest.update(b"\0");digest.update(path.read_bytes());digest.update(b"\0")
     return digest.hexdigest()
@@ -236,7 +240,8 @@ def audit_template(template_dir: Path) -> dict[str, Any]:
 
 
 def latex_text(path: Path) -> str:
-    text = path.read_text(encoding="utf-8")
+    from scripts.tex_sources import expand
+    text = expand(path).text
     text = re.sub(r"(?m)(?<!\\)%.*$", " ", text)
     text = re.sub(r"\\(?:cite|ref|label|includegraphics)\*?(?:\[[^]]*\])?\{[^}]*\}", " ", text)
     text = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^]]*\])?", " ", text)
@@ -270,7 +275,9 @@ def inspect_manuscript(paper_dir: Path, venue: dict[str, Any]) -> tuple[dict[str
         raise ComplianceError("Manuscript main.tex or main.docx is required")
     normalized = " ".join(text.split())
     lower = normalized.lower()
-    required_sections = ["abstract", "introduction"]
+    required_sections = venue.get("requirements", {}).get("required_sections", [])
+    if not isinstance(required_sections, list) or any(not isinstance(section, str) for section in required_sections):
+        raise ComplianceError("Venue required_sections must be an array of actual required section names")
     missing_sections = [section for section in required_sections if section not in lower]
     placeholders = sorted(set(match.group(0) for match in PLACEHOLDER_RE.finditer(normalized)))
     words = re.findall(r"\b[\w'-]+\b", normalized, flags=re.UNICODE)
@@ -366,13 +373,16 @@ def compile_latex(manuscript: Path, timeout: int, no_compile: bool) -> dict[str,
 
 def compliance_report(paper_dir: Path, timeout: int = 180, no_compile: bool = False) -> dict[str, Any]:
     venue = read_json(paper_dir / "venue.json")
-    template = audit_template(paper_dir / "venue-template")
+    template_dir = paper_dir / "venue-template"
+    required = venue.get("requirements", {}).get("template_required", False)
+    template = (audit_template(template_dir) if required or (template_dir / "template-inventory.json").is_file()
+                else {"status": "not_applicable", "reason": "No required journal template is configured"})
     manuscript, manuscript_path = inspect_manuscript(paper_dir, venue)
     compile_result = compile_latex(manuscript_path, timeout, no_compile)
     allowed_compile = {"pass", "not_applicable"}
     status = (
         "pass"
-        if template["status"] == manuscript["status"] == "pass"
+        if template["status"] in {"pass", "not_applicable"} and manuscript["status"] == "pass"
         and compile_result["status"] in allowed_compile
         else "fail"
     )

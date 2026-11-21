@@ -62,9 +62,8 @@ class ResearchTaskRouteTests(unittest.TestCase):
                     with self.subTest(action=action, key=key), self.assertRaises(cloud_job.CloudJobError):
                         cloud_job.literature_operation(project, "program/op.json")
 
-    def test_research_task_execution_still_requires_cloud(self):
+    def test_local_task_executes_selected_research_operation(self):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), \
              patch("scripts.literature_synthesis.refresh") as execute:
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                literaturectl.execute_operation(Path("unused"), {"action": "literature_synthesis"})
-        execute.assert_not_called()
+            literaturectl.execute_operation(Path("unused"), {"action": "literature_synthesis"})
+        execute.assert_called_once()

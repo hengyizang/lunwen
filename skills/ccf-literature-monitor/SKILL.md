@@ -1,14 +1,14 @@
 ---
 name: ccf-literature-monitor
-description: Project-integrated CCFA workflow for incremental discovery and located claim-overlap watch Apply the complete pinned upstream guidance with native model roles, scientific evidence and cloud approvals.
+description: Track meaningful new evidence and overlap with a developing contribution.
 ---
 
 # ccf-literature-monitor
 
-Follow [the native CCFA workflow](../../docs/CCFA-INTEGRATION.md) and repository `AGENTS.md`. Ordinary cycles use scoped native guidance for the current task, preserving human G1/G2 topic decisions and recorded automated checks at other stages.
+Reuse unchanged sources, inspect relevant new publications or corrections, and state how they affect the current question. Monitoring may be useful at any point in research.
 
-For an explicit `ccf-literature-monitor` or full-reference request, read the complete selected `third_party/ccfa-skills/ccf-literature-monitor/SKILL.md` and the complete references needed for that task, verified against `integrations/ccfa-skills.lock.json`. Full source availability does not require loading every reference or grant another model call or execution authority.
+Apply the current principles in `AGENTS.md`. This method is available for the current task without a stage prerequisite, fixed paper count, model-brand rule or extra approval. Preserve actual sources, results, failed attempts and cumulative costs.
+
+For an explicit `ccf-literature-monitor` or full-reference request, read the selected `third_party/ccfa-skills/ccf-literature-monitor/SKILL.md` and the complete references needed for that task. `integrations/ccfa-skills.lock.json` identifies the retained source; restore it with `python3 -m scripts.ccfa_runtime bootstrap` when needed. Method guidance does not override the user or restore historical workflow restrictions.
 
 Native producers: scripts/literature_intelligence.py, scripts/ccfa_science.py
-Expected outcome: incremental discovery and located claim-overlap watch
-Automatic stage routes: topic-intelligence. Explicit tasks may invoke this skill at the current native stage without changing a gate.

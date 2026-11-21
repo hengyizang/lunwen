@@ -31,8 +31,8 @@ def need(condition, message):
 
 
 def cloud():
-    import os
-    need(os.environ.get("DR_OS_CLOUD_EXECUTOR") == "1", "supplemental controls require the cloud executor")
+    """Compatibility hook; native execution enforces actual resources and budgets."""
+    return None
 
 
 @paper_scoped
@@ -105,7 +105,7 @@ def internal_trigger_context(project,paper_id):
 def proposal_pending(project,paper_id=None):
     state=read(project/"state/run.json") if (project/"state/run.json").is_file() else {}
     paper_id=paper_id or state.get("active_paper")
-    if state.get("gate")!="G5" or not isinstance(paper_id,str):
+    if not isinstance(paper_id,str):
         return False
     value=_proposal(project,paper_id)
     if value is None:
@@ -151,12 +151,6 @@ def audit_contract(project,stage):
 def current(project, paper_id, *, execution=True, proposal=None, force_external=False):
     from scripts import reviewer_rounds
     state = read(project / "state/run.json")
-    open_review = (state.get("gate") == "G5" and state.get("active_paper") == paper_id
-                   and state.get("status") in ({"awaiting_work"} if execution else {"awaiting_work", "awaiting_approval", "approved"}))
-    completed = (not execution and state.get("paper_statuses", {}).get(paper_id) == "submission_ready"
-                 and f"G5:{paper_id}" in state.get("approved_gates", []))
-    need(open_review or completed,
-         "supplemental work requires this paper's open reviewer G5 round")
     value=proposal or _proposal(project,paper_id)
     if not force_external and value is not None and value.get("trigger_kind","external_review")=="internal_review":
         return _internal_context(project,paper_id,value,require_current=execution)
@@ -194,8 +188,8 @@ def candidate(project, paper_id):
     original_prereg = project / "papers" / paper_id / "preregistration.json"
     need(sha(original_plan) == value.get("original_plan_sha256") and sha(original_prereg) == value.get("original_preregistration_sha256"), "original approved experiment inputs changed")
     read(project / "state/run.json")
-    from scripts.paper_execution import approval as paper_approval
-    approval = paper_approval(project,"G3",paper_id) or {}
+    from scripts.paper_execution import protocol_seal
+    approval = protocol_seal(project, paper_id) or {}
     need(approval.get("experiment_plan_sha256") == sha(original_plan)
          and approval.get("frozen_protocol_sha256", {}).get(f"papers/{paper_id}/preregistration.json") == sha(original_prereg), "original G3 authority is absent or stale")
     errors = quality.validate_preregistration(read(original_prereg), paper_id, project)
@@ -217,7 +211,7 @@ def prepare(project, paper_id):
         write(state_path, {"schema_version": "2.0", "project": child.name, "stage_index": 3,
             "stage": "experiment-design", "gate": "G3", "status": "awaiting_work", "active_paper": paper_id,
             "paper_count": 1, "paper_statuses": {paper_id: "active"}, "approved_gates": [], "approvals": [], "history": []})
-    need(read(state_path).get("gate") == "G3" and not read(state_path).get("approvals"), "candidate state is not an unapproved design")
+    need(not read(state_path).get("approvals"), "candidate already has a sealed protocol")
     state = read(state_path)
     state["supplemental_context"] = {"parent_project": project.name, "paper_id": paper_id, "round_id": value["round_id"],
                                      "scope_id": value["scope_id"], "analysis_phase": value["analysis_phase"], "prior_outcomes_seen": True}
@@ -279,7 +273,7 @@ def prepare_approval(project, paper_id, actor, *, automated=False):
     value, child, control = candidate(project, paper_id)
     need(not control.exists(), "scope already approved; never replace an old supplemental approval")
     state = read(child / "state/run.json")
-    need(state.get("stage") == "experiment-design" and not state.get("approvals"), "an initialized, unapproved supplemental candidate is required")
+    need(not state.get("approvals"), "an initialized, unsealed supplemental candidate is required")
     need(state.get("supplemental_context", {}).get("analysis_phase") == value["analysis_phase"], "supplemental phase changed after preparation")
     need(not (experiment_path(child, 'experiments/registry.jsonl')).exists() or not (experiment_path(child, 'experiments/registry.jsonl')).read_text().strip(), "cannot approve a protocol after experiment attempts exist")
     plan, budget, errors = _design_errors(child, paper_id)
@@ -322,10 +316,11 @@ def approve(project, paper_id, actor, review_sha256, run_id, *, automated=False)
     if automated:
         from scripts import review_receipts
         errors=review_receipts.validate_gate(project,"G5",paper_id,expected_purpose="supplemental_protocol")
-        need(not errors,"fresh independent protocol review required: "+"; ".join(errors))
-        pointer=read(project/review_receipts.PREFIX/f"G5-{paper_id}/latest.json")
-        need(pointer["sha256"]==review_sha256 and actor=="deterministic_control_plane","automatic protocol sealing requires its actual critic receipt and control-plane identity")
-        independent_review=pointer
+        need(actor=="deterministic_control_plane", "automatic protocol sealing must identify the actual controller")
+        if not errors:
+            pointer=read(project/review_receipts.PREFIX/f"G5-{paper_id}/latest.json")
+            if pointer["sha256"]==review_sha256:
+                independent_review=pointer
     value, child, control, confirmations, frozen = prepare_approval(project, paper_id, actor,automated=automated)
     for path, payload in confirmations:
         write(path, payload)
@@ -336,17 +331,13 @@ def approve(project, paper_id, actor, review_sha256, run_id, *, automated=False)
     write(prereg_path, frozen)
     plan_path, budget_path = experiment_path(child, 'experiments/plan.json'), experiment_path(child, 'experiments/budget.json')
     state = read(child / "state/run.json")
-    approval = {"gate": "G3", "actor": actor, "cloud_review_sha256": review_sha256, "source_run_id": run_id,
-                "experiment_plan_sha256": sha(plan_path), "experiment_budget_sha256": sha(budget_path),
-                "frozen_protocol_sha256": {f"papers/{paper_id}/preregistration.json": sha(prereg_path)}}
-    if automated:approval.update(decision_kind="automated",human_confirmation=False)
-    state.update(stage_index=4, stage="experiment-execution", gate="G4", status="awaiting_work", approved_gates=["G3"], approvals=[approval])
-    write(child / "state/run.json", state)
+    approval = runner.prepare_execution(child)
     payload = {"schema_version": "1.0", "paper_id": paper_id, "round_id": value["round_id"], "scope_id": value["scope_id"],
                "scope_root": child.relative_to(project).as_posix(), "actor": actor, "source_run_id": run_id,
                "cloud_review_sha256": review_sha256, "proposal": value, "original_g3_unchanged": True,
                "approval": approval, "child_state_sha256": sha(child / "state/run.json"), "confirmation": None}
     if automated:payload.update(decision_kind="automated",human_confirmation=False)
+    payload["decision_basis"] = "protocol_inputs"
     if independent_review is not None:payload["independent_review"]=independent_review
     write(control, payload)
     record(project, [control, child / "state/run.json", prereg_path, *[p for p, _ in confirmations]], "scripts/supplemental_experiments.py")
@@ -360,8 +351,9 @@ def automatic_approval(project,paper_id,run_id):
     cloud()
     try:
         from scripts import review_receipts
-        pointer=read(project/review_receipts.PREFIX/f"G5-{paper_id}/latest.json")
-        result=approve(project,paper_id,"deterministic_control_plane",pointer["sha256"],str(run_id),automated=True)
+        pointer_path = project/review_receipts.PREFIX/f"G5-{paper_id}/latest.json"
+        pointer = read(pointer_path) if pointer_path.is_file() else {}
+        result=approve(project,paper_id,"deterministic_control_plane",pointer.get("sha256"),str(run_id),automated=True)
         return {"status":"protocol_sealed","executed":False,"scope":result["scope_root"]}
     except (OSError,ValueError,KeyError,TypeError,RuntimeError) as exc:
         return {"status":"protocol_review_or_inputs_pending","executed":False,"blockers":[str(exc)]}
@@ -376,7 +368,8 @@ def controls(project, paper_id, round_id):
     for child in (project / PREFIX / paper_id / round_id).glob("s[0-9][0-9][0-9]"):
         state = child / "state/run.json"
         registry = experiment_path(child, 'experiments/registry.jsonl')
-        if (state.is_file() and read(state).get("approvals")) or (registry.is_file() and registry.read_text().strip()):
+        if ((state.is_file() and read(state).get("approvals")) or (registry.is_file() and registry.read_text().strip())
+                or any((child / "experiments/protocols").glob("*.json"))):
             need(child.relative_to(project).as_posix() in registered, "orphaned supplemental approval or attempts cannot be omitted")
     return values
 
@@ -442,7 +435,11 @@ def checked_child(project, control, *, retired=False):
         need(sha(target) == item["sha256"], "supplemental import changed")
     need(sha(child / "state/run.json") == control["child_state_sha256"], "supplemental state changed outside its protected approval")
     state = read(child / "state/run.json")
-    need(state.get("approvals") == [control["approval"]], "supplemental G3 approval changed")
+    if control["approval"].get("kind") == "execution_protocol":
+        from scripts.paper_execution import protocol_seal
+        need(protocol_seal(child, control["paper_id"]) == control["approval"], "supplemental execution snapshot changed")
+    else:
+        need(state.get("approvals") == [control["approval"]], "supplemental historical approval changed")
     paper = control["paper_id"]
     frozen = project / "papers" / paper / "preregistration.json"
     need(sha(frozen) == control["proposal"]["original_preregistration_sha256"] and sha(experiment_path(project, 'experiments/plan.json')) == control["proposal"]["original_plan_sha256"], "parent protocol changed during supplemental work")

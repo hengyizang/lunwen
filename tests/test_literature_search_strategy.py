@@ -90,10 +90,10 @@ class SearchStrategyTests(WorkbenchFixture):
         with self.assertRaisesRegex(ValueError, "counterevidence"):
             strategy.build(self.project, self.spec)
 
-    def test_doctoral_scope_cannot_silently_change(self):
+    def test_exploratory_scope_is_explicit_without_overwriting_the_core(self):
         write(self.project / "program/core-thesis.json", {"doctoral_question": "An approved different question"})
-        with self.assertRaisesRegex(ValueError, "scope differs"):
-            strategy.build(self.project, self.spec)
+        strategy.build(self.project, self.spec)
+        self.assertEqual(read(self.project / "program/core-thesis.json")["doctoral_question"], "An approved different question")
 
     def test_exact_concept_source_anchor_is_checked_and_changed_source_blocks_reuse(self):
         paper = self.add_paper("a", "Held-out devices are not included in tuning.")

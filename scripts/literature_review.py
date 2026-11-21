@@ -20,10 +20,10 @@ def prepare(project: Path, request: dict) -> dict:
         raise ValueError("unsupported literature retrieval request")
     question = workbench._text(request.get("question"), "retrieval question", 1000)
     identifiers = request.get("paper_ids")
-    if (not isinstance(identifiers, list) or not 1 <= len(identifiers) <= 30
+    if (not isinstance(identifiers, list) or not identifiers
             or any(not isinstance(x, str) for x in identifiers) or len(set(identifiers)) != len(identifiers)):
-        raise ValueError("select 1..30 distinct registered literature papers")
-    library, _, manifest = workbench._snapshot(project)
+        raise ValueError("select distinct registered literature papers")
+    library, _, manifest = workbench._snapshot(project, paper_ids=identifiers)
     papers = {p["id"]: p for p in library["papers"] if p.get("status") == "current"}
     stances = request.get("stances", {})
     if (not isinstance(stances, dict) or set(stances) - set(identifiers)
@@ -58,7 +58,7 @@ def prepare(project: Path, request: dict) -> dict:
     return {"spec": spec, "paper_sources": paper_sources,
             "paper_scopes": {p: papers[p].get("source_scope", "scope_not_declared") for p in identifiers},
             "dependencies": list(bindings.values()),
-            "workbench_manifest_sha256": sha(project / manifest["output_dir"] / "manifest.json"),
+            "workbench_manifest_sha256": workbench.source_snapshot_identity(library, identifiers),
             "doctoral_scope": library.get("scope"), "question": question}
 
 
@@ -85,6 +85,15 @@ def refresh(project: Path, request_file="program/literature-retrieval.json") -> 
     result["fingerprint"] = workbench._digest(result)
     directory = path_in(project, OUTPUT, exists=False)
     report, view = directory / "latest.json", directory / "index.html"
+    if report.is_file():
+        previous = directory / "versions" / (sha(report) + ".json")
+        if not previous.exists():
+            previous.parent.mkdir(parents=True, exist_ok=True)
+            previous.write_bytes(report.read_bytes())
+            record(project, [previous], "scripts/literature_review.py")
+    version = directory / "versions" / (result["fingerprint"] + ".json")
+    if not version.exists():
+        write(version, result)
     write(report, result)
     rows = []
     for item in result["results"]:
@@ -97,5 +106,5 @@ def refresh(project: Path, request_file="program/literature-retrieval.json") -> 
         "<h1>Question-scoped original evidence</h1><p>" + html.escape(result["question"]) +
         "</p><p>Ranking is a reading aid. Source presence does not establish claim support.</p><ol>" +
         "".join(rows) + "</ol>", encoding="utf-8")
-    record(project, [report, view], "scripts/literature_review.py")
-    return {"report": OUTPUT + "/latest.json", "view": OUTPUT + "/index.html", **result}
+    record(project, [report, view, version], "scripts/literature_review.py")
+    return {"report": version.relative_to(project).as_posix(), "latest_report": OUTPUT + "/latest.json", "view": OUTPUT + "/index.html", **result}

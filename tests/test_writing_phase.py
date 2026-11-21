@@ -57,7 +57,8 @@ class WritingPhaseTests(unittest.TestCase):
         write(self.project/"state/run.json",self.state)
         submission=research_methods.stage_context("writing-and-review","writer",project=self.project)
         self.assertNotIn("LOCAL COMPLETE COVERAGE",submission)
-        self.assertIn("CFH/H/AD, style/hygiene and numeric scores are C observations",submission)
+        self.assertIn("numeric accuracy",submission)
+        self.assertIn("No per-ID notes, extra calls or gates are required",submission)
         self.assertIn("submission-review",submission)
 
     def seal(self, *, decision):
@@ -89,7 +90,7 @@ class WritingPhaseTests(unittest.TestCase):
         self.assertTrue(review_receipts.validate_gate(self.project,"G5","P01"))
         self.assertFalse(api.remediation_required({"verdict":"pass-with-conditions",**{key:[] for key in review_receipts.FIELDS-{"verdict"}}},"writing-and-review",[]))
 
-    def test_g5_never_accepts_resumed_exploratory_plan_or_preregistration(self):
+    def test_exploratory_material_can_be_written_without_becoming_confirmatory_support(self):
         case=fixtures.IndependentPaperTests()
         case.setUp()
         self.addCleanup(case.doCleanups)
@@ -102,4 +103,7 @@ class WritingPhaseTests(unittest.TestCase):
                 write(case.project/"papers/P01/preregistration.json",{"research_phase":"exploratory" if source=="preregistration" else "confirmatory"})
                 with patch.object(researchctl,"PROJECTS_ROOT",case.root):
                     errors=researchctl.gate_errors("demo","G5")
-                self.assertTrue(any("exploratory observations cannot enter G5" in error for error in errors))
+                self.assertFalse(any("exploratory observations cannot enter G5" in error for error in errors))
+                from scripts.results_validation import _outcome_error
+                self.assertIsNotNone(_outcome_error("supported", [{"analysis_phase": "exploratory", "role": "primary",
+                    "decision": "exploratory_only"}], empirical=True))

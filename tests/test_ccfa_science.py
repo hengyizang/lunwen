@@ -82,11 +82,10 @@ class CCFAScienceTests(unittest.TestCase):
             "next_action": "Read the held-out-device protocol.", "mode": "normal", "open_items": ["Resolve split unit"],
             "artifacts": [{"file": self.primary, "status": "executed"}]}
 
-    def test_cloud_only_and_bounded_operation_envelope(self):
+    def test_local_execution_and_bounded_operation_envelope(self):
         request = self.request("continuity", self.continuity())
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}):
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                science.execute(self.project, "continuity", request)
+            self.assertIn("report", science.execute(self.project, "continuity", request))
         for change in ({"source": "../secrets.json"}, {"id": "../../escape"}, {"approve": True}):
             with self.assertRaises(ValueError):
                 science.execute(self.project, "continuity", {**request, **change})
@@ -139,7 +138,8 @@ class CCFAScienceTests(unittest.TestCase):
         second = cloud_research_steps.after_write(self.project, "paper-architecture")
         self.assertEqual(first["operation_errors"], [])
         self.assertEqual(second["operation_errors"], [])
-        self.assertTrue(second["ccfa"][-1]["result"]["exact_request_replay"])
+        self.assertEqual([item["action"] for item in second["skipped_operations"]], ["ccfa_science"])
+        self.assertEqual(science.current(self.project, "continuity", "case"), first["ccfa"][-1]["result"]["report"])
 
     def test_exact_replay_still_requires_current_implementation_and_executor_origin(self):
         for change in ("implementation", "origin"):
@@ -249,12 +249,10 @@ class CCFAScienceTests(unittest.TestCase):
         self.assertEqual(result["report"]["result"]["artifacts"][0]["status"], "verified")
         self.assertFalse(result["report"]["limits"]["scientific_completion_verified"])
 
-    def test_claude_persistent_source_and_tampered_output_rejected(self):
+    def test_tracked_anthropic_source_is_accepted_and_tampered_output_rejected(self):
         request = self.request("continuity", self.continuity())
         self.track(self.project / request["source"], family="anthropic")
-        with self.assertRaisesRegex(ValueError, "non-Claude"):
-            science.execute(self.project, "continuity", request)
-        result = self.run_op("continuity", self.continuity())
+        result = science.execute(self.project, "continuity", request)
         self.json(result["path"], {"operation": "continuity"})
         with self.assertRaisesRegex(ValueError, "provenance"):
             science.current(self.project, "continuity", "case")
@@ -300,6 +298,9 @@ class CCFAScienceTests(unittest.TestCase):
         a.update(status="measured", measurement={"receipt": receipt, "run_id": "trial.v1", "configuration": config})
         result = self.run_op("lineage", {"candidates": [a]})
         self.assertEqual(result["report"]["result"]["measured_candidates"], ["A"])
+        with (self.project / "experiments/registry.jsonl").open("a") as ledger:
+            ledger.write(json.dumps({"run_id": "unrelated", "status": "failed"}) + "\n")
+        self.assertEqual(science.current(self.project, "lineage", "case")["result"]["measured_candidates"], ["A"])
         self.text(measured["path"], "{}\n")
         with self.assertRaisesRegex(ValueError, "stale"):
             science.current(self.project, "lineage", "case")

@@ -192,12 +192,11 @@ class LiteratureComparisonTests(unittest.TestCase):
         self.assertFalse(result["costs"]["model_cost_coverage_complete"])
         self.assertEqual(result["routes"][0]["failure_type"], "RuntimeError")
 
-    def test_execution_requires_cloud_and_explicit_boolean(self):
+    def test_local_prepare_is_available_and_execution_requires_explicit_boolean(self):
         request = self.request()
         with patch.dict(os.environ, {"GITHUB_ACTIONS": "false", "DR_OS_CLOUD_EXECUTOR": "0"}), \
                 patch.object(comparison.model_runtime, "call") as call:
-            with self.assertRaisesRegex(ValueError, "authorized cloud runner"):
-                comparison.refresh(self.project, request, execute=True)
+            self.assertEqual(comparison.refresh(self.project, request)["status"], "prepared_no_model_calls")
             call.assert_not_called()
         with self.assertRaisesRegex(ValueError, "explicit boolean"):
             comparison.refresh(self.project, request, execute="true")
@@ -219,12 +218,13 @@ class LiteratureComparisonTests(unittest.TestCase):
 
     def test_question_scope_and_original_bytes_cannot_drift_after_plan(self):
         request = self.request()
-        comparison.refresh(self.project, request)
+        first = comparison.refresh(self.project, request)
         spec = read(self.project / request)
         spec["cases"][0]["request"]["question"] = "How many adults?"
         write(self.project / request, spec)
-        with self.assertRaisesRegex(ValueError, "new ID"):
-            comparison.refresh(self.project, request)
+        second = comparison.refresh(self.project, request)
+        self.assertNotEqual(first["plan_path"], second["plan_path"])
+        self.assertTrue((self.project / first["plan_path"]).is_file())
 
     def test_saved_output_tamper_and_unregistered_file_are_rejected(self):
         result, _ = self.execute()
@@ -241,8 +241,8 @@ class LiteratureComparisonTests(unittest.TestCase):
 
     def test_interrupted_execution_intent_prevents_automatic_retry(self):
         request = self.request()
-        comparison.refresh(self.project, request)
-        target = self.project / comparison.OUTPUT / "comparison-a/routes/case-a-retrieval.json"
+        prepared = comparison.refresh(self.project, request)
+        target = (self.project / prepared["plan_path"]).parent / "routes/case-a-retrieval.json"
         comparison._write(self.project, target, {"status": "started"})
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}), \
                 patch.object(comparison.model_runtime, "call") as call:
@@ -322,7 +322,7 @@ class LiteratureComparisonTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "request changed during"):
                 comparison.refresh(self.project, request, execute=True)
             self.assertEqual(call.call_count, 1)
-        directory = self.project / comparison.OUTPUT / "comparison-a"
+        directory = next((self.project / comparison.OUTPUT / "comparison-a/versions").iterdir())
         receipt = read(directory / "routes/case-a-retrieval.json")
         self.assertEqual(receipt["costs"]["known_model_cost_cny"], 0.01)
         self.assertEqual(receipt["status"], "source_citations_checked_semantics_require_review")
@@ -343,7 +343,7 @@ class LiteratureComparisonTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "workbench scope or snapshot changed"):
                 comparison.refresh(self.project, request, execute=True)
             self.assertEqual(call.call_count, 1)
-        directory = self.project / comparison.OUTPUT / "comparison-a"
+        directory = next((self.project / comparison.OUTPUT / "comparison-a/versions").iterdir())
         receipt = read(directory / "routes/case-a-retrieval.json")
         self.assertEqual(receipt["costs"]["known_model_cost_cny"], 0.01)
         self.assertFalse((directory / "routes/case-a-full_text.json").exists())

@@ -6,7 +6,7 @@ Accessed: 2026-09-01.
 
 JCR quartiles rank journals within a JIF category; they are not a universal
 experimental-design standard and may differ by category and annual edition.
-The existing six-paper ≥3 Q1 and remaining Q2 ambitions are planning targets,
+Any user-selected paper-count or Q1/Q2 ambitions are planning targets,
 not scientific or packaging thresholds. Use actual venue fit and final
 source/template/export requirements. Ranking and IF missing from lawful sources
 stay unknown. Keep scientific-integrity requirements independent of venue rank;
@@ -43,18 +43,8 @@ than an invented universal “Q1 checklist”:
   and
   https://www.nature.com/natmachintell/submission-guidelines/aip-and-formatting
 
-## Repository consequences
+## Research implications
 
-The authoritative current A/B/C rules are in [workflow.md](workflow.md) and
-[stage-contracts.md](stage-contracts.md). G1 retains real closest/adjacent-work
-comparisons, counterevidence and an honest bounded retrieval stop. G2 uses
-cumulative contribution/evidence rows and standalone paper value. G3/G4 retain
-rights, frozen confirmatory inputs, the actual runner, every adverse attempt and
-appropriate registered methods/replay; explicit exploration keeps its bounded
-claim limit and separate subsequent confirmation. Final G5 uses the blind panel
-and actual B venue/template/export evidence. Editorial and numeric observations
-remain visible rather than extra gates.
+Select applicable scientific checks for the actual design: valid independent units, fair comparisons, appropriate uncertainty, transparent methods and reproducible evidence. These publication sources guide relevant work; they do not create a universal seed, baseline, paper-count, review-panel or approval requirement.
 
-## Experiment evidence and calibrated conclusions
-
-Use [the executable experiment evidence contract](../docs/EXPERIMENT-EVIDENCE.md) at G3–G4. The tool now checks that text promises correspond to real comparator runs, preserves unfavorable evidence, and links conclusions to independently counted units and preregistered statistical decisions. Method suitability, substantive importance, baseline fairness, data representativeness, mechanism and causal identification still require scientific review. The current project remains unverified until real experiments, independent scientific audits and actual G1/G2 topic decisions are completed; there is no automatic doctoral/Q1 certification.
+Check the real target's requirements when preparing a deliverable. No repository score, unit test, ranking or model consensus can certify doctoral merit, acceptance or completed scientific research. Describe the actual evidence and remaining uncertainty.

@@ -1,5 +1,6 @@
 """Standalone cloud-fixture execution and pre-G3-freeze preparation checks."""
 import os
+import json
 from pathlib import Path
 import subprocess
 import sys
@@ -56,6 +57,16 @@ class StandaloneCleaningTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "runtime hash"):
             self.execute()
         self.assertFalse((self.project/self.output).exists())
+
+    def test_empty_executor_mounts_accept_cleaned_data_and_receipt(self):
+        for relative in (self.output, self.receipt):
+            target = self.project / relative
+            target.parent.mkdir(parents=True, exist_ok=True); target.touch()
+        slots = {"run_id": "synthetic-approved-fixture", "paths": [self.output, self.receipt]}
+        with patch.dict(os.environ, {"RESEARCH_OS_OUTPUT_SLOTS": json.dumps(slots)}):
+            result = self.execute()
+        self.assertEqual(result["output"]["sha256"], sha(self.project / self.output))
+        self.assertTrue(read(self.project / self.receipt))
 
     def test_runtime_hash_changes_and_raw_output_alias_are_refused(self):
         self.fixture.source.write_text("changed source", encoding="utf-8")

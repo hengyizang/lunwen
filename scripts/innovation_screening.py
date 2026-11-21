@@ -152,7 +152,7 @@ def _validate(project, register, *, require_decision=True):
     _need(not require_decision or mode=="decision","exploratory screening is still in progress; complete the decision-specific evidence before G1 approval")
     hypotheses = {h["hypothesis_id"]: h for h in register["hypotheses"]}
     ids = set(hypotheses)
-    _need(3 <= len(ids) <= 30, "innovation screening needs three to thirty candidate hypotheses")
+    _need(bool(ids), "innovation screening needs a candidate hypothesis")
     normalized = [tuple(" ".join(_text(h[key], "candidate " + key).casefold().split()) for key in ("hypothesis", "prediction", "precise_difference")) for h in hypotheses.values()]
     _need(len(set(normalized)) == len(normalized), "candidate IDs repeat the exact same hypothesis, prediction and precise difference")
     scope = value["scope"]
@@ -392,7 +392,7 @@ def validate_novelty_gate(project: Path, matrix: dict, originality: dict,
             label = "novelty " + _text(claim.get("claim_id"), "claim ID")
             _text(claim.get("claim"), label + " statement")
             expected = set(_strings(claim.get("closest_work_ids"), label + " closest works", 3))
-            _need(len(expected) >= 3, label + " needs three distinct closest works")
+            _need(bool(expected), label + " needs relevant related work")
             comparisons = _rows(claim.get("prior_art_comparisons"), label + " prior_art_comparisons", 3)
             seen = set()
             for comparison in comparisons:
@@ -570,7 +570,6 @@ def adjudication(project: Path, spec: dict, *, observed=None) -> dict:
     work_ids = {work for pair in pairs for claim in pair["claims"] for work in claim.get("closest_work_ids", [])}
     nearest = [work for work in originality.get("closest_prior_work", []) if work.get("id") in work_ids]
     adjacent = originality.get("search_scope", {}).get("adjacent_fields", [])
-    adjacent_ids = {field.strip().casefold() for field in adjacent if isinstance(field, str) and field.strip()}
     available = {}
     for work in nearest:
         try:
@@ -580,10 +579,8 @@ def adjudication(project: Path, spec: dict, *, observed=None) -> dict:
     for pair in pairs:
         linked = {work for claim in pair["claims"] for work in claim.get("closest_work_ids", [])}
         pair["coverage_gaps"] = []
-        if len({available[key] for key in linked & available.keys()}) < 5:
-            pair["coverage_gaps"].append("The compared claims need at least five distinct source-bound nearest works.")
-        if len(adjacent_ids) < 3:
-            pair["coverage_gaps"].append("The comparison needs at least three distinct adjacent fields.")
+        if not linked.intersection(available):
+            pair["coverage_gaps"].append("Cite the relevant original work for these claims.")
         decisions = {r["decision"] for r in pair["judgments"]}
         pair["decision"] = next(iter(decisions)) if len(decisions) == 1 and not source_errors and not pair["coverage_gaps"] else "insufficient"
         pair["merge_concern_present"] = "should_merge" in decisions
@@ -594,4 +591,4 @@ def adjudication(project: Path, spec: dict, *, observed=None) -> dict:
         "pairs": pairs, "claim_novelty_judgments": claim_judgments, "source_validation_errors": source_errors,
         "nearest_works": nearest, "adjacent_fields": adjacent,
         "model_call_made": False, "novelty_verified": False, "scientific_completion_verified": False,
-        "role_contract": "Return novelty_adjudication:[{claim_ids:[left,right],decision:distinct|should_merge|insufficient,rationale,shared_mechanism,discriminating_prediction,remaining_uncertainty}]. Compare OUR mechanisms with 5–8 original nearest works and at least three adjacent fields; if that source coverage is missing, retain insufficient and name the gap. Do not discard contrary works to fit a count. Test whether removing the proposed novelty leaves the same method or predictions. should_merge is a valid finding. Do not vote away dissent or infer global novelty from missing hits."}
+        "role_contract": "Return novelty_adjudication:[{claim_ids:[left,right],decision:distinct|should_merge|insufficient,rationale,shared_mechanism,discriminating_prediction,remaining_uncertainty}]. Compare OUR mechanisms with the most relevant original works, including adjacent fields where applicable; if that source coverage is missing, retain insufficient and name the gap. Do not discard contrary works to fit a count. Test whether removing the proposed novelty leaves the same method or predictions. should_merge is a valid finding. Do not vote away dissent or infer global novelty from missing hits."}

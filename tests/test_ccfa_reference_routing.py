@@ -55,8 +55,8 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                 contract = runtime.humanization_contract("writing-and-review", "critic", root=root)
             self.assertIn("Optional H/AD method sources are unavailable or changed", contract)
             self.assertNotIn("UNTRUSTED_CHANGED_OPTIONAL_METHOD", contract)
-            self.assertIn("source/version", contract)
-            self.assertIn("numeric", contract.lower())
+            self.assertIn(runtime.COMMIT, contract)
+            self.assertNotIn("BEGIN PINNED POLICY", contract)
 
     def test_default_cycles_select_the_current_owner_and_independent_review_role(self):
         cases = [
@@ -78,16 +78,17 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                 for unrelated in ("ccf-rebuttal-writer", "ccf-submission-checker", "ccf-paper-to-exemplar"):
                     self.assertNotIn("BEGIN PINNED CCFA " + unrelated + "/SKILL.md", prompt)
 
-    def test_explicit_tasks_retain_specialists_and_native_topic_decision_policy(self):
+    def test_explicit_tasks_retain_specialists_and_native_source_links(self):
         prompt = runtime.model_contract("writing-and-review", "critic", skill="ccf-visual-composer")
         self.assertIn(runtime.source("ccf-visual-composer/SKILL.md"), prompt)
         self.assertNotIn("BEGIN PINNED CCFA ccf-paper-reviewer/SKILL.md", prompt)
-        self.assertIn("human G1/G2 topic decisions", prompt)
+        self.assertNotIn("human G1/G2 topic decisions", prompt)
         self.assertNotIn("preserve cloud-only execution, G0-G5 approvals", prompt)
         self.assertFalse(runtime.installation_errors())
         for identifier in runtime.STAGE_DEFAULTS.values():
             adapter = (runtime.ROOT / "skills" / identifier / "SKILL.md").read_text(encoding="utf-8")
-            self.assertIn("human G1/G2 topic decisions", adapter)
+            self.assertIn(runtime.VENDOR + "/" + identifier + "/SKILL.md", adapter)
+            self.assertNotIn("human G1/G2 topic decisions", adapter)
             self.assertNotIn("G0-G5 human approvals", adapter)
 
     def test_all_seventeen_default_modes_include_their_complete_applicable_reference_bodies(self):
@@ -112,9 +113,8 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertNotIn(baseline,prompt)
             self.assertNotIn(prose,prompt)
             self.assertNotIn(experiment,prompt)
-            self.assertIn("native core preflight",prompt)
+            self.assertEqual(prompt.count("CCFA writing guidance ("), 1)
             self.assertNotIn("AVAILABLE OBSERVATION CATALOG", prompt)
-            self.assertIn("Empty or partial observation lists are valid", prompt)
         explicit = runtime.model_contract("topic-intelligence", "writer", skill="ccf-humanization")
         for item in runtime.humanization_prompt_sources("topic-intelligence", full=True):
             self.assertIn((runtime.ROOT / item["path"]).read_text(encoding="utf-8"), explicit)
@@ -140,7 +140,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                     self.assertNotIn(body, ordinary)
                     self.assertEqual(explicit.count(body), 1)
                     self.assertIn("SHA256 " + hashlib.sha256(runtime.canonical(body.encode())).hexdigest(), explicit)
-                    self.assertEqual(explicit.count("native core preflight"), 1)
+                    self.assertEqual(explicit.count("CCFA writing guidance ("), 1)
                     self.assertNotIn("LOCAL COMPLETE COVERAGE", explicit)
                     for name in ("humanization-policy.md", "experiment-discipline.md"):
                         self.assertNotIn(runtime.source("ccf-humanization/references/" + name), explicit)
@@ -161,31 +161,30 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
                 hashes = re.findall(r"BEGIN PINNED CCFA \S+ SHA256 ([a-f0-9]{64})", prompt)
                 self.assertEqual(len(hashes), len(set(hashes)))
 
-    def test_ordinary_shared_api_prompts_receive_core_and_load_exact_full_sources_on_demand(self):
+    def test_shared_api_loads_complete_specialist_only_when_task_is_explicit(self):
         with tempfile.TemporaryDirectory() as directory, patch("scripts.model_runtime.call", side_effect=AssertionError("No paid call permitted")):
             project = Path(directory)
             (project / "state").mkdir()
-            state = {"stage": "experiment-design", "gate": "G3", "active_paper": "P01"}
-            (project / "state/run.json").write_text(json.dumps(state), encoding="utf-8")
-            config = {"contract": "G3", "gate": "G3", "author_task": "Design a source-bound protocol"}
-            with patch.object(api, "project_root", return_value=project), patch.object(api, "stage_config", return_value=config):
-                prompts = [api.planning_prompt("fixture", state["stage"], ""),
-                    api.writer_prompt("fixture", state["stage"], ""),
-                    api.critic_prompt("fixture", state["stage"], ""),
-                    api.remediation_prompt("fixture", state["stage"], "", "{}"),
-                    ]
+            (project / "state/run.json").write_text(json.dumps({
+                "stage": "experiment-design", "active_paper": "P01"}))
+            reference = "ccf-experiment-designer/references/evidence-design.md"
+            with patch.object(api, "project_root", return_value=project), patch.object(
+                    runtime, "model_contract", side_effect=AssertionError("No implicit method bundle")):
+                prompts = [api.planning_prompt("fixture", "experiment-design", "Design the next comparison"),
+                    api.writer_prompt("fixture", "experiment-design", "Design the next comparison"),
+                    api.critic_prompt("fixture", "experiment-design", "Review the comparison"),
+                    api.remediation_prompt("fixture", "experiment-design", "Revise the comparison", "{}")]
             for prompt in prompts:
-                for relative in ("ccf-experiment-designer/references/evidence-design.md",
-                                 "ccf-experiment-designer/references/result-templates.md",
-                                 "ccf-common/references/privacy-and-evidence.md"):
-                    self.assertNotIn(runtime.source(relative),prompt)
-                self.assertIn("critical_tests",prompt)
-                self.assertIn("source/version",prompt)
-                self.assertNotIn("BEGIN PINNED CCFA ccf-paper-writer/references/venue-guides/", prompt)
-            reference="ccf-experiment-designer/references/evidence-design.md"
-            with patch.object(api,"project_root",return_value=project):
-                explicit=api.writer_prompt("fixture",state["stage"],reference)
-            self.assertEqual(explicit.count(runtime.source(reference)),1)
+                self.assertNotIn(runtime.source(reference), prompt)
+            packet = runtime.prepare(project, {"schema_version": "1.0", "id": "selected-design",
+                "skill": "ccf-experiment-designer", "stage": "experiment-design", "paper_id": "P01",
+                "task": "Design the next comparison", "inputs": [], "references": [reference]})
+            self.assertEqual(packet["model_calls"], 0)
+            self.assertFalse(packet["scientific_completion_verified"])
+            with patch.object(api, "project_root", return_value=project):
+                explicit = api.writer_prompt("fixture", "experiment-design", "Design the next comparison")
+            self.assertEqual(explicit.count(runtime.source(reference)), 1)
+            self.assertNotIn("BEGIN PINNED CCFA ccf-paper-writer/references/venue-guides/", explicit)
 
     def test_active_defaults_and_explicit_reference_share_one_body_and_task_specific_owner(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
@@ -205,7 +204,7 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertNotIn("BEGIN PINNED CCFA ccf-rebuttal-writer/SKILL.md", prompt)
             self.assertNotIn("BEGIN PINNED CCFA ccf-visual-composer/SKILL.md", prompt)
             self.assertNotIn(runtime.source("ccf-humanization/SKILL.md"),prompt)
-            self.assertEqual(prompt.count("native core preflight"),1)
+            self.assertEqual(prompt.count("CCFA writing guidance ("),1)
 
     def test_explicit_cross_skill_nested_venue_is_reachable_without_activating_another_owner(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "1"}):
@@ -221,37 +220,39 @@ class CCFAReferenceRoutingTests(unittest.TestCase):
             self.assertEqual(prompt.count(runtime.source(relative)), 1)
             self.assertNotIn("BEGIN PINNED CCFA ccf-paper-writer/SKILL.md", prompt)
 
-    def test_scientific_contract_occurs_once_in_every_shared_api_prompt(self):
+    def test_shared_api_prompts_preserve_selected_source_once_without_stage_bundle(self):
         with tempfile.TemporaryDirectory() as directory:
-            project=Path(directory)
-            state={"stage":"writing-and-review","gate":"G5","active_paper":"P01","paper_count":1}
-            (project/"state").mkdir()
-            (project/"state/run.json").write_text(json.dumps(state))
-            with patch.object(api,"project_root",return_value=project),patch.object(api,"active_paper",return_value="P01"):
-                prompts=[api.planning_prompt("fixture",state["stage"],""),api.writer_prompt("fixture",state["stage"],""),
-                    api.critic_prompt("fixture",state["stage"],""),api.remediation_prompt("fixture",state["stage"],"","{}"),
-                    ]
+            project = Path(directory)
+            source = project / "evidence/observations.md"
+            source.parent.mkdir()
+            body = "Observed effect -0.24; interval [-0.41, -0.07]. Failed replication remains unresolved."
+            source.write_text(body)
+            with patch.object(api, "project_root", return_value=project), patch.object(
+                    runtime, "model_contract", side_effect=AssertionError("No implicit method bundle")):
+                prompts = [
+                    api.planning_prompt("fixture", "writing-and-review", "Draft the interpretation", source_paths=["evidence/observations.md"]),
+                    api.writer_prompt("fixture", "writing-and-review", "Draft the interpretation", source_paths=["evidence/observations.md"]),
+                    api.critic_prompt("fixture", "writing-and-review", "Review the interpretation", source_paths=["evidence/observations.md"]),
+                    api.remediation_prompt("fixture", "writing-and-review", "Correct the interpretation", "{}", source_paths=["evidence/observations.md"]),
+                ]
             for prompt in prompts:
-                self.assertEqual(prompt.count("G5 SCIENTIFIC WRITING:"),1)
-                self.assertNotIn("At G5 read the protected academic-style audit",prompt)
-                self.assertNotIn("LOCAL COMPLETE COVERAGE",prompt)
-                self.assertLess(len(prompt),25000)
+                self.assertEqual(prompt.count(body), 1)
+                self.assertIn(hashlib.sha256(source.read_bytes()).hexdigest(), prompt)
+                self.assertNotIn("G5 SCIENTIFIC WRITING:", prompt)
+                self.assertNotIn("LOCAL COMPLETE COVERAGE", prompt)
 
     def test_draft_topic_and_exploratory_design_do_not_demand_final_evidence(self):
         with tempfile.TemporaryDirectory() as directory:
-            project=Path(directory)
-            (project/"state").mkdir()
-            (project/"state/run.json").write_text(json.dumps({"stage":"experiment-design","gate":"G3","active_paper":"P01"}))
-            (project/"experiments").mkdir()
-            (project/"experiments/plan.json").write_text('{"research_phase":"exploratory"}')
-            with patch.object(api,"project_root",return_value=project):
-                topic=api.writer_prompt("fixture","topic-intelligence","")
-                exploration=api.writer_prompt("fixture","experiment-design","")
-            self.assertIn("status=in_progress|ready_for_review",topic)
-            self.assertNotIn("consecutive_no_material_new_work_rounds>=2",topic)
-            self.assertNotIn("unresolved_search_gaps=[]",topic)
-            self.assertIn("Only the formal G1 topic decision",topic)
-            self.assertIn("Unknown power",exploration)
-            self.assertNotIn("critical_tests",exploration)
-            self.assertNotIn("clean_room_run_ids",exploration)
-            self.assertIn("preserve every failed/adverse attempt",exploration)
+            project = Path(directory)
+            (project / "state").mkdir()
+            (project / "state/run.json").write_text(json.dumps({"stage": "experiment-design", "active_paper": "P01"}))
+            with patch.object(api, "project_root", return_value=project):
+                topic = api.writer_prompt("fixture", "topic-intelligence", "Refine one working question")
+                exploration = api.writer_prompt("fixture", "experiment-design", "Run an exploratory comparison")
+            self.assertIn("Refine one working question", topic)
+            self.assertNotIn("Only the formal G1 topic decision", topic)
+            self.assertNotIn("consecutive_no_material_new_work_rounds", topic)
+            self.assertIn("research_phase='exploratory'", exploration)
+            self.assertNotIn("critical_tests", exploration)
+            self.assertNotIn("clean_room_run_ids", exploration)
+            self.assertNotIn("HUMAN_INPUT_REQUIRED", exploration)

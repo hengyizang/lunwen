@@ -44,20 +44,22 @@ class DiscoveryNavigationTests(unittest.TestCase):
             source.parent.mkdir(parents=True); source.write_text(text, encoding="utf-8", newline="\n")
             with patch.object(api, "ROOT", root):
                 snapshot = api.project_snapshot("demo", stage="topic-intelligence")
-            self.assertIn("complete_dataset_discovery_navigation_index", snapshot)
-            self.assertIn(digest, snapshot)
-            self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), digest)
-            # The existing context plan exposes a selected complete original candidate.
-            row = index["candidate_rows"][499]
-            plan = project / "program/context-plan.json"; plan.parent.mkdir()
-            plan.write_text(json.dumps({"schema_version": "1.0", "stages": {"topic-intelligence": {
-                "question": "Inspect this complete synthetic candidate before any fitness judgement",
-                "items": [{"path": self.relative, "reason": "Read complete selected discovery lead", "stance": "neutral",
-                           "start_line": row[1], "end_line": row[2]}]}}}), encoding="utf-8")
+            self.assertNotIn("Synthetic dataset", snapshot)
             with patch.object(api, "ROOT", root):
-                selected = api.project_snapshot("demo", stage="topic-intelligence")
-            self.assertIn("Synthetic dataset 499", selected)
-            self.assertIn("Synthetic unassessed discovery description.", selected)
+                with self.assertRaisesRegex(ValueError, "verified extracts"):
+                    api.project_snapshot("demo", source_paths=[self.relative])
+            row = index["candidate_rows"][499]
+            extract = project / "evidence/selected-candidate.json"
+            extract.parent.mkdir()
+            original = json.loads("\n".join(lines[row[1]-1:row[2]]).rstrip().rstrip(","))
+            extract.write_text(json.dumps({"source": self.relative, "source_sha256": digest,
+                "start_line": row[1], "end_line": row[2], "candidate": original}))
+            with patch.object(api, "ROOT", root):
+                snapshot = api.project_snapshot("demo", source_paths=["evidence/selected-candidate.json"])
+            self.assertIn(digest, snapshot)
+            self.assertIn("Synthetic dataset 499", snapshot)
+            self.assertIn("Synthetic unassessed discovery description.", snapshot)
+            self.assertEqual(hashlib.sha256(source.read_bytes()).hexdigest(), digest)
 
     def test_scientific_source_overflow_still_blocks_and_no_writer_can_forge_auto_receipt(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -65,8 +67,12 @@ class DiscoveryNavigationTests(unittest.TestCase):
             source = project / "evidence/negative.md"; source.parent.mkdir(parents=True)
             source.write_text("Contrary scientific result. " * 8000, encoding="utf-8")
             with patch.object(api, "ROOT", root):
-                with self.assertRaisesRegex(ValueError, "source ranges"):
-                    api.project_snapshot("demo", stage="topic-intelligence")
+                self.assertNotIn("Contrary scientific result", api.project_snapshot("demo"))
+                selected = api.project_snapshot("demo", source_paths=["evidence/negative.md"])
+                self.assertIn(source.read_text(), selected)
+                with patch.object(api, "MAX_SNAPSHOT_SOURCE_BYTES", 100):
+                    with self.assertRaisesRegex(ValueError, "verified extract"):
+                        api.project_snapshot("demo", source_paths=["evidence/negative.md"])
             self.assertTrue(artifact_ownership.executor_owned(project, self.relative))
             with patch.object(api, "ROOT", root):
                 with self.assertRaisesRegex(ValueError, "protected|controller|Automatic"):

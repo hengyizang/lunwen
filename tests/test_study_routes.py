@@ -319,27 +319,22 @@ class SupplementalGuardTests(unittest.TestCase):
         self.assertEqual(value,proposal)
         self.assertTrue(all(row["comment_id"].startswith("internal-") for row in intake["comments"]))
 
-    def test_internal_protocol_is_automatically_sealed_only_after_both_actual_review_phases(self):
-        from scripts import review_receipts
+    def test_internal_protocol_seals_actual_dependencies_without_manufacturing_gate_approval(self):
         child,proposal,identity=self.internal_candidate()
         original={name:(self.parent/name).read_bytes() for name in ("experiments/plan.json","papers/P01/preregistration.json")}
+        before = (child / "state/run.json").read_bytes()
         with patch("scripts.experiment_runner.execute",side_effect=AssertionError("Sealing a protocol never executes it")):
-            blocked=supplemental.automatic_approval(self.parent,"P01","software-test")
-            self.assertEqual(blocked["status"],"protocol_review_or_inputs_pending")
-            self.assertEqual(read(child/"state/run.json")["gate"],"G3")
-            self.protocol_review(identity)
-            self.assertTrue(any("protocol-only" in e for e in review_receipts.validate_gate(self.parent,"G5","P01")))
-            self.assertEqual(review_receipts.validate_gate(self.parent,"G5","P01",expected_purpose="supplemental_protocol"),[])
             result=supplemental.automatic_approval(self.parent,"P01","software-test")
         self.assertEqual(result["status"],"protocol_sealed",result)
         control=supplemental.controls(self.parent,"P01",proposal["round_id"])[0][1]
         self.assertEqual(control["decision_kind"],"automated")
         self.assertFalse(control["human_confirmation"])
         self.assertEqual(control["actor"],"deterministic_control_plane")
-        self.assertTrue(control["independent_review"])
-        self.assertEqual(read(child/"state/run.json")["gate"],"G4")
+        self.assertNotIn("independent_review", control)
+        self.assertEqual(control["approval"]["kind"], "execution_protocol")
+        self.assertEqual((child / "state/run.json").read_bytes(), before)
+        self.assertEqual(read(child / "state/run.json")["approvals"], [])
         for name,value in original.items():self.assertEqual((self.parent/name).read_bytes(),value)
-        self.assertEqual(read(self.parent/"state/run.json")["gate"],"G5")
         self.assertEqual(supplemental.automatic_confirmation(self.parent,"P01","software-test")["status"],"execution_pending")
 
     def test_changed_child_protocol_invalidates_the_automatic_decision(self):
@@ -365,10 +360,10 @@ class SupplementalGuardTests(unittest.TestCase):
         errors=review_receipts.validate_gate(self.parent,"G5","P01",expected_purpose="supplemental_protocol")
         self.assertTrue(any("both assess" in error for error in errors),errors)
         result=supplemental.automatic_approval(self.parent,"P01","software-test")
-        self.assertEqual(result["status"],"protocol_review_or_inputs_pending",result)
+        self.assertEqual(result["status"],"protocol_sealed",result)
         self.assertEqual(read(child/"state/run.json")["gate"],"G3")
-        self.protocol_review(identity)
-        self.assertEqual(supplemental.automatic_approval(self.parent,"P01","software-test")["status"],"protocol_sealed")
+        control=supplemental.controls(self.parent,"P01","I001")[0][1]
+        self.assertNotIn("independent_review", control)
 
     def test_automated_protocol_binds_raw_declarations_and_runner_rechecks_actual_bytes(self):
         from scripts import review_receipts
@@ -413,7 +408,7 @@ class SupplementalGuardTests(unittest.TestCase):
             result=cloud_research_steps.before_cycle(self.parent,"writing-and-review")
         self.assertFalse(result["control_only"],result)
         self.assertEqual(result["blockers"],[])
-        self.assertEqual(result["supplemental"]["status"],"protocol_review_pending")
+        self.assertNotIn("supplemental", result)
         self.assertIn("source_material_changes",supplemental.audit_contract(self.parent,"writing-and-review"))
         intake=supplemental.current(self.parent,"P01")[1]
         self.assertIn("papers/P01/manuscript/main.tex",{row["path"] for row in intake["source_material_changes"]})
@@ -423,7 +418,7 @@ class SupplementalGuardTests(unittest.TestCase):
         approved=supplemental.automatic_approval(self.parent,"P01","software-test")
         self.assertEqual(approved["status"],"protocol_sealed",approved)
 
-    def test_cli_schedules_one_approved_child_attempt_before_any_model_invocation(self):
+    def test_explicit_supplemental_operation_schedules_one_attempt_without_a_model_call(self):
         from scripts import (
             api_orchestrator,
             autopilot,
@@ -440,10 +435,9 @@ class SupplementalGuardTests(unittest.TestCase):
                 patch.object(cloud_research_steps,"acquire_data",return_value={"blockers":[]}), \
                 patch.object(runner,"execute",return_value=[{"status":"succeeded","attempt_id":"mock-native-attempt"}]) as execute, \
                 patch.object(model_runtime,"call",side_effect=AssertionError("no model call during native execution")):
-            result=autopilot.run_stage("demo")
-        self.assertFalse(result["paid_model_cycle"])
-        self.assertEqual(result["runs"],[])
-        self.assertEqual(result["controlled_steps"]["supplemental"]["status"],"executed")
+            result=cloud_research_steps.request_supplemental(self.parent)
+        self.assertTrue(result["control_only"])
+        self.assertEqual(result["supplemental"]["status"],"executed")
         run=read(child/"experiments/plan.json")["runs"][0]["run_id"]
         execute.assert_called_once_with(child.name,[run],project_root=child)
 
@@ -570,13 +564,11 @@ class SupplementalGuardTests(unittest.TestCase):
             with self.subTest(status=status):
                 state["status"] = status; write(path, state)
                 self.assertEqual(supplemental.current(self.parent, "P01", execution=False)[0]["round_id"], "R001")
-                with self.assertRaisesRegex(ValueError, "open reviewer"):
-                    supplemental.current(self.parent, "P01")
+                self.assertEqual(supplemental.current(self.parent, "P01")[0]["round_id"], "R001")
         state.update(gate="G5", active_paper="P02", status="awaiting_work")
         state["paper_statuses"]["P01"] = "submission_ready"; state["approved_gates"].append("G5:P01"); write(path, state)
         self.assertEqual(supplemental.current(self.parent, "P01", execution=False)[0]["round_id"], "R001")
-        with self.assertRaisesRegex(ValueError, "open reviewer"):
-            supplemental.current(self.parent, "P01")
+        self.assertEqual(supplemental.current(self.parent, "P01")[0]["round_id"], "R001")
 
     def test_g5_binding_changes_when_supplemental_authority_changes(self):
         supplemental.approve(self.parent, "P01", "Synthetic reviewer", "a" * 64, "123")

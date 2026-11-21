@@ -167,17 +167,18 @@ class AutomaticDataDiscoveryTests(unittest.TestCase):
         self.assertTrue(summary["scientific_review_required"])
         self.assertEqual(schema_errors(report, "dataset-discovery.schema.json"), [])
 
-    def test_all_source_failures_stop_before_model_cycle(self) -> None:
+    def test_all_source_failures_preserve_diagnostics_without_blocking_research(self) -> None:
         def fetcher(_url: str, **_kwargs):
             raise NetworkSafetyError("offline")
 
-        with tempfile.TemporaryDirectory() as directory, self.assertRaises(
-            AutomaticDataDiscoveryError
-        ):
-            run_automatic_discovery(
+        with tempfile.TemporaryDirectory() as directory:
+            result = run_automatic_discovery(
                 Path(directory),
                 "experiment-design",
                 explicit_query="robot sensor dataset",
                 providers=["zenodo"],
                 fetcher=fetcher,
             )
+            self.assertEqual(result["status"], "sources_unavailable")
+            self.assertEqual(result["candidate_count"], 0)
+            self.assertTrue((Path(directory) / result["report_path"]).is_file())

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Validate repository manifests and extension structure without dependencies."""
+"""Validate core manifests and discovery entries; optional installations are explicit."""
 
 from __future__ import annotations
 
-import importlib.util
+import argparse
 import hashlib
 import json
 import re
@@ -109,8 +109,6 @@ def validate_venue(path: Path, errors: list[str]) -> None:
         "institutional-jcr-export",
     }:
         errors.append(f"{path.relative_to(ROOT)}: Q1/Q2 needs identified JCR evidence")
-    if jcr.get("direct_clarivate_recheck_required") is not True:
-        errors.append(f"{path.relative_to(ROOT)}: G5 Clarivate recheck must be required")
     for source in value.get("sources", []):
         if not str(source.get("url", "")).startswith("https://"):
             errors.append(f"{path.relative_to(ROOT)}: source URL must use HTTPS")
@@ -169,8 +167,8 @@ def validate_academic_style_rules(
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
     configured_sources = value.get("sources")
-    if not isinstance(configured_sources, list) or len(configured_sources) < 3:
-        errors.append(f"{path.relative_to(ROOT)}: at least three reviewed sources are required")
+    if not isinstance(configured_sources, list) or not configured_sources:
+        errors.append(f"{path.relative_to(ROOT)}: configured sources must be a nonempty array")
         return
     configured_ids: set[str] = set()
     for source in configured_sources:
@@ -219,14 +217,13 @@ def validate_stage_config(path: Path, errors: list[str]) -> None:
     if not isinstance(stages, dict):
         errors.append(f"{path.relative_to(ROOT)}: stages must be an object")
         return
-    if set(stages) != set(EXPECTED_STAGES):
-        errors.append(f"{path.relative_to(ROOT)}: stage names do not match G0-G5")
-    for name, gate in EXPECTED_STAGES.items():
-        stage = stages.get(name)
+    for name, stage in stages.items():
         if not isinstance(stage, dict):
+            errors.append(f"{path.relative_to(ROOT)}: {name} must be an object")
             continue
-        if stage.get("gate") != gate:
-            errors.append(f"{path.relative_to(ROOT)}: {name} must map to {gate}")
+        gate = EXPECTED_STAGES.get(name)
+        if gate and stage.get("gate", gate) != gate:
+            errors.append(f"{path.relative_to(ROOT)}: legacy label {name} must map to {gate}")
         if not str(stage.get("author_task", "")).strip():
             errors.append(f"{path.relative_to(ROOT)}: {name} needs author_task")
 
@@ -253,13 +250,12 @@ def validate_editorial_integration(errors: list[str]) -> None:
     lock = load_json(ROOT / "integrations/editorial-upstreams.lock.json", errors)
     if not isinstance(lock, dict):
         return
-    expected = {"humanizer", "anti-defensive-writing", "watermarks-remover"}
     sources = lock.get("sources", [])
-    if len(sources) != 3 or {row.get("id") for row in sources} != expected:
-        errors.append("editorial sources must cover all three pinned integrations")
+    if not isinstance(sources, list) or any(not isinstance(row, dict) for row in sources):
+        errors.append("editorial sources must be an array of objects")
         return
     for source in sources:
-        if source.get("license") != "MIT" or not SHA_RE.fullmatch(source.get("commit", "")):
+        if not source.get("license") or not SHA_RE.fullmatch(source.get("commit", "")):
             errors.append("editorial source license or commit is missing")
         for item in source.get("files", []):
             relative = Path(item.get("path", ""))
@@ -272,21 +268,12 @@ def validate_editorial_integration(errors: list[str]) -> None:
                     errors.append(f"editorial vendored source hash mismatch: {relative}")
             except OSError as exc:
                 errors.append(f"editorial vendored source unavailable: {exc}")
-    humanizer = load_json(ROOT / "config/humanizer-rules.json", errors)
-    defensive = load_json(ROOT / "config/anti-defensive-rules.json", errors)
-    if isinstance(humanizer, dict):
-        rows = humanizer.get("rules", [])
-        if [row.get("number") for row in rows] != list(range(1, 27)) or len({row.get("id") for row in rows}) != 26:
-            errors.append("Humanizer guidance must retain all 26 optional methods exactly once")
-    if isinstance(defensive, dict):
-        groups = defensive.get("groups", [])
-        if [row.get("review_id") for row in groups] != [f"AD{i:02d}" for i in range(1, 9)]:
-            errors.append("Anti-defensive guidance must retain AD01 through AD08")
-        if len(defensive.get("checklist", [])) != 10 or len(defensive.get("rewrite_procedure", [])) != 5 or len(defensive.get("function_classes", [])) != 6:
-            errors.append("Anti-defensive source checklist, procedure or function coverage is incomplete")
 
 
-def main() -> int:
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--integrations", action="store_true", help="Also verify installed optional tool resources; this may require prior installation.")
+    args = parser.parse_args(argv)
     errors: list[str] = []
 
     for path in sorted((ROOT / "schemas").glob("*.json")):
@@ -303,20 +290,13 @@ def main() -> int:
     )
     validate_stage_config(ROOT / "config" / "stages.json", errors)
     validate_editorial_integration(errors)
-    try:
+    if args.integrations:
         from scripts.research_methods import installation_errors
-    except ImportError:
-        from research_methods import installation_errors
-    errors.extend(installation_errors(ROOT))
-    from scripts.ccfa_runtime import installation_errors as ccfa_installation_errors
-    errors.extend(ccfa_installation_errors(ROOT))
-    from scripts.research_toolkit import installation_errors as toolkit_installation_errors
-    errors.extend(toolkit_installation_errors(ROOT))
-    try:
+        from scripts.ccfa_runtime import installation_errors as ccfa_installation_errors
+        from scripts.research_toolkit import installation_errors as toolkit_installation_errors
         from scripts.literaturectl import installation_errors as literature_installation_errors
-        errors.extend(literature_installation_errors(ROOT))
-    except ImportError as exc:
-        errors.append(f"literature integration unavailable: {exc}")
+        for check in (installation_errors, ccfa_installation_errors, toolkit_installation_errors, literature_installation_errors):
+            errors.extend(check(ROOT))
 
     plugin = load_json(ROOT / ".claude-plugin" / "plugin.json", errors)
     if isinstance(plugin, dict) and plugin.get("name") != "doctoral-research-os":
@@ -325,106 +305,19 @@ def main() -> int:
     if isinstance(plugin, dict) and version and plugin.get("version") != version:
         errors.append("Plugin version must match pyproject.toml")
     mcp = load_json(ROOT / ".mcp.json", errors)
-    codex = (
-        mcp.get("mcpServers", {}).get("codex-review", {})
-        if isinstance(mcp, dict)
-        else {}
-    )
-    if codex.get("command") != "codex" or codex.get("args") != ["mcp-server"]:
-        errors.append(".mcp.json: codex-review must run codex mcp-server")
-    research_mcp=mcp.get("mcpServers",{}).get("doctoral-research-os",{}) if isinstance(mcp,dict) else {}
-    if research_mcp.get("command")!="python3" or research_mcp.get("args")!=["scripts/research_mcp.py"]:errors.append(".mcp.json: doctoral-research-os server is required")
-    try:
-        start_script = (ROOT / "scripts" / "start.sh").read_text(encoding="utf-8")
-    except OSError as exc:
-        errors.append(f"scripts/start.sh: {exc}")
-    else:
-        if "scripts/autopilot.py start" not in start_script:
-            errors.append("scripts/start.sh must retain the shared API compatibility entry")
-    package_script = ROOT / "scripts" / "submission_package.py"
-    if not package_script.is_file():
-        errors.append("scripts/submission_package.py is required")
-    package_skill = ROOT / "skills" / "package" / "SKILL.md"
-    if not package_skill.is_file():
-        errors.append("skills/package/SKILL.md is required")
-    uuapi_doc = ROOT / "docs" / "UUAPI-CC-SWITCH.md"
-    if not uuapi_doc.is_file():
-        errors.append("docs/UUAPI-CC-SWITCH.md is required")
-    for relative in (
-        "docs/RESEARCH-QUALITY.md",
-        "docs/CI-VALIDATION.md",
-        "docs/LIVE-ACCEPTANCE.md",
-        "docs/P0-P1-COMPLETION.md",
-        "scripts/research_quality.py",
-        "schemas/novelty-claim-matrix.schema.json",
-        "schemas/data-quality-report.schema.json",
-        "schemas/data-quality-confirmation.schema.json",
-        "schemas/power-analysis.schema.json",
-        "schemas/power-simulation-evidence.schema.json",
-        "schemas/preregistration.schema.json",
-        "schemas/baseline-reproduction.schema.json",
-        "schemas/clean-room-reproduction.schema.json",
-        "schemas/reproduction-confirmation.schema.json",
-        "schemas/literature-evidence-receipt.schema.json",
-        "schemas/ai4science-evidence-receipt.schema.json",
-        "schemas/live-acceptance-report.schema.json",
-        "schemas/core-thesis.schema.json",
-        "schemas/extension-thesis.schema.json",
-        "schemas/venue-candidates.schema.json",
-        "scripts/literature_evidence.py",
-        "scripts/ai4science_evidence.py",
-        "scripts/tooluniverse_worker.py",
-        "scripts/live_acceptance.py",
-        "scripts/venue_candidates.py",
-        ".github/workflows/validate.yml",
-        "config/requirements-traceability.json",
-        "scripts/requirements_trace.py",
-        "scripts/install-d-drive.ps1",
-        "scripts/bootstrap-d-drive.sh",
-        "scripts/research_mcp.py",
-        "scripts/manuscript_docx.py",
-        "scripts/manuscript_hygiene.py",
-        "docs/MANUSCRIPT-HYGIENE.md",
-        "scripts/research_increments.py",
-        "scripts/incremental_evidence.py",
-        "scripts/incremental_writing.py",
-        "scripts/incremental_rules.py",
-        "schemas/research-increments.schema.json",
-        "docs/RESEARCH-INCREMENTS.md",
-    ):
+    if isinstance(mcp, dict):
+        servers = mcp.get("mcpServers", {})
+        if not isinstance(servers, dict):
+            errors.append(".mcp.json: mcpServers must be an object")
+        else:
+            for name, server in servers.items():
+                if not isinstance(server, dict) or not (server.get("command") or server.get("url")):
+                    errors.append(f".mcp.json: {name} needs a command or URL")
+
+    for relative in ("AGENTS.md", "README.md", "references/workflow.md", "references/stage-contracts.md",
+                     "scripts/researchctl.py", "scripts/autopilot.py", "skills/start/SKILL.md", "skills/continue/SKILL.md"):
         if not (ROOT / relative).is_file():
-            errors.append(f"{relative} is required")
-    workflow_path = ROOT / ".github" / "workflows" / "validate.yml"
-    if workflow_path.is_file():
-        workflow = workflow_path.read_text(encoding="utf-8")
-        for marker in (
-            "python scripts/run_tests.py fast",
-            "python scripts/run_tests.py ${{ matrix.suite }}",
-            "&& 'all' || 'compat'", "suite: slow", "needs: fast-tests",
-            "github.event_name == 'schedule'", "inputs.repair_ref != ''",
-            "uses: ./.github/actions/setup-runtime",
-            "python -m compileall -q scripts tests",
-            "python scripts/validate_repo.py",
-            "scripts/live_acceptance.py literature",
-            "scripts/live_acceptance.py container",
-        ):
-            if marker not in workflow:
-                errors.append(f"validate.yml is missing required check: {marker}")
-    try:
-        provider_source = (ROOT / "scripts" / "ai_providers.py").read_text(
-            encoding="utf-8"
-        )
-    except OSError as exc:
-        errors.append(f"scripts/ai_providers.py: {exc}")
-    else:
-        for provider in ("uuapi-anthropic", "uuapi-openai"):
-            if provider not in provider_source:
-                errors.append(f"scripts/ai_providers.py must support {provider}")
-    try:
-        trace_path=ROOT/"scripts"/"requirements_trace.py";spec=importlib.util.spec_from_file_location("doctoral_os_requirements_trace",trace_path)
-        if spec is None or spec.loader is None:raise ImportError("cannot load requirements trace")
-        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);errors.extend(f"requirements trace: {x}" for x in module.validate())
-    except (ImportError,OSError) as exc:errors.append(f"requirements trace validator unavailable: {exc}")
+            errors.append(f"{relative} is required by the documented entry points")
 
     skill_names: dict[str, Path] = {}
     skill_paths = list((ROOT / "skills").glob("*/SKILL.md"))

@@ -1,8 +1,30 @@
 name: Complete CCFA skills acceptance
 on:
   pull_request:
+    paths:
+      - '.github/workflows/ccfa-skills.yml'
+      - '.github/actions/setup-runtime/**'
+      - 'scripts/ccfa*.py'
+      - 'scripts/research_methods.py'
+      - 'scripts/skill_discovery.py'
+      - 'integrations/ccfa*'
+      - 'skills/ccf-*/**'
+      - '.agents/skills/ccf-*/**'
+      - 'tests/test_ccfa*.py'
+      - 'tests/test_editorial_integration.py'
   push:
     branches: [main]
+    paths:
+      - '.github/workflows/ccfa-skills.yml'
+      - '.github/actions/setup-runtime/**'
+      - 'scripts/ccfa*.py'
+      - 'scripts/research_methods.py'
+      - 'scripts/skill_discovery.py'
+      - 'integrations/ccfa*'
+      - 'skills/ccf-*/**'
+      - '.agents/skills/ccf-*/**'
+      - 'tests/test_ccfa*.py'
+      - 'tests/test_editorial_integration.py'
   workflow_dispatch:
 permissions:
   contents: read
@@ -20,6 +42,7 @@ jobs:
       - uses: ./.github/actions/setup-runtime
         with:
           python-version: "3.12"
+          ccfa: 'true'
           packages: '[".[reader,figures,research-quality]", "PyYAML", "seaborn"]'
       - name: Install every original skill using the pinned official installer
         run: >-

@@ -30,7 +30,7 @@ MATH_BLOCK=re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$|\\\(.*?\\\)|\\\[.*?\\\]",re.S)
 MATH_TOKEN=re.compile(r"\\[A-Za-z]+|[A-Za-z]")
 GREEK={"alpha","beta","gamma","delta","epsilon","varepsilon","zeta","eta","theta","vartheta","iota","kappa","lambda","mu","nu","xi","pi","varpi","rho","varrho","sigma","varsigma","tau","upsilon","phi","varphi","chi","psi","omega"}
 RESULT_STATUSES={"supported","partially_supported","not_supported","contradicted","inconclusive"}
-INFERENCE_LEVELS={"descriptive":0,"association":1,"prediction":2,"causal":3,"mechanism":4}
+INFERENCE_LEVELS={"descriptive", "association", "prediction", "causal", "mechanism"}
 LEXICAL_SCOPE = re.compile(r"\b(?:all|every|any|always|never|wherever|regardless)\b|所有|全部|任意|任何|不需要", re.I)
 LEXICAL_COMPARISON = re.compile(r"\b(?:better|faster|more|higher|lower|superior|outperform(?:s|ed|ing)?|improv(?:e|es|ed|ement|ements))\b|优于|更快|更高|更低|更好", re.I)
 
@@ -151,7 +151,9 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
         allowed=str(link.get("allowed_inference","")).lower();strength=str(link.get("claim_strength","")).lower()
         if allowed not in INFERENCE_LEVELS:errors.append(f"{identifier}: invalid allowed_inference")
         if strength not in INFERENCE_LEVELS:errors.append(f"{identifier}: invalid claim_strength")
-        elif allowed in INFERENCE_LEVELS and INFERENCE_LEVELS[strength]>INFERENCE_LEVELS[allowed]:errors.append(f"{identifier}: claim_strength exceeds allowed_inference")
+        elif allowed in INFERENCE_LEVELS and strength != allowed and strength != "descriptive":
+            warnings.append(f"{identifier}: {strength} claim needs its own methodological justification; "
+                            f"{allowed} evidence does not imply an ordered inference hierarchy")
         if link.get("result_status") not in RESULT_STATUSES:errors.append(f"{identifier}: invalid result_status")
         evidence_ids=link.get("evidence_ids")
         if not isinstance(evidence_ids,list) or not evidence_ids or any(not isinstance(id_,str) for id_ in evidence_ids):
@@ -161,8 +163,8 @@ def audit(project: Path, manuscript: Path, spec: Path) -> dict[str, Any]:
             excerpts = "\n".join(str(facts_by_id[key].get("verbatim_evidence", "")) for key in evidence_ids)
             warnings.extend(_lexical_support_hints(str(link.get("canonical_claim", "")), excerpts, identifier))
         locations=link.get("sections",{})
-        if not isinstance(locations,dict) or not SECTION.issubset(locations):
-            errors.append(f"{identifier}: title/abstract/question/results/conclusion locations required")
+        if not isinstance(locations,dict) or not locations or not set(locations) <= SECTION:
+            errors.append(f"{identifier}: identify the actual manuscript sections containing this claim")
         else:
             for section, phrase in locations.items():
                 if section not in SECTION:continue

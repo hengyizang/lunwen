@@ -67,8 +67,8 @@ def assess(project: Path, action=None, *, previous=None, paper_ids=None, bind_so
     _need(set(categories) <= CATEGORIES, "Unsupported writing issue category")
     scope = action["scope"]
     _keys(scope, {"paper_ids", "claim_ids", "sections", "boundary"})
-    papers = _strings(scope["paper_ids"], "paper scope", maximum=6)
-    _need(all(re.fullmatch(r"P0[1-6]", paper) for paper in papers), "Writing action paper scope is restricted to P01-P06")
+    papers = _strings(scope["paper_ids"], "paper scope", maximum=99)
+    _need(all(re.fullmatch(r"P[0-9]{2}", paper) for paper in papers), "Writing action needs actual Pxx paper identifiers")
     if paper_ids is not None:
         _need(set(papers) <= set(paper_ids), "Writing action changes its parent issue's paper scope")
     claims = _strings(scope["claim_ids"], "claim IDs", minimum=0)

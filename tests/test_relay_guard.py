@@ -619,7 +619,7 @@ class RelayGuardTests(unittest.TestCase):
                     "fixture-request",kwargs["model"],completion_status="completed")
             with patch.object(guard,"CloudStore",return_value=self.store) as shared,patch("scripts.production_readiness.catalog") as catalog, \
                     patch("scripts.cloud_checkpoint.sync_billing"),patch.object(relay_billing,"read_meter",side_effect=relay_billing.BillingReconciliationError("Synthetic meter unavailable")) as meter,patch.object(ai_providers,"call",side_effect=reply) as post:
-                model_runtime.call(project,run_id="fixture",stage="intake",role="persistent-writer",provider="openai",prompt="Synthetic work only",max_output_tokens=100)
+                model_runtime.call(project,run_id="fixture",stage="intake",role="persistent-writer",provider=provider,prompt="Synthetic work only",max_output_tokens=100)
                 shared.assert_not_called();catalog.assert_not_called();meter.assert_called_once();post.assert_called_once()
             state=model_spend.read(project)
             self.assertGreater(state["spent_cny"],0);self.assertEqual(state["reservations"],{})

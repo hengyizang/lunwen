@@ -32,9 +32,8 @@ class LiteratureCompletionRoutes(unittest.TestCase):
                 checked, _ = cloud_job.literature_operation(project, "program/operation.json")
                 self.assertIs(checked["execute"], True)
 
-    def test_cloud_required_before_any_new_operation(self):
+    def test_local_host_can_run_an_available_literature_operation(self):
         with patch.dict(os.environ, {"DR_OS_CLOUD_EXECUTOR": "0", "GITHUB_ACTIONS": "false"}), \
              patch("scripts.literature_zotero.refresh") as call:
-            with self.assertRaisesRegex(ValueError, "cloud"):
-                literaturectl.execute_operation(Path("unused"), {"action": "literature_zotero"})
-            call.assert_not_called()
+            literaturectl.execute_operation(Path("unused"), {"action": "literature_zotero"})
+            call.assert_called_once()

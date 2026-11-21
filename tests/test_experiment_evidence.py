@@ -242,7 +242,7 @@ class ExperimentEvidenceTests(unittest.TestCase):
             path = self.project / relative
             original = path.read_bytes()
             path.write_bytes(original + b" ")
-            with self.assertRaisesRegex(runner.ExperimentError, "changed after G3"):
+            with self.assertRaisesRegex(runner.ExperimentError, "changed after"):
                 runner.approved_plan(self.project, self.project / "experiments/plan.json",
                                      self.project / "experiments/budget.json")
             path.write_bytes(original)

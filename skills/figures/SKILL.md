@@ -1,25 +1,10 @@
 ---
 name: figures
-description: Search source-linked paper figure references, build evidence-bound figure briefs, and produce reproducible data charts or native editable method diagrams for an active paper.
+description: Create clear data charts and editable scientific diagrams from actual evidence.
 ---
 
 # Figures
 
-Read the active paper's claims, approved experiment registry, target venue and `docs/RESEARCH-CAPABILITIES.md`. Keep data charts distinct from conceptual diagrams and AI illustrations.
+Choose a useful visual for the question. Render data charts from real recorded values with appropriate units, uncertainty and encodings; any capable model may write the plotting code, labels or caption. Use `scripts/publication_figures.py` or an appropriate plotting tool. Reference galleries, shared style briefs, SVG/PPTX/draw.io exports and diagram IR are optional aids. Inspect the actual final-size rendering. Separate conceptual illustrations from measured data and preserve source attribution; no fixed six-paper style or brand rule applies.
 
-For reference search, main-figure story alignment, shared six-paper visual tokens
-or editable SVG/PPTX/draw.io, read `docs/FIGURE-REFERENCE-WORKBENCH.md`. Use free
-cloud operations and reuse a bound search; select at most five source-linked
-layout references. Never load the full gallery into paid context. Write our own
-claim-bound content and inspect original-image rights separately. Map every
-node/arrow and numeric label to located paper/protocol/data evidence. Native
-export requires current non-Claude IR provenance; it does not register a final
-figure or approve science/visuals. Revalidate after any source or style change.
-Carry the current brief as `story_ref` into its editable export so final checks
-also revalidate the actual manuscript, claims and all brief dependencies.
-
-1. Profile a real CSV/TSV/JSON with `scripts/figure_profile.py`; ask what registered claim the figure serves. Never infer significance, error bars, sample size, PCA coordinates or ROC metrics in a plotting prompt.
-2. Create `schemas/publication-figure-spec.schema.json`-compatible specs. Before `--record`, ensure the source spec has current non-Claude provenance: an actual Codex/GPT authorship record or `scripts/output_provenance.py attest` for a genuinely human-authored/reviewed spec. Use `scripts/publication_figures.py render`; review SVG/PDF/PNG layout, missing labels, legend occlusion and grayscale legibility. The 37 chart families cover trends, distributions, uncertainty, diagnostics, meta-analysis, survival/Kaplan–Meier, calibration, ROC/PR, correlation, volcano/PCA, Q–Q/funnel, Bland–Altman, SHAP summaries, nomograms, decision curves, Sankey/network/chord and precomputed geospatial views. Analytical coordinates, risk counts, intervals and weights are inputs, not computed or fitted by the renderer. Enable `source_data_export` only if redistribution is authorized. For specialized plot types, write a local Python renderer and retain identical source-run/claim/provenance checks.
-3. For study architecture, methods, mechanism or data flow, create a typed `schemas/research-diagram.schema.json` IR with typed input/data/process/model/decision/output/actor/system/construct nodes and data/control/causal/association/feedback/temporal edges; run `scripts/research_diagrams.py --project <slug> --spec <project-relative-json>`. Acyclic structures use a deterministic layered layout; mechanism cycles use a deterministic circular layout. Check that every edge is scientifically defensible and inspect all exported formats. `--record` requires a named English-label and visual reviewer and current non-Claude provenance for the IR.
-4. GPT Image may create only a clearly labeled conceptual illustration, never a measured result or substitute chart. `scripts/concept_illustrations.py` supports an explicit paid API generation or a manual ChatGPT-web PNG import. The image remains unregistered until a person visually checks all scientific details and runs `scripts/figure_provenance.py approve-illustration` with an AI-use disclosure location. Do not silently replace a deterministic data figure.
-5. Before packaging, run `scripts/figure_provenance.py validate --project <slug> --paper <Pxx>` and preserve the original editable source, prompt receipt, figure and hashes.
+Follow the current research-first principles in `AGENTS.md`; use this capability whenever it helps the task. Historical stage labels are compatibility context, not prerequisites.

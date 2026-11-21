@@ -16,26 +16,20 @@ from tests import test_literature_intelligence as literature_fixture
 
 
 class ReviewEngineeringControlsTests(unittest.TestCase):
-    def test_writer_policy_rejected_before_a_model_call(self):
-        with patch("scripts.model_runtime.call", side_effect=AssertionError("no model invocation")):
-            for provider in ("anthropic", "codekey-gemini", "codekey-deepseek"):
-                with self.subTest(provider=provider), self.assertRaisesRegex(ValueError, "OpenAI/Codex"):
-                    api_orchestrator.validate_roles("anthropic", provider, "openai")
-            api_orchestrator.validate_roles("anthropic", "cheapai-gpt-pro", "anthropic")
-
-    def test_formal_entry_points_require_six_before_creating_a_project(self):
-        for count in (0, 1, 4, 7, 20, True):
+    def test_supported_writers_and_gradual_project_initialization(self):
+        with patch("scripts.model_runtime.call", side_effect=AssertionError("unexpected model call")):
+            for provider in ("anthropic", "codekey-gemini", "codekey-deepseek", "cheapai-gpt-pro"):
+                api_orchestrator.validate_roles("anthropic", provider, "openai")
+        for count in (0, 100, True):
             with self.subTest(count=count), self.assertRaises(cloud_job.CloudJobError):
                 cloud_job.validate_request(request("init", paper_count=count))
-        self.assertEqual(cloud_job.validate_request(request("init"))["action"], "init")
+        for count in (1, 4, 7, 20):
+            self.assertEqual(cloud_job.validate_request(request("init", paper_count=count))["paper_count"], count)
         with tempfile.TemporaryDirectory() as directory, patch.object(researchctl, "PROJECTS_ROOT", Path(directory)):
-            args = researchctl.parser().parse_args(["init", "--project", "unsupported-count", "--paper-count", "4"])
-            with self.assertRaisesRegex(researchctl.ResearchCtlError, "six"):
-                args.func(args)
-            self.assertFalse((Path(directory) / "unsupported-count").exists())
-            with patch.dict(os.environ, {"DR_OS_ROUTING_PROFILE": "production"}):
-                with self.assertRaisesRegex(researchctl.ResearchCtlError, "six"):
-                    researchctl.initialize(SimpleNamespace(project="unsupported-count", paper_count=4, venue=None))
+            args = researchctl.parser().parse_args(["init", "--project", "single-study", "--question", "How does drift change the measurement?"])
+            args.func(args)
+            project = Path(directory) / "single-study"
+            self.assertEqual(sorted(x.name for x in (project / "papers").iterdir()), ["P01"])
 
     def test_corrupt_failed_receipt_does_not_trigger_another_request(self):
         fixture = literature_fixture.LiteratureIntelligenceTests()

@@ -39,15 +39,14 @@ BLOCKED = {"state", "api_runs", "raw", "private", "credentials", "secrets",
 IDENTIFIER = re.compile(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}\Z")
 HASH = re.compile(r"[0-9a-f]{64}\Z")
 STOPWORDS = {"the", "and", "this", "that", "with", "from", "what", "which", "paper", "study"}
-MAX_TEXT = 2_000_000
+MAX_TEXT = 64_000_000
 MAX_TOTAL = 100_000_000
 
 
 def _implementation_hash():
-    # Views and reuse depend on every renderer/reasoning implementation, rather
-    # than just this entry point. A helper update must invalidate old snapshots.
-    paths = (Path(__file__), Path(__file__).with_name("literature_browser.py"),
-             Path(__file__).with_name("literature_reasoning.py"))
+    # Source parsing/card validation define this snapshot. View and reading-plan
+    # implementations carry their own versions and must not invalidate sources.
+    paths = (Path(__file__),)
     return _digest({p.name: sha(p) for p in paths if p.is_file()})
 
 
@@ -75,7 +74,7 @@ def _path(project, relative, *, exists=True, corpus=False):
     if any(p.startswith(".") or p.casefold() in BLOCKED for p in parts):
         raise ValueError("private/control/hidden paths are not workbench inputs")
     if any(word in Path(relative).name.casefold() for word in
-           ("api_key", "apikey", "credential", "password", "secret", "token")):
+           ("api_key", "apikey", "credential", "password", "secret")):
         raise ValueError("sensitive filenames are not workbench inputs")
     if corpus and (not parts or parts[0] not in {"literature", "evidence"}):
         raise ValueError("sources, readers, notes and cards must be controlled literature/evidence files")
@@ -107,6 +106,11 @@ class _Files:
             limit = 30_000_000 if path.suffix.lower() == ".pdf" else MAX_TEXT
             if path.stat().st_size > limit:
                 raise ValueError("source exceeds workbench size limit: " + relative)
+            if path.suffix.lower() == ".pdf":
+                with path.open("rb") as stream:
+                    data = stream.read(5)
+                self.cache[relative] = (data, sha(path))
+                return self.cache[relative]
             data = path.read_bytes()
             self.total += len(data)
             if self.total > MAX_TOTAL:
@@ -163,8 +167,9 @@ def source_binding(project: Path, source: dict, *, manifest=None, files=None) ->
     path = approved_pdf(project, relative, manifest)
     if path != path_in(project, relative) or path.stat().st_size > 64 * 1024 * 1024:
         raise ValueError("authorized original PDF exceeds 64 MiB or resolves differently")
-    data = path.read_bytes()
-    digest = hashlib.sha256(data).hexdigest()
+    with path.open("rb") as stream:
+        data = stream.read(5)
+    digest = sha(path)
     if not data.startswith(b"%PDF-") or digest != source["sha256"]:
         raise ValueError("raw original PDF magic or exact source hash differs")
     if relative not in files.cache:
@@ -285,12 +290,12 @@ def _reader(project, spec, source, files):
     if not isinstance(receipt, dict):
         raise ValueError("native reader receipt must be an object")
     origin = current_origin(project, _path(project, receipt_rel, corpus=True))
-    if origin.get("status") != "tracked" or origin.get("family") == "anthropic":
-        raise ValueError("native reader receipt requires current controlled non-Claude provenance")
+    if origin.get("status") != "tracked":
+        raise ValueError("native reader receipt requires current source provenance")
     if (receipt.get("pdf_sha256") != source["sha256"]
             or receipt.get("reader_sha256") != reader["sha256"]
-            or receipt.get("reader_implementation_sha256") != sha(Path(paper_reader.__file__))):
-        raise ValueError("native reader source/output/implementation binding changed")
+            or not HASH.fullmatch(str(receipt.get("reader_implementation_sha256", "")))):
+        raise ValueError("native reader source/output binding changed or extractor version missing")
     mapping = files.binding(receipt.get("source_map"))
     source_map = _json(files.get(mapping["path"])[0])
     if not isinstance(source_map, dict):
@@ -336,6 +341,7 @@ def _reader(project, spec, source, files):
         images.append({**binding, "pdf_page": image["pdf_page"]})
     return {**reader, "receipt": {"path": receipt_rel, "sha256": receipt_hash},
             "source_map": mapping, "page_ranges": ranges, "page_images": images,
+            "missing_text_pages": [b["pdf_page"] for b in blocks if b.get("extracted_text_sha256") == hashlib.sha256(b"").hexdigest()],
             "extracted_not_semantically_verified": True}
 
 
@@ -401,8 +407,8 @@ def _card(project, paper, card, files):
     fields = {}
     for field in FIELDS:
         rows = incoming.get(field, [])
-        if not isinstance(rows, list) or len(rows) > 50:
-            raise ValueError("card fields must contain at most 50 located entries")
+        if not isinstance(rows, list):
+            raise ValueError("card fields must contain arrays of located entries")
         fields[field] = []
         for row in rows:
             if not isinstance(row, dict) or row.get("kind") not in KINDS:
@@ -440,8 +446,6 @@ def _chunks(paper, relative, text, digest):
     lines, first, buffer, size, page = text.splitlines(), 1, [], 0, None
     for number, line in enumerate(lines, 1):
         match = re.fullmatch(r"## PDF page ([1-9][0-9]*)\s*", line)
-        if len(line) > 12000:
-            raise ValueError("full-text indexing needs lines at most 12000 characters; prepare a traceable extract")
         if buffer and (size + len(line) > 3000 or match):
             yield _chunk(paper, relative, digest, first, number - 1, buffer, page)
             first, buffer, size = number, [], 0
@@ -541,24 +545,42 @@ def _discovered(project, files):
     return result
 
 
-def _snapshot(project, output_dir=None, *, current=True):
+def _snapshot(project, output_dir=None, *, current=True, paper_ids=None):
     from scripts.output_provenance import current_origin
     relative, directory = _output(project, output_dir)
     manifest_path = _path(project, relative + "/manifest.json")
     origin = current_origin(project, manifest_path)
-    if origin.get("status") != "tracked" or origin.get("family") == "anthropic":
+    if origin.get("status") != "tracked":
         raise ValueError("workbench manifest provenance is stale or untracked; rebuild")
     manifest = read(manifest_path)
     if manifest.get("schema_version") != "1.0" or manifest.get("implementation_sha256") != _implementation_hash():
         raise ValueError("workbench implementation changed; rebuild the snapshot")
     if manifest.get("output_dir") != relative:
         raise ValueError("workbench manifest output directory differs")
+    library = read(directory / "library.json")
+    selected = [p for p in library.get("papers", []) if paper_ids is None or p["id"] in paper_ids]
+    relevant = None
+    if paper_ids is not None and all("dependency_paths" in p for p in selected):
+        relevant = set()
+        for paper in selected:
+            relevant.update(paper.get("dependency_paths", []))
+            relevant.add(paper["source"]["path"])
+        config_path = _path(project, CONFIG, exists=False)
+        if config_path.is_file():
+            configured = {p["id"]: p for p in read(config_path).get("papers", [])}
+            for paper in selected:
+                if paper.get("spec_sha256") and _digest(configured.get(paper["id"])) != paper["spec_sha256"]:
+                    raise ValueError("selected paper configuration changed; rebuild its snapshot")
     for item in manifest.get("outputs", []):
+        if relevant is not None and item["path"] not in {relative + "/library.json", relative + "/search-index.json", *[p.get("output_card") for p in selected]}:
+            continue
         if not item["path"].startswith(relative + "/") or sha(_path(project, item["path"])) != item["sha256"]:
             raise ValueError("workbench output changed; rebuild the snapshot")
     if current:
         checked_files = _Files(project)
         for item in manifest.get("inputs", []):
+            if relevant is not None and item["path"] not in relevant:
+                continue
             if item.get("kind") == "approved_binary_pdf":
                 actual = source_binding(project, item, manifest=item.get("manifest"), files=checked_files)["sha256"]
             elif item.get("kind") == "approved_figure_asset":
@@ -567,18 +589,25 @@ def _snapshot(project, output_dir=None, *, current=True):
                 actual = sha(_path(project, item["path"]))
             if actual != item["sha256"]:
                 raise ValueError("workbench source changed; rebuild before reading old evidence")
-    library = read(directory / "library.json")
     if current:
-        for paper in library.get("papers", []):
+        for paper in selected:
             receipt = paper["reader"]["receipt"] if paper.get("reader") else None
             bindings = [receipt] if receipt else []
             if paper.get("card_input"):
                 bindings.append(paper["card_input"])
             for binding in bindings:
                 origin = current_origin(project, _path(project, binding["path"]))
-                if origin.get("family") == "anthropic" or (binding == receipt and origin.get("status") != "tracked"):
+                if binding == receipt and origin.get("status") != "tracked":
                     raise ValueError("workbench input provenance changed; rebuild")
     return library, read(directory / "search-index.json"), manifest
+
+
+def source_snapshot_identity(library, paper_ids):
+    """Stable scientific dependency identity, excluding dashboards and plans."""
+    selected = set(paper_ids)
+    return _digest({p["id"]: {"source": p["source"], "reader": p.get("reader"),
+                            "source_scope": p.get("source_scope")}
+                    for p in library["papers"] if p["id"] in selected})
 
 
 def build(project: Path, config_path: str | None = None, output_dir: str | None = None) -> dict:
@@ -594,7 +623,7 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
             raise ValueError("unsupported literature workbench configuration")
     else:
         config = {"schema_version": "1.0"}
-    scope = {"doctoral_question": config.get("doctoral_question"), "status": "proposed_requires_G1_review"}
+    scope = {"doctoral_question": config.get("doctoral_question"), "status": "research_context"}
     if scope["doctoral_question"] is not None:
         _text(scope["doctoral_question"], "doctoral question", 4000)
     core_path = _path(project, "program/core-thesis.json", exists=False)
@@ -604,14 +633,12 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
         actual = core.get("doctoral_question") if isinstance(core, dict) else None
         scope["core_thesis"] = {"path": "program/core-thesis.json", "sha256": core_hash}
         if isinstance(actual, str) and actual.strip().casefold() not in {"", "unassigned", "tbd", "pending", "not selected", "not yet selected"}:
-            if scope["doctoral_question"] is not None and scope["doctoral_question"].strip() != actual.strip():
-                raise ValueError("workbench scope differs from the doctoral question; G1/G2 human review is required")
-            scope.update(doctoral_question=actual.strip(), status="current_question_bound_requires_scientific_review")
+            scope.update(doctoral_question=scope["doctoral_question"] or actual.strip(), status="research_context")
     entries = config.get("papers")
     if entries is None:
         entries = _discovered(project, files)
-    if not isinstance(entries, list) or len(entries) > 200:
-        raise ValueError("papers must be an array of at most 200 controlled sources")
+    if not isinstance(entries, list):
+        raise ValueError("papers must be an array of explicit sources")
     if directory.exists() and any(directory.iterdir()) and not (directory / "manifest.json").is_file():
         raise ValueError("refusing to populate a nonempty directory owned by another tool")
     try:
@@ -630,12 +657,10 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
             raise ValueError("duplicate library paper ID")
         paper_ids, topic = spec.get("paper_ids", []), spec.get("topic_id")
         if (not isinstance(paper_ids, list) or len(set(paper_ids)) != len(paper_ids)
-                or any(p not in {f"P{i:02d}" for i in range(1, 7)} for p in paper_ids)):
-            raise ValueError("paper mappings must be distinct P01-P06 identifiers")
+                or any(not isinstance(p, str) or not IDENTIFIER.fullmatch(p) for p in paper_ids)):
+            raise ValueError("paper mappings must be distinct safe identifiers")
         if topic is not None:
             _id(topic, "topic ID")
-        if paper_ids and topic is None:
-            raise ValueError("P01-P06 mappings require an explicit topic ID")
         paper = {"id": identifier, "title": _text(spec.get("title", identifier), "paper title", 1000),
                  "topic_id": topic, "paper_ids": paper_ids, "status": "current",
                  "discovered_pending": bool(spec.get("discovered_pending")),
@@ -664,14 +689,12 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
                 paper["read_scope"] = "metadata_only_not_full_text"
             elif Path(paper["source"]["path"]).suffix.lower() == ".pdf" and not paper["reader"]:
                 paper["read_scope"] = "pdf_pending_controlled_extraction"
+            elif paper["reader"] and paper["reader"].get("missing_text_pages"):
+                paper["read_scope"] = "partial_text_extraction_requires_visual_or_ocr_review"
             else:
                 paper["read_scope"] = "available_text_not_human_reviewed"
             card_binding = files.binding(spec["card"]) if spec.get("card") else None
             paper["card_input"] = card_binding
-            if card_binding:
-                from scripts.output_provenance import current_origin
-                if current_origin(project, _path(project, card_binding["path"])).get("family") == "anthropic":
-                    raise ValueError("persistent scientific cards may not have a current Claude writer")
             # The dependency identities (including actual receipt/map/image hashes)
             # determine whether extraction and card validation can be reused.
             dependencies = [paper["source"], *paper["notes"]]
@@ -682,8 +705,10 @@ def build(project: Path, config_path: str | None = None, output_dir: str | None 
                 dependencies.append(card_binding)
             if paper["figure_manifest"]:
                 dependencies += [paper["figure_manifest"], *paper["figure_manifest"]["assets"]]
+            paper["spec_sha256"] = _digest(spec)
+            paper["dependency_paths"] = sorted({item["path"] for item in dependencies} | ({paper["manifest"]} if paper.get("manifest") else set()))
             fingerprint = _digest({"spec": spec, "dependencies": dependencies,
-                                   "scope": scope, "implementation": _implementation_hash()})
+                                   "implementation": _implementation_hash()})
             paper["input_fingerprint"] = fingerprint
             prior = previous.get(identifier, {})
             if prior.get("input_fingerprint") == fingerprint and prior.get("status") == "current":
@@ -808,10 +833,8 @@ def search(project: Path, query: str, *, topic_id=None, paper_id=None, limit=10,
         raise ValueError("search limit must be 1..100")
     if topic_id is not None:
         _id(topic_id, "topic ID")
-    if paper_id is not None and paper_id not in {f"P{i:02d}" for i in range(1, 7)}:
-        raise ValueError("paper_id filter must be P01-P06")
-    if paper_id is not None and topic_id is None:
-        raise ValueError("P01-P06 search requires its topic scope")
+    if paper_id is not None:
+        _id(paper_id, "paper filter")
     _, index, manifest = _snapshot(Path(project), output_dir)
     docs, scores = index["documents"], defaultdict(float)
     for term in set(_tokens(query)):

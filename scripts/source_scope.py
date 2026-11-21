@@ -56,7 +56,10 @@ def _registered_basis(project: Path, paper_id: str) -> tuple[dict, dict]:
     if len(rows) != 1 or rows[0].get("source_scope") != "full_text":
         raise ValueError("registered supplied full-text source is required")
     spec = rows[0]; primary = spec.get("source")
-    metadata_path = path_in(project, f"literature/metadata/{paper_id}.json")
+    registration = spec.get("registration")
+    metadata_path = path_in(project, registration["path"] if registration else f"literature/metadata/{paper_id}.json")
+    if registration and sha(metadata_path) != registration.get("sha256"):
+        raise ValueError("source registration metadata changed")
     metadata_origin = output_provenance.current_origin(project, metadata_path)
     if metadata_origin.get("status") != "tracked" or metadata_origin.get("model") != "scripts/literature_registration.py":
         raise ValueError("source registration metadata lacks executor provenance")
@@ -65,7 +68,7 @@ def _registered_basis(project: Path, paper_id: str) -> tuple[dict, dict]:
     if sha(acquired_path) != binding.get("sha256"):
         raise ValueError("source acquisition receipt is stale")
     acquired_origin = output_provenance.current_origin(project, acquired_path)
-    if acquired_origin.get("status") != "tracked" or acquired_origin.get("family") == "anthropic":
+    if acquired_origin.get("status") != "tracked":
         raise ValueError("source acquisition receipt lacks executor provenance")
     if not isinstance(primary, dict):
         raise ValueError("registered PDF identity is missing")

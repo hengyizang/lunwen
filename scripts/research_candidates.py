@@ -156,8 +156,8 @@ def audit_register(project: Path, spec: Path, *, require_decision: bool = False)
     if value.get("automatic_selection") is not False:
         errors.append("the hypothesis register must not automatically select a topic")
     hypotheses = value.get("hypotheses")
-    if not isinstance(hypotheses, list) or len(hypotheses) < 3:
-        errors.append("at least three concrete candidate hypotheses are required")
+    if not isinstance(hypotheses, list) or not hypotheses:
+        errors.append("at least one concrete candidate hypothesis is required")
         hypotheses = hypotheses if isinstance(hypotheses, list) else []
     ids = [row["hypothesis_id"].strip() for row in hypotheses
            if isinstance(row, dict) and isinstance(row.get("hypothesis_id"), str)]

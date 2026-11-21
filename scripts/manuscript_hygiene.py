@@ -171,7 +171,7 @@ def _can_apply(project: Path, path: Path, origin: dict) -> bool:
     return (path.suffix.lower() in EDITABLE
             and not artifact_ownership.executor_owned(project, path.relative_to(project).as_posix())
             and origin.get("status") == "tracked"
-            and (origin.get("family") == "openai" or origin.get("provider") == "human-attestation"))
+            and origin.get("provider") != "deterministic-control-plane")
 
 
 def _record(project: Path, paths: list[Path], run_id: str, *, family: str = "other") -> None:
@@ -271,8 +271,8 @@ def _validate_change(project: Path, receipt: Path, implementation: dict) -> None
     if not source.is_relative_to(_paper(project, value["paper_id"])) or source.suffix.lower() not in EDITABLE:
         raise ValueError("hygiene change source escapes its paper")
     old_origin = value["source"]["origin"]
-    if old_origin.get("status") != "tracked" or not (old_origin.get("family") == "openai" or old_origin.get("provider") == "human-attestation"):
-        raise ValueError("hygiene change cannot conceal unknown or Claude source ancestry")
+    if old_origin.get("status") != "tracked" or old_origin.get("provider") == "deterministic-control-plane":
+        raise ValueError("hygiene change requires the original tracked author")
     original = path_in(project, (receipt.parent / ("original" + source.suffix)).relative_to(project).as_posix())
     payload = original.read_bytes()
     derived, analysis, before, after = _scan(payload, source.suffix.lower())

@@ -18,8 +18,21 @@ def decision_errors(decision):
         [*decision.get("errors", []), *decision.get("review_errors", [])])]
 
 
-def requires_critic(stage):
-    return stage != "intake"
+def requires_critic(stage, project=None):
+    """Review is opt-in per project; the one-argument form is legacy-compatible."""
+    if stage == "intake":
+        return False
+    if project is None:
+        return True
+    policy = project / "program/review-policy.json"
+    if not policy.is_file():
+        return False
+    value = read(policy)
+    stages = value.get("stages")
+    if type(value.get("enabled", False)) is not bool or (stages is not None and
+            (not isinstance(stages, list) or any(not isinstance(item, str) for item in stages))):
+        raise ValueError("review-policy needs boolean enabled and optional stage names")
+    return value.get("enabled", False) and (stages is None or stage in stages)
 
 
 def skipped_remediation(reviews):
@@ -27,6 +40,8 @@ def skipped_remediation(reviews):
     status, reason = {
         "administrative_intake": ("not_applicable", "Administrative intake uses planner and writer; no scientific critique or approval was performed."),
         "scientific_review": ("not_required", "No actionable initial findings; writer notes retained."),
+        "review_not_requested": ("not_requested", "No optional scientific review was requested; no review or approval is inferred."),
+        "optional_submission_views": ("panel_observations_recorded", "Selected source reviews retain their findings and author responses; scientific validity is not established."),
         "three_blind_submission_views": ("panel_observations_recorded", "Read frozen panel concerns and retain source-bound author responses; scientific validity is not established."),
     }[reviews["review_mode"]]
     return {"status": status, "reason": reason, "model_call_made": False, "final_independent_review_required": False}
@@ -40,9 +55,9 @@ def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remed
     retain evidence and dissent but do not manufacture a second invocation or gate.
     """
     result = {"audits": {}, "paths": {}, "evidence": {}, "methods": {}, "review_mode": "scientific_review"}
-    if not requires_critic(stage):
+    if not requires_critic(stage, project):
         result["evidence"]["initial"], result["methods"]["initial"] = refresh("initial")
-        return {**result, "review_mode": "administrative_intake", "research_decision": research_decision(project, stage, run_id),
+        return {**result, "review_mode": "administrative_intake" if stage == "intake" else "review_not_requested", "research_decision": research_decision(project, stage, run_id),
                 "decision_log": None, "dispositions": [], "remediation_skipped": True}
     from scripts.api_orchestrator import remediation_required, validate_remediation_notes
     paper = read(project / "state/run.json").get("active_paper") if stage == "writing-and-review" else None
@@ -78,19 +93,14 @@ def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remed
         if phase == "initial":
             notes = writer_notes(audit, note_stage) if callable(writer_notes) else writer_notes
             result["remediation_skipped"] = not remediation_required(audit, note_stage, notes)
-        protocol_review = materials.get("review_purpose") == "supplemental_protocol"
-        seal_phase = "observation" if phase == "initial" and result["remediation_skipped"] and not protocol_review else phase
+        seal_phase = "observation" if phase == "initial" and result["remediation_skipped"] else phase
         if path:
             review_receipts.seal_phase(project, stage=stage, run_id=run_id, phase=seal_phase,
                 audit_path=path, prompt=request, identity=identity, writer_family=writer_family,
                 materials=materials, notes=notes if seal_phase in {"final", "observation"} else None, cycle_required=True)
         if phase == "initial":
             if result["remediation_skipped"]:
-                if not protocol_review:
-                    break
-                # An existing supplemental execution protocol still needs its
-                # two actual authority receipts, even when no repair is needed.
-                continue
+                break
             notes = remediate(audit, path, note_stage)
             notes = validate_remediation_notes({"stage": note_stage, "notes": notes}, audit)
         elif path:
@@ -106,14 +116,14 @@ def review_cycle(project, stage, run_id, *, writer_family, prompt, invoke, remed
 
 
 def submission_cycle(project, run_id, *, writer_family, refresh):
-    """The final checkpoint replaces the ordinary critic with three blind views."""
+    """Run selected source reviews only when requested; final checks remain separate."""
     from scripts import review_panel
     paper = read(project / "state/run.json")["active_paper"]
     evidence, methods = refresh("initial")
     decision = research_decision(project, "writing-and-review", run_id)
     panel = review_panel.run(project, paper, run_id, writer_family=writer_family)
     final_evidence, final_methods = refresh("panel")
-    return {"panel": panel, "review_mode": "three_blind_submission_views", "audits": {}, "paths": {}, "decision_log": None,
+    return {"panel": panel, "review_mode": "optional_submission_views" if panel["status"] != "not_requested" else "review_not_requested", "audits": {}, "paths": {}, "decision_log": None,
         "evidence": {"initial": evidence, "final": final_evidence},
         "methods": {"initial": methods, "panel": final_methods}, "remediation_skipped": True,
         "decision_before_review": decision, "research_decision": {**decision,

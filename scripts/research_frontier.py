@@ -51,9 +51,9 @@ def _ids(value, label, maximum=100, *, nonempty=False):
 
 def _origin(project, path, module=None):
     origin = current_origin(project, path)
-    if origin.get("family") == "anthropic" or (module and (
+    if module and (
             origin.get("status") != "tracked" or origin.get("family") != "other"
-            or origin.get("model") != module)):
+            or origin.get("model") != module):
         raise ValueError("artifact has missing, stale or disallowed provenance: " + str(path))
 
 

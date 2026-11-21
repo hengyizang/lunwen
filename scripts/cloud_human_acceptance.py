@@ -109,8 +109,11 @@ def quality_fixture(project: Path, *, real_power: bool = False) -> None:
 def reproduction_fixture(project: Path) -> None:
     """Explicitly synthetic receipts; real executor acceptance is a separate job."""
     evidence = project / "experiments/metrics.json"
-    evidence.write_text('{"metric": 0.8, "synthetic": true}\n', encoding="utf-8")
+    evidence.write_text(json.dumps({"metric": .8, "B1_reference": .8, "B2_reference": .82,
+        "B1_observed": .8-.01, "B2_observed": .82-.01, "synthetic": True}) + "\n", encoding="utf-8")
     outputs = [{"path": evidence.relative_to(project).as_posix(), "sha256": cp.sha(evidence)}]
+    def value_source(key):
+        return {**outputs[0], "selector": {"json_pointer": "/" + key}}
     registry = []
     for run, attempt in (("base-domain", "a1"), ("base-recent", "a2"), ("original", "a3"), ("reproduction", "b1")):
         clean = attempt == "b1"
@@ -133,6 +136,7 @@ def reproduction_fixture(project: Path) -> None:
         "baselines": [
             {"baseline_id": b, "class": cls, "metric": "F1", "reference_source_url": "https://example.org/" + b.lower(),
              "reference_value": reference, "observed_value": reference - .01, "absolute_tolerance": .02,
+             "reference_source": value_source(b + "_reference"), "observed_source": value_source(b + "_observed"),
              "comparable_protocol": True, "within_tolerance": True, "run_ids": [run], "attempt_ids": [attempt],
              "evidence_files": outputs, "comparison_notes": "Synthetic fixture only."}
             for b, cls, reference, run, attempt in (("B1", "domain_standard", .8, "base-domain", "a1"),
@@ -150,6 +154,7 @@ def reproduction_fixture(project: Path) -> None:
                       "reproduction_environment_digest": quality.registry_environment_digest(registry, ["b1"]),
                       "source_commit": "a" * 40},
         "metric_comparisons": [{"metric": "F1", "original_value": .8, "reproduction_value": .79,
+                                "original_source": value_source("metric"), "reproduction_source": value_source("B1_observed"),
                                 "absolute_tolerance": .02, "within_tolerance": True}],
         "evidence_files": outputs,
     }

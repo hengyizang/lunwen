@@ -230,8 +230,13 @@ def execute(root, contract_path, dataset_id, output, receipt, *, dataset_registr
         "raw_input_unchanged": True, "scientific_validity_verified": False, "data_rights_verified": False, "gate_approved": False}
     for binding in inputs: _binding(root, binding)
     receipt_bytes = (json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False)+"\n").encode("utf-8")
+    slots = json.loads(os.environ.get("RESEARCH_OS_OUTPUT_SLOTS", "{}"))
     for path, content in ((target, payload), (receipt_file, receipt_bytes)):
-        if path.exists() and path.read_bytes() != content: raise ValueError("refusing to overwrite a different generated cleaning artifact")
+        mounted = (isinstance(slots, dict) and slots.get("run_id") == run_id
+                   and path.relative_to(root).as_posix() in slots.get("paths", []))
+        if path.exists() and path.read_bytes() != content:
+            if not mounted or not path.is_file() or path.stat().st_size != 0:
+                raise ValueError("refusing to overwrite a different generated cleaning artifact")
     target.parent.mkdir(parents=True, exist_ok=True); receipt_file.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(payload); receipt_file.write_bytes(receipt_bytes)
     return result

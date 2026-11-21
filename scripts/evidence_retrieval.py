@@ -47,7 +47,7 @@ def _dense_scores(project: Path, binding: dict, query: str, chunks: list[dict], 
     if (not isinstance(binding, dict) or set(binding) != {"path", "sha256"}
             or not isinstance(binding.get("path"), str)):
         raise ValueError("dense_cache needs an exact path and sha256")
-    content, digest = safe_text(project, binding["path"], redact)
+    content, digest = safe_text(project, binding["path"], redact, max_bytes=256_000_000)
     if binding["sha256"] != digest:
         raise ValueError("dense cache changed")
     cache = json.loads(content)
@@ -111,18 +111,18 @@ def corpus(project: Path, sources: list[dict], *, redact=lambda value: value) ->
         relative = source["path"]
         if relative in {item["path"] for item in searched}:
             raise ValueError("duplicate retrieval source")
-        text, digest = safe_text(project, relative, redact)
+        text, digest = safe_text(project, relative, redact, max_bytes=64_000_000)
         if source.get("sha256") != digest:
             raise ValueError("retrieval source changed: " + relative)
         total += len(text.encode())
-        if total > 20_000_000:
-            raise ValueError("retrieval exceeds 20 MB; declare a smaller explicit corpus")
+        if total > 256_000_000:
+            raise ValueError("retrieval exceeds this worker's 256 MB processing limit; sources are retained")
         searched.append({"path": relative, "sha256": digest, "stance": source.get("stance", "neutral")})
         lines = text.splitlines(keepends=True)
         ranges = source.get("ranges")
         if "ranges" in source:
-            if not isinstance(ranges, list) or not 1 <= len(ranges) <= 200:
-                raise ValueError("source ranges need 1-200 explicit original-text ranges")
+            if not isinstance(ranges, list) or not ranges:
+                raise ValueError("source ranges need explicit original-text ranges")
             previous_end = 0
             for selected_range in ranges:
                 if (not isinstance(selected_range, dict)
@@ -156,9 +156,9 @@ def retrieve(project: Path, spec: dict, *, redact=lambda value: value) -> dict:
     if not isinstance(spec, dict):
         raise ValueError("retrieval plan must be an object")
     sources, query, limit = spec.get("sources"), spec.get("query"), spec.get("limit", 8)
-    if (spec.get("schema_version") != "1.0" or not isinstance(sources, list) or not 1 <= len(sources) <= 50
+    if (spec.get("schema_version") != "1.0" or not isinstance(sources, list) or not sources
             or type(limit) is not int or not 1 <= limit <= 20):
-        raise ValueError("retrieval needs 1-50 explicit sources, a query and limit 1-20")
+        raise ValueError("retrieval needs explicit sources, a query and result limit 1-20")
     query = _query(query, "query")
     expansions = spec.get("query_expansions", [])
     if not isinstance(expansions, list) or len(expansions) > 5:

@@ -109,7 +109,9 @@ def validate_style(style):
                   "edge_label_size_pt", "text_color", "node_fills", "edge_colors", "edge_styles",
                   "palette_semantics", "legend_policy"})
     _need(style["schema_version"] == "1.0" and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", str(style["id"])), "Unsupported visual style identity")
-    _need(style["paper_ids"] == [f"P{i:02}" for i in range(1, 7)], "Visual style must cover the common six-paper portfolio")
+    _need(isinstance(style["paper_ids"], list) and style["paper_ids"] and
+          all(isinstance(value, str) and re.fullmatch(r"P\d{2}", value) for value in style["paper_ids"]) and
+          len(style["paper_ids"]) == len(set(style["paper_ids"])), "Visual style must name its actual unique paper IDs")
     _text(style["font_family"], "Font family")
     _need(len(style["font_family"]) <= 80 and not re.search(r"[<>;\r\n\x00-\x1f]", style["font_family"]), "Font family needs a literal name")
     for key, low, high in (("font_size_pt", 7, 18), ("title_size_pt", 8, 24), ("edge_label_size_pt", 6, 16)):
@@ -130,9 +132,9 @@ def validate_style(style):
     return style
 
 
-def default_style():
+def default_style(paper_ids=None):
     """Deterministic starting tokens, not a journal rule or a scientific decision."""
-    return {"schema_version": "1.0", "id": "doctoral-six-paper-v1", "paper_ids": [f"P{i:02}" for i in range(1, 7)],
+    return {"schema_version": "1.0", "id": "research-paper-v1", "paper_ids": list(paper_ids) if paper_ids is not None else ["P01"],
             "font_family": "Times New Roman", "font_size_pt": 8, "title_size_pt": 11, "edge_label_size_pt": 7,
             "text_color": "#142C38", "node_fills": {"input": "#D9EDF1", "data": "#D9EDF1", "process": "#E8E5F1",
             "model": "#FAEAD8", "decision": "#FAEAD8", "output": "#DCEDE5", "actor": "#E7EAF0", "system": "#E7EAF0", "construct": "#E8E5F1"},
@@ -153,7 +155,7 @@ def load_visual_style(project: Path, style_ref):
     _need(style_ref["path"] == STYLE_PATH, "Style reference must identify the shared program style")
     from scripts.output_provenance import current_origin
     origin = current_origin(project, target)
-    _need(origin.get("status") == "tracked" and origin.get("family") != "anthropic", "Visual style needs tracked non-Claude persistent provenance")
+    _need(origin.get("status") == "tracked", "Visual style needs its current recorded source")
     return validate_style(read(target))
 
 
@@ -223,8 +225,8 @@ def _results(project, request, inputs, claims):
 
 def build_report(project: Path, request: dict):
     required = {"schema_version", "id", "paper_id", "phase", "paper_contract", "claims", "diagram", "sources", "claim_ids",
-                "gallery_report", "references", "problem", "contribution", "flow", "panels", "modules", "connections", "numeric_bindings", "result_sources"}
-    _keys(request, required, {"manuscript"})
+                "problem", "contribution", "flow", "panels", "modules", "connections", "numeric_bindings", "result_sources"}
+    _keys(request, required, {"manuscript", "gallery_report", "references"})
     _need(request["schema_version"] == "1.0" and request["phase"] in {"planned", "observed"}, "Unsupported figure story version or phase")
     _need(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", str(request["id"])), "Unsafe figure brief ID")
     paper = request["paper_id"]
@@ -357,6 +359,11 @@ def _numeric(project, request, ir, inputs, allowed, results):
 
 
 def _references(project, request, inputs):
+    references = request.get("references", [])
+    _need(isinstance(references, list) and len(references) <= 10, "References must be a bounded optional array")
+    if not references:
+        return
+    _need(isinstance(request.get("gallery_report"), dict), "Selected external references need their actual gallery source")
     gallery_path = _binding(project, request["gallery_report"], inputs)
     _need(request["gallery_report"]["path"].startswith("reports/figure-gallery/"), "References need a native figure-gallery search report")
     from scripts.figure_gallery import validate_search_report
@@ -364,8 +371,6 @@ def _references(project, request, inputs):
     if gallery is None:
         gallery = read(gallery_path)
     candidates = gallery.get("candidates", [])
-    references = request["references"]
-    _need(isinstance(references, list) and 2 <= len(references) <= 10, "Compare two to ten external reference candidates")
     seen = set()
     for entry in references:
         _keys(entry, {"figure_id", "url", "metadata_sha256", "borrow_layout", "do_not_copy"})

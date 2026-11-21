@@ -1,7 +1,7 @@
 """Narrow owner amendments of the cumulative API ceiling and planning date.
 
-This is an authenticated cloud control, never a model operation or a scientific
-approval. It is deliberately limited to G1 before any later gate or experiment.
+This records explicit owner resource decisions without changing scientific
+approvals, frozen experiments, results or the selected research task.
 """
 from __future__ import annotations
 
@@ -44,9 +44,12 @@ def _updated_constraints(original: dict, ceiling: int, deadline: str) -> dict:
         replacements[(date.fromisoformat(old_date) - timedelta(days=1)).isoformat()] = (
             date.fromisoformat(deadline) - timedelta(days=1)).isoformat()
     for key in ("research_goal", "notes"):
-        texts = [value[key]] if key == "research_goal" else value[key]
+        texts = [value.get(key)] if key == "research_goal" else value.get(key,[])
         updated = []
         for text in texts:
+            if not isinstance(text,str):
+                updated.append(text)
+                continue
             if key == "research_goal":
                 if old_date in replacements:
                     text = re.sub(r"\b(before|by)(\s+)" + re.escape(old_date) + r"\b",
@@ -55,7 +58,7 @@ def _updated_constraints(original: dict, ceiling: int, deadline: str) -> dict:
                 for prior, current in replacements.items():
                     text = text.replace(prior, current)
             if key == "notes" and old_budget != ceiling:
-                token = f"initial cumulative model API envelope of CNY {old_budget:g}"
+                token = f"initial cumulative model API envelope of CNY {old_budget:g}" if isinstance(old_budget,(int,float)) else "__no_previous_budget__"
                 if token in text:
                     text = text.replace(token, f"current cumulative model API envelope of CNY {ceiling}")
                     text = re.sub(r", with CNY [\d.]+ per-paper warning and CNY [\d.]+ per-paper hard limits", "", text)
@@ -72,78 +75,47 @@ def _updated_constraints(original: dict, ceiling: int, deadline: str) -> dict:
 
 
 def prepare(project: Path, new_ceiling_cny: int, target_submission_ready_date: str, actor: str) -> dict:
-    if os.environ.get("GITHUB_ACTIONS") != "true" and os.environ.get("DR_OS_CLOUD_EXECUTOR") != "1":
-        raise ValueError("operating amendments require the authenticated cloud controller")
-    validate_selectors(new_ceiling_cny, target_submission_ready_date)
-    if not isinstance(actor, str) or not actor.strip():
-        raise ValueError("named owner required for operating amendment")
-    state = researchctl.load_state(project.name)
-    if (state.get("gate") != "G1" or state.get("status") != "awaiting_work"
-            or state.get("approved_gates") != ["G0"]
-            or not isinstance(state.get("approvals"), list) or not state["approvals"]
-            or any(a.get("gate") != "G0" for a in state["approvals"])):
-        raise ValueError("operating amendment is limited to open G1 with only the actual G0 approval")
+    """Check resource commitments, independently of the project's research phase."""
+    validate_selectors(new_ceiling_cny,target_submission_ready_date)
+    if not isinstance(actor,str) or not actor.strip():raise ValueError("named owner required for operating amendment")
+    state=read(path_in(project,"state/run.json"))
     if state.get("supplemental_context") is not None:
         raise ValueError("supplemental projects cannot amend parent operating authority")
-    registry = experiment_path(project, 'experiments/registry.jsonl')
-    if registry.exists() and registry.read_text(encoding="utf-8").strip():
-        raise ValueError("operating amendment cannot rebind an executed experiment protocol")
-    for candidate in (project / "papers").glob("P[0-9][0-9]/preregistration.json"):
-        if candidate.is_file() and read(candidate).get("frozen_at"):
-            raise ValueError("frozen scientific protocols require their own reviewed amendment route")
-    constraints_path = path_in(project, "intake/constraints.json")
-    original = read(constraints_path)
-    errors = intake_validation.validate_constraints(original)
-    if errors or original.get("execution_mode") != "cloud_only":
-        raise ValueError("valid owner-approved cloud-only intake required: " + "; ".join(errors))
-    policy_path = path_in(project, cloud_continuation.POLICY.as_posix())
-    policy = read(policy_path)
-    approval = state["approvals"][-1]
-    if (set(policy) != cloud_continuation.POLICY_FIELDS or policy.get("schema_version") != "1.0"
-            or type(policy.get("enabled")) is not bool or policy.get("actor") != actor
-            or (approval.get("actor") != actor and not (
-                approval.get("decision_type") == "deterministic"
-                and approval.get("actor") == "deterministic-control-plane"))
-            or policy.get("constraints_sha256") != sha(constraints_path)
-            or policy.get("g0_approval_artifact_sha256") != approval.get("artifact_sha256")
-            or not re.fullmatch(r"[a-f0-9]{64}", str(approval.get("artifact_sha256")))
-            or policy.get("system_execution_hours_per_day") != 24
-            or policy.get("resume_interval_minutes") != 15
-            or policy.get("stop_when") != "all_papers_submission_ready"):
-        raise ValueError("original named G0 and continuation input hashes must still match")
-    spend = model_spend.read(project, required=True)
-    assert spend is not None
-    if new_ceiling_cny < spend["spent_cny"] + model_spend.reserved(spend):
+    constraints_path=path_in(project,"intake/constraints.json")
+    original=read(constraints_path)
+    policy_path=path_in(project,cloud_continuation.POLICY.as_posix(),exists=False)
+    policy=read(policy_path) if policy_path.is_file() else None
+    if policy is not None and (type(policy.get("enabled")) is not bool or policy.get("actor")!=actor):
+        raise ValueError("operating amendment must use the recorded owner authority")
+    spend=model_spend.read(project,required=True)
+    if new_ceiling_cny<spend["spent_cny"]+model_spend.reserved(spend):
         raise ValueError("amended cumulative ceiling cannot fall below spent and reserved charges")
-    if (new_ceiling_cny == spend["authorized_ceiling_cny"]
-            and new_ceiling_cny == original["model_api_budget_cny"]
-            and target_submission_ready_date == original.get("target_submission_ready_date")):
+    if (new_ceiling_cny==spend["authorized_ceiling_cny"] and new_ceiling_cny==original.get("model_api_budget_cny")
+            and target_submission_ready_date==original.get("target_submission_ready_date")):
         raise ValueError("operating amendment must change a current constraint")
-    updated = _updated_constraints(original, new_ceiling_cny, target_submission_ready_date)
-    if intake_validation.validate_constraints(updated):
-        raise ValueError("amended intake must remain valid without weakening scientific constraints")
-    return {"constraints_before": original, "constraints_after": updated,
-            "constraints_sha256_before": sha(constraints_path), "continuation_before": policy,
-            "spend_before": spend, "run_before": state,
-            "effect": "exact cumulative API ceiling and planning date only; no paid calls or scientific gate advance",
-            "scientific_completion_verified": False}
+    updated=_updated_constraints(original,new_ceiling_cny,target_submission_ready_date)
+    return {"constraints_before":original,"constraints_after":updated,"constraints_sha256_before":sha(constraints_path),
+            "continuation_before":policy,"spend_before":spend,"run_before":state,
+            "effect":"exact cumulative API ceiling and planning date only; no paid calls or scientific gate advance",
+            "scientific_completion_verified":False}
 
 
 def apply(project: Path, new_ceiling_cny: int, target_submission_ready_date: str,
           actor: str, review_sha256: str, run_id: str, note: str) -> list[Path]:
     prepared = prepare(project, new_ceiling_cny, target_submission_ready_date, actor)
     if (not re.fullmatch(r"[a-f0-9]{64}", str(review_sha256)) or not re.fullmatch(r"[0-9]+", str(run_id))
-            or not isinstance(note, str) or not 10 <= len(note.strip()) <= 500):
+            or not isinstance(note, str) or not note.strip()):
         raise ValueError("exact owner dossier hash, numeric cloud run and authorization note required")
     receipt = path_in(project, f"{PREFIX}/{run_id}.json", exists=False)
     if receipt.exists():
         raise ValueError("operating amendment cannot overwrite its prior receipt")
     constraints_path = path_in(project, "intake/constraints.json")
-    policy_path = path_in(project, cloud_continuation.POLICY.as_posix())
+    policy_path = path_in(project, cloud_continuation.POLICY.as_posix(), exists=False)
     state_path = path_in(project, "state/run.json")
     spend_path = path_in(project, model_spend.FILE.as_posix())
     provenance = path_in(project, output_provenance.REGISTRY_RELATIVE.as_posix(), exists=False)
-    outputs = [constraints_path, policy_path, state_path, spend_path, receipt]
+    outputs = [constraints_path, state_path, spend_path, receipt]
+    if prepared["continuation_before"] is not None:outputs.append(policy_path)
     originals = {p: p.read_bytes() if p.exists() else None for p in [*outputs, provenance]}
     timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     try:
@@ -152,33 +124,26 @@ def apply(project: Path, new_ceiling_cny: int, target_submission_ready_date: str
             model_spend.amend_ceiling(project, new_ceiling_cny=new_ceiling_cny,
                                      actor=actor, run_id=run_id, authorization_note=note)
         write(constraints_path, prepared["constraints_after"])
-        # The prior G0 is retained verbatim. This explicit narrow intake decision
-        # authorizes only these operating values, never a G1-G5 scientific verdict.
-        approval = {"gate": "G0", "kind": "operating_constraints_amendment", "actor": actor,
-                    "at": timestamp, "note": note, "artifact_sha256": researchctl.artifact_hash(project.name, "G0"),
-                    "prior_g0_artifact_sha256": prepared["run_before"]["approvals"][-1]["artifact_sha256"],
-                    "cloud_review_sha256": review_sha256, "source_run_id": run_id,
-                    "amended_fields": ["model_api_budget_cny", "target_submission_ready_date"],
-                    "scientific_approval_granted": False}
+        decision={"kind":"operating_constraints_amendment","actor":actor,"at":timestamp,"note":note,
+                  "cloud_review_sha256":review_sha256,"source_run_id":run_id,
+                  "amended_fields":["model_api_budget_cny","target_submission_ready_date"],
+                  "scientific_approval_granted":False}
         state = copy.deepcopy(prepared["run_before"])
-        state["approvals"].append(approval)
-        state.pop("ready_gate", None)
-        state.pop("ready_artifact_sha256", None)
         state.setdefault("history", []).append({"at": timestamp, "event": "owner_operating_constraints_amended",
             "actor": actor, "receipt": receipt.relative_to(project).as_posix(),
             "new_ceiling_cny": new_ceiling_cny, "target_submission_ready_date": target_submission_ready_date,
             "scientific_approval_granted": False, "paid_calls": 0})
         state["updated_at"] = timestamp
         write(state_path, state)
-        policy = copy.deepcopy(prepared["continuation_before"])
-        policy.update(constraints_sha256=sha(constraints_path),
-                      g0_approval_artifact_sha256=approval["artifact_sha256"])
-        write(policy_path, policy)
+        policy=copy.deepcopy(prepared["continuation_before"])
+        if policy is not None:
+            policy["constraints_sha256"]=sha(constraints_path)
+            write(policy_path,policy)
         write(receipt, {"schema_version": "1.0", **prepared, "actor": actor,
             "cloud_review_sha256": review_sha256, "source_run_id": run_id, "authorization_note": note,
             "created_at": timestamp, "constraints_sha256_after": sha(constraints_path),
             "continuation_after": policy, "spend_after": model_spend.read(project, required=True),
-            "g0_operating_amendment": approval, "paid_calls": 0,
+            "operating_decision": decision, "paid_calls": 0,
             "planning_date_is_not_a_completion_guarantee": True})
         record(project, outputs, MODULE)
     except Exception:

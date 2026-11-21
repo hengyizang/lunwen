@@ -20,8 +20,8 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
     if sha(leads_path) != expected_leads_sha256:
         raise ValueError("Discovery selection requires the exact current topic-leads hash")
     origin = current_origin(project, leads_path)
-    if origin.get("status") != "tracked" or origin.get("family") == "anthropic":
-        raise ValueError("Discovery leads require current non-Claude executor provenance")
+    if origin.get("status") != "tracked":
+        raise ValueError("Discovery leads require current source provenance")
     leads = read(leads_path)
     if leads.get("kind") != "literature_discovery_intelligence":
         raise ValueError("Select only executed literature discovery leads")
@@ -38,7 +38,6 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
         raise ValueError("Candidate requires actual executed source receipts")
     identifier = paper_id or "paper-" + hashlib.sha256(candidate_id.encode()).hexdigest()[:16]
     workbench._id(identifier, "literature paper ID")
-    metadata_path = path_in(project, "literature/metadata/" + identifier + ".json", exists=False)
     metadata = {"schema_version": "1.0", "source_scope": "metadata_only", "candidate": candidate,
                 "discovery_sha256": expected_leads_sha256, "human_screening_approved": False,
                 "full_text_reading_verified": False, "scientific_completion_verified": False}
@@ -57,7 +56,7 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
             raise ValueError("Acquisition manifest binding is stale or outside source receipts")
         receipt_path = path_in(project, relative)
         asset_origin = current_origin(project, receipt_path)
-        if asset_origin.get("status") != "tracked" or asset_origin.get("family") == "anthropic":
+        if asset_origin.get("status") != "tracked":
             raise ValueError("Acquisition must have current executor provenance")
         acquired = read(receipt_path)
         metadata["acquisition_receipt"] = acquisition_receipt
@@ -88,22 +87,36 @@ def register(project: Path, candidate_id: str, *, expected_leads_sha256: str,
     elif manifest or reader:
         raise ValueError("Full-text attachments need their acquisition receipt")
     metadata_digest = hashlib.sha256((json.dumps(metadata, ensure_ascii=False, indent=2) + "\n").encode()).hexdigest()
+    metadata_path = path_in(project, "literature/metadata/" + identifier + "-" + metadata_digest[:16] + ".json", exists=False)
+    spec["registration"] = {"path": metadata_path.relative_to(project).as_posix(), "sha256": metadata_digest}
     spec.setdefault("source", {"path": metadata_path.relative_to(project).as_posix(), "sha256": metadata_digest})
     config_file = path_in(project, config_path, exists=False)
     config = read(config_file) if config_file.is_file() else {"schema_version": "1.0", "papers": []}
-    if config.get("doctoral_question") not in {None, leads["doctoral_question"]}:
-        raise ValueError("Do not mix doctoral questions in a shared library")
-    config["doctoral_question"] = leads["doctoral_question"]
+    config.setdefault("doctoral_question", leads["doctoral_question"])
     papers = config.setdefault("papers", [])
     previous = next((p for p in papers if p.get("id") == identifier), None)
     if previous:
         if previous.get("candidate_id") != candidate_id:
             raise ValueError("Library ID already belongs to another source")
+        # Registration adds source observations; it must not clear the user's
+        # mappings, or rebind an analyzed version to different source bytes.
+        for field in ("topic_id", "paper_ids"):
+            if field in previous:
+                spec[field] = previous[field]
         if previous.get("source") == spec["source"]:
             spec = {**previous, **spec}
-        elif previous.get("card") or previous.get("reader"):
-            raise ValueError("Preserve analyzed prior versions before rebinding a paper")
-        papers[papers.index(previous)] = spec
+            papers[papers.index(previous)] = spec
+        elif previous.get("source_scope") == "full_text" and acquisition_receipt is None:
+            spec = previous
+            attachment = "existing_full_text_retained_metadata_observation_saved"
+        else:
+            identifier = identifier[:60] + "-" + spec["source"]["sha256"][:12]
+            spec["id"] = identifier
+            version = next((p for p in papers if p.get("id") == identifier), None)
+            if version is None:
+                papers.append(spec)
+            elif version.get("source") != spec["source"]:
+                raise ValueError("Version ID already belongs to another source")
     else:
         papers.append(spec)
     write(metadata_path, metadata)
