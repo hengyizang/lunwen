@@ -1,0 +1,112 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-gddmsa-enlarging-error-detectio",
+  "dataset_name": "Enlarging Error Detection Threshold of IMU-based Hand Tracking in VR with Haptic Feedback",
+  "doi": "10.7910/dvn/gddmsa",
+  "landing_url": "https://doi.org/10.7910/DVN/GDDMSA",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/GDDMSA",
+  "access_date": "2026-11-21",
+  "round_number": 7,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "exp3_result.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11116835",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/GDDMSA/1967700f970-656ded6428d6?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp3_result.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T080017Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=022b988da2887dea79b80e05f2a87faec9d9d42621546c27c3ccb390e3cf3eaa",
+      "http_status": 200,
+      "bytes": 279,
+      "publisher_checksum": "md5:42440b29d30a917d4b6192d0cf3fc29d",
+      "verified_md5": "42440b29d30a917d4b6192d0cf3fc29d",
+      "verified_sha256": "5bcde499216d76770d773c216b0dab3b0b94369f10f4b4f6957dafda5b136b04"
+    },
+    {
+      "file": "exp1_result.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11116834",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/GDDMSA/1967700fc4a-700fabeb74fc?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp1_result.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T080019Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=be1d8876b6a7d6717f0b56febea9a1132f20634e472489dc24aaa710042d1647",
+      "http_status": 200,
+      "bytes": 280,
+      "publisher_checksum": "md5:c3723739b2b1085be2ceb3881eade4ff",
+      "verified_md5": "c3723739b2b1085be2ceb3881eade4ff",
+      "verified_sha256": "e3e80018314a64982254cb7aa75d7c3b77a613f5cbef649fb0b504b962a55c22"
+    },
+    {
+      "file": "exp4_result.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11116836",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/GDDMSA/1967700fb5d-6178795ada8a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp4_result.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T080020Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=2c0f5da416a678a5e8d3cbbada5b46b12973337eba6eec60fb56cc7bb018837d",
+      "http_status": 200,
+      "bytes": 556,
+      "publisher_checksum": "md5:a66abd734e66bb1fddc81e8e9a1d86c3",
+      "verified_md5": "a66abd734e66bb1fddc81e8e9a1d86c3",
+      "verified_sha256": "90de176cbd67ec8882fecde35547039d9dd2293fa63e01222836868c33b38f07"
+    },
+    {
+      "file": "exp2_follow_haptic.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/11116837",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/GDDMSA/1967700fd3a-2c28dbfd440d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27exp2_follow_haptic.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T080022Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=61d0aab9214c646e43cb61b24197f5211afbd2d1290ad7e54a3638f10e296841",
+      "http_status": 200,
+      "bytes": 560,
+      "publisher_checksum": "md5:18662f210756e056301ab64d3a55625a",
+      "verified_md5": "18662f210756e056301ab64d3a55625a",
+      "verified_sha256": "2baf7ee1804ae9e351385fa7c4b22f78b854324ac5c5b2a34c709cff9de9d9f8"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-gddmsa-enlarging-error-detectio",
+  "raw_total_bytes": 1675,
+  "raw_total_rows": 28,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv",
+  "cleaned_csv_sha256": "bce523e0d9fbd177cbb89fd852865c308530bdcb99a00164046da8d1c8f1764e",
+  "cleaned_rows": 30,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "exp3_result.txt": {
+      "0.3750": 0,
+      "0.7500": 0,
+      "0.8750": 0,
+      "0.8750.1": 0,
+      "1.0000": 0
+    },
+    "exp1_result.txt": {
+      "0.3750": 0,
+      "0.6250": 0,
+      "0.3750.1": 0,
+      "0.7500": 0,
+      "1.0000": 0
+    },
+    "exp4_result.txt": {
+      "0.6250": 0,
+      "0.8750": 0,
+      "0.5000": 0,
+      "1.0000": 0,
+      "1.0000.1": 0,
+      "0.1250": 0,
+      "0.2500": 0,
+      "0.500": 0,
+      "1.0000.2": 0,
+      "1.0000.3": 0
+    },
+    "exp2_follow_haptic.txt": {
+      "1.0000": 0,
+      "0.8750": 0,
+      "1.0000.1": 0,
+      "0.8750.1": 0,
+      "1.0000.2": 0,
+      "0.8750.2": 0,
+      "0.7500": 0,
+      "0.3750": 0,
+      "0.3750.1": 0,
+      "0.0000": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

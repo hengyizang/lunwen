@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-wrctu4-soil-hydraulic-parameter",
+  "dataset_name": "Soil hydraulic parameters for \"Analyzing dual porosity in soil hydraulic properties using soil databases for pedotransfer function development\"",
+  "doi": "10.7910/dvn/wrctu4",
+  "landing_url": "https://doi.org/10.7910/DVN/WRCTU4",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/WRCTU4",
+  "access_date": "2026-11-21",
+  "round_number": 7,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "all_fitted_hydraulic_parameters-final.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/5678213",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WRCTU4/17de4fe6f1b-4648c085a56d?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27all_fitted_hydraulic_parameters-final.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T080026Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cb5775a0cba8782214d63a9baecaa15e8b9a259104d1908054402f6b55e75cc1",
+      "http_status": 200,
+      "bytes": 17749,
+      "publisher_checksum": "dataverse_original_md5:de531883c5baba7871bb550980798a52",
+      "verified_md5": "cb58265e8e27ecbc4a57d89879d9028d",
+      "verified_sha256": "4310d567b54edcc92e45371f70da7faec470113e4752ed267aaa915a42c5d4c6"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-wrctu4-soil-hydraulic-parameter",
+  "raw_total_bytes": 17749,
+  "raw_total_rows": 211,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv",
+  "cleaned_csv_sha256": "4c588c01e973fb76a220b7df4f28d095670e33c131a8760304a013ef3de5dc2e",
+  "cleaned_rows": 211,
+  "cleaned_cols": 7,
+  "null_counts_by_file": {
+    "all_fitted_hydraulic_parameters-final.tab": {
+      "ID": 0,
+      "Thetas": 0,
+      "alpha": 0,
+      "n": 0,
+      "SSRtheta": 0,
+      "bimodality": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 6,
-  "total_new_literature": 504,
-  "total_new_datasets": 471,
-  "total_new_reading_queue": 436,
+  "round_number": 7,
+  "total_new_literature": 623,
+  "total_new_datasets": 528,
+  "total_new_reading_queue": 551,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -16,7 +16,9 @@
     "dataverse:10.7910/dvn/ifhd40",
     "dataverse:10.7910/dvn/ud54yb",
     "figshare:35055502",
-    "figshare:33578671"
+    "figshare:33578671",
+    "dataverse:10.7910/dvn/gddmsa",
+    "dataverse:10.7910/dvn/wrctu4"
   ],
   "cleaned_datasets_meta": [
     {
@@ -186,6 +188,34 @@
       "cleaned_rows": 11,
       "raw_total_rows": 23,
       "verified_sha256": "db4cd6087b1a71584235c5e0e04601c3749bbd453f30add0c0d0858539152c8d"
+    },
+    {
+      "slug": "dataverse-gddmsa-enlarging-error-detectio",
+      "key": "dataverse:10.7910/dvn/gddmsa",
+      "dataset_name": "Enlarging Error Detection Threshold of IMU-based Hand Tracking in VR with Haptic Feedback",
+      "doi": "10.7910/dvn/gddmsa",
+      "landing_url": "https://doi.org/10.7910/DVN/GDDMSA",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-gddmsa-enlarging-error-detectio-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_gddmsa_enlarging_error_detectio.py",
+      "cleaned_rows": 30,
+      "raw_total_rows": 28,
+      "verified_sha256": "5bcde499216d76770d773c216b0dab3b0b94369f10f4b4f6957dafda5b136b04"
+    },
+    {
+      "slug": "dataverse-wrctu4-soil-hydraulic-parameter",
+      "key": "dataverse:10.7910/dvn/wrctu4",
+      "dataset_name": "Soil hydraulic parameters for \"Analyzing dual porosity in soil hydraulic properties using soil databases for pedotransfer function development\"",
+      "doi": "10.7910/dvn/wrctu4",
+      "landing_url": "https://doi.org/10.7910/DVN/WRCTU4",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py",
+      "cleaned_rows": 211,
+      "raw_total_rows": 211,
+      "verified_sha256": "4310d567b54edcc92e45371f70da7faec470113e4752ed267aaa915a42c5d4c6"
     }
   ],
   "snowballed_dois": [
@@ -197,7 +227,9 @@
     "10.1016/j.measurement.2024.115365",
     "10.1016/j.tws.2024.112745",
     "10.1109/robosoft60065.2024.10521997",
-    "10.3390/s24165441"
+    "10.1109/robosoft63089.2025.11020810",
+    "10.3390/s24165441",
+    "10.5194/ms-15-531-2024"
   ],
   "rounds_history": [
     {
@@ -253,32 +285,41 @@
       "net_new_datasets": 67,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 7,
+      "completed_at": "2026-11-21T07:59:03Z",
+      "batch_label": "Broad Engineering R7: Mechanical_Physics_AI",
+      "net_new_literature": 119,
+      "net_new_datasets": 57,
+      "cleaned_count": 2,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T07:54:02Z",
+  "updated_at": "2026-11-21T07:59:03Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 32,
+    "Adjacent": 35,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 72,
-    "Mechanical_Physics_AI": 95,
-    "Mechatronics_PHM_Control": 76,
+    "Mechanical_Physics_AI": 209,
+    "Mechatronics_PHM_Control": 86,
     "Robotics_Embodied": 244,
-    "R5_MultiRobot_Comm": 85,
+    "R5_MultiRobot_Comm": 86,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 7,
-    "Smart_Factory_DigitalTwin": 4
+    "Smart_Manufacturing": 13,
+    "Smart_Factory_DigitalTwin": 5
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 166,
-    "Mechatronics_PHM_Control": 141,
-    "Smart_Manufacturing": 36,
-    "Robotics_Embodied": 156,
+    "Mechanical_Physics_AI": 211,
+    "Mechatronics_PHM_Control": 150,
+    "Smart_Manufacturing": 68,
+    "Robotics_Embodied": 157,
     "R5_MultiRobot_Comm": 3,
     "Smart_Factory_DigitalTwin": 59,
     "R2_Aerial_Actuator": 9,

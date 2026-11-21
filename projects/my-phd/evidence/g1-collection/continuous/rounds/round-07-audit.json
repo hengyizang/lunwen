@@ -1,0 +1,334 @@
+{
+  "schema_version": "1.0",
+  "round": 7,
+  "completed_at": "2026-11-21T07:59:03Z",
+  "batch_label": "Broad Engineering R7: Mechanical_Physics_AI",
+  "base_head_sha": "64b73cfa176b2d85709dc02b4225561200056311",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 125,
+    "duplicates_skipped": 6,
+    "net_new": 119,
+    "new_reading_queue": 115,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t075903z-arxiv-5705718506",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atopology+AND+all%3Aoptimization+AND+all%3Adeep+AND+all%3Alearning+AND+all%3Amechanics&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "ec8b0bf608166a609279299ec0f83673f6b86cd247420fc59ead32a5b807cf9f",
+        "normalized_results_sha256": "33a54d79a2c73845cadbe78f8ad50da16e8448a5697db1b9a7421126c585f77d"
+      },
+      {
+        "provider": "crossref",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t075904z-crossref-73bb5fe99a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=topology+optimization+deep+learning+mechanics&rows=12",
+        "result_count": 12,
+        "response_sha256": "fa0b80e68a1272fe9366b8da06b9002f32020889b967cabeb1ed5ba62346df26",
+        "normalized_results_sha256": "6886f3591059b782b7e9670a0b2cab4ea8e05bba46b370e9f7855a4c9e99365a"
+      },
+      {
+        "provider": "openalex",
+        "query": "topology optimization deep learning mechanics",
+        "receipt_id": "20261121t075905z-openalex-6c206dacbc",
+        "request_url": "https://api.openalex.org/works?search=topology+optimization+deep+learning+mechanics&per-page=12",
+        "result_count": 12,
+        "response_sha256": "1111f41515c1426aed9de67aadd824eaeac4b642eba23f998811181ded2d564c",
+        "normalized_results_sha256": "18ad48cbd0ff56c0807751d0135f9d79172acecc86d52757463247c5409dedc4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t075909z-arxiv-974043fb1c",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Afatigue+AND+all%3Alife+AND+all%3Aprediction+AND+all%3Amachine+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "def3c02312f7240cec25271028416c5a1e164b9308e16624cb6f28365889bdfa",
+        "normalized_results_sha256": "b7dd350a3d282de7f3f1bde136648ec1825c71740fa815fc9135a9fc44666393"
+      },
+      {
+        "provider": "crossref",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t075911z-crossref-b992038ad5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=fatigue+life+prediction+machine+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "7c1f89c2ff758ba075876cd3524afdd9d01351b7b49befd442cf5bee6958256c",
+        "normalized_results_sha256": "5df2781d63377e08485e311bd66bcb86d5679f513574c284b601b59d1d483796"
+      },
+      {
+        "provider": "openalex",
+        "query": "fatigue life prediction machine learning",
+        "receipt_id": "20261121t075913z-openalex-021bec5d4f",
+        "request_url": "https://api.openalex.org/works?search=fatigue+life+prediction+machine+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a4762bc12b58cb0ac8209fc7d694d1d6dc4159d690f38e9de710ba931a9b2dc4",
+        "normalized_results_sha256": "78a04d57f071904defb6c226b8b7bafcb936c084b650908fdd8697b1798cfb1c"
+      },
+      {
+        "provider": "arxiv",
+        "query": "tribology wear prediction machine learning",
+        "receipt_id": "20261121t075916z-arxiv-e6cc449370",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Atribology+AND+all%3Awear+AND+all%3Aprediction+AND+all%3Amachine+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "78fe44123f799b5dd5c8936b77346274d51d149cbdaee0bedd6cace165313237",
+        "normalized_results_sha256": "c5f0a6236d72b7ba98f397997a7d5bcd3e3f74f16130610b3b8ae8673b96353d"
+      },
+      {
+        "provider": "crossref",
+        "query": "tribology wear prediction machine learning",
+        "receipt_id": "20261121t075916z-crossref-2fb00d9071",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=tribology+wear+prediction+machine+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "55c6814166345153ede8b2d9a5811d2d9da83a706c64b34eebd7cb47ea1f606e",
+        "normalized_results_sha256": "c8ec54ee459fd97b8664dcaaf776c95e520c58318c9c73e9267e361d1cd1f0e0"
+      },
+      {
+        "provider": "openalex",
+        "query": "tribology wear prediction machine learning",
+        "receipt_id": "20261121t075918z-openalex-334f884025",
+        "request_url": "https://api.openalex.org/works?search=tribology+wear+prediction+machine+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "efbb2fb919f536c68c6f06f64b31f15222b3e276a0d86bd10f7e67a38892b65d",
+        "normalized_results_sha256": "efdb33ee735d6ad2aee49fa262bd781ab5f9dea0814f4121c5e3eae4bb4c19b2"
+      },
+      {
+        "provider": "arxiv",
+        "query": "structural vibration modal identification AI",
+        "receipt_id": "20261121t075919z-arxiv-99cd77a94d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Astructural+AND+all%3Avibration+AND+all%3Amodal+AND+all%3Aidentification+AND+all%3AAI&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "c301d1a32a087dac44e01857469e51b5e57aeda0facf03bd9fd417ba682f9fe8",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "structural vibration modal identification AI",
+        "receipt_id": "20261121t075921z-crossref-644d322103",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=structural+vibration+modal+identification+AI&rows=12",
+        "result_count": 12,
+        "response_sha256": "ae83ce36cd0d9170998bf5e9c146a74dacab33cf9afeb5d58f71948626916802",
+        "normalized_results_sha256": "d37a042f1786899cac76d39b89a446e7633e6163f139a9d53be5c67769ae828b"
+      },
+      {
+        "provider": "openalex",
+        "query": "structural vibration modal identification AI",
+        "receipt_id": "20261121t075922z-openalex-4a4f81d654",
+        "request_url": "https://api.openalex.org/works?search=structural+vibration+modal+identification+AI&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9906fef98cb34cc1025740b140927005bd38bad3f95d66c6eb95c9d5620b5dab",
+        "normalized_results_sha256": "f70c69bfeb323251652e9d509b1a2728f071d19fcefbbddee46832d060c9d44a"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.5194/ms-15-531-2024",
+        "receipt_id": "20261121t075924z-opencitations-4c24e04e01",
+        "result_count": 2,
+        "response_sha256": "466a0fb13095e1984c04996d9db03b81af3852c7ba8b1e997cc439d77f7981a4"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/robosoft63089.2025.11020810",
+        "receipt_id": "20261121t075926z-opencitations-5c600db4eb",
+        "result_count": 1,
+        "response_sha256": "22767c78cd28da5fab0fe43dd983e018ab89d319044830cbccb73f84ebc58186"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 173,
+    "off_topic_filtered": 97,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 19,
+    "net_new": 57,
+    "provider_statuses": [
+      {
+        "query": "welding inspection",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "welding inspection",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "welding inspection",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "cnc milling",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "cnc milling",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "chatter detection",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "chatter detection",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "chatter detection",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "chatter detection",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fatigue crack",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-gddmsa-enlarging-error-detectio",
+        "key": "dataverse:10.7910/dvn/gddmsa",
+        "dataset_name": "Enlarging Error Detection Threshold of IMU-based Hand Tracking in VR with Haptic Feedback",
+        "doi": "10.7910/dvn/gddmsa",
+        "landing_url": "https://doi.org/10.7910/DVN/GDDMSA",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-gddmsa-enlarging-error-detectio-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_gddmsa_enlarging_error_detectio.py",
+        "cleaned_rows": 30,
+        "raw_total_rows": 28,
+        "verified_sha256": "5bcde499216d76770d773c216b0dab3b0b94369f10f4b4f6957dafda5b136b04"
+      },
+      {
+        "slug": "dataverse-wrctu4-soil-hydraulic-parameter",
+        "key": "dataverse:10.7910/dvn/wrctu4",
+        "dataset_name": "Soil hydraulic parameters for \"Analyzing dual porosity in soil hydraulic properties using soil databases for pedotransfer function development\"",
+        "doi": "10.7910/dvn/wrctu4",
+        "landing_url": "https://doi.org/10.7910/DVN/WRCTU4",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py",
+        "cleaned_rows": 211,
+        "raw_total_rows": 211,
+        "verified_sha256": "4310d567b54edcc92e45371f70da7faec470113e4752ed267aaa915a42c5d4c6"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

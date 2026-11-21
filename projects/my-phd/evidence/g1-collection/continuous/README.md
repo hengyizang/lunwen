@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：6
-- **最近更新时间 (UTC)**：2026-11-21T07:54:02Z
-- **累计净新增文献** (`literature-new.csv`)：504 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：471 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：436 条
-- **累计已完成确定性清洗数据集**：12 个
+- **已完成轮次**：7
+- **最近更新时间 (UTC)**：2026-11-21T07:59:03Z
+- **累计净新增文献** (`literature-new.csv`)：623 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：528 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：551 条
+- **累计已完成确定性清洗数据集**：14 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -21,14 +21,14 @@
 |---|---:|---:|
 | `R1_Force_Contact` | 1 | 6 |
 | `R2_Aerial_Actuator` | 72 | 9 |
-| `R5_MultiRobot_Comm` | 85 | 3 |
-| `Robotics_Embodied` | 244 | 156 |
-| `Mechanical_Physics_AI` | 95 | 166 |
-| `Mechatronics_PHM_Control` | 76 | 141 |
-| `Smart_Manufacturing` | 7 | 36 |
-| `Smart_Factory_DigitalTwin` | 4 | 59 |
+| `R5_MultiRobot_Comm` | 86 | 3 |
+| `Robotics_Embodied` | 244 | 157 |
+| `Mechanical_Physics_AI` | 209 | 211 |
+| `Mechatronics_PHM_Control` | 86 | 150 |
+| `Smart_Manufacturing` | 13 | 68 |
+| `Smart_Factory_DigitalTwin` | 5 | 59 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 32 | 0 |
+| `Adjacent` | 35 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -58,6 +58,8 @@
 | `dataverse-ud54yb-moon-wreckers-planetary` | Moon Wreckers Planetary Rover Driving Status Anomaly Detection Dataset | 10.7910/dvn/ud54yb | `summary_table` | 84 | `a86c89f00174` | [CSV](data/dataverse-ud54yb-moon-wreckers-planetary-cleaned.csv) · [JSON](data/dataverse-ud54yb-moon-wreckers-planetary-provenance.json) · [PY](data/derive_dataverse_ud54yb_moon_wreckers_planetary.py) |
 | `figshare-35055502-processed-data-supportin` | Processed data supporting “Complex Damage Identification of Jacket... | 10.6084/m9.figshare.35055502.v1 | `summary_table` | 37 | `d46a127a1fb7` | [CSV](data/figshare-35055502-processed-data-supportin-cleaned.csv) · [JSON](data/figshare-35055502-processed-data-supportin-provenance.json) · [PY](data/derive_figshare_35055502_processed_data_supportin.py) |
 | `figshare-33578671-source-data-for-tecobot` | Source data for TeCoBot, A Tensegrity-based modular Continuum robot | 10.6084/m9.figshare.33578671.v2 | `summary_table` | 11 | `db4cd6087b1a` | [CSV](data/figshare-33578671-source-data-for-tecobot-cleaned.csv) · [JSON](data/figshare-33578671-source-data-for-tecobot-provenance.json) · [PY](data/derive_figshare_33578671_source_data_for_tecobot.py) |
+| `dataverse-gddmsa-enlarging-error-detectio` | Enlarging Error Detection Threshold of IMU-based Hand Tracking in V... | 10.7910/dvn/gddmsa | `summary_table` | 30 | `5bcde499216d` | [CSV](data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv) · [JSON](data/dataverse-gddmsa-enlarging-error-detectio-provenance.json) · [PY](data/derive_dataverse_gddmsa_enlarging_error_detectio.py) |
+| `dataverse-wrctu4-soil-hydraulic-parameter` | Soil hydraulic parameters for "Analyzing dual porosity in soil hydr... | 10.7910/dvn/wrctu4 | `cleaned_rows` | 211 | `4310d567b54e` | [CSV](data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv) · [JSON](data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json) · [PY](data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -69,3 +71,4 @@
 | 4 | 2026-11-21T07:45:57Z | Broad Engineering R4: R5_MultiRobot_Comm | +93 | +92 | +2 | [round-04-audit.json](rounds/round-04-audit.json) |
 | 5 | 2026-11-21T07:49:14Z | Broad Engineering R5: Robotics_Embodied | +118 | +112 | +3 | [round-05-audit.json](rounds/round-05-audit.json) |
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
+| 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
