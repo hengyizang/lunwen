@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 22,
+  "completed_at": "2026-11-21T09:14:08Z",
+  "batch_label": "Broad Engineering R22: R5_MultiRobot_Comm / Robotics_Embodied",
+  "base_head_sha": "e29113b7f8a383170f37aa30466255f5f4a14088",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 133,
+    "duplicates_skipped": 27,
+    "net_new": 106,
+    "new_reading_queue": 102,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "robotic wireless sensor relay",
+        "receipt_id": "20261121t091408z-arxiv-d10060d966",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Awireless+AND+all%3Asensor+AND+all%3Arelay&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "2855c9f9ef630105a700e786675ab770223f89262cb097bac79ee99af93e6d08",
+        "normalized_results_sha256": "963d69e8f5eac6ecca5f2df68599019142f779cf06a165cf65c0d1c3f0e43115"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic wireless sensor relay",
+        "receipt_id": "20261121t091409z-crossref-db29cb0703",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+wireless+sensor+relay&rows=12",
+        "result_count": 12,
+        "response_sha256": "d2f8990b66fc3ca7ab1898febd04483d2f79125dd71c52cf9bce9d2283c7d7b2",
+        "normalized_results_sha256": "2adae7631c8c60751133e1db68db1281ebf7ada2389651b927c119aea3b966a9"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic wireless sensor relay",
+        "receipt_id": "20261121t091410z-openalex-c268c563a8",
+        "request_url": "https://api.openalex.org/works?search=robotic+wireless+sensor+relay&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9d97ed65101910cee04dc849802ac66068aea476d0f77a452957b7ff6fea918e",
+        "normalized_results_sha256": "c2689efa80fccae80c05d79e820072a2be0b8b40ab632db9ed1a23956af50bb0"
+      },
+      {
+        "provider": "arxiv",
+        "query": "distributed multi-agent path finding",
+        "receipt_id": "20261121t091412z-arxiv-acdf440b84",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Adistributed+AND+all%3Amulti-agent+AND+all%3Apath+AND+all%3Afinding&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "c3f61b6410c5fda299872ea0ab6bf6d12df5179df49e8d883959758252644495",
+        "normalized_results_sha256": "eae34dd962096950013336e9027d3f453ed4b511718fcdc017e402a665290ffa"
+      },
+      {
+        "provider": "crossref",
+        "query": "distributed multi-agent path finding",
+        "receipt_id": "20261121t091413z-crossref-705640bf26",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=distributed+multi-agent+path+finding&rows=12",
+        "result_count": 12,
+        "response_sha256": "ea68e6c6ccfdad3a32e6d8fcd93359b772e2891e4515fc8ada47554614ef36b7",
+        "normalized_results_sha256": "67726a789a9f3dfdd18ea1d47ef3d2eace7b27edf44dc7be77284403423c4efb"
+      },
+      {
+        "provider": "openalex",
+        "query": "distributed multi-agent path finding",
+        "receipt_id": "20261121t091414z-openalex-53651c954a",
+        "request_url": "https://api.openalex.org/works?search=distributed+multi-agent+path+finding&per-page=12",
+        "result_count": 12,
+        "response_sha256": "22a0801354fd7142e4c3a14a89b193a3c07d95d8ab807d37a1b24bc9b3fbf607",
+        "normalized_results_sha256": "d8bb751088a009214bd027511bd4444b6a8c78409c06798e36994ed17c6bc3b7"
+      },
+      {
+        "provider": "arxiv",
+        "query": "cooperative uav ugv localization",
+        "receipt_id": "20261121t091415z-arxiv-fab994e921",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acooperative+AND+all%3Auav+AND+all%3Augv+AND+all%3Alocalization&start=0&max_results=12",
+        "result_count": 9,
+        "response_sha256": "00c2db27b01ebb12d2dfd83365bed24bb7ecda1ae7e07df0d809b2a449135edb",
+        "normalized_results_sha256": "8af8af791070900e68cbc7bee3c4940df08154d386cc2732ffc340bf726321ef"
+      },
+      {
+        "provider": "crossref",
+        "query": "cooperative uav ugv localization",
+        "receipt_id": "20261121t091416z-crossref-243b112a39",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=cooperative+uav+ugv+localization&rows=12",
+        "result_count": 12,
+        "response_sha256": "0dc8ca9eb41180a437c163e671cc004c1abe0bff3800b25600355a78ccce65c6",
+        "normalized_results_sha256": "5288ae03b2191e9e85e545939116b90ef4a3506644675421540d270d68b3c487"
+      },
+      {
+        "provider": "openalex",
+        "query": "cooperative uav ugv localization",
+        "receipt_id": "20261121t091417z-openalex-d225d703fe",
+        "request_url": "https://api.openalex.org/works?search=cooperative+uav+ugv+localization&per-page=12",
+        "result_count": 12,
+        "response_sha256": "85d51a9f79d0ca1cc759709aef2d3773b3e299947140176c3525f110f70580d7",
+        "normalized_results_sha256": "0d4eb0451f34962d5dcc6eb1db49ba22dd69fd858ca51d2172d67c4c3db2d117"
+      },
+      {
+        "provider": "arxiv",
+        "query": "exoskeleton gait assistance control",
+        "receipt_id": "20261121t091419z-arxiv-f4b0244c81",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aexoskeleton+AND+all%3Agait+AND+all%3Aassistance+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "c52c2ffd64bb8ce14ca930bbe3b84273a5d06c108894c75f415aa20f8a78e924",
+        "normalized_results_sha256": "0a99b2e75fed80208b7772d0e77bbd061229524e35b42bdb94a43f91efa5dec4"
+      },
+      {
+        "provider": "crossref",
+        "query": "exoskeleton gait assistance control",
+        "receipt_id": "20261121t091420z-crossref-bf90f5205d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=exoskeleton+gait+assistance+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "d21647d372a7a3d150489658c26f81e8996b4d40c9c94f0cb62d14677ddd23bc",
+        "normalized_results_sha256": "322633b5f5a17e543764e15ac817754e4a4762090d4ff3b2b72e0d1ca39af1d1"
+      },
+      {
+        "provider": "openalex",
+        "query": "exoskeleton gait assistance control",
+        "receipt_id": "20261121t091421z-openalex-7533ac2266",
+        "request_url": "https://api.openalex.org/works?search=exoskeleton+gait+assistance+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "5f2146130d4e5e77679bfc69d0ae05a015043486a9ed89e35ecf53ea9dbdccbb",
+        "normalized_results_sha256": "34ff58a13a230460a969795c209f2233cee1587da23ed600ca741ced76fc8645"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3389/fpsyg.2021.716976",
+        "receipt_id": "20261121t091423z-opencitations-245056ba29",
+        "result_count": 1,
+        "response_sha256": "5bda506815e6bc318832939d28a9976d415b4a1be6a602a083cb51ca7a4a4879"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/b978-0-443-14133-1.00007-0",
+        "receipt_id": "20261121t091425z-opencitations-eaeb68a297",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 226,
+    "off_topic_filtered": 124,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 19,
+    "net_new": 83,
+    "provider_statuses": [
+      {
+        "query": "carbon fiber composite",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "carbon fiber composite",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "carbon fiber composite",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "carbon fiber composite",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "carbon fiber composite",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "fracture toughness",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fracture toughness",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "fracture toughness",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fracture toughness",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "fracture toughness",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "modal analysis",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "modal analysis",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "acoustic emission",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-35049556-data-for-a-four-level-ex",
+        "key": "figshare:35049556",
+        "dataset_name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+        "doi": "10.6084/m9.figshare.35049556.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-35049556-data-for-a-four-level-ex-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-35049556-data-for-a-four-level-ex-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_35049556_data_for_a_four_level_ex.py",
+        "cleaned_rows": 35,
+        "raw_total_rows": 739,
+        "verified_sha256": "4899442117fdbeb9040296fb14b9c1d666c9d98deb5c634b34925cfed356d9c1"
+      },
+      {
+        "slug": "figshare-34163973-combined-effects-of-fibe",
+        "key": "figshare:34163973",
+        "dataset_name": "Combined effects of fiber length and content on the mechanical and thermal conductivity of short carbon fiber reinforced polyether-ether-ketone composites manufactured by screw extrusion-based additive manufacturing",
+        "doi": "10.6084/m9.figshare.34163973.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Combined_effects_of_fiber_length_and_content_on_the_mechanical_and_thermal_conductivity_of_short_carbon_fiber_reinforced_polyether-ether-ketone_composites_manufactured_by_screw_extrusion-based_additive_manufacturing/34163973",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34163973-combined-effects-of-fibe-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34163973-combined-effects-of-fibe-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34163973_combined_effects_of_fibe.py",
+        "cleaned_rows": 148,
+        "raw_total_rows": 6854,
+        "verified_sha256": "bafee8d3ce900025fbe5722c0e8d10eaeda0351d0e7358608889aa3364fc451f"
+      },
+      {
+        "slug": "figshare-32625708-dynamic-flexible-job-sho",
+        "key": "figshare:32625708",
+        "dataset_name": "Dynamic flexible job shop scheduling under worker constraints with learning-forgetting effects via Q-learning-enhanced algorithm assisted by digital twin",
+        "doi": "10.6084/m9.figshare.32625708.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Dynamic_flexible_job_shop_scheduling_under_worker_constraints_with_learning-forgetting_effects_via_Q-learning-enhanced_algorithm_assisted_by_digital_twin/32625708",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32625708-dynamic-flexible-job-sho-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32625708-dynamic-flexible-job-sho-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32625708_dynamic_flexible_job_sho.py",
+        "cleaned_rows": 130,
+        "raw_total_rows": 140,
+        "verified_sha256": "c69c4879f96b7376041776797a1b2d9478ab499ce8bccc870479ce9ab66c94e3"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

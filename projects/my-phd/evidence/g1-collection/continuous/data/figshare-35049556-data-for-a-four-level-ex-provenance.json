@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-35049556-data-for-a-four-level-ex",
+  "dataset_name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+  "doi": "10.6084/m9.figshare.35049556.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+  "source_api_url": "https://api.figshare.com/v2/articles/35049556",
+  "access_date": "2026-11-21",
+  "round_number": 22,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "data_package.zip",
+      "download_url": "https://ndownloader.figshare.com/files/71601883",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/71601883/data_package.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T091437Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22data_package.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=51b472d152ab5fc5cbee6d86000059e13267b784ac6e76589cdd715ab3445123",
+      "http_status": 200,
+      "bytes": 8751450,
+      "publisher_checksum": "md5:da0f1b6b9656e8723b916d9ff951bcfc",
+      "verified_md5": "da0f1b6b9656e8723b916d9ff951bcfc",
+      "verified_sha256": "4899442117fdbeb9040296fb14b9c1d666c9d98deb5c634b34925cfed356d9c1"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-35049556-data-for-a-four-level-ex",
+  "raw_total_bytes": 8751450,
+  "raw_total_rows": 739,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-35049556-data-for-a-four-level-ex-cleaned.csv",
+  "cleaned_csv_sha256": "4f30face2f3e87e5cc8573b387584ab50989a7a72b1026759a2a5c193ac286ff",
+  "cleaned_rows": 35,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "data_package.zip::corpus_comparison.csv": {
+      "corpus": 0,
+      "model": 0,
+      "topology": 0,
+      "cells": 0,
+      "cells_L4": 0
+    },
+    "data_package.zip::described_operating_values.csv": {
+      "topology": 0,
+      "role": 0,
+      "item": 0,
+      "value": 0,
+      "unit": 0,
+      "tolerance": 0
+    },
+    "data_package.zip::described_values_check.csv": {
+      "corpus": 0,
+      "model": 0,
+      "topology": 0,
+      "repetition": 0,
+      "passing_attempt": 0,
+      "passing_attempt_followed_l4_message": 0,
+      "deviates_from_described_values": 0,
+      "deviations": 359,
+      "spec_file": 0
+    },
+    "data_package.zip::failure_taxonomy.csv": {
+      "model": 0,
+      "Text/format": 0,
+      "Framework convention": 0,
+      "Units/connections": 0,
+      "Sizing/convergence": 0,
+      "Near miss, guide exception": 0,
+      "Near miss, other": 0,
+      "Other/unclassified": 0,
+      "failed_cells": 0
+    },
+    "data_package.zip::model_topology.csv": {
+      "model": 0,
+      "topology": 0,
+      "rotor_active": 0,
+      "cells": 0,
+      "cells_L4": 0,
+      "mean_best_level": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

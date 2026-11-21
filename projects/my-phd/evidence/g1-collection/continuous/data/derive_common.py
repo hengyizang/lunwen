@@ -72,6 +72,8 @@ def summarize(df: pd.DataFrame, source_file: str) -> list[dict]:
         non_null = int(series.notna().sum())
         null_cnt = int(series.isna().sum())
         num = pd.to_numeric(series, errors="coerce")
+        if pd.api.types.is_bool_dtype(num):
+            num = num.astype("float64")
         valid_num = num.dropna()
         if len(valid_num) > 0 and len(valid_num) >= 0.5 * max(1, non_null):
             rows.append({
@@ -128,6 +130,11 @@ def reproduce(input_dir: Path, expected_files: list[dict], expected_output_sha25
     for src_name, df in parsed_tables:
         df_clean = df.copy()
         df_clean.columns = [re.sub(r"\s+", " ", str(c).strip()) for c in df_clean.columns]
+        for col in df_clean.columns:
+            if df_clean[col].dtype == object:
+                df_clean[col] = df_clean[col].map(
+                    lambda v: json.dumps(v, ensure_ascii=False, sort_keys=True) if isinstance(v, (list, dict)) else v
+                )
         df_clean = df_clean.drop_duplicates().reset_index(drop=True)
         summary_rows.extend(summarize(df_clean, src_name))
         df_w = df_clean.copy()

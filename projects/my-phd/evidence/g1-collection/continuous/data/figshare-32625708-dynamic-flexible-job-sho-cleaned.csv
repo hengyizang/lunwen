@@ -1,0 +1,131 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Instances.zip::operation.csv,﻿operation_index,categorical_or_text,59,59,0,59,,,,,,,"{""(1, 1)"": 1, ""(1, 2)"": 1, ""(1, 3)"": 1}"
+Instances.zip::operation.csv,available_machines,categorical_or_text,59,59,0,45,,,,,,,"{""[1, 2, 4, 5, 6, 7]"": 5, ""[1, 2, 3, 4, 6, 7]"": 4, ""[1, 2, 3, 4, 5, 6]"": 3}"
+Instances.zip::operation.csv,available_workers,categorical_or_text,59,59,0,11,,,,,,,"{""[1, 2, 3, 4]"": 16, ""[1, 3]"": 9, ""[2, 3, 4]"": 6}"
+Instances.zip::processing_energy.csv,﻿,numeric,7,7,0,7,0,1.5,3,3,4.5,6,2.16025
+Instances.zip::processing_energy.csv,"(1, 1)",numeric,7,7,0,5,3,4,6,5.2,6,7,1.64317
+Instances.zip::processing_energy.csv,"(1, 2)",numeric,7,7,0,3,5,7.25,8,7.25,8,8,1.5
+Instances.zip::processing_energy.csv,"(1, 3)",numeric,7,7,0,4,4,4.75,6.5,6.25,8,8,2.06155
+Instances.zip::processing_energy.csv,"(2, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""4"": 2, ""8"": 1}"
+Instances.zip::processing_energy.csv,"(2, 2)",numeric,7,7,0,5,3,3.25,4.5,4.66667,5,8,1.8619
+Instances.zip::processing_energy.csv,"(2, 3)",numeric,7,7,0,6,3,4.25,5.5,5.33333,6,8,1.75119
+Instances.zip::processing_energy.csv,"(2, 4)",numeric,7,7,0,4,4,4,4.5,5.25,5.75,8,1.89297
+Instances.zip::processing_energy.csv,"(2, 5)",numeric,7,7,0,5,4,5,5,5.66667,6.5,8,1.50555
+Instances.zip::processing_energy.csv,"(2, 6)",numeric,7,7,0,4,4,4,5,5.25,6.25,7,1.5
+Instances.zip::processing_energy.csv,"(2, 7)",numeric,7,7,0,5,3,3,4,4.4,5,7,1.67332
+Instances.zip::processing_energy.csv,"(2, 8)",numeric,7,7,0,4,3,4.5,6.5,6,8,8,2.44949
+Instances.zip::processing_energy.csv,"(3, 1)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""7"": 1, ""3"": 1}"
+Instances.zip::processing_energy.csv,"(3, 2)",numeric,7,7,0,4,3,3,4,4,4,6,1.22474
+Instances.zip::processing_energy.csv,"(3, 3)",numeric,7,7,0,5,5,6,6.5,6.5,7,8,1.04881
+Instances.zip::processing_energy.csv,"(3, 4)",numeric,7,7,0,4,3,4.5,5,5,5.5,7,1.63299
+Instances.zip::processing_energy.csv,"(4, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""5"": 2, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(4, 2)",numeric,7,7,0,4,3,3,3.5,3.75,4.25,5,0.957427
+Instances.zip::processing_energy.csv,"(4, 3)",numeric,7,7,0,4,3,3.75,6,5.75,8,8,2.62996
+Instances.zip::processing_energy.csv,"(5, 1)",numeric,7,7,0,5,4,4,4.5,5.33333,6.5,8,1.75119
+Instances.zip::processing_energy.csv,"(5, 2)",numeric,7,7,0,6,3,3.25,4.5,4.83333,5.75,8,1.94079
+Instances.zip::processing_energy.csv,"(5, 3)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""5"": 2, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(5, 4)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""4"": 1, ""5"": 1}"
+Instances.zip::processing_energy.csv,"(5, 5)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""8"": 1, ""5"": 1}"
+Instances.zip::processing_energy.csv,"(6, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""3"": 2, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(6, 2)",numeric,7,7,0,5,3,3.75,5,5,6.25,7,1.82574
+Instances.zip::processing_energy.csv,"(6, 3)",numeric,7,7,0,4,4,4,4.5,4.66667,5,6,0.816497
+Instances.zip::processing_energy.csv,"(6, 4)",numeric,7,7,0,6,3,4.25,6,5.66667,7,8,1.96638
+Instances.zip::processing_energy.csv,"(6, 5)",numeric,7,7,0,4,3,3.75,5,4.75,6,6,1.5
+Instances.zip::processing_energy.csv,"(6, 6)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""5"": 1, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(6, 7)",numeric,7,7,0,3,6,7.5,8,7.5,8,8,1
+Instances.zip::processing_energy.csv,"(6, 8)",numeric,7,7,0,4,3,6,7,6.25,7.25,8,2.21736
+Instances.zip::processing_energy.csv,"(7, 1)",numeric,7,7,0,5,3,4,4,4.8,6,7,1.64317
+Instances.zip::processing_energy.csv,"(7, 2)",numeric,7,7,0,4,3,6,7,6.25,7.25,8,2.21736
+Instances.zip::processing_energy.csv,"(7, 3)",numeric,7,7,0,5,3,4,5,5.16667,6.75,7,1.7224
+Instances.zip::processing_energy.csv,"(7, 4)",numeric,7,7,0,5,3,3.25,4,4.66667,5.5,8,1.96638
+Instances.zip::processing_energy.csv,"(7, 5)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""5"": 2, ""4"": 1}"
+Instances.zip::processing_energy.csv,"(7, 6)",numeric,7,7,0,6,3,4.5,6.5,5.83333,7,8,1.94079
+Instances.zip::processing_energy.csv,"(7, 7)",numeric,7,7,0,5,3,3.25,4,4.83333,6.25,8,2.13698
+Instances.zip::processing_energy.csv,"(7, 8)",numeric,7,7,0,6,3,5.25,6.5,6,7,8,1.78885
+Instances.zip::processing_energy.csv,"(8, 1)",categorical_or_text,7,7,0,2,,,,,,,"{""-"": 5, ""5"": 2}"
+Instances.zip::processing_energy.csv,"(8, 2)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""5"": 1, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(8, 3)",numeric,7,7,0,5,3,5,5,5.5,6.5,8,1.76068
+Instances.zip::processing_energy.csv,"(8, 4)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""3"": 1, ""8"": 1}"
+Instances.zip::processing_energy.csv,"(9, 1)",numeric,7,7,0,5,3,4,7,5.8,7,8,2.16795
+Instances.zip::processing_energy.csv,"(9, 2)",numeric,7,7,0,5,3,3,4,4.2,5,6,1.30384
+Instances.zip::processing_energy.csv,"(9, 3)",numeric,7,7,0,5,3,3.25,4.5,4.83333,6.5,7,1.83485
+Instances.zip::processing_energy.csv,"(9, 4)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""8"": 1, ""3"": 1}"
+Instances.zip::processing_energy.csv,"(10, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""5"": 1, ""8"": 1}"
+Instances.zip::processing_energy.csv,"(10, 2)",numeric,7,7,0,4,3,5,5,5,6,6,1.22474
+Instances.zip::processing_energy.csv,"(10, 3)",numeric,7,7,0,5,3,3,4,4.6,6,7,1.81659
+Instances.zip::processing_energy.csv,"(10, 4)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""5"": 1, ""3"": 1}"
+Instances.zip::processing_energy.csv,"(11, 1)",numeric,7,7,0,3,4,4,5,5,6,6,1.1547
+Instances.zip::processing_energy.csv,"(11, 2)",numeric,7,7,0,5,3,3.75,4.5,4.5,5.25,6,1.29099
+Instances.zip::processing_energy.csv,"(11, 3)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""7"": 1, ""8"": 1}"
+Instances.zip::processing_energy.csv,"(11, 4)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 4, ""5"": 2, ""4"": 1}"
+Instances.zip::processing_energy.csv,"(12, 1)",numeric,7,7,0,5,3,4,5,5.2,7,7,1.78885
+Instances.zip::processing_energy.csv,"(12, 2)",numeric,7,7,0,6,3,4,5,5.33333,6.75,8,1.96638
+Instances.zip::processing_energy.csv,"(12, 3)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""5"": 1, ""6"": 1}"
+Instances.zip::processing_energy.csv,"(12, 4)",numeric,7,7,0,5,4,5.25,6,5.66667,6,7,1.0328
+Instances.zip::processing_time.csv,﻿,numeric,7,7,0,7,0,1.5,3,3,4.5,6,2.16025
+Instances.zip::processing_time.csv,"(1, 1)",numeric,7,7,0,6,1.11778,1.17689,1.62181,1.49562,1.6455,1.91612,0.338955
+Instances.zip::processing_time.csv,"(1, 2)",numeric,7,7,0,5,0.939549,0.976892,1.14867,1.18372,1.3555,1.49798,0.265587
+Instances.zip::processing_time.csv,"(1, 3)",numeric,7,7,0,5,1.21083,1.53777,1.68031,1.58194,1.72449,1.75631,0.251485
+Instances.zip::processing_time.csv,"(2, 1)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.7141942278243185"": 1, ""1.3666162137414066"": 1}"
+Instances.zip::processing_time.csv,"(2, 2)",numeric,7,7,0,7,0.91664,1.0042,1.14762,1.20443,1.29072,1.71986,0.295069
+Instances.zip::processing_time.csv,"(2, 3)",numeric,7,7,0,7,1.15423,1.52942,1.80319,1.67468,1.86952,1.95769,0.311849
+Instances.zip::processing_time.csv,"(2, 4)",numeric,7,7,0,5,1.05809,1.2044,1.25397,1.31639,1.36596,1.69955,0.271619
+Instances.zip::processing_time.csv,"(2, 5)",numeric,7,7,0,7,1.09063,1.16462,1.21679,1.37495,1.49139,1.99534,0.346979
+Instances.zip::processing_time.csv,"(2, 6)",numeric,7,7,0,5,0.966004,1.47554,1.65182,1.52813,1.70442,1.84286,0.385454
+Instances.zip::processing_time.csv,"(2, 7)",numeric,7,7,0,6,1.185,1.30884,1.46215,1.43617,1.46487,1.75999,0.21544
+Instances.zip::processing_time.csv,"(2, 8)",numeric,7,7,0,5,1.12635,1.35791,1.43529,1.39802,1.4754,1.59516,0.196168
+Instances.zip::processing_time.csv,"(3, 1)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.8955287800657796"": 1, ""0.9241994839343364"": 1}"
+Instances.zip::processing_time.csv,"(3, 2)",numeric,7,7,0,6,1.17203,1.27673,1.50337,1.45645,1.53217,1.79794,0.243793
+Instances.zip::processing_time.csv,"(3, 3)",numeric,7,7,0,7,1.02929,1.15319,1.63927,1.54913,1.91416,1.99001,0.442421
+Instances.zip::processing_time.csv,"(3, 4)",numeric,7,7,0,5,1.20456,1.3342,1.60237,1.57513,1.84331,1.89121,0.336617
+Instances.zip::processing_time.csv,"(4, 1)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.4738977667355846"": 1, ""1.0003429468687886"": 1}"
+Instances.zip::processing_time.csv,"(4, 2)",numeric,7,7,0,5,1.32513,1.36094,1.48597,1.5424,1.66743,1.87253,0.250424
+Instances.zip::processing_time.csv,"(4, 3)",numeric,7,7,0,5,1.48728,1.5128,1.55152,1.63806,1.67679,1.96194,0.219424
+Instances.zip::processing_time.csv,"(5, 1)",numeric,7,7,0,7,0.954698,1.04339,1.39463,1.37926,1.68761,1.82004,0.385772
+Instances.zip::processing_time.csv,"(5, 2)",numeric,7,7,0,7,0.927632,1.14071,1.601,1.49858,1.85792,1.93099,0.43734
+Instances.zip::processing_time.csv,"(5, 3)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.9769310159058118"": 1, ""1.335998091784732"": 1}"
+Instances.zip::processing_time.csv,"(5, 4)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""0.9385489839252575"": 1, ""1.65946972802499"": 1}"
+Instances.zip::processing_time.csv,"(5, 5)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.4397875843719483"": 1, ""1.9378095413088028"": 1}"
+Instances.zip::processing_time.csv,"(6, 1)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.5797423367709729"": 1, ""1.1166306584149293"": 1}"
+Instances.zip::processing_time.csv,"(6, 2)",numeric,7,7,0,5,1.48766,1.54536,1.60416,1.67096,1.72976,1.98786,0.220666
+Instances.zip::processing_time.csv,"(6, 3)",numeric,7,7,0,7,1.00698,1.17091,1.46358,1.46737,1.77871,1.91297,0.378888
+Instances.zip::processing_time.csv,"(6, 4)",numeric,7,7,0,7,1.10299,1.59543,1.66247,1.63991,1.82766,1.95576,0.299229
+Instances.zip::processing_time.csv,"(6, 5)",numeric,7,7,0,5,1.10271,1.23275,1.33575,1.44011,1.54311,1.98623,0.383401
+Instances.zip::processing_time.csv,"(6, 6)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.8926581982988053"": 1, ""1.370214224246868"": 1}"
+Instances.zip::processing_time.csv,"(6, 7)",numeric,7,7,0,5,1.0621,1.14324,1.26734,1.27311,1.3972,1.49564,0.194034
+Instances.zip::processing_time.csv,"(6, 8)",numeric,7,7,0,5,1.08424,1.24691,1.32052,1.43029,1.50389,1.99588,0.393489
+Instances.zip::processing_time.csv,"(7, 1)",numeric,7,7,0,6,1.10885,1.16072,1.30172,1.41891,1.57704,1.94624,0.346271
+Instances.zip::processing_time.csv,"(7, 2)",numeric,7,7,0,5,0.954646,1.15088,1.33754,1.36988,1.55654,1.84977,0.380442
+Instances.zip::processing_time.csv,"(7, 3)",numeric,7,7,0,7,1.024,1.28832,1.30433,1.371,1.46393,1.79321,0.258764
+Instances.zip::processing_time.csv,"(7, 4)",numeric,7,7,0,7,1.21528,1.38707,1.66685,1.62592,1.85385,1.99651,0.315549
+Instances.zip::processing_time.csv,"(7, 5)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.6058597118323354"": 1, ""1.4051034298913239"": 1}"
+Instances.zip::processing_time.csv,"(7, 6)",numeric,7,7,0,7,0.947051,1.59393,1.65876,1.60375,1.79622,1.94359,0.348428
+Instances.zip::processing_time.csv,"(7, 7)",numeric,7,7,0,7,1.57403,1.73988,1.74204,1.76161,1.8123,1.93666,0.120408
+Instances.zip::processing_time.csv,"(7, 8)",numeric,7,7,0,7,1.28659,1.50669,1.69373,1.63244,1.77469,1.87458,0.220827
+Instances.zip::processing_time.csv,"(8, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.9608206399289414"": 1, ""1.7351107802490942"": 1}"
+Instances.zip::processing_time.csv,"(8, 2)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.011961699549165"": 1, ""1.3912892951193883"": 1}"
+Instances.zip::processing_time.csv,"(8, 3)",numeric,7,7,0,7,0.959317,1.39268,1.7187,1.5574,1.74684,1.90748,0.357953
+Instances.zip::processing_time.csv,"(8, 4)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.3917694362913748"": 1, ""1.6937827564171535"": 1}"
+Instances.zip::processing_time.csv,"(9, 1)",numeric,7,7,0,6,1.15172,1.29974,1.36266,1.43338,1.57117,1.7816,0.246188
+Instances.zip::processing_time.csv,"(9, 2)",numeric,7,7,0,6,0.984568,1.17899,1.43538,1.44115,1.69424,1.91256,0.375336
+Instances.zip::processing_time.csv,"(9, 3)",numeric,7,7,0,7,0.980774,1.12755,1.21021,1.29152,1.51188,1.63546,0.266599
+Instances.zip::processing_time.csv,"(9, 4)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.6410696767110047"": 1, ""1.6358517190931994"": 1}"
+Instances.zip::processing_time.csv,"(10, 1)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""0.9845256330279513"": 1, ""1.816547090911704"": 1}"
+Instances.zip::processing_time.csv,"(10, 2)",numeric,7,7,0,6,1.00567,1.24512,1.35572,1.42822,1.60172,1.93285,0.354289
+Instances.zip::processing_time.csv,"(10, 3)",numeric,7,7,0,6,0.955702,1.1914,1.36456,1.37645,1.62931,1.74128,0.319553
+Instances.zip::processing_time.csv,"(10, 4)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""0.9527852169883858"": 1, ""0.9942447580187567"": 1}"
+Instances.zip::processing_time.csv,"(11, 1)",numeric,7,7,0,5,1.01996,1.12677,1.22911,1.20669,1.30903,1.34856,0.147093
+Instances.zip::processing_time.csv,"(11, 2)",numeric,7,7,0,5,1.0061,1.12589,1.17338,1.19399,1.24148,1.42309,0.172004
+Instances.zip::processing_time.csv,"(11, 3)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.0242145792351707"": 1, ""1.1794289943400675"": 1}"
+Instances.zip::processing_time.csv,"(11, 4)",categorical_or_text,7,7,0,4,,,,,,,"{""-"": 4, ""1.9954039079227912"": 1, ""1.2846201704020035"": 1}"
+Instances.zip::processing_time.csv,"(12, 1)",numeric,7,7,0,6,0.997811,1.3862,1.56971,1.54155,1.82391,1.93012,0.371245
+Instances.zip::processing_time.csv,"(12, 2)",numeric,7,7,0,7,0.972482,1.57454,1.59804,1.5598,1.75717,1.81333,0.307929
+Instances.zip::processing_time.csv,"(12, 3)",categorical_or_text,7,7,0,3,,,,,,,"{""-"": 5, ""1.0788368126039878"": 1, ""1.3258824414170087"": 1}"
+Instances.zip::processing_time.csv,"(12, 4)",numeric,7,7,0,7,0.983674,1.0726,1.20164,1.19372,1.27712,1.44353,0.168683
+Instances.zip::worker.csv,Unnamed: 0,numeric,4,4,0,4,0,0.75,1.5,1.5,2.25,3,1.29099
+Instances.zip::worker.csv,worker_index,numeric,4,4,0,4,1,1.75,2.5,2.5,3.25,4,1.29099
+Instances.zip::worker.csv,initial_efficiency,numeric,4,4,0,4,0.897577,1.07949,1.22646,1.19543,1.3424,1.43124,0.231773
+Instances.zip::worker.csv,learning_rate,numeric,4,4,0,4,0.530025,0.53259,0.568123,0.652868,0.688401,0.945202,0.197753
+Instances.zip::operation.csv,﻿operation_index,categorical_or_text,63,63,0,63,,,,,,,"{""(1, 1)"": 1, ""(1, 2)"": 1, ""(1, 3)"": 1}"
+Instances.zip::operation.csv,available_machines,categorical_or_text,63,63,0,46,,,,,,,"{""[2, 7]"": 3, ""[2, 3, 4, 5, 6, 7]"": 3, ""[2, 3, 5, 6, 7]"": 3}"
+Instances.zip::operation.csv,available_workers,categorical_or_text,63,63,0,20,,,,,,,"{""[1, 2, 4, 5]"": 6, ""[2, 3, 4, 5]"": 6, ""[1, 4, 5]"": 5}"
