@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-jzgtxj-peafowl-locomotion",
+  "dataset_name": "Peafowl Locomotion",
+  "doi": "10.7910/dvn/jzgtxj",
+  "landing_url": "https://doi.org/10.7910/DVN/JZGTXJ",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/JZGTXJ",
+  "access_date": "2026-11-21",
+  "round_number": 51,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "PeafowlLocomotion_Data.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3551685",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/JZGTXJ/16ce3c9f8d9-7d59385b4e40?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27PeafowlLocomotion_Data.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T124708Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=b98d4447079ec44fae76204c80796b17e56bb6c292d60bae5dc7e4fe8e04112d",
+      "http_status": 200,
+      "bytes": 16384,
+      "publisher_checksum": "dataverse_original_md5:bd025280e6fbae14d30c70621f4aafe0",
+      "verified_md5": "e067bed65dafd42a3fa43aac7812ade2",
+      "verified_sha256": "a7c4d8841feac9e39ba94c5d400907b06e359132474a6a14803efb50b0717f40"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-jzgtxj-peafowl-locomotion",
+  "raw_total_bytes": 16384,
+  "raw_total_rows": 282,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-jzgtxj-peafowl-locomotion-cleaned.csv",
+  "cleaned_csv_sha256": "35b8e1e109576998c50714ea0e06aaa63a3de3a18c0d5b377fc65751a2e0de15",
+  "cleaned_rows": 282,
+  "cleaned_cols": 9,
+  "null_counts_by_file": {
+    "PeafowlLocomotion_Data.tab": {
+      "BirdID": 0,
+      "EyeOpen": 0,
+      "JumpType": 0,
+      "Behavior": 0,
+      "pupilXLRelative": 0,
+      "pupilXRRelative": 1,
+      "pupilYLRelative": 0,
+      "pupilYRRelative": 1
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

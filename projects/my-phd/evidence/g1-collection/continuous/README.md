@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：50
-- **最近更新时间 (UTC)**：2026-11-21T12:39:13Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5513 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1971 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：4532 条
-- **累计已完成确定性清洗数据集**：110 个
+- **已完成轮次**：51
+- **最近更新时间 (UTC)**：2026-11-21T12:44:05Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5545 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1973 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：4559 条
+- **累计已完成确定性清洗数据集**：113 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 201 | 99 |
-| `R2_Aerial_Actuator` | 457 | 119 |
+| `R1_Force_Contact` | 207 | 99 |
+| `R2_Aerial_Actuator` | 477 | 119 |
 | `R5_MultiRobot_Comm` | 304 | 97 |
-| `Robotics_Embodied` | 1568 | 615 |
-| `Mechanical_Physics_AI` | 1507 | 894 |
-| `Mechatronics_PHM_Control` | 1318 | 680 |
-| `Smart_Manufacturing` | 736 | 426 |
-| `Smart_Factory_DigitalTwin` | 437 | 89 |
+| `Robotics_Embodied` | 1584 | 615 |
+| `Mechanical_Physics_AI` | 1507 | 895 |
+| `Mechatronics_PHM_Control` | 1324 | 680 |
+| `Smart_Manufacturing` | 736 | 428 |
+| `Smart_Factory_DigitalTwin` | 437 | 90 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 698 | 0 |
+| `Adjacent` | 701 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-32308917-dataset-for-laser-weldin` | Dataset for Laser Welding Deformation Prediction of TC4 Titanium Al... | 10.6084/m9.figshare.32308917.v1 | `summary_table` | 63 | `8202e327786d` | [CSV](data/figshare-32308917-dataset-for-laser-weldin-cleaned.csv) · [JSON](data/figshare-32308917-dataset-for-laser-weldin-provenance.json) · [PY](data/derive_figshare_32308917_dataset_for_laser_weldin.py) |
-| `figshare-32095810-quantitative-prediction` | Quantitative prediction errors of the radial basis function neural... | 10.6084/m9.figshare.32095810.v1 | `cleaned_rows` | 100 | `130c154ee177` | [CSV](data/figshare-32095810-quantitative-prediction-cleaned.csv) · [JSON](data/figshare-32095810-quantitative-prediction-provenance.json) · [PY](data/derive_figshare_32095810_quantitative_prediction.py) |
-| `dataverse-nssigl-date-stamping-us-housing` | Date-stamping US housing market explosivity | 10.7910/dvn/nssigl | `summary_table` | 30 | `0ba1e5896d69` | [CSV](data/dataverse-nssigl-date-stamping-us-housing-cleaned.csv) · [JSON](data/dataverse-nssigl-date-stamping-us-housing-provenance.json) · [PY](data/derive_dataverse_nssigl_date_stamping_us_housing.py) |
 | `dataverse-sqs8my-replication-data-for-tur` | Replication Data for: "Turning on Those Who Turn to the Courts: Exp... | 10.7910/dvn/sqs8my | `summary_table` | 190 | `200f97378710` | [CSV](data/dataverse-sqs8my-replication-data-for-tur-cleaned.csv) · [JSON](data/dataverse-sqs8my-replication-data-for-tur-provenance.json) · [PY](data/derive_dataverse_sqs8my_replication_data_for_tur.py) |
 | `dataverse-mygsyo-replication-data-for-foo` | Replication Data for: Foot-propelled swimming kinematics and turnin... | 10.7910/dvn/mygsyo | `summary_table` | 24 | `b5455e1580d1` | [CSV](data/dataverse-mygsyo-replication-data-for-foo-cleaned.csv) · [JSON](data/dataverse-mygsyo-replication-data-for-foo-provenance.json) · [PY](data/derive_dataverse_mygsyo_replication_data_for_foo.py) |
 | `figshare-32362119-data-sheet-1-optimizing` | Data Sheet 1_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s005 | `summary_table` | 214 | `4c4a5f96d2e1` | [CSV](data/figshare-32362119-data-sheet-1-optimizing-cleaned.csv) · [JSON](data/figshare-32362119-data-sheet-1-optimizing-provenance.json) · [PY](data/derive_figshare_32362119_data_sheet_1_optimizing.py) |
@@ -71,12 +68,14 @@
 | `dataverse-4qhuwx-replication-data-for-hea` | Replication Data for: Heating and Current-Drive Actuator Systems fo... | 10.7910/dvn/4qhuwx | `summary_table` | 15 | `060dbe697f9e` | [CSV](data/dataverse-4qhuwx-replication-data-for-hea-cleaned.csv) · [JSON](data/dataverse-4qhuwx-replication-data-for-hea-provenance.json) · [PY](data/derive_dataverse_4qhuwx_replication_data_for_hea.py) |
 | `figshare-24204510-data-of-rapid-phase-curr` | Data of Rapid Phase Current Sampling in a Permanent Magnet Synchron... | 10.6084/m9.figshare.24204510.v1 | `summary_table` | 13 | `d9ca7c67f863` | [CSV](data/figshare-24204510-data-of-rapid-phase-curr-cleaned.csv) · [JSON](data/figshare-24204510-data-of-rapid-phase-curr-provenance.json) · [PY](data/derive_figshare_24204510_data_of_rapid_phase_curr.py) |
 | `figshare-32065938-custom-machining-gantry` | Custom Machining Gantry for Hybrid Additive Manufacturing Vibration... | 10.6084/m9.figshare.32065938.v1 | `summary_table` | 16 | `f667d7ae26ae` | [CSV](data/figshare-32065938-custom-machining-gantry-cleaned.csv) · [JSON](data/figshare-32065938-custom-machining-gantry-provenance.json) · [PY](data/derive_figshare_32065938_custom_machining_gantry.py) |
+| `dataverse-efnv5j-replication-data-for-hyd` | Replication Data For: Hydraulic Fracturing Chemicals Reporting: Ana... | 10.7910/dvn/efnv5j | `cleaned_rows` | 34 | `81cdd210694d` | [CSV](data/dataverse-efnv5j-replication-data-for-hyd-cleaned.csv) · [JSON](data/dataverse-efnv5j-replication-data-for-hyd-provenance.json) · [PY](data/derive_dataverse_efnv5j_replication_data_for_hyd.py) |
+| `dataverse-wohq9f-replication-data-for-mix` | Replication Data for: Mixed hydraulic responses to drought in six c... | 10.7910/dvn/wohq9f | `summary_table` | 37 | `5d1ccf03e688` | [CSV](data/dataverse-wohq9f-replication-data-for-mix-cleaned.csv) · [JSON](data/dataverse-wohq9f-replication-data-for-mix-provenance.json) · [PY](data/derive_dataverse_wohq9f_replication_data_for_mix.py) |
+| `dataverse-jzgtxj-peafowl-locomotion` | Peafowl Locomotion | 10.7910/dvn/jzgtxj | `cleaned_rows` | 282 | `a7c4d8841fea` | [CSV](data/dataverse-jzgtxj-peafowl-locomotion-cleaned.csv) · [JSON](data/dataverse-jzgtxj-peafowl-locomotion-provenance.json) · [PY](data/derive_dataverse_jzgtxj_peafowl_locomotion.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 26 | 2026-11-21T09:34:02Z | Broad Engineering R26: Mechanical_Physics_AI | +202 | +62 | +2 | [round-26-audit.json](rounds/round-26-audit.json) |
 | 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
 | 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
 | 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
@@ -101,3 +100,4 @@
 | 48 | 2026-11-21T12:24:05Z | Broad Engineering R48: R1_Force_Contact / R2_Aerial_Actuator | +174 | +7 | +3 | [round-48-audit.json](rounds/round-48-audit.json) |
 | 49 | 2026-11-21T12:29:10Z | Broad Engineering R49: R2_Aerial_Actuator / R5_MultiRobot_Comm | +105 | +15 | +3 | [round-49-audit.json](rounds/round-49-audit.json) |
 | 50 | 2026-11-21T12:39:13Z | Broad Engineering R50: R1_Force_Contact (2025) | +52 | +6 | +2 | [round-50-audit.json](rounds/round-50-audit.json) |
+| 51 | 2026-11-21T12:44:05Z | Broad Engineering R51: R1_Force_Contact / R2_Aerial_Actuator (2025) | +32 | +2 | +3 | [round-51-audit.json](rounds/round-51-audit.json) |

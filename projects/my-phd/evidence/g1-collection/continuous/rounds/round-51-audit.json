@@ -1,0 +1,338 @@
+{
+  "schema_version": "1.0",
+  "round": 51,
+  "completed_at": "2026-11-21T12:44:05Z",
+  "batch_label": "Broad Engineering R51: R1_Force_Contact / R2_Aerial_Actuator (2025)",
+  "base_head_sha": "407c5b16c2100ba2ec3bfc6dae6dc38dd1190048",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 62,
+    "duplicates_skipped": 30,
+    "net_new": 32,
+    "new_reading_queue": 27,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t124405z-arxiv-9434045bdb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Atactile+AND+all%3Aslip+AND+all%3Adetection+AND+all%3Arobotic+AND+all%3Agrasping%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 5,
+        "response_sha256": "ce6abf37537897e65c2b3ee5b6ca99d8a9868cfb78eed4279ad1e0f1ecbb4733",
+        "normalized_results_sha256": "6859bc25ed6ad18c1763c6d1fe740dc7514b2dcaa7e38b954485d8bcd1652992"
+      },
+      {
+        "provider": "openalex",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t124406z-openalex-3b78968f2a",
+        "request_url": "https://api.openalex.org/works?search=tactile+slip+detection+robotic+grasping&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "7902102153d625eeb97db9b1cf4b857ab0d6552a1d5e5ac0361e1a73708a144f",
+        "normalized_results_sha256": "d37d6a4483311584526504a5d42e22d74d1890c99e4d74f7eeeafbfc7841e21f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "tactile slip detection robotic grasping",
+        "receipt_id": "20261121t124411z-europe-pmc-e5f1e3002b",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=tactile+slip+detection+robotic+grasping&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "9102cf57e9c9e639e58772312e4a4661a20444416b86adf36350362d0d4fb3a9",
+        "normalized_results_sha256": "296a0a80b4a20865d42e09a25eb7a149269978e720008d0ed469563922221325"
+      },
+      {
+        "provider": "arxiv",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t124420z-arxiv-caff6e41f0",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Acompliant+AND+all%3Acontact-rich+AND+all%3Aassembly+AND+all%3Aresidual+AND+all%3Alearning%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "ca91b8129916bb29b07930349021e016bcf0c2ac7424370bcf8f8e839b590303",
+        "normalized_results_sha256": "c0bbc96b78ad2ce631a886918c5c8fc0aecaf9f81c6fd33c952a8a5b79926fc3"
+      },
+      {
+        "provider": "openalex",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t124421z-openalex-01c97624b1",
+        "request_url": "https://api.openalex.org/works?search=compliant+contact-rich+assembly+residual+learning&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "9c8fbeb39c66ad185487505aad0f50ed4325b39e386001b07a969ae180254ad2",
+        "normalized_results_sha256": "e336bd8b0fd6dcbd5fd4e49c0e904e0c8ce4845ad8848a9a76b1c861751cf4b1"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "compliant contact-rich assembly residual learning",
+        "receipt_id": "20261121t124423z-europe-pmc-ae60a27ddd",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=compliant+contact-rich+assembly+residual+learning&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "f4cfab6b87264c6e6f01a99094fd845f4b150f200c71c3ef1f0306d5e08d9326",
+        "normalized_results_sha256": "1a5d18f433ef81d655f75b66f475575694248e26eabfadace3f0bfcd0837b6d4"
+      },
+      {
+        "provider": "arxiv",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t124433z-arxiv-bbc2d4a2d4",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aquadrotor+AND+all%3Aactuator+AND+all%3Asaturation+AND+all%3Atrajectory+AND+all%3Atracking%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 1,
+        "response_sha256": "ff205fb284a002552b7fd66acb71ad4d56b35744b43a30e3832c9e6a763d8293",
+        "normalized_results_sha256": "5a8a6d0ce7adc47bdf465a516359af7bc1a15dcccceb71913e05c5c397a48339"
+      },
+      {
+        "provider": "openalex",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t124434z-openalex-5c3f90fa46",
+        "request_url": "https://api.openalex.org/works?search=quadrotor+actuator+saturation+trajectory+tracking&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "316ea126157d0f7034bbc02e63126906cfebe89fa5e3999b4b99a4536746aad1",
+        "normalized_results_sha256": "279eb5062cd32fd0b5b58e1ef2f46d1e69ce6727965b4c67a38d0599efc9949f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "quadrotor actuator saturation trajectory tracking",
+        "receipt_id": "20261121t124542z-europe-pmc-352b3f7c3a",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=quadrotor+actuator+saturation+trajectory+tracking&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "f6d30b3fc5296bb68d4c0768d73f69d6f93f997c16d9d462f8f8ac98c457f656",
+        "normalized_results_sha256": "d4f6247e4834f6110cb34dc144b204bcd6ce03a4d2a20062e9483fa7c7041e12"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t124544z-arxiv-3be5a8ff5d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Amultirotor+AND+all%3Arotor+AND+all%3Afailure+AND+all%3Acontrol+AND+all%3Aallocation%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "091a91c1cde510edcf768c9346a266d5efa1fbe38a5e71efc4a88f2219a466b3",
+        "normalized_results_sha256": "cafd35321dd9bb0f155a7564c28373d2fc9dcfb92c541ae541197cbec55389bc"
+      },
+      {
+        "provider": "openalex",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t124545z-openalex-34609a0d74",
+        "request_url": "https://api.openalex.org/works?search=multirotor+rotor+failure+control+allocation&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "92ddb054a599798b5db957b9e7a9244039816c6e61ce224ce1c72cffec8fbc87",
+        "normalized_results_sha256": "1d29f8e17a79a48605d6285453e97190720936d391d81bd8d22d3839e9ccaaa4"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "multirotor rotor failure control allocation",
+        "receipt_id": "20261121t124548z-europe-pmc-4fb073c95c",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=multirotor+rotor+failure+control+allocation&pageSize=12&format=json",
+        "result_count": 2,
+        "response_sha256": "8692e6042bbe154882ce0cc1ff2dc0777165e02ef11c34ac2be9b572d45b7d93",
+        "normalized_results_sha256": "d36a49f4661ee29554c470553aedb4f7e55fe947b3b94c068024ff0d5b59c5cc"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1001/jamapediatrics.2025.1979",
+        "receipt_id": "20261121t124552z-opencitations-b492ba92ef",
+        "result_count": 4,
+        "response_sha256": "6821760d04ccac2d6851cde00b65b1445200604273c6ef031ecea8bf2a656c21"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.69635/mssl.2025.1.2.28",
+        "receipt_id": "20261121t124554z-opencitations-d328a4335a",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 74,
+    "off_topic_filtered": 65,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 7,
+    "net_new": 2,
+    "provider_statuses": [
+      {
+        "query": "electrical discharge machining sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "electrical discharge machining sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "electrical discharge machining sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "electrical discharge machining sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "electrical discharge machining sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "sheet metal stamping sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "sheet metal stamping sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "sheet metal stamping sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "sheet metal stamping sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "sheet metal stamping sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hot forging sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hot forging sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hot forging sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hot forging sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hot forging sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "injection molding sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "injection molding sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "injection molding sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "injection molding sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "injection molding sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 14,
+    "cleaned": [
+      {
+        "slug": "dataverse-efnv5j-replication-data-for-hyd",
+        "key": "dataverse:10.7910/dvn/efnv5j",
+        "dataset_name": "Replication Data For: Hydraulic Fracturing Chemicals Reporting: Analysis of Available Data and Recommendations for Policymakers",
+        "doi": "10.7910/dvn/efnv5j",
+        "landing_url": "https://doi.org/10.7910/DVN/EFNV5J",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-efnv5j-replication-data-for-hyd-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-efnv5j-replication-data-for-hyd-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_efnv5j_replication_data_for_hyd.py",
+        "cleaned_rows": 34,
+        "raw_total_rows": 34,
+        "verified_sha256": "81cdd210694d2b8bf85d95843e7bec788c43110fb373a702d13f2ae2d747de77"
+      },
+      {
+        "slug": "dataverse-wohq9f-replication-data-for-mix",
+        "key": "dataverse:10.7910/dvn/wohq9f",
+        "dataset_name": "Replication Data for: Mixed hydraulic responses to drought in six common woody species from a dry sclerophyll forest in South Africa",
+        "doi": "10.7910/dvn/wohq9f",
+        "landing_url": "https://doi.org/10.7910/DVN/WOHQ9F",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wohq9f-replication-data-for-mix-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wohq9f-replication-data-for-mix-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wohq9f_replication_data_for_mix.py",
+        "cleaned_rows": 37,
+        "raw_total_rows": 644,
+        "verified_sha256": "5d1ccf03e6886e0e8d3561974085655a0274341dce13e7ef671dce635ca515eb"
+      },
+      {
+        "slug": "dataverse-jzgtxj-peafowl-locomotion",
+        "key": "dataverse:10.7910/dvn/jzgtxj",
+        "dataset_name": "Peafowl Locomotion",
+        "doi": "10.7910/dvn/jzgtxj",
+        "landing_url": "https://doi.org/10.7910/DVN/JZGTXJ",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-jzgtxj-peafowl-locomotion-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-jzgtxj-peafowl-locomotion-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_jzgtxj_peafowl_locomotion.py",
+        "cleaned_rows": 282,
+        "raw_total_rows": 282,
+        "verified_sha256": "a7c4d8841feac9e39ba94c5d400907b06e359132474a6a14803efb50b0717f40"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/2703948: HTTP Error 400: Bad Request"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-fhoo0q-datasets-for-recognition\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_fhoo0q_datasets_for_recognition.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Hit_1.csv: 34debecfc3072994f6ef8118c8b0c3c4847082b260eccf2d1b71f0b740d1d150 != 4bc6294120f7e4c4f8d1baec1565353835ada4838c14516dfb571a2a5d74783f\n"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-1g3ssb-multi-sensor-based-power\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_1g3ssb_multi_sensor_based_power.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for Expt_3.tab: f16dec591ac709ffce5ed7d82ce87db76c86744b84d76a32087457068e1e40be != fa922de59b6813263e8e926123b56cd969a99e7d37baf817094308875786cb7c\n"
+      },
+      {
+        "name": "Strongman biomechanics - atlas stone IMU data",
+        "url": "https://doi.org/10.7910/DVN/PQOIGN",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_pqoign_strongman_biomechanics_a.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-pqoign-strongman-biomechanics-a\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_pqoign_strongman_biomechanics_a.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for MC40_01240__mag.tab: 883cc36994f349f71beb3fb42223e6032604f1409d14dcedd2d53189892c5d76 != acbddb887352f6e5734e1f5f9ca7c09ecd9bf85c981e3006494f04c50d32a9e4\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -1,0 +1,38 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+13_TraitData.csv,Unnamed: 0,categorical_or_text,6,6,0,6,,,,,,,"{""Boscia_oleoides"": 1, ""Euclea_undulata"": 1, ""Pappea_capensis"": 1}"
+13_TraitData.csv,tip.label,categorical_or_text,6,6,0,6,,,,,,,"{""Boscia_oleoides"": 1, ""Euclea_undulata"": 1, ""Pappea_capensis"": 1}"
+13_TraitData.csv,P50,numeric,6,6,0,6,-8.09,-7.6125,-6,-6.27,-5.055,-4.64,1.51273
+13_TraitData.csv,tlp,numeric,6,6,0,6,-3.82,-3.35,-2.14,-2.465,-1.74,-1.33,1.05265
+13_TraitData.csv,moe,numeric,6,6,0,6,3.48,3.8725,4.245,5.735,5.7575,12.43,3.41341
+13_TraitData.csv,osmoticpot,numeric,6,6,0,6,-2.92,-1.99,-1.41,-1.64333,-1.1075,-0.93,0.763771
+13_TraitData.csv,lma,numeric,6,6,0,6,106.097,138.373,181,202.759,253.897,346.097,91.5944
+13_TraitData.csv,hv,numeric,6,5,1,5,0.113766,0.127247,0.136292,0.180165,0.144327,0.379196,0.111839
+13_TraitData.csv,height,numeric,6,6,0,6,1.4,2.25,2.5,2.65,3.35,3.7,0.875785
+13_TraitData.csv,PPE,numeric,6,5,1,5,0.000358453,3.33322,12.6706,26.0614,55.7173,58.5857,28.7766
+09_HuberValues.csv,Unnamed: 0,numeric,23,23,0,23,1,6.5,12,12,17.5,23,6.78233
+09_HuberValues.csv,genussp,categorical_or_text,23,23,0,5,,,,,,,"{""PAPCAP"": 6, ""EUCUND"": 5, ""POLMYR"": 5}"
+09_HuberValues.csv,sapwoodarea_cm2,numeric,23,23,0,23,6.62799,11.9424,20.5084,32.0565,38.9904,102.878,30.1609
+09_HuberValues.csv,individualleafarea_cm2,numeric,23,23,0,23,0.0970052,0.254334,0.463684,0.553833,0.683855,1.59839,0.371916
+09_HuberValues.csv,totalleafarea_cm2,numeric,23,23,0,23,88.56,122.946,150.77,152.491,179.443,215.94,37.7924
+02_MurrayParkRainfall.csv,"Data collected by Wilson Turner, Royden R. Webster, Barbara Webster, Harold C. Knight, Michael B. Webster and Greg Webster. Data provided by MBW and GW.",numeric,108,108,0,108,1921,1947,1973,1973,1999,2025,30.4549
+02_MurrayParkRainfall.csv,Unnamed: 1,categorical_or_text,108,105,3,2,,,,,,,"{""INCHES"": 104, ""UNITS"": 1}"
+02_MurrayParkRainfall.csv,Unnamed: 2,numeric,108,105,3,82,0,0.3975,0.835,1.05779,1.45,3.9,0.88457
+02_MurrayParkRainfall.csv,Unnamed: 3,numeric,108,105,3,91,0,0.7375,1.2,1.37808,2.0275,3.62,0.911825
+02_MurrayParkRainfall.csv,Unnamed: 4,numeric,108,105,3,89,0.04,0.83,1.295,1.66058,2.1525,6.38,1.27119
+02_MurrayParkRainfall.csv,Unnamed: 5,numeric,108,105,3,88,0,0.525,0.87,1.18019,1.69,5.76,0.969777
+02_MurrayParkRainfall.csv,Unnamed: 6,numeric,108,105,3,75,0,0.24,0.48,0.862692,1.0625,8.4,1.12492
+02_MurrayParkRainfall.csv,Unnamed: 7,numeric,108,105,3,67,0,0.165,0.45,0.586923,0.785,3.28,0.612816
+02_MurrayParkRainfall.csv,Unnamed: 8,numeric,108,105,3,75,0,0.1175,0.415,0.741058,0.915,7.72,1.10057
+02_MurrayParkRainfall.csv,Unnamed: 9,numeric,108,105,3,78,0,0.1675,0.505,0.777788,0.9675,4.65,0.952994
+02_MurrayParkRainfall.csv,Unnamed: 10,numeric,108,105,3,78,0,0.2,0.49,0.875673,1.21,5.01,0.998407
+02_MurrayParkRainfall.csv,Unnamed: 11,numeric,108,105,3,81,0,0.4875,0.965,1.24923,1.575,6.11,1.08329
+02_MurrayParkRainfall.csv,Unnamed: 12,numeric,108,104,4,86,0,0.46,1,1.47961,2.19,7.02,1.37301
+02_MurrayParkRainfall.csv,Unnamed: 13,numeric,108,104,4,82,0,0.305,0.86,1.15485,1.855,4.04,0.995818
+02_MurrayParkRainfall.csv,Unnamed: 14,numeric,108,104,4,97,6.49,10.2,12.54,12.9968,15.195,23.06,3.44297
+02_MurrayParkRainfall.csv,Unnamed: 15,numeric,108,105,3,98,6.49,10.185,12.535,12.9791,15.1525,23.06,3.47064
+02_MurrayParkRainfall.csv,Unnamed: 16,categorical_or_text,108,9,99,3,,,,,,,"{""PROB"": 7, ""Comment"": 1, ""*Starts using mm"": 1}"
+03_CHIRPS.csv,Data downloaded from CHIRPS (https://www.chc.ucsb.edu/data/chirps) for the site on the Kaboega Farm (S33.246464; E25.370629),numeric,507,505,2,505,1,126.75,252.5,252.5,378.25,504,145.637
+03_CHIRPS.csv,Unnamed: 1,numeric,507,494,13,494,-3.45823,-0.58207,0.0883027,-0.00128811,0.581922,3.24884,1.01633
+03_CHIRPS.csv,Unnamed: 2,numeric,507,505,2,43,1981,1991,2001.5,2001.5,2012,2022,12.133
+03_CHIRPS.csv,Unnamed: 3,numeric,507,505,2,13,1,3.75,6.5,6.5,9.25,12,3.45548
+03_CHIRPS.csv,Unnamed: 4,numeric,507,505,2,504,0,32.4887,53.3081,61.7136,81.5393,306.456,38.8721

@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-wohq9f-replication-data-for-mix",
+  "dataset_name": "Replication Data for: Mixed hydraulic responses to drought in six common woody species from a dry sclerophyll forest in South Africa",
+  "doi": "10.7910/dvn/wohq9f",
+  "landing_url": "https://doi.org/10.7910/DVN/WOHQ9F",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/WOHQ9F",
+  "access_date": "2026-11-21",
+  "round_number": 51,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "13_TraitData.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10854871",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WOHQ9F/194bdffd33d-1b25f51a5c7b?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2713_TraitData.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T124637Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=51cb3b09e290ccea75258ff8a9e1a6c15f81c5eb29df78639c6027133f86514d",
+      "http_status": 200,
+      "bytes": 709,
+      "publisher_checksum": "md5:4d53c3f88f3695ad155a7934d86f73ff",
+      "verified_md5": "4d53c3f88f3695ad155a7934d86f73ff",
+      "verified_sha256": "5d1ccf03e6886e0e8d3561974085655a0274341dce13e7ef671dce635ca515eb"
+    },
+    {
+      "file": "09_HuberValues.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10854869",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WOHQ9F/194bdffce7c-2fe8a94011ac?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2709_HuberValues.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T124638Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=80c4450fb1bc2a57c57f3fbee1671ea8029449a97e47d42de9a860f2e0134c68",
+      "http_status": 200,
+      "bytes": 1052,
+      "publisher_checksum": "md5:ba0b265a7d0d8df0763d278b156a5f60",
+      "verified_md5": "ba0b265a7d0d8df0763d278b156a5f60",
+      "verified_sha256": "06cbf9f5a17811021723cc7d8fc26d723b2116a6d5c44276f4b2764341fc998e"
+    },
+    {
+      "file": "02_MurrayParkRainfall.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10854863",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WOHQ9F/194bdffbeff-112826e63d62?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2702_MurrayParkRainfall.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T124640Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=64d69bfa01913ce801d77a88ea6db8a6d0f0436b3bafe144630ba71f562941ec",
+      "http_status": 200,
+      "bytes": 8869,
+      "publisher_checksum": "md5:55d2bd8b7c0ecf773f59932ede7f628a",
+      "verified_md5": "55d2bd8b7c0ecf773f59932ede7f628a",
+      "verified_sha256": "bea0aeac529d1a1383cd2b91796d10c91a6b873fca85561b1f5e35eca9db7be5"
+    },
+    {
+      "file": "03_CHIRPS.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10854865",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WOHQ9F/194bdffc09f-0abaae34d68f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%2703_CHIRPS.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T124642Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=3575d21551b1e55eb6a4cc8d58ff255b8aa95b1aab94beaeae8ac3d3751e411d",
+      "http_status": 200,
+      "bytes": 18395,
+      "publisher_checksum": "md5:4c5d2fa3febcec2f2c90351c0d0bc26e",
+      "verified_md5": "4c5d2fa3febcec2f2c90351c0d0bc26e",
+      "verified_sha256": "ec27b537b922fbe5d2db53a6f2b922842d3782828fd50b09a0599c3daeda9f84"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-wohq9f-replication-data-for-mix",
+  "raw_total_bytes": 29025,
+  "raw_total_rows": 644,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-wohq9f-replication-data-for-mix-cleaned.csv",
+  "cleaned_csv_sha256": "7e86aec8f4f0677ec7034c40ed01d90e9092532aa69d6d1a94db3af893aab7b9",
+  "cleaned_rows": 37,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "13_TraitData.csv": {
+      "Unnamed: 0": 0,
+      "tip.label": 0,
+      "P50": 0,
+      "tlp": 0,
+      "moe": 0,
+      "osmoticpot": 0,
+      "lma": 0,
+      "hv": 1,
+      "height": 0,
+      "PPE": 1
+    },
+    "09_HuberValues.csv": {
+      "Unnamed: 0": 0,
+      "genussp": 0,
+      "sapwoodarea_cm2": 0,
+      "individualleafarea_cm2": 0,
+      "totalleafarea_cm2": 0
+    },
+    "02_MurrayParkRainfall.csv": {
+      "Data collected by Wilson Turner, Royden R. Webster, Barbara Webster, Harold C. Knight, Michael B. Webster and Greg Webster. Data provided by MBW and GW.": 0,
+      "Unnamed: 1": 3,
+      "Unnamed: 2": 3,
+      "Unnamed: 3": 3,
+      "Unnamed: 4": 3,
+      "Unnamed: 5": 3,
+      "Unnamed: 6": 3,
+      "Unnamed: 7": 3,
+      "Unnamed: 8": 3,
+      "Unnamed: 9": 3,
+      "Unnamed: 10": 3,
+      "Unnamed: 11": 3,
+      "Unnamed: 12": 4,
+      "Unnamed: 13": 4,
+      "Unnamed: 14": 4,
+      "Unnamed: 15": 3,
+      "Unnamed: 16": 99
+    },
+    "03_CHIRPS.csv": {
+      "Data downloaded from CHIRPS (https://www.chc.ucsb.edu/data/chirps) for the site on the Kaboega Farm (S33.246464; E25.370629)": 2,
+      "Unnamed: 1": 13,
+      "Unnamed: 2": 2,
+      "Unnamed: 3": 2,
+      "Unnamed: 4": 2
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
