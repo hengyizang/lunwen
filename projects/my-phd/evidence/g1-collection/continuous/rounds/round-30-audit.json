@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 30,
+  "completed_at": "2026-11-21T09:54:02Z",
+  "batch_label": "Broad Engineering R30: Smart_Manufacturing / Smart_Factory_DigitalTwin",
+  "base_head_sha": "e89d11b5ff5cf6d0249c49cf65f892c434620879",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 183,
+    "duplicates_skipped": 3,
+    "net_new": 180,
+    "new_reading_queue": 112,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "injection molding quality prediction",
+        "receipt_id": "20261121t095402z-arxiv-ebe9f9d44e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Ainjection+AND+all%3Amolding+AND+all%3Aquality+AND+all%3Aprediction&start=0&max_results=12",
+        "result_count": 8,
+        "response_sha256": "83ab195683b1185f3e7317513d14c8caf7ad7ac9c8acf3131615cc16a95c4617",
+        "normalized_results_sha256": "c25849d83b3222775d2c7c3bffa2e0971c47ad7e29e77aaab53282d2ce4ef674"
+      },
+      {
+        "provider": "openalex",
+        "query": "injection molding quality prediction",
+        "receipt_id": "20261121t095403z-openalex-f0ab0e4e65",
+        "request_url": "https://api.openalex.org/works?search=injection+molding+quality+prediction&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6b1de71fd5222e8c574ec7dcbab4c26cb2fbc58c31ae2e09857c93eef957d95f",
+        "normalized_results_sha256": "44f6dbec56781d678628fe63515623dbfd2c41777c1904f3dcd0640dde2ae2fe"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "injection molding quality prediction",
+        "receipt_id": "20261121t095404z-europe-pmc-a1b57b5d8c",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=injection+molding+quality+prediction&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "98061df9b9b987bc474a61d5cec6ea3994962dd3f7e5c136ce1afbf2411ae178",
+        "normalized_results_sha256": "12a691dd0f0018f91ed92c2cb09e23783fc8622bd35f9446a4677255c7fa5359"
+      },
+      {
+        "provider": "arxiv",
+        "query": "wafer defect inspection vision",
+        "receipt_id": "20261121t095407z-arxiv-09b99e9f91",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Awafer+AND+all%3Adefect+AND+all%3Ainspection+AND+all%3Avision&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "a7bd4689b65a335f2464d2ae9e5aa8d372fa01c9024b0eaeccf65901812dce39",
+        "normalized_results_sha256": "a3863f7fe4028ce0d1c6396c20dd17a4a2e8c07c302e9c49f0aa4d348d760ee7"
+      },
+      {
+        "provider": "openalex",
+        "query": "wafer defect inspection vision",
+        "receipt_id": "20261121t095408z-openalex-f26972c066",
+        "request_url": "https://api.openalex.org/works?search=wafer+defect+inspection+vision&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4d0bd5004f746298ae46affbea80750fa9d8cd0f1acaa5e17dde03fda57ae895",
+        "normalized_results_sha256": "bd48395a38ed6e28f955656b71c4bdc7f04889803fd6a58b7e9ee758f9335c79"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "wafer defect inspection vision",
+        "receipt_id": "20261121t095410z-europe-pmc-9b959a362e",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=wafer+defect+inspection+vision&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "c519319256b6a764890ac05ae0187cee607020cef49c6155f40b715dea82e782",
+        "normalized_results_sha256": "c731b906007bddc2c50cf58f1b4e53990da59ffd668e93cafa008de31bba3fe3"
+      },
+      {
+        "provider": "arxiv",
+        "query": "PCB solder joint inspection",
+        "receipt_id": "20261121t095419z-arxiv-1cb0f548fd",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3APCB+AND+all%3Asolder+AND+all%3Ajoint+AND+all%3Ainspection&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "643e8abcdc03cb61242a218f67771e4b03c19dcef0f512c9b2bae7f26da28954",
+        "normalized_results_sha256": "8f68654515778c34f64b599e0a72b4bf67474a741a6648eeee9a00ff506a2508"
+      },
+      {
+        "provider": "openalex",
+        "query": "PCB solder joint inspection",
+        "receipt_id": "20261121t095420z-openalex-e91c58e2e3",
+        "request_url": "https://api.openalex.org/works?search=PCB+solder+joint+inspection&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9c3f2733f9c7511b5537a20a105e02b9f90404ba2ae3af8ece81c2142cdca2aa",
+        "normalized_results_sha256": "d6cb339da2257146bb7c26f018e4fb69179fa892c25b40f22c80ca0827b7b3ee"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "PCB solder joint inspection",
+        "receipt_id": "20261121t095421z-europe-pmc-e1d833b639",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=PCB+solder+joint+inspection&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "99da588520b477fe9430ce6362570e5b55613b1f9d62254d539504617683605b",
+        "normalized_results_sha256": "b45864a9dd16d60b778929f0944e293c261025f877a77ea0c6455931415f26fc"
+      },
+      {
+        "provider": "arxiv",
+        "query": "steel strip surface defect",
+        "receipt_id": "20261121t095431z-arxiv-69835b2089",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Asteel+AND+all%3Astrip+AND+all%3Asurface+AND+all%3Adefect&start=0&max_results=12",
+        "result_count": 7,
+        "response_sha256": "9b34156b1e96bc85f39c68f5c107251e9a4aad1c05655456d8263f0cb2c1cec1",
+        "normalized_results_sha256": "6bf2410dcca6df0da46423270a43d2a4f94a719d066973fa4fb30f40322a534d"
+      },
+      {
+        "provider": "openalex",
+        "query": "steel strip surface defect",
+        "receipt_id": "20261121t095432z-openalex-55b96cb17c",
+        "request_url": "https://api.openalex.org/works?search=steel+strip+surface+defect&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a3aa2e55458c36709c51359627181520e2c9f4706db9dcbf9d433b62cc385d0d",
+        "normalized_results_sha256": "458508ad60bbf300e369c49b6baf0ad8dff3afc344ad5cd45fa53b6ab297bab3"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "steel strip surface defect",
+        "receipt_id": "20261121t095433z-europe-pmc-dc23b9423a",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=steel+strip+surface+defect&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "efc26b55f7e2a9fe3cc6d3be51afd4e35d64cea95e29d7a0e4512b7211ef8497",
+        "normalized_results_sha256": "937865a9e82889f44c9069efa6f51317b28652cfe76f149ee6de83cc88d0f518"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/s40194-018-0567-9",
+        "receipt_id": "20261121t095435z-opencitations-f87cd4e687",
+        "result_count": 56,
+        "response_sha256": "494620315160748ee6948894989b498fb9fa352c474f36e14536e35a340df5c8"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/autotestcon47465.2024.10697527",
+        "receipt_id": "20261121t095437z-opencitations-08d37fe780",
+        "result_count": 1,
+        "response_sha256": "f9e8fcbbdefa996d97cc1ec03c1d2a2b95ce398ac8d3e489368dad84dad51c51"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 146,
+    "off_topic_filtered": 57,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 35,
+    "net_new": 54,
+    "provider_statuses": [
+      {
+        "query": "swarm formation",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "swarm formation",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "swarm formation",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "swarm formation",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "swarm formation",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "drone racing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "drone racing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "drone racing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "drone racing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "drone racing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "vtol uav",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "vtol uav",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "vtol uav",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "vtol uav",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "vtol uav",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "hexarotor control",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hexarotor control",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hexarotor control",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hexarotor control",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hexarotor control",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 18,
+    "cleaned": [
+      {
+        "slug": "figshare-34341267-ant-carry-a-reproducible",
+        "key": "figshare:34341267",
+        "dataset_name": "ANT-CARRY: A Reproducible Dataset of Ant-Inspired Acoustic Fragment Transport, Pheromone-Guided Spectral Redistribution, and Audio Resynthesis",
+        "doi": "10.6084/m9.figshare.34341267.v1",
+        "landing_url": "https://figshare.com/articles/dataset/ANT-CARRY_A_Reproducible_Dataset_of_Ant-Inspired_Acoustic_Fragment_Transport_Pheromone-Guided_Spectral_Redistribution_and_Audio_Resynthesis/34341267",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34341267-ant-carry-a-reproducible-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34341267-ant-carry-a-reproducible-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34341267_ant_carry_a_reproducible.py",
+        "cleaned_rows": 22,
+        "raw_total_rows": 1335,
+        "verified_sha256": "b12302f6ef9e93bca7a61e2184c1dbf1739ce5f98ea4b9cfc68b610d09987a5c"
+      },
+      {
+        "slug": "figshare-26243276-research-on-control-meth",
+        "key": "figshare:26243276",
+        "dataset_name": "Research on Control Methods for Automatic Drilling Robot Based on Visual Servoing",
+        "doi": "10.6084/m9.figshare.26243276.v3",
+        "landing_url": "https://figshare.com/articles/dataset/Research_on_Control_Methods_for_Automatic_Drilling_Robot_Based_on_Visual_Servoing/26243276",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-26243276-research-on-control-meth-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-26243276-research-on-control-meth-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_26243276_research_on_control_meth.py",
+        "cleaned_rows": 3,
+        "raw_total_rows": 3,
+        "verified_sha256": "29b1479a510cd9d99a1b5004a75e03d4d70228f1d1970b45c6276878ed98dd39"
+      },
+      {
+        "slug": "figshare-28589216-a-new-open-dataset-from",
+        "key": "figshare:28589216",
+        "dataset_name": "A new open dataset from a milling process – data for classification and estimation of tool life",
+        "doi": "10.6084/m9.figshare.28589216.v1",
+        "landing_url": "https://springernature.figshare.com/articles/dataset/A_new_open_dataset_from_a_milling_process_data_for_classification_and_estimation_of_tool_life/28589216",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-28589216-a-new-open-dataset-from-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-28589216-a-new-open-dataset-from-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_28589216_a_new_open_dataset_from.py",
+        "cleaned_rows": 131,
+        "raw_total_rows": 969,
+        "verified_sha256": "e125471f983e98ae326e2c47e15f633bb30738e285b9ad6e54b5e364d4d66dbc"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

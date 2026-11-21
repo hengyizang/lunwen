@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34341267-ant-carry-a-reproducible",
+  "dataset_name": "ANT-CARRY: A Reproducible Dataset of Ant-Inspired Acoustic Fragment Transport, Pheromone-Guided Spectral Redistribution, and Audio Resynthesis",
+  "doi": "10.6084/m9.figshare.34341267.v1",
+  "landing_url": "https://figshare.com/articles/dataset/ANT-CARRY_A_Reproducible_Dataset_of_Ant-Inspired_Acoustic_Fragment_Transport_Pheromone-Guided_Spectral_Redistribution_and_Audio_Resynthesis/34341267",
+  "source_api_url": "https://api.figshare.com/v2/articles/34341267",
+  "access_date": "2026-11-21",
+  "round_number": 30,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "ANT_CARRY_ETRI_Complete_Dataset.zip",
+      "download_url": "https://ndownloader.figshare.com/files/69927450",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69927450/ANT_CARRY_ETRI_Complete_Dataset.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T095449Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22ANT_CARRY_ETRI_Complete_Dataset.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=ff5d04d1cb404df38d9c919287a40a521df6b4339f033c922813666159450366",
+      "http_status": 200,
+      "bytes": 4259143,
+      "publisher_checksum": "md5:4da2f9633d89df035dbd13baf408a3fd",
+      "verified_md5": "4da2f9633d89df035dbd13baf408a3fd",
+      "verified_sha256": "b12302f6ef9e93bca7a61e2184c1dbf1739ce5f98ea4b9cfc68b610d09987a5c"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34341267-ant-carry-a-reproducible",
+  "raw_total_bytes": 4259143,
+  "raw_total_rows": 1335,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34341267-ant-carry-a-reproducible-cleaned.csv",
+  "cleaned_csv_sha256": "0fc1608571acc9d78772558a81fcf1faee87039dd122ab2391f45eb93447efd2",
+  "cleaned_rows": 22,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json": {
+      "recording": 0,
+      "original_archive_name": 0,
+      "duration_analyzed_seconds": 0,
+      "original_sha256": 0
+    },
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv": {
+      "recording": 0,
+      "seed": 0,
+      "mode": 0,
+      "events": 0,
+      "unique_source_cells": 0,
+      "concentration": 0,
+      "rms_change": 0,
+      "mean_abs_change": 0
+    },
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv": {
+      "recording": 0,
+      "mode": 0,
+      "n_seeds": 0,
+      "unique_source_cells": 0,
+      "concentration": 0,
+      "rms_change": 0
+    },
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv": {
+      "agent_id": 0,
+      "step": 0,
+      "time_s": 0,
+      "frequency_hz": 0
+    }
+  },
+  "time_monotonicity": {
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json": {
+      "column": "duration_analyzed_seconds",
+      "numeric_samples": 15,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": false,
+      "min_step": 0.0,
+      "median_step": 0.0,
+      "max_step": 0.0
+    },
+    "ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv": {
+      "column": "time_s",
+      "numeric_samples": 1080,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -2.7733333333333334,
+      "median_step": 0.0,
+      "max_step": 3.946666666666666
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

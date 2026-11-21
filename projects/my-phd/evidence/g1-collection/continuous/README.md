@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：29
-- **最近更新时间 (UTC)**：2026-11-21T09:49:01Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：3149 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：1453 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：2737 条
-- **累计已完成确定性清洗数据集**：60 个
+- **已完成轮次**：30
+- **最近更新时间 (UTC)**：2026-11-21T09:54:02Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：3329 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：1507 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：2849 条
+- **累计已完成确定性清洗数据集**：63 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,15 +20,15 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 124 | 57 |
-| `R2_Aerial_Actuator` | 387 | 50 |
-| `R5_MultiRobot_Comm` | 242 | 45 |
-| `Robotics_Embodied` | 1044 | 458 |
-| `Mechanical_Physics_AI` | 934 | 648 |
-| `Mechatronics_PHM_Control` | 755 | 469 |
-| `Smart_Manufacturing` | 399 | 284 |
-| `Smart_Factory_DigitalTwin` | 155 | 69 |
+| `R2_Aerial_Actuator` | 387 | 83 |
+| `R5_MultiRobot_Comm` | 244 | 75 |
+| `Robotics_Embodied` | 1046 | 462 |
+| `Mechanical_Physics_AI` | 963 | 657 |
+| `Mechatronics_PHM_Control` | 760 | 478 |
+| `Smart_Manufacturing` | 491 | 284 |
+| `Smart_Factory_DigitalTwin` | 161 | 69 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 246 | 0 |
+| `Adjacent` | 303 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-qgkeuw-dataset-for-influence-of` | Dataset for Influence of Visual and Haptic Feedback on the Detectio... | 10.7910/dvn/qgkeuw | `summary_table` | 150 | `5a748c1b718e` | [CSV](data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv) · [JSON](data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json) · [PY](data/derive_dataverse_qgkeuw_dataset_for_influence_of.py) |
-| `figshare-32025606-snu-planetary-gearbox-da` | SNU Planetary Gearbox Dataset | 10.6084/m9.figshare.32025606.v5 | `cleaned_rows` | 28 | `e4e0dcbb38b8` | [CSV](data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv) · [JSON](data/figshare-32025606-snu-planetary-gearbox-da-provenance.json) · [PY](data/derive_figshare_32025606_snu_planetary_gearbox_da.py) |
-| `figshare-34002057-clustering-enhanced-mcnn` | Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under M... | 10.6084/m9.figshare.34002057.v2 | `summary_table` | 20 | `3ae2b31aaf2d` | [CSV](data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv) · [JSON](data/figshare-34002057-clustering-enhanced-mcnn-provenance.json) · [PY](data/derive_figshare_34002057_clustering_enhanced_mcnn.py) |
 | `figshare-26318407-non-muscle-powered-actua` | Non-muscle powered actuation inspired by cellular morphology and hy... | 10.6084/m9.figshare.26318407.v1 | `summary_table` | 20 | `e0f9dedbdb67` | [CSV](data/figshare-26318407-non-muscle-powered-actua-cleaned.csv) · [JSON](data/figshare-26318407-non-muscle-powered-actua-provenance.json) · [PY](data/derive_figshare_26318407_non_muscle_powered_actua.py) |
 | `dataverse-cytve5-replication-data-for-fin` | Replication Data for: Fin-fin interactions during locomotion in a s... | 10.7910/dvn/cytve5 | `summary_table` | 20 | `921a4b6940c9` | [CSV](data/dataverse-cytve5-replication-data-for-fin-cleaned.csv) · [JSON](data/dataverse-cytve5-replication-data-for-fin-provenance.json) · [PY](data/derive_dataverse_cytve5_replication_data_for_fin.py) |
 | `dataverse-snbqc2-replication-data-for-usi` | Replication Data for "Using TrackMate to Analyze Drosophila Larval... | 10.7910/dvn/snbqc2 | `summary_table` | 30 | `4c66f11347a1` | [CSV](data/dataverse-snbqc2-replication-data-for-usi-cleaned.csv) · [JSON](data/dataverse-snbqc2-replication-data-for-usi-provenance.json) · [PY](data/derive_dataverse_snbqc2_replication_data_for_usi.py) |
@@ -71,12 +68,14 @@
 | `dataverse-xtpysv-light-detection-and-rang` | Light detection and ranging (lidar) point clouds collected from unm... | 10.7910/dvn/xtpysv | `summary_table` | 39 | `0be07b5056c7` | [CSV](data/dataverse-xtpysv-light-detection-and-rang-cleaned.csv) · [JSON](data/dataverse-xtpysv-light-detection-and-rang-provenance.json) · [PY](data/derive_dataverse_xtpysv_light_detection_and_rang.py) |
 | `dataverse-4zoizl-replication-data-for-win` | Replication Data for: Wing wear reduces bumblebee flight performanc... | 10.7910/dvn/4zoizl | `summary_table` | 16 | `3ece0c7ef9f4` | [CSV](data/dataverse-4zoizl-replication-data-for-win-cleaned.csv) · [JSON](data/dataverse-4zoizl-replication-data-for-win-provenance.json) · [PY](data/derive_dataverse_4zoizl_replication_data_for_win.py) |
 | `dataverse-7iajwu-the-multi-sensor-based-m` | The multi sensor-based machining signal fusion to compare the relat... | 10.7910/dvn/7iajwu | `cleaned_rows` | 48 | `6e2423c31e67` | [CSV](data/dataverse-7iajwu-the-multi-sensor-based-m-cleaned.csv) · [JSON](data/dataverse-7iajwu-the-multi-sensor-based-m-provenance.json) · [PY](data/derive_dataverse_7iajwu_the_multi_sensor_based_m.py) |
+| `figshare-34341267-ant-carry-a-reproducible` | ANT-CARRY: A Reproducible Dataset of Ant-Inspired Acoustic Fragment... | 10.6084/m9.figshare.34341267.v1 | `summary_table` | 22 | `b12302f6ef9e` | [CSV](data/figshare-34341267-ant-carry-a-reproducible-cleaned.csv) · [JSON](data/figshare-34341267-ant-carry-a-reproducible-provenance.json) · [PY](data/derive_figshare_34341267_ant_carry_a_reproducible.py) |
+| `figshare-26243276-research-on-control-meth` | Research on Control Methods for Automatic Drilling Robot Based on V... | 10.6084/m9.figshare.26243276.v3 | `cleaned_rows` | 3 | `29b1479a510c` | [CSV](data/figshare-26243276-research-on-control-meth-cleaned.csv) · [JSON](data/figshare-26243276-research-on-control-meth-provenance.json) · [PY](data/derive_figshare_26243276_research_on_control_meth.py) |
+| `figshare-28589216-a-new-open-dataset-from` | A new open dataset from a milling process – data for classification... | 10.6084/m9.figshare.28589216.v1 | `summary_table` | 131 | `e125471f983e` | [CSV](data/figshare-28589216-a-new-open-dataset-from-cleaned.csv) · [JSON](data/figshare-28589216-a-new-open-dataset-from-provenance.json) · [PY](data/derive_figshare_28589216_a_new_open_dataset_from.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 5 | 2026-11-21T07:49:14Z | Broad Engineering R5: Robotics_Embodied | +118 | +112 | +3 | [round-05-audit.json](rounds/round-05-audit.json) |
 | 6 | 2026-11-21T07:54:02Z | Broad Engineering R6: Robotics_Embodied / Mechanical_Physics_AI | +111 | +67 | +2 | [round-06-audit.json](rounds/round-06-audit.json) |
 | 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
 | 8 | 2026-11-21T08:04:25Z | Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control | +144 | +84 | +0 | [round-08-audit.json](rounds/round-08-audit.json) |
@@ -101,3 +100,4 @@
 | 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
 | 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
 | 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
+| 30 | 2026-11-21T09:54:02Z | Broad Engineering R30: Smart_Manufacturing / Smart_Factory_DigitalTwin | +180 | +54 | +3 | [round-30-audit.json](rounds/round-30-audit.json) |

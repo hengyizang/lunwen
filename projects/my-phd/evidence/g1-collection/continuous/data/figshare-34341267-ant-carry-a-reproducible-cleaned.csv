@@ -1,0 +1,23 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json,recording,categorical_or_text,15,15,0,15,,,,,,,"{""road102_8"": 1, ""road102_9"": 1, ""road102_10"": 1}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json,original_archive_name,categorical_or_text,15,15,0,15,,,,,,,"{""国道102号 8.m4a"": 1, ""国道102号 9.m4a"": 1, ""国道102号 10.m4a"": 1}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json,duration_analyzed_seconds,numeric,15,15,0,1,5,5,5,5,5,5,0
+ANT_CARRY_ETRI_Complete_Dataset.zip::summary.json,original_sha256,categorical_or_text,15,15,0,15,,,,,,,"{""45aa0fbaa33a9489229a0ddbc2a1f99af91088de8ca72389e249ff137220ce84"": 1, ""fe1f0131a421848c5b8891bec49d83e35cc505756628ac3a0dacd76cebac39be"": 1, ""e657db72bd811..."
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,recording,categorical_or_text,180,180,0,15,,,,,,,"{""road102_8"": 12, ""road102_9"": 12, ""road102_10"": 12}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,seed,numeric,180,180,0,3,2026,2026,2027,2027,2028,2028,0.818774
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,mode,categorical_or_text,180,180,0,4,,,,,,,"{""ant_pheromone"": 45, ""ant_no_pheromone"": 45, ""random"": 45}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,events,numeric,180,180,0,1,1035,1035,1035,1035,1035,1035,0
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,unique_source_cells,numeric,180,180,0,110,35,189.75,614.5,518.55,755,1035,323.773
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,concentration,numeric,180,180,0,134,0.000966184,0.00219748,0.00540409,0.0141819,0.022099,0.0449999,0.0154113
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,rms_change,numeric,180,180,0,180,0.00059532,0.00222044,0.00429693,0.00542076,0.00775099,0.0216821,0.00420168
+ANT_CARRY_ETRI_Complete_Dataset.zip::trial_results.csv,mean_abs_change,numeric,180,180,0,180,0.000247677,0.000641022,0.00124899,0.00130255,0.00182199,0.00344969,0.000724993
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,recording,categorical_or_text,60,60,0,15,,,,,,,"{""road102_10"": 4, ""road102_11"": 4, ""road102_12"": 4}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,mode,categorical_or_text,60,60,0,4,,,,,,,"{""ant_pheromone"": 15, ""ant_no_pheromone"": 15, ""random"": 15}"
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,n_seeds,numeric,60,60,0,1,3,3,3,3,3,3,0
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,unique_source_cells,numeric,60,60,0,46,43,212.833,631.833,518.55,755.917,918.333,319.46
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,concentration,numeric,60,60,0,48,0.00214552,0.00338382,0.00601399,0.0141819,0.0207635,0.0423605,0.015256
+ANT_CARRY_ETRI_Complete_Dataset.zip::recording_means.csv,rms_change,numeric,60,60,0,60,0.000868225,0.00234931,0.0041085,0.00542076,0.00748145,0.0168967,0.00396697
+ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv,agent_id,numeric,1080,1080,0,12,0,2.75,5.5,5.5,8.25,11,3.45365
+ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv,step,numeric,1080,1080,0,90,0,22,44.5,44.5,67,89,25.9912
+ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv,time_s,numeric,1080,1080,0,46,0.501333,1.36,3.56267,3.0028,4.35733,4.82133,1.53174
+ANT_CARRY_ETRI_Complete_Dataset.zip::agent_paths_road102_8.csv,frequency_hz,numeric,1080,1080,0,42,187.5,679.688,949.219,975.304,1435.55,1710.94,485.361

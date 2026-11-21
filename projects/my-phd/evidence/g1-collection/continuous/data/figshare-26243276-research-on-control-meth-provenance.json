@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-26243276-research-on-control-meth",
+  "dataset_name": "Research on Control Methods for Automatic Drilling Robot Based on Visual Servoing",
+  "doi": "10.6084/m9.figshare.26243276.v3",
+  "landing_url": "https://figshare.com/articles/dataset/Research_on_Control_Methods_for_Automatic_Drilling_Robot_Based_on_Visual_Servoing/26243276",
+  "source_api_url": "https://api.figshare.com/v2/articles/26243276",
+  "access_date": "2026-11-21",
+  "round_number": 30,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "ur_eMc.txt",
+      "download_url": "https://ndownloader.figshare.com/files/47567393",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/47567393/ur_eMc.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T095501Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22ur_eMc.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=e582962626f868d862a6db2b971a8211b9ea0a8b9736ad4e8155476106ab3537",
+      "http_status": 200,
+      "bytes": 191,
+      "publisher_checksum": "md5:44aca77f7f29677d9c05dc4a5a4e21a0",
+      "verified_md5": "44aca77f7f29677d9c05dc4a5a4e21a0",
+      "verified_sha256": "29b1479a510cd9d99a1b5004a75e03d4d70228f1d1970b45c6276878ed98dd39"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-26243276-research-on-control-meth",
+  "raw_total_bytes": 191,
+  "raw_total_rows": 3,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-26243276-research-on-control-meth-cleaned.csv",
+  "cleaned_csv_sha256": "a600133acb887b9df0192a571602382317aba95dda5f84a0977a9f877b1b2ebd",
+  "cleaned_rows": 3,
+  "cleaned_cols": 8,
+  "null_counts_by_file": {
+    "ur_eMc.txt": {
+      "0.9997944925": 0,
+      "Unnamed: 1": 3,
+      "-0.0201039786": 0,
+      "Unnamed: 3": 3,
+      "0.002608214238": 0,
+      "Unnamed: 5": 3,
+      "-0.03313756829": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
