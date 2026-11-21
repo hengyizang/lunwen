@@ -1,0 +1,1166 @@
+{
+  "as_of": "2026-11-21",
+  "unit": "named release or source collection; OXE splits are separate indexed releases; releases and versions can share observations",
+  "input_tables": {
+    "datasets-manip.csv": {
+      "rows": 86,
+      "sha256": "f69e7d5896cc48c243968685d823ee7da053bd5ccfc0ba9b51096e5661982729"
+    },
+    "datasets-navigation.csv": {
+      "rows": 57,
+      "sha256": "476163ed6e6feb53ea888aeb6f289c1d3468aae93643c79e1f082280a652bef3"
+    },
+    "datasets-adj.csv": {
+      "rows": 30,
+      "sha256": "08b0862f76e5218c0ee3fc181c94d37a5b8882ed02bffb6944fc2aa3808f932d"
+    },
+    "r1-dataset-fit.csv": {
+      "rows": 16,
+      "sha256": "b7d1c2ed61909f5b00784bd7bb5aae93725c60da59fc3d7cca7fe480f6fe3377"
+    },
+    "datasets-fem.csv": {
+      "rows": 12,
+      "sha256": "50ef6d54ad71b025fd7e2744732d9a175124438e4508167fd0e0801feaaaefe3"
+    },
+    "datasets-r5-lajoie.csv": {
+      "rows": 1,
+      "sha256": "eff24d7bda88f2dcc8aa9f4853cc1f2970ed0dd1f92e433446534ba235a8eb77"
+    },
+    "datasets-r1-dualarm.csv": {
+      "rows": 1,
+      "sha256": "85edfed4f9a9bab6ad6b33e52c95f05abb3bded93963882160e71041a8be2fd2"
+    },
+    "datasets-r5-roboloc.csv": {
+      "rows": 1,
+      "sha256": "d060dee77358317607bd3161d96583b0ff122ae8dd84d5a8ea232815afc56e3e"
+    }
+  },
+  "total_input_rows": 204,
+  "catalogue_records": 191,
+  "oxe_subreleases": 58,
+  "baseline": {
+    "project_state_commit": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+    "prior_dataset_candidates": 745,
+    "coverage": "Includes previous catalog discovery leads (not approved/acquired datasets).",
+    "matched": 1,
+    "unmatched": 190,
+    "unmatched_interpretation": "No full DOI, normalized primary URL or exact normalized full name matched the dataset subset of the frozen index; partial titles and mirrors can conceal past discovery. Unmatched is not a novelty conclusion.",
+    "matches": [
+      {
+        "name": "ME-AD Progressive Robotics Anomaly Detection",
+        "matches": [
+          {
+            "baseline_index": 58,
+            "name": "ME-AD: Progressive Robotics Anomaly Detection Dataset",
+            "reasons": [
+              "canonical_url",
+              "doi"
+            ],
+            "source_locations": [
+              "data/discovery-broad-auto-20261101T080436670556Z.json#/candidates/53",
+              "data/discovery-broad-auto-20261108T082426952293Z.json#/candidates/5",
+              "data/discovery-broad-auto-20261108T111810282362Z.json#/candidates/41"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "deduplication": {
+    "rules": [
+      "Union exact normalized primary URLs, explicitly listed dataset DOIs (including version-specific Zenodo/Mendeley IDs), or exact normalized names. No fuzzy pair is auto-merged.",
+      "Original source names retained as aliases. Confirmed Blackbird, ALFA and NeuroBEM aliases share their official URL.",
+      "OXE releases indexed individually. Different release revisions, sibling datasets, parent/derived data and same-lab task sets are retained; named family is informative and is not used to merge."
+    ],
+    "merges": [
+      {
+        "source": "datasets-adj.csv",
+        "input_row": 3,
+        "name": "NeuroBEM quadrotor flights",
+        "rule_keys": [
+          "url|rpg.ifi.uzh.ch/neuro_bem/Readme.html"
+        ]
+      },
+      {
+        "source": "datasets-adj.csv",
+        "input_row": 8,
+        "name": "MIT Blackbird UAV Dataset",
+        "rule_keys": [
+          "url|github.com/mit-aera/blackbird-dataset"
+        ]
+      },
+      {
+        "source": "datasets-adj.csv",
+        "input_row": 9,
+        "name": "ALFA UAV fault and anomaly dataset",
+        "rule_keys": [
+          "url|theairlab.org/alfa-dataset"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 4,
+        "name": "REASSEMBLE",
+        "rule_keys": [
+          "url|tuwien-asl.github.io/REASSEMBLE_page",
+          "name|reassemble"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 5,
+        "name": "Copper Rings Insertion Attempts",
+        "rule_keys": [
+          "url|zenodo.org/records/6364950",
+          "name|copper rings insertion attempts",
+          "doi|10.5281/zenodo.6364950"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 9,
+        "name": "RH20T",
+        "rule_keys": [
+          "url|huggingface.co/datasets/tonyfanggalaxies/rh20t",
+          "name|rh20t"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 10,
+        "name": "ManipForce",
+        "rule_keys": [
+          "url|sites.google.com/view/manipforce",
+          "name|manipforce"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 11,
+        "name": "FMB (OXE)",
+        "rule_keys": [
+          "url|storage.googleapis.com/gresearch/robotics/fmb/0.0.1/dataset_info.json",
+          "name|fmb oxe"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 12,
+        "name": "Stanford Kuka Multimodal (OXE)",
+        "rule_keys": [
+          "url|storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+          "name|stanford kuka multimodal oxe"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 13,
+        "name": "TacBench DIGIT force / slip",
+        "rule_keys": [
+          "url|huggingface.co/datasets/facebook/digit-force-estimation",
+          "name|tacbench digit force slip"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 14,
+        "name": "TacBench GelSight Mini force / slip",
+        "rule_keys": [
+          "url|huggingface.co/datasets/facebook/gelsight-force-estimation",
+          "name|tacbench gelsight mini force slip"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 15,
+        "name": "ViFailback",
+        "rule_keys": [
+          "url|huggingface.co/datasets/sii-rhos-ai/vifailback-dataset",
+          "name|vifailback"
+        ]
+      },
+      {
+        "source": "r1-dataset-fit.csv",
+        "input_row": 16,
+        "name": "DECO-50",
+        "rule_keys": [
+          "url|huggingface.co/datasets/baai-humanoid/deco-50",
+          "name|deco 50"
+        ]
+      }
+    ]
+  },
+  "address_validation": {
+    "address_syntax_checked": 191,
+    "method": "HTTP HEAD for all primary URLs, GET headers if HEAD fails. This checks landing pages, not full source files. Dedicated OXE/selected numeric checks are documented separately.",
+    "responses": {
+      "http://rugd.vision/": {
+        "status": 200,
+        "resolved_url": "http://rugd.vision/",
+        "method": "HEAD"
+      },
+      "https://air.cs.itu.edu.tr/projects/finonet.html": {
+        "status": 200,
+        "resolved_url": "https://air.cs.itu.edu.tr/projects/finonet.html",
+        "method": "HEAD"
+      },
+      "https://amrl.cs.utexas.edu/coda/": {
+        "status": 200,
+        "resolved_url": "https://amrl.cs.utexas.edu/coda/",
+        "method": "HEAD"
+      },
+      "https://archive.ics.uci.edu/dataset/138/robot+execution+failures": {
+        "status": 200,
+        "resolved_url": "https://archive.ics.uci.edu/dataset/138/robot+execution+failures",
+        "method": "HEAD"
+      },
+      "https://arpg.colorado.edu/cumulti/": {
+        "status": 200,
+        "resolved_url": "https://arpg.colorado.edu/cumulti/",
+        "method": "HEAD"
+      },
+      "https://asrl.utias.utoronto.ca/datasets/mrclam/index.html": {
+        "status": null,
+        "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+        "method": "GET",
+        "fallback_web_open": "Publisher page retrieved via web search service on 2026-11-21; title and sequence/file-format documentation verified."
+      },
+      "https://cisl.ucr.edu/CooperScene/": {
+        "status": 200,
+        "resolved_url": "https://cisl.ucr.edu/CooperScene/",
+        "method": "HEAD"
+      },
+      "https://contactdb.cc.gatech.edu/": {
+        "status": 200,
+        "resolved_url": "https://contactdb.cc.gatech.edu/",
+        "method": "HEAD"
+      },
+      "https://contactpose.cc.gatech.edu/": {
+        "status": 200,
+        "resolved_url": "https://contactpose.cc.gatech.edu/",
+        "method": "HEAD"
+      },
+      "https://csiro-robotics.github.io/Wild-Places/": {
+        "status": 200,
+        "resolved_url": "https://csiro-robotics.github.io/Wild-Places/",
+        "method": "HEAD"
+      },
+      "https://daroslab.github.io/cear/": {
+        "status": 200,
+        "resolved_url": "https://daroslab.github.io/cear/",
+        "method": "HEAD"
+      },
+      "https://data.4tu.nl/datasets/308d8c70-cc88-45fb-b16a-5bd80531beef": {
+        "status": 200,
+        "resolved_url": "https://data.4tu.nl/datasets/308d8c70-cc88-45fb-b16a-5bd80531beef",
+        "method": "HEAD"
+      },
+      "https://data.mendeley.com/datasets/df4kfzrbrg/1": {
+        "status": 200,
+        "resolved_url": "https://data.mendeley.com/datasets/df4kfzrbrg/1",
+        "method": "HEAD"
+      },
+      "https://data.mendeley.com/datasets/ftdyxrr3c5/1": {
+        "status": 200,
+        "resolved_url": "https://data.mendeley.com/datasets/ftdyxrr3c5/1",
+        "method": "HEAD"
+      },
+      "https://data.mendeley.com/datasets/h66hb89k6z/1": {
+        "status": 200,
+        "resolved_url": "https://data.mendeley.com/datasets/h66hb89k6z/1",
+        "method": "HEAD"
+      },
+      "https://data.mendeley.com/datasets/wzbzznk8z3/2": {
+        "status": 200,
+        "resolved_url": "https://data.mendeley.com/datasets/wzbzznk8z3/2",
+        "method": "HEAD"
+      },
+      "https://data.uni-hannover.de/dataset/measurement-data-of-a-laboratory-steel-cantilever-beam-with-a-reversible-damage-mechanism": {
+        "status": 200,
+        "resolved_url": "https://data.uni-hannover.de/dataset/measurement-data-of-a-laboratory-steel-cantilever-beam-with-a-reversible-damage-mechanism",
+        "method": "HEAD"
+      },
+      "https://data.uni-hannover.de/en/dataset/cantilever-beam-dataset-for-structural-change-localisation": {
+        "status": 200,
+        "resolved_url": "https://data.uni-hannover.de/en/dataset/cantilever-beam-dataset-for-structural-change-localisation",
+        "method": "HEAD"
+      },
+      "https://deepscene.cs.uni-freiburg.de/": {
+        "status": 200,
+        "resolved_url": "https://deepscene.cs.uni-freiburg.de/",
+        "method": "HEAD"
+      },
+      "https://dex-cap.github.io/": {
+        "status": 200,
+        "resolved_url": "https://dex-cap.github.io/",
+        "method": "HEAD"
+      },
+      "https://dexwild.github.io/": {
+        "status": 200,
+        "resolved_url": "https://dexwild.github.io/",
+        "method": "HEAD"
+      },
+      "https://doi.org/10.3929/ethz-b-000520254": {
+        "status": 200,
+        "resolved_url": "https://www.research-collection.ethz.ch/handle/20.500.11850/520254",
+        "method": "HEAD"
+      },
+      "https://doi.org/10.3929/ethz-b-000618078": {
+        "status": 200,
+        "resolved_url": "https://www.research-collection.ethz.ch/handle/20.500.11850/618078",
+        "method": "HEAD"
+      },
+      "https://doi.org/10.5061/dryad.7d7wm3898": {
+        "status": 200,
+        "resolved_url": "https://datadryad.org/dataset/doi:10.5061/dryad.7d7wm3898",
+        "method": "HEAD"
+      },
+      "https://filipbjelonic.com/publication/pace_dataset": {
+        "status": 200,
+        "resolved_url": "https://filipbjelonic.com/publication/pace_dataset",
+        "method": "HEAD"
+      },
+      "https://fpv.ifi.uzh.ch/datasets/": {
+        "status": 200,
+        "resolved_url": "https://fpv.ifi.uzh.ch/datasets/",
+        "method": "HEAD"
+      },
+      "https://github.com/GiovanniPettorru/multimodal-RSSI-localization-dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/GiovanniPettorru/multimodal-RSSI-localization-dataset",
+        "method": "HEAD"
+      },
+      "https://github.com/IPNL-POLYU/UrbanNavDataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/IPNL-POLYU/UrbanNavDataset",
+        "method": "HEAD"
+      },
+      "https://github.com/MIT-SPARK/Kimera-Multi-Data": {
+        "status": 200,
+        "resolved_url": "https://github.com/MIT-SPARK/Kimera-Multi-Data",
+        "method": "HEAD"
+      },
+      "https://github.com/SJTU-ViSYS/M2DGR-plus": {
+        "status": 200,
+        "resolved_url": "https://github.com/SJTU-ViSYS/M2DGR-plus",
+        "method": "HEAD"
+      },
+      "https://github.com/UMich-CURLY/deep-contact-estimator": {
+        "status": 200,
+        "resolved_url": "https://github.com/UMich-CURLY/deep-contact-estimator",
+        "method": "HEAD"
+      },
+      "https://github.com/ctu-mrs/coop_uav_dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/ctu-mrs/coop_uav_dataset",
+        "method": "HEAD"
+      },
+      "https://github.com/elejeune11/Mechanical-MNIST": {
+        "status": 200,
+        "resolved_url": "https://github.com/elejeune11/Mechanical-MNIST",
+        "method": "HEAD"
+      },
+      "https://github.com/elejeune11/Mechanical-MNIST-Cahn-Hilliard": {
+        "status": 200,
+        "resolved_url": "https://github.com/elejeune11/Mechanical-MNIST-Cahn-Hilliard",
+        "method": "HEAD"
+      },
+      "https://github.com/facebookresearch/neuralfeels/blob/main/data/README.md": {
+        "status": 200,
+        "resolved_url": "https://github.com/facebookresearch/neuralfeels/blob/main/data/README.md",
+        "method": "HEAD"
+      },
+      "https://github.com/google-deepmind/deepmind-research/blob/master/meshgraphnets/README.md": {
+        "status": 200,
+        "resolved_url": "https://github.com/google-deepmind/deepmind-research/blob/master/meshgraphnets/README.md",
+        "method": "HEAD"
+      },
+      "https://github.com/herolab-uga/indoor-rssi-mobile-robot": {
+        "status": 200,
+        "resolved_url": "https://github.com/herolab-uga/indoor-rssi-mobile-robot",
+        "method": "HEAD"
+      },
+      "https://github.com/mit-aera/Blackbird-Dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/mit-aera/Blackbird-Dataset",
+        "method": "HEAD"
+      },
+      "https://github.com/rpl-cmu/YCB-Slide": {
+        "status": 200,
+        "resolved_url": "https://github.com/rpl-cmu/YCB-Slide",
+        "method": "HEAD"
+      },
+      "https://github.com/syediu/nanobench": {
+        "status": 200,
+        "resolved_url": "https://github.com/syediu/nanobench",
+        "method": "HEAD"
+      },
+      "https://github.com/taraknezevic/franka-friction-identification-dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/taraknezevic/franka-friction-identification-dataset",
+        "method": "HEAD"
+      },
+      "https://github.com/unmannedlab/RELLIS-3D": {
+        "status": 200,
+        "resolved_url": "https://github.com/unmannedlab/RELLIS-3D",
+        "method": "HEAD"
+      },
+      "https://github.com/utiasASRL/pyboreas": {
+        "status": 200,
+        "resolved_url": "https://github.com/utiasASRL/pyboreas",
+        "method": "HEAD"
+      },
+      "https://github.com/wavelab/pelican_dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/wavelab/pelican_dataset",
+        "method": "HEAD"
+      },
+      "https://github.com/wenhaol/DCM-RSSI": {
+        "status": 200,
+        "resolved_url": "https://github.com/wenhaol/DCM-RSSI",
+        "method": "HEAD"
+      },
+      "https://github.com/wheelbot/dataset": {
+        "status": 200,
+        "resolved_url": "https://github.com/wheelbot/dataset",
+        "method": "HEAD"
+      },
+      "https://goose-dataset.de/": {
+        "status": 200,
+        "resolved_url": "https://goose-dataset.de/",
+        "method": "HEAD"
+      },
+      "https://grandtour.leggedrobotics.com/dataset": {
+        "status": 200,
+        "resolved_url": "https://grandtour.leggedrobotics.com/dataset",
+        "method": "HEAD"
+      },
+      "https://graspnet.net/": {
+        "status": 200,
+        "resolved_url": "https://graspnet.net/",
+        "method": "HEAD"
+      },
+      "https://hilti-challenge.com/dataset-2023": {
+        "status": 200,
+        "resolved_url": "https://hilti-challenge.com/dataset-2023",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/BAAI-Humanoid/DECO-50": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/BAAI-Humanoid/DECO-50",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/KAIST-SmartDesignLab/DeepJEB": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/KAIST-SmartDesignLab/DeepJEB",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/MINT-SJTU/RoboFAC-dataset": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/MINT-SJTU/RoboFAC-dataset",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/OpenDriveLab/FreeTacMan": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/OpenDriveLab/FreeTacMan",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/RDLwicked/TacDexterUCL_OXT": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/RDLwicked/TacDexterUCL_OXT",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/agibot-world/AgiBotWorld-Beta": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld-Beta",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/agibot-world/AgiBotWorld2026": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld2026",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/facebook/digit-force-estimation": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/facebook/digit-force-estimation",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/facebook/digit-pose-estimation": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/facebook/digit-pose-estimation",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/facebook/gelsight-force-estimation": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/facebook/gelsight-force-estimation",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/facebook/sparsh-x-dataset": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/facebook/sparsh-x-dataset",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/facebook/touch-slide": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/facebook/touch-slide",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/frankzydou/NAD/blob/main/README.md": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/frankzydou/NAD/blob/main/README.md",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/tonyfanggalaxies/RH20T": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/tonyfanggalaxies/RH20T",
+        "method": "HEAD"
+      },
+      "https://huggingface.co/datasets/x-humanoid-robomind/RoboMIND": {
+        "status": 200,
+        "resolved_url": "https://huggingface.co/datasets/x-humanoid-robomind/RoboMIND",
+        "method": "HEAD"
+      },
+      "https://jrdb.erc.monash.edu.au/": {
+        "status": 200,
+        "resolved_url": "https://jrdb.erc.monash.edu.au/",
+        "method": "HEAD"
+      },
+      "https://m3ed.io/": {
+        "status": 200,
+        "resolved_url": "https://m3ed.io/",
+        "method": "HEAD"
+      },
+      "https://mcube.mit.edu/omnipush-dataset/index.html": {
+        "status": 200,
+        "resolved_url": "https://mcube.mit.edu/omnipush-dataset/index.html",
+        "method": "HEAD"
+      },
+      "https://mcube.mit.edu/push-dataset/index.html": {
+        "status": 200,
+        "resolved_url": "https://mcube.mit.edu/push-dataset/index.html",
+        "method": "HEAD"
+      },
+      "https://mobility-lab.seas.ucla.edu/v2v4real/": {
+        "status": 200,
+        "resolved_url": "https://mobility-lab.seas.ucla.edu/v2v4real/",
+        "method": "HEAD"
+      },
+      "https://nanayawoa.github.io/REBOOT/": {
+        "status": 200,
+        "resolved_url": "https://nanayawoa.github.io/REBOOT/",
+        "method": "HEAD"
+      },
+      "https://norlab.ulaval.ca/research/montmorencydataset/": {
+        "status": 200,
+        "resolved_url": "https://norlab.ulaval.ca/research/montmorencydataset/",
+        "method": "HEAD"
+      },
+      "https://ntu-aris.github.io/ntu_viral_dataset/": {
+        "status": 200,
+        "resolved_url": "https://ntu-aris.github.io/ntu_viral_dataset/",
+        "method": "HEAD"
+      },
+      "https://objectfolder.stanford.edu/": {
+        "status": 200,
+        "resolved_url": "https://objectfolder.stanford.edu/",
+        "method": "HEAD"
+      },
+      "https://ori-drs.github.io/datasets/oxford-spires/": {
+        "status": 200,
+        "resolved_url": "https://ori-drs.github.io/datasets/oxford-spires/",
+        "method": "HEAD"
+      },
+      "https://ori-drs.github.io/newer-college-dataset/": {
+        "status": 200,
+        "resolved_url": "https://ori-drs.github.io/newer-college-dataset/",
+        "method": "HEAD"
+      },
+      "https://oxford-robotics-institute.github.io/radar-robotcar-dataset/": {
+        "status": 200,
+        "resolved_url": "https://oxford-robotics-institute.github.io/radar-robotcar-dataset/",
+        "method": "HEAD"
+      },
+      "https://pengyu-team.github.io/S3E/": {
+        "status": 200,
+        "resolved_url": "https://pengyu-team.github.io/S3E/",
+        "method": "HEAD"
+      },
+      "https://pro.hw.ac.uk/radiate/": {
+        "status": 200,
+        "resolved_url": "https://pro.hw.ac.uk/radiate/",
+        "method": "HEAD"
+      },
+      "https://projects.asl.ethz.ch/datasets/euroc-mav/": {
+        "status": 200,
+        "resolved_url": "https://projects.asl.ethz.ch/datasets/euroc-mav/",
+        "method": "HEAD"
+      },
+      "https://research.tudelft.nl/en/datasets/flight-data-of-a-quadrotor-launched-in-the-air-while-learning-its/": {
+        "status": 200,
+        "resolved_url": "https://research.tudelft.nl/en/datasets/flight-data-of-a-quadrotor-launched-in-the-air-while-learning-its/",
+        "method": "HEAD"
+      },
+      "https://researchportal.vub.be/en/datasets/beam-dataset-for-gnn-based-vs/": {
+        "status": 200,
+        "resolved_url": "https://researchportal.vub.be/en/datasets/beam-dataset-for-gnn-based-vs/",
+        "method": "HEAD"
+      },
+      "https://robotcar-dataset.robots.ox.ac.uk/about/": {
+        "status": 200,
+        "resolved_url": "https://robotcar-dataset.robots.ox.ac.uk/about/",
+        "method": "HEAD"
+      },
+      "https://robots.engin.umich.edu/SoftwareData/InfoNCLT": {
+        "status": 200,
+        "resolved_url": "https://robots.engin.umich.edu/SoftwareData/InfoNCLT",
+        "method": "HEAD"
+      },
+      "https://rpg.ifi.uzh.ch/neuro_bem/Readme.html": {
+        "status": 200,
+        "resolved_url": "https://rpg.ifi.uzh.ch/neuro_bem/Readme.html",
+        "method": "HEAD"
+      },
+      "https://scheduleopt.github.io/benchmarks/fjsplib": {
+        "status": 200,
+        "resolved_url": "https://scheduleopt.github.io/benchmarks/fjsplib",
+        "method": "HEAD"
+      },
+      "https://scheduleopt.github.io/benchmarks/jsplib": {
+        "status": 200,
+        "resolved_url": "https://scheduleopt.github.io/benchmarks/jsplib",
+        "method": "HEAD"
+      },
+      "https://simjeb.github.io/": {
+        "status": 200,
+        "resolved_url": "https://simjeb.github.io/",
+        "method": "HEAD"
+      },
+      "https://sites.google.com/view/manipforce": {
+        "status": 200,
+        "resolved_url": "https://sites.google.com/view/manipforce",
+        "method": "HEAD"
+      },
+      "https://sjtu-visys.github.io/M2DGR/": {
+        "status": 200,
+        "resolved_url": "https://sjtu-visys.github.io/M2DGR/",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/aloha_mobile/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/aloha_mobile/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/asu_table_top_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/asu_table_top_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/austin_buds_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/austin_buds_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/austin_sailor_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/austin_sailor_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/austin_sirius_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/austin_sirius_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/bc_z/1.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/bc_z/1.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/berkeley_autolab_ur5/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_autolab_ur5/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/berkeley_cable_routing/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_cable_routing/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/berkeley_fanuc_manipulation/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_fanuc_manipulation/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/berkeley_mvp_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_mvp_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/berkeley_rpt_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_rpt_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/bridge/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/bridge/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/cmu_franka_exploration_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/cmu_franka_exploration_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/cmu_play_fusion/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/cmu_play_fusion/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/cmu_playing_with_food/1.0.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/cmu_playing_with_food/1.0.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/cmu_stretch/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/cmu_stretch/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/columbia_cairlab_pusht_real/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/columbia_cairlab_pusht_real/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/conq_hose_manipulation/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/conq_hose_manipulation/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/dlr_edan_shared_control_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/dlr_edan_shared_control_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/dlr_sara_grid_clamp_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_grid_clamp_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/dlr_sara_pour_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_pour_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/dobbe/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/dobbe/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/droid/1.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/droid/1.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/eth_agent_affordances/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/eth_agent_affordances/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/fractal20220817_data/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/fractal20220817_data/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/furniture_bench_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/furniture_bench_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/iamlab_cmu_pickup_insert_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/iamlab_cmu_pickup_insert_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/imperialcollege_sawyer_wrist_cam/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/imperialcollege_sawyer_wrist_cam/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/jaco_play/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/jaco_play/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/kaist_nonprehensile_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/kaist_nonprehensile_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/kuka/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/kuka/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/language_table/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/language_table/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/mimic_play/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/mimic_play/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/nyu_door_opening_surprising_effectiveness/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/nyu_door_opening_surprising_effectiveness/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/nyu_franka_play_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/nyu_franka_play_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/nyu_rot_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/nyu_rot_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/robo_net/1.0.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/robo_net/1.0.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/robo_set/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/robo_set/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/robot_vqa/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/robot_vqa/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/roboturk/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/roboturk/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/stanford_hydra_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/stanford_hydra_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/stanford_mask_vit_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/stanford_mask_vit_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/stanford_robocook_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/stanford_robocook_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/taco_play/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/taco_play/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/tidybot/0.0.1/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/tidybot/0.0.1/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/tokyo_u_lsmo_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/tokyo_u_lsmo_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/toto/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/toto/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/ucsd_kitchen_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_kitchen_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/ucsd_pick_and_place_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_pick_and_place_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/uiuc_d3field/1.1.2/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/uiuc_d3field/1.1.2/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/utaustin_mutex/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/utaustin_mutex/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_opening_fridge_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_opening_fridge_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds/1.0.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds/1.0.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_bimanual_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_bimanual_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_pick_and_place_converted_externally_to_rlds/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_pick_and_place_converted_externally_to_rlds/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://storage.googleapis.com/gresearch/robotics/viola/0.1.0/dataset_info.json": {
+        "status": 200,
+        "resolved_url": "https://storage.googleapis.com/gresearch/robotics/viola/0.1.0/dataset_info.json",
+        "method": "HEAD"
+      },
+      "https://superodometry.com/datasets": {
+        "status": 200,
+        "resolved_url": "https://superodometry.com/datasets",
+        "method": "HEAD"
+      },
+      "https://tactidex.github.io/": {
+        "status": 200,
+        "resolved_url": "https://tactidex.github.io/",
+        "method": "HEAD"
+      },
+      "https://tactile-reactive-dexterous.github.io/": {
+        "status": 200,
+        "resolved_url": "https://tactile-reactive-dexterous.github.io/",
+        "method": "HEAD"
+      },
+      "https://tengbo-yu.github.io/PRISM/": {
+        "status": 200,
+        "resolved_url": "https://tengbo-yu.github.io/PRISM/",
+        "method": "HEAD"
+      },
+      "https://theairlab.org/TartanDrive2/": {
+        "status": 200,
+        "resolved_url": "https://theairlab.org/TartanDrive2/",
+        "method": "HEAD"
+      },
+      "https://theairlab.org/alfa-dataset/": {
+        "status": 200,
+        "resolved_url": "https://theairlab.org/alfa-dataset/",
+        "method": "HEAD"
+      },
+      "https://theairlab.org/tartandrive-dataset/": {
+        "status": 200,
+        "resolved_url": "https://theairlab.org/tartandrive-dataset/",
+        "method": "HEAD"
+      },
+      "https://touch-and-go.github.io/": {
+        "status": 200,
+        "resolved_url": "https://touch-and-go.github.io/",
+        "method": "HEAD"
+      },
+      "https://tulaut.github.io/ds_ExtendedTennesseeEastman": {
+        "status": 200,
+        "resolved_url": "https://tulaut.github.io/ds_ExtendedTennesseeEastman",
+        "method": "HEAD"
+      },
+      "https://tuwien-asl.github.io/REASSEMBLE_page/": {
+        "status": 200,
+        "resolved_url": "https://tuwien-asl.github.io/REASSEMBLE_page/",
+        "method": "HEAD"
+      },
+      "https://vision.eng.au.dk/fieldsafe/": {
+        "status": 200,
+        "resolved_url": "https://vision.eng.au.dk/fieldsafe/",
+        "method": "HEAD"
+      },
+      "https://www.cs.utexas.edu/~xiao/SCAND/SCAND.html": {
+        "status": 200,
+        "resolved_url": "https://www.cs.utexas.edu/~xiao/SCAND/SCAND.html",
+        "method": "HEAD"
+      },
+      "https://www.cvlibs.net/datasets/kitti/eval_odometry.php": {
+        "status": 200,
+        "resolved_url": "https://www.cvlibs.net/datasets/kitti/eval_odometry.php",
+        "method": "HEAD"
+      },
+      "https://www.decar.ca/miluv/": {
+        "status": 200,
+        "resolved_url": "https://www.decar.ca/miluv/",
+        "method": "HEAD"
+      },
+      "https://www.nature.com/articles/s41597-025-05692-4": {
+        "status": 200,
+        "resolved_url": "https://www.nature.com/articles/s41597-025-05692-4?error=cookies_not_supported&code=e338ccd8-5648-486e-a55e-712b60cccd40",
+        "method": "HEAD"
+      },
+      "https://www.nonlinearbenchmark.org/benchmarks/coupled-electric-drives": {
+        "status": 200,
+        "resolved_url": "https://www.nonlinearbenchmark.org/benchmarks/coupled-electric-drives",
+        "method": "HEAD"
+      },
+      "https://www.nonlinearbenchmark.org/benchmarks/emps": {
+        "status": 200,
+        "resolved_url": "https://www.nonlinearbenchmark.org/benchmarks/emps",
+        "method": "HEAD"
+      },
+      "https://www.nonlinearbenchmark.org/benchmarks/industrial-robot": {
+        "status": 200,
+        "resolved_url": "https://www.nonlinearbenchmark.org/benchmarks/industrial-robot",
+        "method": "HEAD"
+      },
+      "https://www.nonlinearbenchmark.org/benchmarks/nano-drone": {
+        "status": 200,
+        "resolved_url": "https://www.nonlinearbenchmark.org/benchmarks/nano-drone",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/11096791": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/11096791",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/1219249": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/1219249",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/12516500": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/12516500",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/13641620": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/13641620",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/14995354": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/14995354",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/15487235": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/15487235",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/17376427": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/17376427",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/18419272": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/18419272",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/18549433": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/18549433",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/20817531": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/20817531",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/6364950": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/6364950",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/7221387": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/7221387",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/7221443": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/7221443",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/7240050": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/7240050",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/7568592": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/7568592",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/7648996": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/7648996",
+        "method": "HEAD"
+      },
+      "https://catalog.data.gov/dataset/c-v2x-interoperability-testing-datasets": {
+        "status": 200,
+        "resolved_url": "https://catalog.data.gov/dataset/c-v2x-interoperability-testing-datasets",
+        "method": "HEAD"
+      },
+      "https://doi.org/10.21227/z1zp-e621": {
+        "status": 200,
+        "resolved_url": "https://ieee-dataport.org/documents/collaborative-simultaneous-localization-and-mapping-dataset-mars-analogue-terrain-inter",
+        "method": "HEAD"
+      },
+      "https://github.com/UCR-CISL/SEE-V2X": {
+        "status": 200,
+        "resolved_url": "https://github.com/UCR-CISL/SEE-V2X",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/14967644": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/14967644",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/17136034": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/17136034",
+        "method": "HEAD"
+      },
+      "https://data.mendeley.com/datasets/m7g93whs3t/1": {
+        "status": 200,
+        "resolved_url": "https://data.mendeley.com/datasets/m7g93whs3t/1",
+        "method": "HEAD"
+      },
+      "https://zenodo.org/records/15989282": {
+        "status": 200,
+        "resolved_url": "https://zenodo.org/records/15989282",
+        "method": "HEAD"
+      }
+    },
+    "unconfirmed": [
+      {
+        "name": "UTIAS MR.CLAM",
+        "url": "https://asrl.utias.utoronto.ca/datasets/mrclam/index.html",
+        "status": null,
+        "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+        "method": "GET",
+        "fallback_web_open": "Publisher page retrieved via web search service on 2026-11-21; title and sequence/file-format documentation verified."
+      }
+    ]
+  },
+  "sha256_utf8sig_csv": "12dc2f34bee2072e234e24914aefca98982e1b45f4dfd3272a45fc342026dd96"
+}

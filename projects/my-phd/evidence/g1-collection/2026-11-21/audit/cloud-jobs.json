@@ -1,0 +1,83 @@
+[
+  {
+    "topic": "R1",
+    "issue": "https://github.com/hengyizang/lunwen/issues/186",
+    "run": "https://github.com/hengyizang/lunwen/actions/runs/44864371507",
+    "receipt": "https://github.com/hengyizang/lunwen/blob/10320a0eed18cf30a68400b0a3c52854ca9fe5c9/projects/my-phd/evidence/literature/assets/d9d09fac27b93e39416bb7c8/receipts/f59ac747d9523adc805af05f448b3f1264f45b7cf12b25c30778aee06df8c370.json",
+    "original": "https://arxiv.org/abs/2403.01068v1",
+    "status": "acquired",
+    "pdf_status": "acquired",
+    "pdf_sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+    "download_files": [
+      {
+        "source_url": "https://arxiv.org/abs/2403.01068v1",
+        "final_url": "https://arxiv.org/abs/2403.01068v1",
+        "sha256": "1db914119c1149c8307410cb6b9c512443c682455d04cbac459c5c1ca98e8526",
+        "bytes": 41343,
+        "kind": "html"
+      },
+      {
+        "source_url": "https://arxiv.org/pdf/2403.01068",
+        "final_url": "https://arxiv.org/pdf/2403.01068",
+        "sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+        "bytes": 431629,
+        "kind": "pdf"
+      },
+      {
+        "source_url": "https://arxiv.org/pdf/2403.01068v1",
+        "final_url": "https://arxiv.org/pdf/2403.01068v1",
+        "sha256": "c04ef9ff914e7a530ba7c55b1e923c92fd4dce6f9854d361d5f910ef8ebb5eb2",
+        "bytes": 431629,
+        "kind": "pdf"
+      }
+    ],
+    "failures": []
+  },
+  {
+    "topic": "R2",
+    "issue": "https://github.com/hengyizang/lunwen/issues/187",
+    "run": "https://github.com/hengyizang/lunwen/actions/runs/44865437075",
+    "receipt": "https://github.com/hengyizang/lunwen/blob/a5c058691b8f5348812d6165f6043514a7da0bda/projects/my-phd/evidence/literature/assets/a9e0b5854c66252d916f7336/receipts/6861ee57ab1d20b452dcfaa9e035f40354614ea79e0d510a5db86f0837d43d96.json",
+    "original": "https://www.nature.com/articles/s41598-026-65823-8",
+    "status": "acquired",
+    "pdf_status": "acquired",
+    "pdf_sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+    "download_files": [
+      {
+        "source_url": "https://www.nature.com/articles/s41598-026-65823-8",
+        "final_url": "https://www.nature.com/articles/s41598-026-65823-8?error=cookies_not_supported&code=0703aaed-f59d-45d1-a48c-37c38a16ba70",
+        "sha256": "1b9a71b42497e5a48d11780f144f1a08adaa4fdf051d0fc7500751ad0738b693",
+        "bytes": 405881,
+        "kind": "html"
+      },
+      {
+        "source_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf",
+        "final_url": "https://www.nature.com/articles/s41598-026-65823-8.pdf?error=cookies_not_supported&code=15dedf09-e7b2-45a1-9adf-22557d0edb24",
+        "sha256": "283b22982efa247cc752ca4261a16b3e4e396105dccf124c080f4533f3a0d8a7",
+        "bytes": 9326851,
+        "kind": "pdf"
+      }
+    ],
+    "failures": []
+  },
+  {
+    "topic": "R5",
+    "issue": "https://github.com/hengyizang/lunwen/issues/188",
+    "run": "https://github.com/hengyizang/lunwen/actions/runs/44865545357",
+    "receipt": "https://github.com/hengyizang/lunwen/blob/435d65d11bfc587786b76dc95db24c5b667f713c/projects/my-phd/evidence/literature/assets/096422efaf7b7c609d72100f/receipts/5053534c998a6381383bb50afaebc88d4b814c76b22675b0f34bbcc395544d53.json",
+    "original": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+    "status": "acquired",
+    "pdf_status": "acquired",
+    "pdf_sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+    "download_files": [
+      {
+        "source_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+        "final_url": "https://tisl.cs.toronto.edu/publication/201910-itsc-cooperative_localization/itsc19-cooperative_localization.pdf",
+        "sha256": "d90f7eb3063ff10463ba1e0229dad0243d21ed7b13dba3c428c997bdae86f730",
+        "bytes": 1033392,
+        "kind": "pdf"
+      }
+    ],
+    "failures": []
+  }
+]

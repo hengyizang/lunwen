@@ -1,0 +1,350 @@
+{
+  "record_api": "https://zenodo.org/api/records/15989282",
+  "record_doi": "10.5281/zenodo.15989282",
+  "title": "RoboLoc-G: Multisensor Localization Dataset from a Robotic Gantry System",
+  "creators": [
+    "Domínguez-Bolaño, Tomás",
+    "Carro Lagoa, Ángel",
+    "Barral Vales, Valentín",
+    "Escudero, Carlos J.",
+    "García-Naya, José A."
+  ],
+  "rights": {
+    "id": "cc-by-4.0"
+  },
+  "provider_zip_url": "https://zenodo.org/api/records/15989282/files/SENSORS_MEASUREMENTS_CSV.zip/content",
+  "provider_zip_size": 39518189,
+  "provider_zip_checksum_as_advertised_only": "md5:849cbc1fab3ff1ba6a36c34325575d06",
+  "utc_access": "2026-11-21T04:15:50.738633+00:00",
+  "scope": "Whole eight gtec-ftm.csv Wi-Fi fine-time-measurement files in archived UWB_FTM_IMU trajectories. Physical gantry robot and fixed anchors; Wi-Fi frame handshakes for ranging, not application-level age of information or inter-mobile-robot traffic. Other instruments/ground truth not downloaded here. Sampling units are table records, not individual successful round trips.",
+  "range_requests": [
+    {
+      "first": 39452653,
+      "last": 39518188,
+      "bytes": 65536,
+      "http": 206
+    },
+    {
+      "first": 38917907,
+      "last": 38917936,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 38917993,
+      "last": 38945627,
+      "bytes": 27635,
+      "http": 206
+    },
+    {
+      "first": 38958586,
+      "last": 38958615,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 38958673,
+      "last": 39012763,
+      "bytes": 54091,
+      "http": 206
+    },
+    {
+      "first": 39037486,
+      "last": 39037515,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39037573,
+      "last": 39099164,
+      "bytes": 61592,
+      "http": 206
+    },
+    {
+      "first": 39136002,
+      "last": 39136031,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39136087,
+      "last": 39199286,
+      "bytes": 63200,
+      "http": 206
+    },
+    {
+      "first": 39220443,
+      "last": 39220472,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39220530,
+      "last": 39250403,
+      "bytes": 29874,
+      "http": 206
+    },
+    {
+      "first": 39278645,
+      "last": 39278674,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39278732,
+      "last": 39334457,
+      "bytes": 55726,
+      "http": 206
+    },
+    {
+      "first": 39361246,
+      "last": 39361275,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39361333,
+      "last": 39382717,
+      "bytes": 21385,
+      "http": 206
+    },
+    {
+      "first": 39414758,
+      "last": 39414787,
+      "bytes": 30,
+      "http": 206
+    },
+    {
+      "first": 39414845,
+      "last": 39473582,
+      "bytes": 58738,
+      "http": 206
+    }
+  ],
+  "actual_source_zip_bytes_transferred": 438017,
+  "member_files": [
+    {
+      "sequence": "circle",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/circle/gtec-ftm.csv",
+      "local_file": "circle.csv",
+      "records": 1106,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 27635,
+      "uncompressed_bytes": 151040,
+      "crc32": "25e236b2",
+      "sha256": "5f2f47bec91e0fc5e70aac7c450db2c448bcc12acdf9dca517bb6fc5766fb5b1"
+    },
+    {
+      "sequence": "random1",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/random1/gtec-ftm.csv",
+      "local_file": "random1.csv",
+      "records": 2167,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 54091,
+      "uncompressed_bytes": 298488,
+      "crc32": "4d4b7ba3",
+      "sha256": "de2b37d4c8eeddea46d8a86120668f27b5fde632462843aca8e83feb162f32f5"
+    },
+    {
+      "sequence": "random2",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/random2/gtec-ftm.csv",
+      "local_file": "random2.csv",
+      "records": 2510,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 61592,
+      "uncompressed_bytes": 346278,
+      "crc32": "4ba6b150",
+      "sha256": "1e2bfed14fd9617c1374f31396e488d60a826eb0688265e26b6630a1e6d579d2"
+    },
+    {
+      "sequence": "still",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/still/gtec-ftm.csv",
+      "local_file": "still.csv",
+      "records": 2704,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 63200,
+      "uncompressed_bytes": 374930,
+      "crc32": "ce4e561c",
+      "sha256": "be4474c8ec09a81f25f448dd4eeb75d3f483e6484808b59cb7ec67f37211b9ef"
+    },
+    {
+      "sequence": "zigzag1",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/zigzag1/gtec-ftm.csv",
+      "local_file": "zigzag1.csv",
+      "records": 1195,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 29874,
+      "uncompressed_bytes": 165672,
+      "crc32": "5b600234",
+      "sha256": "76dbc9575310e827b38f72bf645e7c4d6a50441d3c9a1bfad55fd72217e9329a"
+    },
+    {
+      "sequence": "zigzag2",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/zigzag2/gtec-ftm.csv",
+      "local_file": "zigzag2.csv",
+      "records": 2223,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 55726,
+      "uncompressed_bytes": 311029,
+      "crc32": "15b2c77c",
+      "sha256": "c617ab88193f1d07d939287e6c7fdadc6ca2b3fb8c9acd98a13825cb197e88c5"
+    },
+    {
+      "sequence": "zigzag3",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/zigzag3/gtec-ftm.csv",
+      "local_file": "zigzag3.csv",
+      "records": 864,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 21385,
+      "uncompressed_bytes": 121180,
+      "crc32": "cdfe8376",
+      "sha256": "dcc1ff1617c535df5cf51a0afc7cc49ddf923d8e599ef7f9e36acec410be1dc2"
+    },
+    {
+      "sequence": "zigzag4",
+      "archive_member": "SENSORS_MEASUREMENTS_CSV/UWB_FTM_IMU/zigzag4/gtec-ftm.csv",
+      "local_file": "zigzag4.csv",
+      "records": 2383,
+      "columns": [
+        "timestamp",
+        "anchor_id",
+        "array_index",
+        "dist_est",
+        "frames.rssi",
+        "frames.rtt",
+        "frames.t1",
+        "frames.t2",
+        "frames.t3",
+        "frames.t4",
+        "num_frames",
+        "rtt_est",
+        "rtt_raw"
+      ],
+      "compressed_bytes": 58738,
+      "uncompressed_bytes": 326430,
+      "crc32": "dfa8f395",
+      "sha256": "a5505c4c452e9d7a02e997767405fc8d801dee7a2162a1be87418400b3d389c5"
+    }
+  ],
+  "total_records": 15152,
+  "field_audit": {
+    "derived_csv": "r5-ftm-coverage.csv",
+    "coverage_sha256": "5e265b4b5474ab6fe5501a39af600c458bdbcd7c894bf4880628c56561b516ab",
+    "source_dataset_card": "https://zenodo.org/records/15989282",
+    "hardware_api_reference": "https://docs.espressif.com/projects/esp-idf/en/v5.4/esp32s2/api-reference/network/esp_wifi.html",
+    "primary_measurement": "Each CSV row represents a frame in a ranging exchange. A timestamp-anchor pair can occur on multiple rows. The physical setup was one gantry robot with fixed anchors.",
+    "validity_rule": "Count four integer timestamps with all values >0 and t4>=t1 and t3>=t2. These inequalities compare only fields on the same device clock. This is a completeness/ordering test, not a certification of propagation time or clock alignment. All source rows, zero values, and nonnumerics are retained in counts.",
+    "timestamp_basis": "The provider documents frames.t1 to frames.t4 in picoseconds. Outer timestamp range is reported as source integers without a time-unit conversion.",
+    "rtt_unit_discrepancy": "Data card labels frames.rtt (per-frame) ns. ESP-IDF v5.4 for ESP32-S2 lists wifi_ftm_report_entry_t.rtt in ps. The source card and SDK both label report-level rtt_est and rtt_raw as ns. Raw per-frame limits remain unlabeled by design. The dataset release's exact firmware build has not been established.",
+    "arithmetic_check": "On integer values compute D=(t4-t1)-(t3-t2), nominally picoseconds. Raw equality holds on 15150/15152. On circle and zigzag3 one row each has raw frames.rtt=0 and D=-7812 and -9374 ps respectively. A negative D is preserved; do not infer a physical negative duration. No timestamp correction or overwrite performed.",
+    "counts": {
+      "rows": 15152,
+      "distinct_timestamp_anchor_pairs": 1062,
+      "four_timestamp_numeric_rows": 15152,
+      "four_positive_and_within_clock_order_rows": 15152,
+      "frame_rtt_zero_rows": 2,
+      "frame_rtt_missing_or_nonnumeric_rows": 0,
+      "raw_equal_four_timestamp_difference_ps_rows": 15150,
+      "negative_four_timestamp_difference_rows": 2
+    },
+    "aggregation": "Min and max include zeros. Missing or non-integer values are counted separately. Distinct timestamp-anchor pairs are counted within each sequence then summed. No effective independent sample size or between-robot AoI is inferred."
+  }
+}

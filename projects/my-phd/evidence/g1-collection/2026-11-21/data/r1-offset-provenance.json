@@ -1,0 +1,112 @@
+{
+  "creation_utc": "2026-11-21T04:10:23.389158+00:00",
+  "dataset": "Dataset for \"Estimating Force/Torque Sensor Offsets and Gravity Parameters Using Only Wrench Measurements to Facilitate Human Demonstration of Robot Manipulation Tasks in Contact\"",
+  "record_url": "https://zenodo.org/records/17376427",
+  "metadata_api": "https://zenodo.org/api/records/17376427",
+  "dataset_doi": "10.5281/zenodo.17376427",
+  "creator": "Mousavi Mohammadi, Ali",
+  "publisher": "Zenodo",
+  "release_date": "2025-09-23",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "license_id_from_release": "cc-by-4.0",
+  "companion_paper": "https://doi.org/10.1109/CASE58245.2025.11163796",
+  "companion_code_fixed_revision": "https://github.com/alimousavimohammadi/offset_gravity_estimation/tree/781aa7cbd370ada97ea98e66a79aee32a1207550",
+  "author_code_column_mappings": [
+    "https://github.com/alimousavimohammadi/offset_gravity_estimation/blob/781aa7cbd370ada97ea98e66a79aee32a1207550/src/python/scripts/human_demonstration.py",
+    "https://github.com/alimousavimohammadi/offset_gravity_estimation/blob/781aa7cbd370ada97ea98e66a79aee32a1207550/src/python/scripts/robot_execution.py"
+  ],
+  "wrench_units_source": "https://github.com/alimousavimohammadi/offset_gravity_estimation/blob/781aa7cbd370ada97ea98e66a79aee32a1207550/src/python/scripts/functions/plotting.py",
+  "file": {
+    "name": "data.zip",
+    "public_file_url": "https://zenodo.org/api/records/17376427/files/data.zip/content",
+    "size_bytes": 2581147,
+    "archive_sha256_computed": "e5f1087a1de5ed261af79b25bdc7548bbbf4e1386510c731e1675b8280c3eae4",
+    "published_checksum_verified": "md5:8064a4e55b5c51d00fe59cc32faf8e21"
+  },
+  "members": [
+    {
+      "member": "human_demonstration/report_2025_02_22_10_47_44_light_object.dat",
+      "size": 1298687,
+      "sha256": "36d9bea280129c29e134c1762cb0dc79ce91a12e400c14a35d26738c56e92cdf",
+      "condition": "light_object",
+      "measurements": [
+        "jr3.sensor_0.wrench_filter_0.force.x",
+        "jr3.sensor_0.wrench_filter_0.force.y",
+        "jr3.sensor_0.wrench_filter_0.force.z",
+        "jr3.sensor_0.wrench_filter_0.torque.x",
+        "jr3.sensor_0.wrench_filter_0.torque.y",
+        "jr3.sensor_0.wrench_filter_0.torque.z"
+      ],
+      "time_column": "TimeStamp",
+      "rows": 9394
+    },
+    {
+      "member": "human_demonstration/report_2025_03_04_17_55_42_heavy_object.dat",
+      "size": 2693012,
+      "sha256": "661c7503590465f57560f64272042abedb9e7313b945c22191124ae5342d4936",
+      "condition": "heavy_object",
+      "measurements": [
+        "jr3.sensor_0.wrench_filter_0.force.x",
+        "jr3.sensor_0.wrench_filter_0.force.y",
+        "jr3.sensor_0.wrench_filter_0.force.z",
+        "jr3.sensor_0.wrench_filter_0.torque.x",
+        "jr3.sensor_0.wrench_filter_0.torque.y",
+        "jr3.sensor_0.wrench_filter_0.torque.z"
+      ],
+      "time_column": "TimeStamp",
+      "rows": 19550
+    },
+    {
+      "member": "robot_execution/report_of_2025_02_22_11_58_21_normal_speed.dat",
+      "size": 1245127,
+      "sha256": "53f1a4be6b86fa4e687bc91daff9e3bce23c34bb2e2e2f75f62f1db6966f6b38",
+      "condition": "normal_speed",
+      "measurements": [
+        "netft_sensor.sensed_wrench.0",
+        "netft_sensor.sensed_wrench.1",
+        "netft_sensor.sensed_wrench.2",
+        "netft_sensor.sensed_wrench.3",
+        "netft_sensor.sensed_wrench.4",
+        "netft_sensor.sensed_wrench.5"
+      ],
+      "time_column": "TimeStamp",
+      "rows": 6553
+    },
+    {
+      "member": "robot_execution/report_of_2025_02_22_12_03_48_slow_speed.dat",
+      "size": 7779415,
+      "sha256": "e6c6febbbec87830bc76faf347f600050217d181b81b00cded186bb1c686b921",
+      "condition": "slow_speed",
+      "measurements": [
+        "netft_sensor.sensed_wrench.0",
+        "netft_sensor.sensed_wrench.1",
+        "netft_sensor.sensed_wrench.2",
+        "netft_sensor.sensed_wrench.3",
+        "netft_sensor.sensed_wrench.4",
+        "netft_sensor.sensed_wrench.5"
+      ],
+      "time_column": "TimeStamp",
+      "rows": 41022
+    }
+  ],
+  "derived_table": {
+    "filename": "r1-offset-sample.csv",
+    "sha256": "4beee582fc52ed0b5a365f7437b868353704e31755f7f2bff500d269598370d9",
+    "conditions": 4,
+    "total_records": 76519,
+    "finite_wrench_time_records": 76519
+  },
+  "method": "Read four whitespace-delimited .dat files inside the published archive; their paths identify 2 demonstration payloads and 2 robot speeds. Count all nonempty data rows after the single header, require exactly the expected number of fields, then finite stored timestamp and the six measured force/torque values. Retain startup rows. Within each file compute Euclidean norms sqrt(x^2+y^2+z^2) separately for three measured forces and three measured torques; calculate minimum, median, maximum without pose transform, resampling, zeroing, gravity compensation or filtering. Report nonpositive timestamp differences and median over positive differences. Raw readings and timestamps are never written to the table.",
+  "units": {
+    "force": "N, per author plotting functions",
+    "torque": "N m, per author plotting functions",
+    "time": "Original units of file TimeStamp. DAT headers do not label the unit; fields deliberately use source units."
+  },
+  "scope_limitations": [
+    "The four files are four conditions from two setups. Samples within a recording are temporally dependent.",
+    "JR3 filtered output is used for demonstration; raw Net F/T sensor output is used for the two robot runs, matching the author raw-measurement branch. These two streams should not be pooled as equivalent. Neither set of descriptive norms measures bias or error against truth.",
+    "No independent thermal drift trajectory, independently measured contact-force ground truth, cross-robot experiment, assembly performance outcome or longitudinal stability was established by this extraction.",
+    "This is a descriptive derivative. No calibration model or scientific experiment was executed. Conditions reflect published file labels; no person-level identifiers or trajectories are retained."
+  ]
+}

@@ -1,0 +1,5 @@
+﻿condition,setup,wrench_channel,total_rows,finite_wrench_time_rows,malformed_rows,all_six_wrench_zero_rows,time_span_source_units,time_steps_nonpositive,median_positive_time_step_source_units,force_norm_min_N,force_norm_median_N,force_norm_max_N,torque_norm_min_Nm,torque_norm_median_Nm,torque_norm_max_Nm
+light_object,human_demonstration,JR3 wrench_filter_0,9394,9394,0,0,23.48107984,0,0.0025,0.1027871642,1.252227294,2.310517965,0.00197172632,0.0422591529,0.104649266
+heavy_object,human_demonstration,JR3 wrench_filter_0,19550,19550,0,0,48.87060147,0,0.0025,0.4510860796,13.89531221,21.64753066,0.01270393421,0.1461402573,2.784166108
+normal_speed,robot_execution,netft_sensor.sensed_wrench,6553,6553,0,0,32.77159965,0,0.005,4.967524449,6.266218599,8.924222436,0.06788216594,0.118918938,0.1403392285
+slow_speed,robot_execution,netft_sensor.sensed_wrench,41022,41022,0,0,205.1139997,0,0.005,5.257800432,6.489336883,9.099636874,0.06827535522,0.1169840537,0.1373256327

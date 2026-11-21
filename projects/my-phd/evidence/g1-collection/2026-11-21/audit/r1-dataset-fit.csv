@@ -1,0 +1,17 @@
+name,url,observed,missing
+KU Leuven wrist F/T offsets and gravity,https://zenodo.org/records/17376427,"已取完整 2,581,147 字节公开 ZIP，匹配发布方 MD5，SHA-256 e5f1087a1de5ed261af79b25bdc7548bbbf4e1386510c731e1675b8280c3eae4。包内四个 .dat 分别对应轻/重物人工示范及正常/慢速机器人执行；读到 JR3 的三力三矩与机器人 netft_sensor.sensed_wrench 六通道数值；四个文件扣除表头分别有 9394、19550、6553、41022 行。研究主题是从 wrench 估计偏置与重力。",文件名与发布说明未建立第二套独立、可溯源六轴力真值。未见温度、插接失误或装配损伤标签。
+KUKA wrist ATI Gamma + IMU,https://zenodo.org/records/11096791,已查官方 v2 元数据与文件表：腕部 ATI Gamma 六轴、工具 IMU、24 姿态标定，另有静态、无扰动、振动、振动+人为接触。作者记录不同采样率与 IMU 延迟。,IMU 是独立惯性测量，不是独立接触力真值。接触由人工施加，未列可溯源参考 F/T、热漂移或装配失败标签；元数据对 raw/unbiased 表述不一致，需结合原文及数据。
+High-payload collaborative robot: independent external F/T,https://zenodo.org/records/7240050,"实查 ZIP 中央目录和 2022_08_03_calpak/README_1.docx，作者列机器人 TCP F/T、外置独立 F/T、碰撞检测状态、速度和工况。对 1.bag 的 131,072 字节 ZIP 范围用 DEFLATE 解码后，按 sensor_msgs/JointState 消息结构解出 /external_ft_sensor 的 405 条六元素 effort 数值（首条 1.233399、2.068434、2.511513、−0.013103、0.015723、−0.003316；单位和轴顺序待核）、/coll_det_ee/force 和两个碰撞检测通道。",首次仅抽取 bag 前缀，未核对整体归一化、坐标、同步、力的六元素映射或参考校准证书。碰撞检测信号并非装配卡滞或成功标签。
+REASSEMBLE,https://tuwien-asl.github.io/REASSEMBLE_page/,"官方页明确腕装六轴 AIDIN AFT200-D80-C；NIST 装配板 4,551 次操作，4,035 次成功、516 次未成功，含漏抓、掉件、错位和卡住。",光学动作捕捉用于定位，不是第二套独立 F/T；失败与漂移的因果关系未建立。
+Copper Rings Insertion Attempts,https://zenodo.org/records/6364950,官方记录 300 个试次、四个槽，腕部 ATI Nano25，原始 F/T 和变换至工具坐标的 F/T、参考/实测位姿与 RGB；沿 x/y 施加 −3 至 3 mm 位置偏差。,变换后的信号与原始信号来自同一传感器。几何偏差不等同于力偏置；与同团队 7221387 可能重合。
+Rings Insertion exception context,https://zenodo.org/records/7221387,元数据列四槽、位置偏差、正常、未知原因错误插入；MAT 同时含参考/实测位姿与原始/工具帧 F/T。,两个坐标系不构成独立力参考；与 6364950 同平台同任务，不能视作独立复现。
+PiH exception strategies,https://zenodo.org/records/7568592,官方元数据列 Franka Research 3、腕部 ATI Nano25，100 Hz 位姿及力矩，10 Hz RGB/点云；档案将几何偏移导致的错误轨迹和人工纠正轨迹分开。,位置与姿态偏移是任务扰动；未见独立力真值、偏置注入或温度序列。
+PRISM,https://tengbo-yu.github.io/PRISM/,"发布方确认 6 自由度 F/T、触觉、机器人状态与多视角 RGB-D，电子器件插拔等工业任务；5,000 余条机器人轨迹与配套人类示范。",仅核项目页概览。传感器安装、独立参考来源、各类失败分母与偏置标签待逐配置确认。
+RH20T,https://huggingface.co/datasets/tonyfanggalaxies/RH20T,官方页明确腕部力矩传感器和 100 Hz 六轴 F/T、配置及标定信息；cfg7 另有 200 Hz 指尖触觉。,未建立独立载荷参考或失败原因；腕部六轴与 cfg7 指尖数据不可互换。
+ManipForce,https://sites.google.com/view/manipforce,公开项目及数据结构列腕端六轴力矩和单独时间戳；镜像说明 AIDIN AFT200 数据经过重力补偿。六项真实接触任务。,手持夹具示范；补偿后力信号不能直接还原原始零偏。未见独立力真值或失败标签。
+FMB (OXE),https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/dataset_info.json,版本化 TFDS features 明确 eef_force 与 eef_torque，任务包括真实装配。,字段名不足以辨别外部腕部 F/T 与基于关节估计的力矩；未核独立参考或失败分类。
+Stanford Kuka Multimodal (OXE),https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json,版本化字段有 ee_forces_continuous，实机异形销孔插入。,连续末端力字段不能自动证明同时具备腕部六轴、独立参考或零偏标签。
+TacBench DIGIT force / slip,https://huggingface.co/datasets/facebook/digit-force-estimation,独立 ATI Nano17 给出指尖触觉的三轴力参考；滑移标签按摩擦锥间接推断。,适合传感器对照，不是装配任务的腕力矩偏置数据。
+TacBench GelSight Mini force / slip,https://huggingface.co/datasets/facebook/gelsight-force-estimation,GelSight Mini 与独立 ATI Nano17 力参考，在三种压头下有法向、切向加载与间接滑移标签。,实验在触觉台架，未覆盖腕力漂移、真实装配失败或闭环载荷变化。
+ViFailback,https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset,"数据卡区分 657 次成功与 4,545 次失败；含失败时段/诊断问答。",核到失败标签，没有核到腕部 F/T 或独立参考；只能作为失败任务资料。
+DECO-50,https://huggingface.co/datasets/BAAI-Humanoid/DECO-50,左右末端触觉均有明确文件字段，全库覆盖四个场景、28 个子任务。,指尖触觉数组同腕部 F/T 的测量物理量不同；公开目录未展示独立腕力参考或标定误差。

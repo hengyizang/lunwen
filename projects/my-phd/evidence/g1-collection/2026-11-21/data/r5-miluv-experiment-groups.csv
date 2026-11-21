@@ -1,0 +1,8 @@
+机器人数量,CIR字段启用,障碍物条件,清单实验数,逐包丢失标签,清单SHA256,版本固定来源,权利口径
+1,false,false,13,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+1,false,true,1,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+1,true,false,4,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+1,true,true,2,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+3,false,false,12,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+3,true,false,3,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。
+3,true,true,1,清单无显式逐包丢失或对时误差字段,8b66ed2185c7b68dc67ce285a1f481175b21cec7613bff8b732f841d2b79dc3c,https://github.com/decargroup/miluv/blob/399ad46f4e6e88c3c98b40aae33fe8e2c6719cff/config/experiments.csv,仅对官方配置元数据计数组合；作者开发工具仓库 MIT，未分发原始传感器记录。

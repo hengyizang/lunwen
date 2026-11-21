@@ -1,0 +1,1524 @@
+{
+  "as_of": "2026-11-21",
+  "unit": "source release or named collection, not independent studies or experiments",
+  "source_urls": [
+    "https://github.com/google-deepmind/open_x_embodiment",
+    "https://docs.google.com/spreadsheets/d/1rPBD77tk60AEIGZrGSODwyyzs5FgCU9Uz3h-3_t2A9g/edit#gid=0"
+  ],
+  "records": [
+    {
+      "name": "RT-1 Robot Action (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/fractal20220817_data/0.1.0/dataset_info.json",
+      "observed_scope": "Google Robot。微型厨房拾放与移动物体。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=87,212。观察字段示例 base_pose_tool_reached, gripper_closed, gripper_closedness_commanded, height_to_bottom, image, natural_language_embedding, natural_language_instruction, orientation_box, orientation_start",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/fractal20220817_data/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "1c6770c91636a1f765e474f0b9cd3d44f93b031473a0356903ff32a6675c7bd3",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/fractal20220817_data/0.1.0/features.json",
+      "features_sha256": "7e02025e596cabd8d4e4afd6f2486b2110f22c0e42a9aa259d441cf5d538a684",
+      "tfds_dataset": "fractal20220817_data",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 87212
+      },
+      "upstream_urls_in_info": [
+        "https://ai.googleblog.com/2022/12/rt-1-robotics-transformer-for-real.html"
+      ]
+    },
+    {
+      "name": "QT-Opt (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/kuka/0.1.0/dataset_info.json",
+      "observed_scope": "Kuka iiwa。箱内物体抓取。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=580,392。观察字段示例 clip_function_input/base_pose_tool_reached, clip_function_input/workspace_bounds, gripper_closed, height_to_bottom, image, natural_language_embedding, natural_language_instruction, task_id",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/kuka/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "90fe78ece0375c9a3057825dca2f23680747c314330a363e7a3d3db1ac4044af",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/kuka/0.1.0/features.json",
+      "features_sha256": "0addcb510b755975316669db487dc2d278372b1190232534fc65d12b74cf497e",
+      "tfds_dataset": "kuka",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 580392
+      },
+      "upstream_urls_in_info": [
+        "https://arxiv.org/abs/1806.10293"
+      ]
+    },
+    {
+      "name": "Berkeley Bridge (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/bridge/0.1.0/dataset_info.json",
+      "observed_scope": "WidowX。家庭与玩具厨房多技能操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=25,460，test=3,475。观察字段示例 state, image, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/bridge/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。与 BridgeData V2 原始发布同源。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "3aa04bdf7de9d48d37233ac5a6040de2fcee209a67e85a10b9f83174ac15de0a",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/bridge/0.1.0/features.json",
+      "features_sha256": "f259698e2657dbc160fa874eba6c00963fb52a96bffa88d38d0a0ff4e7da00a4",
+      "tfds_dataset": "bridge",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 25460,
+        "test": 3475
+      },
+      "upstream_urls_in_info": [
+        "https://rail-berkeley.github.io/bridgedata/"
+      ]
+    },
+    {
+      "name": "Freiburg Franka Play (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/taco_play/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。桌面堆叠、柜门开合与按键。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=3,242，test=361。观察字段示例 depth_gripper, depth_static, natural_language_embedding, natural_language_instruction, rgb_gripper, rgb_static, robot_obs, structured_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/taco_play/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "d53a55dd3abe5b37a3dea675e56d5f10bcbabcb57b562af603e1870676db459a",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/taco_play/0.1.0/features.json",
+      "features_sha256": "e3720bca3d819fe7b11b7bf44d35ab1bf75e2e8eefb13d26ee85427a617e9be8",
+      "tfds_dataset": "taco_play",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 3242,
+        "test": 361
+      },
+      "upstream_urls_in_info": [
+        "https://www.kaggle.com/datasets/oiermees/taco-robot"
+      ]
+    },
+    {
+      "name": "USC Jaco Play (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/jaco_play/0.1.0/dataset_info.json",
+      "observed_scope": "Jaco 2。桌面厨房物品拾放。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=976，test=109。观察字段示例 image_wrist, end_effector_cartesian_pos, end_effector_cartesian_velocity, image, joint_pos, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/jaco_play/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "db00d175e4eb42f46661936cb12ec71abed129830090206be1221f702220f43f",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/jaco_play/0.1.0/features.json",
+      "features_sha256": "9dc73b85474d9ca0e733cd02e0c59f91dd067c4755030898b126207d9adc0194",
+      "tfds_dataset": "jaco_play",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 976,
+        "test": 109
+      },
+      "upstream_urls_in_info": [
+        "https://github.com/clvrai/clvr_jaco_play_dataset"
+      ]
+    },
+    {
+      "name": "Berkeley Cable Routing (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_cable_routing/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。将柔性电缆布入固定卡扣。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=1,482，test=165。观察字段示例 robot_state, wrist225_image, wrist45_image, image, natural_language_embedding, natural_language_instruction, top_image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/berkeley_cable_routing/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "955b96b3d231c686f3311ca697c50ebddaefa6c10414f7e809995bcf4dabeeeb",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_cable_routing/0.1.0/features.json",
+      "features_sha256": "76c13cb2ef4bc30b291d977d47b1e28cef3725a27eaa797f761137663a8e9c6d",
+      "tfds_dataset": "berkeley_cable_routing",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 1482,
+        "test": 165
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/view/cablerouting/home"
+      ]
+    },
+    {
+      "name": "Roboturk (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/roboturk/0.1.0/dataset_info.json",
+      "observed_scope": "Sawyer。整理衣物、叠碗与物品搜寻。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=1,796，test=199。观察字段示例 front_rgb, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/roboturk/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "384c7cbb879e74dc01506405dd4be28f4c41b6d37d2026e8bfa0a1ca7b89976b",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/roboturk/0.1.0/features.json",
+      "features_sha256": "2c94f810e0a73ae2f764e35460cbd9b7dea53efcafd9c45400e9bdb8015dec65",
+      "tfds_dataset": "roboturk",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 1796,
+        "test": 199
+      },
+      "upstream_urls_in_info": [
+        "https://roboturk.stanford.edu/dataset_real.html"
+      ]
+    },
+    {
+      "name": "NYU VINN (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/nyu_door_opening_surprising_effectiveness/0.1.0/dataset_info.json",
+      "observed_scope": "Hello Stretch。多种柜门开启。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=435，test=49。观察字段示例 image, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/nyu_door_opening_surprising_effectiveness/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "44d03631de311b328c608aecb58b1e26392b065f79ab11f1d6eaadd7c711bd6d",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/nyu_door_opening_surprising_effectiveness/0.1.0/features.json",
+      "features_sha256": "de544d9c0e20f0a94c8d3af5f94e6755191eef5bc79a4d4316188d390fae4c75",
+      "tfds_dataset": "nyu_door_opening_surprising_effectiveness",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 435,
+        "test": 49
+      },
+      "upstream_urls_in_info": [
+        "https://jyopari.github.io/VINN/"
+      ]
+    },
+    {
+      "name": "Austin VIOLA (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/viola/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。布置桌面与制作咖啡。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=135，test=15。观察字段示例 ee_states, gripper_states, joint_states, agentview_rgb, eye_in_hand_rgb, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/viola/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "b69689aae6aa7cee355c69dc2275e61c3db767b89d1f6c612ccbf31c170b1eca",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/viola/0.1.0/features.json",
+      "features_sha256": "4266b25ee896fb41817e9f817b214c9b5de7ceb6d1eddc7f9899ea54a8f43fb2",
+      "tfds_dataset": "viola",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 135,
+        "test": 15
+      },
+      "upstream_urls_in_info": [
+        "https://ut-austin-rpl.github.io/VIOLA/"
+      ]
+    },
+    {
+      "name": "Berkeley Autolab UR5 (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_autolab_ur5/0.1.0/dataset_info.json",
+      "observed_scope": "UR5。物体拾放等四项技能。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=896，test=104。观察字段示例 image_with_depth, robot_state, hand_image, image, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/berkeley_autolab_ur5/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "ecb42ef854d8a4bf9749eaeaa198929c5a9771f6d2e2265d1b5772571c0b734f",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_autolab_ur5/0.1.0/features.json",
+      "features_sha256": "b95d8c52c658ec3cc771b3b5d9a7695dfcb582844008f7cbaf63c79440cbba16",
+      "tfds_dataset": "berkeley_autolab_ur5",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 896,
+        "test": 104
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/view/berkeley-ur5/home"
+      ]
+    },
+    {
+      "name": "TOTO Benchmark (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/toto/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。舀取与倾倒。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=902，test=101。观察字段示例 state, image, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/toto/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "7cc9dde4a65a3acd43312692e56b836f3d4bc78215f3c539bb6c791698d492c1",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/toto/0.1.0/features.json",
+      "features_sha256": "1dd48fc3ee611f6326e1b952d01fbef9a396851113e3892995a3f44492078bd4",
+      "tfds_dataset": "toto",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 902,
+        "test": 101
+      },
+      "upstream_urls_in_info": [
+        "https://toto-benchmark.org/"
+      ]
+    },
+    {
+      "name": "Language Table (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/language_table/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。根据语言指令推动多形状积木。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=442,226。观察字段示例 effector_target_translation, effector_translation, instruction, rgb",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/language_table/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。真实与仿真另有发布，分包与来源应分别核对。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "f9c24bb59cc3dd66bc655d78762ed2a4c47b6628d187d684c29c8c886f7dd938",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/language_table/0.1.0/features.json",
+      "features_sha256": "aab4b382f0f235a6327006a8f47c13fa3169f4e2cbf71674b0519649af2d95bd",
+      "tfds_dataset": "language_table",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 442226
+      },
+      "upstream_urls_in_info": [
+        "https://interactive-language.github.io/"
+      ]
+    },
+    {
+      "name": "Columbia PushT Dataset (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/columbia_cairlab_pusht_real/0.1.0/dataset_info.json",
+      "observed_scope": "UR5。将 T 形块推至目标位姿。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=122，test=14。观察字段示例 robot_state, wrist_image, image, natural_language_embedding, natural_language_instruction",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/columbia_cairlab_pusht_real/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "3416e656e6c921705a512c5001772c92c2c574462d4e47364d7978d5e5b672af",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/columbia_cairlab_pusht_real/0.1.0/features.json",
+      "features_sha256": "ef8b62bdb14d8dbf4e1f9ad48df4889dcd8954b6a0225399fc60aab620807b0d",
+      "tfds_dataset": "columbia_cairlab_pusht_real",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 122,
+        "test": 14
+      },
+      "upstream_urls_in_info": [
+        "https://github.com/columbia-ai-robotics/diffusion_policy"
+      ]
+    },
+    {
+      "name": "Stanford Kuka Multimodal (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Kuka iiwa。不同外形销钉的精密插入。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=3,000。观察字段示例 depth_image, ee_forces_continuous, state, contact, ee_orientation, ee_orientation_vel, ee_position, ee_vel, ee_yaw",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "181750acf6a81ff893787e821c8ea47200c608c5ab90ed7c95b6f2050ffb1b31",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/stanford_kuka_multimodal_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "e9685f940020af4ed062e66873576b58e67049d47e63c8312d2be4723d5c4d2a",
+      "tfds_dataset": "stanford_kuka_multimodal_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 3000
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/view/visionandtouch"
+      ]
+    },
+    {
+      "name": "NYU ROT (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/nyu_rot_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。开盒、叠杯等桌面操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=14。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/nyu_rot_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "1756b3c9e4eba31133493546119ab5b3bc4d5208ef89b02cc528cf3e77d5d2d9",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/nyu_rot_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "26ed31f766ed6197acfba6ebf466692272950369baeeff5e1eb24c8f8f129082",
+      "tfds_dataset": "nyu_rot_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 14
+      },
+      "upstream_urls_in_info": [
+        "https://rot-robot.github.io/"
+      ]
+    },
+    {
+      "name": "Stanford HYDRA (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/stanford_hydra_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。家庭操作中的多阶段示范。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=570。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/stanford_hydra_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "60418341b3f8f43bea1cb95cb03b12e0ea6753ec68bc0979e3943e7547ddb2c2",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/stanford_hydra_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "fb7255b5da511eba8bbaf70e1091c1778888efeba990f3a5cbd377a9e4faee62",
+      "tfds_dataset": "stanford_hydra_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 570
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/view/hydra-il-2023"
+      ]
+    },
+    {
+      "name": "Austin BUDS (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/austin_buds_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。厨房中的长时序锅具操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=50。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/austin_buds_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "d04e0a7b3db006cb1aebcffc95de22f030d1b0145755a5eb64cb367fd2e8443f",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/austin_buds_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "cfae5887defe5ef7d88bebbb8be5c25b4a8154496e97bed459314eeeffdfae5f",
+      "tfds_dataset": "austin_buds_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 50
+      },
+      "upstream_urls_in_info": [
+        "https://ut-austin-rpl.github.io/rpl-BUDS/"
+      ]
+    },
+    {
+      "name": "NYU Franka Play (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/nyu_franka_play_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。玩具厨房无结构交互。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=365，val=91。观察字段示例 depth, depth_additional_view, state, image, image_additional_view",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/nyu_franka_play_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "1f260003290a7459dea6553b8e3ee8922bfea567010e88002384a83f48b6e1ad",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/nyu_franka_play_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "77560fb7011e0b5556be70c24b442b8f7fc6f51b06f07f3d2000d8611abbfcf6",
+      "tfds_dataset": "nyu_franka_play_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 365,
+        "val": 91
+      },
+      "upstream_urls_in_info": [
+        "https://play-to-policy.github.io/"
+      ]
+    },
+    {
+      "name": "Furniture Bench (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/furniture_bench_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。组装九种家具模型。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=5,100。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/furniture_bench_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "f1c032199705b15a0845c6adbf37d2b9f3f980516e1cc7e5a6e6fca662cb2545",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/furniture_bench_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "cda3500c8de9c84a821fc0ca904bfc88d803200420352cbd4a27a29be182104c",
+      "tfds_dataset": "furniture_bench_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 5100
+      },
+      "upstream_urls_in_info": [
+        "https://clvrai.github.io/furniture-bench/"
+      ]
+    },
+    {
+      "name": "CMU Franka Exploration (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/cmu_franka_exploration_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。厨房自由探索。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=199。观察字段示例 highres_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/cmu_franka_exploration_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "842b5172d470efc3641d9691b72c83ec9fc6fa0846d6cadeb5a99db4278eaaef",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/cmu_franka_exploration_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "2112e9eaee5ede817cadda571227e594d033e8d247090c0e74ef9827b584e4b2",
+      "tfds_dataset": "cmu_franka_exploration_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 199
+      },
+      "upstream_urls_in_info": [
+        "https://human-world-model.github.io/"
+      ]
+    },
+    {
+      "name": "UCSD Kitchen (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_kitchen_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。厨房语言条件操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=150。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/ucsd_kitchen_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "73294a4bc1c1b33254f17bea92d0607ce71cfcb5e3459477f4c25734e1d212b8",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_kitchen_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "a57b46b0a4d93f352ee521a9e761931a8e8151962f1263ee946f7b45b3415598",
+      "tfds_dataset": "ucsd_kitchen_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 150
+      },
+      "upstream_urls_in_info": [
+        " "
+      ]
+    },
+    {
+      "name": "UCSD Pick Place (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_pick_and_place_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。桌面和厨房拾放。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=1,355。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/ucsd_pick_and_place_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "2db73d0cbac9600994040791d80edd525906e927db5c2355f784ad2bee0cf066",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/ucsd_pick_and_place_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "42c74e3d1099110229fea2411779560dc1ad752aa731e59499eb4edeb9e0a24e",
+      "tfds_dataset": "ucsd_pick_and_place_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 1355
+      },
+      "upstream_urls_in_info": [
+        "https://owmcorl.github.io"
+      ]
+    },
+    {
+      "name": "Austin Sailor (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/austin_sailor_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。玩具厨房物体操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=240。观察字段示例 state, state_ee, state_gripper, state_joint, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/austin_sailor_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "265be6ca2b3de5d56bd53333ded061fd86ce5878cb8a9cb29afbb6a4436ac074",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/austin_sailor_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "469aa53420dccd8e05b77977c9fc6c4c5e20b8c4c439f2333be1674fb1fd0f9c",
+      "tfds_dataset": "austin_sailor_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 240
+      },
+      "upstream_urls_in_info": [
+        "https://ut-austin-rpl.github.io/sailor/"
+      ]
+    },
+    {
+      "name": "Austin Sirius (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/austin_sirius_dataset_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。咖啡胶囊插入及齿轮装配。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=559。观察字段示例 state, state_ee, state_gripper, state_joint, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/austin_sirius_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "1949884ea278ab42777bc3e210b46a14fc60f5d42adb7b4722894e855c749134",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/austin_sirius_dataset_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "2daa245958f596605aa91a12d88ad9d2af987b1f415a23122fe3793a90819119",
+      "tfds_dataset": "austin_sirius_dataset_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 559
+      },
+      "upstream_urls_in_info": [
+        "https://ut-austin-rpl.github.io/sirius/"
+      ]
+    },
+    {
+      "name": "BC-Z (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/bc_z/1.0.1/dataset_info.json",
+      "observed_scope": "Google Robot。擦拭、拾取、放置多种物体。版本 1.0.0，按发布分片汇总的 TFDS 样本数为 train=39,350，val=3,914。观察字段示例 episode_success, image, natural_language_embedding, natural_language_instruction, present/autonomous, present/axis_angle, present/intervention, present/sensed_close, present/xyz",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/bc_z/1.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "4adfaafc15c741ec4d0282ee9542f73aff5b7cf1a2379a64ed4f795379c52ec5",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/bc_z/1.0.1/features.json",
+      "features_sha256": "7727459c63c131c0c812ca7fe2d3fb97f7f4023530632ae198f5e90430ef0e45",
+      "tfds_dataset": "bc_z",
+      "version": "1.0.1",
+      "split_examples": {
+        "train": 39350,
+        "val": 3914
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/view/bc-z/home"
+      ]
+    },
+    {
+      "name": "Tokyo PR2 Fridge Opening (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_opening_fridge_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "PR2。开启冰箱门。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=64，val=16。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_opening_fridge_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "1b7751f280f32a8b8ecaeda4ad7adcc952492d08bbf68751aba5922c5e85e350",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_opening_fridge_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "05ead7a6d43c589a3e802317d033d88dd17e95257d1ce31574fbf2ebfa78e45e",
+      "tfds_dataset": "utokyo_pr2_opening_fridge_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 64,
+        "val": 16
+      },
+      "upstream_urls_in_info": [
+        "--"
+      ]
+    },
+    {
+      "name": "Tokyo PR2 Tabletop Manipulation (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds/1.0.0/dataset_info.json",
+      "observed_scope": "PR2。桌面食品拾放。版本 1.0.0，按发布分片汇总的 TFDS 样本数为 train=192，val=48。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds/1.0.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "8636152a1809e96799d30fbb35722a2a5900071c64b665de2c9340135c2540f1",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds/1.0.0/features.json",
+      "features_sha256": "c09296b662929af4b5a49f78efea01c424660eefb43e15de1b47e1cee83fdf49",
+      "tfds_dataset": "utokyo_pr2_tabletop_manipulation_converted_externally_to_rlds",
+      "version": "1.0.0",
+      "split_examples": {
+        "train": 192,
+        "val": 48
+      },
+      "upstream_urls_in_info": []
+    },
+    {
+      "name": "UTokyo xArm PickPlace (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_pick_and_place_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。堆叠盘子。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=92，val=10。观察字段示例 joint_state, end_effector_pose, hand_image, image, image2, joint_trajectory",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_pick_and_place_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "b45824e1042e3b5211b5106806ae0c8b7c6b44a452c10f03f96b2e5183bddb2c",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_pick_and_place_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "dde7cfeb776001f0e8c83d77bfe540dec9c0902c4a1a79f246c4ebcb74683709",
+      "tfds_dataset": "utokyo_xarm_pick_and_place_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 92,
+        "val": 10
+      },
+      "upstream_urls_in_info": [
+        "--"
+      ]
+    },
+    {
+      "name": "UTokyo xArm Bimanual (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_bimanual_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm Bimanual。双臂整理毛巾。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=64，val=6。观察字段示例 action_l, action_r, image, pose_l, pose_r",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_bimanual_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "8fb058755ab8173d427c75b3140b7277d0d1389c910475bd7db5a97f3a8c102f",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/utokyo_xarm_bimanual_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "03d4aa37247238ad5876c77bf0b69d6b0ac2cfc7920e25df004b952537bca0ff",
+      "tfds_dataset": "utokyo_xarm_bimanual_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 64,
+        "val": 6
+      },
+      "upstream_urls_in_info": [
+        "--"
+      ]
+    },
+    {
+      "name": "Robonet (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/robo_net/1.0.0/dataset_info.json",
+      "observed_scope": "Multi-Robot。多硬件箱内物体操作。版本 1.0.0，按发布分片汇总的 TFDS 样本数为 train=82,775。观察字段示例 state, image, image1, image2",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/robo_net/1.0.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "827fc4ab400907d34deadc7e4da201838958bbd0b93995eaa5e1d63c80069085",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/robo_net/1.0.0/features.json",
+      "features_sha256": "13119b9ee3b04d046bea4fd1426e4c76862686e63989fc5c785a2457b011e0ae",
+      "tfds_dataset": "robo_net",
+      "version": "1.0.0",
+      "split_examples": {
+        "train": 82775
+      },
+      "upstream_urls_in_info": []
+    },
+    {
+      "name": "Berkeley MVP Data (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_mvp_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "xArm。桌面到达、推移与拾取。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=480。观察字段示例 gripper, hand_image, joint_pos, pose",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/berkeley_mvp_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "dd504938fe152d386a95911fddc03901d7c12908146b33f44c3039c2b0940682",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_mvp_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "2ff6317c90d04e2b1f41c3a39acbe892219312b40a9e2c7a70016113f7f23d11",
+      "tfds_dataset": "berkeley_mvp_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 480
+      },
+      "upstream_urls_in_info": [
+        "https://arxiv.org/abs/2203.06173"
+      ]
+    },
+    {
+      "name": "Berkeley RPT Data (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_rpt_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。拾取、堆叠、卸叠与箱内抓取。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=908。观察字段示例 gripper, hand_image, joint_pos",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/berkeley_rpt_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "9790c22e0b68eaed9c76b34e0ee1f3d4c8fbfb824144d55fdf9e6cd8079ca690",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_rpt_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "a3806ca6126eaff50ad3820de51cac8f3abae64f532a4b547484a00c56754f63",
+      "tfds_dataset": "berkeley_rpt_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 908
+      },
+      "upstream_urls_in_info": [
+        "https://arxiv.org/abs/2306.10007"
+      ]
+    },
+    {
+      "name": "KAIST Nonprehensile Objects (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/kaist_nonprehensile_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。非抓持条件下的桌面移动。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=201。观察字段示例 state, image, partial_pointcloud",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/kaist_nonprehensile_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "f6bbb3804c3d4af533733f5d46c7c45c0fba2c3d136caa4fabc6518dfa8f08f3",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/kaist_nonprehensile_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "8c1a8201e963417cd44d985ea60118e40e7cb1a051f7b1cbfc087afacd3f4b9b",
+      "tfds_dataset": "kaist_nonprehensile_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 201
+      },
+      "upstream_urls_in_info": [
+        "--"
+      ]
+    },
+    {
+      "name": "Stanford MaskVIT Data (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/stanford_mask_vit_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Sawyer。箱内随机推移与抓取。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=9,109，val=91。观察字段示例 state, end_effector_pose, finger_sensors, high_bound, image, low_bound",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/stanford_mask_vit_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "352a4d947c5fef284bcfa040ab06e1fcd9569b4f20ed254f6335b7bda8edaa58",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/stanford_mask_vit_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "cdd887cb646d537c09ffa157994fcc5eea297c3cda2a5db6ad70ed1686bbfc44",
+      "tfds_dataset": "stanford_mask_vit_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 9109,
+        "val": 91
+      },
+      "upstream_urls_in_info": [
+        "https://arxiv.org/abs/2206.11894"
+      ]
+    },
+    {
+      "name": "LSMO Dataset (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/tokyo_u_lsmo_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Cobotta。避障并到达目标物。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=50。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/tokyo_u_lsmo_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "9c1c303f0971ad75f0e98e1e615809510c8e537305212e96253d9fe552ba76cd",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/tokyo_u_lsmo_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "074ce33ef29bc52c0b4b0076914784e50c0bd551aa83423ce17e5ce0ea0544f7",
+      "tfds_dataset": "tokyo_u_lsmo_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 50
+      },
+      "upstream_urls_in_info": [
+        "https://journals.sagepub.com/doi/full/10.1177/02783649211044405"
+      ]
+    },
+    {
+      "name": "DLR Sara Pour Dataset (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_pour_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "DLR SARA。将乒乓球倒入杯中。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=100。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/dlr_sara_pour_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "59f5c942ab7bb08412d051d2ce2784d78970d61cb8b05f8d5262df568d04561f",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_pour_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "ae558056b74a83ca399d395e2f0ef2e78e07dd5ec29b612477663c334ed7859c",
+      "tfds_dataset": "dlr_sara_pour_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 100
+      },
+      "upstream_urls_in_info": [
+        "https://elib.dlr.de/193739/1/padalkar2023rlsct.pdf"
+      ]
+    },
+    {
+      "name": "DLR Sara Grid Clamp Dataset (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_grid_clamp_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "DLR SARA。网格夹具定位。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=107。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/dlr_sara_grid_clamp_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "17d535a0627e048d87b7c6c4d8fecda8556ec04529c1ec3e311196b5efb36b71",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/dlr_sara_grid_clamp_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "b142816d0d03f51b2bf5429e6b7acb8749a3640332b659aea60902002dd5eda6",
+      "tfds_dataset": "dlr_sara_grid_clamp_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 107
+      },
+      "upstream_urls_in_info": [
+        "https://www.researchsquare.com/article/rs-3289569/v1"
+      ]
+    },
+    {
+      "name": "DLR Wheelchair Shared Control (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/dlr_edan_shared_control_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "DLR EDAN。轮椅辅助机械臂抓取。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=104。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/dlr_edan_shared_control_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "c0adedc28ce2f8120b0a252c45c7ff6d4d7ccd07b66af5117460f7ad9bdf0e86",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/dlr_edan_shared_control_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "93a8d4026f36b510268fa11bc513d4e54d463ac175e3500eb7462cea9c6f9b99",
+      "tfds_dataset": "dlr_edan_shared_control_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 104
+      },
+      "upstream_urls_in_info": [
+        "https://ieeexplore.ieee.org/document/9341156"
+      ]
+    },
+    {
+      "name": "ASU TableTop Manipulation (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/asu_table_top_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "UR5。桌面拾取、推移与转动物品。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=110。观察字段示例 state, state_vel, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/asu_table_top_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "d7b42753f3a97a333e41c6e532f5f259582578be09d9b054554de9c62d6f9bff",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/asu_table_top_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "31711feb3dab5d66a2f3160c8f2152c828f035e0626106da29d46efde4901b05",
+      "tfds_dataset": "asu_table_top_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 110
+      },
+      "upstream_urls_in_info": [
+        "https://link.springer.com/article/10.1007/s10514-023-10129-1"
+      ]
+    },
+    {
+      "name": "Stanford Robocook (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/stanford_robocook_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。使用工具改变面团形状。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=2,460。观察字段示例 depth_1, depth_2, depth_3, depth_4, state, image_1, image_2, image_3, image_4",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/stanford_robocook_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "b354c8822e124b6e30ae6d9c44392f100bba76b337084b492e646df064cb8f22",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/stanford_robocook_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "209dcb6c4ceec6e4df0d836c99bf659d51c82fb6ed3413dc9eb69b3d78d73875",
+      "tfds_dataset": "stanford_robocook_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 2460
+      },
+      "upstream_urls_in_info": [
+        "https://hshi74.github.io/robocook/"
+      ]
+    },
+    {
+      "name": "ETH Agent Affordances (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/eth_agent_affordances/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。打开和关闭烤箱。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=118。观察字段示例 state, image, input_point_cloud",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/eth_agent_affordances/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "0110ba41cf6a92b2547e6341777418fee49f92c81d98e72249219a289ad49b27",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/eth_agent_affordances/0.1.0/features.json",
+      "features_sha256": "97a8ae3b751cac1210801107dff20bbbc253c07e8ce78f037d1d684fa49ddb34",
+      "tfds_dataset": "eth_agent_affordances",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 118
+      },
+      "upstream_urls_in_info": [
+        "https://ieeexplore.ieee.org/iel7/10160211/10160212/10160747.pdf"
+      ]
+    },
+    {
+      "name": "Imperial Wrist Cam (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/imperialcollege_sawyer_wrist_cam/0.1.0/dataset_info.json",
+      "observed_scope": "Sawyer。抓取与插入日用品。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=170。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/imperialcollege_sawyer_wrist_cam/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "088cb67e07e42fe2b992e6a368aff390da8d03791aa9aacf313448c59b3a7f4a",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/imperialcollege_sawyer_wrist_cam/0.1.0/features.json",
+      "features_sha256": "446b638e2b1a7128cb4cc5c043b826056b2a94d52fbbfef9089e11679d5895c2",
+      "tfds_dataset": "imperialcollege_sawyer_wrist_cam",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 170
+      },
+      "upstream_urls_in_info": [
+        "--"
+      ]
+    },
+    {
+      "name": "CMU Franka Pick-Insert Data (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/iamlab_cmu_pickup_insert_converted_externally_to_rlds/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。拾取异形物或插入。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=631。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/iamlab_cmu_pickup_insert_converted_externally_to_rlds/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "c785e6c3b6584c93083e8d4aa7dfd0b439f0fb3f36c1673b2d8ceb3aac0b8536",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/iamlab_cmu_pickup_insert_converted_externally_to_rlds/0.1.0/features.json",
+      "features_sha256": "32157ed2644cc0d728541c08a3a9b2fdfe1602ce3594fbdc67d212edfc4496b0",
+      "tfds_dataset": "iamlab_cmu_pickup_insert_converted_externally_to_rlds",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 631
+      },
+      "upstream_urls_in_info": [
+        "https://openreview.net/forum?id=WuBv9-IGDUA"
+      ]
+    },
+    {
+      "name": "UIUC D3Field (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/uiuc_d3field/1.1.2/dataset_info.json",
+      "observed_scope": "Kinova Gen3。按目标图像整理物品。版本 1.1.2，按发布分片汇总的 TFDS 样本数为 train=196。观察字段示例 depth_1, depth_2, depth_3, depth_4, state, image_1, image_2, image_3, image_4",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/uiuc_d3field/1.1.2/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "be3f54b425b945ed0dbec7ab5b2f10075f09dfb6d4ccf426cba91e77f3f71e11",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/uiuc_d3field/1.1.2/features.json",
+      "features_sha256": "d50836660b4eca1384a7a68974ec76f82527024374fac70003ef4ba89731514e",
+      "tfds_dataset": "uiuc_d3field",
+      "version": "1.1.2",
+      "split_examples": {
+        "train": 196
+      },
+      "upstream_urls_in_info": []
+    },
+    {
+      "name": "Austin Mutex (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/utaustin_mutex/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。家庭多任务多模态示范。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=1,500。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/utaustin_mutex/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "97a7c008b4ac7f5fe921d7561cb64ef5a1e3edca2271e29746d1ce7c877ba761",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/utaustin_mutex/0.1.0/features.json",
+      "features_sha256": "589bbfcdc9c4110beaae425c3a363aae54330d903064eadb3a292ce43ff9f860",
+      "tfds_dataset": "utaustin_mutex",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 1500
+      },
+      "upstream_urls_in_info": [
+        "https://ut-austin-rpl.github.io/MUTEX/"
+      ]
+    },
+    {
+      "name": "Berkeley Fanuc Manipulation (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_fanuc_manipulation/0.1.0/dataset_info.json",
+      "observed_scope": "Fanuc Mate。开抽屉与拾放等任务。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=415。观察字段示例 end_effector_state, state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/berkeley_fanuc_manipulation/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "6ffe8c8e46776cf7707b646baa6061197d21ed9694d17301b981ce47f22f1fed",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/berkeley_fanuc_manipulation/0.1.0/features.json",
+      "features_sha256": "d298e9bf1c92a7edf5cff116c30784706379497f630e10a1fd5cb85468469ecf",
+      "tfds_dataset": "berkeley_fanuc_manipulation",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 415
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/berkeley.edu/fanuc-manipulation"
+      ]
+    },
+    {
+      "name": "CMU Food Manipulation (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/cmu_playing_with_food/1.0.0/dataset_info.json",
+      "observed_scope": "Franka。机器人与食物的交互。版本 1.0.0，按发布分片汇总的 TFDS 样本数为 train=4,200。观察字段示例 state, finger_vision_1, finger_vision_2, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/cmu_playing_with_food/1.0.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "da772525ea9ada04d8ab12ddf7e87528c8f036fb02d751197818413d7982544c",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/cmu_playing_with_food/1.0.0/features.json",
+      "features_sha256": "5f36d30b9b046eb6f4cd4d8cfe70a13f2682c6f017a42c544a2c8d5e2aaf08fd",
+      "tfds_dataset": "cmu_playing_with_food",
+      "version": "1.0.0",
+      "split_examples": {
+        "train": 4200
+      },
+      "upstream_urls_in_info": []
+    },
+    {
+      "name": "CMU Play Fusion (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/cmu_play_fusion/0.1.0/dataset_info.json",
+      "observed_scope": "Franka。多个复杂厨房和桌面场景的操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=576。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/cmu_play_fusion/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "e7a9df16b794ee5f254e75006093b4ace3f1532c42c346c703a22710351d45b3",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/cmu_play_fusion/0.1.0/features.json",
+      "features_sha256": "4d4c014adab783c1e08d48bf5f4411656e2dca114028f98fcb94595a3b70fa20",
+      "tfds_dataset": "cmu_play_fusion",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 576
+      },
+      "upstream_urls_in_info": [
+        "https://play-fusion.github.io/"
+      ]
+    },
+    {
+      "name": "CMU Stretch (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/cmu_stretch/0.1.0/dataset_info.json",
+      "observed_scope": "Hello Stretch。多环境家庭移动操作。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=135。观察字段示例 state, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/cmu_stretch/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "e8d34bc2f6442f1b9cbcb7b5c12b7ac20ebadc5c85ee7c5b13968a918de6e851",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/cmu_stretch/0.1.0/features.json",
+      "features_sha256": "284bf790848647f44fac2cfafd5f9f32955d224f57e3786d8767f26931bdc04c",
+      "tfds_dataset": "cmu_stretch",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 135
+      },
+      "upstream_urls_in_info": [
+        "https://robo-affordances.github.io/"
+      ]
+    },
+    {
+      "name": "RoboVQA (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/robot_vqa/0.1.0/dataset_info.json",
+      "observed_scope": "Google Robot。人和机器人处理长时序自然语言请求。版本 0.1.0，按发布分片汇总的 TFDS 样本数为 train=3,331,523，test=3,774。观察字段示例 images, raw_text_answer, raw_text_question",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/robot_vqa/0.1.0/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。混合人和机器人视觉问答记录。切分数含问答样本，不能当作独立物理轨迹数。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "9dfe5622eb66c0c3802f6c41fd9d516cfe8a3948436cabb449c1414f04842037",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/robot_vqa/0.1.0/features.json",
+      "features_sha256": "211a720cc6d17bc68feef65998a20fbcefa04b65d627be5cdc80b87a06a5de89",
+      "tfds_dataset": "robot_vqa",
+      "version": "0.1.0",
+      "split_examples": {
+        "train": 3331523,
+        "test": 3774
+      },
+      "upstream_urls_in_info": [
+        "https://anonymous-robovqa.github.io/"
+      ]
+    },
+    {
+      "name": "DROID (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/droid/1.0.1/dataset_info.json",
+      "observed_scope": "Franka。分布式真实环境多任务机械臂操作。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=95,658。观察字段示例 wrist_image_left, cartesian_position, exterior_image_1_left, exterior_image_2_left, gripper_position, joint_position",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/droid/1.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "240764bd443f83f811cde24f9b8117d1228ab11aefa55899983e14731964b781",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/droid/1.0.1/features.json",
+      "features_sha256": "c02093d7f49d876dbd146594300a119712fc4a64bb0a00caa58cfd0503b99ec8",
+      "tfds_dataset": "droid",
+      "version": "1.0.1",
+      "split_examples": {
+        "train": 95658
+      },
+      "upstream_urls_in_info": [
+        "https://droid-dataset.github.io/"
+      ]
+    },
+    {
+      "name": "ConqHose (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/conq_hose_manipulation/0.0.1/dataset_info.json",
+      "observed_scope": "Spot。软管末端的抓取、拖动和举升。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=113，val=26。观察字段示例 state, frontleft_fisheye_image, frontright_fisheye_image, hand_color_image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/conq_hose_manipulation/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "82421f18580df55fe8f18348e76514617527f30484133b6924696422e232b28e",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/conq_hose_manipulation/0.0.1/features.json",
+      "features_sha256": "27a4704fd75f27e6458dcd6b1322153fc86777c0d45c7615ec46c1a7e8d94e2d",
+      "tfds_dataset": "conq_hose_manipulation",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 113,
+        "val": 26
+      },
+      "upstream_urls_in_info": [
+        "https://sites.google.com/corp/view/conq-hose-manipulation-dataset/home"
+      ]
+    },
+    {
+      "name": "DobbE (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/dobbe/0.0.1/dataset_info.json",
+      "observed_scope": "Hello Stretch。手持装置采集家庭操作示范。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=5,208。观察字段示例 state, wrist_image, gripper, quat, rot, xyz",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/dobbe/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。该数据含人持设备采集的示范。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "99c3155af60f24b8d99d6c1752e89faed6d5f5cc64700fd46ae4dc5cbc28ef75",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/dobbe/0.0.1/features.json",
+      "features_sha256": "a15ab7de1bc8eaf9ac827feaff7e12823583b0101592da8ad23cf462a6ad5ec8",
+      "tfds_dataset": "dobbe",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 5208
+      },
+      "upstream_urls_in_info": [
+        "\nhttps://github.com/notmahi/dobb-e\n"
+      ]
+    },
+    {
+      "name": "FMB (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/dataset_info.json",
+      "observed_scope": "Franka。3D 打印零部件的拾放、定位与装配。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=8,611。观察字段示例 eef_force, eef_torque, image_side_1_depth, image_side_2_depth, image_wrist_1, image_wrist_1_depth, image_wrist_2, image_wrist_2_depth, state_gripper_pose",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "e158442b8e5e920e3ddcf407fca45e41cc2354693746f0509e7a610dd3f02696",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/fmb/0.0.1/features.json",
+      "features_sha256": "7e4019dd74e0fc5774ee1bb454fa91b2ace4088862c2594d80a680e52726cf47",
+      "tfds_dataset": "fmb",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 8611
+      },
+      "upstream_urls_in_info": [
+        "https://functional-manipulation-benchmark.github.io/"
+      ]
+    },
+    {
+      "name": "MimicPlay (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/mimic_play/0.0.1/dataset_info.json",
+      "observed_scope": "Franka。家用电器与场景中的操作。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=378。观察字段示例 state, wrist_image, image",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/mimic_play/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "41a3d4931d4250012f08b816aff07b55dc2f0a845607d2f7918278fee6e8b6ad",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/mimic_play/0.0.1/features.json",
+      "features_sha256": "5ceaae5c6fa63134535e6c12c70d9947a6bfa0751916a6287662e891945a6a53",
+      "tfds_dataset": "mimic_play",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 378
+      },
+      "upstream_urls_in_info": [
+        "https://mimic-play.github.io/"
+      ]
+    },
+    {
+      "name": "MobileALOHA (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/aloha_mobile/0.0.1/dataset_info.json",
+      "observed_scope": "MobileALOHA。双臂移动操作与厨房任务。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=276。观察字段示例 cam_left_wrist, cam_right_wrist, state, cam_high",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/aloha_mobile/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "61129ae3883c4098d074d260e9951f36d4fe8a60744a509214033933f370da37",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/aloha_mobile/0.0.1/features.json",
+      "features_sha256": "059d415cb730ba01008bf772124d097e4052e3d8f921338c8918137389c581d5",
+      "tfds_dataset": "aloha_mobile",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 276
+      },
+      "upstream_urls_in_info": [
+        "https://mobile-aloha.github.io"
+      ]
+    },
+    {
+      "name": "RoboSet (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/robo_set/0.0.1/dataset_info.json",
+      "observed_scope": "Franka。厨房物体操作。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=18,250。观察字段示例 image_wrist, state, state_velocity, image_left, image_right, image_top",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/robo_set/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "bba40ca241f8187b61fdacf71275ac5b897826ecb6e0dffaa8dca3eb82d78930",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/robo_set/0.0.1/features.json",
+      "features_sha256": "78975a9d777375c64210f4fe7e78a6980adc42f1bf32a2e6ec09fea2db8e6f68",
+      "tfds_dataset": "robo_set",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 18250
+      },
+      "upstream_urls_in_info": [
+        "https://robopen.github.io/"
+      ]
+    },
+    {
+      "name": "TidyBot (OXE)",
+      "source_url": "https://storage.googleapis.com/gresearch/robotics/tidybot/0.0.1/dataset_info.json",
+      "observed_scope": "TidyBot。按偏好整理物体。版本 0.0.1，按发布分片汇总的 TFDS 样本数为 train=24。观察字段示例 image, object, receptacles",
+      "access_notes": "RLDS/TFDS 官方发布描述与字段定义已读取。字段文件 https://storage.googleapis.com/gresearch/robotics/tidybot/0.0.1/features.json",
+      "limitations": "Open X-Embodiment 收录版本；使用该版本的切分数，独立研究及总轨迹统计须与原发布版去重。",
+      "method": "HTTP GET dataset_info.json and features.json; split sizes summed from shardLengths; no raw trajectories read",
+      "dataset_info_sha256": "ccdd6e788e5d48f5cb5b52e71735cfb6e07c5c91eacab0aa1415038c09cbdb20",
+      "features_url": "https://storage.googleapis.com/gresearch/robotics/tidybot/0.0.1/features.json",
+      "features_sha256": "4c88bb30825da23ab60993ef92db9e69a6d8dfec31495b29338a56ca4724e690",
+      "tfds_dataset": "tidybot",
+      "version": "0.0.1",
+      "split_examples": {
+        "train": 24
+      },
+      "upstream_urls_in_info": [
+        "https://github.com/jimmyyhwu/rlds_dataset_builder\n\nhttps://github.com/jimmyyhwu/tidybot"
+      ]
+    },
+    {
+      "name": "Touch-Slide",
+      "source_url": "https://huggingface.co/datasets/facebook/touch-slide",
+      "observed_scope": "人操作 DIGIT 沿 9 个玩具厨房物体滑动，每个物体 5 条轨迹，共约 18 万帧。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-4.0。固定版本目录 https://huggingface.co/datasets/facebook/touch-slide/tree/466860e825b8e9c5467718dd56c1ce116c50ceea",
+      "limitations": "无标签；可用于触觉自监督，不能单独检验闭环控制。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "466860e825b8e9c5467718dd56c1ce116c50ceea",
+      "readme_url": "https://huggingface.co/datasets/facebook/touch-slide/resolve/466860e825b8e9c5467718dd56c1ce116c50ceea/README.md",
+      "listed_examples": [
+        "assets/bread-digit.gif",
+        "assets/bread-real.gif",
+        "assets/touch_slide_objs.png",
+        "banana/dataset_0.pkl"
+      ],
+      "gated": false
+    },
+    {
+      "name": "TacBench DIGIT force / slip",
+      "source_url": "https://huggingface.co/datasets/facebook/digit-force-estimation",
+      "observed_scope": "DIGIT 与 ATI Nano17 同步触觉和三轴力，三个压头，最高 5 N 法向加载。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-4.0。固定版本目录 https://huggingface.co/datasets/facebook/digit-force-estimation/tree/408e5b82e01b1cc471c8e747b686303afbababdc",
+      "limitations": "滑移由摩擦锥间接推断；传感器台架结果应独立于在手抓取结果。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "408e5b82e01b1cc471c8e747b686303afbababdc",
+      "readme_url": "https://huggingface.co/datasets/facebook/digit-force-estimation/resolve/408e5b82e01b1cc471c8e747b686303afbababdc/README.md",
+      "listed_examples": [
+        "assets/force.gif",
+        "flat/batch_1/dataset_digit_00.pkl",
+        "flat/batch_1/dataset_digit_01.pkl",
+        "flat/batch_1/dataset_digit_02.pkl"
+      ],
+      "gated": false
+    },
+    {
+      "name": "TacBench GelSight Mini force / slip",
+      "source_url": "https://huggingface.co/datasets/facebook/gelsight-force-estimation",
+      "observed_scope": "GelSight Mini 与三轴力，三个压头，最高 3 N 法向加载。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-4.0。固定版本目录 https://huggingface.co/datasets/facebook/gelsight-force-estimation/tree/136db55485b6501605b1d2648ce0fe44740e302e",
+      "limitations": "与 DIGIT 分包共享实验设计，但硬件与载荷范围不同；滑移标签为间接推断。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "136db55485b6501605b1d2648ce0fe44740e302e",
+      "readme_url": "https://huggingface.co/datasets/facebook/gelsight-force-estimation/resolve/136db55485b6501605b1d2648ce0fe44740e302e/README.md",
+      "listed_examples": [
+        "assets/force.gif",
+        "flat/batch_1/dataset_gelsight_00.pkl",
+        "flat/batch_1/dataset_gelsight_01.pkl",
+        "flat/batch_1/dataset_gelsight_02.pkl"
+      ],
+      "gated": false
+    },
+    {
+      "name": "TacBench DIGIT pose",
+      "source_url": "https://huggingface.co/datasets/facebook/digit-pose-estimation",
+      "observed_scope": "三指触觉与对象位姿时间同步，操作者移动两个物体。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-4.0。固定版本目录 https://huggingface.co/datasets/facebook/digit-pose-estimation/tree/91faf6c077dbcd8dd8a5c03eb309c32cc4a63c66",
+      "limitations": "手保持固定，位姿变化集中在平面内；仅两个对象。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "91faf6c077dbcd8dd8a5c03eb309c32cc4a63c66",
+      "readme_url": "https://huggingface.co/datasets/facebook/digit-pose-estimation/resolve/91faf6c077dbcd8dd8a5c03eb309c32cc4a63c66/README.md",
+      "listed_examples": [
+        "assets/pose_estimation.png",
+        "bgs/digit_index.png",
+        "bgs/digit_middle.png",
+        "bgs/digit_ring.png"
+      ],
+      "gated": false
+    },
+    {
+      "name": "Sparsh-X / Digit 360",
+      "source_url": "https://huggingface.co/datasets/facebook/sparsh-x-dataset",
+      "observed_scope": "多模态触觉，含 Allegro 手和人工夹持器两种来源，含触觉图像、接触音频、IMU 和压力。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-4.0。固定版本目录 https://huggingface.co/datasets/facebook/sparsh-x-dataset/tree/9f05fe1d4982fb64c310c06fb99a85dde81b1930",
+      "limitations": "机器人与人工采集、传感器采样率须区分。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "9f05fe1d4982fb64c310c06fb99a85dde81b1930",
+      "readme_url": "https://huggingface.co/datasets/facebook/sparsh-x-dataset/resolve/9f05fe1d4982fb64c310c06fb99a85dde81b1930/README.md",
+      "listed_examples": [
+        "assets/object_action.gif",
+        "d360/20240601-fre-metahand.tar.gz",
+        "d360/20240830-fre-metahand.tar.gz",
+        "d360/20240923-fre-trash_picker.tar.gz"
+      ],
+      "gated": false
+    },
+    {
+      "name": "RH20T",
+      "source_url": "https://huggingface.co/datasets/tonyfanggalaxies/RH20T",
+      "observed_scope": "实物接触任务，机器人力矩、动作、多视角视觉及人类示范，按 7 种配置发布。配置 7 含指尖触觉。",
+      "access_notes": "发布库公开列出文件。数据卡标示 RH20T-C 为 CC BY-SA 4.0，RH20T-NC 为 CC BY-NC 4.0。固定版本目录 https://huggingface.co/datasets/tonyfanggalaxies/RH20T/tree/ae13524566502155941720083c9d5921e4100966",
+      "limitations": "新版图像缩至 320×180；分场景许可不同。涉及人声与人像的素材请遵循发布者用途说明。见 https://rh20t.github.io/",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "ae13524566502155941720083c9d5921e4100966",
+      "readme_url": "https://huggingface.co/datasets/tonyfanggalaxies/RH20T/resolve/ae13524566502155941720083c9d5921e4100966/README.md",
+      "listed_examples": [
+        "RH20T_calib/RH20T_cfg1.tar.gz",
+        "RH20T_calib/RH20T_cfg2.tar.gz",
+        "RH20T_calib/RH20T_cfg3.tar.gz",
+        "RH20T_calib/RH20T_cfg4.tar.gz"
+      ],
+      "gated": false
+    },
+    {
+      "name": "AgiBot World Beta",
+      "source_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld-Beta",
+      "observed_scope": "真实机器人双臂操控；发布方报告项目规模超百万轨迹、100 台机器人、2,976.4 小时。",
+      "access_notes": "需在发布平台提交访问申请。数据卡标示 CC BY-NC-SA 4.0 及访问协议。固定版本目录 https://huggingface.co/datasets/agibot-world/AgiBotWorld-Beta/tree/2252b3fdc88dc67fa5d5e4b771e1b86f5e71c278",
+      "limitations": "统计为发布方口径；Alpha、Beta 与后续版本可能重合。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "2252b3fdc88dc67fa5d5e4b771e1b86f5e71c278",
+      "readme_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld-Beta/resolve/2252b3fdc88dc67fa5d5e4b771e1b86f5e71c278/README.md",
+      "listed_examples": [
+        "observations/327/648642-685046.tar",
+        "observations/327/684757-685393.tar",
+        "observations/351/776577-808593.tar",
+        "observations/351/793670-837280.tar"
+      ],
+      "gated": "auto"
+    },
+    {
+      "name": "AgiBot World 2026",
+      "source_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld2026",
+      "observed_scope": "AGIBOT G2 双臂平台在真实商业与家庭环境采集，档案按场景与任务划分。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-nc-sa-4.0。固定版本目录 https://huggingface.co/datasets/agibot-world/AgiBotWorld2026/tree/95b159a10305a0385f369aba5d4b16242526d17b",
+      "limitations": "配套 GenieSim 是单独的仿真资源；与早期版本的重合尚未核对。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "95b159a10305a0385f369aba5d4b16242526d17b",
+      "readme_url": "https://huggingface.co/datasets/agibot-world/AgiBotWorld2026/resolve/95b159a10305a0385f369aba5d4b16242526d17b/README.md",
+      "listed_examples": [
+        "ImitationLearning/CommercialSpaces/task_3400/313498_314085.tar.gz",
+        "ImitationLearning/CommercialSpaces/task_3400/314096_314575.tar.gz",
+        "ImitationLearning/CommercialSpaces/task_3400/314576_315886.tar.gz",
+        "ImitationLearning/CommercialSpaces/task_3400/315903_317024.tar.gz"
+      ],
+      "gated": false
+    },
+    {
+      "name": "RoboMIND",
+      "source_url": "https://huggingface.co/datasets/x-humanoid-robomind/RoboMIND",
+      "observed_scope": "原版报告 10.7 万条实机示范、479 项任务、96 类物体；多种机器人平台。",
+      "access_notes": "需在发布平台提交访问申请。数据卡标示 apache-2.0。固定版本目录 https://huggingface.co/datasets/x-humanoid-robomind/RoboMIND/tree/e7ffe31d1fe983a42c3d7b79d192f554fc05b86e",
+      "limitations": "本数据卡另列 V2.0；数值取自原版，不与 V2.0 相加。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "e7ffe31d1fe983a42c3d7b79d192f554fc05b86e",
+      "readme_url": "https://huggingface.co/datasets/x-humanoid-robomind/RoboMIND/resolve/e7ffe31d1fe983a42c3d7b79d192f554fc05b86e/README.md",
+      "listed_examples": [
+        "benchmark1_0_compressed/h5_agilex_3rgb/10_packplate.tar.gz.part-aa",
+        "benchmark1_0_compressed/h5_agilex_3rgb/10_packplate.tar.gz.part-ab",
+        "benchmark1_0_compressed/h5_agilex_3rgb/10_packplate_2.tar.gz.part-aa",
+        "benchmark1_0_compressed/h5_agilex_3rgb/10_packplate_2.tar.gz.part-ab"
+      ],
+      "gated": "auto"
+    },
+    {
+      "name": "RoboFAC",
+      "source_url": "https://huggingface.co/datasets/MINT-SJTU/RoboFAC-dataset",
+      "observed_scope": "操作失败归因与纠正；总集含 9,440 条错误、1,282 条成功轨迹及 78,623 组问答，发布树含 realworld_data。",
+      "access_notes": "发布库公开列出文件。数据卡标示 mit。固定版本目录 https://huggingface.co/datasets/MINT-SJTU/RoboFAC-dataset/tree/d18353ab36db82ff888ebc9e8485c9fa77e1b25b",
+      "limitations": "总集混合实物与仿真；整库统计不能标为实机样本量。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "d18353ab36db82ff888ebc9e8485c9fa77e1b25b",
+      "readme_url": "https://huggingface.co/datasets/MINT-SJTU/RoboFAC-dataset/resolve/d18353ab36db82ff888ebc9e8485c9fa77e1b25b/README.md",
+      "listed_examples": [
+        "realworld_data/so100_insert_cylinder_error/videos/chunk-000/observation.images.above/episode_000000.mp4",
+        "realworld_data/so100_insert_cylinder_error/videos/chunk-000/observation.images.above/episode_000001.mp4",
+        "realworld_data/so100_insert_cylinder_error/videos/chunk-000/observation.images.above/episode_000002.mp4",
+        "realworld_data/so100_insert_cylinder_error/videos/chunk-000/observation.images.above/episode_000003.mp4"
+      ],
+      "gated": false
+    },
+    {
+      "name": "DECO-50",
+      "source_url": "https://huggingface.co/datasets/BAAI-Humanoid/DECO-50",
+      "observed_scope": "真实双臂灵巧操作，含 50 小时遥操作数据、4 个场景、28 个子任务，左右手触觉及多相机图像。",
+      "access_notes": "发布库公开列出文件。数据卡标示 apache-2.0。固定版本目录 https://huggingface.co/datasets/BAAI-Humanoid/DECO-50/tree/86650c87ffa1baee29f0be0bb8a2d9e40c03ff0b",
+      "limitations": "按 episode/子任务与参与者设计划分，连续视频帧不独立。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "86650c87ffa1baee29f0be0bb8a2d9e40c03ff0b",
+      "readme_url": "https://huggingface.co/datasets/BAAI-Humanoid/DECO-50/resolve/86650c87ffa1baee29f0be0bb8a2d9e40c03ff0b/README.md",
+      "listed_examples": [
+        "task1/data-t1-1/episode_0000.tar.gz",
+        "task1/data-t1-1/episode_0001.tar.gz",
+        "task1/data-t1-1/episode_0002.tar.gz",
+        "task1/data-t1-1/episode_0003.tar.gz"
+      ],
+      "gated": false
+    },
+    {
+      "name": "ViFailback",
+      "source_url": "https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset",
+      "observed_scope": "ALOHA 实机双臂，100 项任务、5,202 条轨迹，含 657 次成功及 4,545 次失败，另含 58,128 个视觉问答对。",
+      "access_notes": "发布库公开列出文件。数据卡标示 mit。固定版本目录 https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset/tree/21df46c2585c52e5a62df5f4b946bae6cbc6fed7",
+      "limitations": "失败过采样，类别比例不能代表生产环境失败率；问答与轨迹计数分开。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "21df46c2585c52e5a62df5f4b946bae6cbc6fed7",
+      "readme_url": "https://huggingface.co/datasets/sii-rhos-ai/ViFailback-Dataset/resolve/21df46c2585c52e5a62df5f4b946bae6cbc6fed7/README.md",
+      "listed_examples": [
+        "VQA/ViFailback_VQA_benchmark.json",
+        "VQA/ViFailback_VQA_train.json",
+        "annotated_data/cut_sausage/cut_sausage_annotations.json",
+        "annotated_data/cut_sausage/frames/episode_0_cam_high/0.jpg"
+      ],
+      "gated": false
+    },
+    {
+      "name": "TacDexterUCL_OXT",
+      "source_url": "https://huggingface.co/datasets/RDLwicked/TacDexterUCL_OXT",
+      "observed_scope": "XHand1 触觉阵列及腕部 RGB；6 个任务、266 条轨迹、100,955 帧。",
+      "access_notes": "发布库公开列出文件。数据卡标示 cc-by-4.0。固定版本目录 https://huggingface.co/datasets/RDLwicked/TacDexterUCL_OXT/tree/66e278ae977778fd24dc5504b6f2075fb8fe7f7a",
+      "limitations": "机械手安装在手持支架上；手腕运动来自操作者；OXT 汇编可能包含本包。",
+      "method": "read pinned HF publisher README and API file listing; no raw sample inspected",
+      "revision": "66e278ae977778fd24dc5504b6f2075fb8fe7f7a",
+      "readme_url": "https://huggingface.co/datasets/RDLwicked/TacDexterUCL_OXT/resolve/66e278ae977778fd24dc5504b6f2075fb8fe7f7a/README.md",
+      "listed_examples": [
+        "SHA256SUMS",
+        "TacDexterUCL_OXT/insert_the_plug_into_the_socket.zarr.zip",
+        "TacDexterUCL_OXT/pick_up_the_orange_and_put_it_into_the_bowl.zarr.zip",
+        "TacDexterUCL_OXT/pick_up_the_watering_can_and_pour_into_the_red_bowl.zarr.zip"
+      ],
+      "gated": false
+    },
+    {
+      "name": "MIT MCube planar pushing",
+      "source_url": "https://mcube.mit.edu/push-dataset/index.html",
+      "observed_scope": "真实平面推动实验，记录物体及推杆位姿、接触力矩；系统改变表面、形状、位置、方向、速度和加速度。",
+      "access_notes": "项目页按表面列出 JSON、HDF5 来源及重复推压子集。",
+      "limitations": "三路时间不同步，需重采样；记录不完整的试次有单独清单。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "9f80b0caffdf3ccf67571ee8bae9ec0f0d835b79463ca7bc2fc922e8811cdbcc",
+      "page_bytes": 15516,
+      "resolved_url": "https://mcube.mit.edu/push-dataset/index.html"
+    },
+    {
+      "name": "Omnipush",
+      "source_url": "https://mcube.mit.edu/omnipush-dataset/index.html",
+      "observed_scope": "按 250 种物体、每种 250 次平面推动设计的实测数据；改变形状与质量分布。",
+      "access_notes": "仅部分恢复。作者确认提供物体无配重模型、零件及视频预测子集，CC BY 4.0。",
+      "limitations": "原始仓库 2021 年受损；项目规模不代表可下载完整样本量。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "11b27955e9a1ebde62ee9cda30927fdebad56c3bd70d6f952cc182d8a7cd13e2",
+      "page_bytes": 21172,
+      "resolved_url": "https://mcube.mit.edu/omnipush-dataset/index.html"
+    },
+    {
+      "name": "ManipForce",
+      "source_url": "https://sites.google.com/view/manipforce",
+      "observed_scope": "手持系统同步记录异步 RGB 与高频力矩，六项真实接触任务，含齿轮装配、电池插入和开盖。",
+      "access_notes": "项目页、作者 GitHub https://github.com/gist-ailab/ManipForce 以及按任务的 Zarr 压缩包镜像 https://huggingface.co/datasets/real-stanford/manipforce",
+      "limitations": "训练示范由人手持夹具生成；需按 RGB 与力数据各自时间戳对齐。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "53a87d5e9b680c2f21ede6af47c09349e008e06b8706de8f4d22355690efa875",
+      "page_bytes": 176867,
+      "resolved_url": "https://sites.google.com/view/manipforce"
+    },
+    {
+      "name": "FreeTacMan",
+      "source_url": "https://huggingface.co/datasets/OpenDriveLab/FreeTacMan",
+      "observed_scope": "手持感知夹具的实体操控，50 种任务、超万条轨迹、超 300 万对视觉触觉图像。",
+      "access_notes": "数据卡标示 MIT；发布者方法与模态说明 https://opendrivelab.com/FreeTacMan",
+      "limitations": "人为驱动手持夹具；用真实机器人验证策略时需另取评估集。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "04f1e1b9bab013ddc52f77def266d9c588919221146a5bcdcce03d3a7313f89d",
+      "page_bytes": 345025,
+      "resolved_url": "https://huggingface.co/datasets/OpenDriveLab/FreeTacMan"
+    },
+    {
+      "name": "ObjectFolder Real",
+      "source_url": "https://objectfolder.stanford.edu/",
+      "observed_scope": "100 个实物对象的视觉、敲击声、网格与触觉；Franka 携 GelSight 指尖。",
+      "access_notes": "项目首页提供 Download 与交互样本入口。",
+      "limitations": "需选择 Real；2.0 是神经对象及其合成读数。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "c15a3c697161bf5a774220d399c5c17792d0734a1170ab9e67c4b8f9fda7224e",
+      "page_bytes": 25198,
+      "resolved_url": "https://objectfolder.stanford.edu/"
+    },
+    {
+      "name": "YCB-Slide",
+      "source_url": "https://github.com/rpl-cmu/YCB-Slide",
+      "observed_scope": "DIGIT 与 YCB 对象的滑动触觉序列，提供传感器位姿、RGB 视频与网格。",
+      "access_notes": "维护者仓库提供 download_dataset.sh。",
+      "limitations": "真实及仿真分开，深度真值和接触掩膜只在仿真部分提供。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "4f6826a0cdfb7f76cb66d6c493e765a6ac7e4ab2024b5c7b49f6a3f25540a945",
+      "page_bytes": 288179,
+      "resolved_url": "https://github.com/rpl-cmu/YCB-Slide"
+    },
+    {
+      "name": "FeelSight",
+      "source_url": "https://github.com/facebookresearch/neuralfeels/blob/main/data/README.md",
+      "observed_scope": "Allegro 灵巧手在手旋转；含视觉、DIGIT 触觉和本体感知，30 次实机及 40 次模拟实验，各 30 秒。",
+      "access_notes": "仓库说明按实物及仿真分包列出下载入口。",
+      "limitations": "旋转任务、对象和时长有限；实机实验分母为 30。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "2beffaccefcddc15373d5ca0462f84227df1c1aaf337a03bb7d94687c141f5f2",
+      "page_bytes": 204770,
+      "resolved_url": "https://github.com/facebookresearch/neuralfeels/blob/main/data/README.md"
+    },
+    {
+      "name": "T-Rex",
+      "source_url": "https://tactile-reactive-dexterous.github.io/",
+      "observed_scope": "100 小时触觉同步遥操作示范，按物体与运动基元组合设计，适于接触反馈研究。",
+      "access_notes": "作者页链接 Hugging Face 数据卡及训练代码。",
+      "limitations": "基元预训练样本不等同于新任务的闭环测试。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "afd92cdda895bf110cf1eaee2b4472969e4c8d888a5c2e2ef120cf74d6221cf9",
+      "page_bytes": 154809,
+      "resolved_url": "https://tactile-reactive-dexterous.github.io/"
+    },
+    {
+      "name": "TactiDex",
+      "source_url": "https://tactidex.github.io/",
+      "observed_scope": "手物交互中同步测量整手触觉压力、手部运动学与对象状态，用于灵巧动作迁移。",
+      "access_notes": "作者页提供 Google Drive 数据链接。",
+      "limitations": "真实部分为人手示范；后优化及仿真映射量须与原始传感严格区分。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "acde8c55a2bfcd0adb01c1d887610a0b625df2ad73562b7a4a494863264337f1",
+      "page_bytes": 34509,
+      "resolved_url": "https://tactidex.github.io/"
+    },
+    {
+      "name": "DexWild",
+      "source_url": "https://dexwild.github.io/",
+      "observed_scope": "93 个环境下的 9,290 个人类灵巧示范及跨本体策略学习设置。",
+      "access_notes": "作者页链接 Hugging Face 数据、硬件、采集与训练代码。",
+      "limitations": "9,290 为便携采集系统的人类示范数；不同机器人评估数据另计。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "3666f066be9f916551a3cd7d10cad700214c4a92d272fa3d57509177eb663476",
+      "page_bytes": 61228,
+      "resolved_url": "https://dexwild.github.io/"
+    },
+    {
+      "name": "DexCap",
+      "source_url": "https://dex-cap.github.io/",
+      "observed_scope": "腕部和手指动作捕捉结合场景点云，用于真实灵巧操作迁移。",
+      "access_notes": "作者页链接 Hugging Face 数据、代码与硬件文档。",
+      "limitations": "人手动作需运动学重定向，原始动作和机器人执行不能混作同一真值。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "347f0966ad9a7bdc3534764db547ee3181703fcc1a9b94fffa41007b3a70a18f",
+      "page_bytes": 17196,
+      "resolved_url": "https://dex-cap.github.io/"
+    },
+    {
+      "name": "Touch and Go",
+      "source_url": "https://touch-and-go.github.io/",
+      "observed_scope": "人持触觉传感器在自然环境探索，带第一视角视频、材质标签与接触起点。",
+      "access_notes": "作者页提供 Google Drive 数据及字段说明。",
+      "limitations": "主要用于视觉触觉表征，未记录机器人命令。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "4d94063f76e1f12850c914612c104c6f0f54691ffd5d5eb8cefcce5a4997df41",
+      "page_bytes": 25943,
+      "resolved_url": "https://touch-and-go.github.io/"
+    },
+    {
+      "name": "ContactPose",
+      "source_url": "https://contactpose.cc.gatech.edu/",
+      "observed_scope": "50 名参与者对 25 个物体进行两种意图下的 2,306 个抓握，含接触、手姿、物体姿态与 RGB-D 图像。",
+      "access_notes": "项目页及作者数据工具 https://github.com/facebookresearch/ContactPose",
+      "limitations": "人手接触证据；动态控制、力矩或成功率需另行验证。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "44e722ce74ac3a122c15e8f9498657d252fe18b14395a7f3e8d1d222b68b7609",
+      "page_bytes": 5175,
+      "resolved_url": "https://contactpose.cc.gatech.edu/"
+    },
+    {
+      "name": "ContactDB",
+      "source_url": "https://contactdb.cc.gatech.edu/",
+      "observed_scope": "人手抓握 50 个 3D 打印物体，含 3,750 个附接触图的网格及同步 RGB-D、热像数据。",
+      "access_notes": "研究组项目页列出资料与下载。",
+      "limitations": "热痕反映表面接触而非直接测力；3D 打印材料与真实家用物体不同。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "1d2a25c17165c91c38b72aaf80bea2855f64048c2b2479d590b1f4e389e36045",
+      "page_bytes": 5963,
+      "resolved_url": "https://contactdb.cc.gatech.edu/"
+    },
+    {
+      "name": "GraspNet-1Billion",
+      "source_url": "https://graspnet.net/",
+      "observed_scope": "双 RGB-D 相机采集 190 个真实堆叠场景、88 个物体，97,280 张图像，配有姿态及稠密抓取标注。",
+      "access_notes": "作者页链接数据下载、SDK、基准文档。",
+      "limitations": "超过十亿指抓取位姿标注，不能解读为十亿次机器人执行。",
+      "method": "project/release page reviewed; metadata only",
+      "page_http_status": 200,
+      "page_sha256": "a01a53396b09f3951a20c7ca588707d1e56cd109cb45473f777d33a58f1e6e5f",
+      "page_bytes": 18124,
+      "resolved_url": "https://graspnet.net/"
+    }
+  ]
+}
