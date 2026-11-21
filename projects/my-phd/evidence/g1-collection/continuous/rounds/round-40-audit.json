@@ -1,0 +1,303 @@
+{
+  "schema_version": "1.0",
+  "round": 40,
+  "completed_at": "2026-11-21T10:44:10Z",
+  "batch_label": "Broad Engineering R40: Mechatronics_PHM_Control",
+  "base_head_sha": "4014db0b6f6edd96481dd3cde41e593d362662af",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 120,
+    "duplicates_skipped": 9,
+    "net_new": 111,
+    "new_reading_queue": 98,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "switched reluctance motor control",
+        "receipt_id": "20261121t104410z-arxiv-bbafcc018f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aswitched+AND+all%3Areluctance+AND+all%3Amotor+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "ea5f7af86f29ab789d9b17616083126499591f5c968e32d7b287cdae5e5fedf0",
+        "normalized_results_sha256": "a74100c7674bded8bad62524067b3116617f2ccc6ea4d24dbe66eb04f31da7fc"
+      },
+      {
+        "provider": "crossref",
+        "query": "switched reluctance motor control",
+        "receipt_id": "20261121t104411z-crossref-4848606920",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=switched+reluctance+motor+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "284431494cacf5b4a538157434cd31c22c015f7a04f106e79d2e0ada40c75e46",
+        "normalized_results_sha256": "c0012d2a983325746f61ae7d5f1c7b3c957760d648f13c95c8c56d2f8edd4669"
+      },
+      {
+        "provider": "openalex",
+        "query": "switched reluctance motor control",
+        "receipt_id": "20261121t104413z-openalex-ffcce6f6ef",
+        "request_url": "https://api.openalex.org/works?search=switched+reluctance+motor+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "7b04019857874fa04a368cf504714c632638e31fca8fdda284846f8b915b9edf",
+        "normalized_results_sha256": "ac26c486d39c91617ff0020a16aa3052afa2fd5b923ad05ae3e5911053518d4b"
+      },
+      {
+        "provider": "arxiv",
+        "query": "brushless dc motor fault",
+        "receipt_id": "20261121t104414z-arxiv-6efab34661",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Abrushless+AND+all%3Adc+AND+all%3Amotor+AND+all%3Afault&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "1b38388e9d3b44d27a4448f4be190a02b50ac063235105a4bb4a68ae07d4614a",
+        "normalized_results_sha256": "ca1dcae4eb7e41b5bff5a224ea70b6d9a0c20556ee69a0f321b33195fbaaaa2d"
+      },
+      {
+        "provider": "crossref",
+        "query": "brushless dc motor fault",
+        "receipt_id": "20261121t104415z-crossref-b33b3e3eac",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=brushless+dc+motor+fault&rows=12",
+        "result_count": 12,
+        "response_sha256": "6cbb5bdc93dd14ab3e39df9f372a59e05584ff940d823de3289d2f7dd06b3630",
+        "normalized_results_sha256": "f14d022b0b4e7d28e55027e078e1d238c03081fc071767ad9cfe3ef61de08627"
+      },
+      {
+        "provider": "openalex",
+        "query": "brushless dc motor fault",
+        "receipt_id": "20261121t104416z-openalex-65c01dd78d",
+        "request_url": "https://api.openalex.org/works?search=brushless+dc+motor+fault&per-page=12",
+        "result_count": 12,
+        "response_sha256": "12173aab64d62451f8acb9ce242d0499b62093d38c149e6156bf626bc91d58c7",
+        "normalized_results_sha256": "9c6eab4b82c8621ea8ca92630ec75353ca93de4935eb3bc0275a88cbbdc058f0"
+      },
+      {
+        "provider": "arxiv",
+        "query": "harmonic drive hysteresis modeling",
+        "receipt_id": "20261121t104418z-arxiv-7257456f1d",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aharmonic+AND+all%3Adrive+AND+all%3Ahysteresis+AND+all%3Amodeling&start=0&max_results=12",
+        "result_count": 8,
+        "response_sha256": "10f65ede89ab3c99f09d991f19a43aa8f367b3925665a85b64bee8730c7e85fb",
+        "normalized_results_sha256": "446ce829aabeea5929bb0e90aa0ccce3db6fdb18ab174c0ea67133d7a94652f7"
+      },
+      {
+        "provider": "crossref",
+        "query": "harmonic drive hysteresis modeling",
+        "receipt_id": "20261121t104419z-crossref-99692ff6be",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=harmonic+drive+hysteresis+modeling&rows=12",
+        "result_count": 12,
+        "response_sha256": "59a0dd526d9cad03dfdc71b22f08df0611e44130c6e859dd8011f71215f13a5e",
+        "normalized_results_sha256": "b2f0503a242e54c121d4ae635611e9c2b892b842293e549052f0f245ab07b8cb"
+      },
+      {
+        "provider": "openalex",
+        "query": "harmonic drive hysteresis modeling",
+        "receipt_id": "20261121t104421z-openalex-38a0f565a0",
+        "request_url": "https://api.openalex.org/works?search=harmonic+drive+hysteresis+modeling&per-page=12",
+        "result_count": 12,
+        "response_sha256": "ee1cfda7f380738ead7c2dbc7953b22bfc58eaf090d89e67e23165852dfe38e4",
+        "normalized_results_sha256": "37651462944742a1f93eabb98a3b09fb760d05b1781dc568cc21d406eb417421"
+      },
+      {
+        "provider": "arxiv",
+        "query": "electro-hydraulic servo control",
+        "receipt_id": "20261121t104422z-arxiv-c752d82f6b",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aelectro-hydraulic+AND+all%3Aservo+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "64d3004d23b3da74febc9872b983578cc7eb6498b4ab2105ab188cfa0b112e5a",
+        "normalized_results_sha256": "f1e68ee4ae5b829d7f2d181ab4856afca9c27e99b532382fa4bf0d284975eb66"
+      },
+      {
+        "provider": "crossref",
+        "query": "electro-hydraulic servo control",
+        "receipt_id": "20261121t104423z-crossref-ee8d20d699",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=electro-hydraulic+servo+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "8803182f32fcf6d29925df1bf415750af83c0de3b7ceaa85d2f8c1fd6b651cad",
+        "normalized_results_sha256": "526d7fd6fa6cfb6014b38241f8aad2d9397ecfb2ca436778490cd63de7e6cba6"
+      },
+      {
+        "provider": "openalex",
+        "query": "electro-hydraulic servo control",
+        "receipt_id": "20261121t104424z-openalex-8e85065133",
+        "request_url": "https://api.openalex.org/works?search=electro-hydraulic+servo+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "81736cd7df74286ee5b390ff5013e9d1fb1f402674602f6a5689047e9d83e743",
+        "normalized_results_sha256": "fd2d914457a1854244afb86ac88682d91db4abfe5bb675e9b175750a1afa0f77"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/app16041780",
+        "receipt_id": "20261121t104426z-opencitations-47c43280f4",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1145/3756423.3756433",
+        "receipt_id": "20261121t104427z-opencitations-3b32381c4a",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 106,
+    "off_topic_filtered": 44,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 50,
+    "net_new": 12,
+    "provider_statuses": [
+      {
+        "query": "robot force torque sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "robot force torque sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "quadrotor flight sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 9
+      },
+      {
+        "query": "quadrotor flight sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot assembly sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 12
+      },
+      {
+        "query": "robot assembly sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot assembly sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot assembly sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "multi-robot uwb sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "multi-robot uwb sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "multi-robot uwb sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-32308917-dataset-for-laser-weldin",
+        "key": "figshare:32308917",
+        "dataset_name": "Dataset for Laser Welding Deformation Prediction of TC4 Titanium Alloy Thin Plates Using AAS-RBF Neural Network",
+        "doi": "10.6084/m9.figshare.32308917.v1",
+        "landing_url": "https://figshare.com/articles/dataset/_b_Dataset_for_Laser_Welding_Deformation_Prediction_of_TC4_Titanium_Alloy_Thin_Plates_Using_AAS-RBF_Neural_Network_b_/32308917",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32308917-dataset-for-laser-weldin-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32308917-dataset-for-laser-weldin-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32308917_dataset_for_laser_weldin.py",
+        "cleaned_rows": 63,
+        "raw_total_rows": 2805,
+        "verified_sha256": "8202e327786d8de23190b4d0908b4e45c76a17a1ec70a3d24b837ce70f35614f"
+      },
+      {
+        "slug": "figshare-32095810-quantitative-prediction",
+        "key": "figshare:32095810",
+        "dataset_name": "Quantitative prediction errors of the radial basis function neural networkmodel across different welding parameters",
+        "doi": "10.6084/m9.figshare.32095810.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Quantitative_prediction_errors_of_the_radial_basis_function_neural_networkmodel_across_different_welding_parameters/32095810",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32095810-quantitative-prediction-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32095810-quantitative-prediction-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32095810_quantitative_prediction.py",
+        "cleaned_rows": 100,
+        "raw_total_rows": 100,
+        "verified_sha256": "130c154ee177ca1f25b0e9b23e1f39b8302d3bc6516e8ecb7a68af0704369c21"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：39
-- **最近更新时间 (UTC)**：2026-11-21T10:39:02Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4091 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1824 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：3547 条
-- **累计已完成确定性清洗数据集**：85 个
+- **已完成轮次**：40
+- **最近更新时间 (UTC)**：2026-11-21T10:44:10Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv`)：4202 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1836 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：3645 条
+- **累计已完成确定性清洗数据集**：87 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,13 +20,13 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 147 | 76 |
-| `R2_Aerial_Actuator` | 391 | 101 |
-| `R5_MultiRobot_Comm` | 250 | 80 |
-| `Robotics_Embodied` | 1343 | 542 |
-| `Mechanical_Physics_AI` | 1319 | 796 |
-| `Mechatronics_PHM_Control` | 920 | 599 |
-| `Smart_Manufacturing` | 533 | 337 |
-| `Smart_Factory_DigitalTwin` | 212 | 73 |
+| `R2_Aerial_Actuator` | 397 | 109 |
+| `R5_MultiRobot_Comm` | 251 | 90 |
+| `Robotics_Embodied` | 1356 | 554 |
+| `Mechanical_Physics_AI` | 1339 | 798 |
+| `Mechatronics_PHM_Control` | 1012 | 603 |
+| `Smart_Manufacturing` | 535 | 337 |
+| `Smart_Factory_DigitalTwin` | 213 | 73 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 330 | 0 |
 | `R2` | 37 | 0 |
@@ -46,8 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-34341267-ant-carry-a-reproducible` | ANT-CARRY: A Reproducible Dataset of Ant-Inspired Acoustic Fragment... | 10.6084/m9.figshare.34341267.v1 | `summary_table` | 22 | `b12302f6ef9e` | [CSV](data/figshare-34341267-ant-carry-a-reproducible-cleaned.csv) · [JSON](data/figshare-34341267-ant-carry-a-reproducible-provenance.json) · [PY](data/derive_figshare_34341267_ant_carry_a_reproducible.py) |
-| `figshare-26243276-research-on-control-meth` | Research on Control Methods for Automatic Drilling Robot Based on V... | 10.6084/m9.figshare.26243276.v3 | `cleaned_rows` | 3 | `29b1479a510c` | [CSV](data/figshare-26243276-research-on-control-meth-cleaned.csv) · [JSON](data/figshare-26243276-research-on-control-meth-provenance.json) · [PY](data/derive_figshare_26243276_research_on_control_meth.py) |
 | `figshare-28589216-a-new-open-dataset-from` | A new open dataset from a milling process – data for classification... | 10.6084/m9.figshare.28589216.v1 | `summary_table` | 131 | `e125471f983e` | [CSV](data/figshare-28589216-a-new-open-dataset-from-cleaned.csv) · [JSON](data/figshare-28589216-a-new-open-dataset-from-provenance.json) · [PY](data/derive_figshare_28589216_a_new_open_dataset_from.py) |
 | `dataverse-qblawv-the-scent-of-the-swarm-f` | The scent of the swarm: first experimental evidence for olfactory r... | 10.7910/dvn/qblawv | `summary_table` | 21 | `c03b06209bce` | [CSV](data/dataverse-qblawv-the-scent-of-the-swarm-f-cleaned.csv) · [JSON](data/dataverse-qblawv-the-scent-of-the-swarm-f-provenance.json) · [PY](data/derive_dataverse_qblawv_the_scent_of_the_swarm_f.py) |
 | `dataverse-8cse6u-drone-telemetry-record-d` | Drone Telemetry Record Data | 10.7910/dvn/8cse6u | `summary_table` | 35 | `2fc41b3c7af0` | [CSV](data/dataverse-8cse6u-drone-telemetry-record-d-cleaned.csv) · [JSON](data/dataverse-8cse6u-drone-telemetry-record-d-provenance.json) · [PY](data/derive_dataverse_8cse6u_drone_telemetry_record_d.py) |
@@ -71,12 +69,13 @@
 | `dataverse-25880-annual-behavioral-tracki` | Annual Behavioral Tracking Survey (FSW & High Risk MSM)-I (2008) (B... | 10.7910/dvn/25880 | `summary_table` | 890 | `4e2b18c6ac70` | [CSV](data/dataverse-25880-annual-behavioral-tracki-cleaned.csv) · [JSON](data/dataverse-25880-annual-behavioral-tracki-provenance.json) · [PY](data/derive_dataverse_25880_annual_behavioral_tracki.py) |
 | `dataverse-25901-annual-behavioral-tracki` | Annual Behavioral Tracking Survey (FSW & High risk MSM)-II -2011 (B... | 10.7910/dvn/25901 | `summary_table` | 1054 | `da8e9bebe528` | [CSV](data/dataverse-25901-annual-behavioral-tracki-cleaned.csv) · [JSON](data/dataverse-25901-annual-behavioral-tracki-provenance.json) · [PY](data/derive_dataverse_25901_annual_behavioral_tracki.py) |
 | `dataverse-ombstn-a-sound-dataset-of-vario` | A Sound Dataset of Various Discrete Manufacturing Operations on Rea... | 10.7910/dvn/ombstn | `cleaned_rows` | 40 | `f7a279a1337b` | [CSV](data/dataverse-ombstn-a-sound-dataset-of-vario-cleaned.csv) · [JSON](data/dataverse-ombstn-a-sound-dataset-of-vario-provenance.json) · [PY](data/derive_dataverse_ombstn_a_sound_dataset_of_vario.py) |
+| `figshare-32308917-dataset-for-laser-weldin` | Dataset for Laser Welding Deformation Prediction of TC4 Titanium Al... | 10.6084/m9.figshare.32308917.v1 | `summary_table` | 63 | `8202e327786d` | [CSV](data/figshare-32308917-dataset-for-laser-weldin-cleaned.csv) · [JSON](data/figshare-32308917-dataset-for-laser-weldin-provenance.json) · [PY](data/derive_figshare_32308917_dataset_for_laser_weldin.py) |
+| `figshare-32095810-quantitative-prediction` | Quantitative prediction errors of the radial basis function neural... | 10.6084/m9.figshare.32095810.v1 | `cleaned_rows` | 100 | `130c154ee177` | [CSV](data/figshare-32095810-quantitative-prediction-cleaned.csv) · [JSON](data/figshare-32095810-quantitative-prediction-provenance.json) · [PY](data/derive_figshare_32095810_quantitative_prediction.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 15 | 2026-11-21T08:39:11Z | Broad Engineering R15: R2_Aerial_Actuator / R5_MultiRobot_Comm (2026) | +52 | +0 | +2 | [round-15-audit.json](rounds/round-15-audit.json) |
 | 16 | 2026-11-21T08:44:12Z | Broad Engineering R16: R5_MultiRobot_Comm / Robotics_Embodied (2026) | +70 | +0 | +3 | [round-16-audit.json](rounds/round-16-audit.json) |
 | 17 | 2026-11-21T08:49:03Z | Broad Engineering R17: Robotics_Embodied (2026) | +48 | +0 | +3 | [round-17-audit.json](rounds/round-17-audit.json) |
 | 18 | 2026-11-21T08:54:12Z | Broad Engineering R18: Mechanical_Physics_AI (2026) | +80 | +0 | +3 | [round-18-audit.json](rounds/round-18-audit.json) |
@@ -101,3 +100,4 @@
 | 37 | 2026-11-21T10:29:02Z | Broad Engineering R37: Robotics_Embodied | +75 | +30 | +2 | [round-37-audit.json](rounds/round-37-audit.json) |
 | 38 | 2026-11-21T10:34:04Z | Broad Engineering R38: Robotics_Embodied | +145 | +52 | +2 | [round-38-audit.json](rounds/round-38-audit.json) |
 | 39 | 2026-11-21T10:39:02Z | Broad Engineering R39: Robotics_Embodied | +92 | +32 | +3 | [round-39-audit.json](rounds/round-39-audit.json) |
+| 40 | 2026-11-21T10:44:10Z | Broad Engineering R40: Mechatronics_PHM_Control | +111 | +12 | +2 | [round-40-audit.json](rounds/round-40-audit.json) |

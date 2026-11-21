@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-32095810-quantitative-prediction",
+  "dataset_name": "Quantitative prediction errors of the radial basis function neural networkmodel across different welding parameters",
+  "doi": "10.6084/m9.figshare.32095810.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Quantitative_prediction_errors_of_the_radial_basis_function_neural_networkmodel_across_different_welding_parameters/32095810",
+  "source_api_url": "https://api.figshare.com/v2/articles/32095810",
+  "access_date": "2026-11-21",
+  "round_number": 40,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Quantitative prediction errors of the RBFNN model across different welding parameters.csv",
+      "download_url": "https://ndownloader.figshare.com/files/64000636",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/64000636/QuantitativepredictionerrorsoftheRBFNNmodelacrossdifferentweldingparameters.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T104506Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Quantitative%2520prediction%2520errors%2520of%2520the%2520RBFNN%2520model%2520across%2520different%2520welding%2520parameters.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=c6ea030226706220584e272f983d2fd26428f4cc37f7ae93effd530bce42745f",
+      "http_status": 200,
+      "bytes": 1720,
+      "publisher_checksum": "md5:c302db7d8d81845f27dfb0d65e61d5ff",
+      "verified_md5": "c302db7d8d81845f27dfb0d65e61d5ff",
+      "verified_sha256": "130c154ee177ca1f25b0e9b23e1f39b8302d3bc6516e8ecb7a68af0704369c21"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-32095810-quantitative-prediction",
+  "raw_total_bytes": 1720,
+  "raw_total_rows": 100,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-32095810-quantitative-prediction-cleaned.csv",
+  "cleaned_csv_sha256": "cfcbb8ddc860ff8db5e51ae8261bbdf5e2ebbd43747dde90ac10cc1237b4db51",
+  "cleaned_rows": 100,
+  "cleaned_cols": 5,
+  "null_counts_by_file": {
+    "Quantitative prediction errors of the RBFNN model across different welding parameters.csv": {
+      "No.": 0,
+      "Laser Power (W)": 0,
+      "Focal Position (mm)": 0,
+      "RMSE": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
