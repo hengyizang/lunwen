@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-26318407-non-muscle-powered-actua",
+  "dataset_name": "Non-muscle powered actuation inspired by cellular morphology and hydraulics of the Venus flytrap",
+  "doi": "10.6084/m9.figshare.26318407.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Non-muscle_powered_actuation_inspired_by_cellular_morphology_and_hydraulics_of_the_Venus_flytrap/26318407",
+  "source_api_url": "https://api.figshare.com/v2/articles/26318407",
+  "access_date": "2026-11-21",
+  "round_number": 20,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "80%_8sv1.csv",
+      "download_url": "https://ndownloader.figshare.com/files/47741704",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/47741704/80_8sv1.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090525Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%2280%2525_8sv1.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=b6a03349fa91bb026802f19fe572d8ca9a6314483b0003065ee7861052888760",
+      "http_status": 200,
+      "bytes": 129072,
+      "publisher_checksum": "md5:90bde1d8725b8b2849c1694290a7f359",
+      "verified_md5": "90bde1d8725b8b2849c1694290a7f359",
+      "verified_sha256": "e0f9dedbdb67882317c42d84d67da3dbde749552b285a853dfe9423ba075e601"
+    },
+    {
+      "file": "Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv",
+      "download_url": "https://ndownloader.figshare.com/files/47741692",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/47741692/ResultsfromOverlayDots80_8s_withoutcellinmpersec.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090527Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Results%2520from%2520Overlay%2520Dots%252080%2525_8s_withoutcell%2520in%2520%253Fm%2520per%2520sec.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=a94d734a2d2396f05b42d6f5c0952ca8f92dbc18e7cf7eb28fd91bdeef5a7aa8",
+      "http_status": 200,
+      "bytes": 131674,
+      "publisher_checksum": "md5:33778e9202c852db59f2fd7f81ca4307",
+      "verified_md5": "33778e9202c852db59f2fd7f81ca4307",
+      "verified_sha256": "eca9fc5ec4ef3068e2e47602e192bf2c58a1afe0e030f041388ae9c3399a8f25"
+    },
+    {
+      "file": "weiyitu.txt",
+      "download_url": "https://ndownloader.figshare.com/files/47741731",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/47741731/weiyitu.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090529Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22weiyitu.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=032c4a4eafb0fa7b41803efa2598f0595224c8b093a25c3281ef5eeffdc1020c",
+      "http_status": 200,
+      "bytes": 825,
+      "publisher_checksum": "md5:f39f09f94da8b4c37e0cf7c049bfec72",
+      "verified_md5": "f39f09f94da8b4c37e0cf7c049bfec72",
+      "verified_sha256": "1861cde4c9d2fd1bfe6fd531fdd781ed951c6c7b17844b37892b545c267827d8"
+    },
+    {
+      "file": "lobelimi.txt",
+      "download_url": "https://ndownloader.figshare.com/files/47741674",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/47741674/lobelimi.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090531Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22lobelimi.txt%22&response-content-type=text%2Fplain&X-Amz-Signature=228f3a36e752264b97d5ec6b1b2498d51a30d09b102d91b2cb25319f4c613052",
+      "http_status": 200,
+      "bytes": 954,
+      "publisher_checksum": "md5:beed6b996fd9e1955ea8250f7067dc0d",
+      "verified_md5": "beed6b996fd9e1955ea8250f7067dc0d",
+      "verified_sha256": "d4cd73e2fb489a4b53dd34a9d3d8d3384cb2f3b1c2b5a537a94eb33a4e09dff9"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-26318407-non-muscle-powered-actua",
+  "raw_total_bytes": 262525,
+  "raw_total_rows": 7880,
+  "duplicate_rows_removed": 23,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-26318407-non-muscle-powered-actua-cleaned.csv",
+  "cleaned_csv_sha256": "3ee073126d6125e19a7d6a6cebc20995d41d3adb3f3db076b0348d7f3d2646e6",
+  "cleaned_rows": 20,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "80%_8sv1.csv": {
+      "Track n": 0,
+      "Slice n": 0,
+      "X": 0,
+      "Y": 0,
+      "Distance": 0,
+      "Velocity": 2691,
+      "Pixel Value": 0
+    },
+    "Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv": {
+      "Track n¡ã": 0,
+      "Slice n¡ã": 0,
+      "X": 0,
+      "Y": 0,
+      "Distance": 0,
+      "Velocity": 3887,
+      "Pixel Value": 0
+    },
+    "weiyitu.txt": {
+      "clear": 5,
+      "all": 4
+    },
+    "lobelimi.txt": {
+      "0": 0,
+      "1500": 0,
+      "0.1": 0,
+      "2500": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

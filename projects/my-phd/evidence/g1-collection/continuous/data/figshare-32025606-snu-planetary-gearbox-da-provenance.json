@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-32025606-snu-planetary-gearbox-da",
+  "dataset_name": "SNU Planetary Gearbox Dataset",
+  "doi": "10.6084/m9.figshare.32025606.v5",
+  "landing_url": "https://figshare.com/articles/dataset/SNU_Planetary_Gearbox_Dataset/32025606/5",
+  "source_api_url": "https://api.figshare.com/v2/articles/32025606",
+  "access_date": "2026-11-21",
+  "round_number": 20,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "datasummary.csv",
+      "download_url": "https://ndownloader.figshare.com/files/68843998",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/68843998/datasummary.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090500Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22datasummary.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=126993c031e436cc334d5f126b5bddf722a445f716b6261ec10307de123d2419",
+      "http_status": 200,
+      "bytes": 7178,
+      "publisher_checksum": "md5:4438079dc5ce4929c93c6a52948da238",
+      "verified_md5": "4438079dc5ce4929c93c6a52948da238",
+      "verified_sha256": "e4e0dcbb38b850bce883334a4e472a4d397cb17f69e5493d526f8e7a1a96d72d"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-32025606-snu-planetary-gearbox-da",
+  "raw_total_bytes": 7178,
+  "raw_total_rows": 28,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv",
+  "cleaned_csv_sha256": "4984eb4da27a6e405ed418745b7a0b77f1cec916b83dea0d1f801644a5582f21",
+  "cleaned_rows": 28,
+  "cleaned_cols": 21,
+  "null_counts_by_file": {
+    "datasummary.csv": {
+      "﻿config_no": 0,
+      "faulty_component": 4,
+      "fault_mode": 0,
+      "label": 0,
+      "groove_diameter_mm": 0,
+      "speed_profile": 0,
+      "load_torque_Nm": 0,
+      "nominal_torque_Nm": 0,
+      "recording_duration_s": 0,
+      "sampling_frequency_Hz": 0,
+      "file_path": 0,
+      "file_name": 0,
+      "signal_type": 0,
+      "unit": 0,
+      "n_samples": 0,
+      "min_value": 0,
+      "max_value": 0,
+      "file_size_bytes": 0,
+      "sha256_checksum": 0,
+      "known_anomaly": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

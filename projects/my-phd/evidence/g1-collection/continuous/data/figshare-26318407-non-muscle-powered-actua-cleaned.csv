@@ -1,0 +1,21 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+80%_8sv1.csv,Track n,numeric,3900,3900,0,13,1,6,9,8.76923,12,15,4.11717
+80%_8sv1.csv,Slice n,numeric,3900,3900,0,300,1,75.75,150.5,150.5,225.25,300,86.6132
+80%_8sv1.csv,X,numeric,3900,3900,0,716,276,514,842,877.408,1150.5,1598,393.599
+80%_8sv1.csv,Y,numeric,3900,3900,0,614,90,272.75,631.5,575.555,862,989,293.162
+80%_8sv1.csv,Distance,numeric,3900,3900,0,364,-1,0,0.129,0.785871,0.577,44.207,2.3194
+80%_8sv1.csv,Velocity,numeric,3900,1209,2691,166,-1,0,0.065,0.380069,0.323,22.104,1.1843
+80%_8sv1.csv,Pixel Value,numeric,3900,3900,0,403,-1.57903e+07,-6.44772e+06,-1.77641e+06,-3.22549e+06,82,255,3.5646e+06
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Track n¡ã,numeric,3900,3900,0,13,1,4,7,7,10,13,3.74214
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Slice n¡ã,numeric,3900,3900,0,300,1,75.75,150.5,150.5,225.25,300,86.6132
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,X,numeric,3900,3900,0,591,362,576,856,926.948,1284,1598,368.419
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Y,numeric,3900,3900,0,478,24,312,605,563.398,808,904,243.236
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Distance,numeric,3900,3900,0,278,-1,0,0.258,0.723142,0.577,18.735,1.96443
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Velocity,numeric,3900,13,3887,1,-1,-1,-1,-1,-1,-1,0
+Results from Overlay Dots 80%_8s_withoutcell in µm per sec.csv,Pixel Value,numeric,3900,3900,0,2144,-1.67114e+07,-1.42077e+07,-9.6717e+06,-8.32819e+06,-1.11925e+06,-1,5.93965e+06
+weiyitu.txt,clear,categorical_or_text,8,3,5,3,,,,,,,"{""on"": 1, ""xlabel('t/min')"": 1, ""deformation/um')"": 1}"
+weiyitu.txt,all,categorical_or_text,8,4,4,4,,,,,,,"{""data=importdata('D:\\data\\v180.txt');"": 1, ""yuandianx=data(601:900,3);"": 1, ""yuandiany=data(601:900,4);"": 1}"
+lobelimi.txt,0,numeric,49,49,0,20,-1000,0,1000,810.204,1500,2700,867.526
+lobelimi.txt,1500,numeric,49,49,0,19,-200,1200,2000,1775.51,2500,3500,823.997
+lobelimi.txt,0.1,numeric,49,49,0,18,-1500,0,200,455.102,1000,2700,951.547
+lobelimi.txt,2500,numeric,49,49,0,16,500,1500,2000,2067.35,3000,4000,904.707

@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34002057-clustering-enhanced-mcnn",
+  "dataset_name": "Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under Multi-Operating Conditions",
+  "doi": "10.6084/m9.figshare.34002057.v2",
+  "landing_url": "https://figshare.com/articles/dataset/Clustering-Enhanced_MCNN-LSTM-Based_Control_Method_for_PMSM_Under_Multi-Operating_Conditions/34002057",
+  "source_api_url": "https://api.figshare.com/v2/articles/34002057",
+  "access_date": "2026-11-21",
+  "round_number": 20,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Fig07_torque_no_load.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69517188",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69517188/Fig07_torque_no_load.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090510Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig07_torque_no_load.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=8108e750531a5e21e5df5c50b2d1e66864b553fda386a1b70359e3056ee04b89",
+      "http_status": 200,
+      "bytes": 45348,
+      "publisher_checksum": "md5:e2415291044ceaf676bb69d4faceee35",
+      "verified_md5": "e2415291044ceaf676bb69d4faceee35",
+      "verified_sha256": "3ae2b31aaf2d9ec62a371161a55602735bbbc78e2d63ac82155a36d99df0030a"
+    },
+    {
+      "file": "Fig09_torque_sudden_load_10Nm.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69517194",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69517194/Fig09_torque_sudden_load_10Nm.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090512Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig09_torque_sudden_load_10Nm.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=20e6b77d6588ba54291ffd67c5746bf59d05ebb855ae4b4afc733888a38d4e69",
+      "http_status": 200,
+      "bytes": 45398,
+      "publisher_checksum": "md5:6ea603533c4e3aeaa5edd9f1128969f9",
+      "verified_md5": "6ea603533c4e3aeaa5edd9f1128969f9",
+      "verified_sha256": "41f807b6870bdd08b1f1333ed4746c4e70dc3dbc4de9c3c9211b6be1ea148335"
+    },
+    {
+      "file": "Fig11_torque_steady_load_10Nm.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69517200",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69517200/Fig11_torque_steady_load_10Nm.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090513Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig11_torque_steady_load_10Nm.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=fdf0e0a81b435b434f4674e0412c52da24412f3a5e0672afad539a4b2b5a293e",
+      "http_status": 200,
+      "bytes": 47145,
+      "publisher_checksum": "md5:ab8886d9df23bb55031a2dab01509b84",
+      "verified_md5": "ab8886d9df23bb55031a2dab01509b84",
+      "verified_sha256": "caa6d651626de1ebe63669d7b721e78a0e70c05260318abe8ce3f067e6b6b51d"
+    },
+    {
+      "file": "Fig10_speed_steady_load_10Nm.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69517197",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69517197/Fig10_speed_steady_load_10Nm.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T090515Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22Fig10_speed_steady_load_10Nm.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=768c294da5b83af880e16f9bc231711d09319d9f66b886c1a250f545ac1be33f",
+      "http_status": 200,
+      "bytes": 51174,
+      "publisher_checksum": "md5:6f3da61ff07ef3e5cb7c9941db293b0a",
+      "verified_md5": "6f3da61ff07ef3e5cb7c9941db293b0a",
+      "verified_sha256": "eb5e7b08ef2820c41288c4d6db420955f98e9a55d0e746e4537b8ec9d671a818"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34002057-clustering-enhanced-mcnn",
+  "raw_total_bytes": 189065,
+  "raw_total_rows": 4004,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv",
+  "cleaned_csv_sha256": "ca4106d9fa2cffdc33fc695eb15ba46b83604e6ab0bbe419fdebc8562bfbdd2c",
+  "cleaned_rows": 20,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Fig07_torque_no_load.csv": {
+      "t_s": 0,
+      "CNN_LSTM_Nm": 0,
+      "MCNN_LSTM_Nm": 0,
+      "CE_LSTM_Nm": 0,
+      "CE_MCNN_LSTM_Nm": 0
+    },
+    "Fig09_torque_sudden_load_10Nm.csv": {
+      "t_s": 0,
+      "CNN_LSTM_Nm": 0,
+      "MCNN_LSTM_Nm": 0,
+      "CE_LSTM_Nm": 0,
+      "CE_MCNN_LSTM_Nm": 0
+    },
+    "Fig11_torque_steady_load_10Nm.csv": {
+      "t_s": 0,
+      "CNN_LSTM_Nm": 0,
+      "MCNN_LSTM_Nm": 0,
+      "CE_LSTM_Nm": 0,
+      "CE_MCNN_LSTM_Nm": 0
+    },
+    "Fig10_speed_steady_load_10Nm.csv": {
+      "t_s": 0,
+      "CNN_LSTM_rpm": 0,
+      "MCNN_LSTM_rpm": 0,
+      "CE_LSTM_rpm": 0,
+      "CE_MCNN_LSTM_rpm": 0
+    }
+  },
+  "time_monotonicity": {
+    "Fig07_torque_no_load.csv": {
+      "column": "t_s",
+      "numeric_samples": 1001,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0009999999999998899,
+      "median_step": 0.0010000000000000009,
+      "max_step": 0.0010000000000000009
+    },
+    "Fig09_torque_sudden_load_10Nm.csv": {
+      "column": "t_s",
+      "numeric_samples": 1001,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0009999999999998899,
+      "median_step": 0.0010000000000000009,
+      "max_step": 0.0010000000000000009
+    },
+    "Fig11_torque_steady_load_10Nm.csv": {
+      "column": "t_s",
+      "numeric_samples": 1001,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0009999999999998899,
+      "median_step": 0.0010000000000000009,
+      "max_step": 0.0010000000000000009
+    },
+    "Fig10_speed_steady_load_10Nm.csv": {
+      "column": "t_s",
+      "numeric_samples": 1001,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": true,
+      "min_step": 0.0009999999999998899,
+      "median_step": 0.0010000000000000009,
+      "max_step": 0.0010000000000000009
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

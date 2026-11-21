@@ -7,28 +7,28 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：19
-- **最近更新时间 (UTC)**：2026-11-21T08:59:01Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1702 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：915 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：1570 条
-- **累计已完成确定性清洗数据集**：36 个
+- **已完成轮次**：20
+- **最近更新时间 (UTC)**：2026-11-21T09:04:03Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv`)：1861 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：960 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：1692 条
+- **累计已完成确定性清洗数据集**：39 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 108 | 47 |
-| `R2_Aerial_Actuator` | 172 | 37 |
+| `R1_Force_Contact` | 113 | 47 |
+| `R2_Aerial_Actuator` | 267 | 38 |
 | `R5_MultiRobot_Comm` | 149 | 32 |
-| `Robotics_Embodied` | 621 | 270 |
-| `Mechanical_Physics_AI` | 516 | 387 |
-| `Mechatronics_PHM_Control` | 411 | 281 |
-| `Smart_Manufacturing` | 206 | 235 |
-| `Smart_Factory_DigitalTwin` | 143 | 63 |
+| `Robotics_Embodied` | 672 | 270 |
+| `Mechanical_Physics_AI` | 531 | 411 |
+| `Mechatronics_PHM_Control` | 434 | 290 |
+| `Smart_Manufacturing` | 212 | 250 |
+| `Smart_Factory_DigitalTwin` | 144 | 63 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 54 | 0 |
+| `Adjacent` | 81 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-33578671-source-data-for-tecobot` | Source data for TeCoBot, A Tensegrity-based modular Continuum robot | 10.6084/m9.figshare.33578671.v2 | `summary_table` | 11 | `db4cd6087b1a` | [CSV](data/figshare-33578671-source-data-for-tecobot-cleaned.csv) · [JSON](data/figshare-33578671-source-data-for-tecobot-provenance.json) · [PY](data/derive_figshare_33578671_source_data_for_tecobot.py) |
-| `dataverse-gddmsa-enlarging-error-detectio` | Enlarging Error Detection Threshold of IMU-based Hand Tracking in V... | 10.7910/dvn/gddmsa | `summary_table` | 30 | `5bcde499216d` | [CSV](data/dataverse-gddmsa-enlarging-error-detectio-cleaned.csv) · [JSON](data/dataverse-gddmsa-enlarging-error-detectio-provenance.json) · [PY](data/derive_dataverse_gddmsa_enlarging_error_detectio.py) |
-| `dataverse-wrctu4-soil-hydraulic-parameter` | Soil hydraulic parameters for "Analyzing dual porosity in soil hydr... | 10.7910/dvn/wrctu4 | `cleaned_rows` | 211 | `4310d567b54e` | [CSV](data/dataverse-wrctu4-soil-hydraulic-parameter-cleaned.csv) · [JSON](data/dataverse-wrctu4-soil-hydraulic-parameter-provenance.json) · [PY](data/derive_dataverse_wrctu4_soil_hydraulic_parameter.py) |
 | `dataverse-ckliy1-perception-and-acoustic` | Perception and acoustic data with R scripts | 10.7910/dvn/ckliy1 | `summary_table` | 77 | `408482190050` | [CSV](data/dataverse-ckliy1-perception-and-acoustic-cleaned.csv) · [JSON](data/dataverse-ckliy1-perception-and-acoustic-provenance.json) · [PY](data/derive_dataverse_ckliy1_perception_and_acoustic.py) |
 | `dataverse-myrxr8-autonomous-integrated-sy` | Autonomous Integrated Systems in Archaeology | 10.7910/dvn/myrxr8 | `summary_table` | 9 | `5749db2a529a` | [CSV](data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv) · [JSON](data/dataverse-myrxr8-autonomous-integrated-sy-provenance.json) · [PY](data/derive_dataverse_myrxr8_autonomous_integrated_sy.py) |
 | `dataverse-z1ohnl-replication-data-for-rol` | Replication Data for: Role of single chemical heterogeneities in ge... | 10.7910/dvn/z1ohnl | `summary_table` | 12 | `ff5918e2ede4` | [CSV](data/dataverse-z1ohnl-replication-data-for-rol-cleaned.csv) · [JSON](data/dataverse-z1ohnl-replication-data-for-rol-provenance.json) · [PY](data/derive_dataverse_z1ohnl_replication_data_for_rol.py) |
@@ -71,6 +68,9 @@
 | `dataverse-kkdxdk-mmwalk-dataset` | mmWalk Dataset | 10.7910/dvn/kkdxdk | `cleaned_rows` | 50 | `82d91d6cf851` | [CSV](data/dataverse-kkdxdk-mmwalk-dataset-cleaned.csv) · [JSON](data/dataverse-kkdxdk-mmwalk-dataset-provenance.json) · [PY](data/derive_dataverse_kkdxdk_mmwalk_dataset.py) |
 | `dataverse-lccllw-multisensegolf-a-multimo` | MultiSenseGolf: A Multimodal Sensor-Based Dataset for Golf Swing Mo... | 10.7910/dvn/lccllw | `summary_table` | 42 | `026fcf22978f` | [CSV](data/dataverse-lccllw-multisensegolf-a-multimo-cleaned.csv) · [JSON](data/dataverse-lccllw-multisensegolf-a-multimo-provenance.json) · [PY](data/derive_dataverse_lccllw_multisensegolf_a_multimo.py) |
 | `dataverse-qgkeuw-dataset-for-influence-of` | Dataset for Influence of Visual and Haptic Feedback on the Detectio... | 10.7910/dvn/qgkeuw | `summary_table` | 150 | `5a748c1b718e` | [CSV](data/dataverse-qgkeuw-dataset-for-influence-of-cleaned.csv) · [JSON](data/dataverse-qgkeuw-dataset-for-influence-of-provenance.json) · [PY](data/derive_dataverse_qgkeuw_dataset_for_influence_of.py) |
+| `figshare-32025606-snu-planetary-gearbox-da` | SNU Planetary Gearbox Dataset | 10.6084/m9.figshare.32025606.v5 | `cleaned_rows` | 28 | `e4e0dcbb38b8` | [CSV](data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv) · [JSON](data/figshare-32025606-snu-planetary-gearbox-da-provenance.json) · [PY](data/derive_figshare_32025606_snu_planetary_gearbox_da.py) |
+| `figshare-34002057-clustering-enhanced-mcnn` | Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under M... | 10.6084/m9.figshare.34002057.v2 | `summary_table` | 20 | `3ae2b31aaf2d` | [CSV](data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv) · [JSON](data/figshare-34002057-clustering-enhanced-mcnn-provenance.json) · [PY](data/derive_figshare_34002057_clustering_enhanced_mcnn.py) |
+| `figshare-26318407-non-muscle-powered-actua` | Non-muscle powered actuation inspired by cellular morphology and hy... | 10.6084/m9.figshare.26318407.v1 | `summary_table` | 20 | `e0f9dedbdb67` | [CSV](data/figshare-26318407-non-muscle-powered-actua-cleaned.csv) · [JSON](data/figshare-26318407-non-muscle-powered-actua-provenance.json) · [PY](data/derive_figshare_26318407_non_muscle_powered_actua.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -95,3 +95,4 @@
 | 17 | 2026-11-21T08:49:03Z | Broad Engineering R17: Robotics_Embodied (2026) | +48 | +0 | +3 | [round-17-audit.json](rounds/round-17-audit.json) |
 | 18 | 2026-11-21T08:54:12Z | Broad Engineering R18: Mechanical_Physics_AI (2026) | +80 | +0 | +3 | [round-18-audit.json](rounds/round-18-audit.json) |
 | 19 | 2026-11-21T08:59:01Z | Broad Engineering R19: R1_Force_Contact | +99 | +43 | +3 | [round-19-audit.json](rounds/round-19-audit.json) |
+| 20 | 2026-11-21T09:04:03Z | Broad Engineering R20: R1_Force_Contact / R2_Aerial_Actuator | +159 | +45 | +3 | [round-20-audit.json](rounds/round-20-audit.json) |

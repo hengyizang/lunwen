@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0",
+  "round": 20,
+  "completed_at": "2026-11-21T09:04:03Z",
+  "batch_label": "Broad Engineering R20: R1_Force_Contact / R2_Aerial_Actuator",
+  "base_head_sha": "83374605c4f26c6756611b19bc90144929d44cd1",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 187,
+    "duplicates_skipped": 28,
+    "net_new": 159,
+    "new_reading_queue": 122,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "robotic surface finishing force",
+        "receipt_id": "20261121t090403z-openalex-5749f512ce",
+        "request_url": "https://api.openalex.org/works?search=robotic+surface+finishing+force&per-page=12",
+        "result_count": 12,
+        "response_sha256": "7c65fe453a117d7716d95f37c39cc901538ad33e6a67fae43365291a42c92d25",
+        "normalized_results_sha256": "5f96772f4b1353b287742f97fdd6683122b3490f2cdec0fb2bdffc54b472c120"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic surface finishing force",
+        "receipt_id": "20261121t090404z-crossref-466ebddb8b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+surface+finishing+force&rows=12",
+        "result_count": 12,
+        "response_sha256": "6085dc02cc2d2170bf2644e2ba860d59ab7bf07ebac2004b09c5ec08691f20a1",
+        "normalized_results_sha256": "7d3b088c874d497b3b27017752ea0600e93af046d79ae70580766275e1847716"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "robotic surface finishing force",
+        "receipt_id": "20261121t090405z-europe-pmc-6fd0553f94",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=robotic+surface+finishing+force&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "cae0787b47717adcf72d2186c9a76330c8eaf4fa979ae1b6ae065c7c7401103c",
+        "normalized_results_sha256": "02ea0d35102c0190fa5683834819f9a07d85eaa371a7c4cecc1b701878b3368b"
+      },
+      {
+        "provider": "hal",
+        "query": "robotic surface finishing force",
+        "receipt_id": "20261121t090409z-hal-35ac5bde70",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=robotic+surface+finishing+force&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "openalex",
+        "query": "quadrotor aerodynamic disturbance estimation",
+        "receipt_id": "20261121t090410z-openalex-3e25617fcd",
+        "request_url": "https://api.openalex.org/works?search=quadrotor+aerodynamic+disturbance+estimation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "eb05ce4eb6399093e0d2e903c2b23d41c10beb391f7b0ce39fe3b33a833ce5a2",
+        "normalized_results_sha256": "3c3a734cfe5e58b1fbe66c147ac703ceb791120cc45c1652cb5ca76595eb6102"
+      },
+      {
+        "provider": "crossref",
+        "query": "quadrotor aerodynamic disturbance estimation",
+        "receipt_id": "20261121t090411z-crossref-a0ff01d6cf",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=quadrotor+aerodynamic+disturbance+estimation&rows=12",
+        "result_count": 12,
+        "response_sha256": "a244efc5360c6d87276996606f97fb678c801143ec768763d731defdaca340e3",
+        "normalized_results_sha256": "2087af971f159b82fbb7de145e067119ad90d714a573ca64c9fb8fa1aeb5edc5"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "quadrotor aerodynamic disturbance estimation",
+        "receipt_id": "20261121t090412z-europe-pmc-1639810dc5",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=quadrotor+aerodynamic+disturbance+estimation&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "96dd72edd2227bb61be4a87ee3ee41c777e95dd306ca6572178b521d5d030fd6",
+        "normalized_results_sha256": "aa3af910499c3c3c1c97cbf3c102886d06592c7fd8d4d7a321eb78abdbc7d856"
+      },
+      {
+        "provider": "hal",
+        "query": "quadrotor aerodynamic disturbance estimation",
+        "receipt_id": "20261121t090418z-hal-06749e62e8",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=quadrotor+aerodynamic+disturbance+estimation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 4,
+        "response_sha256": "fd0ed90cd47cc054bfcc033dcec1b09e4137a6a510826e302207b7446381871d",
+        "normalized_results_sha256": "274fe092c40a12e16303716c6739700998d6d0a4c19eba4f348c6c0b312e27c4"
+      },
+      {
+        "provider": "openalex",
+        "query": "VTOL transition flight control",
+        "receipt_id": "20261121t090419z-openalex-4339e818ff",
+        "request_url": "https://api.openalex.org/works?search=VTOL+transition+flight+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "b92e4d76a1702680f5e640aa4493c2f4ad94bc5fb2a35d5a5f98faa4cedbc083",
+        "normalized_results_sha256": "414d82d4696bb30bbe59f076327276f190c46085d12cf4f8862d6624f6113245"
+      },
+      {
+        "provider": "crossref",
+        "query": "VTOL transition flight control",
+        "receipt_id": "20261121t090420z-crossref-51888a1346",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=VTOL+transition+flight+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "838418fa735035700bc59360eb4e752f8edb6d717925534c49ed46d7928a37b1",
+        "normalized_results_sha256": "9a04e904fd1e58bacbc5d5fe036222d21eafa748b4b1158b46ef36cb1fc053ed"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "VTOL transition flight control",
+        "receipt_id": "20261121t090422z-europe-pmc-e84b472cd6",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=VTOL+transition+flight+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "272bf5267af8f38e9e533ba2d972f120d7ce88fe1adf178686c12d91f202e32c",
+        "normalized_results_sha256": "8392825f2e3b6e26c87ebc69e391ec6a9ee95ab1957ccb35b8430e16a3f1c32e"
+      },
+      {
+        "provider": "hal",
+        "query": "VTOL transition flight control",
+        "receipt_id": "20261121t090427z-hal-bace1e7693",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=VTOL+transition+flight+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "ab4d6560c8f124a8376c9aa05401efa4d635ac8ee1e5056827c76e4ea5b4a849",
+        "normalized_results_sha256": "0711cbbf083c6f534c2f4d5fb39c2e6ce6905cb720a5b21242f97dd6de838905"
+      },
+      {
+        "provider": "openalex",
+        "query": "drone racing agile control",
+        "receipt_id": "20261121t090429z-openalex-4d085b72e5",
+        "request_url": "https://api.openalex.org/works?search=drone+racing+agile+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "6bbf68e46a62b65f7b5a4718224e171d1d566c2d966c160fc6c1b19d96a36f67",
+        "normalized_results_sha256": "8e6a5e221380813063bf7ed33bca90715368ef87fdd373a85ef2a512346815bc"
+      },
+      {
+        "provider": "crossref",
+        "query": "drone racing agile control",
+        "receipt_id": "20261121t090430z-crossref-333c40685e",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=drone+racing+agile+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "89a182b1b18deef276d1be84fc8491d735a5e8e89f37791ca21402cc0380da85",
+        "normalized_results_sha256": "2dde1f6e43b391a2b5b0959f558b18079b1f39fa254a05e73d74f487f673741b"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "drone racing agile control",
+        "receipt_id": "20261121t090431z-europe-pmc-dc0a9bd3b9",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=drone+racing+agile+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "cc5d708ecd0a788943c29ed3107d6764ca634470b71c4790554bf3e11ff41a61",
+        "normalized_results_sha256": "141aced611d3c5179815ceee5fc5f8ad213f9a92110c9675b93d290beb7b6e72"
+      },
+      {
+        "provider": "hal",
+        "query": "drone racing agile control",
+        "receipt_id": "20261121t090438z-hal-b8b5835a3d",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=drone+racing+agile+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1371/journal.pone.0210058",
+        "receipt_id": "20261121t090439z-opencitations-805519268f",
+        "result_count": 27,
+        "response_sha256": "2da7c192cb17ddd5ee754a3a7122e4bb0b5594ea0b24b519f5b06a0dbf15e64d"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/iros60139.2025.11247435",
+        "receipt_id": "20261121t090440z-opencitations-0d24102642",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 183,
+    "off_topic_filtered": 111,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 27,
+    "net_new": 45,
+    "provider_statuses": [
+      {
+        "query": "hot forging",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hot forging",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hot forging",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hot forging",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hot forging",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "injection molding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "injection molding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "injection molding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "injection molding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "injection molding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "laser cladding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser cladding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "laser cladding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser cladding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser cladding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "wire arc additive",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wire arc additive",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "wire arc additive",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wire arc additive",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wire arc additive",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 18,
+    "cleaned": [
+      {
+        "slug": "figshare-32025606-snu-planetary-gearbox-da",
+        "key": "figshare:32025606",
+        "dataset_name": "SNU Planetary Gearbox Dataset",
+        "doi": "10.6084/m9.figshare.32025606.v5",
+        "landing_url": "https://figshare.com/articles/dataset/SNU_Planetary_Gearbox_Dataset/32025606/5",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32025606-snu-planetary-gearbox-da-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32025606-snu-planetary-gearbox-da-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32025606_snu_planetary_gearbox_da.py",
+        "cleaned_rows": 28,
+        "raw_total_rows": 28,
+        "verified_sha256": "e4e0dcbb38b850bce883334a4e472a4d397cb17f69e5493d526f8e7a1a96d72d"
+      },
+      {
+        "slug": "figshare-34002057-clustering-enhanced-mcnn",
+        "key": "figshare:34002057",
+        "dataset_name": "Clustering-Enhanced MCNN-LSTM-Based Control Method for PMSM Under Multi-Operating Conditions",
+        "doi": "10.6084/m9.figshare.34002057.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Clustering-Enhanced_MCNN-LSTM-Based_Control_Method_for_PMSM_Under_Multi-Operating_Conditions/34002057",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34002057-clustering-enhanced-mcnn-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34002057-clustering-enhanced-mcnn-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34002057_clustering_enhanced_mcnn.py",
+        "cleaned_rows": 20,
+        "raw_total_rows": 4004,
+        "verified_sha256": "3ae2b31aaf2d9ec62a371161a55602735bbbc78e2d63ac82155a36d99df0030a"
+      },
+      {
+        "slug": "figshare-26318407-non-muscle-powered-actua",
+        "key": "figshare:26318407",
+        "dataset_name": "Non-muscle powered actuation inspired by cellular morphology and hydraulics of the Venus flytrap",
+        "doi": "10.6084/m9.figshare.26318407.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Non-muscle_powered_actuation_inspired_by_cellular_morphology_and_hydraulics_of_the_Venus_flytrap/26318407",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-26318407-non-muscle-powered-actua-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-26318407-non-muscle-powered-actua-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_26318407_non_muscle_powered_actua.py",
+        "cleaned_rows": 20,
+        "raw_total_rows": 7880,
+        "verified_sha256": "e0f9dedbdb67882317c42d84d67da3dbde749552b285a853dfe9423ba075e601"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Data for \"A four-level executable validation protocol for evaluating LLM-generated topology specifications of physics-based HVAC digital twins\"",
+        "url": "https://figshare.com/articles/dataset/Data_for_A_four-level_executable_validation_protocol_for_evaluating_LLM-generated_topology_specifications_of_physics-based_HVAC_digital_twins_/35049556",
+        "error": "numpy boolean subtract, the `-` operator, is not supported, use the bitwise_xor, the `^` operator, or the logical_xor function instead."
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
