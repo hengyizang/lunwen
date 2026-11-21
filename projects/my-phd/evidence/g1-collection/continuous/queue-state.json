@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 24,
-  "total_new_literature": 2460,
-  "total_new_datasets": 1183,
-  "total_new_reading_queue": 2138,
+  "round_number": 25,
+  "total_new_literature": 2577,
+  "total_new_datasets": 1255,
+  "total_new_reading_queue": 2238,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -53,7 +53,10 @@
     "dataverse:10.7910/dvn/a9lpy7",
     "dataverse:10.7910/dvn/m6jxed",
     "dataverse:10.7910/dvn/ckmbcg",
-    "figshare:35071237"
+    "figshare:35071237",
+    "dataverse:10.7910/dvn/qpuojh",
+    "dataverse:10.7910/dvn/dozy6n",
+    "dataverse:10.7910/dvn/epu7uw"
   ],
   "cleaned_datasets_meta": [
     {
@@ -741,6 +744,48 @@
       "cleaned_rows": 22,
       "raw_total_rows": 24,
       "verified_sha256": "7560dcee2b2169bcc05c28a251c1e6cb8a5e7c54fb3c28a3ee8e5b1d559629b3"
+    },
+    {
+      "slug": "dataverse-qpuojh-close-box",
+      "key": "dataverse:10.7910/dvn/qpuojh",
+      "dataset_name": "close_box",
+      "doi": "10.7910/dvn/qpuojh",
+      "landing_url": "https://doi.org/10.7910/DVN/QPUOJH",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qpuojh-close-box-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qpuojh-close-box-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qpuojh_close_box.py",
+      "cleaned_rows": 2,
+      "raw_total_rows": 400,
+      "verified_sha256": "552f163cf7c176a56c60f24dfc58f169d1a5b2c69a9b861d58dbfd1e3ac7b836"
+    },
+    {
+      "slug": "dataverse-dozy6n-eval-dataset",
+      "key": "dataverse:10.7910/dvn/dozy6n",
+      "dataset_name": "eval_dataset",
+      "doi": "10.7910/dvn/dozy6n",
+      "landing_url": "https://doi.org/10.7910/DVN/DOZY6N",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-dozy6n-eval-dataset-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-dozy6n-eval-dataset-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_dozy6n_eval_dataset.py",
+      "cleaned_rows": 200,
+      "raw_total_rows": 200,
+      "verified_sha256": "a522bf125f660f48e4c5ad65414c8156ab2a5cdd34cbe2ae360e1efb9580d7e3"
+    },
+    {
+      "slug": "dataverse-epu7uw-scoop-with-spatula",
+      "key": "dataverse:10.7910/dvn/epu7uw",
+      "dataset_name": "scoop_with_spatula",
+      "doi": "10.7910/dvn/epu7uw",
+      "landing_url": "https://doi.org/10.7910/DVN/EPU7UW",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-epu7uw-scoop-with-spatula-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-epu7uw-scoop-with-spatula-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_epu7uw_scoop_with_spatula.py",
+      "cleaned_rows": 2,
+      "raw_total_rows": 400,
+      "verified_sha256": "2a2b5622df5f5510cc8db30f8a4b3c5c852ecc9cf83bd2c6186af6e3e11f0f89"
     }
   ],
   "snowballed_dois": [
@@ -773,6 +818,8 @@
     "10.1109/tase.2025.3634193",
     "10.1109/tro.2022.3226365",
     "10.1155/2022/5552166",
+    "10.1177/20556683241280733",
+    "10.1186/s12903-023-03340-0",
     "10.1371/journal.pone.0210058",
     "10.18178/ijmerr.15.1.65-79",
     "10.2139/ssrn.7447982",
@@ -1006,36 +1053,45 @@
       "net_new_datasets": 53,
       "cleaned_count": 1,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 25,
+      "completed_at": "2026-11-21T09:29:02Z",
+      "batch_label": "Broad Engineering R25: Mechanical_Physics_AI",
+      "net_new_literature": 117,
+      "net_new_datasets": 72,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T09:24:11Z",
+  "updated_at": "2026-11-21T09:29:02Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 204,
+    "Adjacent": 216,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 364,
-    "Mechanical_Physics_AI": 592,
-    "Mechatronics_PHM_Control": 554,
-    "Robotics_Embodied": 1032,
-    "R5_MultiRobot_Comm": 240,
+    "R2_Aerial_Actuator": 365,
+    "Mechanical_Physics_AI": 689,
+    "Mechatronics_PHM_Control": 564,
+    "Robotics_Embodied": 1033,
+    "R5_MultiRobot_Comm": 242,
     "R1_Force_Contact": 124,
-    "Smart_Manufacturing": 221,
+    "Smart_Manufacturing": 227,
     "Smart_Factory_DigitalTwin": 150
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 585,
-    "Mechatronics_PHM_Control": 357,
-    "Smart_Manufacturing": 280,
-    "Robotics_Embodied": 276,
+    "Mechanical_Physics_AI": 607,
+    "Mechatronics_PHM_Control": 394,
+    "Smart_Manufacturing": 282,
+    "Robotics_Embodied": 318,
     "R5_MultiRobot_Comm": 36,
     "Smart_Factory_DigitalTwin": 65,
-    "R2_Aerial_Actuator": 44,
-    "R1_Force_Contact": 48
+    "R2_Aerial_Actuator": 45,
+    "R1_Force_Contact": 51
   },
   "probed_uncleanable_keys": [
     "dataverse:10.7910/dvn/29444",

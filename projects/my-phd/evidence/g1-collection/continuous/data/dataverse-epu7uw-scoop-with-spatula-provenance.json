@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-epu7uw-scoop-with-spatula",
+  "dataset_name": "scoop_with_spatula",
+  "doi": "10.7910/dvn/epu7uw",
+  "landing_url": "https://doi.org/10.7910/DVN/EPU7UW",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/EPU7UW",
+  "access_date": "2026-11-21",
+  "round_number": 25,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "scoop_with_spatula_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10942545",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/EPU7UW/1956072bd49-e459ae69d854?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27scoop_with_spatula_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092943Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=1f5621ecbf37690c72df5e5adf17a3aadcf79d5f705bae11bdef9dd3adb5eab0",
+      "http_status": 200,
+      "bytes": 443512,
+      "publisher_checksum": "md5:32e68c9cb0d19776cf00579ae59d74ed",
+      "verified_md5": "32e68c9cb0d19776cf00579ae59d74ed",
+      "verified_sha256": "2a2b5622df5f5510cc8db30f8a4b3c5c852ecc9cf83bd2c6186af6e3e11f0f89"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-epu7uw-scoop-with-spatula",
+  "raw_total_bytes": 443512,
+  "raw_total_rows": 400,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-epu7uw-scoop-with-spatula-cleaned.csv",
+  "cleaned_csv_sha256": "0f39bb0243890dcc81944bb7ef97541c82d1eda076d10cb1d72906afbf0bd1bb",
+  "cleaned_rows": 2,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "scoop_with_spatula_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

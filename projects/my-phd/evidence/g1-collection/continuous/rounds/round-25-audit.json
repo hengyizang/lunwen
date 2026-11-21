@@ -1,0 +1,317 @@
+{
+  "schema_version": "1.0",
+  "round": 25,
+  "completed_at": "2026-11-21T09:29:02Z",
+  "batch_label": "Broad Engineering R25: Mechanical_Physics_AI",
+  "base_head_sha": "63000646246575461a25abac6c339c60abaa5905",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 135,
+    "duplicates_skipped": 18,
+    "net_new": 117,
+    "new_reading_queue": 100,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "fracture mechanics physics neural",
+        "receipt_id": "20261121t092902z-arxiv-c67bac5e59",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Afracture+AND+all%3Amechanics+AND+all%3Aphysics+AND+all%3Aneural&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "2ea658e14b81bbff0253487910e262f58942863230adaede80acf049840e8e05",
+        "normalized_results_sha256": "7fc707d1a3cf7bd9bcdfd92b3b67f43e11f77dad80fd0a291932969d80cd743c"
+      },
+      {
+        "provider": "crossref",
+        "query": "fracture mechanics physics neural",
+        "receipt_id": "20261121t092903z-crossref-af4f37f96a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=fracture+mechanics+physics+neural&rows=12",
+        "result_count": 12,
+        "response_sha256": "84874ddee5ea155d5b2e1a10ce4b8b6df1d5f3ee6afac6d343dc9cfba15a344b",
+        "normalized_results_sha256": "4cf65dd1e04f2e2c57286ac43742651d090e52fdf6585d1a2177c48d8d3dc15e"
+      },
+      {
+        "provider": "openalex",
+        "query": "fracture mechanics physics neural",
+        "receipt_id": "20261121t092904z-openalex-622b95876a",
+        "request_url": "https://api.openalex.org/works?search=fracture+mechanics+physics+neural&per-page=12",
+        "result_count": 12,
+        "response_sha256": "1e767d30bf28c1dd2e1c0b99ffc1119e2c1f8ce89cc2f7a8aff60d419c462a88",
+        "normalized_results_sha256": "46591787e7e8f080d0ea33448c96b288ab69dd2f92037daf9bd0ab9897d44621"
+      },
+      {
+        "provider": "arxiv",
+        "query": "composite delamination machine learning",
+        "receipt_id": "20261121t092905z-arxiv-5ada00b086",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Acomposite+AND+all%3Adelamination+AND+all%3Amachine+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 6,
+        "response_sha256": "e7af56009c90aa2c95e59f052c312ee4373a813c203476d19fe713ab8a7cfc59",
+        "normalized_results_sha256": "5f848856be56d6a9ab9705a39573e8a78a18574676e4bcfa2de7dd70f5e090a5"
+      },
+      {
+        "provider": "crossref",
+        "query": "composite delamination machine learning",
+        "receipt_id": "20261121t092907z-crossref-967542413a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=composite+delamination+machine+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "a48e42db4942d6b4898c267bd0be95327464f945146c375ecb067f9cf481630e",
+        "normalized_results_sha256": "0b5a23eafd8732239621f4733710eeed81ca40665d71882c724dc5fb9a6e9c3f"
+      },
+      {
+        "provider": "openalex",
+        "query": "composite delamination machine learning",
+        "receipt_id": "20261121t092908z-openalex-8e7402ebe0",
+        "request_url": "https://api.openalex.org/works?search=composite+delamination+machine+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "da7e43dd44762a6987fca52126a3c5b0653511991a7d836b868b1eeebd358ec6",
+        "normalized_results_sha256": "cb4ca5025b857d073a0edf5f3de7634cc2df28e481a4331cabd00ec89134c235"
+      },
+      {
+        "provider": "arxiv",
+        "query": "graph neural network truss",
+        "receipt_id": "20261121t092909z-arxiv-2766b656cb",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Agraph+AND+all%3Aneural+AND+all%3Anetwork+AND+all%3Atruss&start=0&max_results=12",
+        "result_count": 8,
+        "response_sha256": "58b4c5495d827a947cea89dd7519f6232a0db4f8e4ef0aeea6b06f5830511d8d",
+        "normalized_results_sha256": "d8b5b6f7338371423555c39f190f026860351f7112421326021419d78f180a82"
+      },
+      {
+        "provider": "crossref",
+        "query": "graph neural network truss",
+        "receipt_id": "20261121t092910z-crossref-af3bd246de",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=graph+neural+network+truss&rows=12",
+        "result_count": 12,
+        "response_sha256": "dc6bbd20e3e3a5bedd6ff7e8efef8f2c5d99c595f9649ab12b381ed94412e0b0",
+        "normalized_results_sha256": "64e78895c7ffdc06dd6fc1479b763832b6b49950114af8fb381b924b84607877"
+      },
+      {
+        "provider": "openalex",
+        "query": "graph neural network truss",
+        "receipt_id": "20261121t092911z-openalex-17f7983884",
+        "request_url": "https://api.openalex.org/works?search=graph+neural+network+truss&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9f7b55bfff8680e62c79b9cdc3dd8da54edba586b846e01c87cfdf3a977215b7",
+        "normalized_results_sha256": "2dddafa0da71d551b8d4acf6d317b03658fd04fd918def6fddbb553673d46ad0"
+      },
+      {
+        "provider": "arxiv",
+        "query": "ultrasonic nondestructive evaluation ML",
+        "receipt_id": "20261121t092913z-arxiv-366a0cbf0c",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aultrasonic+AND+all%3Anondestructive+AND+all%3Aevaluation+AND+all%3AML&start=0&max_results=12",
+        "result_count": 1,
+        "response_sha256": "6ff45d39ff1d4615a2e2abe98666a2783ab5c16b0162768fe43d575c5cc26045",
+        "normalized_results_sha256": "8c9d45d5bc0652288ac6b7de1c901d29a62ce24540cf18487bb4f4dbc6d9f83a"
+      },
+      {
+        "provider": "crossref",
+        "query": "ultrasonic nondestructive evaluation ML",
+        "receipt_id": "20261121t092914z-crossref-6e06bfebbb",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=ultrasonic+nondestructive+evaluation+ML&rows=12",
+        "result_count": 12,
+        "response_sha256": "8f9eec91a6bd196c6e594df7e667feba41dff9b1613a26eb5be5bb60123907d6",
+        "normalized_results_sha256": "68681f84ab45252860bd0aa1c1a98ecfeeec27e4dd4579cf9488f70b57a47ccb"
+      },
+      {
+        "provider": "openalex",
+        "query": "ultrasonic nondestructive evaluation ML",
+        "receipt_id": "20261121t092915z-openalex-22b066a028",
+        "request_url": "https://api.openalex.org/works?search=ultrasonic+nondestructive+evaluation+ML&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2958df741cafd6eb95f0c35e5a5fb86fdb87f4294cdc781a6f539342602684d1",
+        "normalized_results_sha256": "8911689c3b936522551e84a1648ac5e67421bea957f74d1cc7d692241fa9163b"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1186/s12903-023-03340-0",
+        "receipt_id": "20261121t092917z-opencitations-ebef0896a4",
+        "result_count": 12,
+        "response_sha256": "764165d06616a42e7e0caa9b976ced0645f49631e6fd9ab8e203ca487d69a1a7"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1177/20556683241280733",
+        "receipt_id": "20261121t092918z-opencitations-6d09086597",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 193,
+    "off_topic_filtered": 77,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 44,
+    "net_new": 72,
+    "provider_statuses": [
+      {
+        "query": "ball screw",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "ball screw",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "ball screw",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ball screw",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ball screw",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "linear actuator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "linear actuator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "linear actuator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "linear actuator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "linear actuator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 10
+      },
+      {
+        "query": "pneumatic actuator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pneumatic actuator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pneumatic actuator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pneumatic actuator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pneumatic actuator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "robotic exoskeleton",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic exoskeleton",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic exoskeleton",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic exoskeleton",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "robotic exoskeleton",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      }
+    ],
+    "probed_for_cleaning": 3,
+    "cleaned": [
+      {
+        "slug": "dataverse-qpuojh-close-box",
+        "key": "dataverse:10.7910/dvn/qpuojh",
+        "dataset_name": "close_box",
+        "doi": "10.7910/dvn/qpuojh",
+        "landing_url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-qpuojh-close-box-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-qpuojh-close-box-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_qpuojh_close_box.py",
+        "cleaned_rows": 2,
+        "raw_total_rows": 400,
+        "verified_sha256": "552f163cf7c176a56c60f24dfc58f169d1a5b2c69a9b861d58dbfd1e3ac7b836"
+      },
+      {
+        "slug": "dataverse-dozy6n-eval-dataset",
+        "key": "dataverse:10.7910/dvn/dozy6n",
+        "dataset_name": "eval_dataset",
+        "doi": "10.7910/dvn/dozy6n",
+        "landing_url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-dozy6n-eval-dataset-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-dozy6n-eval-dataset-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_dozy6n_eval_dataset.py",
+        "cleaned_rows": 200,
+        "raw_total_rows": 200,
+        "verified_sha256": "a522bf125f660f48e4c5ad65414c8156ab2a5cdd34cbe2ae360e1efb9580d7e3"
+      },
+      {
+        "slug": "dataverse-epu7uw-scoop-with-spatula",
+        "key": "dataverse:10.7910/dvn/epu7uw",
+        "dataset_name": "scoop_with_spatula",
+        "doi": "10.7910/dvn/epu7uw",
+        "landing_url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-epu7uw-scoop-with-spatula-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-epu7uw-scoop-with-spatula-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_epu7uw_scoop_with_spatula.py",
+        "cleaned_rows": 2,
+        "raw_total_rows": 400,
+        "verified_sha256": "2a2b5622df5f5510cc8db30f8a4b3c5c852ecc9cf83bd2c6186af6e3e11f0f89"
+      }
+    ],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

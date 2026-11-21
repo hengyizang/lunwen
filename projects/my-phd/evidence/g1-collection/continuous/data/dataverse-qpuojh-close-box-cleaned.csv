@@ -1,0 +1,3 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+close_box_fed.json,env_idx,numeric,400,400,0,400,0,99.75,199.5,199.5,299.25,399,115.614
+close_box_fed.json,variations_parameters,categorical_or_text,400,400,0,400,,,,,,,"{""[{\""color_list\"": [[0.55, 0.33, 0.83]], \""name\"": \""manip_obj_color\"", \""type\"": \""object_color\""}, {\""name\"": \""manip_obj_tex\"", \""textures_filenames\"": [..."

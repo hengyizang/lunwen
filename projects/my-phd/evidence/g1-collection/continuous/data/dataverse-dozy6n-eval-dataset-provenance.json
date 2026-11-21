@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-dozy6n-eval-dataset",
+  "dataset_name": "eval_dataset",
+  "doi": "10.7910/dvn/dozy6n",
+  "landing_url": "https://doi.org/10.7910/DVN/DOZY6N",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/DOZY6N",
+  "access_date": "2026-11-21",
+  "round_number": 25,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "slide_block_to_target_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10942651",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/DOZY6N/19560789e2d-e00a8cb64f1a?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27slide_block_to_target_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092931Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=0f00ff560961dc23e85a14260e4d182007f99fd7b9d018badf0314e734902e2d",
+      "http_status": 200,
+      "bytes": 38453,
+      "publisher_checksum": "md5:e3e3031a97a5fb3fd054088c87691435",
+      "verified_md5": "e3e3031a97a5fb3fd054088c87691435",
+      "verified_sha256": "a522bf125f660f48e4c5ad65414c8156ab2a5cdd34cbe2ae360e1efb9580d7e3"
+    },
+    {
+      "file": "close_box_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10943102",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/DOZY6N/19560907e5c-54f416a644d1?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27close_box_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092933Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=a001930985e7c583eac8af8d3dc103457982c76bf0f8708bd78d2e2eaeacd679",
+      "http_status": 200,
+      "bytes": 41954,
+      "publisher_checksum": "md5:68da76a28e7294dd47c1fefc9f3ff608",
+      "verified_md5": "68da76a28e7294dd47c1fefc9f3ff608",
+      "verified_sha256": "dae9d1d35874751d66428426f009b371283badbde70ea45f52a4f87f74899308"
+    },
+    {
+      "file": "insert_onto_square_peg_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10943969",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/DOZY6N/19560cba708-f59e5e3bcb3f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27insert_onto_square_peg_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092934Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=56424b064024ed1023fd3353364ea2f520e85d911ca64ec3a744920a7043be19",
+      "http_status": 200,
+      "bytes": 50078,
+      "publisher_checksum": "md5:e018805360726118efc546b9961b19fe",
+      "verified_md5": "e018805360726118efc546b9961b19fe",
+      "verified_sha256": "bbac7adc0c178bdad3a80b0115fb74800bb56c83b445d483e276c033302487ff"
+    },
+    {
+      "file": "scoop_with_spatula_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10944828",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/DOZY6N/1956114aa5b-b00fc7089b29?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27scoop_with_spatula_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092938Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6222a50eef593e0884b5ca65f3d6f7ca53ba4ce52581e4f2563c120fd226412e",
+      "http_status": 200,
+      "bytes": 55614,
+      "publisher_checksum": "md5:efa6755b81ae62969191e60379f3d899",
+      "verified_md5": "efa6755b81ae62969191e60379f3d899",
+      "verified_sha256": "dee9d175d00ec6bf43c9c87867f1df44f6bcecac26449740bc5eb2a44f88f0bd"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-dozy6n-eval-dataset",
+  "raw_total_bytes": 186099,
+  "raw_total_rows": 200,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-dozy6n-eval-dataset-cleaned.csv",
+  "cleaned_csv_sha256": "b387968cc772c7ebb6cda49daa370df452e7ca66e5388fa283044249aa8c0964",
+  "cleaned_rows": 200,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "slide_block_to_target_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    },
+    "close_box_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    },
+    "insert_onto_square_peg_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    },
+    "scoop_with_spatula_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

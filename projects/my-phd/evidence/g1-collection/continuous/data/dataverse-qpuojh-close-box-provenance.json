@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-qpuojh-close-box",
+  "dataset_name": "close_box",
+  "doi": "10.7910/dvn/qpuojh",
+  "landing_url": "https://doi.org/10.7910/DVN/QPUOJH",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/QPUOJH",
+  "access_date": "2026-11-21",
+  "round_number": 25,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "close_box_fed.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/10942509",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/QPUOJH/195606ebcd8-7659d540ba06?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27close_box_fed.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T092926Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=b2ec37cd1c43a43a85b023e6df202536cf0c3164f8c7ac0dd342ce73e3295793",
+      "http_status": 200,
+      "bytes": 336749,
+      "publisher_checksum": "md5:9e5d0042a75317f9b9f0e7fecf3b55f3",
+      "verified_md5": "9e5d0042a75317f9b9f0e7fecf3b55f3",
+      "verified_sha256": "552f163cf7c176a56c60f24dfc58f169d1a5b2c69a9b861d58dbfd1e3ac7b836"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-qpuojh-close-box",
+  "raw_total_bytes": 336749,
+  "raw_total_rows": 400,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-qpuojh-close-box-cleaned.csv",
+  "cleaned_csv_sha256": "793ff2b757162aa829bc4736444c53e535c964aad87f575f6852f69b5d6c9608",
+  "cleaned_rows": 2,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "close_box_fed.json": {
+      "env_idx": 0,
+      "variations_parameters": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
