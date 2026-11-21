@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 9,
-  "total_new_literature": 864,
-  "total_new_datasets": 654,
-  "total_new_reading_queue": 779,
+  "round_number": 10,
+  "total_new_literature": 970,
+  "total_new_datasets": 729,
+  "total_new_reading_queue": 882,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -235,12 +235,14 @@
   ],
   "snowballed_dois": [
     "10.1016/j.enganabound.2025.106487",
+    "10.1016/j.ifacsc.2026.100375",
     "10.1016/j.ijmecsci.2025.111073",
     "10.1016/j.ijmecsci.2026.111174",
     "10.1016/j.measurement.2023.112827",
     "10.1016/j.measurement.2024.115140",
     "10.1016/j.measurement.2024.115365",
     "10.1016/j.tws.2024.112745",
+    "10.1038/s41598-026-47975-9",
     "10.1109/lcsys.2025.3610637",
     "10.1109/lra.2025.3609669",
     "10.1109/robosoft60065.2024.10521997",
@@ -331,9 +333,18 @@
       "net_new_datasets": 42,
       "cleaned_count": 1,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 10,
+      "completed_at": "2026-11-21T08:15:25Z",
+      "batch_label": "Broad Engineering R10: Smart_Manufacturing",
+      "net_new_literature": 106,
+      "net_new_datasets": 75,
+      "cleaned_count": 0,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:09:11Z",
+  "updated_at": "2026-11-21T08:15:25Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
@@ -341,25 +352,47 @@
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 75,
-    "Mechanical_Physics_AI": 312,
-    "Mechatronics_PHM_Control": 253,
-    "Robotics_Embodied": 264,
+    "Mechanical_Physics_AI": 353,
+    "Mechatronics_PHM_Control": 270,
+    "Robotics_Embodied": 283,
     "R5_MultiRobot_Comm": 88,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 18,
-    "Smart_Factory_DigitalTwin": 12
+    "Smart_Manufacturing": 117,
+    "Smart_Factory_DigitalTwin": 17
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 299,
-    "Mechatronics_PHM_Control": 192,
-    "Smart_Manufacturing": 80,
-    "Robotics_Embodied": 170,
+    "Mechanical_Physics_AI": 312,
+    "Mechatronics_PHM_Control": 210,
+    "Smart_Manufacturing": 129,
+    "Robotics_Embodied": 223,
     "R5_MultiRobot_Comm": 17,
     "Smart_Factory_DigitalTwin": 60,
-    "R2_Aerial_Actuator": 34,
-    "R1_Force_Contact": 7
-  }
+    "R2_Aerial_Actuator": 36,
+    "R1_Force_Contact": 10
+  },
+  "probed_uncleanable_keys": [
+    "figshare:11920611",
+    "figshare:26466709",
+    "figshare:28554332",
+    "figshare:28983659",
+    "figshare:29153054",
+    "figshare:30730229",
+    "figshare:31897891",
+    "figshare:32515680",
+    "figshare:32694780",
+    "figshare:33160262",
+    "figshare:33160286",
+    "figshare:34781844",
+    "figshare:34890892",
+    "figshare:34921179",
+    "figshare:34921191",
+    "figshare:34921197",
+    "figshare:34921200",
+    "figshare:35002606",
+    "figshare:35036950",
+    "figshare:35047093"
+  ]
 }

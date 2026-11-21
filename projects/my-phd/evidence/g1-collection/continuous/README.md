@@ -7,11 +7,11 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：9
-- **最近更新时间 (UTC)**：2026-11-21T08:09:11Z
-- **累计净新增文献** (`literature-new.csv`)：864 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：654 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：779 条
+- **已完成轮次**：10
+- **最近更新时间 (UTC)**：2026-11-21T08:15:25Z
+- **累计净新增文献** (`literature-new.csv`)：970 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：729 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：882 条
 - **累计已完成确定性清洗数据集**：15 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
@@ -19,14 +19,14 @@
 
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
-| `R1_Force_Contact` | 1 | 7 |
-| `R2_Aerial_Actuator` | 75 | 34 |
+| `R1_Force_Contact` | 1 | 10 |
+| `R2_Aerial_Actuator` | 75 | 36 |
 | `R5_MultiRobot_Comm` | 88 | 17 |
-| `Robotics_Embodied` | 264 | 170 |
-| `Mechanical_Physics_AI` | 312 | 299 |
-| `Mechatronics_PHM_Control` | 253 | 192 |
-| `Smart_Manufacturing` | 18 | 80 |
-| `Smart_Factory_DigitalTwin` | 12 | 60 |
+| `Robotics_Embodied` | 283 | 223 |
+| `Mechanical_Physics_AI` | 353 | 312 |
+| `Mechatronics_PHM_Control` | 270 | 210 |
+| `Smart_Manufacturing` | 117 | 129 |
+| `Smart_Factory_DigitalTwin` | 17 | 60 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 39 | 0 |
 | `R2` | 37 | 0 |
@@ -75,3 +75,4 @@
 | 7 | 2026-11-21T07:59:03Z | Broad Engineering R7: Mechanical_Physics_AI | +119 | +57 | +2 | [round-07-audit.json](rounds/round-07-audit.json) |
 | 8 | 2026-11-21T08:04:25Z | Broad Engineering R8: Mechanical_Physics_AI / Mechatronics_PHM_Control | +144 | +84 | +0 | [round-08-audit.json](rounds/round-08-audit.json) |
 | 9 | 2026-11-21T08:09:11Z | Broad Engineering R9: Mechatronics_PHM_Control | +97 | +42 | +1 | [round-09-audit.json](rounds/round-09-audit.json) |
+| 10 | 2026-11-21T08:15:25Z | Broad Engineering R10: Smart_Manufacturing | +106 | +75 | +0 | [round-10-audit.json](rounds/round-10-audit.json) |

@@ -1,0 +1,274 @@
+{
+  "schema_version": "1.0",
+  "round": 10,
+  "completed_at": "2026-11-21T08:15:25Z",
+  "batch_label": "Broad Engineering R10: Smart_Manufacturing",
+  "base_head_sha": "2fdc1583d3ae69be83fda5dc1971f48bf65ba796",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 117,
+    "duplicates_skipped": 11,
+    "net_new": 106,
+    "new_reading_queue": 103,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "additive manufacturing melt pool thermal",
+        "receipt_id": "20261121t081525z-arxiv-adb3160f73",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aadditive+AND+all%3Amanufacturing+AND+all%3Amelt+AND+all%3Apool+AND+all%3Athermal&start=0&max_results=12",
+        "result_count": 12,
+        "response_sha256": "f4f0d4fb8493bb5b38e9a6c1bf30c6ff90d965639f326b04d7d9ee209e63d7c8",
+        "normalized_results_sha256": "b3da4c6b603da84f354b35a68bee1a6e6a9e6d6a67aeb5c4e4e1b51a514aff5b"
+      },
+      {
+        "provider": "crossref",
+        "query": "additive manufacturing melt pool thermal",
+        "receipt_id": "20261121t081526z-crossref-153057fc67",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=additive+manufacturing+melt+pool+thermal&rows=12",
+        "result_count": 12,
+        "response_sha256": "b52d9ec672fbb522cb467918e297b6c141a70486dfe93c7ddd0c50c3b42dfd36",
+        "normalized_results_sha256": "7ea78a784c4903061babc2d64262da7268647df1d7be0cf4d7f4d6bea4bd5425"
+      },
+      {
+        "provider": "openalex",
+        "query": "additive manufacturing melt pool thermal",
+        "receipt_id": "20261121t081528z-openalex-af8e7601d8",
+        "request_url": "https://api.openalex.org/works?search=additive+manufacturing+melt+pool+thermal&per-page=12",
+        "result_count": 12,
+        "response_sha256": "9b40895281f56fdedc60837f1b2f2b7c12df292526b286ffb3390ba6a6c73777",
+        "normalized_results_sha256": "8afd4cd497175a65938abd35031e48f35003fc598271afff9eab371f37ce37a1"
+      },
+      {
+        "provider": "arxiv",
+        "query": "CNC machining tool wear prediction",
+        "receipt_id": "20261121t081530z-arxiv-c9fc76e084",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3ACNC+AND+all%3Amachining+AND+all%3Atool+AND+all%3Awear+AND+all%3Aprediction&start=0&max_results=12",
+        "result_count": 6,
+        "response_sha256": "47316aba40a164730b24fba643d877566650c0c428542d8fb283cf09d2c6d595",
+        "normalized_results_sha256": "c64669b9a1dca41f45ee1710bac4aec1044451020a8857e1638d964606f0d30a"
+      },
+      {
+        "provider": "crossref",
+        "query": "CNC machining tool wear prediction",
+        "receipt_id": "20261121t081530z-crossref-b5b02ee6cb",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=CNC+machining+tool+wear+prediction&rows=12",
+        "result_count": 12,
+        "response_sha256": "c4d9a68844198b5864ae861bbafe1db93b54dbde1aeb3af847cabada41cfc4ea",
+        "normalized_results_sha256": "a2996e857a34a9c373506049d915c09673c1a77e837d0f0e028b36f61fe0db26"
+      },
+      {
+        "provider": "openalex",
+        "query": "CNC machining tool wear prediction",
+        "receipt_id": "20261121t081532z-openalex-acc143d516",
+        "request_url": "https://api.openalex.org/works?search=CNC+machining+tool+wear+prediction&per-page=12",
+        "result_count": 12,
+        "response_sha256": "159499c706d1857c87938a24262c5cd33c2af222ac83b4aed7bf673cb80a0fac",
+        "normalized_results_sha256": "97f744f3e18c100ba489e8f986ae594fe23f7d124a0dbe2d03cbf91e5ba94bca"
+      },
+      {
+        "provider": "arxiv",
+        "query": "milling chatter detection machine learning",
+        "receipt_id": "20261121t081534z-arxiv-7712e0b672",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Amilling+AND+all%3Achatter+AND+all%3Adetection+AND+all%3Amachine+AND+all%3Alearning&start=0&max_results=12",
+        "result_count": 3,
+        "response_sha256": "442f8c103060119a084eb56299e4ef35cd1c9adc835db3507bffeaa67553e6da",
+        "normalized_results_sha256": "c5495f7540ff482a3c8c20879f895c25f6ed6a326f60fe8ca6a152aaae8ec367"
+      },
+      {
+        "provider": "crossref",
+        "query": "milling chatter detection machine learning",
+        "receipt_id": "20261121t081534z-crossref-01e5554361",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=milling+chatter+detection+machine+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "dfc61835bd54ae1bb094cd4ed936a79a5b527ff5dd0804780f040bf60f502dfa",
+        "normalized_results_sha256": "56442f2bb28c7b3c26ef5823cc407aa3318d7290af76807bc34f1fede6e7e616"
+      },
+      {
+        "provider": "openalex",
+        "query": "milling chatter detection machine learning",
+        "receipt_id": "20261121t081536z-openalex-86715162c8",
+        "request_url": "https://api.openalex.org/works?search=milling+chatter+detection+machine+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "93f9b4081505ca1af3a665e3f5f3a32f8c8a25b201acdbf08c0bb733afcf7556",
+        "normalized_results_sha256": "32cd2c04d988e86ba7d808c204e60499bca0d87ee172d0c399f11a58686d38bb"
+      },
+      {
+        "provider": "arxiv",
+        "query": "robotic welding defect inspection vision",
+        "receipt_id": "20261121t081537z-arxiv-a7bf2da525",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Arobotic+AND+all%3Awelding+AND+all%3Adefect+AND+all%3Ainspection+AND+all%3Avision&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "b301697ceea4cd8b2063d3922d80235cf50f7f09060e0fd18fc66b70af8e8039",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "robotic welding defect inspection vision",
+        "receipt_id": "20261121t081538z-crossref-1323ecb9fc",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=robotic+welding+defect+inspection+vision&rows=12",
+        "result_count": 12,
+        "response_sha256": "d334299f8523395322d8586b2552ffbef5f22b7847b576e8a4dedb2455fb6f05",
+        "normalized_results_sha256": "80085482176d75cce3d1ca433a71f1bcd064a2b247606352c7c40a8219c664eb"
+      },
+      {
+        "provider": "openalex",
+        "query": "robotic welding defect inspection vision",
+        "receipt_id": "20261121t081540z-openalex-e8f2abc494",
+        "request_url": "https://api.openalex.org/works?search=robotic+welding+defect+inspection+vision&per-page=12",
+        "result_count": 12,
+        "response_sha256": "5e249d2b447ff9c0e76332a5d631114b496c297ff899781e8c3c36f79b8fdaec",
+        "normalized_results_sha256": "71fe0289061d3b2e62b1e46faf8f0914675f6041960919d4969a1177ed8fe1c1"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ifacsc.2026.100375",
+        "receipt_id": "20261121t081541z-opencitations-c8e8cd9549",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1038/s41598-026-47975-9",
+        "receipt_id": "20261121t081542z-opencitations-543633e842",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 238,
+    "off_topic_filtered": 112,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 51,
+    "net_new": 75,
+    "provider_statuses": [
+      {
+        "query": "autonomous driving",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "autonomous driving",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic gripper",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic gripper",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 5
+      },
+      {
+        "query": "peg insertion",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "peg insertion",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "peg insertion",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "peg insertion",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "peg insertion",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "industrial robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "industrial robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 10
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [],
+    "cleaning_errors": []
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}
