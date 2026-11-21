@@ -1,0 +1,331 @@
+{
+  "schema_version": "1.0",
+  "round": 11,
+  "completed_at": "2026-11-21T08:19:12Z",
+  "batch_label": "Broad Engineering R11: Smart_Manufacturing / Smart_Factory_DigitalTwin",
+  "base_head_sha": "da08137aa0e91fc472e53126dde5a304d156d64d",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 170,
+    "duplicates_skipped": 22,
+    "net_new": 148,
+    "new_reading_queue": 131,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "industrial surface defect detection manufacturing",
+        "receipt_id": "20261121t081912z-openalex-a6b2df9062",
+        "request_url": "https://api.openalex.org/works?search=industrial+surface+defect+detection+manufacturing&per-page=12",
+        "result_count": 12,
+        "response_sha256": "3f5fbe810743d27ff6c63ee6392f28811c43b79ac8140de1b05dd28aa459103a",
+        "normalized_results_sha256": "c4a0b2a385dabb4a9f9f9b027dbe2afd799e70ba59da7d538eb5fa63838b8fa4"
+      },
+      {
+        "provider": "crossref",
+        "query": "industrial surface defect detection manufacturing",
+        "receipt_id": "20261121t081914z-crossref-4cb15a8489",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=industrial+surface+defect+detection+manufacturing&rows=12",
+        "result_count": 12,
+        "response_sha256": "93e5c0503b582d81777703a548aa06a2b4e4b8e03ed02a06f98daac4fc15a628",
+        "normalized_results_sha256": "918a13fc2905b17eec94ace89b62c9c110bbc5203f86736d32a6a3adc1ca6784"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "industrial surface defect detection manufacturing",
+        "receipt_id": "20261121t081916z-europe-pmc-285d286f30",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=industrial+surface+defect+detection+manufacturing&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "83a843dc19c5ac64ce17efcb2e928bbcf964ce079933065f757e7fbc662a95df",
+        "normalized_results_sha256": "0715d50c082c105b058241d5b20843081834722ddbea11935183eec34535b8d0"
+      },
+      {
+        "provider": "hal",
+        "query": "industrial surface defect detection manufacturing",
+        "receipt_id": "20261121t081924z-hal-1fee746c86",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=industrial+surface+defect+detection+manufacturing&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 7,
+        "response_sha256": "61764ad9644e7af6f5f5ae14393e7b53d9007bc0c87b2364271cbd3ff58cd5b8",
+        "normalized_results_sha256": "29bd8e9133be7758db115d99f46a3f29a8bd7c8a3a5ff10bed1370fb3de42a8b"
+      },
+      {
+        "provider": "openalex",
+        "query": "laser powder bed fusion anomaly",
+        "receipt_id": "20261121t081927z-openalex-c4013cf3b9",
+        "request_url": "https://api.openalex.org/works?search=laser+powder+bed+fusion+anomaly&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2526dad772e442c4a7e2300efc4666ff4ce352c079fd11caf525ec92e8a6847c",
+        "normalized_results_sha256": "79db82b8a9ee772d32e20950e21353d5552a97fc6cd4ea5a646e91f4a171c8ce"
+      },
+      {
+        "provider": "crossref",
+        "query": "laser powder bed fusion anomaly",
+        "receipt_id": "20261121t081930z-crossref-f384706e4a",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=laser+powder+bed+fusion+anomaly&rows=12",
+        "result_count": 12,
+        "response_sha256": "f90794c66a4db58d83c8156434bab6776e9a91c64d23fcc4dc1f7ee719ee31fe",
+        "normalized_results_sha256": "a1428d404d9f81995b46d5218a287ea4a00e2c91e7eb731f0e9f004e1006c1b1"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "laser powder bed fusion anomaly",
+        "receipt_id": "20261121t081932z-europe-pmc-e595ec293c",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=laser+powder+bed+fusion+anomaly&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "1d82ced09ea140da6493282724af5a7429fd13521fc58e1179fd637529d711d6",
+        "normalized_results_sha256": "7e70ecaf15e2c084cf3ae9733bd7a685872cae04fca701a91a223d658ff46409"
+      },
+      {
+        "provider": "hal",
+        "query": "laser powder bed fusion anomaly",
+        "receipt_id": "20261121t081934z-hal-5a04b4779f",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=laser+powder+bed+fusion+anomaly&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 2,
+        "response_sha256": "37419ee4d495b5e2feea5a6c8f1ee52541cf3272d437e1712d7bf41d1c2a62b7",
+        "normalized_results_sha256": "874ca83a9a592b14541a97dbc7b9dc21ea7eb237d2a6d92b59f149d8a5376059"
+      },
+      {
+        "provider": "openalex",
+        "query": "digital twin smart manufacturing optimization",
+        "receipt_id": "20261121t081936z-openalex-3c6afb842d",
+        "request_url": "https://api.openalex.org/works?search=digital+twin+smart+manufacturing+optimization&per-page=12",
+        "result_count": 12,
+        "response_sha256": "fd476288204b441d7f977dab4c752a05209ef93af4c3a3d8e1ff06293ba226a5",
+        "normalized_results_sha256": "6e5983df54690860f25d89d927f799403b7f014621d315cf6e1497f724c80680"
+      },
+      {
+        "provider": "crossref",
+        "query": "digital twin smart manufacturing optimization",
+        "receipt_id": "20261121t081938z-crossref-4f7bc2bafd",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=digital+twin+smart+manufacturing+optimization&rows=12",
+        "result_count": 12,
+        "response_sha256": "8e4cf0c8d0435b9d7f202cac0c0c686559864eaa4d070049e891af660e11dafd",
+        "normalized_results_sha256": "ebf63242d2dcdb9ae465723fd085ad36fea984ac6b54ab69bc678126be276347"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "digital twin smart manufacturing optimization",
+        "receipt_id": "20261121t081940z-europe-pmc-ba3512618f",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=digital+twin+smart+manufacturing+optimization&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "39f5a6ef73e078b13713b366191a797bbd5d818a59a221657e3e39682e3f9b43",
+        "normalized_results_sha256": "393f517c159abd49c7e1e230951c3e1c3553bfe906ea76641c00b4b606c49208"
+      },
+      {
+        "provider": "hal",
+        "query": "digital twin smart manufacturing optimization",
+        "receipt_id": "20261121t081948z-hal-78a6d6f1cd",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=digital+twin+smart+manufacturing+optimization&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 12,
+        "response_sha256": "aedbf06d85c3d9dbb1d68686e078192a37f357ca1d4136ccf6f6f749b35e71c7",
+        "normalized_results_sha256": "9533cdfb6a9bab773832047f09806581f7d918d86221e57e5e3c39f255708e41"
+      },
+      {
+        "provider": "openalex",
+        "query": "flexible job shop scheduling RL",
+        "receipt_id": "20261121t081950z-openalex-7b68b3db63",
+        "request_url": "https://api.openalex.org/works?search=flexible+job+shop+scheduling+RL&per-page=12",
+        "result_count": 12,
+        "response_sha256": "886fc2baef22b49ff296a434690c708760ce20409aff5066f993051fb3ea7329",
+        "normalized_results_sha256": "4d8f16093bdc26ff95b7f8550dfb367a4c58cd5c91c5f0d0a75855683a72c7c9"
+      },
+      {
+        "provider": "crossref",
+        "query": "flexible job shop scheduling RL",
+        "receipt_id": "20261121t081952z-crossref-97fd85c12d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=flexible+job+shop+scheduling+RL&rows=12",
+        "result_count": 12,
+        "response_sha256": "84526f6894be175e5df1e6ff9bf11b1c232ebeff9c1e8a41fe7a7fa01ccefc03",
+        "normalized_results_sha256": "483f1c9bb2b14177250343855f2ae9dd30700c0f32e3ae9c3634cd516d183037"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "flexible job shop scheduling RL",
+        "receipt_id": "20261121t081953z-europe-pmc-446ea298e0",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=flexible+job+shop+scheduling+RL&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "b2de0cf103359c5117826e033da271549e047f48fe4644c532dbb1703264b3f9",
+        "normalized_results_sha256": "41be1122e6436e9c01e62f374e7e5f5874d0c066717891f241d2f35deead58ef"
+      },
+      {
+        "provider": "hal",
+        "query": "flexible job shop scheduling RL",
+        "receipt_id": "20261121t081956z-hal-c1e8704863",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=flexible+job+shop+scheduling+RL&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 1,
+        "response_sha256": "9daeaa930fec45c39fbd27d4c637227f04315c9d778e5e6e986465852ddd5b94",
+        "normalized_results_sha256": "a6aa0e84649624a00ba7fdf7b613d88f817989a645dff3e551bea061c2a0f19d"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1002/9781394331925.ch23",
+        "receipt_id": "20261121t081958z-opencitations-aea197e412",
+        "result_count": 1,
+        "response_sha256": "5b5e6f4862fabb16cf992bac91833ac94de09e376ec42f2eb9806c1b9e8e1f03"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/sym15091776",
+        "receipt_id": "20261121t082000z-opencitations-48bbea26f0",
+        "result_count": 3,
+        "response_sha256": "4f2b5d5854233a91f026069e8377b9d3b97a61a7b2afc8fe270bed3be7670f44"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 178,
+    "off_topic_filtered": 69,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 71,
+    "net_new": 38,
+    "provider_statuses": [
+      {
+        "query": "wind turbine bearing",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 14
+      },
+      {
+        "query": "wind turbine bearing",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "wind turbine bearing",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine bearing",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wind turbine bearing",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "laser welding",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser welding",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "laser welding",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser welding",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser welding",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robot force torque",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robot force torque",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "quadrotor flight",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "dataverse-myrxr8-autonomous-integrated-sy",
+        "key": "dataverse:10.7910/dvn/myrxr8",
+        "dataset_name": "Autonomous Integrated Systems in Archaeology",
+        "doi": "10.7910/dvn/myrxr8",
+        "landing_url": "https://doi.org/10.7910/DVN/MYRXR8",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-myrxr8-autonomous-integrated-sy-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_myrxr8_autonomous_integrated_sy.py",
+        "cleaned_rows": 9,
+        "raw_total_rows": 25,
+        "verified_sha256": "5749db2a529a36102eb6b57d13f24f3f828b418b0e281d3bc530f655fd503981"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "UrbanIng-V2X",
+        "url": "https://doi.org/10.7910/DVN/A9LPY7",
+        "error": "unhashable type: 'list'"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

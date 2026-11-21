@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 10,
-  "total_new_literature": 970,
-  "total_new_datasets": 729,
-  "total_new_reading_queue": 882,
+  "round_number": 11,
+  "total_new_literature": 1118,
+  "total_new_datasets": 767,
+  "total_new_reading_queue": 1013,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -19,7 +19,8 @@
     "figshare:33578671",
     "dataverse:10.7910/dvn/gddmsa",
     "dataverse:10.7910/dvn/wrctu4",
-    "dataverse:10.7910/dvn/ckliy1"
+    "dataverse:10.7910/dvn/ckliy1",
+    "dataverse:10.7910/dvn/myrxr8"
   ],
   "cleaned_datasets_meta": [
     {
@@ -231,9 +232,24 @@
       "cleaned_rows": 77,
       "raw_total_rows": 31860,
       "verified_sha256": "4084821900503a9e9d08ab1d317b8e70abd90a59215d60ab673e914430ca941a"
+    },
+    {
+      "slug": "dataverse-myrxr8-autonomous-integrated-sy",
+      "key": "dataverse:10.7910/dvn/myrxr8",
+      "dataset_name": "Autonomous Integrated Systems in Archaeology",
+      "doi": "10.7910/dvn/myrxr8",
+      "landing_url": "https://doi.org/10.7910/DVN/MYRXR8",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-myrxr8-autonomous-integrated-sy-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_myrxr8_autonomous_integrated_sy.py",
+      "cleaned_rows": 9,
+      "raw_total_rows": 25,
+      "verified_sha256": "5749db2a529a36102eb6b57d13f24f3f828b418b0e281d3bc530f655fd503981"
     }
   ],
   "snowballed_dois": [
+    "10.1002/9781394331925.ch23",
     "10.1016/j.enganabound.2025.106487",
     "10.1016/j.ifacsc.2026.100375",
     "10.1016/j.ijmecsci.2025.111073",
@@ -250,6 +266,7 @@
     "10.1109/tase.2025.3634193",
     "10.3390/s24165441",
     "10.3390/s26041129",
+    "10.3390/sym15091776",
     "10.5194/ms-15-531-2024"
   ],
   "rounds_history": [
@@ -342,38 +359,65 @@
       "net_new_datasets": 75,
       "cleaned_count": 0,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 11,
+      "completed_at": "2026-11-21T08:19:12Z",
+      "batch_label": "Broad Engineering R11: Smart_Manufacturing / Smart_Factory_DigitalTwin",
+      "net_new_literature": 148,
+      "net_new_datasets": 38,
+      "cleaned_count": 1,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T08:15:25Z",
+  "updated_at": "2026-11-21T08:19:12Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 39,
+    "Adjacent": 43,
     "R2": 37,
     "R5": 5,
     "R2_Aerial_Actuator": 75,
-    "Mechanical_Physics_AI": 353,
-    "Mechatronics_PHM_Control": 270,
-    "Robotics_Embodied": 283,
-    "R5_MultiRobot_Comm": 88,
+    "Mechanical_Physics_AI": 366,
+    "Mechatronics_PHM_Control": 286,
+    "Robotics_Embodied": 290,
+    "R5_MultiRobot_Comm": 89,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 117,
-    "Smart_Factory_DigitalTwin": 17
+    "Smart_Manufacturing": 187,
+    "Smart_Factory_DigitalTwin": 90
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 312,
-    "Mechatronics_PHM_Control": 210,
-    "Smart_Manufacturing": 129,
-    "Robotics_Embodied": 223,
+    "Mechanical_Physics_AI": 326,
+    "Mechatronics_PHM_Control": 235,
+    "Smart_Manufacturing": 151,
+    "Robotics_Embodied": 226,
     "R5_MultiRobot_Comm": 17,
-    "Smart_Factory_DigitalTwin": 60,
+    "Smart_Factory_DigitalTwin": 61,
     "R2_Aerial_Actuator": 36,
     "R1_Force_Contact": 10
   },
   "probed_uncleanable_keys": [
+    "dataverse:10.7910/dvn/2jxwvw",
+    "dataverse:10.7910/dvn/4sjujn",
+    "dataverse:10.7910/dvn/aqvrbv",
+    "dataverse:10.7910/dvn/g9y8wc",
+    "dataverse:10.7910/dvn/gvr2ba",
+    "dataverse:10.7910/dvn/hxc8hk",
+    "dataverse:10.7910/dvn/iaxsrd",
+    "dataverse:10.7910/dvn/knkwmj",
+    "dataverse:10.7910/dvn/md7xaq",
+    "dataverse:10.7910/dvn/n6n4ur",
+    "dataverse:10.7910/dvn/nuxe30",
+    "dataverse:10.7910/dvn/nzwlhe",
+    "dataverse:10.7910/dvn/qr7lmc",
+    "dataverse:10.7910/dvn/sjkv4t",
+    "dataverse:10.7910/dvn/sykbed",
+    "dataverse:10.7910/dvn/ukwlzp",
+    "dataverse:10.7910/dvn/wwpac4",
+    "dataverse:10.7910/dvn/zfjcet",
     "figshare:11920611",
     "figshare:26466709",
     "figshare:28554332",

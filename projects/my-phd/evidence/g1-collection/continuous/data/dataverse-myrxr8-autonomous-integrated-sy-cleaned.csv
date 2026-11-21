@@ -1,0 +1,10 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+AI in Archaeology Publications (Scopus) - Data Submission for Harvard Dataverse.csv,,numeric,11,11,0,11,2012,2014.5,2017,2017,2019.5,2022,3.31662
+AI in Archaeology Publications (Scopus) - Data Submission for Harvard Dataverse.csv,Number of Articles (Scopus),numeric,11,11,0,10,8,10,18,18.4545,23.5,36,9.57459
+AI in Archaeology Publications (Dimensions.ai) - Data Submission for Harvard Dataverse.tab,Year,numeric,11,11,0,11,2012,2014.5,2017,2017,2019.5,2022,3.31662
+AI in Archaeology Publications (Dimensions.ai) - Data Submission for Harvard Dataverse.tab,Number of Articles (Dimensions),numeric,11,11,0,10,940,1085,1185,1144.55,1207.5,1250,97.9912
+UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab,Reporting Period,categorical_or_text,3,3,0,3,,,,,,,"{""2018–19"": 1, ""2019–20"": 1, ""Average 2018–20"": 1}"
+UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab,Specified Injuries (Rate),numeric,3,3,0,3,0.16,0.635,1.11,1.09333,1.56,2.01,0.925113
+UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab,Injuries > 7 Days Absence (Rate),numeric,3,3,0,3,0.33,0.65,0.97,0.936667,1.24,1.51,0.590706
+UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab,Total Non-Reportable Accidents,numeric,3,2,1,2,147,150,153,153,156,159,8.48528
+UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab,Total Near Misses Reported,numeric,3,2,1,2,133,134.75,136.5,136.5,138.25,140,4.94975

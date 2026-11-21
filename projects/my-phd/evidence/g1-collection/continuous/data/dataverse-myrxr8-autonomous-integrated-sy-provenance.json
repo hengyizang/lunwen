@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-myrxr8-autonomous-integrated-sy",
+  "dataset_name": "Autonomous Integrated Systems in Archaeology",
+  "doi": "10.7910/dvn/myrxr8",
+  "landing_url": "https://doi.org/10.7910/DVN/MYRXR8",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/MYRXR8",
+  "access_date": "2026-11-21",
+  "round_number": 11,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "AI in Archaeology Publications (Scopus) - Data Submission for Harvard Dataverse.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13376192",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYRXR8/19bc7fb2130-0dfb5669b822?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27AI%2520in%2520Archaeology%2520Publications%2520%2528Scopus%2529%2520-%2520Data%2520Submission%2520for%2520Harvard%2520Dataverse.csv&response-content-type=text%2Fcomma-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082024Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cda1f4a55b40731ae1eefe50d337fcd91070af7a801941a4c765cdbc23efcad3",
+      "http_status": 200,
+      "bytes": 126,
+      "publisher_checksum": "md5:411267d2050a28a2ea983361c80b1b69",
+      "verified_md5": "411267d2050a28a2ea983361c80b1b69",
+      "verified_sha256": "5749db2a529a36102eb6b57d13f24f3f828b418b0e281d3bc530f655fd503981"
+    },
+    {
+      "file": "AI in Archaeology Publications (Dimensions.ai) - Data Submission for Harvard Dataverse.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13376190",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYRXR8/19bc7fb1f39-5edf792a0dde?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27AI%2520in%2520Archaeology%2520Publications%2520%2528Dimensions.ai%2529%2520-%2520Data%2520Submission%2520for%2520Harvard%2520Dataverse.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082026Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ea9d193d6c347083a6c3011ca402345428dab0141bca92c38f1fdacea39c679e",
+      "http_status": 200,
+      "bytes": 146,
+      "publisher_checksum": "dataverse_original_md5:1b2f1aa6268359b4043b3c8ac389a02a",
+      "verified_md5": "69f6a347b6787f5acf07c6e360751eb5",
+      "verified_sha256": "986494582cea0e19b78f4e03f8214b9924a3093d6ee52c1139dc5efe2a93cf0e"
+    },
+    {
+      "file": "UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/13376191",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/MYRXR8/19bc7fad0f8-02dfd686c6ea?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27UK%2520Archaeology%2520Injury%2520Frequency%2520Rates%2520-%2520Data%2520Extraction%2520for%2520Harvard%2520Dataverse.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T082028Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ec3a054e668adc21f0d9c3ab1f8ca396da65b82ce482d2d9f8234480cefbe45d",
+      "http_status": 200,
+      "bytes": 244,
+      "publisher_checksum": "dataverse_original_md5:3a1aa41b1826f5b9500187b336ceb0a0",
+      "verified_md5": "25be2727f0c00833f0abca480cb8fea8",
+      "verified_sha256": "a00dcb2eeda2563fa1f61620efd808ccb0020898109be14785048d779a412972"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-myrxr8-autonomous-integrated-sy",
+  "raw_total_bytes": 516,
+  "raw_total_rows": 25,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-myrxr8-autonomous-integrated-sy-cleaned.csv",
+  "cleaned_csv_sha256": "fcf3def5f196fc5b0a872a167d0d0144c5d57b642e1a8d5c19f43ab9c807a85c",
+  "cleaned_rows": 9,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "AI in Archaeology Publications (Scopus) - Data Submission for Harvard Dataverse.csv": {
+      "": 0,
+      "Number of Articles (Scopus)": 0
+    },
+    "AI in Archaeology Publications (Dimensions.ai) - Data Submission for Harvard Dataverse.tab": {
+      "Year": 0,
+      "Number of Articles (Dimensions)": 0
+    },
+    "UK Archaeology Injury Frequency Rates - Data Extraction for Harvard Dataverse.tab": {
+      "Reporting Period": 0,
+      "Specified Injuries (Rate)": 0,
+      "Injuries > 7 Days Absence (Rate)": 0,
+      "Total Non-Reportable Accidents": 1,
+      "Total Near Misses Reported": 1
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
