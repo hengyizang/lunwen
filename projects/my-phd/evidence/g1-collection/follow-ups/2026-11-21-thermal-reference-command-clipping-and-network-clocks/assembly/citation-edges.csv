@@ -1,0 +1,10 @@
+from_id,relation,to_id,locator,evidence_use
+10.48550/arXiv.2602.22100,cites,10.1007/s11370-019-00307-5,arXiv v1 ref. [11],Recruit physically measured mating tolerances and compare success definitions.
+10.1007/s11370-019-00307-5,links_data,yumbla-author-tolerance-table,Springer article link to author tolerance page,Public table provides author classes and measured thresholds.
+10.48550/arXiv.2602.22100,cites,10.1007/978-3-031-89471-8_26,arXiv v1 ref. [3]; see Fig. 4,Earlier stride-search baseline on car door.
+10.48550/arXiv.2602.22100,cites,10.1109/case58245.2025.11164054,arXiv v1 ref. [10],Resolve formerly forthcoming CASE citation via DOI and arXiv; inspect proxy definition.
+10.6092/unibo/amsacta/8779,is_supplement_to,10.1109/tmech.2026.3654272,Bologna repository abstract,Publisher-paper outcome evaluated against actual companion files.
+10.1007/s11370-023-00481-7,contains,bargsten-plug-fig14-16,"§3.2, Figs. 14–16",Same physical episode; do not count Fig. 15 as another trial.
+10.48550/arXiv.2602.22100,contains,kernbach-table-iv,"§V.B, Table IV",Outcome type is geometric.
+10.1109/case58245.2025.11164054,contains,kienle-table-iii,"§V, Table III",Search protocol flag.
+10.18434/m32077,is_supplement_to,10.1109/isie.2019.8781418,NIST NERDm references[0] isSupplementTo; conference title and authors verified,Electrical force-feedback signal and independent physical position observer have different units.

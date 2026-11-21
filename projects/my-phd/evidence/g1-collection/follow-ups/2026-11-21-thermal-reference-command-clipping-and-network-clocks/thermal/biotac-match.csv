@@ -1,0 +1,3 @@
+bag,tactile_rows,wrench_rows,tactile_span_s,paired_rows,unique_paired_wrench_rows,abs_delta_median_ms,abs_delta_p95_ms,abs_delta_max_ms
+2018-01-19-18-16-58_biotac_ff_stick_calibration.bag,313388,376314,3133.869261,301083,301043,2.021741,3.819699,4.999656
+2018-01-19-19-46-18_biotac_ff_flat_sensor_calibration.bag,201869,242500,2018.680562,194001,193983,2.010924,3.799668,4.999624

@@ -1,0 +1,872 @@
+{
+  "searched_at_utc": "2026-11-21T23:21:35+00:00",
+  "sources": "IMEKO conference archive, Acta IMEKO, NIST, NTNU conference proceedings archive, UC eScholarship, arXiv, publisher PDF/HTML, PMC versioned JATS XML, Crossref",
+  "screening": "Direct identifiers and research-body/author archival copies followed by backward citation checks, then public ranked Crossref neighborhood checks. Search-return counts reflect the recorded per-query window. Search rankings and direct web access vary across dates. Two Khaled environmental sensitivity papers were screened by bibliographic record and citation context only.",
+  "queries": [
+    {
+      "at_utc": "2026-11-21T23:21:34+00:00",
+      "query": "torque transducer creep recovery temperature humidity creep torque calibration",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=torque+transducer+creep+recovery+temperature+humidity+creep+torque+calibration&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=torque+transducer+creep+recovery+temperature+humidity+creep+torque+calibration&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:29+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1117/12.2511952",
+              "title": "Torque standard machine for calibration of reference torque wrench and torque transducer at Nim"
+            },
+            {
+              "doi": "10.1088/0022-3735/18/3/004",
+              "title": "Torque control feedback circuit-rheometer control for creep"
+            },
+            {
+              "doi": "10.21014/tc3-2022.041",
+              "title": "1 kN·m UNIVERSAL TORQUE CALIBRATION MACHINE WITH REFERENCE TORQUE TRANSDUCER AT SASO / NMCC"
+            },
+            {
+              "doi": "10.1108/aeat.2006.12778ead.010",
+              "title": "Reference torque transducer"
+            },
+            {
+              "doi": "10.23919/measurement59122.2023.10164420",
+              "title": "The Creep Behaviour of a 2 kN•m Torque Transducer Tested at GUM and PTB"
+            },
+            {
+              "doi": "10.2478/msr-2024-0012",
+              "title": "Study of a 2 kN·m Torque Transducer Tested at GUM and PTB, Including Creep Behaviour"
+            },
+            {
+              "doi": "10.1016/j.measurement.2015.07.007",
+              "title": "Humidity and temperature effects on torque transducers, bridge calibration unit and amplifiers"
+            },
+            {
+              "doi": "10.1515/teme-2020-0077",
+              "title": "The investigation of effects of humidity and temperature on torque transducers calibration"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:34+00:00",
+      "query": "six axis force torque sensor model based in situ calibration temperature compensation iCub",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=six+axis+force+torque+sensor+model+based+in+situ+calibration+temperature+compensation+iCub&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "source": "Crossref public REST works relevance order",
+      "limit": 8,
+      "http_status": 200,
+      "returned": 8,
+      "results": [
+        {
+          "doi": "10.3390/s19245521",
+          "title": "Six-Axis Force Torque Sensor Model-Based In Situ Calibration Method and Its Impact in Floating-Based Robot Dynamic Performance"
+        },
+        {
+          "doi": "10.1109/icra.2019.8794382",
+          "title": "Model Based In Situ Calibration with Temperature compensation of 6 axis Force Torque Sensors"
+        },
+        {
+          "doi": "10.1109/humanoids.2016.7803310",
+          "title": "Model based in situ calibration of six axis force torque sensors"
+        },
+        {
+          "doi": "10.1109/icece.2010.332",
+          "title": "Neural-Network-Based Six-axis Force/Torque Robot Sensor Calibration"
+        },
+        {
+          "doi": "10.1109/tim.2023.3338712/mm1",
+          "title": "Air-Chamber Based Soft Six-Axis Force/Torque Sensor for Human-Robot Interaction_supp1-3338712.pdf"
+        },
+        {
+          "doi": "10.2139/ssrn.6749267",
+          "title": "Design, Calibration, and High-Precision Decoupling of a Full-Plane Six-Axis Force/Torque Sensor Based on Biaxial Strain Gauges"
+        },
+        {
+          "doi": "10.1115/1.4066455",
+          "title": "In-Situ Calibration of Six-Axis Force/Torque Transducers on a Six-Legged Robot"
+        },
+        {
+          "doi": "10.1109/icra.2015.7139477",
+          "title": "In situ calibration of six-axis force-torque sensors using accelerometer measurements"
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:34+00:00",
+      "query": "closed loop identification Hammerstein saturation tape drive iterative instrumental variables Han",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=closed+loop+identification+Hammerstein+saturation+tape+drive+iterative+instrumental+variables+Han&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "source": "Crossref public REST works relevance order",
+      "limit": 8,
+      "http_status": 200,
+      "returned": 8,
+      "results": [
+        {
+          "doi": "10.3182/20110828-6-it-1002.01589",
+          "title": "Closed-loop Identification of Hammerstein Systems Using Iterative Instrumental Variables"
+        },
+        {
+          "doi": "10.1109/cdc.2011.6160473",
+          "title": "Output error identification of closed-loop Hammerstein systems"
+        },
+        {
+          "doi": "10.31390/gradschool_disstheses.6133",
+          "title": "Study of Two Instrumental Variable Methods for Closed-Loop Multivariable System Identification."
+        },
+        {
+          "doi": "10.3182/20110828-6-it-1002.01853",
+          "title": "On the closed loop identification of LPV models using instrumental variables"
+        },
+        {
+          "doi": "10.1016/j.sysconle.2023.105565",
+          "title": "Non-asymptotic state-space identification of closed-loop stochastic linear systems using instrumental variables"
+        },
+        {
+          "doi": "10.1007/978-1-4471-0205-2_2",
+          "title": "System Identification. Performance and Closed-loop Issues"
+        },
+        {
+          "doi": "10.1007/s11071-014-1763-9",
+          "title": "A nonlinear recursive instrumental variables identification method of Hammerstein ARMAX system"
+        },
+        {
+          "doi": "10.1080/00207170802225930",
+          "title": "Hammerstein system identification by non-parametric instrumental variables"
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:34+00:00",
+      "query": "load cell creep recovery 30 min 60 min force transducer NIST",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=load+cell+creep+recovery+30+min+60+min+force+transducer+NIST&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "source": "Crossref public REST works relevance order",
+      "limit": 8,
+      "http_status": 200,
+      "returned": 8,
+      "results": [
+        {
+          "doi": "10.7717/peerj.15080/table-3",
+          "title": "Table 3: SARS-CoV-2 viral load (log\n                      <sub>10</sub>\n                      ) at baseline (T0), immediately postrinsing (T1), 30 min postrinsing (T2) and 60 min postrinsing (T3) for patients who completed the clinical study."
+        },
+        {
+          "doi": "10.7717/peerj.2754/fig-6",
+          "title": "Figure 6: Sodium dodecyl sulfate polyacrylamide gel electrophoresis (SDS-PAGE) analysis of digested samples before the GIS digestion (P0), during buccal (P1), gastric (1 min: P2-1, 5 min: P2-5, 25 min: P2-25, 60 min: P2-60) and duodenal (1 min: P3-1, 5 min: P3-5, 30 min: P3-30, 120 min: P3-120) phases of\n                      <i>in vitro</i>\n                      GIS digestion."
+        },
+        {
+          "doi": "10.7717/peerj.16504/table-4",
+          "title": "Table 4: Major compounds identified in the bio-oil obtained at reaction conditions of 330 °C, 60 min., and AF’s solid load of 50%; using GC-MS, the US National Institute of Standards and Technology (NIST) library."
+        },
+        {
+          "doi": "10.17816/brmma88616-61179",
+          "title": "Fig. 1. Increase in FEV1 (blue column) and the number of patients with reversible bronchial obstruction (yellow column) in pharmacological tests with various bronchodilators: Сб — 15 min after administration of 400 mcg of salbutamol; Бер — 30 min after berodual; ТИО — 60 min after 18 mcg of tiotropium; ТИО + Сб — 90 min after 18 tiotropium and 400 mcg salbutamol; ГЛИ — 60 min after 50 mcg of glycopyrronium; ГЛИ + Сб — 90 min after 50 µg of glycopyrronium and 400 mcg of salbutamol; IND/GLI 30 — 30 min after 110/50 mcg IND/GLI combination; IND/GLI 60 — 60 min after 110/50mcg IND/GLI combination"
+        },
+        {
+          "doi": "10.7717/peerj.1388/table-2",
+          "title": "Table 2: Tensile testing result of untreated, 30 min and 60 min HNO\n                      <sub>3</sub>\n                      treated mPE."
+        },
+        {
+          "doi": "10.7717/peerj.2146/fig-1",
+          "title": "Figure 1: Ultrasound transducer interface housing for the load cell used during force-feedback scanning."
+        },
+        {
+          "doi": "10.7554/elife.28862.016",
+          "title": "Figure 4—figure supplement 2. Plots showing mean whole cell intensity (wci, black line) of ClensorA647 in cells imaged as a function of indicated times in (a) J774A.1 cells and (b) THP-1 cells."
+        },
+        {
+          "doi": "10.7717/peerj.6717/fig-10",
+          "title": "Figure 10: The MIPS curves were plotted before injury and 0 min, 5 min, 10 min, 15 min, 20 min, 25 min, 30 min after injury in the frequency of 50 MHz to 70 MHz."
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "thermal drift fiber optic robot force sensor compensation free unloaded force sensor catheter temperature",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=thermal+drift+fiber+optic+robot+force+sensor+compensation+free+unloaded+force+sensor+catheter+temperature&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "source": "Crossref public REST works relevance order",
+      "limit": 8,
+      "http_status": 200,
+      "returned": 8,
+      "results": [
+        {
+          "doi": "10.1515/cdbme-2022-1103",
+          "title": "Pressure sensor catheter based on Fiber Tip Fabry-Pérot-Interferometer and Fiber Bragg Grating for temperature compensation"
+        },
+        {
+          "doi": "10.1364/ofs.2006.tub5",
+          "title": "Fiber Optic Brownian Motion Force Sensor"
+        },
+        {
+          "doi": "10.2139/ssrn.5163869",
+          "title": "Research on Robot Force Compensation and Collision Detection Based on Six-Dimensional Force Sensor"
+        },
+        {
+          "doi": "10.1109/sas70013.2026.11744183",
+          "title": "Fiber-Optic Force Myography Sensor for Grip Force Measurements"
+        },
+        {
+          "doi": "10.1109/lra.2024.3504236/mm1",
+          "title": "Sensor-Free Strategy for Estimating Guidewire/Catheter Shape and Contact Force in Endovascular Interventions_supp1-3504236.mp4"
+        },
+        {
+          "doi": "10.2139/ssrn.7657040",
+          "title": "3D-printed fiber-optic micro-force sensor with automated non-contact pneumatic calibration"
+        },
+        {
+          "doi": "10.1364/opticaopen.22108565",
+          "title": "A plastic optic fiber sensor with temperature compensation for glucose concentration measurement"
+        },
+        {
+          "doi": "10.1364/opticaopen.22108565.v1",
+          "title": "A plastic optic fiber sensor with temperature compensation for glucose concentration measurement"
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "force transducers loading schemes creep recovery force measurements",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=force+transducers+loading+schemes+creep+recovery+force+measurements&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "source": "Crossref public REST works relevance order",
+      "limit": 8,
+      "http_status": 200,
+      "returned": 8,
+      "results": [
+        {
+          "doi": "10.1016/j.measurement.2017.10.003",
+          "title": "The influence of the unloading rate on creep recovery of force transducers"
+        },
+        {
+          "doi": "10.1007/978-3-642-18296-9_16",
+          "title": "Mixed Methods in Force Measurements"
+        },
+        {
+          "doi": "10.1021/acs.nanolett.7b02404.s001",
+          "title": "Nanophotonic Atomic Force Microscope Transducers Enable Chemical Composition and Thermal Conductivity Measurements at the Nanoscale"
+        },
+        {
+          "doi": "10.1007/978-3-030-35322-3_20",
+          "title": "Virtual Instrumentation and Force Transducer for Measurements in Dentistry"
+        },
+        {
+          "doi": "10.1007/978-3-030-35322-3_21",
+          "title": "A Supplement on Photoelastic and Digital Techniques in Force Measurements"
+        },
+        {
+          "doi": "10.1007/978-3-642-18296-9_9",
+          "title": "Magnetoelastic Force Transducers"
+        },
+        {
+          "doi": "10.1007/978-3-642-18296-9_5",
+          "title": "Capacitive Force Transducers"
+        },
+        {
+          "doi": "10.1007/978-3-642-18296-9_7",
+          "title": "Electromagnetic Force Transducers"
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "creep measurement reference torque calibration machines fast torque calibrations continuous",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=creep+measurement+reference+torque+calibration+machines+fast+torque+calibrations+continuous&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=creep+measurement+reference+torque+calibration+machines+fast+torque+calibrations+continuous&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:31+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1088/1742-6596/1065/4/042036",
+              "title": "Calibration of reference torque wrench by new reference torque standard machine at nim"
+            },
+            {
+              "doi": "10.1117/12.2511952",
+              "title": "Torque standard machine for calibration of reference torque wrench and torque transducer at Nim"
+            },
+            {
+              "doi": "10.1520/e2624-17r25",
+              "title": "Practice for Torque Calibration of Testing Machines"
+            },
+            {
+              "doi": "10.1108/sr.2001.08721caf.005",
+              "title": "FAST Technology revolutionises torque measurement"
+            },
+            {
+              "doi": "10.1520/e2624-17",
+              "title": "Practice for Torque Calibration of Testing Machines"
+            },
+            {
+              "doi": "10.1115/pvp2022-79350",
+              "title": "Frequency of Torque Tool Calibrations and Field Torque Verifications"
+            },
+            {
+              "doi": "10.1016/j.measurement.2014.09.081",
+              "title": "Calibration of reference torque wrenches using a 10Nm deadweight torque standard machine"
+            },
+            {
+              "doi": "10.1016/j.measurement.2016.02.050",
+              "title": "The optimization of continuous torque calibration procedure"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "temperature humidity sensitivity coefficients torque transfer standards ambient conditions",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=temperature+humidity+sensitivity+coefficients+torque+transfer+standards+ambient+conditions&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=temperature+humidity+sensitivity+coefficients+torque+transfer+standards+ambient+conditions&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:33+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.7736/kspe.2015.32.2.185",
+              "title": "The Determination of Temperature and Humidity Sensitivity Coefficients of Torque Transducers using Seasonal Climatic Changes of Ambient Conditions in the Laboratory"
+            },
+            {
+              "doi": "10.1109/lmag.2012.2195775",
+              "title": "Spin-Transfer Torque Switching Above Ambient Temperature"
+            },
+            {
+              "doi": "10.1080/00140138308963418",
+              "title": "Influence of high ambient temperature and humidity on visual sensitivity"
+            },
+            {
+              "doi": "10.1109/cpem.2016.7540702",
+              "title": "Temperature sensitivity coefficients of the BIPM secondary voltage standards"
+            },
+            {
+              "doi": "10.1016/j.measurement.2016.07.028",
+              "title": "The influence of temperature and humidity on the sensitivity of torque transducers"
+            },
+            {
+              "doi": "10.1088/1757-899x/101/1/012005",
+              "title": "Single-phase ambient and cryogenic temperature heat transfer coefficients in microchannels"
+            },
+            {
+              "doi": "10.1088/1681-7575/ab7428",
+              "title": "Determination of temperature and humidity sensitivity coefficients of torque transducers and estimation of their uncertainties based on a Monte Carlo method"
+            },
+            {
+              "doi": "10.3390/buildings14123865",
+              "title": "Liquid-Water Transfer Coefficients of Porous Building Materials Under High-Humidity Conditions"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "torque transducers rotating partial load ranges uncertainty calibration",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=torque+transducers+rotating+partial+load+ranges+uncertainty+calibration&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=torque+transducers+rotating+partial+load+ranges+uncertainty+calibration&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:35+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1016/j.measurement.2006.08.001",
+              "title": "Measurement uncertainty of torque measurements with rotating torque transducers in power test stands"
+            },
+            {
+              "doi": "10.1520/e2428",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1520/e2428-08",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1520/e2428-14",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1520/e2428-15",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1520/e2428-15a",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1520/e2428-22",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            },
+            {
+              "doi": "10.1016/b978-0-7131-3508-4.50006-6",
+              "title": "TRANSDUCERS — STRAIN, FORCE, TORQUE, ACCELERATION, LOAD AND TENSION"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "Humidity and temperature effects on torque transducers, bridge calibration unit and amplifiers",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=Humidity+and+temperature+effects+on+torque+transducers%2C+bridge+calibration+unit+and+amplifiers&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=Humidity+and+temperature+effects+on+torque+transducers%2C+bridge+calibration+unit+and+amplifiers&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:37+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1016/j.measurement.2015.07.007",
+              "title": "Humidity and temperature effects on torque transducers, bridge calibration unit and amplifiers"
+            },
+            {
+              "doi": "10.1515/teme-2020-0077",
+              "title": "The investigation of effects of humidity and temperature on torque transducers calibration"
+            },
+            {
+              "doi": "10.1108/aeat.2004.12776cad.003",
+              "title": "Unit improves calibration of quarter bridge amplifiers"
+            },
+            {
+              "doi": "10.21014/acta_imeko.v3i2.80",
+              "title": "Simplified Measurements of the Humidity Coefficient of Torque Transducers in Calibration Laboratories"
+            },
+            {
+              "doi": "10.1016/j.measurement.2016.07.028",
+              "title": "The influence of temperature and humidity on the sensitivity of torque transducers"
+            },
+            {
+              "doi": "10.1016/j.measurement.2016.10.027",
+              "title": "Remaining differences among precision strain-gauge amplifiers for force transducers after compensation with reference to a common bridge calibration unit"
+            },
+            {
+              "doi": "10.21685/2587-7704-2025-10-2-17",
+              "title": "Combined temperature and humidity measuring transducers"
+            },
+            {
+              "doi": "10.1520/e2428",
+              "title": "Practice for Calibration and Verification of Torque Transducers"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "The influence of temperature and humidity on the sensitivity of torque transducers",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=The+influence+of+temperature+and+humidity+on+the+sensitivity+of+torque+transducers&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=The+influence+of+temperature+and+humidity+on+the+sensitivity+of+torque+transducers&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:39+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1016/j.measurement.2016.07.028",
+              "title": "The influence of temperature and humidity on the sensitivity of torque transducers"
+            },
+            {
+              "doi": "10.1016/j.measurement.2015.07.007",
+              "title": "Humidity and temperature effects on torque transducers, bridge calibration unit and amplifiers"
+            },
+            {
+              "doi": "10.1515/teme-2020-0077",
+              "title": "The investigation of effects of humidity and temperature on torque transducers calibration"
+            },
+            {
+              "doi": "10.21685/2587-7704-2025-10-2-17",
+              "title": "Combined temperature and humidity measuring transducers"
+            },
+            {
+              "doi": "10.7736/kspe.2015.32.2.185",
+              "title": "The Determination of Temperature and Humidity Sensitivity Coefficients of Torque Transducers using Seasonal Climatic Changes of Ambient Conditions in the Laboratory"
+            },
+            {
+              "doi": "10.1088/1681-7575/ab7428",
+              "title": "Determination of temperature and humidity sensitivity coefficients of torque transducers and estimation of their uncertainties based on a Monte Carlo method"
+            },
+            {
+              "doi": "10.1007/bf00981875",
+              "title": "Maximum sensitivity of humidity transducers with crystal plates"
+            },
+            {
+              "doi": "10.1080/00140138308963418",
+              "title": "Influence of high ambient temperature and humidity on visual sensitivity"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    },
+    {
+      "at_utc": "2026-11-21T23:21:35+00:00",
+      "query": "temperature field analysis compensation improvement load cell temperature position strain gauge",
+      "endpoint": "https://api.crossref.org/works?query.bibliographic=temperature+field+analysis+compensation+improvement+load+cell+temperature+position+strain+gauge&rows=8&select=DOI%2Ctitle%2Cauthor%2Cpublished",
+      "status": "HTTP Error 429: Too Many Requests",
+      "retries": [
+        {
+          "source": "Crossref public REST, title field retry",
+          "endpoint": "https://api.crossref.org/works?query.title=temperature+field+analysis+compensation+improvement+load+cell+temperature+position+strain+gauge&rows=8&select=DOI%2Ctitle",
+          "at_utc": "2026-11-21T23:23:41+00:00",
+          "returned": 8,
+          "results": [
+            {
+              "doi": "10.1038/s41598-024-76688-0",
+              "title": "Temperature field analysis and compensation improvement of load cell"
+            },
+            {
+              "doi": "10.1007/978-94-009-4414-5_35",
+              "title": "Temperature Effect and Compensation of Strain Gage Load Cell"
+            },
+            {
+              "doi": "10.1152/jappl.1962.17.3.572",
+              "title": "Temperature compensation for mercury strain gauge used in plethysmography"
+            },
+            {
+              "doi": "10.1007/bf00862750",
+              "title": "Compensation of temperature errors in precision strain gauge dynamometers"
+            },
+            {
+              "doi": "10.1117/12.2513813",
+              "title": "Temperature-compensation of 3D-printed polymer-based strain gauge"
+            },
+            {
+              "doi": "10.1109/jsen.2023.3238328",
+              "title": "A Bilayer Thin-Film Strain Gauge With Temperature Self-Compensation"
+            },
+            {
+              "doi": "10.3390/app12178607",
+              "title": "Additive Manufacturing for Sensors: Piezoresistive Strain Gauge with Temperature Compensation"
+            },
+            {
+              "doi": "10.1520/stp45031s",
+              "title": "Temperature Compensation of High-Temperature Strain Gages"
+            }
+          ],
+          "http_status": 200
+        }
+      ]
+    }
+  ],
+  "fulltext_url_checks": [
+    {
+      "requested_url": "https://nvlpubs.nist.gov/nistpubs/jres/102/3/j23bar.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://nvlpubs.nist.gov/nistpubs/jres/102/3/j23bar.pdf",
+      "file_size": 183710,
+      "sha256": "3c6834a938145dea6442970eb9f95a14fd06992e2f59a44597f7774ecc147d8e",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://jsss.copernicus.org/articles/8/149/2019/jsss-8-149-2019.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://jsss.copernicus.org/articles/8/149/2019/jsss-8-149-2019.pdf",
+      "file_size": 3268799,
+      "sha256": "d89493d5d01db62f13bd6d231033c26afea5596cbe448e22b98a14c9beaa32a0",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://acta.imeko.org/index.php/acta-imeko/article/viewFile/IMEKO-ACTA-08%20%282019%29-03-09/pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://acta.imeko.org/index.php/acta-imeko/article/download/IMEKO-ACTA-08%20%282019%29-03-09/pdf/0",
+      "file_size": 1019672,
+      "sha256": "c5682e4bfcded30372995cd32494c824cb8574683c156d5145b157fa548f4018",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://acta.imeko.org/index.php/acta-imeko/article/download/IMEKO-ACTA-09%20%282020%29-05-30/1518",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://acta.imeko.org/index.php/acta-imeko/article/download/IMEKO-ACTA-09%20%282020%29-05-30/1518",
+      "file_size": 774290,
+      "sha256": "c749905df0df3f74818380bbb023d62bdcbd288adfc46b3a7f0dd36e7d17f6b8",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.imeko.org/publications/wc-2006/PWC-2006-TC3-025u.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.imeko.org/publications/wc-2006/PWC-2006-TC3-025u.pdf",
+      "file_size": 942941,
+      "sha256": "15d5d7731209828564c3448d8ef734ac7fe0783ec4caee3df9efc43be410ec7f",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://imeko.org/publications/tc3-2017/IMEKO-TC3-2017-041.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://imeko.org/publications/tc3-2017/IMEKO-TC3-2017-041.pdf",
+      "file_size": 177700,
+      "sha256": "b7307916ed234678103b405b7dabfbd8eda59e8a6874b330548cc0cab1aa9062",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.imeko.org/publications/tc3-2007/IMEKO-TC3-2007-059u.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.imeko.org/publications/tc3-2007/IMEKO-TC3-2007-059u.pdf",
+      "file_size": 199866,
+      "sha256": "97d5b1b3e3b24e5e5a56e5ff6982ff2b8fff4f33b299ff821484837f05c91c2a",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://skoge.folk.ntnu.no/prost/proceedings/cdc-ecc-2011/data/papers/0545.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://skoge.folk.ntnu.no/prost/proceedings/cdc-ecc-2011/data/papers/0545.pdf",
+      "file_size": 251897,
+      "sha256": "76d69b7003528c7616690ffc8e747f7f981333a9e41a375f228bd8d8f688d61b",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0?error=cookies_not_supported&code=3128140b-5456-4933-815d-d3efbe8cb128",
+      "file_size": 339485,
+      "sha256": "dc60fce61ab298fc95e74c2ac8795bb18a0e7462c45f8e716bcb80fa7cf86d54",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://arxiv.org/pdf/1812.00650",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://arxiv.org/pdf/1812.00650",
+      "file_size": 825908,
+      "sha256": "1cc0f403d33d3350b818284a067665939f2bcc5f14a446f61c478c88984e410e",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6960532/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "failure": "HTTP Error 500: Internal Server Error"
+    },
+    {
+      "requested_url": "https://www.mdpi.com/2076-3417/9/17/3454/pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.mdpi.com/2076-3417/9/17/3454/pdf",
+      "file_size": 1833476,
+      "sha256": "887af2b5fc1dcc1a66eb881bf6f29565033ae37c4d0b1c57bf108cd61fa6faa5",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.mdpi.com/1996-1944/11/11/2305/pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.mdpi.com/1996-1944/11/11/2305/pdf",
+      "file_size": 3164228,
+      "sha256": "0796f746fd5a1ddda11c1ed5d16f9d4660bf9723fe633236c29a6edf8e02f55d",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC4894594/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "failure": "HTTP Error 500: Internal Server Error"
+    },
+    {
+      "requested_url": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2015.00006/xml/nlm",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "resolved_url": "https://www.frontiersin.org/journals/robotics-and-ai/articles/10.3389/frobt.2015.00006/xml/nlm",
+      "file_size": 264015,
+      "sha256": "290504c9bf50787d956ac73cc44597bcedc2680a1118ae7d2ae529eb7c26c9a8",
+      "type": "xml"
+    },
+    {
+      "requested_url": "https://ietresearch.onlinelibrary.wiley.com/doi/full/10.1049/cth2.12052",
+      "retrieval_batch_completed_utc": "2026-11-21T23:11:53+00:00",
+      "failure": "HTTP Error 403: Forbidden"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC5515300/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "failure": "HTTP Error 500: Internal Server Error"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC3965652/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "failure": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10031093/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "failure": "HTTP Error 500: Internal Server Error"
+    },
+    {
+      "requested_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6266500/fullTextXML",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "failure": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "requested_url": "https://imeko.org/publications/tc3-2017/IMEKO-TC3-2017-022.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "resolved_url": "https://imeko.org/publications/tc3-2017/IMEKO-TC3-2017-022.pdf",
+      "file_size": 857125,
+      "sha256": "0cc2130206343b7d8f61a045dcba706cfe5b0737d62f986efbf50772b96e1cfa",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.imeko.org/publications/tc3-2010/IMEKO-TC3-2010-NP-023.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "resolved_url": "https://www.imeko.org/publications/tc3-2010/IMEKO-TC3-2010-NP-023.pdf",
+      "file_size": 1070025,
+      "sha256": "8491766d808f31ef3f9b56a0470b98c9cb96772d216883a61dd5fd144e32e0f9",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.imeko.org/publications/tc3-2010/IMEKO-TC3-2010-042.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "resolved_url": "https://www.imeko.org/publications/tc3-2010/IMEKO-TC3-2010-042.pdf",
+      "file_size": 541590,
+      "sha256": "61a1535c85b37134727c601822c8d91e55028d07ccd0e42374af5a9d86098037",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.imeko.org/publications/tc3-2002/IMEKO-TC3-2002-016.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "resolved_url": "https://www.imeko.org/publications/tc3-2002/IMEKO-TC3-2002-016.pdf",
+      "file_size": 175293,
+      "sha256": "601e82f99c8bd87a50d471057fd404151a17a59904a3f10e475b0194e1ebfa32",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://skoge.folk.ntnu.no/prost/proceedings/fairly-early-world-congress/milan2011/",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "failure": "HTTP Error 404: Not Found"
+    },
+    {
+      "requested_url": "https://escholarship.org/content/qt0x06s0gs/qt0x06s0gs.pdf?t=ml37i3",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:11+00:00",
+      "resolved_url": "https://escholarship.org/content/qt0x06s0gs/qt0x06s0gs.pdf?t=ml37i3",
+      "file_size": 1381577,
+      "sha256": "88cab0944197856746993cbb2310f52924c23c5deafe251e259d49000d2a5165",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515300/",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5515300/",
+      "file_size": 269150,
+      "sha256": "89655e861872f8141bc189f3105fbe3098c18443b3897a0bf4276c7b55e46efd",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3965652/",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3965652/",
+      "file_size": 214794,
+      "sha256": "8d52adf369e443a7ee8073c58d6e7d930f4fe8b187b40fd775bb73f5a6675d62",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10031093/",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10031093/",
+      "file_size": 254302,
+      "sha256": "f8889b4f77961d7b78d8902f88080820d7eba0784c5ea5d611f6a5680d2a6250",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.academia.edu/100355803/Closed_loop_Identification_of_Hammerstein_Systems_Using_Iterative_Instrumental_Variables",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://www.academia.edu/100355803/Closed_loop_Identification_of_Hammerstein_Systems_Using_Iterative_Instrumental_Variables",
+      "file_size": 183216,
+      "sha256": "42402ed84c61e00a2cee41f4e7dae73a562797c4ff69d9b7a090b5b97cec769b",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.mdpi.com/1424-8220/19/24/5521/pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://www.mdpi.com/1424-8220/19/24/5521/pdf",
+      "file_size": 20834013,
+      "sha256": "72841bcf6fed7c8928c9e111d14fce66db7baa1d324c9994fba6df7a0377ccdb",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC5515300.1/PMC5515300.1.xml",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC5515300.1/PMC5515300.1.xml",
+      "file_size": 173839,
+      "sha256": "ce9fc744820d2e6e85dcdd5bda3238e48ac6bbf03d55ebf6efd0299a9e19adb6",
+      "type": "xml"
+    },
+    {
+      "requested_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC3965652.1/PMC3965652.1.xml",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC3965652.1/PMC3965652.1.xml",
+      "file_size": 127012,
+      "sha256": "1115f65de26c22bc735488acab30cc45802f9c5e895e6b40014e2cb9dd82d2a5",
+      "type": "xml"
+    },
+    {
+      "requested_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC10031093.1/PMC10031093.1.xml",
+      "retrieval_batch_completed_utc": "2026-11-21T23:12:50+00:00",
+      "resolved_url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC10031093.1/PMC10031093.1.xml",
+      "file_size": 185695,
+      "sha256": "5c58b239292b9453e6011748bbf9dc508ae03e2138db0ab636c5c58b6fb90333",
+      "type": "xml"
+    },
+    {
+      "requested_url": "https://skoge.folk.ntnu.no/prost/proceedings/ifac11-proceedings/data/html/papers/1589.pdf",
+      "retrieval_batch_completed_utc": "2026-11-21T23:15:10+00:00",
+      "resolved_url": "https://skoge.folk.ntnu.no/prost/proceedings/ifac11-proceedings/data/html/papers/1589.pdf",
+      "file_size": 197636,
+      "sha256": "0f34595baab818bb6c7796ddd72e3bc10d3b1a92294774190068ef2c3e82803a",
+      "type": "pdf"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/3",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/3?error=cookies_not_supported&code=6616a967-1e99-4c08-bfe9-f357551e06c6",
+      "file_size": 168636,
+      "sha256": "0077388410c487da1629fe740503fb70fc0112e0bf827162ad1d0938d667d804",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/4",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/4?error=cookies_not_supported&code=02132dbd-5e3a-4ddd-b86a-202a86d182cc",
+      "file_size": 168077,
+      "sha256": "99588e431603d771430e9afe39955f9a6c9c834f89edfc382afe2f7e575761cb",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/5",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/5?error=cookies_not_supported&code=470f5de2-1cfd-4948-a81e-6060b92c9afd",
+      "file_size": 168287,
+      "sha256": "83a1d7875899bdd249b1f19f381981ef41ba88fe067e80ca1ea08b821d03bf04",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/6",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/6?error=cookies_not_supported&code=33fd48e8-688a-4ac3-aa0b-e57751988411",
+      "file_size": 168602,
+      "sha256": "792799b219515224637ff3ca6003d3f16e490440919b9878e0482dc96260f13a",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/7",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/7?error=cookies_not_supported&code=5571a0c1-58c4-4b2c-8884-2a7c15034bab",
+      "file_size": 168588,
+      "sha256": "930971dc858177042a30851eb8d6a34fed024fbf26bd997182a2a9ecc6de93df",
+      "type": "html"
+    },
+    {
+      "requested_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/8",
+      "retrieval_batch_completed_utc": "2026-11-21T23:16:41+00:00",
+      "resolved_url": "https://www.nature.com/articles/s41598-024-76688-0/tables/8?error=cookies_not_supported&code=d824df65-8b83-4758-8edf-a5f9b92c23ed",
+      "file_size": 168457,
+      "sha256": "6ba45e421a2096e2eda3cac6018c804f9d452a24f6b9ddc1a5fda7826a672d09",
+      "type": "html"
+    }
+  ],
+  "retry_completed_utc": "2026-11-21T23:23:43+00:00"
+}

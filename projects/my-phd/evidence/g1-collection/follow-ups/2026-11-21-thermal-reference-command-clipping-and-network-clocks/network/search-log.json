@@ -1,0 +1,149 @@
+{
+  "accessed_utc": "2026-11-21",
+  "queries": [
+    {
+      "source": "Socrata catalog (domain-scoped)",
+      "query": {
+        "search_context": "data.transportation.gov",
+        "q": "cooperative platooning CARMA",
+        "limit": 15
+      },
+      "url": "https://api.us.socrata.com/api/catalog/v1?search_context=data.transportation.gov&q=cooperative+platooning+CARMA&limit=15",
+      "hits": 3,
+      "returned": [
+        "2qjp-7bah",
+        "dusd-cr84",
+        "wpek-zziu"
+      ]
+    },
+    {
+      "source": "Socrata catalog (domain-scoped)",
+      "query": {
+        "search_context": "data.transportation.gov",
+        "q": "Connected Automated Vehicles Integrated Highway Prototype II",
+        "limit": 15
+      },
+      "url": "https://api.us.socrata.com/api/catalog/v1?search_context=data.transportation.gov&q=Connected+Automated+Vehicles+Integrated+Highway+Prototype+II&limit=15",
+      "hits": 26,
+      "returned": [
+        "2qjp-7bah",
+        "htmy-j8sh",
+        "dusd-cr84",
+        "deww-aa3r",
+        "swef-k9yw",
+        "vhz2-exyi",
+        "iie8-uenj",
+        "mgb7-qq3m",
+        "5tsh-j288",
+        "nimp-626k",
+        "bzz7-amm4",
+        "pcnx-thhb",
+        "f5ku-dn3j",
+        "rrzk-m9b7",
+        "gndc-cf3j"
+      ]
+    },
+    {
+      "source": "Socrata catalog (domain-scoped)",
+      "query": {
+        "search_context": "data.transportation.gov",
+        "q": "Cooperative Automated Research Mobility Applications CARMA 2",
+        "limit": 15
+      },
+      "url": "https://api.us.socrata.com/api/catalog/v1?search_context=data.transportation.gov&q=Cooperative+Automated+Research+Mobility+Applications+CARMA+2&limit=15",
+      "hits": 3,
+      "returned": [
+        "dusd-cr84",
+        "2qjp-7bah",
+        "wpek-zziu"
+      ]
+    },
+    {
+      "source": "Crossref",
+      "query": {
+        "query.title": "Strategic and Tactical Decision-Making for Cooperative Vehicle Platooning with Organized Behavior on Multi-Lane Highways",
+        "rows": 3
+      },
+      "url": "https://api.crossref.org/works?query.title=Strategic+and+Tactical+Decision-Making+for+Cooperative+Vehicle+Platooning+with+Organized+Behavior+on+Multi-Lane+Highways&rows=3",
+      "hits": 3695790,
+      "returned": [
+        "10.2139/ssrn.4118254",
+        "10.1016/j.trc.2022.103952",
+        "10.1109/icus66297.2025.11295443"
+      ]
+    },
+    {
+      "source": "DataCite",
+      "query": {
+        "query": "titles.title:\"CARMA Testing and Evaluation of Research Mobility Applications\"",
+        "page[size]": 3
+      },
+      "url": "https://api.datacite.org/dois?query=titles.title%3A%22CARMA+Testing+and+Evaluation+of+Research+Mobility+Applications%22&page%5Bsize%5D=3",
+      "hits": 0,
+      "returned": []
+    }
+  ],
+  "followed": [
+    "Socrata metadata to raw archive, vehicle filenames and bag topic schemas; DDS/ROS publication output checked at CARMA tag carma-system-4.2.0 counterpart c3b67662e8a1db655f1d6bdf4c9d1d606402e619",
+    "DataCite DOI records for both datasets and two IHP reports; FHWA agency PDF full texts; 2022 annual report references 56 and 57 traced",
+    "Crossref, OpenAlex work W4308814170 and SSRN alias resolution for Han et al. Abstract verified; journal PDF / Elsevier API / SSRN landing HTTP 403.",
+    "CARMA2 source metadata, whole 254-column export and four versioned attachments. Followed the 2019 USDOT testing report section 2.5.2 and Appendix A for sign and units."
+  ],
+  "rejected_or_qualified": [
+    "CARMA1 10.21949/1504510 is a different repository dataset from CARMA2, and not an added source here.",
+    "Generic CACC summaries lacking sender/receiver identities or message events were not used for latency.",
+    "Figures 7 and 10 have asymmetric/distinct BP filenames/timestamps; preserve the 8 unmatched BP links without inferring radio packet loss.",
+    "Replay does not reproduce distributed hardware timing. No report source PDF, original telemetry or raw binaries mirrored."
+  ],
+  "dedup_local_snapshot": {
+    "root": "cloud-state/my-phd history cache plus previous batch local candidate+bundle files",
+    "files_examined": 1628,
+    "method": "Identifier/alias case-folded substring and NFKD alphanumeric normalized full title across all files, prior to final status-branch recheck. A title+authors verified for the preprint/journal equivalence.",
+    "screen": {
+      "R5-IHP2": {
+        "doi_or_alias_keys": [
+          "10.21949/1404196"
+        ],
+        "normalized_title": "connectedautomatedvehiclesintegratedhighwayprototypeiiihp2",
+        "matching_cached_files": []
+      },
+      "R2-R5-CARMA2": {
+        "doi_or_alias_keys": [
+          "10.21949/1504485"
+        ],
+        "normalized_title": "cooperativeautomatedresearchmobilityapplicationscarma2",
+        "matching_cached_files": []
+      },
+      "R5-IHP2-ANNUAL": {
+        "doi_or_alias_keys": [
+          "10.21949/1521761"
+        ],
+        "normalized_title": "2022cdaannualreport",
+        "matching_cached_files": []
+      },
+      "R5-IHP2-CONOPS": {
+        "doi_or_alias_keys": [
+          "10.21949/1521866"
+        ],
+        "normalized_title": "conceptofoperationsforcarmaintegratedhighwayprototype2",
+        "matching_cached_files": []
+      },
+      "R5-IHP2-HAN": {
+        "doi_or_alias_keys": [
+          "10.1016/j.trc.2022.103952",
+          "10.2139/ssrn.4118254"
+        ],
+        "normalized_title": "strategicandtacticaldecisionmakingforcooperativevehicleplatooningwithorganizedbehavioronmultilanehighways",
+        "matching_cached_files": []
+      },
+      "R2-R5-CARMA2-REPORT": {
+        "doi_or_alias_keys": [
+          "DOT-VNTSC-FHWA-19-15",
+          "dot:41814"
+        ],
+        "normalized_title": "carmatestingandevaluationofresearchmobilityapplications",
+        "matching_cached_files": []
+      }
+    }
+  }
+}

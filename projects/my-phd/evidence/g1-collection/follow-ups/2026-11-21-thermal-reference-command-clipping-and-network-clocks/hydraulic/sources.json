@@ -1,0 +1,366 @@
+{
+  "checked_utc": "2026-11-21T23:27:12+00:00",
+  "records": [
+    {
+      "id": "zenodo-3627901",
+      "doi": "10.5281/zenodo.3627901",
+      "concept_doi": "10.5281/zenodo.3627900",
+      "title": "Dataset for DOI: 10.1109/LRA.2019.2927936. \"Multi-DoF Force Characterization of Soft Actuators\"",
+      "authors": [
+        "Sagar Joshi",
+        "Jamie Paik"
+      ],
+      "date": "2020-01-26",
+      "version": "1",
+      "source_url": "https://zenodo.org/records/3627901",
+      "metadata_url": "https://zenodo.org/api/records/3627901",
+      "rights": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "evidence_level": "available_files_full_release_verified",
+      "inspected": "Verified each of the three archives against deposit MD5 and byte count; all ZIP members CRC-tested. The three protocols contain 93 eight-column trial CSVs (pulling 30, tip 36, three-point 27) with 90 matching arrays in the supplied MAT files. Recomputed three two-channel load-cell module norms after exclusion of 63 flagged, initial threshold-exceeding rows.",
+      "limitations": "File and replicate identifiers describe test conditions; module force magnitudes use the source MATLAB scale 0.00981 N per gram-force unit. A six-column planar load-cell fixture is not a six-axis robot wrist. Three CSVs did not exactly match a MAT array; not discarded. No synchronized control-limit flag or thermal reference.",
+      "files": [
+        {
+          "name": "Raw data - Three point bending.zip",
+          "bytes": 9588511,
+          "published_checksum": "md5:3c925721c6916f87a7f5441696cc47ab",
+          "sha256": "62f56fcc8ce3418769a5b14b384751bbc5c8afd21494662134c807d9e0e70267",
+          "download_url": "https://zenodo.org/api/records/3627901/files/Raw%20data%20-%20Three%20point%20bending.zip/content"
+        },
+        {
+          "name": "Raw Data - Tip Force.zip",
+          "bytes": 8489347,
+          "published_checksum": "md5:29abaa1ddd261c804233e45249b03d5c",
+          "sha256": "f11783f2373b3d1ed9d2c7c64a352f3be742cd9230379d832913f4f177a9f540",
+          "download_url": "https://zenodo.org/api/records/3627901/files/Raw%20Data%20-%20Tip%20Force.zip/content"
+        },
+        {
+          "name": "Raw Data - Pulling Force.zip",
+          "bytes": 1522969,
+          "published_checksum": "md5:d370e86aa3333c9535e2b54889e8a300",
+          "sha256": "78f3066a8623f20802b953c0fc2a8dd70b13ca333233740a414dab15e0542882",
+          "download_url": "https://zenodo.org/api/records/3627901/files/Raw%20Data%20-%20Pulling%20Force.zip/content"
+        }
+      ]
+    },
+    {
+      "id": "zenodo-4556924",
+      "doi": "10.5281/zenodo.4556924",
+      "concept_doi": "10.5281/zenodo.4556923",
+      "title": "New datasets obtained from experimental installations with centralized control",
+      "authors": [
+        "Dusan Nedeljkovic",
+        "Zivana Jakovljevic"
+      ],
+      "date": "2021-02-23",
+      "version": "v.1.0",
+      "source_url": "https://zenodo.org/records/4556924",
+      "metadata_url": "https://zenodo.org/api/records/4556924",
+      "rights": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "evidence_level": "available_files_full_release_verified",
+      "inspected": "Verified all 12 trajectory/rate TXT payloads and Table_1.pdf by published MD5/size. Parsed 3,878,500 finite stored voltage values across 7 trajectories. Of these, 242,080 are strictly above 10 V and 170 below 0 V. Aggregates retain per-file rail counts and longest runs.",
+      "limitations": "The recorded electrical signal is between the local controller and the electro-pneumatic pressure regulator. Source gives nominal 0–10 V. Values at or outside this interval do not establish a downstream physical clamp, pressure saturation, integrator windup, or a measured post-limit actuator state. No paired piston-position/pressure channels in these one-column text files.",
+      "files": [
+        {
+          "name": "T5_1.txt",
+          "bytes": 24507,
+          "published_checksum": "md5:d92638a037ad812459c9bb39751dd22b",
+          "sha256": "3bf2ac0f2a0a600cf6f81a4004bbb51daec97ad3281e567a1a93bee9aa1a4284",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T5_1.txt/content"
+        },
+        {
+          "name": "T7_10.txt",
+          "bytes": 140327,
+          "published_checksum": "md5:d4d117f96bf8469adcc9ebe4c64302f1",
+          "sha256": "1787d0b2a22a4b1d96107fcb0e11c134d147c4bd39ed3a406934d0887c9508fb",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T7_10.txt/content"
+        },
+        {
+          "name": "T7_1000.txt",
+          "bytes": 14030407,
+          "published_checksum": "md5:bb0d0cab1efdaf2ed80e60db2f374e0b",
+          "sha256": "9a4a9ace8aed27cc2345c4a600add810ef77887acfde4ae9917b72a648cad451",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T7_1000.txt/content"
+        },
+        {
+          "name": "T6_100.txt",
+          "bytes": 1050518,
+          "published_checksum": "md5:a1b1f55641413aa8293ba7ea9b52b308",
+          "sha256": "9f6c4f854fa54b8d82de360f6501c0f9016a794d913f9f279a3d7c691867971c",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T6_100.txt/content"
+        },
+        {
+          "name": "Table_1.pdf",
+          "bytes": 219934,
+          "published_checksum": "md5:d20009178f68b6a1c79c0a0f0bed5d50",
+          "sha256": "9d3d030aa3b36800b5bb918c4d9cd7bd2f4b3459f0d27a8bf5a1c48136ef94db",
+          "download_url": "https://zenodo.org/api/records/4556924/files/Table_1.pdf/content"
+        },
+        {
+          "name": "T4_10.txt",
+          "bytes": 245170,
+          "published_checksum": "md5:bb9640deaf25086b9aae81f9c692dbd8",
+          "sha256": "67dd9f63e5d77c5ea45a4d8c49223aedf29dca9e4572641b1ebce06819a45780",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T4_10.txt/content"
+        },
+        {
+          "name": "T7_100.txt",
+          "bytes": 1402688,
+          "published_checksum": "md5:e749af1e5f49fce2c6c335c82c934e60",
+          "sha256": "07977e7201ae0d94e84e9f7f6a9f1b6887ab85a7253c3fe7d5461a868c7ab7a3",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T7_100.txt/content"
+        },
+        {
+          "name": "T5_100.txt",
+          "bytes": 2448821,
+          "published_checksum": "md5:f4b2c38db9a92c8c538ff5bf5726b1f6",
+          "sha256": "8f21e1c538c7aa8bfdd95b99ae6128e7d99b7b01204bcdc4c6c5607fe031a272",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T5_100.txt/content"
+        },
+        {
+          "name": "T2_100.txt",
+          "bytes": 909959,
+          "published_checksum": "md5:f3d94a1420155594daa0d9855996269d",
+          "sha256": "f5cf23aa5f436e7173685e047207c97595fde5ca9c633f13e0f0c428aa860e11",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T2_100.txt/content"
+        },
+        {
+          "name": "T3_100.txt",
+          "bytes": 1396699,
+          "published_checksum": "md5:12e6fd696f0beee01ce6ec8161e04d43",
+          "sha256": "45d330d79e6ff34dc61daa200f1cbbf19644c04758486b403a8b2c5224c158a4",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T3_100.txt/content"
+        },
+        {
+          "name": "T4_100.txt",
+          "bytes": 2440076,
+          "published_checksum": "md5:db2f9953d126e3229265aaa581e6544f",
+          "sha256": "c1686df35afdb5d4a02414136615d983d268c3bb80c4c0fc4c7bc2c45d6f2682",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T4_100.txt/content"
+        },
+        {
+          "name": "T1_10.txt",
+          "bytes": 279888,
+          "published_checksum": "md5:a91a261e94d73507f8c2a2264ce6fd98",
+          "sha256": "d788df48dc66e8617ad9a9b994233778a0bbf49ad49fe57b89e0ac90d407bd2f",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T1_10.txt/content"
+        },
+        {
+          "name": "T1_100.txt",
+          "bytes": 2793484,
+          "published_checksum": "md5:d215fcb882409922723237f8f867e1df",
+          "sha256": "f8074dcfec6005123a72234291057a9e771d102814493da9eb2d93ccb010f1bf",
+          "download_url": "https://zenodo.org/api/records/4556924/files/T1_100.txt/content"
+        }
+      ],
+      "series_counting_unit": "One release family identified by concept DOI 10.5281/zenodo.4556923. Top-level files, inspected sample count and voltage contrasts apply only to the v.1.0 release. The v.2.0 signal inventory is documented separately below.",
+      "series_api": "https://zenodo.org/api/records/4556924/versions",
+      "latest_record": "10.5281/zenodo.5514351",
+      "versions": [
+        {
+          "id": 4556924,
+          "doi": "10.5281/zenodo.4556924",
+          "version": "v.1.0",
+          "date": "2021-02-23",
+          "access": "open",
+          "license": "CC BY 4.0",
+          "source_url": "https://zenodo.org/records/4556924",
+          "public_files_listed": 13,
+          "inspection_scope": "Full public v1.0 manifest, MD5, SHA-256 and 12 single-channel voltage recordings documented in parent record and belgrade-regulator-voltage.csv."
+        },
+        {
+          "id": 5514279,
+          "doi": "10.5281/zenodo.5514279",
+          "version": "v.1.1",
+          "date": "2021-09-17",
+          "access": "restricted",
+          "license": null,
+          "source_url": "https://zenodo.org/records/5514279",
+          "public_files_listed": 0,
+          "inspection_scope": "Restricted. Public API lists zero accessible files. Payload and reuse terms were not inspected."
+        },
+        {
+          "id": 5514310,
+          "doi": "10.5281/zenodo.5514310",
+          "version": "v.1.2",
+          "date": "2021-09-17",
+          "access": "restricted",
+          "license": null,
+          "source_url": "https://zenodo.org/records/5514310",
+          "public_files_listed": 0,
+          "inspection_scope": "Restricted. Public API lists zero accessible files. Payload and reuse terms were not inspected."
+        },
+        {
+          "id": 5514351,
+          "doi": "10.5281/zenodo.5514351",
+          "version": "v.2.0",
+          "date": "2021-09-18",
+          "access": "open",
+          "license": "CC BY 4.0",
+          "source_url": "https://zenodo.org/records/5514351",
+          "public_files_listed": 9,
+          "inspection_scope": "Seven T1_v2.txt through T7_v2.txt files describe normal-operation LC2-to-LC1 received data. The other two listings are the retained T7_100.txt and Table_2.pdf. v2 communication records and v1 voltage records are separately described. File-level replay in belgrade-version-audit.csv and version-notes.md.",
+          "unchanged_file_anchor": {
+            "name": "T7_100.txt",
+            "bytes": 1402688,
+            "provider_checksum_v1_v2": "md5:e749af1e5f49fce2c6c335c82c934e60",
+            "v1_verified_sha256": "07977e7201ae0d94e84e9f7f6a9f1b6887ab85a7253c3fe7d5461a868c7ab7a3"
+          },
+          "v2_member_index": [
+            {
+              "name": "T7_100.txt",
+              "reported_bytes": 1402688,
+              "provider_checksum": "md5:e749af1e5f49fce2c6c335c82c934e60",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T7_100.txt/content",
+              "verified_sha256": "07977e7201ae0d94e84e9f7f6a9f1b6887ab85a7253c3fe7d5461a868c7ab7a3"
+            },
+            {
+              "name": "T4_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:d5bdabff9d700fe3eda121c94979b7e9",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T4_v2.txt/content",
+              "verified_sha256": "b7cefd87b5895b6961c08172de019c3896545c57d83afc4eb6f71a6c791397a6"
+            },
+            {
+              "name": "T3_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:62a59d90207f9c21991a3d73c8164e94",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T3_v2.txt/content",
+              "verified_sha256": "aba5b55a05a2e44d3fbdb27fbeba0dab938b34dbc77cd9c681358772205654af"
+            },
+            {
+              "name": "T6_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:f0363683366f4284e52bf0db88677235",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T6_v2.txt/content",
+              "verified_sha256": "01df6d9bc309c5569574e349bbad94b56d75d6fb6485342c88f66f69debb099c"
+            },
+            {
+              "name": "T5_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:e7c83a5791b21b77f5a2041313396a85",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T5_v2.txt/content",
+              "verified_sha256": "5243f2866d967748ad67b521bab208b22b8a176fa2a4e27d4e65cd006adea6df"
+            },
+            {
+              "name": "T2_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:86276bfaf02e6c2e4dec49b7c343c1bf",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T2_v2.txt/content",
+              "verified_sha256": "a74b77fc6b0196c40839e0450227ffa55b79dd477c92900adb0534e0b7aafac4"
+            },
+            {
+              "name": "T1_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:ba7b6c12d69b7564b8a3762c0dcc0101",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T1_v2.txt/content",
+              "verified_sha256": "4b02dc0d8e9e2a548c3c5198a32e83d0b3fbbccf99d19940642f5a1913824e6f"
+            },
+            {
+              "name": "T7_v2.txt",
+              "reported_bytes": 10400000,
+              "provider_checksum": "md5:9272fbe57fe99f856eb2f662c54f096b",
+              "public_url": "https://zenodo.org/api/records/5514351/files/T7_v2.txt/content",
+              "verified_sha256": "a167e9d1124c6c99145844f8205177b1560d522db4223b149928c4b42080189a"
+            },
+            {
+              "name": "Table_2.pdf",
+              "reported_bytes": 211553,
+              "provider_checksum": "md5:a2e266bf8bc90a3e552f5b79df366aee",
+              "public_url": "https://zenodo.org/api/records/5514351/files/Table_2.pdf/content",
+              "verified_sha256": "5c22628d670be1f94697bfd6070cb4330aa6f5ab6ac38fa4e75e2f5ea6f978c5"
+            }
+          ],
+          "interpretation": "Source describes each new receiver signal as 400,000 samples during a 200-minute run. Contents and units must follow Table_2 and the archive. A receiver signal does not alone establish synchronized packet send/receive time, network latency or post-regulator force.",
+          "derived_files": [
+            "belgrade-version-audit.csv",
+            "version-notes.md",
+            "audit_belgrade_versions.py"
+          ],
+          "verified_receiver_file_summary": {
+            "file_count": 7,
+            "samples_per_file": 400000,
+            "receiver_samples_total": 2800000,
+            "stored_range_across_files_native": [
+              0.2,
+              1.00002003
+            ],
+            "strictly_above_native_one": 2,
+            "source": "belgrade-version-audit.csv"
+          }
+        }
+      ]
+    },
+    {
+      "id": "zenodo-6399688",
+      "doi": "10.5281/zenodo.6399688",
+      "concept_doi": "10.5281/zenodo.6399687",
+      "title": "New dataset obtained from 2D positioning system with distributed control",
+      "authors": [
+        "Nedeljkovic, Dusan",
+        "Lesi, Vuk",
+        "Jakovljevic, Zivana",
+        "Pajic, Miroslav"
+      ],
+      "date": "2022-03-30",
+      "version": "v1.0",
+      "source_url": "https://zenodo.org/records/6399688",
+      "metadata_url": "https://zenodo.org/api/records/6399688",
+      "rights": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "evidence_level": "available_files_full_release_verified",
+      "inspected": "Verified the full ZIP and Table_1.pdf by published MD5 and size. CRC and numeric payload were checked for all 62 signals. Thirty pairs of X/Y measured traces have 61,000 values per axis; the X and Y reference lengths are 64,759 and 65,288. Compared measured vs commanded values over the common 61,000-index prefix for all 60 axis trials.",
+      "limitations": "The record description says all signals have 61,000 samples; two deposited reference files are longer. Comparisons use native numerical units, no lag optimization. No individual PTP packet timestamps, send/receive events, per-controller drift trace, or physical post-limit sensor channel. This is a two-axis stage.",
+      "files": [
+        {
+          "name": "Table_1.pdf",
+          "bytes": 47292,
+          "published_checksum": "md5:41845b4550b089787bdaf2ec4bbb7b5f",
+          "sha256": "ed088fdbb24e6550e18cdb89880754b6212c1ef765801615e626c64b2780c052",
+          "download_url": "https://zenodo.org/api/records/6399688/files/Table_1.pdf/content"
+        },
+        {
+          "name": "Positioning_system_data.zip",
+          "bytes": 5326692,
+          "published_checksum": "md5:ec1941b0fd528676841b201b834954a0",
+          "sha256": "e84fd748bc505c85be5b5a9d215ccbbeebc3f48d004165c730d7e2d9548440d8",
+          "download_url": "https://zenodo.org/api/records/6399688/files/Positioning_system_data.zip/content"
+        }
+      ]
+    },
+    {
+      "id": "opara-151",
+      "doi": "10.25532/opara-151",
+      "concept_doi": null,
+      "title": "3-component servo-hydraulic test bench measurements for virtual sensing and forward prediction tasks",
+      "authors": [
+        "Heindel, Leonhard",
+        "Hantschke, Peter",
+        "Kästner, Markus"
+      ],
+      "date": "2021-12-17",
+      "version": "OPARA record issued 2021-12-17; DSpace bitstream sequence 1, UUID 2ce1e46d-3017-4426-9487-f775c15b2e54",
+      "source_url": "https://opara.zih.tu-dresden.de/handle/123456789/2557",
+      "metadata_url": "https://opara.zih.tu-dresden.de/server/api/core/items/eec1959c-6ec6-4ee3-af05-5419f1d2adb6",
+      "rights": "CC BY 4.0 (OPARA dc.rights and dc.rights.uri)",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "evidence_level": "available_files_verified_held_out_partitions_only",
+      "inspected": "Validated 558 selected member CRCs (554 test members plus 4 documentation/helpers) through ranged retrieval. The 1-kHz records pair measured force and displacement in two repeat runs under 18 distinct excitations across 4 families. Compared both published FRF prediction tasks to repeat measurements on 54 axis-condition rows.",
+      "limitations": "Training and validation payloads were not read. The reported provider MD5 refers to the entire 554,952,233-byte ZIP and was not recomputed on the sparse copy. Service-load inputs are deliberately absent; the source describes how to derive them. Some noise/forward prediction lengths differ by one or more samples. Unaligned pairs have blank pointwise errors. A force setpoint is not spool-valve displacement or an actuator saturation flag.",
+      "file_verification": {
+        "archive_name": "Heindel2021_dataset.zip",
+        "remote_bytes": 554952233,
+        "provider_md5": "aa502a9116b2bfe2cf555d8f01b9d015",
+        "whole_archive_md5_recomputed": false,
+        "archive_non_directory_members": 2854,
+        "members_decoded_crc_checked": 558,
+        "test_members": 554,
+        "documentation_or_helper_members": 4,
+        "selected_members_uncompressed_bytes": 375073096,
+        "selected_compressed_payload_bytes": 120027078,
+        "source_url": "https://opara.zih.tu-dresden.de/server/api/core/bitstreams/2ce1e46d-3017-4426-9487-f775c15b2e54/content"
+      }
+    }
+  ]
+}

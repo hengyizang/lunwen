@@ -1,0 +1,583 @@
+{
+  "project": "my-phd",
+  "branch": "cloud-state/my-phd",
+  "parent_commit": "634b9fb8bcb59ae08644e28368e44cf25108b52f",
+  "gate": "G1",
+  "stage": "topic-intelligence",
+  "status": "awaiting_work",
+  "prior_numbered_rounds": 55,
+  "prior_followup_directories": 14,
+  "github_actions_at_start": {
+    "queued": 0,
+    "in_progress": 0
+  },
+  "provider_cost": "free; public sources only",
+  "read_at_utc": "2026-11-21",
+  "history_coverage": {
+    "git_blobs_checked": 1496,
+    "evidence_git_blobs_checked": 1434,
+    "gzip_files_decoded": 7,
+    "archive_members_read": 301,
+    "nested_gzip_payloads": 256,
+    "early_files_compared": 7,
+    "distinct_early_files": 1
+  },
+  "searchable_payloads": 1796,
+  "catalogues_with_title_rows": 44,
+  "historical_title_rows": 45468,
+  "method": "Checked Git blob identity on every project blob in the parent snapshot. Decoded gzip files, tar members and nested gzip. Compared seven pinned early artifacts. Searched normalized DOI, arXiv, version/concept DOI, recorded URLs/aliases, exact normalized titles, title-token Jaccard >=0.67, and a second author-token overlap + title Jaccard >=0.38 pass. Human resolution distinguishes paper from named data and source from individual worksheet. Coverage is limited to those project snapshots and observable identities.",
+  "work_count": 69,
+  "work_by_current_evidence": {
+    "full text": 57,
+    "bibliographic screening": 12
+  },
+  "works_first_time": {
+    "full text": 54,
+    "bibliographic screening": 11
+  },
+  "work_by_history": {
+    "first entry; no historical identity hit": 63,
+    "prior raw discovery only; first catalogue entry": 1,
+    "earlier bibliographic entry; promoted to full text": 1,
+    "previous full text; context": 2,
+    "previous full text; additional figure evidence": 1,
+    "first paper entry; companion lead previously logged": 1
+  },
+  "material_by_type": {
+    "author measurement summary file": 1,
+    "published figure or table": 10,
+    "code and weights": 1,
+    "measured files": 12
+  },
+  "assets_by_history": {
+    "first entry; no historical identity hit": 18,
+    "new figure/table extraction; previous work lead": 1,
+    "earlier repository listing; contents inspected": 1,
+    "new figure/table extraction; previously catalogued work": 1,
+    "new worksheet extraction; previously inspected workbook": 1,
+    "prior discovery lead; first file analysis": 2
+  },
+  "related_sources": 46,
+  "asset_count": 24,
+  "query_logs": [
+    "assembly/search-log.csv",
+    "hydraulic/search.json",
+    "limiter/search-log.json",
+    "literature/search-log.json",
+    "network/search-log.json",
+    "thermal/search.json",
+    "timing/search-log.md"
+  ],
+  "counting": "A literature record may be an article, report, thesis or correction. One evidence family can generate several publication records. A release series is one material source; figure/table extracts and software archives have separate evidence types. Source sample counts, operating points, derived rows, packet pairs and trial counts are not additive.",
+  "domain_file_manifest": [
+    {
+      "file": "assembly/README.md",
+      "bytes": 4633,
+      "sha256": "9815f83623230290161cee4b808968697c56bc0eba0325a67c93b83af862f3ac"
+    },
+    {
+      "file": "assembly/bargsten-plotted-1s.csv",
+      "bytes": 15854,
+      "sha256": "8c147f8b71aefe79431edd91c28822984396ebb6584bc684648a6662cc87e38e",
+      "data_rows": 246
+    },
+    {
+      "file": "assembly/bargsten-plotted-windows.csv",
+      "bytes": 1091,
+      "sha256": "565ad2e1c472b535dbe61b732d6061394c334a06ebb5f9ee90fd4b9c6fae5b33",
+      "data_rows": 15
+    },
+    {
+      "file": "assembly/caporali-outcomes.csv",
+      "bytes": 247,
+      "sha256": "19e6a01aeef52f1fa7f7e49d7a2893ef2fe4ccbf5ec7650adc296744ce03491b",
+      "data_rows": 2
+    },
+    {
+      "file": "assembly/citation-edges.csv",
+      "bytes": 1424,
+      "sha256": "b28b06baf4c363760712c0193b038c37610d01434b342348f8f6e9f39ef3ebfe",
+      "data_rows": 9
+    },
+    {
+      "file": "assembly/derive_assembly.py",
+      "bytes": 6675,
+      "sha256": "fc8d23ce6ffe083de31d9d1e0b5ba7d3ad236a3376cee48636fe27b6c90516c8"
+    },
+    {
+      "file": "assembly/derive_nist.py",
+      "bytes": 3383,
+      "sha256": "4b2ae77b48230f626143a85a174cff782335cae099e502fa6d311cd1fc96f60d"
+    },
+    {
+      "file": "assembly/intelliman-archive-inventory.csv",
+      "bytes": 1848,
+      "sha256": "088ec8d3c303bf1294684a273a65056dffbee3608a57b70af10e404489b52e94",
+      "data_rows": 14
+    },
+    {
+      "file": "assembly/kernbach-table-iv.csv",
+      "bytes": 398,
+      "sha256": "aba19d5de00af5bf1d3723da3832dbae53dc641a465ff0f8b1a298e0224fb4c4",
+      "data_rows": 4
+    },
+    {
+      "file": "assembly/kienle-table-iii.csv",
+      "bytes": 228,
+      "sha256": "b8a548a81ee6ec8b0d326cb137f709b96eb424b86975868cc61f5e0bcd77abd5",
+      "data_rows": 5
+    },
+    {
+      "file": "assembly/literature.csv",
+      "bytes": 5883,
+      "sha256": "90ad0810c902c6ea083b1c9050581b06acfe19a6f336c3b7344445eeb7c7315e",
+      "data_rows": 7
+    },
+    {
+      "file": "assembly/nist-26-runs.csv",
+      "bytes": 5850,
+      "sha256": "d59598960faa6a4ba0d8e79c2ce407a9a26a7981a6d7d3f512f3e03152055a44",
+      "data_rows": 26
+    },
+    {
+      "file": "assembly/search-log.csv",
+      "bytes": 4207,
+      "sha256": "3de68ccdb5a19fe4c07c00a81bde968fb4bd8c8f2a47207bd6458f902fdb9f19",
+      "data_rows": 13
+    },
+    {
+      "file": "assembly/source-catalog.csv",
+      "bytes": 5004,
+      "sha256": "99b6f708285fcd2614c705771c8e4b3462f07c1cae129b5c0a5ff57fc325ca1b",
+      "data_rows": 6
+    },
+    {
+      "file": "assembly/yumbla-repeated-part-codes.csv",
+      "bytes": 455,
+      "sha256": "39f5b70ce2ceae5250a7e586b2c5f4e45c3b0d88800a40f97305f22a1d5facac",
+      "data_rows": 8
+    },
+    {
+      "file": "assembly/yumbla-tolerance-summary.csv",
+      "bytes": 732,
+      "sha256": "6bf90b70bf2f3b0259932efcbd981f6eda20e9e1fc5c1e3ae1ed6add35aeba00",
+      "data_rows": 16
+    },
+    {
+      "file": "hydraulic/README.md",
+      "bytes": 3069,
+      "sha256": "bd46cbbfd6967b2417574ad92f14e88fb8d03c4f93afe4802c2ce609d5ad2a17"
+    },
+    {
+      "file": "hydraulic/audit_belgrade_versions.py",
+      "bytes": 4593,
+      "sha256": "5024878719f52b0d968ce442591d99a270310a4501837feccdd3d7909e2a8707"
+    },
+    {
+      "file": "hydraulic/belgrade-regulator-voltage.csv",
+      "bytes": 1773,
+      "sha256": "5b8ab6706449faa4a3500968bd089de7657a14e98a7243cc715644fcda101db0",
+      "data_rows": 12
+    },
+    {
+      "file": "hydraulic/belgrade-version-audit.csv",
+      "bytes": 8437,
+      "sha256": "ba5fb65c1bb17f9fb06bfb75d06b6efadb79a0819efe4caaf93b85970357ef93",
+      "data_rows": 24
+    },
+    {
+      "file": "hydraulic/citation-edges.csv",
+      "bytes": 2699,
+      "sha256": "38fd42dd7da84e9eaf97ade40e698132bc6b245cfce1e33c104b2bed48ad4fba",
+      "data_rows": 12
+    },
+    {
+      "file": "hydraulic/derive_dresden.py",
+      "bytes": 3883,
+      "sha256": "c144f6e14fc5f8d4cc8b36974381ab6ab4e63aea9fc2f4235ad86334caf299c4"
+    },
+    {
+      "file": "hydraulic/derive_pneumatic.py",
+      "bytes": 5727,
+      "sha256": "7887ac5ceddb9fb03b35c5bd9f358648757dec608c4e805095ebdacc40233ebe"
+    },
+    {
+      "file": "hydraulic/dresden-force-repeats.csv",
+      "bytes": 8491,
+      "sha256": "de4077348f895e40742bba4f149d559d8927ccad7744e5160218679a7534fd1e",
+      "data_rows": 54
+    },
+    {
+      "file": "hydraulic/fetch_dresden.py",
+      "bytes": 2727,
+      "sha256": "f2ac7e7afd3e6360217733a4087a7d37115f9ae4e715d9ced5ffbb7e1b596918"
+    },
+    {
+      "file": "hydraulic/literature.csv",
+      "bytes": 9008,
+      "sha256": "6cee1ba6764c4287c6e88cd7b3042d8d6444c476bca9c5ad17f6b98be2589df5",
+      "data_rows": 11
+    },
+    {
+      "file": "hydraulic/planar-file-inventory.csv",
+      "bytes": 7131,
+      "sha256": "43e1b151e0e6f57bd4092b92760b2de9a9d71b1d42d22993e602bbd7c06c98e9",
+      "data_rows": 62
+    },
+    {
+      "file": "hydraulic/planar-reference-overlap.csv",
+      "bytes": 3838,
+      "sha256": "c3a13bbfb811ac536872febf4c8fa7f7a73a792b718b4a92a6a27e24ba0d4fdc",
+      "data_rows": 60
+    },
+    {
+      "file": "hydraulic/replay-notes.md",
+      "bytes": 7797,
+      "sha256": "47f45555c3f42bf890e370b9297199b611a42880dbc913bc2c4255fad2606fcf"
+    },
+    {
+      "file": "hydraulic/search.json",
+      "bytes": 13445,
+      "sha256": "8e51a0e877304739319577e705403e8649ef36fbf2e97ae86d710a577c030fb5"
+    },
+    {
+      "file": "hydraulic/soft-loadcell-files.csv",
+      "bytes": 13467,
+      "sha256": "725a1c367a90855321a181650b67d4681bcea80a5864ee2cc7d4accbd21b4972",
+      "data_rows": 93
+    },
+    {
+      "file": "hydraulic/sources.json",
+      "bytes": 19718,
+      "sha256": "4e2a4661714819603ce9481608960e7b71d2c903aa992c491771384b46a55e30"
+    },
+    {
+      "file": "hydraulic/version-notes.md",
+      "bytes": 3503,
+      "sha256": "45a5a56df723826f19faec1ba9436fd5e0c3d8d88444731712e3bb2336280855"
+    },
+    {
+      "file": "limiter/README.md",
+      "bytes": 4695,
+      "sha256": "a17734fd4196d89b4e8b94dc4ca3c4c6fedfa9a7562e425e161a52f667712a0c"
+    },
+    {
+      "file": "limiter/citation-edges.csv",
+      "bytes": 487,
+      "sha256": "df684455b5196e27896f791665c35a9e301b2247d34f4a3dabd2057f60fbf7ec",
+      "data_rows": 4
+    },
+    {
+      "file": "limiter/data-sources.json",
+      "bytes": 6363,
+      "sha256": "76b0240eb859d255e7e85e1f8c9e53704745b8aa0e230104c9ded930f6c60325"
+    },
+    {
+      "file": "limiter/derive_lizarraga.py",
+      "bytes": 4968,
+      "sha256": "4696c4d6627c7097dd51ddfef2466956cd604bc58619c760fee7891303fff916"
+    },
+    {
+      "file": "limiter/derive_pmsg.py",
+      "bytes": 4822,
+      "sha256": "41a7409a99ac9e88e1d1692ebf0a648c402c652885da9487f0b0d0f08b188504"
+    },
+    {
+      "file": "limiter/literature.csv",
+      "bytes": 8240,
+      "sha256": "dd0119a99603b29d455d98a4ac73e8a800a066cda746910801d4c0a2cddf6290",
+      "data_rows": 9
+    },
+    {
+      "file": "limiter/liz-campaigns.csv",
+      "bytes": 640,
+      "sha256": "fbec9949c6770c4c558fbcd21b1b4af7a475338bc75bde88545b11e9cdc82033",
+      "data_rows": 3
+    },
+    {
+      "file": "limiter/liz-generations-and-amplitudes.csv",
+      "bytes": 13002,
+      "sha256": "8b362198f4af20fc861b94fad4eab5eb9bd0a0f3e1c0ced742944eadb449825e",
+      "data_rows": 151
+    },
+    {
+      "file": "limiter/pmsg-operating-points.csv",
+      "bytes": 65793,
+      "sha256": "48bb8a0deac675db7b594c12f63918c42a2c7afd5d644797542e55023c958013",
+      "data_rows": 225
+    },
+    {
+      "file": "limiter/published-cap-and-shaft.csv",
+      "bytes": 608,
+      "sha256": "9c8835b964df73c8dd176bbfdc0663f1971b2fcf364e72908e10bc3a151d8c39",
+      "data_rows": 7
+    },
+    {
+      "file": "limiter/published-table-source.json",
+      "bytes": 1499,
+      "sha256": "d1c52b4dbe863814315c89224f0e3eed8655b9e5afd9d8361a329020bf403372"
+    },
+    {
+      "file": "limiter/search-log.json",
+      "bytes": 5273,
+      "sha256": "9aee0b1d9a3406e0cb861e1e68ce790afae9772dd8de0e815a21b31dc0b208cb"
+    },
+    {
+      "file": "literature/README.md",
+      "bytes": 2504,
+      "sha256": "13e1f656192c677e24a0eb1f73882e908de04f7b8522aac2f08d6f795ed9e6dc"
+    },
+    {
+      "file": "literature/citation-edges.csv",
+      "bytes": 2567,
+      "sha256": "621b1b5b98f4b9866db8d05726fa212f35a2482584abf59aedf7a9b8eb7bab3c",
+      "data_rows": 10
+    },
+    {
+      "file": "literature/context-previous-fulltext.csv",
+      "bytes": 2297,
+      "sha256": "cd91a471ff972c4daa7204e57999c6fc64f02338db0805f79a79724a96f794ab",
+      "data_rows": 2
+    },
+    {
+      "file": "literature/derive_printed_calibrations.py",
+      "bytes": 4801,
+      "sha256": "c38fbe4aa41814b9de111c9e41519ba9e11e22a196ad7eb62189aa479c21e3f6"
+    },
+    {
+      "file": "literature/environment-contrasts.csv",
+      "bytes": 2015,
+      "sha256": "418096bd1bfaa4c20104938b37b6a36f7a6bbfbe2b6625eb0099d9c1dbcd31e8",
+      "data_rows": 16
+    },
+    {
+      "file": "literature/history-screen.json",
+      "bytes": 10152,
+      "sha256": "10018f0ac979eecd5713e3eac2a533cac1b3d65d5e3d408d06262902b68411eb"
+    },
+    {
+      "file": "literature/literature.csv",
+      "bytes": 20102,
+      "sha256": "3600caba3904cf557959507e5582e5dcd205f529dd3bd7516719c306e1c8455e",
+      "data_rows": 22
+    },
+    {
+      "file": "literature/loading-sequence-contrasts.csv",
+      "bytes": 625,
+      "sha256": "0fb9498403df59331350548064741e02fc787dd40059dacf03f3edd9a7178fac",
+      "data_rows": 7
+    },
+    {
+      "file": "literature/search-log.json",
+      "bytes": 43392,
+      "sha256": "1511d8a6980e97a2e21eed22d4a9c6f734b526b218921842331926011a8873ec"
+    },
+    {
+      "file": "network/README.md",
+      "bytes": 7634,
+      "sha256": "ef09c01c15a3127a51300421a451477590e5b5a1e27d4d5c3c2443b0447c9ff8"
+    },
+    {
+      "file": "network/carma2-bin-quality.csv",
+      "bytes": 530,
+      "sha256": "bc31dd5b990164a86117ee56c09052a1a5cf3d2d41b0f1fbd48913c328ddef67",
+      "data_rows": 13
+    },
+    {
+      "file": "network/carma2-command-audit.csv",
+      "bytes": 32132,
+      "sha256": "10a9e2e68c97ecc372325dd4fc15224cd00f93b1ae0d19841289930e5592e9af",
+      "data_rows": 168
+    },
+    {
+      "file": "network/citation-edges.csv",
+      "bytes": 472,
+      "sha256": "df8492cf8b0e557bfbb85ea47b99b864886bc8cf2e26f388144312ff02a1036a",
+      "data_rows": 2
+    },
+    {
+      "file": "network/derive_carma2.py",
+      "bytes": 6155,
+      "sha256": "b9223299cc55e21d8e9e2c0e01c84e46645c38d68f5b48328b3a0579ff263d86"
+    },
+    {
+      "file": "network/derive_ihp2.py",
+      "bytes": 15410,
+      "sha256": "342a4ffaba88f985b27247dfffb864fecaa93e93f027d894afb8600b74d67c43"
+    },
+    {
+      "file": "network/ihp2-bag-coverage.csv",
+      "bytes": 5371,
+      "sha256": "0325ea9367488cdb4ab1bd6ba9ddf620b5836d50e31ab806bfd82df976100fb0",
+      "data_rows": 20
+    },
+    {
+      "file": "network/ihp2-follower-updates.csv",
+      "bytes": 803003,
+      "sha256": "1c34efce176973b2043091a6383da4cf1610e7b424d61a6ad4759dcaeeae767f",
+      "data_rows": 2696
+    },
+    {
+      "file": "network/ihp2-four-event-handshakes.csv",
+      "bytes": 7370,
+      "sha256": "1481e6b2c699ba7107a12201d3cbdba76a3cb8131f99304f644ac7df6a280407",
+      "data_rows": 86
+    },
+    {
+      "file": "network/ihp2-handshake-coverage.csv",
+      "bytes": 1534,
+      "sha256": "3c074dd815596ba8cf06779f9d30699fc890ffb94b6f7d7a94cf55a556bb29f6",
+      "data_rows": 38
+    },
+    {
+      "file": "network/ihp2-operation-matches.csv",
+      "bytes": 3910,
+      "sha256": "bad295fee3d504e7bd90a81d91a05527dcfdf264408eb3a2e091c46172f2c310",
+      "data_rows": 38
+    },
+    {
+      "file": "network/literature.csv",
+      "bytes": 2960,
+      "sha256": "d971c2638b079c1d81121087672a46f66275694f92bdcdd4acd784a8135045ff",
+      "data_rows": 4
+    },
+    {
+      "file": "network/search-log.json",
+      "bytes": 5822,
+      "sha256": "fc5402e0b3c97081b1be0d81b75d961f22be8b654ad880306024c15181902bc3"
+    },
+    {
+      "file": "network/sources.json",
+      "bytes": 4116,
+      "sha256": "17a3848e8e05f616b8815c14ec05df6f462116c0f6f02f5e66473f74cf5da1bb"
+    },
+    {
+      "file": "thermal/README.md",
+      "bytes": 3979,
+      "sha256": "1af6df9f6b49576bb850d2ad248cbc95dc06d018c0282d00629cddd9e6858a9c"
+    },
+    {
+      "file": "thermal/biotac-match.csv",
+      "bytes": 380,
+      "sha256": "f4ab1d755910c0589ee42fb8735c4050d4b6f41fb333c2ec7f7ce221edc5d982",
+      "data_rows": 2
+    },
+    {
+      "file": "thermal/biotac-reference-bands.csv",
+      "bytes": 2729,
+      "sha256": "dfaec773d72eea2c197f3f3fd9dc293cd6307e69ecc1d84633b685c03522259f",
+      "data_rows": 18
+    },
+    {
+      "file": "thermal/gallo-figure-a2-bins.csv",
+      "bytes": 322,
+      "sha256": "2c2e4b89ecd4636bee319a55587df557444f5d37360f3dd0a4559bf40fde3081",
+      "data_rows": 10
+    },
+    {
+      "file": "thermal/literature.csv",
+      "bytes": 3149,
+      "sha256": "3040d0d52f27f5c73d689de8e9d6cd01f6e7c0a8e31e2865f99875686bb279ee",
+      "data_rows": 6
+    },
+    {
+      "file": "thermal/mao-figure-3j.csv",
+      "bytes": 185,
+      "sha256": "1bcb3cd9d269bd507df1970e9542f6f8b40d233596807a89c5b1aeb8893f2724",
+      "data_rows": 5
+    },
+    {
+      "file": "thermal/paulsen-figure-s1.csv",
+      "bytes": 209,
+      "sha256": "978e10ebed46f7e7cb23a6a6df31b24f2391281c4fac31a6cb7f00d7abe4528e",
+      "data_rows": 4
+    },
+    {
+      "file": "thermal/rebuild_biotac.py",
+      "bytes": 5721,
+      "sha256": "4ff14e3d2ef2792cd2307f6affcbf944d191bf5192b6c6155213845725488110"
+    },
+    {
+      "file": "thermal/rebuild_figures.py",
+      "bytes": 4390,
+      "sha256": "7dee84551f6c48ba35b6212bd6b1d7982b67538e3d7f5d17a6eade63ccef832c"
+    },
+    {
+      "file": "thermal/search.json",
+      "bytes": 3928,
+      "sha256": "b707004bae8980c3b73a2ca7fa6f4fa94e3582437d76919baaf3565fbddeff81"
+    },
+    {
+      "file": "thermal/sources.json",
+      "bytes": 9045,
+      "sha256": "4ac91cd876aae989b1630f36cf15b763f666cb2d8c1561713a38ba7286165435"
+    },
+    {
+      "file": "timing/README.md",
+      "bytes": 4841,
+      "sha256": "8e6f6a89a3d9453849733c91b72335f456a73af0ac4475241767ab7d83ba7c7b"
+    },
+    {
+      "file": "timing/check_porto.py",
+      "bytes": 6757,
+      "sha256": "9e385de8c5d8391dc826a116ee6354cd28dc1366abea8e276d360c4f2054dab7"
+    },
+    {
+      "file": "timing/check_slate.py",
+      "bytes": 4477,
+      "sha256": "667afa0402b23fbb37614b513b9d8e17315e9a5ba01738be2a436f12c15b2f50"
+    },
+    {
+      "file": "timing/citation-edges.csv",
+      "bytes": 1481,
+      "sha256": "b8b080377d68fb8641bd4145908257d22245f7ef525a65164f8e6cfcfa676557",
+      "data_rows": 7
+    },
+    {
+      "file": "timing/literature.csv",
+      "bytes": 7698,
+      "sha256": "b9f11793e7cc2fc735af9d413795b4258faa00c93c9d7067d9a2d4bd20922ef2",
+      "data_rows": 10
+    },
+    {
+      "file": "timing/porto-gps-clocks.csv",
+      "bytes": 582,
+      "sha256": "2cb775975ab6a7ff5eec00fd277627f1775ffcd682340f5374cf5543d37c1243",
+      "data_rows": 9
+    },
+    {
+      "file": "timing/porto-pcap-replay.csv",
+      "bytes": 2763,
+      "sha256": "4930e93413e9b543443a5a71cc9ffaf12bf2f2bec0a0110a9e9e17e930fa94ac",
+      "data_rows": 38
+    },
+    {
+      "file": "timing/porto-receiver-bins.csv",
+      "bytes": 3545,
+      "sha256": "924a7c1986ce70d4ad0e78b6441731eb233f5ded8030daa5387731e2910d3727",
+      "data_rows": 36
+    },
+    {
+      "file": "timing/search-log.md",
+      "bytes": 3720,
+      "sha256": "97c77a886eeedc96fd7bc8c8827277225309a9ad0185d5f1259acb5312b57931"
+    },
+    {
+      "file": "timing/slate-clock-precision.csv",
+      "bytes": 5613,
+      "sha256": "23f2d1f9ef9424cee6d2fe8219d7e571b771d034cf77da30c154325b51f37f22",
+      "data_rows": 45
+    },
+    {
+      "file": "timing/slate-directional-delays.csv",
+      "bytes": 4897,
+      "sha256": "e27508f51aa2c1906e2d51d7d10977c371cb9c52e2a47ded9b7adb8ca35c8505",
+      "data_rows": 45
+    },
+    {
+      "file": "timing/sources.json",
+      "bytes": 3944,
+      "sha256": "8b232a4de21c41c2a9abac7ea6a9f8e0b12da9c8310ebf881d355eaa4beacb94"
+    }
+  ]
+}

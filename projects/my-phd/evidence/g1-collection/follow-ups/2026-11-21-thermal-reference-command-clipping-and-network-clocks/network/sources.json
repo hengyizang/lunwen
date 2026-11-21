@@ -1,0 +1,69 @@
+[
+  {
+    "record_id": "R5-IHP2",
+    "title": "Connected Automated Vehicles – Integrated Highway Prototype II (IHP2)",
+    "authors": [
+      "Jiaqi Ma",
+      "Leidos (United States)"
+    ],
+    "doi": "10.21949/1404196",
+    "year": 2024,
+    "evidence": "file verified and derived; ROS1 multi-vehicle field trials",
+    "asset": "2qjp-7bah",
+    "file": "cavihp.zip",
+    "file_url": "https://data.transportation.gov/download/2qjp-7bah/application/x-zip-compressed",
+    "source_file_bytes": 403104707,
+    "sha256": "455e7b3b7859b44324dd9220bc128e3d0fd34e9d170e3d18cc837a36d5864bf8",
+    "source_capture": "Florida tests, August 2022; catalog describes original release July 2024",
+    "rowsUpdatedAt": 1767376501,
+    "catalog_url": "https://data.transportation.gov/api/views/2qjp-7bah",
+    "rights": "United States Government Public Domain License per DataCite registry",
+    "rights_url": "https://api.datacite.org/dois/10.21949/1404196",
+    "derivatives": "ihp2-*.csv; researcher-derived summaries / observations; no raw ROS bags or coordinates redistributed.",
+    "limitations": "Application and recorder times; uncalibrated one-way across bags. Unique matched content and callback state establishes software observation, next hardware feedback alone establishes temporal proximity."
+  },
+  {
+    "record_id": "R2-R5-CARMA2",
+    "title": "Cooperative Automated Research Mobility Applications (CARMA) 2",
+    "authors": [
+      "U.S. Department of Transportation"
+    ],
+    "doi": "10.21949/1504485",
+    "year": 2018,
+    "evidence": "file verified and derived; 13 vehicle platooning/merging/route verification runs",
+    "asset": "dusd-cr84",
+    "file": "rows.csv",
+    "file_url": "https://data.transportation.gov/api/views/dusd-cr84/rows.csv?accessType=DOWNLOAD",
+    "source_file_bytes": 156122644,
+    "sha256": "05e048e678d640715e9cfbc583931a11b7e467af8b30e27c64e60716f7fe1e42",
+    "rowsUpdatedAt": 1541702878,
+    "catalog_url": "https://data.transportation.gov/api/views/dusd-cr84",
+    "rights": "Creative Commons Attribution-ShareAlike 3.0 Unported per source Socrata license. CARMA2-derived tables in this directory distributed under same license.",
+    "rights_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "attribution": "U.S. Department of Transportation. (2018). Cooperative Automated Research Mobility Applications (CARMA) 2. [Dataset]. Provided by ITS DataHub through Data.transportation.gov. Accessed 2026-11-21. https://doi.org/10.21949/1504485",
+    "derivatives": "carma2-bin-quality.csv and carma2-command-audit.csv (bin cleaning, run role linkage and per-channel summaries by G1 collection).",
+    "limitations": "Vehicle binaries not independently clocked; command labels not measured wheel torque. Logged roles must be consulted, worksheet nominal mode bool conflicts with observed 0/2/empty.",
+    "attachments": [
+      {
+        "file": "README.docx",
+        "url": "https://data.transportation.gov/api/views/dusd-cr84/files/0f20e455-e6a4-475b-8362-73b4e5da31be?download=true&filename=README.docx",
+        "sha256": "6718548078eabfe93f8c8f97d63e74a84eef5d67c92f7a0376ef8e13b0fddc5a"
+      },
+      {
+        "file": "Run_Descriptions_-_CARMA_2.xlsx",
+        "url": "https://data.transportation.gov/api/views/dusd-cr84/files/6bb2307e-ccf3-4940-a6a4-908603ffc563?download=true&filename=Run_Descriptions_-_CARMA_2.xlsx",
+        "sha256": "b7be7c60eb5f95cdce44bdffb1c883ac3c1b04154205663e2487aadc2cc25399"
+      },
+      {
+        "file": "Data_Elements_-_CARMA_2.xlsx",
+        "url": "https://data.transportation.gov/api/views/dusd-cr84/files/ff5663c8-a7d6-4238-9e8e-e6fc8f844742?download=true&filename=Data_Elements_-_CARMA_2.xlsx",
+        "sha256": "5a03ce54c05ae1ceda8559937c23ee908bbe7395ef0d891f4df448472f50546a"
+      },
+      {
+        "file": "Testing_Logs_-_CARMA_2.xlsx",
+        "url": "https://data.transportation.gov/api/views/dusd-cr84/files/91e8f019-ad66-491a-bcd5-f7675ffa1583?download=true&filename=Testing_Logs_-_CARMA_2.xlsx",
+        "sha256": "fe93cd4286d3cfa195e564fb9e6f4357d4af4a48f4a776f5829cc5904dca60dc"
+      }
+    ]
+  }
+]

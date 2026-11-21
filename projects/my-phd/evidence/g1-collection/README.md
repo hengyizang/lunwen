@@ -21,3 +21,4 @@
 - [R2 执行器请求、限幅与实测反馈，含 R1 腕部接触校准](follow-ups/2026-11-21-command-limits-and-measured-effort/README.md)
 - [R2 独立力矩台架与 R1 接触测力参照](follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/README.md)
 - [R1 腕部载荷基线、R2 执行器限幅与 R5 跨设备记录时钟](follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/README.md)
+- [R1 接触与传感器温度、R2 限幅与轴转矩、R5 编队通信与时钟](follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/README.md)

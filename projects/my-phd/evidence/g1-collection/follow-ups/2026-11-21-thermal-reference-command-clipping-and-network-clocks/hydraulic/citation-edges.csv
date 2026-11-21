@@ -1,0 +1,13 @@
+citing_id,cited_id,relation,locator,source_url,verification
+10.5281/zenodo.3627901,10.1109/lra.2019.2927936,is_companion_data_for,Zenodo title and description,https://zenodo.org/records/3627901,Deposit explicitly identifies the article DOI and the source CSVs/MATLAB analysis.
+10.1109/lra.2019.2927936,10.1038/srep34224,cites,Reference [2],https://infoscience.epfl.ch/bitstreams/f8948b82-d1a3-4997-bee4-92fa1a3cd80f/download,"Authors, title, journal and article number match."
+10.1109/lra.2019.2927936,10.1089/soro.2016.0029,cites,Reference [39],https://infoscience.epfl.ch/bitstreams/f8948b82-d1a3-4997-bee4-92fa1a3cd80f/download,"Authors, title, journal, volume and pages match."
+10.1089/soro.2016.0029.correx,10.1089/soro.2016.0029,corrects,"Correction heading and text, p. 685",https://pmc.ncbi.nlm.nih.gov/articles/PMC6793432/,Explicit sign correction; computations and figures unaffected per publisher notice.
+10.5281/zenodo.4556924,10.1109/telfor48224.2019.8971062,cites_rig_description,Zenodo references [1],https://zenodo.org/records/4556924,Source uses this paper for the physical positioning system description.
+10.5281/zenodo.6399688,10.1109/etfa.2019.8869467,cites_stage_description,Zenodo references [1],https://zenodo.org/records/6399688,"Depositor explicitly lists this item for geometry, distributed motion or synchronization."
+10.5281/zenodo.6399688,10.1109/etfa.2016.7733524,cites_stage_description,Zenodo references [2],https://zenodo.org/records/6399688,"Depositor explicitly lists this item for geometry, distributed motion or synchronization."
+10.5281/zenodo.6399688,duke-lesi-cnc-techreport-2022,cites_stage_description,Zenodo references [3],https://zenodo.org/records/6399688,"Depositor explicitly lists this item for geometry, distributed motion or synchronization."
+10.1109/etfa.2019.8869467,10.1109/etfa.2016.7733524,cites,Reference [6],https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_etfa19.pdf,Author list and conference title match.
+duke-lesi-cnc-techreport-2022,10.1109/etfa.2016.7733524,cites,Reference [18],https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_cnc19.pdf,Technical manuscript names the earlier ETFA paper.
+10.25532/opara-151,10.1243/09596518jsce306,cites_FRF_background,"Heindel2021_dataset.zip -> metadata.txt, ref. [2]",https://opara.zih.tu-dresden.de/handle/123456789/2557,Archive metadata lists authors and title in the frequency-response-model section.
+10.25532/opara-151,10.4271/2001-26-0047,cites_FRF_background,"Heindel2021_dataset.zip -> metadata.txt, ref. [3]",https://opara.zih.tu-dresden.de/handle/123456789/2557,Archive metadata lists authors and title in the frequency-response-model section.

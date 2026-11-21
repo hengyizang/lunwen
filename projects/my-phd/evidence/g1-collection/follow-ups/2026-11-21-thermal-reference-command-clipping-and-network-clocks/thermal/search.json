@@ -1,0 +1,42 @@
+{
+  "access_date_utc": "2026-11-21",
+  "scope": "R1, nearest evidence for missing temperature in the prior industrial wrench drift series. Physical paired measurements, zero-load controls, and known-load experiments.",
+  "queries_and_followup": [
+    {
+      "source": "public web, University of Hamburg dataset and laboratory pages, Crossref, arXiv",
+      "query": "Philipp Ruppel \"Simulation of the SynTouch BioTac Sensor\" pdf 2018 research Hamburg full PDF",
+      "result": "Authors' chapter listing links the TAMS acquisition. Downloaded complete tar, enumerated both bag files and parsed tactile temperature and separately mounted wrench messages. Followed the citing full-text study arXiv:2404.10425v2 §II–III and its reference 10 back to the 2018 acquisition."
+    },
+    {
+      "source": "public web and author-hosted accepted manuscript",
+      "query": "free public data six axis load cell temperature gravity raw recordings robot wrist calibration analog force torque temperature drift CSV ATI GitHub multiaxis experimental sensor original data download",
+      "result": "Guggenheim et al. Fig. 6 was a zero-load material-level control. The later fully assembled instrument was tested at constant temperature. Retained paper link and annotations."
+    },
+    {
+      "source": "previous Mao study, Nature Communications data availability and supplementary material",
+      "query": "Within publisher article searched temperature, environmental immunity, Source Data and Fig. S10. Inspected worksheet names, OOXML shared strings, Fig. 3j and cells A2:C6.",
+      "result": "Five ambient-temperature and Fz mean/SD rows recovered from an earlier study. Source workbook extension."
+    },
+    {
+      "source": "Acta Acustica and Zenodo",
+      "query": "Followed Gallo et al. Appendix A.1.1/Figure A.2 and article reference 25 to versioned ENODISE release 8334930. Checked ZIP member types and README_Thrust.txt/README_Torque.txt.",
+      "result": "Article figure has paired loadcell-body temperature and thrust over ten seconds. Axial loads in the ZIP are condition means, unsuitable for replaying the transient figure."
+    },
+    {
+      "source": "Hydrology and Earth System Sciences and Zenodo",
+      "query": "Inspected Paulsen/Weiler article data availability, supplement 'Temperature and stability test of load cells', plotted paths and legend Fig. S1, and code record 15462111.",
+      "result": "Known mass, air temperature and observed mass change in published curves. Institute named in paper is source of raw measurements. Code ZIP contains no such time series. Plotted legend versus prose disagree on which channel had the maximum."
+    },
+    {
+      "source": "GitLab public project 976564, iCub in-situ literature",
+      "query": "https://gitlab.com/dynamic-interaction-control/icub-insitu-ft-analysis-big-datasets ; queried tree for 2018_09_07/2018_09_07_AllGeneral/icub/left_leg/measures under revision d505a19ebd3241e1d88528f33577fc67024b69a6",
+      "result": "Repository tree visible; subsequent requests rate limited (HTTP 429). Concurrent measured bridge temperature, force/moments and reference load were not established at file level. No new iCub data counted."
+    },
+    {
+      "source": "public web and Europe PMC full text",
+      "query": "10.3390/s22134809 unloaded temperature zero drift six-axis force torque sensor compensation sensors data",
+      "result": "Article already covered in wrist-calibration-contact/literature/r1-literature.csv; excluded as an additional paper."
+    }
+  ],
+  "dedup": "Matched case-insensitive DOI/arXiv and title strings against historical G1 collection through preceding hourly snapshot. Mao's study and Li's chamber paper had prior hits. Crossref DOI and arXiv alias of the BioTac follow-up represent one paper; Hamburg primary and follow-up share measurements. Figure supplementary DOIs and Zenodo companions are separate artifacts."
+}

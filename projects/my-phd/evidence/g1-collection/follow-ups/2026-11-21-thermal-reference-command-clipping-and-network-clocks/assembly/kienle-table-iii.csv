@@ -1,0 +1,6 @@
+source_table,connector,unseen_settings,before_search_success_pct,after_search_success_pct,before_cycle_s,after_cycle_s
+III,A,100,75,94,17,11
+III,B,100,49,88,18,11
+III,C,100,50,95,17,10
+III,D,100,93,98,13,9
+III,E,100,72,90,15,10

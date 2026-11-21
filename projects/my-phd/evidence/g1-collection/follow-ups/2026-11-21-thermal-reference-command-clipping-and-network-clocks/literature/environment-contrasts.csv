@@ -1,0 +1,17 @@
+source_id,locator,instrument,phase,minutes,variable,cycle_levels,fixed_condition,excursion_minus_initial_mV_per_V,returned_minus_initial_mV_per_V
+IMEKO-TC3-2017-022,Table 1,TT1#36847-02,loaded_creep,3,temperature_C,"22,40,22",50% RH,0.000007,-0.000004
+IMEKO-TC3-2017-022,Table 1,TT1#36847-02,loaded_creep,30,temperature_C,"22,40,22",50% RH,0.000035,-0.000015
+IMEKO-TC3-2017-022,Table 1,TT1#36847-02,unloaded_recovery,3,temperature_C,"22,40,22",50% RH,-0.000019,0.000000
+IMEKO-TC3-2017-022,Table 1,TT1#36847-02,unloaded_recovery,30,temperature_C,"22,40,22",50% RH,-0.000037,0.000004
+IMEKO-TC3-2017-022,Table 1,T34-R40#607101,loaded_creep,3,temperature_C,"22,40,22",50% RH,0.000072,-0.000001
+IMEKO-TC3-2017-022,Table 1,T34-R40#607101,loaded_creep,30,temperature_C,"22,40,22",50% RH,0.000167,-0.000001
+IMEKO-TC3-2017-022,Table 1,T34-R40#607101,unloaded_recovery,3,temperature_C,"22,40,22",50% RH,-0.000065,0.000003
+IMEKO-TC3-2017-022,Table 1,T34-R40#607101,unloaded_recovery,30,temperature_C,"22,40,22",50% RH,-0.000124,0.000003
+IMEKO-TC3-2017-022,Table 2,TT1#37102-03,loaded_creep,3,relative_humidity_percent,"50,70,50",22 deg C,0.000016,-0.000004
+IMEKO-TC3-2017-022,Table 2,TT1#37102-03,loaded_creep,30,relative_humidity_percent,"50,70,50",22 deg C,0.000035,0.000010
+IMEKO-TC3-2017-022,Table 2,TT1#37102-03,unloaded_recovery,3,relative_humidity_percent,"50,70,50",22 deg C,-0.000008,0.000003
+IMEKO-TC3-2017-022,Table 2,TT1#37102-03,unloaded_recovery,30,relative_humidity_percent,"50,70,50",22 deg C,-0.000019,0.000012
+IMEKO-TC3-2017-022,Table 2,T34-R40#607101,loaded_creep,3,relative_humidity_percent,"50,70,50",22 deg C,-0.000036,0.000000
+IMEKO-TC3-2017-022,Table 2,T34-R40#607101,loaded_creep,30,relative_humidity_percent,"50,70,50",22 deg C,-0.000093,0.000001
+IMEKO-TC3-2017-022,Table 2,T34-R40#607101,unloaded_recovery,3,relative_humidity_percent,"50,70,50",22 deg C,0.000031,0.000003
+IMEKO-TC3-2017-022,Table 2,T34-R40#607101,unloaded_recovery,30,relative_humidity_percent,"50,70,50",22 deg C,0.000056,0.000014

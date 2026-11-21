@@ -1,0 +1,16 @@
+figure,channel,unit,start_s_inclusive,end_s_exclusive,min_plotted_vertex,max_plotted_vertex,time_at_min_s,time_at_max_s
+14,joint_18_plotted_actuator_torque,Nm,0,60,-24.03,39.9,46.895,35.864
+14,joint_18_plotted_actuator_torque,Nm,60,82,-0.89,29.5,66.982,66.176
+14,joint_18_plotted_actuator_torque,Nm,60,67,-0.89,29.5,66.982,66.176
+14,joint_18_plotted_actuator_torque,Nm,67,75,1.1,7.59,67.178,67.031
+14,joint_18_plotted_actuator_torque,Nm,75,82,3.04,5.34,79.911,76.106
+15,joint_18_plotted_actuator_torque,Nm,0,60,-24.03,39.9,46.895,35.864
+15,joint_18_plotted_actuator_torque,Nm,60,82,-0.89,29.5,66.981,66.175
+15,joint_18_plotted_actuator_torque,Nm,60,67,-0.89,29.5,66.981,66.175
+15,joint_18_plotted_actuator_torque,Nm,67,75,1.1,7.59,67.178,67.031
+15,joint_18_plotted_actuator_torque,Nm,75,82,3.04,5.34,79.91,76.106
+16,wrist_force_L2_norm,N,0,60,5.9,126.58,50.37,36.706
+16,wrist_force_L2_norm,N,60,82,5.93,81.03,64.142,66.966
+16,wrist_force_L2_norm,N,60,67,5.93,81.03,64.142,66.966
+16,wrist_force_L2_norm,N,67,75,7.51,32.28,68.476,67.017
+16,wrist_force_L2_norm,N,75,82,8.12,16.94,75.478,81.375

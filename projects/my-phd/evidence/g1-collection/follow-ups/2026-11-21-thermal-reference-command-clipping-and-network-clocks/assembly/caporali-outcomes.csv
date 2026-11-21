@@ -1,0 +1,3 @@
+source,connector,pin_attempts,pin_success_percent,whole_connector_attempts,whole_connector_successes,whole_connector_success_percent,reported_pull_false_accepts
+Table I and §VI,Molex,231,76.2,30,29,96.7,1
+Table I and §VI,VMI,66,84.8,30,30,100,0

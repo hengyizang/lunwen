@@ -1,0 +1,144 @@
+{
+  "access_date_utc": "2026-11-21",
+  "records": [
+    {
+      "id": "hamburg-biotac",
+      "title": "BioTac Single Contact Response",
+      "creators": "University of Hamburg TAMS; primary collection by Philipp Ruppel, Yannick Jonetzko, Michael Görner, Norman Hendrich and Jianwei Zhang",
+      "landing": "https://tams.informatik.uni-hamburg.de/research/datasets/index.php#biotac_single_contact_response",
+      "associated_article_doi": "10.1007/978-3-030-01370-7_30",
+      "evidence": "complete downloadable physical measurement files",
+      "files": [
+        {
+          "name": "hamburg.tar",
+          "download": "https://tams.informatik.uni-hamburg.de/research/datasets/biotac_single_contact_response.tar",
+          "version": "two ROS1 bags recorded 2018-01-19; HTTP last-modified 2018-06-08",
+          "bytes": 378705920,
+          "sha256": "d9ca52172bd1b385c1ae39d6794ae25d410e6c31943bac1661d9f335fe8566ac",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ],
+      "derivation": "Decode tactile slot 0 PDC and TDC and the independently mounted six-axis wrench. Pair by nearest header time within 5 ms without extrapolation. Produce aggregate tables only.",
+      "limitation": "Thermistor is on the BioTac fingertip. No temperature of the reference Nano17e or known true torque is paired here. Force bands identify reference magnitude, not certified free/contact states."
+    },
+    {
+      "id": "mao-fig3j",
+      "title": "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations — Figure 3j",
+      "creators": "Qian Mao, Zijian Liao, Shiqiang Liu, Jinfeng Yuan and Rong Zhu",
+      "landing": "https://www.nature.com/articles/s41467-025-60861-8",
+      "associated_article_doi": "10.1038/s41467-025-60861-8",
+      "evidence": "publisher numeric figure source, extension of previously collected study",
+      "files": [
+        {
+          "name": "mao.xlsx",
+          "download": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-025-60861-8/MediaObjects/41467_2025_60861_MOESM7_ESM.xlsx",
+          "version": "publisher Source Data; worksheet Figure 3j, cells A2:C6",
+          "bytes": 250034,
+          "sha256": "249c2b581375d730f2b60be0b437f1fda79dbd8f0a3bd5799c0d3bb2e5caf3bb",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        {
+          "name": "maosupp.pdf",
+          "download": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41467-025-60861-8/MediaObjects/41467_2025_60861_MOESM1_ESM.pdf",
+          "version": "publisher supplementary information, Fig. S10",
+          "bytes": 19893493,
+          "sha256": "46eb2c3af0a52e1c2a27e7cd353559b5ed2a6311f8a0c6275494b1f2d6356a3f",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ],
+      "derivation": "Normalize publisher values for temperature, mean Fz and SD.",
+      "limitation": "One instrument at five ambient temperatures; published summaries only. No per-repetition chronology or concurrent independent force/torque column."
+    },
+    {
+      "id": "paulsen-figs1",
+      "title": "Technical note: A weighing forest floor grid lysimeter — supplement Fig. S1",
+      "creators": "Heinke Paulsen and Markus Weiler",
+      "landing": "https://hess.copernicus.org/articles/29/2309/2025/",
+      "associated_article_doi": "10.5194/hess-29-2309-2025",
+      "supplement_doi": "10.5194/hess-29-2309-2025-supplement",
+      "evidence": "published measurement figure; known fixed masses and ambient-temperature trace",
+      "files": [
+        {
+          "name": "hsup.pdf",
+          "download": "https://hess.copernicus.org/articles/29/2309/2025/hess-29-2309-2025-supplement.pdf",
+          "version": "published 2025-05-26, supplement PDF p.2 Fig. S1",
+          "bytes": 760242,
+          "sha256": "38947e61929f06b221690236c08a623d78ddd85bbf7489cc2a026eb03d73e552",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ],
+      "derivation": "Read vector paths and map coordinates using ticks to get approximate per-trace ranges and spans.",
+      "limitation": "Raw field data obtainable from named institute. Zenodo 15462111 is the hardware/code release. Fixed masses 687/704/705 g are not mapped to individual trace labels. Text assigns maximum to LC3; legend assigns maximum to LC1."
+    },
+    {
+      "id": "gallo-figa2",
+      "title": "Development and commissioning of an aeroacoustic test bench for the investigation of single and coaxial propeller noise — Appendix A.1.1",
+      "creators": "Erica Gallo, Julien De Decker, Andrea Bresciani, Pauline Haezebrouck, Emanuele Garone and Christophe Schram",
+      "landing": "https://doi.org/10.1051/aacus/2024085",
+      "associated_article_doi": "10.1051/aacus/2024085",
+      "evidence": "published physical measurement figure; accessible companion archive checked",
+      "files": [
+        {
+          "name": "acoustic2",
+          "download": "https://pdfs.semanticscholar.org/d588/67ffc941d8010a0c071ee3cca92094644e4c.pdf",
+          "version": "Acta Acustica 2025, 9, 16; publisher PDF pp. 14–15, hosted mirror",
+          "bytes": 3741075,
+          "sha256": "6b510d768e64e89e85360c3b567b3e31dce0ff79f0ac464a509ef77cdf93957a",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        },
+        {
+          "name": "gallo.zip",
+          "download": "https://zenodo.org/api/records/8334930/files/Dataset_ENODISE_Experimental_Campaign_Config_C.zip/content",
+          "version": "10.5281/zenodo.8334930, version v2.0; version-specific Zenodo record",
+          "bytes": 66098949,
+          "sha256": "7fee44071cd93c9ac54b6ce9082990da5f1e8132d015f48698271ae966beec55",
+          "rights": "https://creativecommons.org/licenses/by/4.0/"
+        }
+      ],
+      "archive_creators": "Erica Gallo, Julien De Decker, Pauline Haezebrouck, Alessandro Zarri and Christophe Schram",
+      "publisher_pdf": "https://acta-acustica.edpsciences.org/articles/aacus/pdf/2025/01/aacus240083.pdf",
+      "derivation": "Digitize loadcell-temperature line (green) and thrust line (black) from Fig. A.2 into ten one-second graphical windows.",
+      "limitation": "Approximate pixel-derived quantities over a short stable window. Operational axial thrust measured by same cell has no second independent force reference here. Zenodo ZIP lists 70 files, including 6 axial thrust tables and 11 torque tables; thrust README explicitly limits results to 30-s means of 10-Hz captures. No raw temperature or Fig. A.2 pair file identified."
+    },
+    {
+      "id": "biotac-reuse",
+      "title": "Optimizing BioTac Simulation for Realistic Tactile Perception",
+      "creators": "Wadhah Zai El Amri and Nicolás Navarro-Guerrero",
+      "landing": "https://arxiv.org/abs/2404.10425",
+      "associated_article_doi": "10.1109/IJCNN60899.2024.10650656",
+      "evidence": "full text; forward citation and independent reanalysis of same experiments",
+      "files": [
+        {
+          "name": "opt.pdf",
+          "download": "https://arxiv.org/pdf/2404.10425v2",
+          "version": "arXiv:2404.10425v2 dated 2024-10-21",
+          "bytes": 1498581,
+          "sha256": "8a634b46f4720d8c4c5b8430c15141c497f971b24c8c1907df2b98c13376131b",
+          "rights": "Publicly readable arXiv author copy; bibliographic and original annotations only."
+        }
+      ],
+      "derivation": "Verify independent ATI nano17e, TDC/PDC meanings and measured-temperature versus fixed-input test error.",
+      "limitation": "Shares the Hamburg physical acquisition. No new independent experiment is counted."
+    },
+    {
+      "id": "guggenheim-mems",
+      "title": "Robust and Inexpensive Six-Axis Force–Torque Sensors Using MEMS Barometers",
+      "creators": "Jacob W. Guggenheim, Leif P. Jentoft, Yaroslav Tenzer and Robert D. Howe",
+      "landing": "https://doi.org/10.1109/TMECH.2017.2654446",
+      "associated_article_doi": "10.1109/TMECH.2017.2654446",
+      "evidence": "author-hosted full text; zero-load physical component control",
+      "files": [
+        {
+          "name": "harvard.pdf",
+          "download": "https://biorobotics.harvard.edu/files/2024/01/Robust-and-Inexpensive-6-Axis-Force-Torque-Sensors-using-MEMS-Barometers-b138a8487d217f92.pdf",
+          "version": "author-hosted accepted manuscript, Fig. 6a–d and §II.E",
+          "bytes": 6662569,
+          "sha256": "58d825d7bbd4d163eecacfbfee9aa74e4234ad6c7c7fc77c051421c4494ca75a",
+          "rights": "IEEE permission is required for redistribution. Link, metadata and original evidence annotation only."
+        }
+      ],
+      "derivation": "Record the separation between zero-load heating/cooling of isolated cast elements and ATI Gamma comparison of the fully assembled sensor.",
+      "limitation": "Pressure/temperature counts under two rubber formulations. Separate whole six-axis experiments were run at constant temperature; figure supplies no wrist six-axis thermal coefficient."
+    }
+  ]
+}

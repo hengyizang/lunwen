@@ -1,0 +1,90 @@
+{
+  "date_utc": "2026-11-21",
+  "topic": "R2 closed-loop actuator saturation and physical signal identification",
+  "search_engine": "Public web search across publishers, GitHub, Zenodo; actual verification queries run together",
+  "queries": [
+    "DC motor closed-loop experimental PID tuning actuator saturation reported gains raw data GitHub PWM u",
+    "experimental synchronous generator shaft torque measured current reference duty cycle dataset phase voltages InnovaPower",
+    "experimental micromobility dynamometer torque cap post-cap command shaft transducer actuator load saturation data",
+    "closed loop actuator characterization locked rotor shaft torque measured current robotic actuators P90 GL80 torque step dataset",
+    "slotless permanent magnet measured torque current dynamometer load sweep reference current torque 2026",
+    "haptic actuator series elastic dynamometer torque saturation current reference raw experiment open data current limit logged measured torque"
+  ],
+  "follow_up": [
+    "Followed Lizarraga article data-availability link through DrLizarraga alias to GitHub archive, data/README.md, tree, all experiment blobs and firmware. The paper DOI resolves 10.3390/eng7080397; 10.3390/eng1010000 in project README is a placeholder and was excluded as a publication identity.",
+    "Followed PMSG data article to v1.1.0 on Zenodo, then GitHub tag and fixed-commit tree/individual raw MAT files. Read precursor via explicit article ref. 10 and separate Europe PMC full text. Do not count machine family aliases or earlier software archive as another release.",
+    "Followed references from two publisher HTML works as recorded in citation-edges.csv and inspected registered DOI metadata; NSF author manuscript also opened for Lee et al.",
+    "Checked availability statements on publisher pages for actuator benchmarking, slotless PMSM and micromobility dynamometer; a paper table is distinct from downloadable raw data."
+  ],
+  "checked_artifacts": [
+    {
+      "doi": "10.3390/eng7080397",
+      "url": "https://www.mdpi.com/2673-4117/7/8/397",
+      "sha256": "1c60e6aa82b1b72bbe0ab1c60d1d36b985e33c2f51517340e3ec8eee48e10878",
+      "level": "full text and companion files verified"
+    },
+    {
+      "doi": "10.1016/j.dib.2025.112040",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12475480/fullTextXML",
+      "sha256": "88c477eb0c91f479761ab398de48773c22fd71ed0f2cc5ff9be8c0d49a68f9d8",
+      "level": "full text and companion files verified"
+    },
+    {
+      "doi": "10.3390/s26196320",
+      "url": "https://www.mdpi.com/1424-8220/26/19/6320",
+      "sha256": "97509ec2189f102a73c69c1e2faedef4acb6998b65f11f17a86f39314a6c5f54",
+      "level": "full text and published aggregate table verified"
+    },
+    {
+      "doi": "10.3390/act15060301",
+      "url": "https://www.mdpi.com/2076-0825/15/6/301",
+      "sha256": "1fa209faf751f3735ba8597c7f7cd77b7c5411152a8df279b38dddf2e56e788b",
+      "level": "full text verified"
+    },
+    {
+      "doi": "10.3390/machines14101090",
+      "url": "https://www.mdpi.com/2075-1702/14/10/1090",
+      "sha256": "612dcdf9b4662717ad7167272561d4998fcad2f716ec700d39cfb71511ea1fd9",
+      "level": "full text and published operating points verified"
+    },
+    {
+      "doi": "10.1016/j.dib.2024.111018",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11639361/fullTextXML",
+      "sha256": "589d6ff5114d9fe2c20af9ceb287340cae9ea93874024cdf2c841c6e1ceb43dd",
+      "level": "full text verified"
+    },
+    {
+      "doi": "10.1109/iros40897.2019.8967626",
+      "url": "https://par.nsf.gov/servlets/purl/10297861",
+      "sha256": "5930180e05d6ee44fae1666e97995cd4a3acce140bb4c1dcdd7c7aee718ec725",
+      "level": "full text verified"
+    },
+    {
+      "doi": "10.1017/pds.2025.10017",
+      "url": "https://api.crossref.org/works/10.1017/pds.2025.10017",
+      "sha256": "aebe169d6ea10f7a69b567e80ee6e20ef62f39525cf09d42900037582611333d",
+      "level": "bibliographic screening"
+    },
+    {
+      "doi": "10.1109/tro.2016.2640183",
+      "url": "https://api.crossref.org/works/10.1109/tro.2016.2640183",
+      "sha256": "55c87d6b51002f687b7c266900b799280d8d7935884c7f840a9a78d86b019806",
+      "level": "bibliographic screening"
+    }
+  ],
+  "screened_out": [
+    {
+      "url": "https://github.com/jalsultan/dc-motor-pid-speed-control",
+      "reason": "Simulink saturation model; no physical shaft evidence in search hit."
+    },
+    {
+      "url": "https://www.sciencedirect.com/science/article/pii/S2352340926008218",
+      "reason": "OpenMCT was covered by prior archive; not counted as a new work from this search."
+    },
+    {
+      "url": "https://ch.mathworks.com/help/mcb/gs/nonlinear-pmsm-ev-control-workflow.html",
+      "reason": "Simulation workflow rather than released synchronized physical limit/shaft measurements."
+    }
+  ],
+  "remaining_gap": "Downloadable physical trial with simultaneous recorded unconstrained electrical request, saturated command and independently measured shaft torque during confirmed clipping. Meghawer reports this link for a modeled torque command in aggregate; its full-rate traces are not public. Two different platforms cannot be joined to construct a positive physical torque-clipping trace."
+}

@@ -1,0 +1,8 @@
+metric,unit,all_n,all_mean,all_ci95_low,all_ci95_high,warm_subset_n,warm_mean,warm_ci95_low,warm_ci95_high,warm_cov_percent
+Impulse delivered,%,8,99.51,99.05,99.97,7,99.71,99.70,99.72,0.01
+Cap impulse loss,%,8,0.49,0.03,0.95,7,0.29,0.28,0.30,4.61
+Cap active time,%,8,8.38,7.50,9.27,7,8.02,7.76,8.29,3.57
+Measured impulse,%,8,103.16,100.56,105.76,7,102.06,101.81,102.32,0.27
+Torque RMSE vs. setpoint,N m,8,0.704,0.514,0.893,7,0.623,0.616,0.630,1.22
+Torque RMSE vs. post-cap command,N m,8,0.700,0.511,0.889,7,0.620,0.613,0.627,1.22
+Speed tracking RMSE,km/h,8,0.593,0.375,0.811,7,0.501,0.487,0.515,2.92

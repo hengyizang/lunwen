@@ -1,0 +1,4 @@
+campaign,trials,rows,rail_low,rail_high,outside_ack_bounds,trials_with_rail,rows_deadband,nonzero_logged_in_deadband,rail_in_deadband,replay_mismatch,trials_with_replay_mismatch,strict_clip_replay,logged_rail_without_strict_clip_replay,strict_clip_without_logged_rail,largest_rail_streak_samples,zero_dt,irregular_steps,rows_first_off_schedule,rows_last_off_schedule
+data_experiments_DC_L298N_A90,364,44044,0,36418,0,364,7280,0,0,0,0,36411,7,0,101,0,0,0,0
+data_experiments_L298N_A90,2160,261360,651,4514,0,2160,68186,17545,0,0,0,5122,43,0,5,0,0,0,0
+validation_amplitudes_L298N,418,50578,2971,2603,0,400,9707,881,0,0,0,5561,13,0,101,0,0,0,0

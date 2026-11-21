@@ -1,0 +1,5 @@
+source_figure,connector,manufacturer,series,test_trials,seeds,mean_success_percent,sd_percent,position_tolerance_mm,endpoint
+Table IV,A,Molex,Mini-Fit,90,3,93.3,5.47,10,relaxed end-effector distance
+Table IV,B,TE,MQS,90,3,94.4,2.01,10,relaxed end-effector distance
+Table IV,C,TE,AMP MCP,90,3,90,8.1,8,relaxed end-effector distance
+Table IV,D,JAE,MX19,90,3,93.3,5.47,4,relaxed end-effector distance

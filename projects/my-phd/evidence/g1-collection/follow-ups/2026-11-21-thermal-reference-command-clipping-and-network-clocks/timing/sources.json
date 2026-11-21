@@ -1,0 +1,86 @@
+[
+  {
+    "id": "porto80211ad",
+    "doi": "10.5281/zenodo.7026551",
+    "concept_doi": "10.5281/zenodo.7026550",
+    "title": "Vehicle-to-Infrastructure IEEE 802.11ad Wi-Fi dataset",
+    "authors": [
+      "Mattos, Mateus",
+      "Rodrigues, António",
+      "Meireles, Rui",
+      "Aguiar, Ana"
+    ],
+    "published": "2022-08-26",
+    "version": "pinned Zenodo record 7026551",
+    "updated": "2023-01-20T20:03:28.942609+00:00",
+    "source_url": "https://zenodo.org/api/records/7026551",
+    "file": "v2i-80211ad-dataset.zip",
+    "download_url": "https://zenodo.org/api/records/7026551/files/v2i-80211ad-dataset.zip/content",
+    "size_bytes": 660248364,
+    "archive_md5": "md5:a37836cce4f3d37f8ef374850069fc9e",
+    "rights": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+    "evidence_level": "usable files; full archive checksum verified; independent derived tables",
+    "inspected": "Two GPS CSV exports, two application-traffic CSV exports, 38 pcap files, prefixes of both monitor-frame CSV exports.",
+    "scope": "60 GHz fixed AP, one moving car with client and third radio; NTP over separate control network; onboard GPS independent of application timestamps.",
+    "limitations": "No hardware PPS endpoint-delay reference. The observer pcap is a single collection point. The 2021 GPS logger and device timestamps differ by more than one hour. Two pcap files end partway through an additional record header.",
+    "derived_files": [
+      "porto-gps-clocks.csv",
+      "porto-receiver-bins.csv",
+      "porto-pcap-replay.csv"
+    ],
+    "provenance_links": [
+      {
+        "identifier": "10.1016/j.comcom.2022.07.005",
+        "relation": "isSupplementTo",
+        "resource_type": "publication-article",
+        "scheme": "doi"
+      }
+    ]
+  },
+  {
+    "id": "slatePTP",
+    "doi": "10.5281/zenodo.21770838",
+    "concept_doi": "10.5281/zenodo.21770837",
+    "title": "SLATE-PTP: A Spine–Leaf Architecture Timestamps and Evaluation Dataset for IEEE 1588 Precision Time Protocol Benchmarking",
+    "authors": [
+      "Ortega Ruiz, Alberto",
+      "Vázquez Rodríguez, Víctor",
+      "González, Jesús",
+      "Ros, Eduardo",
+      "Rodriguez-Alvarez, Manuel"
+    ],
+    "published": "2026-08-03",
+    "version": "v1",
+    "updated": "2026-09-02T00:37:21.060641+00:00",
+    "source_url": "https://zenodo.org/api/records/21770838",
+    "file": "SLATE-PTP.zip",
+    "download_url": "https://zenodo.org/api/records/21770838/files/SLATE-PTP.zip/content",
+    "size_bytes": 15429375,
+    "archive_md5": "md5:40109ef71fd232f2679346bacbba1f5f",
+    "rights": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+    "evidence_level": "usable files; full archive checksum verified; independent derived tables",
+    "inspected": "All 45 native hardware timestamp CSVs; README; ptp_pipeline.ipynb (_safe_int and Ptp4lProcessor).",
+    "scope": "Wired switched-network reference for timing assumptions in distributed systems. Hardware timestamp exchange under controlled offered load and placement. No moving robots.",
+    "limitations": "External 1 PPS is described in the paper. Archive does not include a coincident independent offset sample for each packet. File-level directional statistics include residual clock offset and network time; reference notebook converts epoch ns through binary64.",
+    "derived_files": [
+      "slate-directional-delays.csv",
+      "slate-clock-precision.csv"
+    ],
+    "provenance_links": [
+      {
+        "identifier": "10.1109/TIM.2026.3718095",
+        "relation": "isDerivedFrom",
+        "resource_type": "publication",
+        "scheme": "doi"
+      },
+      {
+        "identifier": "10.1016/j.dib.2026.113183",
+        "relation": "isSourceOf",
+        "resource_type": "publication",
+        "scheme": "doi"
+      }
+    ]
+  }
+]

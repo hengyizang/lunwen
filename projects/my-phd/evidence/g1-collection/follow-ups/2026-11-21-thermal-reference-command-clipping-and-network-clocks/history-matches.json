@@ -1,0 +1,1182 @@
+{
+  "parent_commit": "634b9fb8bcb59ae08644e28368e44cf25108b52f",
+  "records": {
+    "10.1007/s11370-019-00307-5": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1007/s11370-023-00481-7": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.48550/arxiv.2602.22100": {
+      "kind": "work",
+      "status": "prior raw discovery only; first catalogue entry",
+      "interpretation": "Prior provider response/title only. This batch verifies the relaxed success definition in the preprint and Table IV.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/8d0f5f035cf84b357f7901b2306b363bcd5b1f38b41b3080750b268f0bd70a24.json.gz!8d0f5f035cf84b357f7901b2306b363bcd5b1f38b41b3080750b268f0bd70a24.json": [
+          "10.48550/arxiv.2602.22100",
+          "2602.22100",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/literature/raw/20261108t101602z-crossref-aa43de26ee.json": [
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/tmech.2026.3654272": {
+      "kind": "work",
+      "status": "earlier bibliographic entry; promoted to full text",
+      "interpretation": "Earlier release labels this work adjacent_title_screen. Whole-connector and pull-check outcomes were extracted from the full work.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/430caff4b526fba5afe956be5aed8776be22ffbeab86b6631dfac3425cd52757.json.gz!430caff4b526fba5afe956be5aed8776be22ffbeab86b6631dfac3425cd52757.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/49d1a127937898ac5ff1745df21f8d57621987444d3a7b36d8f5db374bacd6a8.json.gz!49d1a127937898ac5ff1745df21f8d57621987444d3a7b36d8f5db374bacd6a8.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json.gz!be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json": [
+          "10.1109/tmech.2026.3654272",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1109/tmech.2026.3654272",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv": [
+          "10.1109/tmech.2026.3654272",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!adj-literature.csv": [
+          "10.1109/tmech.2026.3654272",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1109/tmech.2026.3654272",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Vision and Tactile Sensing for DLO Manipulation and Pin Insertion in Robotic Connector Assembly",
+          "Alessio Caporali, Michele Mirto, Salvatore Pirozzi, Gianluca Palli",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Vision and Tactile Sensing for DLO Manipulation and Pin Insertion in Robotic Connector Assembly",
+          "Alessio Caporali, Michele Mirto, Salvatore Pirozzi, Gianluca Palli",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv"
+        ],
+        [
+          1.0,
+          "Vision and Tactile Sensing for DLO Manipulation and Pin Insertion in Robotic Connector Assembly",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!adj-literature.csv"
+        ]
+      ],
+      "author_title_candidates": [
+        [
+          1.0,
+          "Vision and Tactile Sensing for DLO Manipulation and Pin Insertion in Robotic Connector Assembly",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "alessio",
+            "caporali",
+            "gianluca",
+            "michele",
+            "mirto",
+            "palli",
+            "pirozzi",
+            "salvatore"
+          ]
+        ]
+      ]
+    },
+    "10.1007/978-3-031-89471-8_26": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/case58245.2025.11164054": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/isie.2019.8781418": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/lra.2019.2927936": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1038/srep34224": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1089/soro.2016.0029": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1089/soro.2016.0029.correx": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/etfa.2016.7733524": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/etfa.2019.8869467": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "duke-lesi-cnc-techreport-2022": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "icetran-2022-nedeljkovic-gan-regulator": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/telfor48224.2019.8971062": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1243/09596518jsce306": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.4271/2001-26-0047": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/eng7080397": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.dib.2025.112040": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/s26196320": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/act15060301": {
+      "kind": "work",
+      "status": "previous full text; context",
+      "interpretation": "Prior evidence includes sections 4.2, figures and tables. Here it supports the adjacent dynamometer literature.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/history-matches.json": [
+          "10.3390/act15060301",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/history-status.csv": [
+          "10.3390/act15060301",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv": [
+          "10.3390/act15060301",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/search.json": [
+          "10.3390/act15060301"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Toward Reproducible Actuator Characterization: A Comprehensive Framework for Robotics Applications",
+          "Iván Jesús Torres Rodríguez | Jordi Marsà Fargas | Carlos Candelo Zuluaga | C. Adrián Pérez Díaz | Luis Daniel Martin Hernández | Daniel Sanz Merodio | Jonay Toledo Carrillo | Miguel López Estévez",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv"
+        ]
+      ],
+      "author_title_candidates": [
+        [
+          1.0,
+          "Toward Reproducible Actuator Characterization: A Comprehensive Framework for Robotics Applications",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv",
+          [
+            "adrian",
+            "candelo",
+            "carlos",
+            "carrillo",
+            "daniel",
+            "diaz",
+            "estevez",
+            "fargas",
+            "hernandez",
+            "ivan",
+            "jesus",
+            "jonay",
+            "jordi",
+            "lopez",
+            "luis",
+            "marsa",
+            "martin",
+            "merodio",
+            "miguel",
+            "perez",
+            "rodriguez",
+            "sanz",
+            "toledo",
+            "torres",
+            "zuluaga"
+          ]
+        ]
+      ]
+    },
+    "10.3390/machines14101090": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.dib.2024.111018": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/iros40897.2019.8967626": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1017/pds.2025.10017": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/tro.2016.2640183": {
+      "kind": "work",
+      "status": "previous full text; context",
+      "interpretation": "Earlier batch has full text. Only bibliographic screening is credited in this pass. Retain the historical evidence grade.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/8db0de38f3a8df68c47f35d68ab8d055eff8089115c13854ed3bf160085e5f62.json.gz!8db0de38f3a8df68c47f35d68ab8d055eff8089115c13854ed3bf160085e5f62.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/citation-edges.csv": [
+          "10.1109/tro.2016.2640183"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv": [
+          "10.1109/tro.2016.2640183",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/search.json": [
+          "10.1109/tro.2016.2640183",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/history-matches.json": [
+          "10.1109/tro.2016.2640183",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/citation-edges.csv": [
+          "10.1109/tro.2016.2640183"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/comparisons.csv": [
+          "10.1109/tro.2016.2640183"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/history-status.csv": [
+          "10.1109/tro.2016.2640183",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv": [
+          "10.1109/tro.2016.2640183",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots",
+          "Patrick M. Wensing | Albert Wang | Sangok Seok | David Otten | Jeffrey Lang | Sangbae Kim",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv"
+        ],
+        [
+          1.0,
+          "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots",
+          "Patrick M. Wensing | Albert Wang | Sangok Seok | David Otten | Jeffrey Lang | Sangbae Kim",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-command-limits-and-measured-effort/lit/literature.csv"
+        ]
+      ],
+      "author_title_candidates": [
+        [
+          1.0,
+          "Proprioceptive Actuator Design in the MIT Cheetah: Impact Mitigation and High-Bandwidth Physical Interaction for Dynamic Legged Robots",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv",
+          [
+            "albert",
+            "david",
+            "jeffrey",
+            "lang",
+            "otten",
+            "patrick",
+            "sangbae",
+            "sangok",
+            "seok",
+            "wang",
+            "wensing"
+          ]
+        ]
+      ]
+    },
+    "10.6028/jres.102.024": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5194/jsss-8-149-2019": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21014/acta_imeko.v8i3.561": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21014/acta_imeko.v9i5.956": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "pwc-2006-tc3-025u": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2017-041": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2007-059u": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2017-022": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2010-np-023": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2010-042": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-tc3-2002-016": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/cdc.2011.6160473": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3182/20110828-6-it-1002.01589": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "ucsd-escholarship-0x06s0gs": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1038/s41598-024-76688-0": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/app9173454": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/ma11112305": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/tbme.2013.2283501": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/jsen.2017.2694965": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3389/frobt.2023.1154494": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.measurement.2016.07.028": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.measurement.2015.07.007": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21949/1521761": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21949/1521866": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.trc.2022.103952": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "dot-vntsc-fhwa-19-15": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1007/978-3-030-01370-7_30": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/ijcnn60899.2024.10650656": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1038/s41467-025-60861-8": {
+      "kind": "work",
+      "status": "previous full text; additional figure evidence",
+      "interpretation": "Same work and source workbook as earlier bench evidence. Newly processed five temperature conditions in worksheet Figure 3j.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/reference/fingertip-source.json": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/datasets.csv": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/fingertip/fingertip-source.json": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/history-matches.json": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/history-status.csv": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/search.json": [
+          "10.1038/s41467-025-60861-8"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao; Zijian Liao; Shiqiang Liu; Jinfeng Yuan; Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv"
+        ],
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv"
+        ],
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/datasets.csv"
+        ],
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv"
+        ],
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv"
+        ]
+      ],
+      "author_title_candidates": [
+        [
+          1.0,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv",
+          [
+            "jinfeng",
+            "liao",
+            "qian",
+            "rong",
+            "shiqiang",
+            "yuan",
+            "zijian"
+          ]
+        ]
+      ]
+    },
+    "10.5194/hess-29-2309-2025": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1051/aacus/2024085": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/tmech.2017.2654446": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.dib.2023.108964": {
+      "kind": "work",
+      "status": "first paper entry; companion lead previously logged",
+      "interpretation": "The matching prior title names the Zenodo dataset in an explicitly deferred lead. No prior record of the article DOI or author/title row.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/network/search.json": [
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.comcom.2022.07.005": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/medcomnet52149.2021.9501244": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.dib.2026.113183": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/tim.2026.3718095": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/ispcs63021.2024.10747714": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/globecom48099.2022.10001039": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1016/j.vehcom.2024.100744": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.3390/s24247892": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.1109/vtc2023-spring57618.2023.10200750": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "yumbla-author-tolerance-table": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "bargsten-plug-fig14-16": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "kernbach-table-iv": {
+      "kind": "asset",
+      "status": "new figure/table extraction; previous work lead",
+      "interpretation": "Historical hit is the parent preprint in provider material; Table IV was not tabulated in the earlier catalogue.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/8d0f5f035cf84b357f7901b2306b363bcd5b1f38b41b3080750b268f0bd70a24.json.gz!8d0f5f035cf84b357f7901b2306b363bcd5b1f38b41b3080750b268f0bd70a24.json": [
+          "10.48550/arxiv.2602.22100"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.6092/unibo/amsacta/8779": {
+      "kind": "asset",
+      "status": "earlier repository listing; contents inspected",
+      "interpretation": "Previously listed in continuous/datasets-new.csv. Actual released files contain code and weights; do not count as measured trajectories.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json.gz!be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json": [
+          "10.6092/unibo/amsacta/8779",
+          "https://amsacta.unibo.it/id/eprint/8779/"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv": [
+          "10.6092/unibo/amsacta/8779"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": [
+        [
+          0.389,
+          "Vision and Tactile Sensing for DLO Manipulation and Pin Insertion in Robotic Connector Assembly",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "alessio",
+            "caporali",
+            "gianluca",
+            "palli"
+          ]
+        ]
+      ]
+    },
+    "kienle-table-iii": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.18434/m32077": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "caporali-table-i": {
+      "kind": "asset",
+      "status": "new figure/table extraction; previously catalogued work",
+      "interpretation": "Historical matches identify the parent paper. This pass extracts its outcome counts and false accept.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json.gz!be6b3a8cef589d5c629c8d79914a32c4ff4854d461e52aea03a3654db31050e7.json": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!adj-literature.csv": [
+          "10.1109/tmech.2026.3654272"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1109/tmech.2026.3654272"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-climate-creep": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "imeko-load-sequence": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "lizarragaxyz/closed-loop-learning-based-pid-tuning-for-dc-motor-actuators": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.15741561": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "meghawer-table-3": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "hamburg-biotac": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "mao-fig3j": {
+      "kind": "asset",
+      "status": "new worksheet extraction; previously inspected workbook",
+      "interpretation": "Same publisher workbook as earlier numerical evidence. This pass computes five Fz/environmental-temperature rows, not a new independent study.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/citation-edges.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "https://www.nature.com/articles/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1038/s41467-025-60861-8",
+          "https://www.nature.com/articles/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/reference/fingertip-source.json": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/fingertip/fingertip-source.json": [
+          "10.1038/s41467-025-60861-8",
+          "https://www.nature.com/articles/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/history-matches.json": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/history-status.csv": [
+          "10.1038/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv": [
+          "10.1038/s41467-025-60861-8",
+          "https://www.nature.com/articles/s41467-025-60861-8"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/search.json": [
+          "10.1038/s41467-025-60861-8"
+        ]
+      },
+      "similar_titles": [
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao; Zijian Liao; Shiqiang Liu; Jinfeng Yuan; Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv"
+        ],
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv"
+        ],
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/datasets.csv"
+        ],
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "Qian Mao | Zijian Liao | Shiqiang Liu | Jinfeng Yuan | Rong Zhu",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv"
+        ],
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv"
+        ]
+      ],
+      "author_title_candidates": [
+        [
+          0.867,
+          "An ultralight, tiny, flexible six-axis force/torque sensor enables dexterous fingertip manipulations",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/literature/literature.csv",
+          [
+            "jinfeng",
+            "liao",
+            "qian",
+            "rong",
+            "shiqiang",
+            "yuan",
+            "zijian"
+          ]
+        ]
+      ]
+    },
+    "paulsen-figs1": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "gallo-figa2": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21949/1404196": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.21949/1504485": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.7026551": {
+      "kind": "asset",
+      "status": "prior discovery lead; first file analysis",
+      "interpretation": "Previous batch explicitly deferred the 660 MB capture archive. Here raw files were inspected and clock fields compared.",
+      "matched_keys_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/network/search.json": [
+          "10.5281/zenodo.7026551",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.21770838": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.3627901": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.4556924": {
+      "kind": "asset",
+      "status": "prior discovery lead; first file analysis",
+      "interpretation": "Two earlier discovery exports named v2 (5514351) of the same concept. Here both public versions are read, the repeated file is matched by digest and the two unavailable intermediate versions remain metadata only.",
+      "matched_keys_by_path": {
+        "projects/my-phd/data/discovery-broad-auto-20261108T082426952293Z.json": [
+          "10.5281/zenodo.5514351",
+          "https://zenodo.org/records/5514351",
+          "normalized title"
+        ],
+        "projects/my-phd/data/discovery-broad-auto-20261108T111810282362Z.json": [
+          "10.5281/zenodo.5514351",
+          "https://zenodo.org/records/5514351",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.5281/zenodo.6399688": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    },
+    "10.25532/opara-151": {
+      "kind": "asset",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No matching identifier, normalized title or author/title candidate found in the audited project snapshot.",
+      "matched_keys_by_path": {},
+      "similar_titles": [],
+      "author_title_candidates": []
+    }
+  }
+}

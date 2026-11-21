@@ -1,0 +1,3 @@
+from_record,edge,to_record,locator,verified_at,qualification
+R5-IHP2-ANNUAL,cites,R5-IHP2-CONOPS,ref 56,https://highways.dot.gov/sites/fhwa.dot.gov/files/FHWA-HRT-24-089.pdf,Exact named technical report and authors.
+R5-IHP2-ANNUAL,cites preprint version of,R5-IHP2-HAN,ref 57,https://highways.dot.gov/sites/fhwa.dot.gov/files/FHWA-HRT-24-089.pdf,"Citation to 10.2139/ssrn.4118254; same title and nine authors as journal DOI, both versions linked at OpenAlex W4308814170."

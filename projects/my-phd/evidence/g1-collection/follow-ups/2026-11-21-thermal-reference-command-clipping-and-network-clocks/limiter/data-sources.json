@@ -1,0 +1,75 @@
+[
+  {
+    "title": "Closed-Loop Learning-Based PID Tuning for DC Motor Actuators – physical ESP32/L298N experiment logs",
+    "authors": "Lizarraga, Jorge A. | Luque-Vega, Luis F. | Ruiz-Leon, Javier | Carrasco-Navarro, Rocío | Mata-Romero, Marcela E. | Nava-Pintor, Jesús Antonio | García-Vázquez, Fabián | Solís-Sánchez, Luis O. | Guerrero-Osuna, Héctor A.",
+    "version": "8c74893a15c2c110e880d41eabd0d648bd2dcc93",
+    "associated_work": "10.3390/eng7080397",
+    "year": 2026,
+    "access_checked_utc": "2026-11-21",
+    "repository": "https://github.com/lizarragaxyz/Closed-Loop-Learning-Based-PID-Tuning-for-DC-Motor-Actuators/tree/8c74893a15c2c110e880d41eabd0d648bd2dcc93",
+    "aliases": [
+      "DrLizarraga/Closed-Loop-Learning-Based-PID-Tuning-for-DC-Motor-Actuators"
+    ],
+    "manifest": "https://api.github.com/repos/lizarragaxyz/Closed-Loop-Learning-Based-PID-Tuning-for-DC-Motor-Actuators/git/trees/8c74893a15c2c110e880d41eabd0d648bd2dcc93?recursive=1",
+    "manifest_response_sha256": "9c50ec1091b2f17327b7398c6a63f0e444b314b679233be0863e59cc1081d1a6",
+    "git_tree_object": "f399ca7c6483c580912805644e79634a8cc2a7bc",
+    "source_archive": "https://codeload.github.com/lizarragaxyz/Closed-Loop-Learning-Based-PID-Tuning-for-DC-Motor-Actuators/tar.gz/8c74893a15c2c110e880d41eabd0d648bd2dcc93",
+    "archive_sha256": "0cf0d14f5d6d2fbe9175764d201efb92fdfa224385312ee925d30e7fb94869be",
+    "data_files": 2942,
+    "total_experiment_mat_bytes": 10163693,
+    "ordered_data_blob_ids_sha256": "277595930b9b14525b3f135407085dd526e6819fb4262ac499abd4c34e7575bb",
+    "ordered_digest_definition": "sort relative paths lexicographically, then SHA-256 over each lowercase 40-character Git blob hex plus LF, concatenated",
+    "counts_scope": "Physical trial files only. Host state checkpoints and optimizer histories excluded. The 60-generation folder may contain reruns; 2,942 denotes distinct serialized files. Exact correspondence of individual files to paper Table 6 unresolved.",
+    "rights": {
+      "article": "CC BY 4.0",
+      "source_license": "https://github.com/lizarragaxyz/Closed-Loop-Learning-Based-PID-Tuning-for-DC-Motor-Actuators/blob/8c74893a15c2c110e880d41eabd0d648bd2dcc93/LICENSE",
+      "source_license_sha256": "10202f50980d9f5eac02f71f128fcb437d9332b7648a5f64c08bfb795596fbb3",
+      "scope": "Root MIT license grants rights in software and associated documentation. Separate license for raw experiment data not identified. Redistributed files are independently calculated counts and author-attributed source pointers; original MAT arrays not copied."
+    },
+    "verification": "Every experiment_*.mat file read and Git blob SHA-1 checked. 121 samples/file. Signed integer u recorded after conditional integration, bounding and round-half-away, then the actuation path applies its positional deadband. Float32 firmware replay with grid-reconstructed r,y matched every logged u. Neither independently measured analog drive current/voltage nor shaft torque is exported.",
+    "firmware_locators": [
+      "TunePID_L298N.ino main loop: computes C(...) and sends integer u after applying downstream policy",
+      "C.ino C and Policy: conditional integration, hard clamp, roundf and positional deadband",
+      "H.ino H and R.ino load_R: encoder grid and quantized setpoint",
+      "sampling.ino get_t_ms and experiment.ino start_experiment: scheduled time and initial row"
+    ],
+    "derived_files": [
+      "liz-campaigns.csv",
+      "liz-generations-and-amplitudes.csv",
+      "derive_lizarraga.py"
+    ]
+  },
+  {
+    "title": "InnovaPower/MitDev-Eletrica: Release with 3-Phase PMSG Dataset",
+    "authors": "Rafael Noboro Tominaga (Zenodo release creator); associated data-article team listed in literature.csv",
+    "version": "v1.1.0",
+    "release_doi": "10.5281/zenodo.15741561",
+    "concept_doi": "10.5281/zenodo.13631678",
+    "commit": "e02fba475cf82b375412a7382143dc29da5241ef",
+    "git_tree_object": "65430929e4886935d463f1e1410b5476d255f4d4",
+    "year": 2025,
+    "access_checked_utc": "2026-11-21",
+    "associated_work": "10.1016/j.dib.2025.112040",
+    "repository": "https://github.com/InnovaPower/MitDev-Eletrica/tree/e02fba475cf82b375412a7382143dc29da5241ef/PMSG-3phase-Dataset",
+    "release_record": "https://zenodo.org/api/records/15741561",
+    "release_record_response_sha256": "b4536937125885ecf3620fb2d440b82273846ab49a23351474783a9ff43b024b",
+    "archive": "Zenodo lists 2,404,737,837-byte v1.1.0 repository ZIP (depositor MD5 67bff60272c6e286ba13be274523644d); only all individual MAT blobs in PMSG-3phase-Dataset were downloaded/decoded. Other machine families excluded.",
+    "manifest": "https://api.github.com/repos/InnovaPower/MitDev-Eletrica/git/trees/e02fba475cf82b375412a7382143dc29da5241ef?recursive=1",
+    "manifest_response_sha256": "b4f10704a542c3a84d2abc13194a7d6ab9ba57ad5e1a21feffee080e622d1004",
+    "data_files": 225,
+    "verified_data_bytes": 1206926234,
+    "read_samples": 13500225,
+    "rights": {
+      "release": "CC BY 4.0 per Zenodo v1.1.0 metadata",
+      "source_license": "https://github.com/InnovaPower/MitDev-Eletrica/blob/e02fba475cf82b375412a7382143dc29da5241ef/LICENSE.txt",
+      "article": "CC BY 4.0",
+      "shared": "Per-file descriptive and consistency statistics with source attribution. Neither raw archive nor original arrays copied."
+    },
+    "verification": "Every MAT blob matched source size and Git SHA-1. All 225 have 60,001 valid observations. Computed duty matches 0.5+Vphase_ref/Vdc to maximum 4.274e-8. No recorded phase duty hit 0 or 1 in 40,500,675 values, which establishes a negative comparator at those endpoints. Iq tracking error and measured-vs-reference phase voltage residuals are not evidence of a current cap.",
+    "data_limit": "Table 1: Iq from measured phase currents, Iq_ref from controller, Torq_mec external mechanical torque, Torq_ele calculated electric torque, Spd reported rad/s, Package_loss an integrator reset on successful CAN reception. The engineering 20 kHz acquisition grid is not independent torque sensor refresh. Observed speed/filename and calculated/measured torque ratios are documented without unit correction or inferred pole-pair scaling; healthy files also contain a high Fault_relay command.",
+    "derived_files": [
+      "pmsg-operating-points.csv",
+      "derive_pmsg.py"
+    ]
+  }
+]

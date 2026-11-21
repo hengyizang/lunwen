@@ -1,0 +1,13 @@
+{
+  "paper_doi": "10.3390/s26196320",
+  "authors": "Meghawer, Assem | Võip, Martin | Ibrahim, Mahmoud | Rassõlkin, Anton",
+  "title": "A Scenario-Based Hardware-in-the-Loop Platform for Real-Time Road-Load Emulation on Production Micromobility Drives",
+  "source": "https://www.mdpi.com/1424-8220/26/19/6320#table_body_display_sensors-26-06320-t003",
+  "source_document_sha256": "97509ec2189f102a73c69c1e2faedef4acb6998b65f11f17a86f39314a6c5f54",
+  "version": "Publisher HTML version of record accessed 2026-11-21",
+  "source_license": "CC BY 4.0 https://creativecommons.org/licenses/by/4.0/",
+  "derivation": "Table 3 transcribed into decimal mean, 95% CI bounds and warm coefficient of variation; numerical values preserved and unit columns separated. Warm n=7 is a subset of all n=8. This is one paper-derived table, not 8 public trials nor a third downloadable raw release.",
+  "eligibility": "85% of throttle-dependent torque ceiling; modeled commanded torque before/after limit and independent physical shaft transducer on physical test stand. Source Table 3 reports means across runs; no raw sampled physical currents at a wall provided by this table.",
+  "public_data_boundary": "Data Availability Statement: scripts and computed result files are available from the corresponding author on reasonable request. Raw full-rate acquisition files are retained locally because of size. No downloadable synchronized raw series was established.",
+  "derived_file": "published-cap-and-shaft.csv"
+}

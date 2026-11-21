@@ -1,0 +1,8 @@
+citing_id,citing_doi,relation,cited_id,cited_doi,locator,source_url
+portpaper,10.1016/j.dib.2023.108964,cites,portjournal,10.1016/j.comcom.2022.07.005,reference 1,https://pmc.ncbi.nlm.nih.gov/articles/PMC9957741/
+portpaper,10.1016/j.dib.2023.108964,cites_concept_of_verified_version,porto80211ad,10.5281/zenodo.7026551,Reference 5 cites concept DOI 10.5281/zenodo.7026550; Zenodo record 7026551 identifies that concept as the parent of the verified version 10.5281/zenodo.7026551.,https://pmc.ncbi.nlm.nih.gov/articles/PMC9957741/
+portjournal,10.1016/j.comcom.2022.07.005,cites,portconf,10.1109/medcomnet52149.2021.9501244,reference 2,https://www.cs.vassar.edu/~rpachecomeireles/research/papers/comcom-2022-preprint.pdf
+slatedib,10.1016/j.dib.2026.113183,links_concept_of_verified_version,slatePTP,10.5281/zenodo.21770838,Specifications table / Data accessibility links concept DOI 10.5281/zenodo.21770837; Zenodo record 21770838 identifies that concept as the parent of the verified version 10.5281/zenodo.21770838.,https://pmc.ncbi.nlm.nih.gov/articles/PMC13562064/
+slatedib,10.1016/j.dib.2026.113183,cites,structured,10.1109/tim.2026.3718095,reference 1,https://pmc.ncbi.nlm.nih.gov/articles/PMC13562064/
+structured,10.1109/tim.2026.3718095,cites,ispcs,10.1109/ispcs63021.2024.10747714,publisher-deposited reference 12,https://doi.org/10.1109/TIM.2026.3718095
+kalman,10.3390/s24247892,cites,cam,10.1016/j.vehcom.2024.100744,reference 8,https://www.mdpi.com/1424-8220/24/24/7892

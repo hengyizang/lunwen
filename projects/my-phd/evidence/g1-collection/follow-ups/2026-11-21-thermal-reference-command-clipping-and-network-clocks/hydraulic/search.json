@@ -1,0 +1,263 @@
+{
+  "completed_utc": "2026-11-21T23:29:09+00:00",
+  "scope": "Free public bibliography and physical signals. Direct companion DOIs, repository references and backward citations; only normal industrial measurements, control and timing evidence extracted.",
+  "web_batch": {
+    "at_utc": "2026-11-21T23:25Z (minute-resolution run)",
+    "queries": [
+      "Robertson Sadeghi Florez Paik 10.1089/soro.2016.0029 full text pdf EPFL",
+      "\"Multi-DoF Force Characterization of Soft Actuators\" epfl pdf Joshi Paik",
+      "\"GAN-based Data Augmentation in the Design\" ETRAN 2022 PDF Nedeljkovic",
+      "\"Distributing Numerical Control for Reconfigurable Manufacturing Systems\" DOI Lesi CNC 2016 ETFA PDF"
+    ],
+    "selected_results": [
+      "https://infoscience.epfl.ch/bitstreams/f8948b82-d1a3-4997-bee4-92fa1a3cd80f/download",
+      "https://pmc-oa-opendata.s3.amazonaws.com/PMC5037455.1/PMC5037455.1.xml",
+      "https://pmc-oa-opendata.s3.amazonaws.com/PMC5346960.1/PMC5346960.1.xml",
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793432/",
+      "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_etfa16.pdf",
+      "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_etfa19.pdf",
+      "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_cnc19.pdf",
+      "https://www.etran.rs/2022/zbornik/ICETRAN-22_radovi/081-ROI1.4.pdf"
+    ]
+  },
+  "crossref_title_queries": [
+    {
+      "query": "Synchronization of Distributed Controllers in Cyber-Physical Systems",
+      "endpoint": "https://api.crossref.org/works?query.title=Synchronization+of+Distributed+Controllers+in+Cyber-Physical+Systems&rows=1",
+      "at_utc": "2026-11-21T23:25:08+00:00",
+      "result": "10.1109/etfa.2019.8869467"
+    },
+    {
+      "query": "Towards Plug-n-Play Numerical Control for Reconfigurable Manufacturing Systems",
+      "endpoint": "https://api.crossref.org/works?query.title=Towards+Plug-n-Play+Numerical+Control+for+Reconfigurable+Manufacturing+Systems&rows=1",
+      "at_utc": "2026-11-21T23:25:08+00:00",
+      "result": "10.1109/etfa.2016.7733524"
+    },
+    {
+      "query": "Distributing Numerical Control for Reconfigurable Manufacturing Systems",
+      "endpoint": "https://api.crossref.org/works?query.title=Distributing+Numerical+Control+for+Reconfigurable+Manufacturing+Systems&rows=1",
+      "at_utc": "2026-11-21T23:24Z (minute-resolution run)",
+      "result": "HTTP 429; followed institutional or conference PDF and catalogue"
+    },
+    {
+      "query": "Detection of Cyber-Attacks in Electro-Pneumatic Positioning System with Distributed Control",
+      "endpoint": "https://api.crossref.org/works?query.title=Detection+of+Cyber-Attacks+in+Electro-Pneumatic+Positioning+System+with+Distributed+Control&rows=1",
+      "at_utc": "2026-11-21T23:25:08+00:00",
+      "result": "10.1109/telfor48224.2019.8971062"
+    },
+    {
+      "query": "GAN-based Data Augmentation in the Design of Cyber-attack Detection Methods",
+      "endpoint": "https://api.crossref.org/works?query.title=GAN-based+Data+Augmentation+in+the+Design+of+Cyber-attack+Detection+Methods&rows=1",
+      "at_utc": "2026-11-21T23:24Z (minute-resolution run)",
+      "result": "HTTP 429; followed institutional or conference PDF and catalogue"
+    },
+    {
+      "query": "Iterative control in automotive testing",
+      "endpoint": "https://api.crossref.org/works?query.title=Iterative+control+in+automotive+testing&rows=1",
+      "at_utc": "2026-11-21T23:25:08+00:00",
+      "result": "10.1243/09596518jsce306"
+    },
+    {
+      "query": "Laboratory road simulation for full vehicle testing a review",
+      "endpoint": "https://api.crossref.org/works?query.title=Laboratory+road+simulation+for+full+vehicle+testing+a+review&rows=1",
+      "at_utc": "2026-11-21T23:25:08+00:00",
+      "result": "10.4271/2001-26-0047"
+    }
+  ],
+  "direct_identifier_checks": [
+    {
+      "at_utc": "2026-11-21T23:29:07+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1109/lra.2019.2927936",
+      "query": "10.1109/lra.2019.2927936",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Multi-DoF Force Characterization of Soft Actuators",
+      "doi": "10.1109/lra.2019.2927936",
+      "returned_type": "journal-article",
+      "sha256": "a7eab05fcde0d8ac5b04416203ac3d27eeafd69c3cb3f42397169faf0c5c2472"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:07+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1038/srep34224",
+      "query": "10.1038/srep34224",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Stretchable Materials for Robust Soft Actuators towards Assistive Wearable Devices",
+      "doi": "10.1038/srep34224",
+      "returned_type": "journal-article",
+      "sha256": "9a70887450a39381c8f30cf797fd36cd8f365851afc5f25269d4ae4431a2bbcc"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:08+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1089/soro.2016.0029",
+      "query": "10.1089/soro.2016.0029",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Soft Pneumatic Actuator Fascicles for High Force and Reliability",
+      "doi": "10.1089/soro.2016.0029",
+      "returned_type": "journal-article",
+      "sha256": "6cab679a87f28a69e93dcf0ff34d2970dbd172f43d74d5f455fbe8e8027b2edf"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:08+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1089/soro.2016.0029.correx",
+      "query": "10.1089/soro.2016.0029.correx",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Correction to:\n                    <i>Soft Pneumatic Actuator Fascicles for High Force and Reliability</i>\n                    by Robertson MA, Sadeghi H, Florez JM, Paik J. Soft Robot 2017;4:23–32. DOI: 10.1089/soro.2016.0029",
+      "doi": "10.1089/soro.2016.0029.correx",
+      "returned_type": "journal-article",
+      "sha256": "c1da0bc03f073cf5219850f91741979d55c97bd0bbd898f381745784a06c271b"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:08+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1109/etfa.2016.7733524",
+      "query": "10.1109/etfa.2016.7733524",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Towards Plug-n-Play numerical control for Reconfigurable Manufacturing Systems",
+      "doi": "10.1109/etfa.2016.7733524",
+      "returned_type": "proceedings-article",
+      "sha256": "89ab452c95f39fbf5fd777d6e6d7fa07102002b1f102cbcd96993624827e1c50"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:08+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1109/etfa.2019.8869467",
+      "query": "10.1109/etfa.2019.8869467",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Synchronization of Distributed Controllers in Cyber-Physical Systems",
+      "doi": "10.1109/etfa.2019.8869467",
+      "returned_type": "proceedings-article",
+      "sha256": "47d3f4535860eee6b670c132481201562c42d91548f1cbe127403ff0b7492370"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:08+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1109/telfor48224.2019.8971062",
+      "query": "10.1109/telfor48224.2019.8971062",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Detection of cyber-attacks in electro-pneumatic positioning system with distributed control",
+      "doi": "10.1109/telfor48224.2019.8971062",
+      "returned_type": "proceedings-article",
+      "sha256": "c3c9b802317a506ef89cf4b85e583523f810c3184bb3d8f93e57229e1d6c3521"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:09+00:00",
+      "endpoint": "https://api.crossref.org/works/10.1243/09596518jsce306",
+      "query": "10.1243/09596518jsce306",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Iterative control in automotive testing",
+      "doi": "10.1243/09596518jsce306",
+      "returned_type": "journal-article",
+      "sha256": "126d7a6f5f2a62205b8e7d2825e5038a3d8eb324940ccef700236ee7d32c6ddf"
+    },
+    {
+      "at_utc": "2026-11-21T23:29:09+00:00",
+      "endpoint": "https://api.crossref.org/works/10.4271/2001-26-0047",
+      "query": "10.4271/2001-26-0047",
+      "source": "Crossref DOI lookup",
+      "status": 200,
+      "title": "Laboratory Road Simulation for Full Vehicle Testing: A Review",
+      "doi": "10.4271/2001-26-0047",
+      "returned_type": "proceedings-article",
+      "sha256": "094b9e3928ba2322b28c61623593965128f65237cbadfe53f7999dead114213a"
+    }
+  ],
+  "source_files": [
+    {
+      "url": "https://infoscience.epfl.ch/bitstreams/f8948b82-d1a3-4997-bee4-92fa1a3cd80f/download",
+      "file_sha256": "66180e139edc648ccae6e528e505e62a3642ab44cd4b19e031f9a3e6bb9b80b7",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC5037455.1/PMC5037455.1.xml",
+      "file_sha256": "70fa511d8480e748c314821746f092d30558f08451d02859d398868d7ffce13d",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC5346960.1/PMC5346960.1.xml",
+      "file_sha256": "a152dd212f55c4e95dfb9f4602cd4b847c65badd0fd66c5ec6d9423ee57767f9",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6793432/",
+      "file_sha256": "aee9a7639954ac99ea269549727d46ba9c03c10ac0cf9ee514b6d07af3b7a2e1",
+      "evidence_level": "full_text_correction"
+    },
+    {
+      "url": "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_etfa16.pdf",
+      "file_sha256": "d98ff5e6ceea27715b3a629ec77cb399ee5abc2af6a904a3b8abb9d3f88e9caa",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_etfa19.pdf",
+      "file_sha256": "0205181527a4b677c0c15517b6bf383df0d484ac501a564c9c432d55e3dcf159",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://cpsl.pratt.duke.edu/sites/cpsl.pratt.duke.edu/files/images/lesi_cnc19.pdf",
+      "file_sha256": "ad5108165023ef662102fbf1a7c3b1b94718960030917568710a4d1e8e5b9315",
+      "evidence_level": "full_text_evidence"
+    },
+    {
+      "url": "https://www.etran.rs/2022/zbornik/ICETRAN-22_radovi/081-ROI1.4.pdf",
+      "file_sha256": "9726864c0aa78d4347580a6cf19373f795f95b15af042ffb65b6c981eef4a1b8",
+      "evidence_level": "full_text_evidence"
+    }
+  ],
+  "data_repositories": [
+    {
+      "source_url": "https://zenodo.org/records/3627901",
+      "doi": "10.5281/zenodo.3627901",
+      "metadata_url": "https://zenodo.org/api/records/3627901"
+    },
+    {
+      "source_url": "https://zenodo.org/records/4556924",
+      "doi": "10.5281/zenodo.4556924",
+      "metadata_url": "https://zenodo.org/api/records/4556924"
+    },
+    {
+      "source_url": "https://zenodo.org/records/6399688",
+      "doi": "10.5281/zenodo.6399688",
+      "metadata_url": "https://zenodo.org/api/records/6399688"
+    },
+    {
+      "source_url": "https://opara.zih.tu-dresden.de/handle/123456789/2557",
+      "doi": "10.25532/opara-151",
+      "metadata_url": "https://opara.zih.tu-dresden.de/server/api/core/items/eec1959c-6ec6-4ee3-af05-5419f1d2adb6"
+    }
+  ],
+  "exclusions": [
+    "Mendeley 10.17632/zg97984dmy.1: DataCite metadata identified a related hydraulic tracking release, but the attempted file listing returned HTTP error payload {\"error\":400}; no file evidence and no accepted-source count.",
+    "EPFL fascicle correction: PMC versioned object guess for PMC6793432.1 returned HTTP 404. The correction was read from its public PMC HTML page.",
+    "Possible journal identification of the Duke CNC report: lab describes manuscript as under review; dataset dates its technical report citation 2022. No registered DOI was confirmed.",
+    "OPARA training split and archive-wide digest were outside the fetched byte ranges; member CRC checks described in sources.json.",
+    "No independent citation relationship is asserted between IcETRAN 2022 and the Zenodo voltage shard collection. The DAQ setup and recorded sample counts were compared."
+  ],
+  "zenodo_version_queries": [
+    {
+      "endpoint": "https://zenodo.org/api/records/4556924/versions",
+      "checked_at_utc": "2026-11-21T23:29:41+00:00",
+      "http_status": 200,
+      "sha256": "a54acc09092777d018f5d46d5143e051a7e8108ac0d998222ee0c280ed0683b7",
+      "note": "Public API version-family, latest-version or fixed v2 record as indicated by endpoint"
+    },
+    {
+      "endpoint": "https://zenodo.org/api/records/4556924/versions/latest",
+      "checked_at_utc": "2026-11-21T23:29:42+00:00",
+      "http_status": 200,
+      "sha256": "974aebc09d2694b9faf1bd5076cc6e87b88fc2481a0163875b85e6893896c95b",
+      "note": "Public API version-family, latest-version or fixed v2 record as indicated by endpoint"
+    },
+    {
+      "endpoint": "https://zenodo.org/api/records/5514351",
+      "checked_at_utc": "2026-11-21T23:29:41+00:00",
+      "http_status": 200,
+      "sha256": "974aebc09d2694b9faf1bd5076cc6e87b88fc2481a0163875b85e6893896c95b",
+      "note": "Public API version-family, latest-version or fixed v2 record as indicated by endpoint"
+    }
+  ],
+  "version_result": "Four Belgrade versions, two with restricted access. v2 is a separate release of the same concept. v1 counts remain limited to v1; receiver-value verification is in belgrade-version-audit.csv, version-notes.md and audit_belgrade_versions.py."
+}
