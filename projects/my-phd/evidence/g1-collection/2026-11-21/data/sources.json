@@ -1,0 +1,126 @@
+{
+  "access_date": "2026-11-21",
+  "uci": {
+    "title": "Robot Execution Failures",
+    "authors": [
+      "Luis Lopes",
+      "Luis Camarinha-Matos"
+    ],
+    "doi": "10.24432/C5M89N",
+    "landing": "https://archive.ics.uci.edu/dataset/138/robot+execution+failures",
+    "archive_url": "https://archive.ics.uci.edu/static/public/138/robot+execution+failures.zip",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "local_name": "g1-uci-138.zip",
+    "sha256": "cdfbe0b260f4a21c5249fe0da4b1baf4041959663a9182253885ee1f41a4568e",
+    "modification": "Per original episode, calculate each channel's median and peak-to-peak amplitude across 15 samples in source units. Preserve all labels, including normal/ok, and the 1-based within-task index. Only the five .data members are read."
+  },
+  "zenodo": {
+    "title": "Accelerometer and Force/Torque Sensor Measurements for Parameter and State Estimation of an Unknown Robot End Effector",
+    "authors": [
+      "Skrede, Aleksander"
+    ],
+    "doi": "10.5281/zenodo.11096791",
+    "landing": "https://zenodo.org/records/11096791",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "modification": "Per-file, per-channel descriptive coverage and min/median/max in source units. No interpolation, force-bias correction or sensor fusion. The source description refers both to raw biased and to unbiased signals. Calibration status is unresolved. The time-span unit is left native. Manual contacts do not provide independent force magnitudes.",
+    "files": [
+      {
+        "file": "0-calibration_fts-accel.csv",
+        "bytes": 5127,
+        "publisher_md5": "md5:9cccc9553ed4cf8fbe22b664a30f3e3e",
+        "sha256": "ae7966b36fd1338de666665eeff2d5ec7c32c6d7dfeee30a0948c3ae172c5edd",
+        "url": "https://zenodo.org/api/records/11096791/files/0-calibration_fts-accel.csv/content"
+      },
+      {
+        "file": "0-steady-state_accel.csv",
+        "bytes": 7280,
+        "publisher_md5": "md5:46cb45737cad50cdd7436bb342a799dc",
+        "sha256": "bb41452ebe965067cccfc30cd60424e0a549543995ea625d43ca61e81b9f25de",
+        "url": "https://zenodo.org/api/records/11096791/files/0-steady-state_accel.csv/content"
+      },
+      {
+        "file": "0-steady-state_wrench.csv",
+        "bytes": 37294,
+        "publisher_md5": "md5:c00a666708201b641aca259df5598d79",
+        "sha256": "f31f28be8d2cd8823138ffc76e35c12264b11d41f9d0f07303b80a240f1dc155",
+        "url": "https://zenodo.org/api/records/11096791/files/0-steady-state_wrench.csv/content"
+      },
+      {
+        "file": "1-baseline_accel.csv",
+        "bytes": 73099,
+        "publisher_md5": "md5:db97e72af5458572a7b4ef1d73d2ca70",
+        "sha256": "82f1a86c90bed56008d290a76a58d3c7f158bf3043c6c45a2000a0e43ff52095",
+        "url": "https://zenodo.org/api/records/11096791/files/1-baseline_accel.csv/content"
+      },
+      {
+        "file": "1-baseline_orientations.csv",
+        "bytes": 66424,
+        "publisher_md5": "md5:fbb2bd513ebb5da95465ab193fd73a39",
+        "sha256": "961cdb8ee1e33ebe1c48d0e82c53ebf15d11ac93bd111f38c38264f1945f3c47",
+        "url": "https://zenodo.org/api/records/11096791/files/1-baseline_orientations.csv/content"
+      },
+      {
+        "file": "1-baseline_wrench.csv",
+        "bytes": 310584,
+        "publisher_md5": "md5:7b45134e2e6158423677e010806163c9",
+        "sha256": "d95c04b1c37c740dd26386ec139807504d474b6f92cdda109c884d0275ca8e3f",
+        "url": "https://zenodo.org/api/records/11096791/files/1-baseline_wrench.csv/content"
+      },
+      {
+        "file": "2-vibrations_accel.csv",
+        "bytes": 73107,
+        "publisher_md5": "md5:f5c7c707bbd08265c43feefb847a33d1",
+        "sha256": "947d1415235174c6c4212c5ce825ebb5726bf3525282a566e4d10453bc59d6a6",
+        "url": "https://zenodo.org/api/records/11096791/files/2-vibrations_accel.csv/content"
+      },
+      {
+        "file": "2-vibrations_orientations.csv",
+        "bytes": 66072,
+        "publisher_md5": "md5:e20bfc94c9123fb16d4b439bc2e5c57c",
+        "sha256": "be5c8cd9f20f88620f07c91c8eef39b6d5763a2ee90f818cf04e77cf340c8f85",
+        "url": "https://zenodo.org/api/records/11096791/files/2-vibrations_orientations.csv/content"
+      },
+      {
+        "file": "2-vibrations_wrench.csv",
+        "bytes": 310653,
+        "publisher_md5": "md5:2615e4ea26bee3cfcfe06f919d931165",
+        "sha256": "25d85227991217ce8590e07f7be08a6fec125f4cd087cd940ab008ae77035b2e",
+        "url": "https://zenodo.org/api/records/11096791/files/2-vibrations_wrench.csv/content"
+      },
+      {
+        "file": "3-vibrations-contact_accel.csv",
+        "bytes": 73239,
+        "publisher_md5": "md5:75e26f4a4db4aea19959f83a85e8aa1d",
+        "sha256": "73bd7f04b52b879a8c526154feb4491d659d48ee6ad487c246a0cd3199da0770",
+        "url": "https://zenodo.org/api/records/11096791/files/3-vibrations-contact_accel.csv/content"
+      },
+      {
+        "file": "3-vibrations-contact_orientations.csv",
+        "bytes": 65910,
+        "publisher_md5": "md5:25fe557d8ff81787f7fe597840bf55d1",
+        "sha256": "4ce085c11a7b7973282da61c0d748d74be5ec690a0cd989b8d05bc537fe83217",
+        "url": "https://zenodo.org/api/records/11096791/files/3-vibrations-contact_orientations.csv/content"
+      },
+      {
+        "file": "3-vibrations-contact_wrench.csv",
+        "bytes": 307641,
+        "publisher_md5": "md5:1c271a0085c8abcfa4bb99b36910da41",
+        "sha256": "34717f5b3057a0203af2154537b0334daf41a7987f70bcc3a236cc60c66f2ae1",
+        "url": "https://zenodo.org/api/records/11096791/files/3-vibrations-contact_wrench.csv/content"
+      }
+    ]
+  },
+  "nano_drone": {
+    "title": "Nonlinear System Identification for a Nano-Drone Benchmark",
+    "publisher": "IDSIA Robotics",
+    "landing": "https://www.nonlinearbenchmark.org/benchmarks/nano-drone",
+    "release": "https://github.com/idsia-robotics/nanodrone-sysid-benchmark/releases/tag/v1.0",
+    "archive_url": "https://github.com/idsia-robotics/nanodrone-sysid-benchmark/releases/download/v1.0/data.zip",
+    "license": "Dataset-specific redistribution terms not confirmed. Only per-run factual counts/timing are listed.",
+    "local_name": "g1-nanodrone.zip",
+    "sha256": "5561a4d90652fc64fbbbbe93e7cf4a8f8eb66984304f435eb507c29119d7dd43",
+    "modification": "Summarize timestamp regularity and duration and check four observed motor speed channels and 13 state outputs. The official test/train split is preserved. This summary contains no time-series values or model fit."
+  }
+}

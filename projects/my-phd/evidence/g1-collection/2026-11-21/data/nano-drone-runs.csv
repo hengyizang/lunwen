@@ -1,0 +1,16 @@
+source_file,official_split,samples,span_s,median_interval_s,nonincreasing_intervals,observed_motor_speed_channels,state_output_channels
+test/melon_20251017_run1.csv,test,6499,64.98,0.01,0,4,13
+test/melon_20251017_run2.csv,test,6499,64.98,0.01,0,4,13
+test/melon_20251017_run3.csv,test,6499,64.98,0.01,0,4,13
+train/chirp_20251017_run1.csv,train,6000,59.99,0.01,0,4,13
+train/chirp_20251017_run2.csv,train,6000,59.99,0.01,0,4,13
+train/chirp_20251017_run3.csv,train,6000,59.99,0.01,0,4,13
+train/chirp_20251017_run4.csv,train,6000,59.99,0.01,0,4,13
+train/random_20251017_run1.csv,train,6000,59.99,0.01,0,4,13
+train/random_20251017_run2.csv,train,6000,59.99,0.01,0,4,13
+train/random_20251017_run3.csv,train,6000,59.99,0.01,0,4,13
+train/random_20251017_run4.csv,train,5999,59.98,0.01,0,4,13
+train/square_20251017_run1.csv,train,1900,18.99,0.01,0,4,13
+train/square_20251017_run2.csv,train,1900,18.99,0.01,0,4,13
+train/square_20251017_run3.csv,train,1900,18.99,0.01,0,4,13
+train/square_20251017_run4.csv,train,1900,18.99,0.01,0,4,13
