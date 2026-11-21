@@ -1,0 +1,311 @@
+{
+  "schema_version": "1.0",
+  "round": 54,
+  "completed_at": "2026-11-21T13:06:40Z",
+  "batch_label": "Broad Engineering R54: Robotics_Embodied (2025)",
+  "base_head_sha": "c4470bac4372e8472e1293a0fb2b3b45609f597e",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 88,
+    "duplicates_skipped": 37,
+    "net_new": 51,
+    "new_reading_queue": 47,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t130640z-arxiv-58560dfb28",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Asim-to-real+AND+all%3Alegged+AND+all%3Arobot+AND+all%3Areinforcement+AND+all%3Alearning%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "29b3d1e59c72d1922e2f6dc79df7cdbe355c87adaaa7ab7ba47a851f621693a7",
+        "normalized_results_sha256": "2040e48dcb750e263a7e76f2111fc3cf250bafe7aa140936e0eb95dd9572f8f9"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t130857z-europe-pmc-712418e446",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=sim-to-real+legged+robot+reinforcement+learning&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "62a87d4a0b79c7b89e530430df62d99dd2faf735a1bdc78632d362a9c07e60c6",
+        "normalized_results_sha256": "59599bb92a79fa3ddeaa163dca2fe45c637dad06b87f435e0360dca3a9eac891"
+      },
+      {
+        "provider": "arxiv",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t130905z-arxiv-a37a6ddc52",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Ahumanoid+AND+all%3Awhole-body+AND+all%3Aloco-manipulation+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "fd54e310aae3f5028ccac382b190e4b66712efe1ba58de3d484795742cdd90d3",
+        "normalized_results_sha256": "83f29a8ad07e46617801f7ac5ccefaf1516ba3d14517b7cafcaab459d30df8ce"
+      },
+      {
+        "provider": "openalex",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t130907z-openalex-2306046d5b",
+        "request_url": "https://api.openalex.org/works?search=humanoid+whole-body+loco-manipulation+control&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "251f3ef71db60ad5a68f14cb6293269f02aebe0a5efeb08d77db0ea391b14175",
+        "normalized_results_sha256": "2068bc4def6b5c0cfbc3915c7100976f93f314e991f283cd9f05dac143c37b83"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t130912z-europe-pmc-f4e8a13de8",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=humanoid+whole-body+loco-manipulation+control&pageSize=12&format=json",
+        "result_count": 5,
+        "response_sha256": "d3bedf120527b6f80d4b2d3ba9cc0f68ba28549eb0954d1c6a86c90f5a9bc299",
+        "normalized_results_sha256": "2f1ab51b88e489ca0a9e466e29de4a755345cb93d1c94b66c5637fa89fcfd1a8"
+      },
+      {
+        "provider": "arxiv",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t130919z-arxiv-4af6cf10dc",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Avision-language-action+AND+all%3Arobotic+AND+all%3Amanipulation+AND+all%3Apolicy%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 12,
+        "response_sha256": "275b989dc7ce71c1d98b8b6c7624a5595866d87fa0d92c9df7623be7cff339d0",
+        "normalized_results_sha256": "655a25783511e6451f4a38908a3d3b22b8572bf417e20c89b6852a3929b9d711"
+      },
+      {
+        "provider": "openalex",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t130921z-openalex-8b1c200dd5",
+        "request_url": "https://api.openalex.org/works?search=vision-language-action+robotic+manipulation+policy&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "e6d1b6f223c7a7a7b777ccb12d181d3af9109a8f3b43457f0e89d024080a8c52",
+        "normalized_results_sha256": "9b1b95262e4c7af2df5af2e8bec31f62f078be1e15443fbd787ba4ba18fa8ca6"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t130927z-europe-pmc-d1d0ce08f0",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=vision-language-action+robotic+manipulation+policy&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "af6ad3e3364966dd1ba2dce7381317353c62e85ae44f0570b114ea809c4c223c",
+        "normalized_results_sha256": "e7320e6b7f0b471f6fb06a0dcbc078e08c9a979ef400dca6d14ed193b76db932"
+      },
+      {
+        "provider": "arxiv",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t130930z-arxiv-56de04d469",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Asoft+AND+all%3Acontinuum+AND+all%3Arobot+AND+all%3Akinematic+AND+all%3Amodeling%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 4,
+        "response_sha256": "75bf0c4440534d72d4d00334148e50b244f93191b40a5f2358d3badeb91dbaf2",
+        "normalized_results_sha256": "7cc350df62df638c6e695f4a11fac427137e3b44da36a4f77bcbb312c8aa66fc"
+      },
+      {
+        "provider": "openalex",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t130931z-openalex-48e6a871ff",
+        "request_url": "https://api.openalex.org/works?search=soft+continuum+robot+kinematic+modeling&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "8856315dde80054f3a2fed333ac5dc81979ae6990ea27515f645ffc6686157de",
+        "normalized_results_sha256": "6e8c2ca0d2a24d7cd5092f3a6ff224685154cec51007ab80c643682ba0b23a2d"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t131007z-europe-pmc-8dfe39ae09",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=soft+continuum+robot+kinematic+modeling&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "80dd0301bd5ea24215eed009483cd7290816b8892c59fd6533880b74fe8fe80d",
+        "normalized_results_sha256": "16fb6faeb927c67543d8bde00099f2d532564f1016a86bc08f7ea08e38dafb6f"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1038/s41598-025-28618-x",
+        "receipt_id": "20261121t131009z-opencitations-5b4b6735de",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1007/s10846-025-02275-8",
+        "receipt_id": "20261121t131011z-opencitations-4a5afdd335",
+        "result_count": 6,
+        "response_sha256": "3c22d9bc5d8d805187d0841b8332af127d02dacb59b0e2064b237aa7dd2777e4"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "openalex",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=sim-to-real+legged+robot+reinforcement+learning&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31: HTTP Error 429: Too Many Requests"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 172,
+    "off_topic_filtered": 132,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 21,
+    "net_new": 19,
+    "provider_statuses": [
+      {
+        "query": "modal analysis sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "modal analysis sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "modal analysis sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "acoustic emission sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "acoustic emission sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "acoustic emission sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "ultrasonic testing sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "ultrasonic testing sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "ultrasonic testing sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ultrasonic testing sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "ultrasonic testing sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "infrared thermography sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 7
+      },
+      {
+        "query": "infrared thermography sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "infrared thermography sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "infrared thermography sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-34910805-data-sheet-1-reliability",
+        "key": "figshare:34910805",
+        "dataset_name": "Data Sheet 1_Reliability-aware multimodal sensor fusion for human motion monitoring with safety-constrained neurorobotic feedback in sports training.zip",
+        "doi": "10.3389/fnbot.2026.1973789.s001",
+        "landing_url": "https://frontiersin.figshare.com/articles/dataset/Data_Sheet_1_Reliability-aware_multimodal_sensor_fusion_for_human_motion_monitoring_with_safety-constrained_neurorobotic_feedback_in_sports_training_zip/34910805",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34910805-data-sheet-1-reliability-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34910805-data-sheet-1-reliability-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34910805_data_sheet_1_reliability.py",
+        "cleaned_rows": 26,
+        "raw_total_rows": 90,
+        "verified_sha256": "1ce3ce9678f1ceca8324dfae17d84e49757f3983d8ced79c930f7b22747a4704"
+      },
+      {
+        "slug": "figshare-34291647-governing-commercial-pub",
+        "key": "figshare:34291647",
+        "dataset_name": "Governing Commercial Public-Area Mobile Robots",
+        "doi": "10.6084/m9.figshare.34291647.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Governing_Commercial_Public-Area_Mobile_Robots/34291647",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-34291647-governing-commercial-pub-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-34291647-governing-commercial-pub-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_34291647_governing_commercial_pub.py",
+        "cleaned_rows": 25,
+        "raw_total_rows": 32,
+        "verified_sha256": "7242f591b30379036e51d968c93a5aa6c1b0d770d227d08bc0d0e3c096c54b61"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "cannot insert source_file, already exists"
+      },
+      {
+        "name": "Welding Data",
+        "url": "https://figshare.com/articles/dataset/Welding_Data/30529277",
+        "error": "Request failed for https://api.figshare.com/v2/articles/30529277: HTTP Error 404: Not Found"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

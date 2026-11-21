@@ -1,0 +1,107 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-34291647-governing-commercial-pub",
+  "dataset_name": "Governing Commercial Public-Area Mobile Robots",
+  "doi": "10.6084/m9.figshare.34291647.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Governing_Commercial_Public-Area_Mobile_Robots/34291647",
+  "source_api_url": "https://api.figshare.com/v2/articles/34291647",
+  "access_date": "2026-11-21",
+  "round_number": 54,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "functional_class_matrix.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69825654",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69825654/functional_class_matrix.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T131048Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22functional_class_matrix.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=f4ad22340f7f20dfc25917266691a625516fda3fad9b4ccac19db85c90f68195",
+      "http_status": 200,
+      "bytes": 1557,
+      "publisher_checksum": "md5:2261fd714d82d8922e4806235bce815f",
+      "verified_md5": "2261fd714d82d8922e4806235bce815f",
+      "verified_sha256": "7242f591b30379036e51d968c93a5aa6c1b0d770d227d08bc0d0e3c096c54b61"
+    },
+    {
+      "file": "proposal_register.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69825669",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69825669/proposal_register.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T131050Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22proposal_register.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=f91c45616dafc9d522366d5a75619b225ce6c2c66260d4461c40585f80694ab7",
+      "http_status": 200,
+      "bytes": 2004,
+      "publisher_checksum": "md5:4a261d8ce19dee682b07669376b44241",
+      "verified_md5": "4a261d8ce19dee682b07669376b44241",
+      "verified_sha256": "d30e0cc13a9447a3a0ada08b7754caf4744f25d3ced30bfd1536bfc31a7afd72"
+    },
+    {
+      "file": "india_institutional_interface_map.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69825660",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69825660/india_institutional_interface_map.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T131054Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22india_institutional_interface_map.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=85f4ff108462a8aedfcc7589d7b6340ad877e97a21a5633b82376c3b43bce3fc",
+      "http_status": 200,
+      "bytes": 2331,
+      "publisher_checksum": "md5:b511efddea6f8195506c12788351ca59",
+      "verified_md5": "b511efddea6f8195506c12788351ca59",
+      "verified_sha256": "4e76412d25481bb7e8b0a358f8a3bde29915b66ae25e3fb918e9307a814d49be"
+    },
+    {
+      "file": "comparative_regulatory_matrix.csv",
+      "download_url": "https://ndownloader.figshare.com/files/69825642",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/69825642/comparative_regulatory_matrix.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T131056Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22comparative_regulatory_matrix.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=1a3503db833686eb22da1709167d4a5ff2a9bb036cb2b126a372cc692e9531a1",
+      "http_status": 200,
+      "bytes": 2756,
+      "publisher_checksum": "md5:d8b0b3e4abe5181c87477ac0cc3acaa2",
+      "verified_md5": "d8b0b3e4abe5181c87477ac0cc3acaa2",
+      "verified_sha256": "70ac03566c9e249a23fad93d9bb5521799c038dc6c7c99fe3e3c60b87d4e3b92"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-34291647-governing-commercial-pub",
+  "raw_total_bytes": 8648,
+  "raw_total_rows": 32,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-34291647-governing-commercial-pub-cleaned.csv",
+  "cleaned_csv_sha256": "f624fce0dccc377c1b709918884415b4a7b8c94536a26a094109fae5e4a7d07d",
+  "cleaned_rows": 25,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "functional_class_matrix.csv": {
+      "function": 0,
+      "useful_output": 0,
+      "primary_exposure": 0,
+      "counterfactuals": 0,
+      "module_focus": 0
+    },
+    "proposal_register.csv": {
+      "id": 0,
+      "proposal": 0,
+      "evidence_class": 0,
+      "permitted_use": 0,
+      "measurement_status": 0,
+      "boundary": 0,
+      "source": 0
+    },
+    "india_institutional_interface_map.csv": {
+      "institution": 0,
+      "existing_capability": 0,
+      "possible_cpmr_role": 0,
+      "boundary": 0,
+      "open_question": 0
+    },
+    "comparative_regulatory_matrix.csv": {
+      "jurisdiction": 0,
+      "unit_of_analysis": 0,
+      "permission_and_reporting": 0,
+      "source_grade": 0,
+      "source": 0,
+      "source_url": 0,
+      "evidence_boundary": 0,
+      "as_of": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
