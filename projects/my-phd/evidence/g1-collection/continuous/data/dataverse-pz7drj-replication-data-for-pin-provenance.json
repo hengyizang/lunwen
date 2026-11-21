@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-pz7drj-replication-data-for-pin",
+  "dataset_name": "Replication data for PINN corrosion-fatigue: PHM 2019",
+  "doi": "10.7910/dvn/pz7drj",
+  "landing_url": "https://doi.org/10.7910/DVN/PZ7DRJ",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/PZ7DRJ",
+  "access_date": "2026-11-21",
+  "round_number": 55,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "rnn_training_crack_length_7yr.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3479136",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/PZ7DRJ/16c441a860c-67eceb2f456f?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rnn_training_crack_length_7yr.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T131732Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=cc5a63e55712edba536bb838463766e8ccc037e37ba8777b3f9cdeca2120ccd3",
+      "http_status": 200,
+      "bytes": 511,
+      "publisher_checksum": "md5:204c439db8fca3701ffe0a71d2ad0fbe",
+      "verified_md5": "204c439db8fca3701ffe0a71d2ad0fbe",
+      "verified_sha256": "a61df619c7467318c6f45e8b8baf5a9d55d028317a4a251fc8671e222b7cfa0b"
+    },
+    {
+      "file": "rnn_training_initial_crack_length.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3479137",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/PZ7DRJ/16c441a86a9-1f709f412cfe?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rnn_training_initial_crack_length.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T131734Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=ce2d4daa87e3647a618e956900a7402c639c91637fd88aeeb2f4e312e51cc256",
+      "http_status": 200,
+      "bytes": 514,
+      "publisher_checksum": "md5:212ab225cf8e10cd47034505ab700c0f",
+      "verified_md5": "212ab225cf8e10cd47034505ab700c0f",
+      "verified_sha256": "31e1ea6a6025ef4bbab9fe0053e6d09c087643933a7a9810a8698adc28e4c242"
+    },
+    {
+      "file": "rnn_predict_7yr_crack_length.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3479131",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/PZ7DRJ/16c441a43ac-14ac14bed1c8?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rnn_predict_7yr_crack_length.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T131737Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=8dbdb6b4a5556a01d3e25d53abe44f22347e0784a37d1f634c13846dbb64dd17",
+      "http_status": 200,
+      "bytes": 2548,
+      "publisher_checksum": "md5:eef83efb07918e2f73f1c2e6b9f249f4",
+      "verified_md5": "eef83efb07918e2f73f1c2e6b9f249f4",
+      "verified_sha256": "729d463aa69cef3c1b340f9035ddd53fbafa02118b7498056d4905f401d3da4e"
+    },
+    {
+      "file": "rnn_predict_cracks_pure_fatigue.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/3479134",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/PZ7DRJ/16c441a84ca-c7a281456e13?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27rnn_predict_cracks_pure_fatigue.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T131739Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=9792de2319b2b4af211fed98726d954890639291a8ae64f448dee5c4015fc44c",
+      "http_status": 200,
+      "bytes": 2561,
+      "publisher_checksum": "md5:085cb15e5e3dd66d2ceae68f30928aec",
+      "verified_md5": "085cb15e5e3dd66d2ceae68f30928aec",
+      "verified_sha256": "37795f128392d31c103139535d9778fa543f172c4a37e03002fe5ee8a6e23d18"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-pz7drj-replication-data-for-pin",
+  "raw_total_bytes": 6134,
+  "raw_total_rows": 238,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-pz7drj-replication-data-for-pin-cleaned.csv",
+  "cleaned_csv_sha256": "28d34654beabd7de95503c9b78156a6b98091f5dbef58e4d6f30e99010b3d9eb",
+  "cleaned_rows": 238,
+  "cleaned_cols": 3,
+  "null_counts_by_file": {
+    "rnn_training_crack_length_7yr.csv": {
+      "Unnamed: 0": 0,
+      "0": 0
+    },
+    "rnn_training_initial_crack_length.csv": {
+      "Unnamed: 0": 0,
+      "0": 0
+    },
+    "rnn_predict_7yr_crack_length.csv": {
+      "Unnamed: 0": 0,
+      "0": 0
+    },
+    "rnn_predict_cracks_pure_fatigue.csv": {
+      "Unnamed: 0": 0,
+      "0": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
