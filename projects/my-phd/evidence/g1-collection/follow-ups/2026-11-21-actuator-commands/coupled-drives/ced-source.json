@@ -1,0 +1,93 @@
+{
+  "dataset": "Coupled Electric Drives (CE8), Uppsala University",
+  "review_date_utc": "2026-11-21",
+  "authors": [
+    "Torbjörn Wigren",
+    "Maarten Schoukens"
+  ],
+  "citation": "Coupled Electric Drives Data Set and Reference Models, Technical Reports from the Department of Information Technology 2017-024, Uppsala University, December 2017.",
+  "persistent_repository_id": "diva2:1165531",
+  "historical_match": {
+    "branch_head_at_screen": "8252892d617ec879cbedad2df60461afa3bf36a9",
+    "catalogue": "2026-11-21/datasets.csv",
+    "lookup": "canonical dataset landing page and normalised complete name",
+    "entry": "Coupled Electric Drives",
+    "upgrade": "Initial catalogue described archive availability. This review obtained both MAT and CSV recordings, checked the method report and calculated five per-run summaries."
+  },
+  "search_log": [
+    {
+      "query": "Coupled Electric Drives, CE8, DATAUNIF, DATAPRBS, title and canonical URL",
+      "where": "initial and later G1 catalogues and earlier project evidence",
+      "result": "one prior dataset entry in the initial curated dataset catalogue"
+    },
+    {
+      "query": "Coupled Electric Drives, dataset and technical report links",
+      "where": "https://www.nonlinearbenchmark.org/benchmarks/coupled-electric-drives",
+      "result": "download from Uppsala University repository. The 2017 report is included in the ZIP alongside both MAT and CSV distributions."
+    },
+    {
+      "query": "CED train_test_split and official download route",
+      "where": "https://github.com/MaartenSchoukens/nonlinear_benchmarks/blob/f9fb3883086870a27b31917ccde1f78c95d53cb2/nonlinear_benchmarks/benchmarks.py#L54-L107",
+      "result": "Reviewed the benchmark-maintainer loader pinned to a specific Git commit."
+    }
+  ],
+  "sources": {
+    "publisher_benchmark_page": "https://www.nonlinearbenchmark.org/benchmarks/coupled-electric-drives",
+    "university_archive_url": "https://uu.diva-portal.org/smash/get/diva2:1165531/FULLTEXT01.zip",
+    "archive_size_bytes": 277015,
+    "archive_sha256": "4379a002295891865ebbf9da15fd1ce253c4ba6586954db525ed6d63d8bb223e",
+    "archive_release": "2017 technical report attachment. No semantic version is supplied. The retrieved bytes identify this data release.",
+    "archive_members": [
+      {
+        "name": "Coupled Electric Drives Data Set and Reference Models.pdf",
+        "bytes": 309505,
+        "sha256": "bd09d57a54529bf47a5b108c50e707f064524e09bd078d8e8d08f3ca4ad1841f"
+      },
+      {
+        "name": "DATAPRBS.csv",
+        "bytes": 17395,
+        "sha256": "aa48c6a6e2ea59608460a449ce75add95b572f61ae0f72ce89a64de5606b23b3"
+      },
+      {
+        "name": "DATAPRBS.MAT",
+        "bytes": 21464,
+        "sha256": "47d0825678d854d8a1bbcfb0ad1188026b853f69beb2067ea00cfd88d13dc4ca"
+      },
+      {
+        "name": "DATAUNIF.csv",
+        "bytes": 16061,
+        "sha256": "9114f637f22ca826f03f066270cf68bd8cad686739a7fa4b471c14ccdbf66889"
+      },
+      {
+        "name": "DATAUNIF.MAT",
+        "bytes": 16096,
+        "sha256": "102c8d8012d6e850d50c13227b8c2280fe69f8bc4a845177f8bc3d761d152c89"
+      }
+    ],
+    "report_locator": "Coupled Electric Drives Data Set and Reference Models.pdf §§1.1–1.3, 2.1–2.3; Figs. 2–3.",
+    "benchmark_loader_url": "https://github.com/MaartenSchoukens/nonlinear_benchmarks/blob/f9fb3883086870a27b31917ccde1f78c95d53cb2/nonlinear_benchmarks/benchmarks.py#L54-L107",
+    "loader_file_sha256": "cf6749f3e1c34df5686ee4a1e2ec0909ad5c04fd8efefd64c18674cc2f61ee0b",
+    "data_rights": "Public download. The examined benchmark page and attached report do not specify an explicit data redistribution licence. Only attribution, links, per-run derived statistics and independent verification code are distributed.",
+    "catalogue_urn": "urn:nbn:se:uu:diva-336281",
+    "university_catalogue_url": "https://urn.kb.se/resolve?urn=urn:nbn:se:uu:diva-336281",
+    "university_mods_export_url": "https://uu.diva-portal.org/smash/export.jsf?format=mods&addFilename=true&aq=%5B%5B%7B%22uri%22%3A%22diva2%3A1165531%22%7D%5D%5D",
+    "university_mods_export_sha256": "52df80f47ab0cd1da629086ec202a3d5a3b16afee60be5d29d5b672b8a2cbb2e",
+    "licence_metadata_note": "Uppsala University MODS export links the exact zip as a free raw object. Its record supplies no explicit accessCondition licensing further redistribution."
+  },
+  "schema_and_limits": {
+    "system": "Two electric motors drive a flexible belt and spring-supported pulley. The report defines u as the sum of the applied motor voltages in volts. It supplies one excitation stream per run and no separate command and post-limit voltage measurements.",
+    "observations": "Pulse-counter speed measurement with sign-insensitive sensing and analogue filtering. Figs. 2–3 label the output without a calibrated physical unit, so z is summarized in the distributed native scale. The 16 negative values in z11 and 3 in z12 are retained; signs of these near-zero measurements do not resolve rotation direction.",
+    "protocol": "All five pairs have 500 samples and a sample interval of 0.02 s. The stated run duration is 10 s; first-to-last sample span is 9.98 s. §2.1 calls the three PRBS experiments open loop. §2.2 describes the two additional externally constructed uniformly distributed inputs. The archived files contain no time column or reference/error, current, joint torque or saturation-flag streams.",
+    "clipping": "For each PRBS run, 255 samples equal its minimum and 245 equal its maximum by excitation design. Pulse-counter rectification is an output-sensor nonlinearity. Neither the repeated input extrema nor rectification demonstrate actuator clipping or anti-windup performance.",
+    "same_signal_structure": "The sign sequences of u1, u2 and u3 are identical over all 500 aligned samples, with 37 sequential sign changes per run. For all 500 aligned uniform-excitation samples u12 − u11 is +0.5 V to within 3e-16 V. The runs have related input patterns and should not be counted as five independent excitation designs.",
+    "published_split": "The pinned maintainer Python loader exposes the two uniform runs and splits each into first 400 and final 100 points with test state initialisation window 10. This summary covers all five original runs. Windowed train/test subdivisions do not constitute separate physical recordings.",
+    "cross_format": "Verified five corresponding MAT/CSV pairs by exact column names and 500x1 MAT shape per variable. CSV numbers carry lower precision. Maximum channel-wise absolute discrepancy across all ten channels is below 0.00005 in source-native units."
+  },
+  "derived_output": {
+    "name": "ced-runs.csv",
+    "sha256": "a80a41f67261a0eb0f203cb48aa0d9608c0abdfcde14d05d0878d2c6cefc2340",
+    "row_unit": "one original input/output pair, ten original variables total",
+    "extrema_definition": "Counts at the observed MAT input endpoints only, exact equality within each run. No actuator saturation labels have been inferred.",
+    "reproduction": "Download the source archive; with Python, numpy and scipy run python derive_ced.py /path/to/FULLTEXT01.zip output.csv. The script checks the pinned archive hash, file integrity, MAT/CSV agreement and cross-run excitation relationships before producing the table."
+  }
+}

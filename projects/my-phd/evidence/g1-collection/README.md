@@ -9,3 +9,4 @@
 - [持续自动检索与清洗目录（新增文献、数据集与 QA 清洗表）](continuous/README.md)
 - [R1 双臂插销实测数据、引文与版本核验](follow-ups/2026-11-21-peg-in-hole/README.md)
 - [R5 五台地面机器人的相互观测、网络台架收发时序与引文核验](follow-ups/2026-11-21-cooperative-timing/README.md)
+- [R2 机械指受约束扭矩、双摆实物实验与耦合电机辨识](follow-ups/2026-11-21-actuator-commands/README.md)

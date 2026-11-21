@@ -1,0 +1,604 @@
+{
+  "title": "DFKI dual-purpose Acrobot / Pendubot, real hardware leaderboards v2",
+  "data_repository": "https://github.com/dfki-ric-underactuated-lab/double_pendulum",
+  "pinned_tree": "1e8544e67f3da72a51ee52fbbb278e131ce2a43f",
+  "pinned_url": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/tree/1e8544e67f3da72a51ee52fbbb278e131ce2a43f",
+  "checked_utc_date": "2026-11-21",
+  "rights": "DFKI RIC Underactuated Robotics Lab (2022), root BSD-3-Clause governs the repository. This package shares independently calculated per-run aggregates and original analysis code. Third-party software terms can differ.",
+  "paper": {
+    "doi": "10.1109/MRA.2023.3341257",
+    "pdf": "https://research.chalmers.se/publication/539559/file/539559_Fulltext.pdf",
+    "sha256": "1aef3eaf2334b812452fb123ee6c856737c4d2144c3791e28ff3f97443dcb682",
+    "authors": "Felix Wiebe, Shivesh Kumar, Lasse J. Shala, Shubham Vyas, Mahdi Javadi, Frank Kirchner",
+    "locator": "IEEE Robotics & Automation Magazine 31(2), pp. 113–124, June 2024. Electronics and actuation, pp. 114–115; System identification, p. 116. The paper reports a 12 N·m peak motor rating. Software limits and logged controller outputs are separate quantities."
+  },
+  "query_log": [
+    {
+      "source": "GitHub repository API",
+      "search": "dfki-ric-underactuated-lab/double_pendulum; README citation and real hardware leaderboard",
+      "url": "https://api.github.com/repos/dfki-ric-underactuated-lab/double_pendulum/git/trees/1e8544e67f3da72a51ee52fbbb278e131ce2a43f?recursive=1",
+      "selection": "All trajectory.csv in leaderboard/{acrobot,pendubot}/{real_hardware_v2,real_hardware_perturbed_v2}/src_data at this commit, seven combinations of configuration, condition and controller, ten files per combination. Physical hardware verified against docs/text/leaderboard.hardware.rst."
+    },
+    {
+      "source": "OpenAlex; Crossref; Chalmers institutional full text",
+      "query": "10.1109/MRA.2023.3341257",
+      "metadata": "https://api.crossref.org/works/10.1109/MRA.2023.3341257",
+      "fulltext": "https://research.chalmers.se/en/publication/539559"
+    }
+  ],
+  "evidence": "70 raw hardware CSV objects byte-verified by Git blob IDs, with SHA-256 for independent replay. Seven experimental groups; no inference of statistical independence across rows.",
+  "semantics": "Acrobot uses active joint 2, Pendubot active joint 1. tau_con records the controller-output history. tau_meas is motor feedback. tau_des, when present, is the desired trajectory torque. tau_pert records perturbations when present. See csv_trajectory.py and the TMotor hardware loop and abstract controller. Source code documents the current logger convention; per-trial firmware settings and exact sample-to-command delays are not provided.",
+  "limits": "5 N·m is an exact numerical reference used to describe visible plateaus in this file collection, not a verified driver limit. The reference loop first clips the controller output and then adds perturbations and motor direction before sending. A final driver command, paired unclipped/limited values and a driver saturation flag are absent from these CSV schemas. No same-row torque tracking error or physical saturation label is inferred. Separate desired-trajectory values and the model-file torque limits must not stand in for the issued drive command.",
+  "reproduction": "Use Python 3 with the standard library. Download the pinned checkout or the CSVs below to their original relative paths; run python derive_leaderboard.py CHECKOUT leaderboard-runs.csv. Every source byte length and SHA-256 is checked. Compare this CSV byte-for-byte to the published table. Time statistics use the recorded per-run timestamps; no resampling or dropping of finite rows.",
+  "csv_files": [
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment01/trajectory.csv",
+      "git_blob": "823a623ee9e851d32d8ae3fff2b8c7aefff85595",
+      "bytes": 2100728,
+      "sha256": "e79fbc1f7934c333f89f4aaec3a8ae2449acb99ba3fe3785d2832a02e3e543af"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment02/trajectory.csv",
+      "git_blob": "e1f4814c6468e059ecfda9ddc82c0f9cdac6ae2e",
+      "bytes": 2527913,
+      "sha256": "68a0917755f054b286586dc15babf267c2b30491ead5cfd1e9d3bb96734dbba3"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment03/trajectory.csv",
+      "git_blob": "75096c1780b72b11a6424511680b2c793eb9f3fa",
+      "bytes": 1399863,
+      "sha256": "4eacb04cda4af93fc99eaced7353ce4c675dc265bc133087d5369d6b5238bdd4"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment04/trajectory.csv",
+      "git_blob": "8d5d9a1700bda6544ab353e310444e8210626f17",
+      "bytes": 2125366,
+      "sha256": "f7533941860c380cd8b5a19359e05ab6fe6bb5e706d5418be7787031fa15e538"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment05/trajectory.csv",
+      "git_blob": "5166e26f682184e3c6d3ee574d90a3f08203134e",
+      "bytes": 2108582,
+      "sha256": "117b549ec4efe48b522c1c6812988b2e4fcd1221f8f8bfee62e00a6f33d75a3f"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment06/trajectory.csv",
+      "git_blob": "c4ce301d62026f3dd76165fbab4c0f3ea770518e",
+      "bytes": 2521846,
+      "sha256": "fcadf86d65861df02081e93762a6e19971f95fe6a54c4e59c222369fa4728f90"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment07/trajectory.csv",
+      "git_blob": "a6a6c07c6fe1ddaf91e88cf57d3f358cd29fe122",
+      "bytes": 2506745,
+      "sha256": "3c93e05cb72d45534d70b9aefbcb40ddd59ebe25ff1925bab268dab83ce48853"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment08/trajectory.csv",
+      "git_blob": "56fb720eed177a5d38b7ac6fb857313f4fde9137",
+      "bytes": 2083987,
+      "sha256": "a42c43093cdec9edb2dad3e8324b2405185380cafb09de2971807c1c7a1e2f27"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment09/trajectory.csv",
+      "git_blob": "df93fc93861798d4facc9103c3275188e7052d4d",
+      "bytes": 2066850,
+      "sha256": "d448519aff97343cef98e7abf1819f2396a253371aba6f56fecc2d0485f6563f"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment10/trajectory.csv",
+      "git_blob": "df8a4ba5b2bf3607c941d2e0374930d04095c9f2",
+      "bytes": 2114742,
+      "sha256": "8fa871e5cb991c243bad4948c2e21c8e346a6fb86d69a440cf8671e954d55b03"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment01/trajectory.csv",
+      "git_blob": "e3cfa5f9f022bb735a9210a2e7d2e7bb42973b8d",
+      "bytes": 1861134,
+      "sha256": "20e05198e1f05d9413b7e9114842a6ebca05dc206a1c5dfbe5de92ba4f13030a"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment02/trajectory.csv",
+      "git_blob": "c018c2cbf1927ccf2be5aaa53bbebcbde5929622",
+      "bytes": 1852584,
+      "sha256": "0d89fab9f182f22ba8fb5d6fcb02aa908805343fe3b587af0a52c55e051b3919"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment03/trajectory.csv",
+      "git_blob": "bfb3313fec79f0231dc0e5d776aa554ea8fd6148",
+      "bytes": 1858644,
+      "sha256": "1e9ccd0d295bca29d73efd80fef5be7d273d804774960104335616155af10072"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment04/trajectory.csv",
+      "git_blob": "3f8d486a62deac29ff376ba597cdbb7321b3bac4",
+      "bytes": 1866045,
+      "sha256": "8edeb944b0e3a7b928923572b98d0608e435d301642705412b3478ce53509472"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment05/trajectory.csv",
+      "git_blob": "409bbc6a552e892f814ff1e23fb5aa5634749c0e",
+      "bytes": 1851070,
+      "sha256": "a6916002b7937cd680fc1f074e4500044cf719b42586839de1db5d72dbe0af48"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment06/trajectory.csv",
+      "git_blob": "e31df71081c60b7f3bf479c13fe48b2f8679ab2d",
+      "bytes": 1855789,
+      "sha256": "4d54aa50e6664144e073dfb92ecc6f5537ac67547dcd8ee52e118e668d28f394"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment07/trajectory.csv",
+      "git_blob": "2ba38635f19e8f3f47251602f66e00554b4e944f",
+      "bytes": 1846779,
+      "sha256": "11ea6cf8b9af4a6f16a68f5cd344506d34405e2ac42fc19b05cf5f75a7960951"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment08/trajectory.csv",
+      "git_blob": "3480b530da2db458c691f4f428320a2b93287a42",
+      "bytes": 1856515,
+      "sha256": "542949266fd770496a6adf6213d3fddcdbda391c1ee6fbaef72724880e971b9d"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment09/trajectory.csv",
+      "git_blob": "b3c1106df7b3e3361a692ff4eedbb7e1a34e10de",
+      "bytes": 1855465,
+      "sha256": "c32623b30504eaeb60f002593f2ada74c15adf7dfc6bfe0c37cac94a7df55567"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment10/trajectory.csv",
+      "git_blob": "456c94ceca03a634598ba270f5d52dd9c518933a",
+      "bytes": 1846680,
+      "sha256": "ff037875cfdb1cf202a3a183686993f658ab09766961b11e58eb8c53ff4e317a"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment01/trajectory.csv",
+      "git_blob": "b3ea48b9249b19a89002989ed974407b7ef12532",
+      "bytes": 124974,
+      "sha256": "033055f440e3fc9efaf8e1451ac14e40bfb38c22f87066224459fd3686e83eee"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment02/trajectory.csv",
+      "git_blob": "f9f59098989a8760b938760d5f7d740c838ab6d5",
+      "bytes": 124307,
+      "sha256": "87db132bd3708660e5c6a2f8058d13dd32bf0eba1e8ed347fee7e3743f591a1a"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment03/trajectory.csv",
+      "git_blob": "bc719e266f546ccd58d911fd9564bfd038a88d98",
+      "bytes": 124802,
+      "sha256": "c8b10bc53896ece461ae646077199903828b213a55b9a745dd3cd4305be3fe86"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment04/trajectory.csv",
+      "git_blob": "950427169836dcdf4ef9a3c61350d83c3829c0d2",
+      "bytes": 124895,
+      "sha256": "1b161820867616db9f4b5431e68897072c2c324824e745707b170eaecc736ad8"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment05/trajectory.csv",
+      "git_blob": "5497ed9c931aa47e75759810f17dca47c04f7915",
+      "bytes": 124323,
+      "sha256": "454d584ac2a4e0d6848cc124f68f625864fc1977bb864310c1da9481ac3bacf0"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment06/trajectory.csv",
+      "git_blob": "fa889a3d3a541bda38f5b7e292d088123c0631e0",
+      "bytes": 124876,
+      "sha256": "471f8f1812bf7907ae6068754c5c97062b8d923ba8c44e1db39d60cd79907d38"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment07/trajectory.csv",
+      "git_blob": "26f6ba025ba28f0a9c5466f86feac86d5c7ed717",
+      "bytes": 124929,
+      "sha256": "6535b46906eb37e484c972d69c2d3bf860a1a53579387c10d3e5b244408d369a"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment08/trajectory.csv",
+      "git_blob": "cd222477cb7df52a96c37a1af0ef9b723d3b03c6",
+      "bytes": 124344,
+      "sha256": "81999912dba0d95a5c874826acb63949c7f57b96a0020e84f7072e7e9c812f15"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment09/trajectory.csv",
+      "git_blob": "ffaec95418a0eb5296e5e0d6fef86fd9a3469c8c",
+      "bytes": 124826,
+      "sha256": "094d828da9350911872a28efb13d122c8a18afc5bf89adca1476f274ab9c1a06"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/experiment10/trajectory.csv",
+      "git_blob": "40eef71c16f054d15eee4a238121528847c6457a",
+      "bytes": 124330,
+      "sha256": "cadb47d6ed1089b722aeecff26e95198eac5ef65f4087258fa5b60d0955540d1"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment01/trajectory.csv",
+      "git_blob": "600ed09539df43dd0882b5454aebf8293f406c3d",
+      "bytes": 1077587,
+      "sha256": "45bc35d04e564c741dc7b5f7b8e24672548fae1a9d63a0398e5fc1c36b90cd4b"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment02/trajectory.csv",
+      "git_blob": "210d2347844107469f50fc3076280a33bd35c7da",
+      "bytes": 1623665,
+      "sha256": "430b1fc8868573baa5edf4b1e1d7a71c4bba3c5eb87fdfa28a98292ec6e5762d"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment03/trajectory.csv",
+      "git_blob": "fe26f0e769755a304413a2620a24f11a9bb4718c",
+      "bytes": 1207086,
+      "sha256": "de7b3bef4ae0c4b94188a988fe6006da9332acb1cb3202222ad464d307fe01ab"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment04/trajectory.csv",
+      "git_blob": "241d97bd7f9bfa55173fd618b005682631906191",
+      "bytes": 1412803,
+      "sha256": "e15dee9a9f58300636630d81de408adad44a7d43c09606c8b2551d1aadcc728d"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment05/trajectory.csv",
+      "git_blob": "48e024c74c803907fc1c245ae381474e295e8a2f",
+      "bytes": 1530267,
+      "sha256": "158bf85226dd8df0ef085043769c8d77148c0cfc2a946921c448851bec95cfc4"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment06/trajectory.csv",
+      "git_blob": "a0aa74837f6f014917cbc6a6d98fce58174733b4",
+      "bytes": 1997680,
+      "sha256": "25c288d724c61e1e57b08386d5adbc19293e20f1849145ec5978c24183c521ff"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment07/trajectory.csv",
+      "git_blob": "447eeaa7dbe7013dff98a897025d061d9ffd079b",
+      "bytes": 1358573,
+      "sha256": "2aaf029c165203bf699d66593d54435ca99bab659d482256fb4eea0080fc377b"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment08/trajectory.csv",
+      "git_blob": "0c4dfd537f7fbb263efd1c0d6f6cb62c13350322",
+      "bytes": 1236588,
+      "sha256": "1c8098508e2cb6cdf62995064804bf3becd74d7bffaa0bb2d2dd12b5b00a54a6"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment09/trajectory.csv",
+      "git_blob": "04eebb877611a58cd18f4444a8af2c6ee57d9ff2",
+      "bytes": 2143072,
+      "sha256": "3a598f985f48d13262701458c905caa71f6b7fe22a1db9e5f312ee102fefeb25"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/experiment10/trajectory.csv",
+      "git_blob": "d5644b2b49002b16a508d8172dea418bcf3bc92d",
+      "bytes": 2141084,
+      "sha256": "7456d5831351ed936ebc60e16a769a51d0d9a22937fe12970e44dfc6f09a02af"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment01/trajectory.csv",
+      "git_blob": "c92972fc6f2bb949a71c9e8d06db4033d97fc2a9",
+      "bytes": 1615335,
+      "sha256": "4d328a20a43e0fbd52d7201486397c24e7e04bfe0bbfa794cd8c9396fe76e1c3"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment02/trajectory.csv",
+      "git_blob": "6be60ae0834c7f0e6fdbd06bff5a752103974d2d",
+      "bytes": 1518590,
+      "sha256": "6646f08ddead3c82613fcfd1b48ee5ebf7a2fa7edd5d5aa3abe7929c9ab275ce"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment03/trajectory.csv",
+      "git_blob": "e3f3fb0fa25ce65da46834fc1156d0c11c6720f1",
+      "bytes": 1518447,
+      "sha256": "8bdb8a3df70e7480fcf2fcaf979447aca74ed2b782848b0c170cfc9650e79611"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment04/trajectory.csv",
+      "git_blob": "ef1e3e1f114aa5a17f21a1678f182a0c014aeec7",
+      "bytes": 2127551,
+      "sha256": "3de8a6223ad988358001daf2ccff77ecf05a573a563f995ca82658d84070fd4d"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment05/trajectory.csv",
+      "git_blob": "a31c3cf24d81c3afc53a8f9c79140ad0ff9a9f43",
+      "bytes": 1519365,
+      "sha256": "b5e6eb3899ff8c7a022fff89552bbf9de7db4a2f4ffacc3f322eaed647707756"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment06/trajectory.csv",
+      "git_blob": "2fcd87cfc5271a1d88da5e3775d4a6f7d5068dae",
+      "bytes": 1519810,
+      "sha256": "ba4f49aa2f25767862bccef35a4b8a70cee64f997e77b5372b0c06d49cffeac0"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment07/trajectory.csv",
+      "git_blob": "46b8d47306bf5acdec98e98c3f777be23efef8ad",
+      "bytes": 1518546,
+      "sha256": "f31b9d66ac695519f81948964b6604ea4e57403223d7f0e225fb34c9c5340db2"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment08/trajectory.csv",
+      "git_blob": "6a5c1e91aeeaba15791b667709e0f8a7e1dcc713",
+      "bytes": 1518212,
+      "sha256": "b4237bb2f85a4d7e75cbca3fd43d4c0a533c56064694cf5ac60d53de3d2d39ee"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment09/trajectory.csv",
+      "git_blob": "8d12646d617e0be231c25420673f133ac449f85b",
+      "bytes": 1520089,
+      "sha256": "656b1c0c50f4cb8bb4f132ad2352fad218484a5146abbc0156a823d1841888fb"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/experiment10/trajectory.csv",
+      "git_blob": "8b0bee5feffc890950a7685e837c55c859cbd990",
+      "bytes": 1522597,
+      "sha256": "8a290bc545d9acf700e340e90370eb632889d711ee037b57d4508c25b4fa8888"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment01/trajectory.csv",
+      "git_blob": "7eef827a0e46cf62e28864a355a86c6d9f65a582",
+      "bytes": 126011,
+      "sha256": "07522189332c480ec1d855f063a72d1dee04316fe185352b3f79ad6f2dbd4e91"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment02/trajectory.csv",
+      "git_blob": "e2f6c48c5379ca30ef5fe075a0647bbef820d404",
+      "bytes": 126080,
+      "sha256": "33dfa89dce12adf2c2bb515660d97dc2bcc6fb8a59cec1716c00bf8edf0ecd09"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment03/trajectory.csv",
+      "git_blob": "a11cee50403394f3b814bce7123e968dfe08ea37",
+      "bytes": 124947,
+      "sha256": "0df1955ec451132dce42e9c19abcf96a2dce990d8dea3022981de89ea1b21127"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment04/trajectory.csv",
+      "git_blob": "00da84686b52ab9b8426556d33f944c0b1fb3959",
+      "bytes": 125963,
+      "sha256": "87d7cdc4f1ee54798d99e4534914eda76681329ffdd19ba8d98bf84e8e5e8420"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment05/trajectory.csv",
+      "git_blob": "aef9e25f2696e5f85f9d28d12664ee247cbcb985",
+      "bytes": 124980,
+      "sha256": "691bbdde510e2283da08a82bff9a7e61db67e963e7e024762cd39211c863d6d1"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment06/trajectory.csv",
+      "git_blob": "7e68c4a32b660564c89282a158ff49417c1c5c83",
+      "bytes": 125052,
+      "sha256": "6a8128c1aa3a85e6270bfb6771116a1c193e107891038b1854c99c5c1da05b0d"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment07/trajectory.csv",
+      "git_blob": "764c53ec59631f5c71733096d1f216a2b815da49",
+      "bytes": 125539,
+      "sha256": "1216561d539af6253d5448beba59460223192e96563534a99296332820138096"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment08/trajectory.csv",
+      "git_blob": "25803a32c78bd260cccad677e448a587bcdbbab0",
+      "bytes": 126061,
+      "sha256": "4d5643cb59e6460e308912a05da2cf7ed5a39b56dc2077d0300b5fa85dda0379"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment09/trajectory.csv",
+      "git_blob": "e3774b360d52fc3bed48c1a98f7d1d6da1a76029",
+      "bytes": 125501,
+      "sha256": "fb2a1a4464cd3d09669362c5c02771a9218e2b8213abdbce66ea476d17393957"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/experiment10/trajectory.csv",
+      "git_blob": "de0c78c64a89ab51aece629bf2f9afbe1364a951",
+      "bytes": 124905,
+      "sha256": "0ce6dfb83be670cb0b8323f44d58e72e43424a85f781a0bba4692e889748e5d7"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment01/trajectory.csv",
+      "git_blob": "4bf3227f644fa222a697534e547a00193d6e9370",
+      "bytes": 190309,
+      "sha256": "01e9cbb2968d4feacf939c2e717def7df0613347cf23691acc287d7f4ca49834"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment02/trajectory.csv",
+      "git_blob": "c927760bd5149f89b8b5ac7abdc7dee823d166a7",
+      "bytes": 183154,
+      "sha256": "57090132962cf3aea45fd3e0e95eee0461ae4ca9e3c97fff2b4182f73dbacd4f"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment03/trajectory.csv",
+      "git_blob": "3bec1c49e59ef54a585909168088ea2a33879527",
+      "bytes": 1526348,
+      "sha256": "71fa94e29725356563dbe7d440b58498b5df3134b618d899b095c28780ef727a"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment04/trajectory.csv",
+      "git_blob": "2f51b5137aeb871e00d21a6d30630fb772f7abf9",
+      "bytes": 178118,
+      "sha256": "6ebc247c0a3b050e6cafbc28a560fbf05c7833e22c545a1cc53533eb23bcd867"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment05/trajectory.csv",
+      "git_blob": "2cbd1dde3943db8d8012674109fa806dbe313106",
+      "bytes": 1525677,
+      "sha256": "1c5bf1a69fa5b2b9541d7bf7e5f962752ddb0ea9abe6e078e2c7e205ee7a989f"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment06/trajectory.csv",
+      "git_blob": "2c0405cf274fdf7a4cc942f04a04ba6d3f0bc7ed",
+      "bytes": 187239,
+      "sha256": "207005ccec00f6c2c718239d28ebeb5cc56700d29634047d7529156297ad449f"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment07/trajectory.csv",
+      "git_blob": "6fa51aaf0d58fd8ee7d8937df10ef6ffa05ee6b2",
+      "bytes": 1523165,
+      "sha256": "42037c1345496ea4ae6db9ac9735f255ec59964e095d8b44b66179314adb7ba4"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment08/trajectory.csv",
+      "git_blob": "030ba402f81f68ee97e61e8b6cb8b3b42b933c7d",
+      "bytes": 188002,
+      "sha256": "9975c79f283e8115cae2356ff4bf4d32923df8acdee7cd79a9a5aaa9e9f84b6a"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment09/trajectory.csv",
+      "git_blob": "00d4f1aff2563536b2ed38f52fcf1c1ec23f858b",
+      "bytes": 265055,
+      "sha256": "f6f8dff0830edf197830a0ceb8414b58b5e1a1319846b08020e670ed0c34de54"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/experiment10/trajectory.csv",
+      "git_blob": "4298ebab06d7e24781f1f9f36a23a350a0508d9b",
+      "bytes": 1520802,
+      "sha256": "8f18d1007032c5194b53c391b15e4d656821cc75d90d20160d623ad450a3db3b"
+    }
+  ],
+  "interpretation_sources": [
+    {
+      "path": "LICENSE",
+      "git_blob": "8f72f32cc745d8525cd6a825a14333e7d2cfdf50",
+      "bytes": 1543,
+      "sha256": "522ac3234664fc921c1e5f7e7a4af4e5caca11d64158e15e61e0387280a54270"
+    },
+    {
+      "path": "README.md",
+      "git_blob": "7513309b4c41fa031ef7b56acb3eed75f4eca624",
+      "bytes": 10788,
+      "sha256": "e5d3318e2db09dbd575e78795df17d29014cef9055d658adbc94912a019feb90"
+    },
+    {
+      "path": "data/system_identification/identified_parameters/design_C.1/model_1.0/model_parameters.yml",
+      "git_blob": "5436e088103f960e599c9d08a5ca3180e6f5ac49",
+      "bytes": 245,
+      "sha256": "5e685ddd1f7c9b9d9c4f0d1b16c23d751ce5e8d55b661d63b1a010c8d174b5b2"
+    },
+    {
+      "path": "docs/text/leaderboard.rst",
+      "git_blob": "30ffe3c4aa3069338067ad68ba1ff759d6ab5ba2",
+      "bytes": 780,
+      "sha256": "cb46692214cbd5bb5053c618725bca7041802759160f1ea3c1dc7931d06c7fd6"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/README.rst",
+      "git_blob": "9e0d672e7d486edcfc26af61832d10b11b5e6b22",
+      "bytes": 43,
+      "sha256": "afabb4654868234fdcaeb3d4b4172c43d58240827412458a5da99b2864fc7798"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/exp_parameters.py",
+      "git_blob": "48dc7593832a752f32b6db601abf27ac73e99cc3",
+      "bytes": 569,
+      "sha256": "2ac1e2186914da7819bc84e0921e62982cef00b863b84e07705c3dbd757c8886"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_perturbed_v2/src_data/ilqr_tvlqr_lqr/README.md",
+      "git_blob": "1b902d97b6193d6216a2a61c8530d00f51225c6d",
+      "bytes": 731,
+      "sha256": "1439c94de7e6ea2c1817508bbdd13bdf033e465c586035ab486d7ba19fc24577"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/README.rst",
+      "git_blob": "9e0d672e7d486edcfc26af61832d10b11b5e6b22",
+      "bytes": 43,
+      "sha256": "afabb4654868234fdcaeb3d4b4172c43d58240827412458a5da99b2864fc7798"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/exp_parameters.py",
+      "git_blob": "f4a54ba33397701c15aef03078956ec02bfe7dd3",
+      "bytes": 580,
+      "sha256": "143971b2b6af3b258b09a1392ffcfa35504b3edd2cf9634b5192f3308ba4fa0b"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/README.md",
+      "git_blob": "1b902d97b6193d6216a2a61c8530d00f51225c6d",
+      "bytes": 731,
+      "sha256": "1439c94de7e6ea2c1817508bbdd13bdf033e465c586035ab486d7ba19fc24577"
+    },
+    {
+      "path": "leaderboard/acrobot/real_hardware_v2/src_data/mcpilco/README.md",
+      "git_blob": "bc6141b57e9027b2915577e718454c0807c40c89",
+      "bytes": 469,
+      "sha256": "6780e489ea2a5edfb6de7db1380d2cb1a3577f718261a154b9cdb48807fc72c6"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/README.rst",
+      "git_blob": "9e0d672e7d486edcfc26af61832d10b11b5e6b22",
+      "bytes": 43,
+      "sha256": "afabb4654868234fdcaeb3d4b4172c43d58240827412458a5da99b2864fc7798"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_perturbed_v2/exp_parameters.py",
+      "git_blob": "aa7e803d04f6f83740a14924363e6310c14fc47b",
+      "bytes": 569,
+      "sha256": "282f586102c3e4104c8dd90a6d159554d81be458d9c8d5991e576b4536b8324a"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/README.rst",
+      "git_blob": "9e0d672e7d486edcfc26af61832d10b11b5e6b22",
+      "bytes": 43,
+      "sha256": "afabb4654868234fdcaeb3d4b4172c43d58240827412458a5da99b2864fc7798"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/exp_parameters.py",
+      "git_blob": "fec7c7f9068a2086ba4459cd5e66d252cee5f0d1",
+      "bytes": 443,
+      "sha256": "ba269ec4072ff095ebb11e8dce8eb705e26863bbd6f78dc160b93fcc498bfe21"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/ilqr_tvlqr_lqr/README.md",
+      "git_blob": "1b902d97b6193d6216a2a61c8530d00f51225c6d",
+      "bytes": 731,
+      "sha256": "1439c94de7e6ea2c1817508bbdd13bdf033e465c586035ab486d7ba19fc24577"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/mcpilco/README.md",
+      "git_blob": "bc6141b57e9027b2915577e718454c0807c40c89",
+      "bytes": 469,
+      "sha256": "6780e489ea2a5edfb6de7db1380d2cb1a3577f718261a154b9cdb48807fc72c6"
+    },
+    {
+      "path": "leaderboard/pendubot/real_hardware_v2/src_data/sac_lqr/README.md",
+      "git_blob": "19a21ee29a2489e69a4f15c5a73adc77de9b7281",
+      "bytes": 249,
+      "sha256": "98b7e6c882f26cf3ffa6651df164c4568732bff8101a2d3b784ab42a8e53a569"
+    },
+    {
+      "path": "src/python/double_pendulum/controller/abstract_controller.py",
+      "git_blob": "436003b9d122006630d30bfd1673f0e248fc8057",
+      "bytes": 9856,
+      "sha256": "649e94e75d7f6e62544b69036ededac3e8a836f8b28854c678b86acf5cbb72cc"
+    },
+    {
+      "path": "src/python/double_pendulum/experiments/hardware_control_loop_tmotors.py",
+      "git_blob": "3b3f797d380b1a51ecc4928ef995ed044777d074",
+      "bytes": 12197,
+      "sha256": "09afa1de982e225e9197bb343cf2079c5d6f584a6f45192c1ef4e120a2ae91d2"
+    },
+    {
+      "path": "src/python/double_pendulum/utils/csv_trajectory.py",
+      "git_blob": "e45d354e3e0c60ee88ff5d464cc27648a05e9aaf",
+      "bytes": 14086,
+      "sha256": "15df721918828c3a7be3e8eb5a70790f0e0a1d083fb69152c8ff744809956d1a"
+    },
+    {
+      "path": "docs/text/leaderboard.hardware.rst",
+      "git_blob": "6cce02ca778fed9167bfa6a3a2ab71825f43fec1",
+      "bytes": 2972,
+      "sha256": "13c3acedb7c5829ea9162ef1edf90ebbf87ebdcc7eea1b3ba444876466fe0203"
+    }
+  ],
+  "related_versions": [
+    {
+      "doi": "10.5281/zenodo.7529896",
+      "type": "Earlier code release v0.1.1 from the repository README badge",
+      "url": "https://api.datacite.org/dois/10.5281/zenodo.7529896",
+      "parent": "10.5281/zenodo.7525931",
+      "use": "Disambiguation only. Analysed v2 CSVs come from the pinned Git tree."
+    },
+    {
+      "doi": "10.24433/co.0981579.v1",
+      "type": "Related Code Ocean capsule v1",
+      "url": "https://api.datacite.org/dois/10.24433/co.0981579.v1",
+      "use": "Metadata screened only. No runs counted from the capsule."
+    }
+  ]
+}

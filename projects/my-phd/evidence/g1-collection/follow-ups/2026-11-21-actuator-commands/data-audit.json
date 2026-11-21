@@ -1,0 +1,48 @@
+{
+  "date_utc": "2026-11-21",
+  "prior_git_commit": "e1a050b22292456d34a7e8dce13fb1ba49e5ec47",
+  "history_checked": "Compared DOI, source slugs/URN, normalized titles and known archive aliases across committed project evidence CSVs and text/JSON records plus the early baseline catalogue. Mentions of a reference within an article are not counted as a newly verified data package. Literature screening has a separate log.",
+  "history_files_checked": 406,
+  "historical_data_matches": {
+    "finger": [],
+    "double_pendulum": [],
+    "coupled_drives": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/datasets.csv",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/audit/dataset-merge.json"
+    ]
+  },
+  "identity_queries": {
+    "finger": [
+      "10.17617/3.ZT6K7P",
+      "10.1109/ICRA40945.2020.9197392",
+      "A Real-Robot Dataset for Assessing Transferability of Learned Dynamics Models",
+      "rr-learning/transferable_dynamics_dataset"
+    ],
+    "double_pendulum": [
+      "10.1109/MRA.2023.3341257",
+      "10.5281/zenodo.7529896",
+      "10.5281/zenodo.7525931",
+      "10.24433/co.0981579.v1",
+      "Open Source Dual-Purpose Acrobot and Pendubot Platform",
+      "dfki-ric-underactuated-lab/double_pendulum"
+    ],
+    "coupled_drives": [
+      "Coupled Electric Drives",
+      "urn:nbn:se:uu:diva-336281",
+      "diva2:1165531"
+    ]
+  },
+  "tests": {
+    "three_physical_data_sources": 3,
+    "new_physical_data_sources": 2,
+    "reverified_existing_source": "Coupled Electric Drives",
+    "dfki_unique_file_digests_across_two_subcollections": 123,
+    "derived_tables_recomputed_byte_for_byte": {
+      "finger/finger-torque-groups.csv": "d8718507a8c85895bb5ed71e8f96c251dc8b6a884e2cee6eb9865d5fa07dc13c",
+      "finger/finger-torque-rollouts.csv": "ae7f84efa763bd53ea1cc1b31910295454145e41848fe2eef6244423c7779b7a",
+      "double-pendulum/dfki-sysid-runs.csv": "4d542ebbc329a20a82abd7add9418670387d128814bc4f47b353ab27a44d9a33",
+      "double-pendulum/leaderboard-runs.csv": "5fea2ba3585d1377d0f2eaef3b33363190f62f34b437c680af94f458d5e50509",
+      "coupled-drives/ced-runs.csv": "a80a41f67261a0eb0f203cb48aa0d9608c0abdfcde14d05d0878d2c6cefc2340"
+    }
+  }
+}

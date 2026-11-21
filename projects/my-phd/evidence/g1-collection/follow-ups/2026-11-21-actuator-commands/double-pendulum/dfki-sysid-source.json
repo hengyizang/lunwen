@@ -1,0 +1,492 @@
+{
+  "dataset": "DFKI RIC Underactuated Robotics Lab double_pendulum, physical system identification experiment records",
+  "project_article_doi": "10.1109/MRA.2023.3341257",
+  "project_article_url": "https://doi.org/10.1109/MRA.2023.3341257",
+  "data_root": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/tree/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/data/experiment_records",
+  "version": "1e8544e67f3da72a51ee52fbbb278e131ce2a43f",
+  "retrieved_utc_date": "2026-11-21",
+  "tree_api_url": "https://api.github.com/repos/dfki-ric-underactuated-lab/double_pendulum/git/trees/1e8544e67f3da72a51ee52fbbb278e131ce2a43f?recursive=1",
+  "raw_url_template": "https://raw.githubusercontent.com/dfki-ric-underactuated-lab/double_pendulum/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/{path}",
+  "coverage": "In the non-truncated Git tree selected all CSV blobs under data/experiment_records with a directory component starting sys_id, including sys_id_friccomp. Excludes noise records, constructed model-fit trajectories, synthetic excitation inputs and leaderboard trials. File paths are design-specific. Basenames are not unique. All 53 record Git blobs are distinct, but distinct files need not be statistically independent.",
+  "checks": "All source lengths and independently recomputed Git blob SHA-1 values match the source tree. SHA-256 digests identify the inspected bytes. Verified finite numeric values and exact column count in every row. Whitespace on 6 column labels in one early file was stripped.",
+  "rights": {
+    "spdx_repository": "BSD-3-Clause",
+    "attribution": "Copyright (c) 2022, DFKI RIC Underactuated Robotics Lab",
+    "license_at_commit": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/blob/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/LICENSE",
+    "publication": "Published here are original per-file aggregate statistics, source references and a new analysis script. No source trajectory is distributed."
+  },
+  "record_schema": {
+    "single_torque_pair": "7 columns: time, pos1/2, vel1/2, tau1/2. These *_measured.csv files provide only one torque pair under generic names. Controller request and returned feedback cannot be separately compared.",
+    "controller_and_motor_feedback": "15 columns: time, pos_meas1/2, vel_meas1/2, pos_filt1/2, vel_filt1/2, tau_con1/2, tau_fric1/2, tau_meas1/2.",
+    "controller_feedback_and_reference": "21 columns: same channels plus pos_des1/2, vel_des1/2 and tau_des1/2. Presence of tau_des by itself does not establish a nonzero feedforward command or the signal sent to the motor."
+  },
+  "method": "Per-file minima and maxima are original torque-field ranges in N m on every released row. Empty summary cells mean absent fields. A zero is a recorded value. First/last timestamps and successive-step summaries use seconds in source order. All rows including the first and zero segments are retained. The exporter can pad desired trajectories with zero or crop to the shortest required series. It is not possible to separate all such cases from true zero references in the CSV alone.",
+  "evidence_limitations": [
+    "At this commit the t-motor experiment loop clips controller output to tau_limit, adds disturbances, applies motor directions, and saves controller history, friction compensation and motor feedback. The logged controller history and motor torque feedback have distinct roles. No column in these 53 records directly contains the final transmitted motor command, calibrated physical output torque, limiter state or per-step applied current limit. The current hardware-loop implementation helps interpret roles; logger revision for each historical 2022–2023 file is unverified.",
+    "Three example recorders configure different safety limits (8, 4 or 5 N m per joint). They do not map their configurations to individual deposited filenames. Repeated values and observed extrema cannot establish clipping or over-current events. The two columns at a common row are not proof of synchronized sensor sampling or calibrated torque tracking error."
+  ],
+  "documentation": {
+    "trajectory_writer_reader": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/blob/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/src/python/double_pendulum/utils/csv_trajectory.py",
+    "tmotor_loop": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/blob/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/src/python/double_pendulum/experiments/hardware_control_loop_tmotors.py",
+    "system_identification_usage": "https://github.com/dfki-ric-underactuated-lab/double_pendulum/blob/1e8544e67f3da72a51ee52fbbb278e131ce2a43f/examples/paper/system_identification_M1.py"
+  },
+  "query_log": [
+    "Inspected pinned repository recursive Git tree and selected full physical sys_id paths. Downloaded every matching CSV from raw.githubusercontent.com and matched byte count and Git blob SHA-1 before computing SHA-256.",
+    "Read three example recording scripts, the trajectory writer/reader, the hardware loop, and a released parameter-fitting example to distinguish trajectory references, motor feedback, and controller outputs."
+  ],
+  "reproduction": "Python 3.10+ standard library: python derive_dfki_sysid.py /path/to/source-tree recalculated.csv. Use the raw_url_template for each record, preserving the full relative paths. Compare recalculated.csv to dfki-sysid-runs.csv.",
+  "files": [
+    {
+      "path": "LICENSE",
+      "type": "documentation_or_code",
+      "bytes": 1543,
+      "git_blob": "8f72f32cc745d8525cd6a825a14333e7d2cfdf50",
+      "sha256": "522ac3234664fc921c1e5f7e7a4af4e5caca11d64158e15e61e0387280a54270"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-055032-PM_measured.csv",
+      "type": "record",
+      "bytes": 889011,
+      "git_blob": "f5a5351260ad40beff4a6f1ef717bb695d1da5b9",
+      "sha256": "30986e4eda0f559c30b0c009009e8943f3cac32cf5dcbcdc1c088ae638942b3a"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-055640-PM_measured.csv",
+      "type": "record",
+      "bytes": 889691,
+      "git_blob": "71931c85424bcdb727d8f6e7a215d36474651184",
+      "sha256": "59a9499806aedc30cc16e6b7b310c0c9c95f58fe4f003c1bcfe5e3192f441095"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-055903-PM_measured.csv",
+      "type": "record",
+      "bytes": 888623,
+      "git_blob": "76c34f97f96a804031798f57c674d1bc53c341f8",
+      "sha256": "e31bcfe7f723ede46b654f496e9c2bbb26db7f0657e0e6a13ff75403786fe59e"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-060143-PM_measured.csv",
+      "type": "record",
+      "bytes": 351551,
+      "git_blob": "c9f840fcdb2ad79f6eafb94e3f0e83818d2722ba",
+      "sha256": "4ce7fd0a842c3f63513443152aa059ec08f0a05847e4757bf8b1fe7009af0d1e"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-060245-PM_measured.csv",
+      "type": "record",
+      "bytes": 353726,
+      "git_blob": "d7bd378ea44035f3acd27864f754e1558920e76f",
+      "sha256": "905adf0d2bcc22b3cbb9a80236f5a822c6e7c794874ee5263ef5e780448d979c"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-060329-PM_measured.csv",
+      "type": "record",
+      "bytes": 357494,
+      "git_blob": "e9e1b51982dc61115ae38d963604d28bc5fb4fdb",
+      "sha256": "a8fad4acfc7600c2f09437a720dbc70c2808506ab158b792068a7cdcfbb6abd1"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-060440-PM_measured.csv",
+      "type": "record",
+      "bytes": 354544,
+      "git_blob": "65c0f0fdedf403209fe135fa007d83806b6453b0",
+      "sha256": "0165553dccbf7a3b72ae4741da167a9a0ad4ae41ff295ed537096180c2c21879"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-061157-PM_measured.csv",
+      "type": "record",
+      "bytes": 3903443,
+      "git_blob": "1b8817c88491b753cab656445312215a95c20f1f",
+      "sha256": "af4f48db0bb984e527c7155cef9e303343cc958d8c8fc528e465823c51b615e8"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id/20220812-061705-PM_measured.csv",
+      "type": "record",
+      "bytes": 177439,
+      "git_blob": "bc8522c8235cadc6604a9e8e7c79f4362450cb66",
+      "sha256": "1e0622471398209fc6a2ad532b5cb46a14b0cf56cd207aaa31332d8658ddc02f"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220812/sys_id_friccomp/20220812-063536-PM_measured.csv",
+      "type": "record",
+      "bytes": 443957,
+      "git_blob": "899a73ad2f52e52c5483812097afa9d2e763fd66",
+      "sha256": "557b51d8880df784bf72d8a632f6c39054ec03545824ad42284abca826da1513"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_00.csv",
+      "type": "record",
+      "bytes": 1903645,
+      "git_blob": "7553373284bb29189badb679bc0b220c242fc5fd",
+      "sha256": "3ea9f330443c902711faaf7f99059dd43e42ea30bb4e2d310d78aa1ec897532d"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_01.csv",
+      "type": "record",
+      "bytes": 1904188,
+      "git_blob": "3af67084cc711d472541cf4a430d6d3dd5c8a60f",
+      "sha256": "fbac28e9765eb86380a3ecbc75d7fd71ee7283a4b6eda740f486b5d8d670bab3"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_02.csv",
+      "type": "record",
+      "bytes": 1904928,
+      "git_blob": "c2e735221841fc6141c280ac8aaa18d42e5c035c",
+      "sha256": "1dd18e2ef41511253b9d2ca2a51fd1a9cafe5eae7cb8280496f050cdae02db0d"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_03.csv",
+      "type": "record",
+      "bytes": 1903491,
+      "git_blob": "81b5e02dff94351bf97410a68b388d6ae406ecf4",
+      "sha256": "f686c90294ee11e371b949369f7bd80541c74fe358a4e5c28c52dd86e08ac398"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_04.csv",
+      "type": "record",
+      "bytes": 1901605,
+      "git_blob": "47347aca69dfbd1b2c0ee428dc9faff98f74841c",
+      "sha256": "b9800f9fba977af0896617a0d535a67e33b20f54361ef3a025659c928dc50658"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_05.csv",
+      "type": "record",
+      "bytes": 1903307,
+      "git_blob": "b002932838e911b74ac8f6842692d94c98e89678",
+      "sha256": "e0352a2b381189beaab535df7da8a08a6a96dee72c0b5af3a43449734402f133"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_06.csv",
+      "type": "record",
+      "bytes": 5259254,
+      "git_blob": "202720b9f3b9e00f6e7dcb6a9aecc1a6702e8965",
+      "sha256": "e4952588e25b90d99588836c70921ad0c70bd519ff3228a342423865c539f776"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_07.csv",
+      "type": "record",
+      "bytes": 5278122,
+      "git_blob": "b86d595153e70c83fa66f1cc3b1466b9f7d0e6df",
+      "sha256": "9def8be7b1e4550e69c4a50d61a2b4fcef58f11ba0a5368ed54a87e668d46dca"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_08.csv",
+      "type": "record",
+      "bytes": 5234384,
+      "git_blob": "b6c4681682ddb6ec1a6c91d49caf6dfbccef9421",
+      "sha256": "52b3c5ee98b0609f51d5d3c9d82cadd1c9213ab6751d5482f4e865c22881c49b"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_09.csv",
+      "type": "record",
+      "bytes": 5250519,
+      "git_blob": "4cbb3a8ff24399bc1b827108b267d9f5177c6da3",
+      "sha256": "ab06900e026c0490963e5cc0b5204b36f4b7dce2ef8a313765103385fac0bef6"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_10.csv",
+      "type": "record",
+      "bytes": 11695841,
+      "git_blob": "5454380a17a05a7ac356ee1c9e1a88362ef97c9e",
+      "sha256": "9e209af5b029d396237b88cb90eaebcd83764c8a92830c4eb9f74c3abf16da2e"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_11.csv",
+      "type": "record",
+      "bytes": 2055036,
+      "git_blob": "cd1ee1234a135aa03db613dc3974f84a72596adb",
+      "sha256": "b2a69f0087aa45cd9372247316eff12c573b9f7110d96ad80fe923e2badbff3b"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_12.csv",
+      "type": "record",
+      "bytes": 1901202,
+      "git_blob": "1a4c2eb70bdfa3469b8ed9929709d84b3821cc82",
+      "sha256": "a5f61491c72ff648bc527f5c50f4d10b79a2f7b3b561f0fdcf4078d98581c0fd"
+    },
+    {
+      "path": "data/experiment_records/design_A.0/20220815/sys_id/trajectory_13.csv",
+      "type": "record",
+      "bytes": 1900571,
+      "git_blob": "e083634b5cd9b9718db3a03dd66072c22b70c997",
+      "sha256": "576bd0a89edf58750bb3b2e1ac880551550761b00407cd70e4e300c4db1fcec4"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_00.csv",
+      "type": "record",
+      "bytes": 1902467,
+      "git_blob": "88df44fc99d1f7b830e7534dede2673a7ffd5ac6",
+      "sha256": "56a084a814614be4e71a9b1fb954565119159a6a0560a84b7f430039366aa68f"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_01.csv",
+      "type": "record",
+      "bytes": 1896199,
+      "git_blob": "9bb2738ecf8b9d17ffbf84f38a921d51d20e9fd2",
+      "sha256": "43c348acc4bbfb4b8d43096c1b8e539a9fbf3b212ebf2a9b2f2f5d8f426fb671"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_02.csv",
+      "type": "record",
+      "bytes": 1897758,
+      "git_blob": "670ef0b25b47a81d5c2a97132d7c851b10f8d72a",
+      "sha256": "c12a77f7ea1b37a63fb7e97af7799f3244e058c3b1f966ba7a1ed2493ba32142"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_03.csv",
+      "type": "record",
+      "bytes": 1899752,
+      "git_blob": "4ce8b2408f5af34575b7a2f1becdb2c477f732a6",
+      "sha256": "6260a0f8c636db5b6ad0b6581fc687e4df497c6a698616cf608ec0504a8463ba"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_04.csv",
+      "type": "record",
+      "bytes": 1901213,
+      "git_blob": "993e72a6800450a4d6fb0d384c4540e891b8daa7",
+      "sha256": "915b8196403f0dbe9ef902aca9aa433739554f8bd568c5e7db9744bfd526edc9"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_05.csv",
+      "type": "record",
+      "bytes": 1901272,
+      "git_blob": "f1107103e8c162639683a379968de5d1b1c77fb1",
+      "sha256": "02fa2a83e5d63ebd63af2bb91daf1bc58c3617a940e77f813e54b9902a092e47"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_06.csv",
+      "type": "record",
+      "bytes": 1898108,
+      "git_blob": "e4d93c821e22e3188e22456e48156c3512d8a22d",
+      "sha256": "7c0db1e5dd964534a2acef59c1104f73938a4c6ef3cd8dd9cfcb4290e6224b4e"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_07.csv",
+      "type": "record",
+      "bytes": 5039257,
+      "git_blob": "18f427392c040fce2958b363261232512da553fe",
+      "sha256": "0d1f0d31b6d68dd693d2104a1ace6d206ee4bb7caa7b61cfa1ca066241cd3bfc"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_08.csv",
+      "type": "record",
+      "bytes": 5063062,
+      "git_blob": "91cf4a3dd49a9e2c17e969c35235f2a4b50f94bb",
+      "sha256": "55c2838fb3613d13e16fb288a9e002b4d0c35b488f299edc732fdf0c1d350f54"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_09.csv",
+      "type": "record",
+      "bytes": 5055584,
+      "git_blob": "a4b11762b81737543113455874dfae041131ce6c",
+      "sha256": "dd962b79b72b6d9ed71711484d22875e38b93b3c6e13874788faa47129f27746"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_10.csv",
+      "type": "record",
+      "bytes": 5081891,
+      "git_blob": "d4cdc340a20049222b8de2640dd1cc727b2c71e7",
+      "sha256": "ea7f886024267f9acc8c40e4d02fc886b945369ac1c0026d0d1ae98023456607"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_11.csv",
+      "type": "record",
+      "bytes": 11402902,
+      "git_blob": "10c878973a92d1b6283c3a104fe9715135f3e162",
+      "sha256": "8f412daf67f4238b3a24c804629c8c81b2b0a472c8a0c3d0f60217af5ac8114f"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_12.csv",
+      "type": "record",
+      "bytes": 1837684,
+      "git_blob": "cf0051acc0bafc735bf2ee2c36a460d79cd8e544",
+      "sha256": "6a2edd8ccfe17e57d27cb60830e9dbfa47b0a67666841f3b3436dd2947e08f39"
+    },
+    {
+      "path": "data/experiment_records/design_C.0/20220914/sys_id/trajectory_13.csv",
+      "type": "record",
+      "bytes": 1835470,
+      "git_blob": "0838e87d17883d3aee4fc6f96a7d98f7c518748a",
+      "sha256": "b6b9fd74619336ddb72c225db591717876eaad304c7b4fcf8a748ee081a0cbc2"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-142917/trajectory.csv",
+      "type": "record",
+      "bytes": 11967801,
+      "git_blob": "bebfa4002c5f75bf8d4612718e66f4178bee0646",
+      "sha256": "e08a285e21c3d0bd0ca3b032c648d5e21071d925881bc9b491568156fe279987"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143339/trajectory.csv",
+      "type": "record",
+      "bytes": 1903961,
+      "git_blob": "c73c4827a94dc572746ac6ea1c49add0e24ee4a8",
+      "sha256": "94f17287b53187dfe8f4ce131f4e7c49918309fcc915cbae2f64ed3101e7c23b"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143524/trajectory.csv",
+      "type": "record",
+      "bytes": 1904321,
+      "git_blob": "0303ff2b081ab0c407e7464afcad29579d884a4e",
+      "sha256": "03fc5e18915e80afabb3e2674b627f9d849d43675aeacbf586ccd24b3ebd7ca5"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143601/trajectory.csv",
+      "type": "record",
+      "bytes": 1905509,
+      "git_blob": "7155457ed3674907cea7c1ccd8ee84090f275e0f",
+      "sha256": "e028c1d7a6a45cfe1b96b7cb33aae412b8888f022677d392f6f9cd4d4f63886d"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143704/trajectory.csv",
+      "type": "record",
+      "bytes": 1902430,
+      "git_blob": "c14ca60ef24ee53ebd0f898a2cd1f0afa63b4f75",
+      "sha256": "e19682394cb7dc8847db9010e568b139a85a447bfbc4547b8828ad58da64a2a9"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143747/trajectory.csv",
+      "type": "record",
+      "bytes": 1900290,
+      "git_blob": "9c0a4dff718855f30f40c5009065382e0593cd1a",
+      "sha256": "8b3f8f25dceec77dbe05c2e687d86485b272fbcabd3af5485a119c9944243a1e"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-143906/trajectory.csv",
+      "type": "record",
+      "bytes": 1890574,
+      "git_blob": "55ec2fcd726f55b1ef1139742610c8a78655bc39",
+      "sha256": "45c7ed0eb4811ee0b11650b6ae344222bfcf4f7a313c7da611442149ee91e70c"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144003/trajectory.csv",
+      "type": "record",
+      "bytes": 1896955,
+      "git_blob": "f9bd41255ca1ad61961d2a888693194f58469897",
+      "sha256": "6841154d567f064208961b2829907fc8457dfd857472286627a0e84da8ab36ed"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144115/trajectory.csv",
+      "type": "record",
+      "bytes": 1899084,
+      "git_blob": "ff6c10e76fa450128ff9252288c135301f16a339",
+      "sha256": "c7ec2483e9dd10bfd536e5797002f39af56933ff697da1082aaf28012cda14ed"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144419/trajectory.csv",
+      "type": "record",
+      "bytes": 5311872,
+      "git_blob": "9f0390e9fe3a2b75f05e9065a6cbc644bfaece3e",
+      "sha256": "477cab97953db1f7bbbd780524ebbaaefb8e95c253b640c261c9b892e313703d"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144520/trajectory.csv",
+      "type": "record",
+      "bytes": 5286268,
+      "git_blob": "fd950bdbbbf9dbb5b77c2fbcf98ac1fb1b6d2a07",
+      "sha256": "338d511e10a0f9f5efa4a4416c22b798dfa84d5256ff6ff59e7f1928ca82f198"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144700/trajectory.csv",
+      "type": "record",
+      "bytes": 5266094,
+      "git_blob": "498e8e019685010e51719015312fba1cb123dbea",
+      "sha256": "06ed2177a5212926cc3b6a81d2f1d9ea9af5eef96a35d597c1186603639e946b"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-144758/trajectory.csv",
+      "type": "record",
+      "bytes": 5298352,
+      "git_blob": "e2c1f35805941e50b43256642f2b3e1a5c47105d",
+      "sha256": "1a3414213d33034e93c616264c5c1ee9a09ea016797fb7c0f214f287e2343e9d"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-154220/trajectory.csv",
+      "type": "record",
+      "bytes": 1594370,
+      "git_blob": "0aaa423d5f7a53db6c9bfedfe37ee34bb88be2d1",
+      "sha256": "c14a6334d98e6c86883cc3a84d41f41d25aab7d5d7a30e4690c0024a20e8972a"
+    },
+    {
+      "path": "data/experiment_records/design_C.1/sys_id/20230629/20230629-154548/trajectory.csv",
+      "type": "record",
+      "bytes": 1594587,
+      "git_blob": "eea95ba9f018f0c7e240db85d4ab754d703023a2",
+      "sha256": "0af9a5f9ef4442a0bd5004cebdaf0eec12c10c01e14d58b722ff7c88b4ce450d"
+    },
+    {
+      "path": "examples/paper/system_identification_M1.py",
+      "type": "documentation_or_code",
+      "bytes": 4286,
+      "git_blob": "8c0ac1622eb21e6b0c4c1e8cb23560caf117c3b3",
+      "sha256": "f78f91448c1161d5fdff82ee2796b5d0be98ff855ff32814a136f290758b5256"
+    },
+    {
+      "path": "experiments/design_independent/tmotors_record_system_identification_data.py",
+      "type": "documentation_or_code",
+      "bytes": 1039,
+      "git_blob": "183027c76f97c1f907fdd9ae4d84480d6ae37960",
+      "sha256": "f288bb6c1cda88c7a4468afde99514e6771113771315f5b0a0d9ffae1f145af1"
+    },
+    {
+      "path": "experiments/design_independent/tmotors_record_system_identification_data2.py",
+      "type": "documentation_or_code",
+      "bytes": 1042,
+      "git_blob": "42f4cb1c8d3730354ffb51a646630583ea3afad5",
+      "sha256": "dd1d9c789cf5543afca8d771fcbf5309f1384e4d643d7b8e5142d91dc8b283e8"
+    },
+    {
+      "path": "experiments/design_independent/tmotors_record_system_identification_data3.py",
+      "type": "documentation_or_code",
+      "bytes": 1874,
+      "git_blob": "ef0c7cda2d125200024ee9a6ba2c6ef6a5c59f07",
+      "sha256": "0ec42e6f0bd8ca188fac767cc9209a39e80cc16daf7ee4d22148af1633f9d761"
+    },
+    {
+      "path": "src/python/double_pendulum/experiments/hardware_control_loop_tmotors.py",
+      "type": "documentation_or_code",
+      "bytes": 12197,
+      "git_blob": "3b3f797d380b1a51ecc4928ef995ed044777d074",
+      "sha256": "09afa1de982e225e9197bb343cf2079c5d6f584a6f45192c1ef4e120a2ae91d2"
+    },
+    {
+      "path": "src/python/double_pendulum/system_identification/data_prep.py",
+      "type": "documentation_or_code",
+      "bytes": 2786,
+      "git_blob": "1e84d638ae938e4f163718896f9325421d026b29",
+      "sha256": "ba52e9b43ad73c264444843381895d19e038d58912343bd2cc7bc5ef02ef740f"
+    },
+    {
+      "path": "src/python/double_pendulum/utils/csv_trajectory.py",
+      "type": "documentation_or_code",
+      "bytes": 14086,
+      "git_blob": "e45d354e3e0c60ee88ff5d464cc27648a05e9aaf",
+      "sha256": "15df721918828c3a7be3e8eb5a70790f0e0a1d083fb69152c8ff744809956d1a"
+    }
+  ],
+  "verification_summary": {
+    "records": 53,
+    "rows": 363787,
+    "source_csv_bytes": 158740659,
+    "schemas": {
+      "single_torque_pair": {
+        "records": 10,
+        "rows": 48440
+      },
+      "controller_and_motor_feedback": {
+        "records": 23,
+        "rows": 114883
+      },
+      "controller_feedback_and_reference": {
+        "records": 20,
+        "rows": 200464
+      }
+    },
+    "reference_signals": "Both tau_des columns are identically zero across all 200464 rows where they exist. Other measured channels and controller outputs vary. Reference torques should not be used as motor commands.",
+    "time_order": "Across all files one adjacent timestamp is repeated and none decrease. The repeated timestamp remains in the aggregate ranges.",
+    "duplicate_time_source": [
+      "data/experiment_records/design_A.0/20220812/sys_id_friccomp/20220812-063536-PM_measured.csv"
+    ],
+    "summary_csv_sha256": "4d542ebbc329a20a82abd7add9418670387d128814bc4f47b353ab27a44d9a33"
+  }
+}

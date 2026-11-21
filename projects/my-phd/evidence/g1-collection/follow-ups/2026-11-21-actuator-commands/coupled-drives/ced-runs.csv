@@ -1,0 +1,6 @@
+archive_member_stem,input,output,samples,sample_period_s,input_min_v,input_max_v,input_distinct_levels,input_changes,samples_at_observed_input_min,samples_at_observed_input_max,output_min_native,output_max_native,negative_output_samples,max_abs_csv_mat_input_difference_v,max_abs_csv_mat_output_difference_native
+DATAPRBS,u1,z1,500,0.02,-1,1,2,37,255,245,0.031746031746,3.08913308913,0,0,4.8962149e-05
+DATAPRBS,u2,z2,500,0.02,-1.5,1.5,2,37,255,245,0.01221001221,6.30769230769,0,0,4.99389499e-05
+DATAPRBS,u3,z3,500,0.02,-0.5,0.5,2,37,255,245,0.017094017094,1.12087912088,0,0,4.7008547e-05
+DATAUNIF,u11,z11,500,0.02,-1.48078761817,2.46966552734,55,55,5,5,-0.026862026862,2.17582417582,16,4.87792969e-05,4.76190476e-05
+DATAUNIF,u12,z12,500,0.02,-0.980787618175,2.96966552734,55,55,5,5,-0.021978021978,3.76312576313,3,4.91699266e-05,4.88400488e-05

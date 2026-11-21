@@ -1,0 +1,112 @@
+{
+  "title": "A Real-Robot Dataset for Assessing Transferability of Learned Dynamics Models",
+  "dataset_doi": "10.17617/3.ZT6K7P",
+  "publisher": "Edmond, Max Planck Society",
+  "version": "1.0",
+  "release_utc": "2022-07-27T15:36:48Z",
+  "version_api": "https://edmond.mpg.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.17617/3.ZT6K7P",
+  "contributors": [
+    "Agudelo-España, Diego",
+    "Zadaianchuk, Andrii",
+    "Wenk, Philipp",
+    "Garg, Aditya",
+    "Akpo, Joel Bessekon",
+    "Grimminger, Felix",
+    "Viereck, Julian",
+    "Naveau, Maximilien",
+    "Righetti, Ludovic",
+    "Martius, Georg",
+    "Krause, Andreas",
+    "Schölkopf, Bernhard",
+    "Bauer, Stefan",
+    "Wüthrich, Manuel"
+  ],
+  "original_data_rights": {
+    "spdx": "CC0-1.0",
+    "url": "http://creativecommons.org/publicdomain/zero/1.0"
+  },
+  "companion_article": {
+    "doi": "10.1109/ICRA40945.2020.9197392",
+    "year": 2020,
+    "title": "A Real-Robot Dataset for Assessing Transferability of Learned Dynamics Models",
+    "fulltext_url": "https://is.mpg.de/uploads/publication_attachment/attachment/589/ICRA20_1157_FI.pdf",
+    "locator": "Secs. IV, IV-A and IV-B, Fig. 2. Defines units, 1000 Hz, GP excitation with protective intervention, and PD sine tracking. The repository README also says 0.001 seconds and 14000 samples in 14 s; its conflicting “1 Hz” string is a typo.",
+    "fulltext_access": "The search-service PDF reader returned the MPI author-hosted PDF. The ELLIS institutional mirror returned a 7-page PDF through both the web reader and direct HTTPS; text was extracted with pdftotext and the clock rate, protection layer and full-reference definitions checked. The direct MPI URL returned HTML to the shell.",
+    "verified_pdf": {
+      "url": "https://ellis.institute/uploads/publication_attachment/attachment/589/ICRA20_1157_FI.pdf",
+      "landing_page": "https://ellis.institute/publications/agudeloespanaetal20",
+      "bytes": 5417667,
+      "sha256": "6306bf8a20046441a8404451e3b1d6555ddf30669a1ba8c24728bc4ff82a97ae",
+      "pages": 7
+    }
+  },
+  "evidence": "Public full text, both complete real experiment archives, and one overlapping validation split verified against the matching rollout and time slice in the closed-loop full file. No simulated rows included.",
+  "selection": "Both physical *_full.npz archives in the v1.0 deposit. Included the Sines validation file only to verify column order, prefix and release splits. Sim_Sines and overlapping splits excluded from all totals.",
+  "meaning": "desired_torques and constrained_torques are compared cell-by-cell. The author data loader uses constrained_torques as model actions. measured_torques is the recorded observation channel; the source does not establish an independently calibrated output force sensor for this analysis.",
+  "files": [
+    {
+      "file": "Sines_full.npz",
+      "download_url": "https://edmond.mpg.de/api/access/datafile/194555",
+      "bytes": 384001184,
+      "publisher_verified_md5": "1384055f15e78516487a8f1f5c90469c",
+      "sha256": "3b9f680198f82bafb1ba327f75c28cc060c0a0188e55cdd04863c198716f5be3",
+      "restricted": false
+    },
+    {
+      "file": "GPs_full.npz",
+      "download_url": "https://edmond.mpg.de/api/access/datafile/194543",
+      "bytes": 384001184,
+      "publisher_verified_md5": "9a99daf8f42ff1a55b734b7fdc26b102",
+      "sha256": "a376295c26e63a5e09f66c0ba384293656e6a6b7f067e035e93b1d2a2a5b2567",
+      "restricted": false
+    },
+    {
+      "file": "Sines_validation.npz",
+      "download_url": "https://edmond.mpg.de/api/access/datafile/194561",
+      "bytes": 5041350,
+      "publisher_verified_md5": "c162daaed6a6f969758565c96ec7ec8a",
+      "sha256": "c1de97892998af0997b319adacc74c231b5a663120dad29cacd686d0cc8d1bc5",
+      "restricted": false
+    }
+  ],
+  "documentation": [
+    {
+      "url": "https://raw.githubusercontent.com/rr-learning/transferable_dynamics_dataset/3660a4bd7c6b011c8d02853bad3cce540708512c/README.md",
+      "sha256": "c17fcf45e1aa983cd54486cfbe37eeef57dfd76022774c340e6bbe14c3797bae"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/rr-learning/transferable_dynamics_dataset/3660a4bd7c6b011c8d02853bad3cce540708512c/DL/utils/data_loading.py",
+      "sha256": "47da624802af3eb3e42877f72c07b990146269c9a2f373aa54b7df49cffa5a5b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/rr-learning/transferable_dynamics_dataset/3660a4bd7c6b011c8d02853bad3cce540708512c/DL/utils/data_extractor.py",
+      "sha256": "0826e8e09a374dc55ecf388d23fcaceacfd1857171c9aaca90a3a224e033d07d"
+    },
+    {
+      "url": "https://edmond.mpg.de/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.17617/3.ZT6K7P",
+      "sha256": "acc791b5f8dd0552bf0f5128a23e605f31c8bfcd6c5af8daf0f728e9cbf3ae5d"
+    }
+  ],
+  "retrieval_date_utc": "2026-11-21",
+  "search_log": [
+    {
+      "search": "robot actuator torque tracking bench dataset measured torque desired torque; robot actuator torque control dataset measured desired torque series elastic actuator data experimental torque tracking",
+      "result": "Authors’ full-text conference paper located. Checked Sec. IV and author repository schema."
+    },
+    {
+      "search": "A Real-Robot Dataset for Assessing Transferability data open source github download MPI open loop real closed loop dataset",
+      "result": "MPG.PuRe paper links directly to the Edmond data DOI. Author code links to same dataset. Version-locked Dataverse file manifest, rights and measured variables verified."
+    },
+    {
+      "search": "DOIs, distinctive title and project slug in project evidence prior to G1 supplementary publication",
+      "keys": [
+        "10.17617/3.ZT6K7P",
+        "10.1109/ICRA40945.2020.9197392",
+        "Transferability of Learned Dynamics Models",
+        "transferable_dynamics_dataset"
+      ],
+      "prior_head": "8252892d617ec879cbedad2df60461afa3bf36a9",
+      "result": "No exact case-insensitive hit in checked-out project evidence at this head."
+    }
+  ]
+}
