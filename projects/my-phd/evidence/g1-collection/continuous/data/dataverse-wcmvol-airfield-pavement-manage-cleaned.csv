@@ -1,0 +1,14 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+Final database for airport pavement index project.tab,InspectionID,numeric,47146,47146,0,46197,60,88565,169260,181907,274034,377092,104943
+Final database for airport pavement index project.tab,SectionID,numeric,47146,47146,0,45666,6,35147.2,53274.5,54964.4,76615.8,94993,23101.3
+Final database for airport pavement index project.tab,BranchID,numeric,47146,47146,0,20432,4,8283,14612.5,16468.1,24579.8,33576,9172.23
+Final database for airport pavement index project.tab,NetworkID,numeric,47146,47146,0,2182,2,485,1157,1412.48,2248,3050,941.782
+Final database for airport pavement index project.tab,Condition,numeric,47146,47146,0,1385,-14,50,66,63.802,81,99.6,21.1879
+Final database for airport pavement index project.tab,Method,categorical_or_text,47146,47146,0,3,,,,,,,"{""PCI"": 44394, ""StructPCI"": 2202, ""FOD"": 550}"
+Final database for airport pavement index project.tab,DateTime,numeric,47146,47146,0,3044,30099,37087,39484,39088.8,40982,46021,2459.74
+Final database for airport pavement index project.tab,SurfaceCategory,categorical_or_text,47146,47146,0,4,,,,,,,"{""Flexible"": 29164, ""Rigid"": 11446, ""FLEXIBLE"": 5272}"
+Final database for airport pavement index project.tab,UseCategory,categorical_or_text,47146,47145,1,4,,,,,,,"{""Airfield"": 37302, ""AIRFIELD"": 5478, ""Roadway/Parking"": 3305}"
+Final database for airport pavement index project.tab,SectionSurface,categorical_or_text,47146,47144,2,13,,,,,,,"{""AC"": 20243, ""PCC"": 13065, ""AAC"": 10676}"
+Final database for airport pavement index project.tab,BranchUse,categorical_or_text,47146,47146,0,10,,,,,,,"{""TAXIWAY"": 21576, ""APRON"": 11950, ""RUNWAY"": 8622}"
+Final database for airport pavement index project.tab,EstimatedServiceLife(day),numeric,47146,47146,0,24065,0.212766,4222.29,7061.42,7782.99,10990.7,18262.7,4553.82
+Final database for airport pavement index project.tab,EstimatedServiceLife(year),numeric,47146,47146,0,24065,0.000582521,11.56,19.3331,21.3087,30.0909,50.0005,12.4677

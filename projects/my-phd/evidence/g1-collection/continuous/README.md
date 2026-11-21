@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：52
-- **最近更新时间 (UTC)**：2026-11-21T12:49:12Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5618 条（已与基线 15,910 条去重）
+- **已完成轮次**：53
+- **最近更新时间 (UTC)**：2026-11-21T12:54:05Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5666 条（已与基线 15,910 条去重）
 - **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1988 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：4632 条
-- **累计已完成确定性清洗数据集**：115 个
+- **累计开放阅读队列** (`reading-queue-new.csv`)：4680 条
+- **累计已完成确定性清洗数据集**：118 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,13 +20,13 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 207 | 99 |
-| `R2_Aerial_Actuator` | 524 | 119 |
-| `R5_MultiRobot_Comm` | 314 | 97 |
-| `Robotics_Embodied` | 1610 | 616 |
+| `R2_Aerial_Actuator` | 530 | 119 |
+| `R5_MultiRobot_Comm` | 349 | 97 |
+| `Robotics_Embodied` | 1630 | 616 |
 | `Mechanical_Physics_AI` | 1509 | 901 |
-| `Mechatronics_PHM_Control` | 1350 | 680 |
+| `Mechatronics_PHM_Control` | 1354 | 680 |
 | `Smart_Manufacturing` | 736 | 438 |
-| `Smart_Factory_DigitalTwin` | 437 | 90 |
+| `Smart_Factory_DigitalTwin` | 440 | 90 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 701 | 0 |
 | `R2` | 37 | 0 |
@@ -46,9 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `figshare-32362119-data-sheet-1-optimizing` | Data Sheet 1_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s005 | `summary_table` | 214 | `4c4a5f96d2e1` | [CSV](data/figshare-32362119-data-sheet-1-optimizing-cleaned.csv) · [JSON](data/figshare-32362119-data-sheet-1-optimizing-provenance.json) · [PY](data/derive_figshare_32362119_data_sheet_1_optimizing.py) |
-| `figshare-32362125-data-sheet-3-optimizing` | Data Sheet 3_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s003 | `cleaned_rows` | 209 | `bcaa8ca93639` | [CSV](data/figshare-32362125-data-sheet-3-optimizing-cleaned.csv) · [JSON](data/figshare-32362125-data-sheet-3-optimizing-provenance.json) · [PY](data/derive_figshare_32362125_data_sheet_3_optimizing.py) |
-| `figshare-32362128-data-sheet-4-optimizing` | Data Sheet 4_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s002 | `cleaned_rows` | 10 | `a8e35125db9c` | [CSV](data/figshare-32362128-data-sheet-4-optimizing-cleaned.csv) · [JSON](data/figshare-32362128-data-sheet-4-optimizing-provenance.json) · [PY](data/derive_figshare_32362128_data_sheet_4_optimizing.py) |
 | `dataverse-d0zgsm-acoustic-mems-sensor-arr` | Acoustic MEMS Sensor Array for Quench Detection of CICC Superconduc... | 10.7910/dvn/d0zgsm | `cleaned_rows` | 569 | `ee045c0e8a7d` | [CSV](data/dataverse-d0zgsm-acoustic-mems-sensor-arr-cleaned.csv) · [JSON](data/dataverse-d0zgsm-acoustic-mems-sensor-arr-provenance.json) · [PY](data/derive_dataverse_d0zgsm_acoustic_mems_sensor_arr.py) |
 | `figshare-34982740-an-ai-empowered-laser-ga` | An AI-empowered laser-galvanometer contouring system for 3D anomaly... | 10.6084/m9.figshare.34982740.v2 | `cleaned_rows` | 17 | `52c1d4956973` | [CSV](data/figshare-34982740-an-ai-empowered-laser-ga-cleaned.csv) · [JSON](data/figshare-34982740-an-ai-empowered-laser-ga-provenance.json) · [PY](data/derive_figshare_34982740_an_ai_empowered_laser_ga.py) |
 | `dataverse-4saz4x-the-effect-of-vibration` | The effect of vibration cycle ergometry on pulmonary VO2 kinetics,... | 10.7910/dvn/4saz4x | `cleaned_rows` | 35 | `ce5db73af5fa` | [CSV](data/dataverse-4saz4x-the-effect-of-vibration-cleaned.csv) · [JSON](data/dataverse-4saz4x-the-effect-of-vibration-provenance.json) · [PY](data/derive_dataverse_4saz4x_the_effect_of_vibration.py) |
@@ -71,12 +68,14 @@
 | `dataverse-jzgtxj-peafowl-locomotion` | Peafowl Locomotion | 10.7910/dvn/jzgtxj | `cleaned_rows` | 282 | `a7c4d8841fea` | [CSV](data/dataverse-jzgtxj-peafowl-locomotion-cleaned.csv) · [JSON](data/dataverse-jzgtxj-peafowl-locomotion-provenance.json) · [PY](data/derive_dataverse_jzgtxj_peafowl_locomotion.py) |
 | `figshare-24602967-data-a-systematic-review` | Data - A systematic review on uncalibrated visual servoing techniques | 10.6084/m9.figshare.24602967.v1 | `summary_table` | 35 | `533ad76fe1e6` | [CSV](data/figshare-24602967-data-a-systematic-review-cleaned.csv) · [JSON](data/figshare-24602967-data-a-systematic-review-provenance.json) · [PY](data/derive_figshare_24602967_data_a_systematic_review.py) |
 | `figshare-31817062-synthetic-pump-predictiv` | Synthetic Pump Predictive Maintenance Dataset with Physics-Based De... | 10.6084/m9.figshare.31817062 | `summary_table` | 35 | `fc69c38645f1` | [CSV](data/figshare-31817062-synthetic-pump-predictiv-cleaned.csv) · [JSON](data/figshare-31817062-synthetic-pump-predictiv-provenance.json) · [PY](data/derive_figshare_31817062_synthetic_pump_predictiv.py) |
+| `dataverse-wapeqw-peromyscus-and-mus-3d-sk` | Peromyscus and Mus 3D Skeleton Kinematics TMT | 10.7910/dvn/wapeqw | `summary_table` | 11 | `ad43618f03c9` | [CSV](data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-cleaned.csv) · [JSON](data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-provenance.json) · [PY](data/derive_dataverse_wapeqw_peromyscus_and_mus_3d_sk.py) |
+| `dataverse-wcmvol-airfield-pavement-manage` | Airfield Pavement Management Framework using a Multi-Objective Deci... | 10.7910/dvn/wcmvol | `summary_table` | 13 | `55997178e8f2` | [CSV](data/dataverse-wcmvol-airfield-pavement-manage-cleaned.csv) · [JSON](data/dataverse-wcmvol-airfield-pavement-manage-provenance.json) · [PY](data/derive_dataverse_wcmvol_airfield_pavement_manage.py) |
+| `dataverse-hmyqwu-replication-data-for-hyb` | Replication Data for: Hybrid physics-informed neural networks for m... | 10.7910/dvn/hmyqwu | `cleaned_rows` | 500 | `7cbd84bb3edf` | [CSV](data/dataverse-hmyqwu-replication-data-for-hyb-cleaned.csv) · [JSON](data/dataverse-hmyqwu-replication-data-for-hyb-provenance.json) · [PY](data/derive_dataverse_hmyqwu_replication_data_for_hyb.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
 | 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
 | 30 | 2026-11-21T09:54:02Z | Broad Engineering R30: Smart_Manufacturing / Smart_Factory_DigitalTwin | +180 | +54 | +3 | [round-30-audit.json](rounds/round-30-audit.json) |
 | 31 | 2026-11-21T09:59:10Z | Broad Engineering R31: Smart_Factory_DigitalTwin / R1_Force_Contact | +54 | +32 | +3 | [round-31-audit.json](rounds/round-31-audit.json) |
@@ -101,3 +100,4 @@
 | 50 | 2026-11-21T12:39:13Z | Broad Engineering R50: R1_Force_Contact (2025) | +52 | +6 | +2 | [round-50-audit.json](rounds/round-50-audit.json) |
 | 51 | 2026-11-21T12:44:05Z | Broad Engineering R51: R1_Force_Contact / R2_Aerial_Actuator (2025) | +32 | +2 | +3 | [round-51-audit.json](rounds/round-51-audit.json) |
 | 52 | 2026-11-21T12:49:12Z | Broad Engineering R52: R2_Aerial_Actuator / R5_MultiRobot_Comm (2025) | +73 | +15 | +2 | [round-52-audit.json](rounds/round-52-audit.json) |
+| 53 | 2026-11-21T12:54:05Z | Broad Engineering R53: R5_MultiRobot_Comm (2025) | +48 | +0 | +3 | [round-53-audit.json](rounds/round-53-audit.json) |

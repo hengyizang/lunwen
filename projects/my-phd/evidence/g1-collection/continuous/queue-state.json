@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 52,
-  "total_new_literature": 5618,
+  "round_number": 53,
+  "total_new_literature": 5666,
   "total_new_datasets": 1988,
-  "total_new_reading_queue": 4632,
+  "total_new_reading_queue": 4680,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -119,7 +119,10 @@
     "dataverse:10.7910/dvn/wohq9f",
     "dataverse:10.7910/dvn/jzgtxj",
     "figshare:24602967",
-    "figshare:31817062"
+    "figshare:31817062",
+    "dataverse:10.7910/dvn/wapeqw",
+    "dataverse:10.7910/dvn/wcmvol",
+    "dataverse:10.7910/dvn/hmyqwu"
   ],
   "cleaned_datasets_meta": [
     {
@@ -1731,6 +1734,48 @@
       "cleaned_rows": 35,
       "raw_total_rows": 36500,
       "verified_sha256": "fc69c38645f1b58da10a625020ba38338a3083808a9078628d8d53ca63418995"
+    },
+    {
+      "slug": "dataverse-wapeqw-peromyscus-and-mus-3d-sk",
+      "key": "dataverse:10.7910/dvn/wapeqw",
+      "dataset_name": "Peromyscus and Mus 3D Skeleton Kinematics TMT",
+      "doi": "10.7910/dvn/wapeqw",
+      "landing_url": "https://doi.org/10.7910/DVN/WAPEQW",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wapeqw_peromyscus_and_mus_3d_sk.py",
+      "cleaned_rows": 11,
+      "raw_total_rows": 209,
+      "verified_sha256": "ad43618f03c98fd6f041ff8bc3880aaff5b9dccb142da1ef7d804262967d40aa"
+    },
+    {
+      "slug": "dataverse-wcmvol-airfield-pavement-manage",
+      "key": "dataverse:10.7910/dvn/wcmvol",
+      "dataset_name": "Airfield Pavement Management Framework using a Multi-Objective Decision Making Process",
+      "doi": "10.7910/dvn/wcmvol",
+      "landing_url": "https://doi.org/10.7910/DVN/WCMVOL",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wcmvol-airfield-pavement-manage-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wcmvol-airfield-pavement-manage-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wcmvol_airfield_pavement_manage.py",
+      "cleaned_rows": 13,
+      "raw_total_rows": 47146,
+      "verified_sha256": "55997178e8f25f125e2b4ca96b03136132a4798bb8ab08bc0065cf5adbcbe20e"
+    },
+    {
+      "slug": "dataverse-hmyqwu-replication-data-for-hyb",
+      "key": "dataverse:10.7910/dvn/hmyqwu",
+      "dataset_name": "Replication Data for: Hybrid physics-informed neural networks for main bearing fatigue prognosis with visual grease inspection",
+      "doi": "10.7910/dvn/hmyqwu",
+      "landing_url": "https://doi.org/10.7910/DVN/HMYQWU",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-hmyqwu-replication-data-for-hyb-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-hmyqwu-replication-data-for-hyb-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_hmyqwu_replication_data_for_hyb.py",
+      "cleaned_rows": 500,
+      "raw_total_rows": 500,
+      "verified_sha256": "7cbd84bb3edf6fc543579fd2b21dd83e2322b266e3a4f308c3635388a2d36a85"
     }
   ],
   "snowballed_dois": [
@@ -2302,23 +2347,32 @@
       "net_new_datasets": 15,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 53,
+      "completed_at": "2026-11-21T12:54:05Z",
+      "batch_label": "Broad Engineering R53: R5_MultiRobot_Comm (2025)",
+      "net_new_literature": 48,
+      "net_new_datasets": 0,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T12:49:12Z",
+  "updated_at": "2026-11-21T12:54:05Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
     "Adjacent": 701,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 524,
+    "R2_Aerial_Actuator": 530,
     "Mechanical_Physics_AI": 1509,
-    "Mechatronics_PHM_Control": 1350,
-    "Robotics_Embodied": 1610,
-    "R5_MultiRobot_Comm": 314,
+    "Mechatronics_PHM_Control": 1354,
+    "Robotics_Embodied": 1630,
+    "R5_MultiRobot_Comm": 349,
     "R1_Force_Contact": 207,
     "Smart_Manufacturing": 736,
-    "Smart_Factory_DigitalTwin": 437
+    "Smart_Factory_DigitalTwin": 440
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
@@ -2345,6 +2399,7 @@
     "dataverse:10.7910/dvn/5agsiu",
     "dataverse:10.7910/dvn/5gqhcm",
     "dataverse:10.7910/dvn/5gsqts",
+    "dataverse:10.7910/dvn/5m5qel",
     "dataverse:10.7910/dvn/6ckenx",
     "dataverse:10.7910/dvn/7cbbat",
     "dataverse:10.7910/dvn/7mxfch",
@@ -2354,12 +2409,14 @@
     "dataverse:10.7910/dvn/8h6npo",
     "dataverse:10.7910/dvn/8ttxz7",
     "dataverse:10.7910/dvn/91r87t",
+    "dataverse:10.7910/dvn/9bmr20",
     "dataverse:10.7910/dvn/9mnhpb",
     "dataverse:10.7910/dvn/9qdd5j",
     "dataverse:10.7910/dvn/aa86hp",
     "dataverse:10.7910/dvn/ahyxl9",
     "dataverse:10.7910/dvn/aqvrbv",
     "dataverse:10.7910/dvn/arcsd1",
+    "dataverse:10.7910/dvn/atcqvi",
     "dataverse:10.7910/dvn/bggp4a",
     "dataverse:10.7910/dvn/bubzrb",
     "dataverse:10.7910/dvn/bwhyeh",
@@ -2378,6 +2435,7 @@
     "dataverse:10.7910/dvn/ffpf7j",
     "dataverse:10.7910/dvn/fjodp5",
     "dataverse:10.7910/dvn/fsly3y",
+    "dataverse:10.7910/dvn/fwazbq",
     "dataverse:10.7910/dvn/fwcevv",
     "dataverse:10.7910/dvn/g9y8wc",
     "dataverse:10.7910/dvn/gcpail",
@@ -2432,6 +2490,7 @@
     "dataverse:10.7910/dvn/ovvn2e",
     "dataverse:10.7910/dvn/oyndzo",
     "dataverse:10.7910/dvn/p62o0e",
+    "dataverse:10.7910/dvn/p6seua",
     "dataverse:10.7910/dvn/pbckwy",
     "dataverse:10.7910/dvn/pcqhp9",
     "dataverse:10.7910/dvn/pgdu2y",

@@ -1,0 +1,12 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+elisa_pre_post_tmt_raw.tab,Condition,categorical_or_text,104,104,0,2,,,,,,,"{""Pre"": 52, ""Post"": 52}"
+elisa_pre_post_tmt_raw.tab,Name,categorical_or_text,104,104,0,52,,,,,,,"{""WSB-M-2LR-234"": 2, ""WSB-M-LR-234"": 2, ""CAST-F-N-CM1"": 2}"
+elisa_pre_post_tmt_raw.tab,CORT_Concentration,numeric,104,103,1,94,46.4425,125.845,235.457,300.041,403.197,1037.44,225.603
+elisa_pre_post_tmt_analysis.csv.txt,Condition,categorical_or_text,102,102,0,2,,,,,,,"{""Pre"": 51, ""Post"": 51}"
+elisa_pre_post_tmt_analysis.csv.txt,Name,categorical_or_text,102,102,0,51,,,,,,,"{""WSB-M-2LR-234"": 2, ""CAST-F-N-CM1"": 2, ""CAST-F-L-CM1"": 2}"
+elisa_pre_post_tmt_analysis.csv.txt,CORT_Concentration,numeric,102,102,0,93,46.4425,127.565,236.015,302.191,409.175,1037.44,225.655
+elisa_pre_post_tmt_analysis.csv.txt,strain,categorical_or_text,102,102,0,6,,,,,,,"{""PWK"": 22, ""WSB"": 16, ""CAST"": 16}"
+elisa_pre_post_tmt_analysis.csv.txt,sex,categorical_or_text,102,102,0,2,,,,,,,"{""F"": 54, ""M"": 48}"
+250810-tmt_no_recordings.hdf5.parts.json,file,categorical_or_text,3,3,0,3,,,,,,,"{""250810-tmt_no_recordings.hdf5.part001"": 1, ""250810-tmt_no_recordings.hdf5.part002"": 1, ""250810-tmt_no_recordings.hdf5.part003"": 1}"
+250810-tmt_no_recordings.hdf5.parts.json,size_bytes,numeric,3,3,0,2,4.34025e+08,1.36701e+09,2.3e+09,1.67801e+09,2.3e+09,2.3e+09,1.07732e+09
+250810-tmt_no_recordings.hdf5.parts.json,sha256,categorical_or_text,3,3,0,3,,,,,,,"{""9f5abb0face752531f8c0a2282aeb458b486aeaed80b78ea3516c9df4e91bfd2"": 1, ""a436c80f517f1818bac7d518ca8ef92d1d8ca4bd623865c488be515c71825a38"": 1, ""32261b662b42e..."

@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-wcmvol-airfield-pavement-manage",
+  "dataset_name": "Airfield Pavement Management Framework using a Multi-Objective Decision Making Process",
+  "doi": "10.7910/dvn/wcmvol",
+  "landing_url": "https://doi.org/10.7910/DVN/WCMVOL",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/WCMVOL",
+  "access_date": "2026-11-21",
+  "round_number": 53,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "Final database for airport pavement index project.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4175616",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WCMVOL/175d6bd6dcc-7ed0c8f7f4d8?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27Final%2520database%2520for%2520airport%2520pavement%2520index%2520project.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130600Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=24cce681c62127951daf7c6d63da9262f142b5bb2698c557d721b3195b4405ae",
+      "http_status": 200,
+      "bytes": 5657497,
+      "publisher_checksum": "dataverse_original_md5:f25cab5128b0a943b444456ace759ce2",
+      "verified_md5": "a59883e79f7cdf7add214630d9e1b7b1",
+      "verified_sha256": "55997178e8f25f125e2b4ca96b03136132a4798bb8ab08bc0065cf5adbcbe20e"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-wcmvol-airfield-pavement-manage",
+  "raw_total_bytes": 5657497,
+  "raw_total_rows": 47146,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-wcmvol-airfield-pavement-manage-cleaned.csv",
+  "cleaned_csv_sha256": "4aa65633406fb9cc5a82f4b986f3f2021868722a4de7dbceb35b3f4adf7de95f",
+  "cleaned_rows": 13,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "Final database for airport pavement index project.tab": {
+      "InspectionID": 0,
+      "SectionID": 0,
+      "BranchID": 0,
+      "NetworkID": 0,
+      "Condition": 0,
+      "Method": 0,
+      "DateTime": 0,
+      "SurfaceCategory": 0,
+      "UseCategory": 1,
+      "SectionSurface": 2,
+      "BranchUse": 0,
+      "EstimatedServiceLife(day)": 0,
+      "EstimatedServiceLife(year)": 0
+    }
+  },
+  "time_monotonicity": {
+    "Final database for airport pavement index project.tab": {
+      "column": "SectionID",
+      "numeric_samples": 47146,
+      "monotonic_non_decreasing": false,
+      "strictly_increasing": false,
+      "min_step": -76622.0,
+      "median_step": 1.0,
+      "max_step": 76634.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

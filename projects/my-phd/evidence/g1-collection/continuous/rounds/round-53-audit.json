@@ -1,0 +1,386 @@
+{
+  "schema_version": "1.0",
+  "round": 53,
+  "completed_at": "2026-11-21T12:54:05Z",
+  "batch_label": "Broad Engineering R53: R5_MultiRobot_Comm (2025)",
+  "base_head_sha": "feb9281559c4e47b3d6fde7383dde1291ca61fca",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 62,
+    "duplicates_skipped": 14,
+    "net_new": 48,
+    "new_reading_queue": 48,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t125405z-openalex-d38d621f53",
+        "request_url": "https://api.openalex.org/works?search=age+of+information+wireless+robot+control&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "27ca1efa6b843f039a4ce0f4183748711f23054dc6154b16dcc19ca41a029237",
+        "normalized_results_sha256": "ea73bc0a6e4b80903c59ea8901fe65762637b616b37c1eafba9226f552395472"
+      },
+      {
+        "provider": "crossref",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t125610z-crossref-d1b249864f",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=age+of+information+wireless+robot+control&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "0085c56b5dc32fb361cc268551ec4c7b396b3d8dc2cfad214b22dce8038d9660",
+        "normalized_results_sha256": "fbafbdaf90836f87277dc921250ba8a58ff361d27e4c9d019e152e39fbe47e68"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t125612z-europe-pmc-47489779ab",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=age+of+information+wireless+robot+control&pageSize=12&format=json",
+        "result_count": 0,
+        "response_sha256": "003c45cb5e212b69beb604af63f76a8602b284d4f09d7d57b8ca6d0b27d9f80b",
+        "normalized_results_sha256": "e5644ae65f0f6a8f3c16d01d5f1c43dfbd5acb8b8b961a41b674d1a66d1ba3ed"
+      },
+      {
+        "provider": "hal",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t125615z-hal-375cdcc0a1",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=age+of+information+wireless+robot+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "313d539222f5905c710f9e992235a54ca2eb828b1a1c82c0a917e08d803e8292",
+        "normalized_results_sha256": "03973ddae2fcb0e5cab07726353906337c67a6105c5fd97d3fd44b8d4feb41b1"
+      },
+      {
+        "provider": "openalex",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t125616z-openalex-c74f2b5a9c",
+        "request_url": "https://api.openalex.org/works?search=UWB+cooperative+localization+clock+drift&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "307ae45efde63584af048718e09bae71e022616e81ad9cc2809a76db76296378",
+        "normalized_results_sha256": "8a50e1564e36c675a31438c64e8f462606efe96620d6ef3ef69a2602a9bccf7c"
+      },
+      {
+        "provider": "crossref",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t125620z-crossref-f05a28535d",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=UWB+cooperative+localization+clock+drift&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "c19b6c88b11929b5bc84e81c7b80a3297091a9535bd9b667e65e69270536777d",
+        "normalized_results_sha256": "28d1bb29d63379c7ce60f87bacca7d15fb8ab7903826e5344386aa56756b6109"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t125622z-europe-pmc-da2508dafc",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=UWB+cooperative+localization+clock+drift&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "2c242d3608d7b6296e75a3b106bc1d5c08b627160dab1224dbecf089a45f8558",
+        "normalized_results_sha256": "7346dbe732bd0828c8bebd9a267a3637a62198b9c0329952fe4abfee17a0384a"
+      },
+      {
+        "provider": "hal",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t125624z-hal-9da8cb06d9",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=UWB+cooperative+localization+clock+drift&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "55b0e8c106d9c97a7082f341d53259cdfc9b0971fdbe80e4dffb3bca26746db2"
+      },
+      {
+        "provider": "crossref",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t125931z-crossref-bcdb65f6d0",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=decentralized+multi-robot+SLAM+communication&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "a7d848e73be2a4b2993094a71e95c26ebd89d071f926b365463529836f0baf7f",
+        "normalized_results_sha256": "31f36e6fe04601d7706cb125618e2fbb0206f77b5a20687e71fb9c70a3ed8a93"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t125933z-europe-pmc-70a3717d91",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=decentralized+multi-robot+SLAM+communication&pageSize=12&format=json",
+        "result_count": 1,
+        "response_sha256": "c28d083988834fcf9e6572e70eded17d8a6d72fc15be891b76a4ea9b7a0c35aa",
+        "normalized_results_sha256": "8d3e56b48d4cbde379c1d2027d4315f5e8cf30408d8b7f8fda156e1f16dd4ca0"
+      },
+      {
+        "provider": "hal",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t125936z-hal-43698e67f5",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=decentralized+multi-robot+SLAM+communication&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "6bc861b17ce45c9a7924faa0baa70ee25f32aee332999f59d39a03ca87dfdbbf",
+        "normalized_results_sha256": "6f9e56cf3cb16c927e6601bab298a6b0e536e8ef9b1242045e5cd8b4babe8166"
+      }
+    ],
+    "errors": [
+      {
+        "provider": "openalex",
+        "query": "decentralized multi-robot SLAM communication",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=decentralized+multi-robot+SLAM+communication&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31: HTTP Error 503: Service Unavailable"
+      },
+      {
+        "provider": "openalex",
+        "query": "V2X cooperative perception latency estimation",
+        "error": "OpenAlex search failed: Request failed for https://api.openalex.org/works?search=V2X+cooperative+perception+latency+estimation&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "crossref",
+        "query": "V2X cooperative perception latency estimation",
+        "error": "Crossref search failed: Request failed for https://api.crossref.org/works?query.bibliographic=V2X+cooperative+perception+latency+estimation&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "V2X cooperative perception latency estimation",
+        "error": "Europe PMC search failed: Request failed for https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=V2X+cooperative+perception+latency+estimation&pageSize=12&format=json: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "hal",
+        "query": "V2X cooperative perception latency estimation",
+        "error": "HAL search failed: Request failed for https://api.archives-ouvertes.fr/search/?q=V2X+cooperative+perception+latency+estimation&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.20517/scierxiv202509.0602.v1",
+        "error": "OpenCitations expansion failed: Request failed for https://api.opencitations.net/index/v2/citations/doi:10.20517/scierxiv202509.0602.v1: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1109/iros60139.2025.11246332",
+        "error": "OpenCitations expansion failed: Request failed for https://api.opencitations.net/index/v2/citations/doi:10.1109/iros60139.2025.11246332: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      }
+    ]
+  },
+  "datasets": {
+    "raw_candidates": 0,
+    "off_topic_filtered": 0,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 0,
+    "net_new": 0,
+    "provider_statuses": [
+      {
+        "query": "selective laser melting sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "selective laser melting sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=selective+laser+melting+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "selective laser melting sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=selective+laser+melting+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "selective laser melting sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=selective+laser+melting+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "selective laser melting sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=selective+laser+melting+sensor&per_page=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "composite delamination sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "composite delamination sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=composite+delamination+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "composite delamination sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=composite+delamination+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "composite delamination sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=composite+delamination+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "composite delamination sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=composite+delamination+sensor&per_page=15: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "carbon fiber composite sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "carbon fiber composite sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=carbon+fiber+composite+sensor&limit=15&full=true: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "query": "carbon fiber composite sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=carbon+fiber+composite+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "carbon fiber composite sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=carbon+fiber+composite+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "carbon fiber composite sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=carbon+fiber+composite+sensor&per_page=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "fracture toughness sensor",
+        "provider": "figshare",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.figshare.com/v2/articles/search: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "fracture toughness sensor",
+        "provider": "huggingface",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://huggingface.co/api/datasets?search=fracture+toughness+sensor&limit=15&full=true: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "fracture toughness sensor",
+        "provider": "dataverse",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://dataverse.harvard.edu/api/search?q=fracture+toughness+sensor&type=dataset&per_page=15&sort=score&order=desc: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "fracture toughness sensor",
+        "provider": "datacite",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://api.datacite.org/dois?query=fracture+toughness+sensor&resource-type-id=dataset&page%5Bsize%5D=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "query": "fracture toughness sensor",
+        "provider": "dryad",
+        "status": "error",
+        "candidate_count": 0,
+        "error": "Request failed for https://datadryad.org/api/v2/search?q=fracture+toughness+sensor&per_page=15: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      }
+    ],
+    "probed_for_cleaning": 15,
+    "cleaned": [
+      {
+        "slug": "dataverse-wapeqw-peromyscus-and-mus-3d-sk",
+        "key": "dataverse:10.7910/dvn/wapeqw",
+        "dataset_name": "Peromyscus and Mus 3D Skeleton Kinematics TMT",
+        "doi": "10.7910/dvn/wapeqw",
+        "landing_url": "https://doi.org/10.7910/DVN/WAPEQW",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wapeqw_peromyscus_and_mus_3d_sk.py",
+        "cleaned_rows": 11,
+        "raw_total_rows": 209,
+        "verified_sha256": "ad43618f03c98fd6f041ff8bc3880aaff5b9dccb142da1ef7d804262967d40aa"
+      },
+      {
+        "slug": "dataverse-wcmvol-airfield-pavement-manage",
+        "key": "dataverse:10.7910/dvn/wcmvol",
+        "dataset_name": "Airfield Pavement Management Framework using a Multi-Objective Decision Making Process",
+        "doi": "10.7910/dvn/wcmvol",
+        "landing_url": "https://doi.org/10.7910/DVN/WCMVOL",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-wcmvol-airfield-pavement-manage-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-wcmvol-airfield-pavement-manage-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_wcmvol_airfield_pavement_manage.py",
+        "cleaned_rows": 13,
+        "raw_total_rows": 47146,
+        "verified_sha256": "55997178e8f25f125e2b4ca96b03136132a4798bb8ab08bc0065cf5adbcbe20e"
+      },
+      {
+        "slug": "dataverse-hmyqwu-replication-data-for-hyb",
+        "key": "dataverse:10.7910/dvn/hmyqwu",
+        "dataset_name": "Replication Data for: Hybrid physics-informed neural networks for main bearing fatigue prognosis with visual grease inspection",
+        "doi": "10.7910/dvn/hmyqwu",
+        "landing_url": "https://doi.org/10.7910/DVN/HMYQWU",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-hmyqwu-replication-data-for-hyb-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-hmyqwu-replication-data-for-hyb-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_hmyqwu_replication_data_for_hyb.py",
+        "cleaned_rows": 500,
+        "raw_total_rows": 500,
+        "verified_sha256": "7cbd84bb3edf6fc543579fd2b21dd83e2322b266e3a4f308c3635388a2d36a85"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Toolbox Motor Validation",
+        "url": "https://doi.org/10.7910/DVN/28860",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/28860: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "Datasets for Recognition of Aggressive Interactions of Children Toward Robotic Toys",
+        "url": "https://doi.org/10.7910/DVN/FHOO0Q",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/FHOO0Q: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Multi-sensor based power prediction models for different geometrical profiles using Box Behnken Design on Inconel 718",
+        "url": "https://doi.org/10.7910/DVN/1G3SSB",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/1G3SSB: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Characterization of MEMS Acoustic Sensors and Amplifiers in Cryogenic Fluids for Quench Detection Applications in HTS CICC",
+        "url": "https://doi.org/10.7910/DVN/F5A3JT",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/F5A3JT: <urlopen error _ssl.c:1063: The handshake operation timed out>"
+      },
+      {
+        "name": "REBCO Conductor Quench Detection Tests for MEMS Acoustic Sensor Array Diagnostics",
+        "url": "https://doi.org/10.7910/DVN/XWISLM",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/XWISLM: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "An Acoustic Quench Detection Method for CICC Conductor Operating in Gas or Liquid",
+        "url": "https://doi.org/10.7910/DVN/ZBHAKC",
+        "error": "Request failed for https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/ZBHAKC: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)>"
+      },
+      {
+        "name": "Strongman biomechanics - atlas stone IMU data",
+        "url": "https://doi.org/10.7910/DVN/PQOIGN",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_pqoign_strongman_biomechanics_a.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-pqoign-strongman-biomechanics-a\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_dataverse_pqoign_strongman_biomechanics_a.py\", line 33, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 162, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 110, in reproduce\n    raise ValueError(f\"SHA-256 mismatch for {item['file']}: {actual} != {item['sha256']}\")\nValueError: SHA-256 mismatch for MC40_01240__mag.tab: 883cc36994f349f71beb3fb42223e6032604f1409d14dcedd2d53189892c5d76 != acbddb887352f6e5734e1f5f9ca7c09ecd9bf85c981e3006494f04c50d32a9e4\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

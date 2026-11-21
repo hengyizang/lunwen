@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-hmyqwu-replication-data-for-hyb",
+  "dataset_name": "Replication Data for: Hybrid physics-informed neural networks for main bearing fatigue prognosis with visual grease inspection",
+  "doi": "10.7910/dvn/hmyqwu",
+  "landing_url": "https://doi.org/10.7910/DVN/HMYQWU",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/HMYQWU",
+  "access_date": "2026-11-21",
+  "round_number": 53,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "approximate_plane_set.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/4158285",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/HMYQWU/1756743a89b-1154bd3964c6?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27approximate_plane_set.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130610Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=2b0b0a1f9fce1f17653983a6350d7f2fc288780b8c8f8f8ceeef1da7120027be",
+      "http_status": 200,
+      "bytes": 40599,
+      "publisher_checksum": "dataverse_original_md5:f23ceb01fb4658d939e3ecb148dc8dac",
+      "verified_md5": "09fdbfd08b23cf2156e1d1cd26471cce",
+      "verified_sha256": "7cbd84bb3edf6fc543579fd2b21dd83e2322b266e3a4f308c3635388a2d36a85"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-hmyqwu-replication-data-for-hyb",
+  "raw_total_bytes": 40599,
+  "raw_total_rows": 500,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "cleaned_rows",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-hmyqwu-replication-data-for-hyb-cleaned.csv",
+  "cleaned_csv_sha256": "d4b8a44ded5ad4e8595da7b010212f7525910fd345c8d9a8fab0c68dc6a146d3",
+  "cleaned_rows": 500,
+  "cleaned_cols": 5,
+  "null_counts_by_file": {
+    "approximate_plane_set.tab": {
+      "dynamicLoads": 0,
+      "bearingTemp": 0,
+      "Dkappa": 0,
+      "delDkappa": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

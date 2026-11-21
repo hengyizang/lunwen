@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-wapeqw-peromyscus-and-mus-3d-sk",
+  "dataset_name": "Peromyscus and Mus 3D Skeleton Kinematics TMT",
+  "doi": "10.7910/dvn/wapeqw",
+  "landing_url": "https://doi.org/10.7910/DVN/WAPEQW",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/WAPEQW",
+  "access_date": "2026-11-21",
+  "round_number": 53,
+  "observed_license_metadata": "CC0 1.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "elisa_pre_post_tmt_raw.tab",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14452149",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WAPEQW/1a1f033218a-c90c6fb3d18b?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27elisa_pre_post_tmt_raw.tab&response-content-type=text%2Ftab-separated-values&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130541Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=0f7a8b5ac174fd512b054ebc7b6a51d346575058e284e1e5d3c6dbcbb968724f",
+      "http_status": 200,
+      "bytes": 4044,
+      "publisher_checksum": "dataverse_original_md5:bf28b16ba145652af4e34c78a4aa4269",
+      "verified_md5": "9d1abd5221e4da66b3beb2a0b237eed4",
+      "verified_sha256": "ad43618f03c98fd6f041ff8bc3880aaff5b9dccb142da1ef7d804262967d40aa"
+    },
+    {
+      "file": "TMT_test.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14450691",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WAPEQW/1a1ef2d33b8-14112acaede8?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27TMT_test.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130544Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=6e45cf608f1c05ede6c00de66199967ccb211a64e6384ae2ddf238a603e8b4b5",
+      "http_status": 200,
+      "bytes": 16,
+      "publisher_checksum": "md5:19ff90de43519ee9749165a6eb3b7b62",
+      "verified_md5": "19ff90de43519ee9749165a6eb3b7b62",
+      "verified_sha256": "23896ef49bbbafe8cc68da77b6d4e6fdfca46350c9e458372c38c8471e83c6c5"
+    },
+    {
+      "file": "elisa_pre_post_tmt_analysis.csv.txt",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14452150",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WAPEQW/1a1f034d316-edd077cdb475?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27elisa_pre_post_tmt_analysis.csv.txt&response-content-type=text%2Fplain&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130546Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=413c99c353bd0e9e8757663707ab8b481956afc43cb48cdd3c24c9391d3de80b",
+      "http_status": 200,
+      "bytes": 4310,
+      "publisher_checksum": "md5:ff44702fa25c4ec10532a523e353dea5",
+      "verified_md5": "ff44702fa25c4ec10532a523e353dea5",
+      "verified_sha256": "ee06d622dc8a1b3acf92c40df10f3aa7fce78123ec3345c8bca28d9ddce97efa"
+    },
+    {
+      "file": "250810-tmt_no_recordings.hdf5.parts.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14452148",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/WAPEQW/1a1f0331ef0-92907e6ffe87?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27250810-tmt_no_recordings.hdf5.parts.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T130548Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=37b42a69312a939c03db01396703bc94c7bc0f94d56a5d55cca3b5da0ffe0288",
+      "http_status": 200,
+      "bytes": 777,
+      "publisher_checksum": "md5:b3c82b8e4912b5e33e052d7d88dc4bde",
+      "verified_md5": "b3c82b8e4912b5e33e052d7d88dc4bde",
+      "verified_sha256": "ea46de1b31259dc6562053b1d862febc9edd6f8bd3be70a8223e655c93bc068e"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-wapeqw-peromyscus-and-mus-3d-sk",
+  "raw_total_bytes": 9147,
+  "raw_total_rows": 209,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-wapeqw-peromyscus-and-mus-3d-sk-cleaned.csv",
+  "cleaned_csv_sha256": "88786e7ec076f1ebc6fcb5e6fa4cb0650bf8182fc0650b858bada21f723bc0a1",
+  "cleaned_rows": 11,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "elisa_pre_post_tmt_raw.tab": {
+      "Condition": 0,
+      "Name": 0,
+      "CORT_Concentration": 1
+    },
+    "elisa_pre_post_tmt_analysis.csv.txt": {
+      "Condition": 0,
+      "Name": 0,
+      "CORT_Concentration": 0,
+      "strain": 0,
+      "sex": 0
+    },
+    "250810-tmt_no_recordings.hdf5.parts.json": {
+      "file": 0,
+      "size_bytes": 0,
+      "sha256": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
