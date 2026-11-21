@@ -1,0 +1,309 @@
+{
+  "schema_version": "1.0",
+  "round": 52,
+  "completed_at": "2026-11-21T12:49:12Z",
+  "batch_label": "Broad Engineering R52: R2_Aerial_Actuator / R5_MultiRobot_Comm (2025)",
+  "base_head_sha": "51ca8d5b4c243693e53e89894e1c74d275f9362f",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 98,
+    "duplicates_skipped": 25,
+    "net_new": 73,
+    "new_reading_queue": 73,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t124912z-arxiv-0a2674a430",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Areference+AND+all%3Agovernor+AND+all%3Aquadrotor+AND+all%3Aconstrained+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "e76fcc7251d819cba99d9858a0fc78e9a5bed0d7e88e10cd5a11b8121a808e28",
+        "normalized_results_sha256": "cafd35321dd9bb0f155a7564c28373d2fc9dcfb92c541ae541197cbec55389bc"
+      },
+      {
+        "provider": "crossref",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t124913z-crossref-3ce8b01b06",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=reference+governor+quadrotor+constrained+control&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "b4cb22b43a1a32fcc02b7db35eb30318768c65ae03bac7f42ed9f8c28cbf5221",
+        "normalized_results_sha256": "60c1b1423a97c8c3b068e6277252ffbe4f53c2b4f11ee035200ff3a50df41cd6"
+      },
+      {
+        "provider": "openalex",
+        "query": "reference governor quadrotor constrained control",
+        "receipt_id": "20261121t124915z-openalex-8ca882601a",
+        "request_url": "https://api.openalex.org/works?search=reference+governor+quadrotor+constrained+control&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "6d20bd60ce83dfc25a3bcd75f0e9d8eae4f590262a54a782baf3a7cead4c4cbe",
+        "normalized_results_sha256": "9f0e0243b1925ac102d732b704488cc578b72a15d0cb161015333d44e5d5e0b9"
+      },
+      {
+        "provider": "arxiv",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t124918z-arxiv-218c5e1a41",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Anonlinear+AND+all%3AMPC+AND+all%3Aquadrotor+AND+all%3Athrust+AND+all%3Aconstraint%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "915bce4f4b5c1956ce4a4d4298f9a3590c3c89b4af56c7ae0e6dee1c49b2e68b",
+        "normalized_results_sha256": "cafd35321dd9bb0f155a7564c28373d2fc9dcfb92c541ae541197cbec55389bc"
+      },
+      {
+        "provider": "crossref",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t124919z-crossref-ac25729f56",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=nonlinear+MPC+quadrotor+thrust+constraint&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "352bcee70672bb15ff1cc2dbadf5601e504f8c2c40a0f45bfd741493d1db6adc",
+        "normalized_results_sha256": "bc4cf0ae271e684cf79e0566fa98b96260a6bfa62c899aa62c39e721b922d8fd"
+      },
+      {
+        "provider": "openalex",
+        "query": "nonlinear MPC quadrotor thrust constraint",
+        "receipt_id": "20261121t124922z-openalex-4a097a6d06",
+        "request_url": "https://api.openalex.org/works?search=nonlinear+MPC+quadrotor+thrust+constraint&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "a67fc19d61ca3492875eaefd32354f08d778ecaa5b90534383f58a51fe01ba73",
+        "normalized_results_sha256": "64565a1d17401eddce92d0bc0491d5b68738834c07f635987a127398d07c63b9"
+      },
+      {
+        "provider": "arxiv",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t125002z-arxiv-64642a5252",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Aaerial+AND+all%3Amanipulator+AND+all%3Adisturbance+AND+all%3Aobserver+AND+all%3Acontrol%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 2,
+        "response_sha256": "ac0cf69754147b9a15a264bc4a3bb8238ea98eb3f9cbb51998406af8c378173a",
+        "normalized_results_sha256": "203f9256de618570a207258409b562a50c84167f4fee12e31d166732f67bf871"
+      },
+      {
+        "provider": "crossref",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t125003z-crossref-d8b9fd054b",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=aerial+manipulator+disturbance+observer+control&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "71d758cf2c1f852356dc98ea927f74b600772c1a65ddd600afae52dfc7d1fd57",
+        "normalized_results_sha256": "0641ce1a5319bcf4bd3a641c744f2d318132e6f6e8e2cb6b057d30d6825d1773"
+      },
+      {
+        "provider": "openalex",
+        "query": "aerial manipulator disturbance observer control",
+        "receipt_id": "20261121t125007z-openalex-b5c51500ff",
+        "request_url": "https://api.openalex.org/works?search=aerial+manipulator+disturbance+observer+control&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "6068b2dca815a84169db261c92cd4bda0210657e466fda83ec0866ece38c0ce8",
+        "normalized_results_sha256": "8c2fe0ab5d41cf7555566f5aabfbc4134e4cd87924abf0d11ffafbdc3d2982b7"
+      },
+      {
+        "provider": "arxiv",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t125016z-arxiv-ee57dda54e",
+        "request_url": "https://export.arxiv.org/api/query?search_query=%28all%3Amulti-robot+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Atimestamp%29+AND+submittedDate%3A%5B202501010000+TO+202512312359%5D&start=0&max_results=12&sortBy=submittedDate&sortOrder=descending",
+        "result_count": 0,
+        "response_sha256": "91597d8d250686a004f7a7d528d7c563d99768a92a9e998b12aed4c6b1ee9b2c",
+        "normalized_results_sha256": "cafd35321dd9bb0f155a7564c28373d2fc9dcfb92c541ae541197cbec55389bc"
+      },
+      {
+        "provider": "crossref",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t125017z-crossref-e40ca0c8c5",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=multi-robot+cooperative+localization+timestamp&rows=12&filter=from-pub-date%3A2025-01-01%2Cuntil-pub-date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "b08a9158ec5a101e10c9979239e28ac55117e839a6a84a425b17770625eb95b7",
+        "normalized_results_sha256": "de7c32db1df125454808adce200e8080c59c9a234148e03613859d460e841971"
+      },
+      {
+        "provider": "openalex",
+        "query": "multi-robot cooperative localization timestamp",
+        "receipt_id": "20261121t125020z-openalex-996bf25dc9",
+        "request_url": "https://api.openalex.org/works?search=multi-robot+cooperative+localization+timestamp&per-page=12&filter=from_publication_date%3A2025-01-01%2Cto_publication_date%3A2025-12-31",
+        "result_count": 12,
+        "response_sha256": "99b34f2e90bdbbb7eaba600b958f7540dc5c706f3a1f5e0fdd563a8a3d885d6b",
+        "normalized_results_sha256": "557bf5d35cb71756856da5b2c952653a162442010a053864dc2f8040ef494967"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1080/10408398.2025.2604196",
+        "receipt_id": "20261121t125046z-opencitations-d6ea356c83",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.2196/78310",
+        "receipt_id": "20261121t125048z-opencitations-959e40eec4",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 106,
+    "off_topic_filtered": 68,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 23,
+    "net_new": 15,
+    "provider_statuses": [
+      {
+        "query": "laser cladding sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "laser cladding sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "laser cladding sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "laser cladding sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 4
+      },
+      {
+        "query": "laser cladding sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "wire arc additive sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "wire arc additive sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "wire arc additive sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "wire arc additive sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 6
+      },
+      {
+        "query": "wire arc additive sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "directed energy deposition sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "directed energy deposition sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "directed energy deposition sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "directed energy deposition sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "directed energy deposition sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "powder bed fusion sensor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 3
+      },
+      {
+        "query": "powder bed fusion sensor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "powder bed fusion sensor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "powder bed fusion sensor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "powder bed fusion sensor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-24602967-data-a-systematic-review",
+        "key": "figshare:24602967",
+        "dataset_name": "Data - A systematic review on uncalibrated visual servoing techniques",
+        "doi": "10.6084/m9.figshare.24602967.v1",
+        "landing_url": "https://figshare.com/articles/dataset/Data_-_A_systematic_review_on_uncalibrated_visual_servoing_techniques/24602967",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-24602967-data-a-systematic-review-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-24602967-data-a-systematic-review-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_24602967_data_a_systematic_review.py",
+        "cleaned_rows": 35,
+        "raw_total_rows": 1396,
+        "verified_sha256": "533ad76fe1e6011f8428caeafce3e0a534986d3198f9b33c3143c49c88d08fd8"
+      },
+      {
+        "slug": "figshare-31817062-synthetic-pump-predictiv",
+        "key": "figshare:31817062",
+        "dataset_name": "Synthetic Pump Predictive Maintenance Dataset with Physics-Based Degradation for RUL Modeling",
+        "doi": "10.6084/m9.figshare.31817062",
+        "landing_url": "https://figshare.com/articles/dataset/Synthetic_Pump_Predictive_Maintenance_Dataset_with_Physics-Based_Degradation_for_RUL_Modeling/31817062",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-31817062-synthetic-pump-predictiv-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-31817062-synthetic-pump-predictiv-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_31817062_synthetic_pump_predictiv.py",
+        "cleaned_rows": 35,
+        "raw_total_rows": 36500,
+        "verified_sha256": "fc69c38645f1b58da10a625020ba38338a3083808a9078628d8d53ca63418995"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Dataset for Paper: Temperature coefficient of resistance of commercial conductive polymer composites for material extrusion: influence of infill orientation and stability over thermal cycles",
+        "url": "https://figshare.com/articles/dataset/Dataset_for_Paper_Temperature_coefficient_of_resistance_of_commercial_conductive_polymer_composites_for_material_extrusion_influence_of_infill_orientation_and_stability_over_thermal_cycles/34450590",
+        "error": "cannot insert source_file, already exists"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

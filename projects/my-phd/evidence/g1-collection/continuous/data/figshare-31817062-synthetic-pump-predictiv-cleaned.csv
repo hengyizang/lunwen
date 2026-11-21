@@ -1,0 +1,36 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+pump_predictive_maintenance_dataset1.csv,timestamp,categorical_or_text,36500,36500,0,758,,,,,,,"{""2023-01-30"": 50, ""2023-01-31"": 50, ""2023-02-01"": 50}"
+pump_predictive_maintenance_dataset1.csv,asset_id,categorical_or_text,36500,36500,0,50,,,,,,,"{""PUMP-000"": 730, ""PUMP-001"": 730, ""PUMP-002"": 730}"
+pump_predictive_maintenance_dataset1.csv,well_id,categorical_or_text,36500,36500,0,49,,,,,,,"{""WELL-988"": 1460, ""WELL-688"": 730, ""WELL-629"": 730}"
+pump_predictive_maintenance_dataset1.csv,pump_type,categorical_or_text,36500,36500,0,4,,,,,,,"{""PCP"": 11680, ""Jet Pump"": 10220, ""ESP"": 7300}"
+pump_predictive_maintenance_dataset1.csv,pump_model,categorical_or_text,36500,36500,0,50,,,,,,,"{""MDL-4682"": 730, ""MDL-9252"": 730, ""MDL-3971"": 730}"
+pump_predictive_maintenance_dataset1.csv,manufacturer,categorical_or_text,36500,36500,0,4,,,,,,,"{""Halliburton"": 11680, ""Baker Hughes"": 10950, ""Schlumberger"": 8760}"
+pump_predictive_maintenance_dataset1.csv,installation_date,categorical_or_text,36500,36500,0,50,,,,,,,"{""2020-07-18"": 730, ""2021-10-15"": 730, ""2021-08-16"": 730}"
+pump_predictive_maintenance_dataset1.csv,operating_hours,numeric,36500,36500,0,1725,2448,17088,23064,23137.9,28848,43872,8288.89
+pump_predictive_maintenance_dataset1.csv,depth_m,numeric,36500,36500,0,48,1507,2380,3076.5,2947.94,3744,3972,797.339
+pump_predictive_maintenance_dataset1.csv,flow_rate_bpd,numeric,36500,36500,0,34203,100,1693.55,2494.32,2545.08,3447.46,6652.8,1161.99
+pump_predictive_maintenance_dataset1.csv,pressure_psi,numeric,36500,36500,0,31606,500,1642.68,2143.64,1981.23,2417.31,3325.87,548.712
+pump_predictive_maintenance_dataset1.csv,temperature_c,numeric,36500,36500,0,2766,41.59,60.65,64.74,64.095,67.82,83.56,5.14295
+pump_predictive_maintenance_dataset1.csv,vibration_mm_s,numeric,36500,36500,0,2408,0.522,1.636,1.933,1.94779,2.246,3.847,0.444473
+pump_predictive_maintenance_dataset1.csv,rotation_rpm,numeric,36500,36500,0,275,0,3464,3499,3430.05,3533,3600,491.707
+pump_predictive_maintenance_dataset1.csv,power_kw,numeric,36500,36500,0,3715,10,491.77,499.21,478.985,500,500,79.8428
+pump_predictive_maintenance_dataset1.csv,current_a,numeric,36500,36500,0,411,20,79.14,79.97,78.3013,80,80,8.45886
+pump_predictive_maintenance_dataset1.csv,voltage_v,numeric,36500,36500,0,473,380,394.6,399.9,399.995,405.4,433.9,7.94639
+pump_predictive_maintenance_dataset1.csv,efficiency_pct,numeric,36500,36500,0,2495,64.79,73.15,76.41,76.655,79.84,93.33,4.87376
+pump_predictive_maintenance_dataset1.csv,water_cut_pct,numeric,36500,36500,0,5012,11.68,28.9375,42.27,41.0892,52.13,66.22,12.6697
+pump_predictive_maintenance_dataset1.csv,gor_scf_bbl,numeric,36500,36500,0,167,580.64,2000,2000,1997.78,2000,2000,43.042
+pump_predictive_maintenance_dataset1.csv,sand_rate_ppm,numeric,36500,36500,0,4910,20.67,497.56,500,491.462,500,500,31.1803
+pump_predictive_maintenance_dataset1.csv,fluid_viscosity_cp,numeric,36500,36500,0,1398,4.08,10.74,12.29,12.3443,13.87,22.29,2.31368
+pump_predictive_maintenance_dataset1.csv,fluid_density_kg_m3,numeric,36500,36500,0,6714,857.08,899.78,911.65,911.151,922.58,981.83,15.1253
+pump_predictive_maintenance_dataset1.csv,co2_ppm,numeric,36500,36500,0,26683,0,448.387,548.83,549.175,649.34,1114.05,149.612
+pump_predictive_maintenance_dataset1.csv,h2s_ppm,numeric,36500,36500,0,1535,4.73,17.15,20.93,20.8749,24.6,28.33,4.33563
+pump_predictive_maintenance_dataset1.csv,ambient_temp_c,numeric,36500,36500,0,2001,15,20.03,25.09,25.0205,30,35,5.7753
+pump_predictive_maintenance_dataset1.csv,shutdown_event,numeric,36500,36500,0,2,0,0,0,0.0199452,0,1,0.139814
+pump_predictive_maintenance_dataset1.csv,overload_event,numeric,36500,36500,0,2,0,0,0,0.00956164,0,1,0.0973164
+pump_predictive_maintenance_dataset1.csv,pressure_drop_event,numeric,36500,36500,0,2,0,0,0,0.0300822,0,1,0.170816
+pump_predictive_maintenance_dataset1.csv,last_maintenance_date,categorical_or_text,36500,36500,0,176,,,,,,,"{""2023-01-13"": 600, ""2023-05-13"": 600, ""2023-09-10"": 600}"
+pump_predictive_maintenance_dataset1.csv,failure_type,categorical_or_text,36500,0,36500,0,,,,,,,{}
+pump_predictive_maintenance_dataset1.csv,days_since_maintenance,numeric,36500,36500,0,120,0,28,59,58.7748,89,119,34.9906
+pump_predictive_maintenance_dataset1.csv,health_index,numeric,36500,36500,0,1835,0.7237,0.8103,0.8383,0.836648,0.8641,0.93,0.0375047
+pump_predictive_maintenance_dataset1.csv,rul_days,numeric,36500,36500,0,357,120,400,400,349.249,400,400,107.323
+pump_predictive_maintenance_dataset1.csv,label_failure_within_7d,numeric,36500,36500,0,1,0,0,0,0,0,0,0

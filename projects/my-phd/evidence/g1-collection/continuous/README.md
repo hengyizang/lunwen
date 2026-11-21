@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：51
-- **最近更新时间 (UTC)**：2026-11-21T12:44:05Z
-- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5545 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1973 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：4559 条
-- **累计已完成确定性清洗数据集**：113 个
+- **已完成轮次**：52
+- **最近更新时间 (UTC)**：2026-11-21T12:49:12Z
+- **累计净新增文献** (`literature-new.csv, literature-new-part-02.csv, literature-new-part-03.csv, literature-new-part-04.csv`)：5618 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv, datasets-new-part-02.csv`)：1988 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：4632 条
+- **累计已完成确定性清洗数据集**：115 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,12 +20,12 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 207 | 99 |
-| `R2_Aerial_Actuator` | 477 | 119 |
-| `R5_MultiRobot_Comm` | 304 | 97 |
-| `Robotics_Embodied` | 1584 | 615 |
-| `Mechanical_Physics_AI` | 1507 | 895 |
-| `Mechatronics_PHM_Control` | 1324 | 680 |
-| `Smart_Manufacturing` | 736 | 428 |
+| `R2_Aerial_Actuator` | 524 | 119 |
+| `R5_MultiRobot_Comm` | 314 | 97 |
+| `Robotics_Embodied` | 1610 | 616 |
+| `Mechanical_Physics_AI` | 1509 | 901 |
+| `Mechatronics_PHM_Control` | 1350 | 680 |
+| `Smart_Manufacturing` | 736 | 438 |
 | `Smart_Factory_DigitalTwin` | 437 | 90 |
 | `R1` | 34 | 0 |
 | `Adjacent` | 701 | 0 |
@@ -46,8 +46,6 @@
 
 | Slug | 名称 | DOI / 入口 | 清洗模式 | 行数 | 原始文件 SHA-256 (前12位) | 清洗表 / 来源 / 脚本 |
 |---|---|---|---|---:|---|---|
-| `dataverse-sqs8my-replication-data-for-tur` | Replication Data for: "Turning on Those Who Turn to the Courts: Exp... | 10.7910/dvn/sqs8my | `summary_table` | 190 | `200f97378710` | [CSV](data/dataverse-sqs8my-replication-data-for-tur-cleaned.csv) · [JSON](data/dataverse-sqs8my-replication-data-for-tur-provenance.json) · [PY](data/derive_dataverse_sqs8my_replication_data_for_tur.py) |
-| `dataverse-mygsyo-replication-data-for-foo` | Replication Data for: Foot-propelled swimming kinematics and turnin... | 10.7910/dvn/mygsyo | `summary_table` | 24 | `b5455e1580d1` | [CSV](data/dataverse-mygsyo-replication-data-for-foo-cleaned.csv) · [JSON](data/dataverse-mygsyo-replication-data-for-foo-provenance.json) · [PY](data/derive_dataverse_mygsyo_replication_data_for_foo.py) |
 | `figshare-32362119-data-sheet-1-optimizing` | Data Sheet 1_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s005 | `summary_table` | 214 | `4c4a5f96d2e1` | [CSV](data/figshare-32362119-data-sheet-1-optimizing-cleaned.csv) · [JSON](data/figshare-32362119-data-sheet-1-optimizing-provenance.json) · [PY](data/derive_figshare_32362119_data_sheet_1_optimizing.py) |
 | `figshare-32362125-data-sheet-3-optimizing` | Data Sheet 3_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s003 | `cleaned_rows` | 209 | `bcaa8ca93639` | [CSV](data/figshare-32362125-data-sheet-3-optimizing-cleaned.csv) · [JSON](data/figshare-32362125-data-sheet-3-optimizing-provenance.json) · [PY](data/derive_figshare_32362125_data_sheet_3_optimizing.py) |
 | `figshare-32362128-data-sheet-4-optimizing` | Data Sheet 4_Optimizing predictive maintenance with synthetic data:... | 10.3389/fmech.2026.1781598.s002 | `cleaned_rows` | 10 | `a8e35125db9c` | [CSV](data/figshare-32362128-data-sheet-4-optimizing-cleaned.csv) · [JSON](data/figshare-32362128-data-sheet-4-optimizing-provenance.json) · [PY](data/derive_figshare_32362128_data_sheet_4_optimizing.py) |
@@ -71,12 +69,13 @@
 | `dataverse-efnv5j-replication-data-for-hyd` | Replication Data For: Hydraulic Fracturing Chemicals Reporting: Ana... | 10.7910/dvn/efnv5j | `cleaned_rows` | 34 | `81cdd210694d` | [CSV](data/dataverse-efnv5j-replication-data-for-hyd-cleaned.csv) · [JSON](data/dataverse-efnv5j-replication-data-for-hyd-provenance.json) · [PY](data/derive_dataverse_efnv5j_replication_data_for_hyd.py) |
 | `dataverse-wohq9f-replication-data-for-mix` | Replication Data for: Mixed hydraulic responses to drought in six c... | 10.7910/dvn/wohq9f | `summary_table` | 37 | `5d1ccf03e688` | [CSV](data/dataverse-wohq9f-replication-data-for-mix-cleaned.csv) · [JSON](data/dataverse-wohq9f-replication-data-for-mix-provenance.json) · [PY](data/derive_dataverse_wohq9f_replication_data_for_mix.py) |
 | `dataverse-jzgtxj-peafowl-locomotion` | Peafowl Locomotion | 10.7910/dvn/jzgtxj | `cleaned_rows` | 282 | `a7c4d8841fea` | [CSV](data/dataverse-jzgtxj-peafowl-locomotion-cleaned.csv) · [JSON](data/dataverse-jzgtxj-peafowl-locomotion-provenance.json) · [PY](data/derive_dataverse_jzgtxj_peafowl_locomotion.py) |
+| `figshare-24602967-data-a-systematic-review` | Data - A systematic review on uncalibrated visual servoing techniques | 10.6084/m9.figshare.24602967.v1 | `summary_table` | 35 | `533ad76fe1e6` | [CSV](data/figshare-24602967-data-a-systematic-review-cleaned.csv) · [JSON](data/figshare-24602967-data-a-systematic-review-provenance.json) · [PY](data/derive_figshare_24602967_data_a_systematic_review.py) |
+| `figshare-31817062-synthetic-pump-predictiv` | Synthetic Pump Predictive Maintenance Dataset with Physics-Based De... | 10.6084/m9.figshare.31817062 | `summary_table` | 35 | `fc69c38645f1` | [CSV](data/figshare-31817062-synthetic-pump-predictiv-cleaned.csv) · [JSON](data/figshare-31817062-synthetic-pump-predictiv-provenance.json) · [PY](data/derive_figshare_31817062_synthetic_pump_predictiv.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
 | 轮次 | UTC 时间 | 主题批次 | 净增文献 | 净增数据集 | 新增清洗表 | 审计文件 |
 |---:|---|---|---:|---:|---:|---|
-| 27 | 2026-11-21T09:39:08Z | Broad Engineering R27: Mechatronics_PHM_Control | +123 | +60 | +3 | [round-27-audit.json](rounds/round-27-audit.json) |
 | 28 | 2026-11-21T09:44:03Z | Broad Engineering R28: Mechatronics_PHM_Control | +92 | +37 | +0 | [round-28-audit.json](rounds/round-28-audit.json) |
 | 29 | 2026-11-21T09:49:01Z | Broad Engineering R29: Smart_Manufacturing | +155 | +39 | +3 | [round-29-audit.json](rounds/round-29-audit.json) |
 | 30 | 2026-11-21T09:54:02Z | Broad Engineering R30: Smart_Manufacturing / Smart_Factory_DigitalTwin | +180 | +54 | +3 | [round-30-audit.json](rounds/round-30-audit.json) |
@@ -101,3 +100,4 @@
 | 49 | 2026-11-21T12:29:10Z | Broad Engineering R49: R2_Aerial_Actuator / R5_MultiRobot_Comm | +105 | +15 | +3 | [round-49-audit.json](rounds/round-49-audit.json) |
 | 50 | 2026-11-21T12:39:13Z | Broad Engineering R50: R1_Force_Contact (2025) | +52 | +6 | +2 | [round-50-audit.json](rounds/round-50-audit.json) |
 | 51 | 2026-11-21T12:44:05Z | Broad Engineering R51: R1_Force_Contact / R2_Aerial_Actuator (2025) | +32 | +2 | +3 | [round-51-audit.json](rounds/round-51-audit.json) |
+| 52 | 2026-11-21T12:49:12Z | Broad Engineering R52: R2_Aerial_Actuator / R5_MultiRobot_Comm (2025) | +73 | +15 | +2 | [round-52-audit.json](rounds/round-52-audit.json) |

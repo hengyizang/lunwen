@@ -1,0 +1,36 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+data_extraction.csv,article,categorical_or_text,78,78,0,78,,,,,,,"{""Practical Considerations of Uncalibrated Visual Servoing"": 1, ""DSP Based Uncalibrated Visual Servoing for a 3-DOF Robot Manipulator"": 1, ""Uncalibrated Visu..."
+data_extraction.csv,Authors,categorical_or_text,78,78,0,75,,,,,,,"{""Zhou, Zhiyu and Zhang, Ruoxi and Zhu, Zefei"": 2, ""Gong, Zeyu and Tao, Bo and Yang, Hua and Yin, Zhouping and Ding, Han"": 2, ""Qiu, Zhoujingzi and Hu, Shiqia..."
+data_extraction.csv,Publication Year,numeric,78,78,0,8,2016,2018,2019.5,2019.69,2022,2023,2.31487
+data_extraction.csv,Motivation for uncalibrated,categorical_or_text,78,78,0,6,,,,,,,"{""Unknown image jacobian values"": 38, ""Unspecified"": 24, ""Recalibration"": 11}"
+data_extraction.csv,Type of robot,categorical_or_text,78,78,0,4,,,,,,,"{""Manipulator"": 66, ""Mobile with attached manipulator"": 6, ""Mobile robot"": 5}"
+data_extraction.csv,Handles noise in image features,numeric,78,78,0,2,0,0,0.5,0.5,1,1,0.503236
+data_extraction.csv,Estimation strategy,categorical_or_text,78,78,0,5,,,,,,,"{""KF"": 33, ""Parameter identification"": 16, ""NN"": 12}"
+data_extraction.csv,Estimation strategy (aux),categorical_or_text,78,7,71,1,,,,,,,"{""NN"": 7}"
+data_extraction.csv,How is the camera/robot workspace?,categorical_or_text,78,78,0,6,,,,,,,"{""Full Pose"": 31, ""Three-dimensional"": 13, ""Constrained"": 9}"
+data_extraction.csv,Journal or Proceeding/Conference,categorical_or_text,78,78,0,2,,,,,,,"{""Journal"": 40, ""Proceeding"": 38}"
+imported_articles.csv,title,categorical_or_text,1318,1318,0,1132,,,,,,,"{""Vision guided navigation for a nonholonomic mobile robot"": 5, ""Dynamic visual servoing of robots in uncalibrated environments"": 5, ""Uncalibrated eye-in-han..."
+imported_articles.csv,author,categorical_or_text,1318,1297,21,987,,,,,,,"{""Dong, Gangqi and Zhu, Zheng H."": 8, ""Zhong, Xungao and Zhong, Xunyu and Peng, Xiafu"": 5, ""Liang, Xinwu and Wang, Hesheng and Chen, Weidong"": 5}"
+imported_articles.csv,journal,categorical_or_text,1318,928,390,522,,,,,,,"{""Proceedings - IEEE International Conference on Robotics and Automation"": 39, ""IEEE/ASME Transactions on Mechatronics"": 25, ""IEEE International Conference o..."
+imported_articles.csv,year,numeric,1318,1315,3,34,1987,2007,2014,2012.37,2019,2023,7.42872
+imported_articles.csv,source,categorical_or_text,1318,1318,0,6,,,,,,,"{""Scopus"": 495, ""ISI Web of Science"": 324, ""IEEE Digital Library"": 296}"
+imported_articles.csv,pages,categorical_or_text,1318,1020,298,989,,,,,,,"{""1--6"": 6, ""1--7"": 4, ""1--8"": 4}"
+imported_articles.csv,volume,numeric,1318,620,698,170,0,10,22,384.227,52,13458,1504.96
+imported_articles.csv,abstract,categorical_or_text,1318,1121,197,1109,,,,,,,"{""A vision-guided robot workstation is presented which picks up workpieces from a fast-moving conveyor belt. The role of computer vision as the feedback tran..."
+imported_articles.csv,document_type,categorical_or_text,1318,537,781,14,,,,,,,"{""Conference paper"": 255, ""Article"": 222, ""CITATION"": 19}"
+imported_articles.csv,doi,categorical_or_text,1318,1016,302,664,,,,,,,"{""10.1109/ICMA54519.2022.9856136"": 3, ""10.1109/ChiCC.2016.7554982"": 3, ""10.1109/SSST.2003.1194586"": 3}"
+imported_articles.csv,url,categorical_or_text,1318,1005,313,997,,,,,,,"{""https://www.mdpi.com/2079-9292/11/24/4184"": 2, ""http://ieeexplore.ieee.org/document/1626893/"": 2, ""https://www.mdpi.com/2076-0825/12/4/143"": 2}"
+imported_articles.csv,affiliation,categorical_or_text,1318,0,1318,0,,,,,,,{}
+imported_articles.csv,author_keywords,categorical_or_text,1318,344,974,340,,,,,,,"{""Instant switching control; Multiple camera fusion; Switching control based on fusion; Uncalibrated visual servoing"": 2, ""6D pose estimation; Extended Kalma..."
+imported_articles.csv,keywords,categorical_or_text,1318,555,763,553,,,,,,,"{""Servomechanisms, Calibration, Jacobian matrices, Transmission line matrix methods, Visual servoing, Orbital robotics, Recursive estimation, Least squares a..."
+imported_articles.csv,publisher,categorical_or_text,1318,404,914,47,,,,,,,"{""IEEE"": 230, ""ieeexplore.ieee.org"": 48, ""Association for Computing Machinery"": 43}"
+imported_articles.csv,issn,categorical_or_text,1318,325,993,131,,,,,,,"{""1050-4729"": 22, ""0302-9743"": 15, ""1083-4435, 1941-014X"": 12}"
+imported_articles.csv,language,categorical_or_text,1318,3,1315,1,,,,,,,"{""en"": 3}"
+imported_articles.csv,note,categorical_or_text,1318,816,502,392,,,,,,,"{""Cited by: 0"": 75, ""Cited by: 1"": 43, ""Query date: 2023-08-08 10:50:49"": 42}"
+imported_articles.csv,selection_criteria,categorical_or_text,1318,818,500,8,,,,,,,"{""Is not focused in UVS"": 387, ""Before 2016"": 157, ""Is not Visual Servoing"": 104}"
+imported_articles.csv,created_at,numeric,1318,1318,0,8,45146.6,45146.6,45146.6,45146.6,45146.6,45146.6,0.028417
+imported_articles.csv,updated_at,numeric,1318,1318,0,1288,45146.6,45160.7,45160.8,45162.5,45165.5,45190.8,7.75
+imported_articles.csv,created_by,categorical_or_text,1318,1318,0,1,,,,,,,"{""glauberrleite"": 1318}"
+imported_articles.csv,updated_by,categorical_or_text,1318,1282,36,1,,,,,,,"{""glauberrleite"": 1282}"
+imported_articles.csv,status,categorical_or_text,1318,1318,0,3,,,,,,,"{""Rejected"": 731, ""Duplicated"": 509, ""Accepted"": 78}"
+imported_articles.csv,comments,categorical_or_text,1318,13,1305,9,,,,,,,"{""KF"": 2, ""Extrinsic"": 2, ""Broyden"": 2}"

@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-24602967-data-a-systematic-review",
+  "dataset_name": "Data - A systematic review on uncalibrated visual servoing techniques",
+  "doi": "10.6084/m9.figshare.24602967.v1",
+  "landing_url": "https://figshare.com/articles/dataset/Data_-_A_systematic_review_on_uncalibrated_visual_servoing_techniques/24602967",
+  "source_api_url": "https://api.figshare.com/v2/articles/24602967",
+  "access_date": "2026-11-21",
+  "round_number": 52,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "data_extraction.csv",
+      "download_url": "https://ndownloader.figshare.com/files/43232319",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/43232319/data_extraction.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T125145Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22data_extraction.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=6bde411578518ffe0d0d5b98eb706154a1f3f855b93cd3b2f9c2df9b64c5d515",
+      "http_status": 200,
+      "bytes": 17756,
+      "publisher_checksum": "md5:b2ce029c00357fb828db804b5a483886",
+      "verified_md5": "b2ce029c00357fb828db804b5a483886",
+      "verified_sha256": "533ad76fe1e6011f8428caeafce3e0a534986d3198f9b33c3143c49c88d08fd8"
+    },
+    {
+      "file": "imported_articles.csv",
+      "download_url": "https://ndownloader.figshare.com/files/43232346",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/43232346/imported_articles.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T125148Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22imported_articles.csv%22&response-content-type=text%2Fcsv&X-Amz-Signature=c6167b27f4ca26e10fdc74c9b6489bf502122a93e7a1af1f3b9d2b0c8b732e56",
+      "http_status": 200,
+      "bytes": 1950573,
+      "publisher_checksum": "md5:fc2a22e3235cfcb22d2edc8ae957d57b",
+      "verified_md5": "fc2a22e3235cfcb22d2edc8ae957d57b",
+      "verified_sha256": "a8c97a4ab9e6cfaaccde1c4c767cdecbedb668d0b15e4f4cdfbd011c2569f5ca"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-24602967-data-a-systematic-review",
+  "raw_total_bytes": 1968329,
+  "raw_total_rows": 1396,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-24602967-data-a-systematic-review-cleaned.csv",
+  "cleaned_csv_sha256": "0ebdec446aac4bd7db372eb3604c202c5c51e2b5796742128fb31835ad2c454d",
+  "cleaned_rows": 35,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "data_extraction.csv": {
+      "article": 0,
+      "Authors": 0,
+      "Publication Year": 0,
+      "Motivation for uncalibrated": 0,
+      "Type of robot": 0,
+      "Handles noise in image features": 0,
+      "Estimation strategy": 0,
+      "Estimation strategy (aux)": 71,
+      "How is the camera/robot workspace?": 0,
+      "Journal or Proceeding/Conference": 0
+    },
+    "imported_articles.csv": {
+      "title": 0,
+      "author": 21,
+      "journal": 390,
+      "year": 3,
+      "source": 0,
+      "pages": 298,
+      "volume": 698,
+      "abstract": 197,
+      "document_type": 781,
+      "doi": 302,
+      "url": 313,
+      "affiliation": 1318,
+      "author_keywords": 974,
+      "keywords": 763,
+      "publisher": 914,
+      "issn": 993,
+      "language": 1315,
+      "note": 502,
+      "selection_criteria": 500,
+      "created_at": 0,
+      "updated_at": 0,
+      "created_by": 0,
+      "updated_by": 36,
+      "status": 0,
+      "comments": 1305
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}
