@@ -1,15 +1,17 @@
 {
   "schema_version": "1.0",
-  "round_number": 3,
-  "total_new_literature": 182,
-  "total_new_datasets": 200,
-  "total_new_reading_queue": 150,
+  "round_number": 4,
+  "total_new_literature": 275,
+  "total_new_datasets": 292,
+  "total_new_reading_queue": 235,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
     "dataverse:10.7910/dvn/cc355j",
     "dataverse:10.7910/dvn/idxscu",
-    "dataverse:10.7910/dvn/r0ozel"
+    "dataverse:10.7910/dvn/r0ozel",
+    "figshare:32308911",
+    "figshare:32141986"
   ],
   "cleaned_datasets_meta": [
     {
@@ -81,12 +83,42 @@
       "cleaned_rows": 402,
       "raw_total_rows": 402,
       "verified_sha256": "5dfc576eab09b8b3ce8f3767f61aeb6a1199f471f3b45f87895672d0d9fd4e62"
+    },
+    {
+      "slug": "figshare-32308911-paper-information-fault",
+      "key": "figshare:32308911",
+      "dataset_name": "Paper information: Fault Severity Classification in Gearboxes Using Sensor Signals and Artificial Intelligence Approaches: A Systematic Literature Review.",
+      "doi": "10.6084/m9.figshare.32308911.v2",
+      "landing_url": "https://figshare.com/articles/dataset/Paper_information_Fault_Severity_Classification_in_Gearboxes_Using_Sensor_Signals_and_Artificial_Intelligence_Approaches_A_Systematic_Literature_Review_/32308911",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32308911-paper-information-fault-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-32308911-paper-information-fault-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32308911_paper_information_fault.py",
+      "cleaned_rows": 83,
+      "raw_total_rows": 83,
+      "verified_sha256": "08e6e869500f987f69c16b76705d5d40edbca5b0de11d859444832f081e25ef2"
+    },
+    {
+      "slug": "figshare-32141986-brac-act-supporting-data",
+      "key": "figshare:32141986",
+      "dataset_name": "BRAC-ACT Supporting Data and Scripts for Long-Horizon Traditional Timber Dougong Assembly",
+      "doi": "10.6084/m9.figshare.32141986.v1",
+      "landing_url": "https://figshare.com/articles/dataset/BRAC-ACT_Supporting_Data_and_Scripts_for_Long-Horizon_Traditional_Timber_Dougong_Assembly/32141986",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32141986-brac-act-supporting-data-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/figshare-32141986-brac-act-supporting-data-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32141986_brac_act_supporting_data.py",
+      "cleaned_rows": 14,
+      "raw_total_rows": 17,
+      "verified_sha256": "acedb8161340ea9a3af9954350bedea9d2061be8b19fbe7a40df9aebcd479804"
     }
   ],
   "snowballed_dois": [
     "10.1016/j.measurement.2023.112827",
     "10.1016/j.measurement.2024.115140",
-    "10.1016/j.measurement.2024.115365"
+    "10.1016/j.measurement.2024.115365",
+    "10.1016/j.tws.2024.112745",
+    "10.3390/s24165441"
   ],
   "rounds_history": [
     {
@@ -115,30 +147,43 @@
       "net_new_datasets": 107,
       "cleaned_count": 3,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 4,
+      "completed_at": "2026-11-21T07:45:57Z",
+      "batch_label": "Broad Engineering R4: R5_MultiRobot_Comm",
+      "net_new_literature": 93,
+      "net_new_datasets": 92,
+      "cleaned_count": 2,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T07:44:04Z",
+  "updated_at": "2026-11-21T07:45:57Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 23,
+    "Adjacent": 28,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 63,
-    "Mechanical_Physics_AI": 7,
-    "Mechatronics_PHM_Control": 22,
-    "Robotics_Embodied": 42,
-    "R5_MultiRobot_Comm": 12,
+    "R2_Aerial_Actuator": 68,
+    "Mechanical_Physics_AI": 14,
+    "Mechatronics_PHM_Control": 40,
+    "Robotics_Embodied": 84,
+    "R5_MultiRobot_Comm": 82,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 2
+    "Smart_Manufacturing": 4,
+    "Smart_Factory_DigitalTwin": 1
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 95,
-    "Mechatronics_PHM_Control": 29,
+    "Mechanical_Physics_AI": 136,
+    "Mechatronics_PHM_Control": 109,
     "Smart_Manufacturing": 23,
-    "Robotics_Embodied": 3
+    "Robotics_Embodied": 21,
+    "R5_MultiRobot_Comm": 2,
+    "Smart_Factory_DigitalTwin": 1,
+    "R2_Aerial_Actuator": 4
   }
 }

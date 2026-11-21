@@ -1,0 +1,84 @@
+source_file,clean,raw
+thesaurus_instituciones.txt,UNIV POLITECN SALESIANA, UNIV POLITECN SALESIANA SEDE CUENCA
+thesaurus_instituciones.txt,QINGDAO INT ACAD PK RES INST, QINGDAO INT ACADEMICIAN PK RES INST
+thesaurus_instituciones.txt,UNIV ALGARVE, UNIV ALGRAVE
+thesaurus_autores.txt,BARCELO-CERDA S, BARCELO-CERDA
+thesaurus_autores.txt,CERRADA M, CERRADA 
+thesaurus_autores.txt,CERRADA M, MARIELA M
+thesaurus_autores.txt,SANCHEZ R, RENE-VINICIO R
+thesaurus_autores.txt,SANCHEZ R, SANCHEZ 
+thesaurus_autores.txt,SANCHEZ R, VINICIO S R
+thesaurus_autores.txt,BARCELO-CERDA s, SUSANA S
+thesaurus_autores.txt,OSORNIO-RIOS R, OSORIO RIOS
+thesaurus_autores.txt,PENUMAKALA P, PENUMAKALA
+thesaurus_keywords.txt,fault diagnosis, faults diagnosis
+thesaurus_keywords.txt,fault diagnosis, fault-diagnosis
+thesaurus_keywords.txt,fault detection, fault-detection
+thesaurus_keywords.txt,gearbox, gearboxes
+thesaurus_keywords.txt,gear, gears
+thesaurus_keywords.txt,bearing, bearings
+thesaurus_keywords.txt,algorithm, algorithms
+thesaurus_keywords.txt,feature, features
+thesaurus_keywords.txt,feature extraction, features extraction
+thesaurus_keywords.txt,feature extraction, feature-extraction
+thesaurus_keywords.txt,feature selection, feature-selection
+thesaurus_keywords.txt,classification model, classification models
+thesaurus_keywords.txt,classifier, classifiers
+thesaurus_keywords.txt,artificial intelligence, artificial-intelligence
+thesaurus_keywords.txt,artificial neural network, artificial neural network (ann)
+thesaurus_keywords.txt,artificial neural networks, artificial neural-networks
+thesaurus_keywords.txt,convolutional neural network, convolutional neural-network
+thesaurus_keywords.txt,convolutional neural network, convolutional neural network (cnn)
+thesaurus_keywords.txt,convolutional neural network, convolutional neural networks
+thesaurus_keywords.txt,neural network, neural-network
+thesaurus_keywords.txt,neural networks, neural-networks
+thesaurus_keywords.txt,deep learning, deep learning (dl)
+thesaurus_keywords.txt,autoencoder, auto-encoder
+thesaurus_keywords.txt,autoencoder, autoencoder (ae)
+thesaurus_keywords.txt,support vector machine, support vector machines
+thesaurus_keywords.txt,k-nearest neighbors, (knn)
+thesaurus_keywords.txt,long short-term memory, (lstm)
+thesaurus_keywords.txt,long short-term memory, lstm
+thesaurus_keywords.txt,multi-task learning, multitask learning
+thesaurus_keywords.txt,multi-task learning, (mtl)
+thesaurus_keywords.txt,multi-task learning, mtl
+thesaurus_keywords.txt,transfer learning, transfer learning (tl)
+thesaurus_keywords.txt,domain adaptation, domain adaptation (da)
+thesaurus_keywords.txt,prognostics and health management, prognostics and health management (phm)
+thesaurus_keywords.txt,wavelet transform, wavelet transforms
+thesaurus_keywords.txt,wavelet packet transform, wavelet packets transform
+thesaurus_keywords.txt,wavelet packet transform, wavelet packets
+thesaurus_keywords.txt,undecimated wavelet transform, undecimated wavelet transform (udwt)
+thesaurus_keywords.txt,discrete wavelet transform, dwt
+thesaurus_keywords.txt,empirical mode decomposition, emd
+thesaurus_keywords.txt,ceemdan, ceemdan algorithm
+thesaurus_keywords.txt,variational mode decomposition, vmd
+thesaurus_keywords.txt,principal component analysis, pca
+thesaurus_keywords.txt,kernel principal component analysis, kernel principal component analysis (kpca)
+thesaurus_keywords.txt,linear discriminant classifier, linear discriminant classifier (ldc)
+thesaurus_keywords.txt,hidden markov models, hidden markov models (hmms)
+thesaurus_keywords.txt,detrended fluctuation analysis, detrended-fluctuation analysis
+thesaurus_keywords.txt,detrended fluctuation analysis, dfa
+thesaurus_keywords.txt,rough set, roughset
+thesaurus_keywords.txt,relieff, relief-f algorithm
+thesaurus_keywords.txt,statistical feature, statistic feature
+thesaurus_keywords.txt,statistical feature, statistical features
+thesaurus_keywords.txt,vibration signal, vibration signals
+thesaurus_keywords.txt,vibration, vibrations
+thesaurus_keywords.txt,vibration, vibrations (mechanical)
+thesaurus_keywords.txt,acoustic signals, acoustic-signals
+thesaurus_keywords.txt,operating conditions, operating-conditions
+thesaurus_keywords.txt,operating conditions, operation conditions
+thesaurus_keywords.txt,operating conditions, working conditions
+thesaurus_keywords.txt,dynamic model, dynamic-model
+thesaurus_keywords.txt,dynamic model, dynamic modeling
+thesaurus_keywords.txt,planetary gearbox, planetary gearboxes
+thesaurus_keywords.txt,multi-stage gearbox, multistage gearbox
+thesaurus_keywords.txt,multi-stage gearbox, multistage gearboxes
+thesaurus_keywords.txt,wind turbine, wind turbines
+thesaurus_keywords.txt,induction motors, induction-motors
+thesaurus_keywords.txt,electric vehicle, electric vehicles
+thesaurus_keywords.txt,dc machine, dc machines
+thesaurus_keywords.txt,powertrain, powertrains
+thesaurus_keywords.txt,powertrain,p ower-train systems
+thesaurus_keywords.txt,vibration analysis, vibratory analysis

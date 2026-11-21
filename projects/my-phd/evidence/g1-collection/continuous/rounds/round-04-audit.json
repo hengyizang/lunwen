@@ -1,0 +1,309 @@
+{
+  "schema_version": "1.0",
+  "round": 4,
+  "completed_at": "2026-11-21T07:45:57Z",
+  "batch_label": "Broad Engineering R4: R5_MultiRobot_Comm",
+  "base_head_sha": "9821f5bee00d2fb5a52775a27da4cff9d2860992",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 115,
+    "duplicates_skipped": 22,
+    "net_new": 93,
+    "new_reading_queue": 85,
+    "receipts": [
+      {
+        "provider": "arxiv",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t074557z-arxiv-8f36abf99f",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Aage+AND+all%3Aof+AND+all%3Ainformation+AND+all%3Awireless+AND+all%3Arobot+AND+all%3Acontrol&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "726e49b66dcc666c8ad961b38cd95bf8003363225d342842de013f427694661e",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t074558z-crossref-f8a12df6ca",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=age+of+information+wireless+robot+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "2386ccfe24b647b91f8b58af10995bed80fb734c0a92b04c511dfefe5618cd5b",
+        "normalized_results_sha256": "5da7d930a5f47355af95df29fe703f6c6bd8a2d54b0d3ce8474a4e01fec17c52"
+      },
+      {
+        "provider": "openalex",
+        "query": "age of information wireless robot control",
+        "receipt_id": "20261121t074559z-openalex-118547c025",
+        "request_url": "https://api.openalex.org/works?search=age+of+information+wireless+robot+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "3f8f021fcf1dee710b4903d68cfdd4a4d6fba4a50fa4a45deedb270e85999967",
+        "normalized_results_sha256": "f1b319a91d586bc13311707537aa0cb03c6186377326c7b2464b36c38f20a33e"
+      },
+      {
+        "provider": "arxiv",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t074601z-arxiv-54a69b58ae",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3AUWB+AND+all%3Acooperative+AND+all%3Alocalization+AND+all%3Aclock+AND+all%3Adrift&start=0&max_results=12",
+        "result_count": 0,
+        "response_sha256": "d7eab744405ccfbca57d07e9e3e815053bcb6612d1d8b99d74e105164fd47aa1",
+        "normalized_results_sha256": "21838a32764855a822d0ebc2b3b2bfad02c983e847bb02575e205ce044c98732"
+      },
+      {
+        "provider": "crossref",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t074602z-crossref-de411b3856",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=UWB+cooperative+localization+clock+drift&rows=12",
+        "result_count": 12,
+        "response_sha256": "2d72f9241f92615c564cd00c83ce3694d8b687cf0bc9f9222232f6ba3d88edab",
+        "normalized_results_sha256": "439247bd47e29d68aef38941cce9adc070efe7f4154c91dd3daee8cfad7172db"
+      },
+      {
+        "provider": "openalex",
+        "query": "UWB cooperative localization clock drift",
+        "receipt_id": "20261121t074603z-openalex-e8933785e2",
+        "request_url": "https://api.openalex.org/works?search=UWB+cooperative+localization+clock+drift&per-page=12",
+        "result_count": 12,
+        "response_sha256": "74588f46823c13fd84328ce928c9a6e4ce7565925c167ad30550802582d7dcb8",
+        "normalized_results_sha256": "e452b0e32948a7e65d330e53acae264ffa3a58fa90cceb190fffe38ab18148da"
+      },
+      {
+        "provider": "arxiv",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t074604z-arxiv-4772949288",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3Adecentralized+AND+all%3Amulti-robot+AND+all%3ASLAM+AND+all%3Acommunication&start=0&max_results=12",
+        "result_count": 8,
+        "response_sha256": "1dc1aa200ba5b2a4a7c46768507bd7344f0da6c7a9d0000089675e5c0a7a86f2",
+        "normalized_results_sha256": "b516217a2fdbdd209edb69bca00a0d1388bd9e0ba1665407b39b6b36ebbe37d6"
+      },
+      {
+        "provider": "crossref",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t074605z-crossref-28fd2e02cd",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=decentralized+multi-robot+SLAM+communication&rows=12",
+        "result_count": 12,
+        "response_sha256": "c770ceaa2a1c891a11e22de92b2dd6f2b5b0ade5c2c7de76c86a5fd0ad962e7d",
+        "normalized_results_sha256": "c58de20a0aa6c6e7d6f4249f07444d4c8f53fe6429e883cea4501937ea1f58d1"
+      },
+      {
+        "provider": "openalex",
+        "query": "decentralized multi-robot SLAM communication",
+        "receipt_id": "20261121t074606z-openalex-96c061d89b",
+        "request_url": "https://api.openalex.org/works?search=decentralized+multi-robot+SLAM+communication&per-page=12",
+        "result_count": 12,
+        "response_sha256": "12a3f829d2bcc8092d092bebb88d2a3040408ce349c0b3a6c0d384eec0acab58",
+        "normalized_results_sha256": "9c9cae47d9a0c8f731781a2701be5f96c16ed34e2063d29070514caa976885d8"
+      },
+      {
+        "provider": "arxiv",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t074608z-arxiv-11563296bc",
+        "request_url": "https://export.arxiv.org/api/query?search_query=all%3AV2X+AND+all%3Acooperative+AND+all%3Aperception+AND+all%3Alatency+AND+all%3Aestimation&start=0&max_results=12",
+        "result_count": 2,
+        "response_sha256": "ec9636a0f4db17608dfef55a750270a7290a89077fb3506b8b32e6d2185a87b4",
+        "normalized_results_sha256": "b55c7f1b827e216c95780671527214d212f6539eb2d90bbe845b9a7ec729d487"
+      },
+      {
+        "provider": "crossref",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t074609z-crossref-8530fe744f",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=V2X+cooperative+perception+latency+estimation&rows=12",
+        "result_count": 12,
+        "response_sha256": "d293d162a4a4d8681e8ea6dd35d33c1194798c3ed3dc860ecb51b1d1a02c2145",
+        "normalized_results_sha256": "b20840e0575e5a206e77b7a116edab808d243efc300407053541ab498dac96cb"
+      },
+      {
+        "provider": "openalex",
+        "query": "V2X cooperative perception latency estimation",
+        "receipt_id": "20261121t074612z-openalex-8adc92cd4f",
+        "request_url": "https://api.openalex.org/works?search=V2X+cooperative+perception+latency+estimation&per-page=12",
+        "result_count": 12,
+        "response_sha256": "b3f0be7e3aadc13a8ede16737566c132e0dadc8df240e1c4fadc68b686968550",
+        "normalized_results_sha256": "70b4fc6ae8589be7af98fd536ed2488103fe40347dfd8f7ee2252e7a01783cfe"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.3390/s24165441",
+        "receipt_id": "20261121t074613z-opencitations-c11c37b935",
+        "result_count": 2,
+        "response_sha256": "ce436ed0f9166c774b2c9b2265f989ef76e2d66e1b76d7429a34ff9b0d8ffe53"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.tws.2024.112745",
+        "receipt_id": "20261121t074614z-opencitations-64592569bc",
+        "result_count": 7,
+        "response_sha256": "09d4e8059c8cca7c6728ac819bc907f47a60e477e1a63a00af54ee7a7d26d5f0"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 178,
+    "off_topic_filtered": 58,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 28,
+    "net_new": 92,
+    "provider_statuses": [
+      {
+        "query": "gearbox fault",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "gearbox fault",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "pmsm motor",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "hydraulic actuator",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "imu odometry",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "imu odometry",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 2
+      },
+      {
+        "query": "imu odometry",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "imu odometry",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      }
+    ],
+    "probed_for_cleaning": 20,
+    "cleaned": [
+      {
+        "slug": "figshare-32308911-paper-information-fault",
+        "key": "figshare:32308911",
+        "dataset_name": "Paper information: Fault Severity Classification in Gearboxes Using Sensor Signals and Artificial Intelligence Approaches: A Systematic Literature Review.",
+        "doi": "10.6084/m9.figshare.32308911.v2",
+        "landing_url": "https://figshare.com/articles/dataset/Paper_information_Fault_Severity_Classification_in_Gearboxes_Using_Sensor_Signals_and_Artificial_Intelligence_Approaches_A_Systematic_Literature_Review_/32308911",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32308911-paper-information-fault-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32308911-paper-information-fault-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32308911_paper_information_fault.py",
+        "cleaned_rows": 83,
+        "raw_total_rows": 83,
+        "verified_sha256": "08e6e869500f987f69c16b76705d5d40edbca5b0de11d859444832f081e25ef2"
+      },
+      {
+        "slug": "figshare-32141986-brac-act-supporting-data",
+        "key": "figshare:32141986",
+        "dataset_name": "BRAC-ACT Supporting Data and Scripts for Long-Horizon Traditional Timber Dougong Assembly",
+        "doi": "10.6084/m9.figshare.32141986.v1",
+        "landing_url": "https://figshare.com/articles/dataset/BRAC-ACT_Supporting_Data_and_Scripts_for_Long-Horizon_Traditional_Timber_Dougong_Assembly/32141986",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/figshare-32141986-brac-act-supporting-data-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/figshare-32141986-brac-act-supporting-data-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_figshare_32141986_brac_act_supporting_data.py",
+        "cleaned_rows": 14,
+        "raw_total_rows": 17,
+        "verified_sha256": "acedb8161340ea9a3af9954350bedea9d2061be8b19fbe7a40df9aebcd479804"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "Processed data supporting “Complex Damage Identification of Jacket Platforms Using Sensor-Scale Collaborative Attention and Multiscale Feature Learning”",
+        "url": "https://figshare.com/articles/dataset/Processed_data_supporting_Complex_Damage_Identification_of_Jacket_Platforms_Using_Sensor-Scale_Collaborative_Attention_and_Multiscale_Feature_Learning_/35055502",
+        "error": "Command failed (1): D:\\nn\\python\\python.exe C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_figshare_35055502_processed_data_supportin.py C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-35055502-processed-data-supportin\n\nTraceback (most recent call last):\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_figshare_35055502_processed_data_supportin.py\", line 21, in <module>\n    raise SystemExit(run_cli(EXPECTED_FILES, EXPECTED_OUTPUT_SHA256, MODE, Path(__file__).name, 25000000))\n                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 151, in run_cli\n    reproduce(Path(sys.argv[1]), expected_files, expected_output_sha256, mode, max_raw_bytes, out)\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\state-my-phd\\projects\\my-phd\\evidence\\g1-collection\\continuous\\data\\derive_common.py\", line 139, in reproduce\n    raise ValueError(f\"Reproduced output SHA-256 mismatch: {out_sha} != {expected_output_sha256}\")\nValueError: Reproduced output SHA-256 mismatch: 901ab77bb6cf3413ca0367c9e69ada0f3d5a3b8b2f8c8320b4477bd6cb56db00 != 9f0d1b98f374ccd6988ae6ee29cb789aab7ce4ea450fabd43399f8e24d005806\n"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

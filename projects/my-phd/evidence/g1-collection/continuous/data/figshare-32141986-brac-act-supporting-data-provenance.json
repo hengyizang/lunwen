@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0",
+  "slug": "figshare-32141986-brac-act-supporting-data",
+  "dataset_name": "BRAC-ACT Supporting Data and Scripts for Long-Horizon Traditional Timber Dougong Assembly",
+  "doi": "10.6084/m9.figshare.32141986.v1",
+  "landing_url": "https://figshare.com/articles/dataset/BRAC-ACT_Supporting_Data_and_Scripts_for_Long-Horizon_Traditional_Timber_Dougong_Assembly/32141986",
+  "source_api_url": "https://api.figshare.com/v2/articles/32141986",
+  "access_date": "2026-11-21",
+  "round_number": 4,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "BRAC-ACT_supporting_data_editable.zip",
+      "download_url": "https://ndownloader.figshare.com/files/64153210",
+      "final_url": "https://44c1cec316ec56bca76dfd65d2882b20.r2.cloudflarestorage.com/figshare-com-storage/64153210/BRACACT_supporting_data_editable.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ff06dacca0bd4b78c42274ace031d878/20261121/auto/s3/aws4_request&X-Amz-Date=20261121T074701Z&X-Amz-Expires=10&X-Amz-SignedHeaders=host&response-content-disposition=attachment%3B%20filename%3D%22BRAC-ACT_supporting_data_editable.zip%22&response-content-type=application%2Fzip&X-Amz-Signature=9ec1817b4154c65b6442617446fa3a0bfa5269a87c5f1bde374ceb10fe17af4d",
+      "http_status": 200,
+      "bytes": 27279,
+      "publisher_checksum": "md5:2fc3db0d9c78acca9039acf3a781d82d",
+      "verified_md5": "2fc3db0d9c78acca9039acf3a781d82d",
+      "verified_sha256": "acedb8161340ea9a3af9954350bedea9d2061be8b19fbe7a40df9aebcd479804"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\figshare-32141986-brac-act-supporting-data",
+  "raw_total_bytes": 27279,
+  "raw_total_rows": 17,
+  "duplicate_rows_removed": 1,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/figshare-32141986-brac-act-supporting-data-cleaned.csv",
+  "cleaned_csv_sha256": "b1507052a0fe3dfc987d9e68191ce26bf7d10872df930c0964af57cecd6c38a8",
+  "cleaned_rows": 14,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "BRAC-ACT_supporting_data_editable.zip::data_availability_statement.txt": {
+      "Data": 1,
+      "availability": 1,
+      "statement": 1
+    },
+    "BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv": {
+      "﻿task_id": 0,
+      "arm_side": 0,
+      "policy_type": 0,
+      "episodes": 0,
+      "training_steps": 0,
+      "description": 0
+    },
+    "BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv": {
+      "﻿execution_order": 0,
+      "task_id": 0,
+      "arm_side": 0,
+      "checkpoint_placeholder": 0,
+      "phase_time_budget_seconds": 0
+    }
+  },
+  "time_monotonicity": {
+    "BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv": {
+      "column": "phase_time_budget_seconds",
+      "numeric_samples": 7,
+      "monotonic_non_decreasing": true,
+      "strictly_increasing": false,
+      "min_step": 0.0,
+      "median_step": 0.0,
+      "max_step": 0.0
+    }
+  },
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

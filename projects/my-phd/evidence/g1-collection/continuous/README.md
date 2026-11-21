@@ -7,12 +7,12 @@
 
 ## 累计产出概览
 
-- **已完成轮次**：3
-- **最近更新时间 (UTC)**：2026-11-21T07:44:04Z
-- **累计净新增文献** (`literature-new.csv`)：182 条（已与基线 15,910 条去重）
-- **累计净新增数据集** (`datasets-new.csv`)：200 个（已与基线 191 个去重）
-- **累计开放阅读队列** (`reading-queue-new.csv`)：150 条
-- **累计已完成确定性清洗数据集**：5 个
+- **已完成轮次**：4
+- **最近更新时间 (UTC)**：2026-11-21T07:45:57Z
+- **累计净新增文献** (`literature-new.csv`)：275 条（已与基线 15,910 条去重）
+- **累计净新增数据集** (`datasets-new.csv`)：292 个（已与基线 191 个去重）
+- **累计开放阅读队列** (`reading-queue-new.csv`)：235 条
+- **累计已完成确定性清洗数据集**：7 个
 - **云端 `[research-cloud]` 自动调度门禁**：`skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS`
 
 ## 学科领域分布（确定性关键词分流，非人工终审）
@@ -20,15 +20,15 @@
 | 领域标签 | 累计文献数 | 累计数据集数 |
 |---|---:|---:|
 | `R1_Force_Contact` | 1 | 0 |
-| `R2_Aerial_Actuator` | 63 | 0 |
-| `R5_MultiRobot_Comm` | 12 | 0 |
-| `Robotics_Embodied` | 42 | 3 |
-| `Mechanical_Physics_AI` | 7 | 95 |
-| `Mechatronics_PHM_Control` | 22 | 29 |
-| `Smart_Manufacturing` | 2 | 23 |
-| `Smart_Factory_DigitalTwin` | 0 | 0 |
+| `R2_Aerial_Actuator` | 68 | 4 |
+| `R5_MultiRobot_Comm` | 82 | 2 |
+| `Robotics_Embodied` | 84 | 21 |
+| `Mechanical_Physics_AI` | 14 | 136 |
+| `Mechatronics_PHM_Control` | 40 | 109 |
+| `Smart_Manufacturing` | 4 | 23 |
+| `Smart_Factory_DigitalTwin` | 1 | 1 |
 | `R1` | 34 | 0 |
-| `Adjacent` | 23 | 0 |
+| `Adjacent` | 28 | 0 |
 | `R2` | 37 | 0 |
 | `R5` | 5 | 0 |
 | `R1_force_truth` | 0 | 83 |
@@ -51,6 +51,8 @@
 | `dataverse-cc355j-experiment-dataset-for-t` | Experiment dataset for the journal - "A Robot for Overground Physic... | 10.7910/dvn/cc355j | `summary_table` | 44 | `416df3a23bd6` | [CSV](data/dataverse-cc355j-experiment-dataset-for-t-cleaned.csv) · [JSON](data/dataverse-cc355j-experiment-dataset-for-t-provenance.json) · [PY](data/derive_dataverse_cc355j_experiment_dataset_for_t.py) |
 | `dataverse-idxscu-replication-data-for-old` | Replication Data for: Older Adults' Acceptance of a Robot for Partn... | 10.7910/dvn/idxscu | `summary_table` | 27 | `c473e00f7672` | [CSV](data/dataverse-idxscu-replication-data-for-old-cleaned.csv) · [JSON](data/dataverse-idxscu-replication-data-for-old-provenance.json) · [PY](data/derive_dataverse_idxscu_replication_data_for_old.py) |
 | `dataverse-r0ozel-when-travel-meets-robots` | When travel meets robots: The role of embedding trust | 10.7910/dvn/r0ozel | `cleaned_rows` | 402 | `5dfc576eab09` | [CSV](data/dataverse-r0ozel-when-travel-meets-robots-cleaned.csv) · [JSON](data/dataverse-r0ozel-when-travel-meets-robots-provenance.json) · [PY](data/derive_dataverse_r0ozel_when_travel_meets_robots.py) |
+| `figshare-32308911-paper-information-fault` | Paper information: Fault Severity Classification in Gearboxes Using... | 10.6084/m9.figshare.32308911.v2 | `cleaned_rows` | 83 | `08e6e869500f` | [CSV](data/figshare-32308911-paper-information-fault-cleaned.csv) · [JSON](data/figshare-32308911-paper-information-fault-provenance.json) · [PY](data/derive_figshare_32308911_paper_information_fault.py) |
+| `figshare-32141986-brac-act-supporting-data` | BRAC-ACT Supporting Data and Scripts for Long-Horizon Traditional T... | 10.6084/m9.figshare.32141986.v1 | `summary_table` | 14 | `acedb8161340` | [CSV](data/figshare-32141986-brac-act-supporting-data-cleaned.csv) · [JSON](data/figshare-32141986-brac-act-supporting-data-provenance.json) · [PY](data/derive_figshare_32141986_brac_act_supporting_data.py) |
 
 ## 最近轮次记录（最多显示最近 25 轮）
 
@@ -59,3 +61,4 @@
 | 1 | 2026-11-21T07:31:26Z | R1/R2/R5 Gap Search + ICRA 2025 | +36 | +34 | +0 | [round-01-audit.json](rounds/round-01-audit.json) |
 | 2 | 2026-11-21T07:37:17Z | R1 Contact Assembly & Tactile + AAAI 2025 Robotics + Short Dataset Queries | +52 | +85 | +2 | [round-02-audit.json](rounds/round-02-audit.json) |
 | 3 | 2026-11-21T07:44:04Z | Broad Engineering R3: R2_Aerial_Actuator / R5_MultiRobot_Comm | +94 | +107 | +3 | [round-03-audit.json](rounds/round-03-audit.json) |
+| 4 | 2026-11-21T07:45:57Z | Broad Engineering R4: R5_MultiRobot_Comm | +93 | +92 | +2 | [round-04-audit.json](rounds/round-04-audit.json) |

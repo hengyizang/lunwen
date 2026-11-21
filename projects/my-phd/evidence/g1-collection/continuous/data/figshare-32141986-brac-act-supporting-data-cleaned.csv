@@ -1,0 +1,15 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+BRAC-ACT_supporting_data_editable.zip::data_availability_statement.txt,Data,categorical_or_text,2,1,1,1,,,,,,,"{""where"": 1}"
+BRAC-ACT_supporting_data_editable.zip::data_availability_statement.txt,availability,categorical_or_text,2,1,1,1,,,,,,,"{""technically"": 1}"
+BRAC-ACT_supporting_data_editable.zip::data_availability_statement.txt,statement,categorical_or_text,2,1,1,1,,,,,,,"{""feasible."": 1}"
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,﻿task_id,categorical_or_text,7,7,0,7,,,,,,,"{""Task 1"": 1, ""Task 2"": 1, ""Task 3"": 1}"
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,arm_side,categorical_or_text,7,7,0,2,,,,,,,"{""left"": 4, ""right"": 3}"
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,policy_type,categorical_or_text,7,7,0,1,,,,,,,"{""ACT"": 7}"
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,episodes,numeric,7,7,0,1,50,50,50,50,50,50,0
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,training_steps,numeric,7,7,0,1,300000,300000,300000,300000,300000,300000,0
+BRAC-ACT_supporting_data_editable.zip::task_definitions_Task1-Task7.csv,description,categorical_or_text,7,7,0,1,,,,,,,"{""Task-wise local assembly policy"": 7}"
+BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv,﻿execution_order,numeric,7,7,0,7,1,2.5,4,4,5.5,7,2.16025
+BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv,task_id,categorical_or_text,7,7,0,7,,,,,,,"{""Task 1"": 1, ""Task 2"": 1, ""Task 3"": 1}"
+BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv,arm_side,categorical_or_text,7,7,0,2,,,,,,,"{""left"": 4, ""right"": 3}"
+BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv,checkpoint_placeholder,categorical_or_text,7,7,0,7,,,,,,,"{""TASK1_CHECKPOINT_PATH"": 1, ""TASK2_CHECKPOINT_PATH"": 1, ""TASK3_CHECKPOINT_PATH"": 1}"
+BRAC-ACT_supporting_data_editable.zip::task_execution_order.csv,phase_time_budget_seconds,numeric,7,7,0,1,45,45,45,45,45,45,0
