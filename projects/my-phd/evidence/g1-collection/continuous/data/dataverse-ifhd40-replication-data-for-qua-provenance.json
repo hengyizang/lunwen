@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "slug": "dataverse-ifhd40-replication-data-for-qua",
+  "dataset_name": "Replication Data for: Quantum Optimization and Reinforcement Learning for Real-Time Plasma Control: QUBO/QAOA Actuator Scheduling and Quantum RL for Shape Control, without Claimed Advantage",
+  "doi": "10.7910/dvn/ifhd40",
+  "landing_url": "https://doi.org/10.7910/DVN/IFHD40",
+  "source_api_url": "https://dataverse.harvard.edu/api/datasets/:persistentId/?persistentId=doi:10.7910/DVN/IFHD40",
+  "access_date": "2026-11-21",
+  "round_number": 5,
+  "observed_license_metadata": "CC BY 4.0",
+  "license_note": "Observed license metadata only; not a legal clearance or human pre-use approval.",
+  "downloaded_files": [
+    {
+      "file": "figures_index.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14293236",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IFHD40/1a0e88c9487-eabd89d5f4f3?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27figures_index.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T075034Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=03d5f155d03ff11c37b80c19e0feb66aa210ee9acb829e8d6a8890ef532ab459",
+      "http_status": 200,
+      "bytes": 211,
+      "publisher_checksum": "md5:0b98c0bb99bd4946ea68512eaf3fb9d2",
+      "verified_md5": "0b98c0bb99bd4946ea68512eaf3fb9d2",
+      "verified_sha256": "127ac1e0266569ab88979300d871565b94169c570875199b4f0ef601a5fe46a4"
+    },
+    {
+      "file": "key_values.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14293225",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IFHD40/1a0e88c6071-d86afc01acd0?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27key_values.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T075035Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=10246d094c9ba5be59b622f47945c5cbbdf0650c135b5fec34e5baaf27351edf",
+      "http_status": 200,
+      "bytes": 682,
+      "publisher_checksum": "md5:5a2261b9e4bb0dab0a6675a58d630b07",
+      "verified_md5": "5a2261b9e4bb0dab0a6675a58d630b07",
+      "verified_sha256": "e5a63e5d10a74b61112f8879a27483d291ebcf6053689dec37b309f61a18810f"
+    },
+    {
+      "file": "verification.csv",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14293226",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IFHD40/1a0e88c64da-8085408f81e5?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27verification.csv&response-content-type=text%2Fcsv&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T075037Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=b65bf9d1f4b4752a488371cfdb5bcc35e96c07e6a3d8df01927fa2f4cfa03a97",
+      "http_status": 200,
+      "bytes": 776,
+      "publisher_checksum": "md5:1c576ee6524d720147549a6554438478",
+      "verified_md5": "1c576ee6524d720147549a6554438478",
+      "verified_sha256": "58da61c821fbe6d705e462758d9b0687cacfd59b757e395ceb3fd08e8c6901bf"
+    },
+    {
+      "file": "anchors.json",
+      "download_url": "https://dataverse.harvard.edu/api/access/datafile/14293223",
+      "final_url": "https://dvn-cloud-iqss.s3.amazonaws.com/10.7910/DVN/IFHD40/1a0e88c581e-a00fdf4bba73?response-content-disposition=attachment%3B%20filename%2A%3DUTF-8%27%27anchors.json&response-content-type=application%2Fjson&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20261121T075039Z&X-Amz-SignedHeaders=host&X-Amz-Credential=AKIAZT3GWQ6FKBSH5I56%2F20261121%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Expires=3600&X-Amz-Signature=1abe6908e334cd252e27b610a78c5e55921e1c6db56790123ea525c35334eded",
+      "http_status": 200,
+      "bytes": 3120,
+      "publisher_checksum": "md5:e0edecb607fda316a0cc3f5898bdcd74",
+      "verified_md5": "e0edecb607fda316a0cc3f5898bdcd74",
+      "verified_sha256": "34f29a7063583424ba7e34a556ab2d948e23d6ae8f411ca3870ff26879aeebca"
+    }
+  ],
+  "raw_staging_dir": "C:\\Users\\Lenovo\\.gemini\\antigravity\\scratch\\lunwen-g1-auto\\raw-staging\\dataverse-ifhd40-replication-data-for-qua",
+  "raw_total_bytes": 4789,
+  "raw_total_rows": 34,
+  "duplicate_rows_removed": 0,
+  "cleaned_mode": "summary_table",
+  "cleaned_csv_path": "evidence/g1-collection/continuous/data/dataverse-ifhd40-replication-data-for-qua-cleaned.csv",
+  "cleaned_csv_sha256": "3b81261b6d00794d077c78d60cbc1491fc67ed67e5b3f93d67bc2fbe23c8b9f9",
+  "cleaned_rows": 13,
+  "cleaned_cols": 14,
+  "null_counts_by_file": {
+    "key_values.csv": {
+      "symbol": 0,
+      "value": 0,
+      "unit": 13,
+      "provenance": 0
+    },
+    "verification.csv": {
+      "serial": 0,
+      "machine": 0,
+      "domain": 0,
+      "title": 0,
+      "verdict": 0,
+      "validator_url": 0
+    },
+    "anchors.json": {
+      "symbol": 0,
+      "value": 0,
+      "unit": 0
+    }
+  },
+  "time_monotonicity": {},
+  "cleaning_rules": [
+    "Verify publisher MD5/SHA-1 checksum (when provided) and record SHA-256.",
+    "Skip prose README/LICENSE/CITATION text files.",
+    "Trim whitespace in column headers.",
+    "Remove exact duplicate rows without imputing missing values or altering source units.",
+    "Emit cleaned tidy rows if <=1,000 rows & <=300 KB with uniform columns; otherwise emit per-file per-column descriptive summary."
+  ],
+  "limitations": "Descriptive deterministic cleaning in source units only; sensor calibration, coordinate frames, and task-specific alignment require manual inspection before modeling."
+}

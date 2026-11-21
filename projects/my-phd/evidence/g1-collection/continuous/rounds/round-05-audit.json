@@ -1,0 +1,384 @@
+{
+  "schema_version": "1.0",
+  "round": 5,
+  "completed_at": "2026-11-21T07:49:14Z",
+  "batch_label": "Broad Engineering R5: Robotics_Embodied",
+  "base_head_sha": "6a8a4199c451126e5574da3a34e0f7de8c10b243",
+  "cloud_dispatch_ready": false,
+  "cloud_dispatch_note": "skipped_baseline_checkpoint_error: unsupported checkpoint file requires an explicit storage plan: evidence/g1-collection/2026-11-21/audit/SHA256SUMS",
+  "literature": {
+    "raw_fetched": 159,
+    "duplicates_skipped": 41,
+    "net_new": 118,
+    "new_reading_queue": 102,
+    "receipts": [
+      {
+        "provider": "openalex",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t074914z-openalex-2b1570b5d2",
+        "request_url": "https://api.openalex.org/works?search=sim-to-real+legged+robot+reinforcement+learning&per-page=12",
+        "result_count": 12,
+        "response_sha256": "2d7847d39c1224d4e54cda308e4261d804bf1cf2ad0ee0b50c0f71b78aa03919",
+        "normalized_results_sha256": "b7d2d906bfa936d92d906d35dd82be62fa8d47d2341f672f69bfa2358e963d5c"
+      },
+      {
+        "provider": "crossref",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t074915z-crossref-6c4fa2e2e9",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=sim-to-real+legged+robot+reinforcement+learning&rows=12",
+        "result_count": 12,
+        "response_sha256": "34fec9f3a9492a109f0a9342fc2bc5b22b5180c4681fc8449b1d0b20d19cab96",
+        "normalized_results_sha256": "a0662e2e66068a2004c98572b58953af6d3f62d8a2dd1e9497878b05541f342f"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t074916z-europe-pmc-bbeb197d12",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=sim-to-real+legged+robot+reinforcement+learning&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "f58f00687a4ee0b6439964a1401650b808eafcca6b060109d4f98fc54a6a8d1c",
+        "normalized_results_sha256": "6eea4709f1b8098df47fca149af441662878e2f921281a76d96b04beac7a7e89"
+      },
+      {
+        "provider": "hal",
+        "query": "sim-to-real legged robot reinforcement learning",
+        "receipt_id": "20261121t074918z-hal-e26118f908",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=sim-to-real+legged+robot+reinforcement+learning&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 0,
+        "response_sha256": "316b596864c92e18c8f6688107ad49ecfc3fe632ebdc85efe82c65ed28ba8064",
+        "normalized_results_sha256": "bd36633e057d93b6e2bdd6f9d88681c6ce338347aeb4bcf4bc483a41df589994"
+      },
+      {
+        "provider": "openalex",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t074920z-openalex-216ae62ef3",
+        "request_url": "https://api.openalex.org/works?search=humanoid+whole-body+loco-manipulation+control&per-page=12",
+        "result_count": 12,
+        "response_sha256": "d45531f129667329815b2d993bd70c89c9dbea238111edd7c5f7c4f3c391a523",
+        "normalized_results_sha256": "d97e9281baf65747f7d3340e004faab7c54650d4e91e56d146050f3b0b76398b"
+      },
+      {
+        "provider": "crossref",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t074921z-crossref-b76fa7e579",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=humanoid+whole-body+loco-manipulation+control&rows=12",
+        "result_count": 12,
+        "response_sha256": "e28eed78aa30c896c0e78afda7c471c4f0bd1ffb1b49c799fd3c5761f4bbef7b",
+        "normalized_results_sha256": "f3a602f510f816f2053eca19b781a48e9eb45b5d07a8c1314fdc6bf384fbdbed"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t074923z-europe-pmc-025bc036c3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=humanoid+whole-body+loco-manipulation+control&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "c55ec7430d017976cc0b9c888280f004454929e5f240b7b233045935347d8d47",
+        "normalized_results_sha256": "4ab9ab0a58f315d5b7253f19339f61d333499a5c8222634b269d9f5d4a46186e"
+      },
+      {
+        "provider": "hal",
+        "query": "humanoid whole-body loco-manipulation control",
+        "receipt_id": "20261121t074924z-hal-a2ec3dd2e3",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=humanoid+whole-body+loco-manipulation+control&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 5,
+        "response_sha256": "4d627b114342d750985add12c24dc7650f722d35b6653d217f4dcd87c25a3e9d",
+        "normalized_results_sha256": "e299be002c7c804643168397a1f0f5b9d21890d37f1b509b63e05d0aadffe5c9"
+      },
+      {
+        "provider": "openalex",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t074927z-openalex-c9575dd1ab",
+        "request_url": "https://api.openalex.org/works?search=vision-language-action+robotic+manipulation+policy&per-page=12",
+        "result_count": 12,
+        "response_sha256": "4708fd6982c34e766991c2fa84928d09a06d7967a8823cfc9ab043daa0c23914",
+        "normalized_results_sha256": "69a09c9b39000b0e8ae8becee7a0f2ce11e4c7820051d9d787a8e1ba54d7ef35"
+      },
+      {
+        "provider": "crossref",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t074930z-crossref-2b40351ea3",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=vision-language-action+robotic+manipulation+policy&rows=12",
+        "result_count": 11,
+        "response_sha256": "dc0f63c722fa326b5f55b672c768a4e8d303141cdd418da878a43e1f8967cb0a",
+        "normalized_results_sha256": "41f02b6e2fb12ccc7c4c89a9d9e9638111cb5c77a9f9f29e010c3dc583cdfcca"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t074931z-europe-pmc-0f5ec4c2b3",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=vision-language-action+robotic+manipulation+policy&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "d77f7fd79adee38c6d0c9b0e29d7cc069e06b8d6e4ac1b9a28a9fbe9e35096b6",
+        "normalized_results_sha256": "a24236e62c8f7c28fc83b536b67cbda054c9d7213472d0bd047b24a3c1264c0c"
+      },
+      {
+        "provider": "hal",
+        "query": "vision-language-action robotic manipulation policy",
+        "receipt_id": "20261121t074933z-hal-9fec702d66",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=vision-language-action+robotic+manipulation+policy&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 3,
+        "response_sha256": "df84bf4e5a228cc6aaf12e2f22d1a12b8415e51070f62be92022a83772bf3716",
+        "normalized_results_sha256": "68cced4cc427a3b2da810796cd08ef44a5a601454233bb13eaeb6aa4c41f27b4"
+      },
+      {
+        "provider": "openalex",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t074934z-openalex-82cc8c94a0",
+        "request_url": "https://api.openalex.org/works?search=soft+continuum+robot+kinematic+modeling&per-page=12",
+        "result_count": 12,
+        "response_sha256": "a1e45bff4dccdf08f72080522dc9616e88333659b95b55f10fbe44e5758a6794",
+        "normalized_results_sha256": "fbb7f3b6d21c0ec2160b52384ac3ab6d7ec7d1a114412f90db85718991fda75f"
+      },
+      {
+        "provider": "crossref",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t074935z-crossref-de653e5f13",
+        "request_url": "https://api.crossref.org/works?query.bibliographic=soft+continuum+robot+kinematic+modeling&rows=12",
+        "result_count": 12,
+        "response_sha256": "c3f6d989e54094be8d12e01750e87f76d301b1a6bbd425b5cf668a7331173149",
+        "normalized_results_sha256": "78dbcaeb14eb7a29f4f4ef96edd94f28ad63d2360338d7c9786b65e930924a8c"
+      },
+      {
+        "provider": "europe-pmc",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t074937z-europe-pmc-4775ff29a1",
+        "request_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=soft+continuum+robot+kinematic+modeling&pageSize=12&format=json",
+        "result_count": 12,
+        "response_sha256": "e89f55c9785939cd0375e6712910fe0d94a193469961f618c24cb93bb383ab24",
+        "normalized_results_sha256": "0d59a7f720925311630cfc54d2cd9f2d494767effbd831b4beb6275122bd5d47"
+      },
+      {
+        "provider": "hal",
+        "query": "soft continuum robot kinematic modeling",
+        "receipt_id": "20261121t074938z-hal-69a561021a",
+        "request_url": "https://api.archives-ouvertes.fr/search/?q=soft+continuum+robot+kinematic+modeling&rows=12&fl=halId_s%2Ctitle_s%2CproducedDateY_i%2CproducedDate_s%2CdoiId_s%2Curi_s%2CauthFullName_s%2Cabstract_s%2CjournalTitle_s%2CdocType_s&wt=json",
+        "result_count": 7,
+        "response_sha256": "c49e155b0c8dcb4099bed14d33a4a5164346f30a5594aa5bfb5fc1c8da268d1d",
+        "normalized_results_sha256": "c11f4cc3d0cc0e4f23463c31526f15119fccf1c82bd3fb62b1197751a24bc8d7"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.ijmecsci.2025.111073",
+        "receipt_id": "20261121t074940z-opencitations-9be6a8ef06",
+        "result_count": 1,
+        "response_sha256": "1c70753683d1426aea4e574986418a0ff044f1e178f83a30549197667607bbe5"
+      },
+      {
+        "provider": "citation_graph",
+        "query": "10.1016/j.enganabound.2025.106487",
+        "receipt_id": "20261121t074942z-opencitations-b9bbff2008",
+        "result_count": 0,
+        "response_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    ],
+    "errors": []
+  },
+  "datasets": {
+    "raw_candidates": 195,
+    "off_topic_filtered": 35,
+    "round1_noise_pruned": 0,
+    "duplicates_skipped": 48,
+    "net_new": 112,
+    "provider_statuses": [
+      {
+        "query": "continuum robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "continuum robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "continuum robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "legged robot",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 11
+      },
+      {
+        "query": "legged robot",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "legged robot",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 11
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 8
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "humanoid locomotion",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 1
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "figshare",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "huggingface",
+        "status": "ok",
+        "candidate_count": 0
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "dataverse",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "datacite",
+        "status": "ok",
+        "candidate_count": 15
+      },
+      {
+        "query": "robotic grasping",
+        "provider": "dryad",
+        "status": "ok",
+        "candidate_count": 13
+      }
+    ],
+    "probed_for_cleaning": 18,
+    "cleaned": [
+      {
+        "slug": "dataverse-c4ydif-results-of-the-graph-and",
+        "key": "dataverse:10.7910/dvn/c4ydif",
+        "dataset_name": "Results of the graph and heuristic based topology optimization for crashworthiness profiles made of fiber reinforced thermoplastics",
+        "doi": "10.7910/dvn/c4ydif",
+        "landing_url": "https://doi.org/10.7910/DVN/C4YDIF",
+        "cleaned_mode": "cleaned_rows",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-c4ydif-results-of-the-graph-and-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-c4ydif-results-of-the-graph-and-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_c4ydif_results_of_the_graph_and.py",
+        "cleaned_rows": 179,
+        "raw_total_rows": 188,
+        "verified_sha256": "3d87bd2f2e3f20ae9c81270b27d5404e66b65375b4f891fd43f5ed999544bcce"
+      },
+      {
+        "slug": "dataverse-ifhd40-replication-data-for-qua",
+        "key": "dataverse:10.7910/dvn/ifhd40",
+        "dataset_name": "Replication Data for: Quantum Optimization and Reinforcement Learning for Real-Time Plasma Control: QUBO/QAOA Actuator Scheduling and Quantum RL for Shape Control, without Claimed Advantage",
+        "doi": "10.7910/dvn/ifhd40",
+        "landing_url": "https://doi.org/10.7910/DVN/IFHD40",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ifhd40-replication-data-for-qua-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ifhd40-replication-data-for-qua-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ifhd40_replication_data_for_qua.py",
+        "cleaned_rows": 13,
+        "raw_total_rows": 34,
+        "verified_sha256": "127ac1e0266569ab88979300d871565b94169c570875199b4f0ef601a5fe46a4"
+      },
+      {
+        "slug": "dataverse-ud54yb-moon-wreckers-planetary",
+        "key": "dataverse:10.7910/dvn/ud54yb",
+        "dataset_name": "Moon Wreckers Planetary Rover Driving Status Anomaly Detection Dataset",
+        "doi": "10.7910/dvn/ud54yb",
+        "landing_url": "https://doi.org/10.7910/DVN/UD54YB",
+        "cleaned_mode": "summary_table",
+        "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ud54yb-moon-wreckers-planetary-cleaned.csv",
+        "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ud54yb-moon-wreckers-planetary-provenance.json",
+        "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ud54yb_moon_wreckers_planetary.py",
+        "cleaned_rows": 84,
+        "raw_total_rows": 4002,
+        "verified_sha256": "a86c89f001742fa2d5b291cd82bf226693a90172fd4a15a4a77f4d9500c7ae25"
+      }
+    ],
+    "cleaning_errors": [
+      {
+        "name": "close_box",
+        "url": "https://doi.org/10.7910/DVN/QPUOJH",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "eval_dataset",
+        "url": "https://doi.org/10.7910/DVN/DOZY6N",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "scoop_with_spatula",
+        "url": "https://doi.org/10.7910/DVN/EPU7UW",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "slide_block_to_target",
+        "url": "https://doi.org/10.7910/DVN/XEAYPQ",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "insert_onto_square_peg",
+        "url": "https://doi.org/10.7910/DVN/PSPXJK",
+        "error": "unhashable type: 'list'"
+      },
+      {
+        "name": "Indicators of Coastal Water Quality: Annual Chlorophyll-a Concentration 1998-2007",
+        "url": "https://doi.org/10.7910/DVN/2NRUYP",
+        "error": "Request failed for https://dataverse.harvard.edu/api/access/datafile/14200118: HTTP Error 400: Bad Request"
+      }
+    ]
+  },
+  "paid_model_calls": 0,
+  "paid_cost_cny": 0.0
+}

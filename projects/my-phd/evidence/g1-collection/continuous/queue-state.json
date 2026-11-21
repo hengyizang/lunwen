@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
-  "round_number": 4,
-  "total_new_literature": 275,
-  "total_new_datasets": 292,
-  "total_new_reading_queue": 235,
+  "round_number": 5,
+  "total_new_literature": 393,
+  "total_new_datasets": 404,
+  "total_new_reading_queue": 337,
   "cleaned_datasets": [
     "figshare:31990188",
     "figshare:32221713",
@@ -11,7 +11,10 @@
     "dataverse:10.7910/dvn/idxscu",
     "dataverse:10.7910/dvn/r0ozel",
     "figshare:32308911",
-    "figshare:32141986"
+    "figshare:32141986",
+    "dataverse:10.7910/dvn/c4ydif",
+    "dataverse:10.7910/dvn/ifhd40",
+    "dataverse:10.7910/dvn/ud54yb"
   ],
   "cleaned_datasets_meta": [
     {
@@ -111,9 +114,53 @@
       "cleaned_rows": 14,
       "raw_total_rows": 17,
       "verified_sha256": "acedb8161340ea9a3af9954350bedea9d2061be8b19fbe7a40df9aebcd479804"
+    },
+    {
+      "slug": "dataverse-c4ydif-results-of-the-graph-and",
+      "key": "dataverse:10.7910/dvn/c4ydif",
+      "dataset_name": "Results of the graph and heuristic based topology optimization for crashworthiness profiles made of fiber reinforced thermoplastics",
+      "doi": "10.7910/dvn/c4ydif",
+      "landing_url": "https://doi.org/10.7910/DVN/C4YDIF",
+      "cleaned_mode": "cleaned_rows",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-c4ydif-results-of-the-graph-and-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-c4ydif-results-of-the-graph-and-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_c4ydif_results_of_the_graph_and.py",
+      "cleaned_rows": 179,
+      "raw_total_rows": 188,
+      "verified_sha256": "3d87bd2f2e3f20ae9c81270b27d5404e66b65375b4f891fd43f5ed999544bcce"
+    },
+    {
+      "slug": "dataverse-ifhd40-replication-data-for-qua",
+      "key": "dataverse:10.7910/dvn/ifhd40",
+      "dataset_name": "Replication Data for: Quantum Optimization and Reinforcement Learning for Real-Time Plasma Control: QUBO/QAOA Actuator Scheduling and Quantum RL for Shape Control, without Claimed Advantage",
+      "doi": "10.7910/dvn/ifhd40",
+      "landing_url": "https://doi.org/10.7910/DVN/IFHD40",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ifhd40-replication-data-for-qua-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ifhd40-replication-data-for-qua-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ifhd40_replication_data_for_qua.py",
+      "cleaned_rows": 13,
+      "raw_total_rows": 34,
+      "verified_sha256": "127ac1e0266569ab88979300d871565b94169c570875199b4f0ef601a5fe46a4"
+    },
+    {
+      "slug": "dataverse-ud54yb-moon-wreckers-planetary",
+      "key": "dataverse:10.7910/dvn/ud54yb",
+      "dataset_name": "Moon Wreckers Planetary Rover Driving Status Anomaly Detection Dataset",
+      "doi": "10.7910/dvn/ud54yb",
+      "landing_url": "https://doi.org/10.7910/DVN/UD54YB",
+      "cleaned_mode": "summary_table",
+      "cleaned_csv": "evidence/g1-collection/continuous/data/dataverse-ud54yb-moon-wreckers-planetary-cleaned.csv",
+      "provenance_json": "evidence/g1-collection/continuous/data/dataverse-ud54yb-moon-wreckers-planetary-provenance.json",
+      "derive_py": "evidence/g1-collection/continuous/data/derive_dataverse_ud54yb_moon_wreckers_planetary.py",
+      "cleaned_rows": 84,
+      "raw_total_rows": 4002,
+      "verified_sha256": "a86c89f001742fa2d5b291cd82bf226693a90172fd4a15a4a77f4d9500c7ae25"
     }
   ],
   "snowballed_dois": [
+    "10.1016/j.enganabound.2025.106487",
+    "10.1016/j.ijmecsci.2025.111073",
     "10.1016/j.measurement.2023.112827",
     "10.1016/j.measurement.2024.115140",
     "10.1016/j.measurement.2024.115365",
@@ -156,34 +203,44 @@
       "net_new_datasets": 92,
       "cleaned_count": 2,
       "cloud_dispatch_ready": false
+    },
+    {
+      "round": 5,
+      "completed_at": "2026-11-21T07:49:14Z",
+      "batch_label": "Broad Engineering R5: Robotics_Embodied",
+      "net_new_literature": 118,
+      "net_new_datasets": 112,
+      "cleaned_count": 3,
+      "cloud_dispatch_ready": false
     }
   ],
-  "updated_at": "2026-11-21T07:45:57Z",
+  "updated_at": "2026-11-21T07:49:14Z",
   "noise_pruned_v1": true,
   "domain_counts_literature": {
     "R1": 34,
-    "Adjacent": 28,
+    "Adjacent": 29,
     "R2": 37,
     "R5": 5,
-    "R2_Aerial_Actuator": 68,
-    "Mechanical_Physics_AI": 14,
-    "Mechatronics_PHM_Control": 40,
-    "Robotics_Embodied": 84,
-    "R5_MultiRobot_Comm": 82,
+    "R2_Aerial_Actuator": 72,
+    "Mechanical_Physics_AI": 22,
+    "Mechatronics_PHM_Control": 52,
+    "Robotics_Embodied": 200,
+    "R5_MultiRobot_Comm": 84,
     "R1_Force_Contact": 1,
-    "Smart_Manufacturing": 4,
-    "Smart_Factory_DigitalTwin": 1
+    "Smart_Manufacturing": 6,
+    "Smart_Factory_DigitalTwin": 2
   },
   "domain_counts_datasets": {
     "R1_force_truth": 83,
     "R5_packet_timing_aoi": 69,
     "R2_actuator_saturation": 16,
-    "Mechanical_Physics_AI": 136,
-    "Mechatronics_PHM_Control": 109,
+    "Mechanical_Physics_AI": 149,
+    "Mechatronics_PHM_Control": 125,
     "Smart_Manufacturing": 23,
-    "Robotics_Embodied": 21,
-    "R5_MultiRobot_Comm": 2,
-    "Smart_Factory_DigitalTwin": 1,
-    "R2_Aerial_Actuator": 4
+    "Robotics_Embodied": 133,
+    "R5_MultiRobot_Comm": 3,
+    "Smart_Factory_DigitalTwin": 3,
+    "R2_Aerial_Actuator": 5,
+    "R1_Force_Contact": 5
   }
 }

@@ -1,0 +1,14 @@
+source_file,column,inferred_kind,rows_total,non_null,null_count,unique_count,min,p25,median,mean,p75,max,std
+key_values.csv,symbol,categorical_or_text,15,15,0,14,,,,,,,"{""I_p"": 2, ""p"": 1, ""Q"": 1}"
+key_values.csv,value,numeric,15,15,0,11,-0.3,1.1,2,3.06107,3.188,9.66,3.16424
+key_values.csv,unit,categorical_or_text,15,2,13,2,,,,,,,"{""×10^23"": 1, ""d^2"": 1}"
+key_values.csv,provenance,categorical_or_text,15,15,0,1,,,,,,,"{""verbatim from arXiv LaTeX source"": 15}"
+verification.csv,serial,categorical_or_text,4,4,0,4,,,,,,,"{""KX-L1-A21"": 1, ""KX-L3-A3"": 1, ""KX-L3-A6"": 1}"
+verification.csv,machine,categorical_or_text,4,4,0,1,,,,,,,"{""shared"": 4}"
+verification.csv,domain,categorical_or_text,4,4,0,2,,,,,,,"{""quantum"": 3, ""control"": 1}"
+verification.csv,title,categorical_or_text,4,4,0,4,,,,,,,"{""Coupled operating-current-window controller (centrepost-life tritium-startup)"": 1, ""Quantum optimization (design-space / fuel-cycle / fleet)"": 1, ""Fault-to..."
+verification.csv,verdict,categorical_or_text,4,4,0,3,,,,,,,"{""reproduced"": 2, ""revised"": 1, ""estimated"": 1}"
+verification.csv,validator_url,categorical_or_text,4,4,0,4,,,,,,,"{""https://www.kronosfusionenergy.com/Physics_Validation_Simulation/gate/KX-L1-A21.html"": 1, ""https://www.kronosfusionenergy.com/Physics_Validation_Simulation..."
+anchors.json,symbol,categorical_or_text,15,15,0,14,,,,,,,"{""I_p"": 2, ""p"": 1, ""Q"": 1}"
+anchors.json,value,numeric,15,15,0,13,-0.3,1.1,2,3.06107,3.188,9.66,3.16424
+anchors.json,unit,categorical_or_text,15,15,0,3,,,,,,,"{"""": 13, ""×10^23"": 1, ""d^2"": 1}"

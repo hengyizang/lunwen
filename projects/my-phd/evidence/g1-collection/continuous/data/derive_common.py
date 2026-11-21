@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import html
 import io
 import json
 import re
@@ -58,7 +59,9 @@ def parse_tabular(name: str, data: bytes):
 
 
 def _clean_text(value, max_len: int = 160) -> str:
-    text = re.sub(r"\s+", " ", str(value or "")).strip()
+    text = html.unescape(str(value or ""))
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
     return text[: max_len - 3].rstrip() + "..." if max_len and len(text) > max_len else text
 
 
@@ -109,6 +112,7 @@ def reproduce(input_dir: Path, expected_files: list[dict], expected_output_sha25
                     m for m in zf.infolist()
                     if not m.is_dir() and not m.filename.startswith("__MACOSX")
                     and Path(m.filename).suffix.lower() in {".csv", ".tsv", ".tab", ".txt", ".json"}
+                    and not is_prose_txt(m.filename)
                     and m.file_size <= max_raw_bytes
                 ]
                 for m in members[:5]:
