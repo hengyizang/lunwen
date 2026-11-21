@@ -1,0 +1,58 @@
+{
+  "title": "TaF-Dataset (TaF-VLA tactile-force pretraining collection)",
+  "repository": "jiamig/taf-dataset",
+  "version": "239c8ee8156bf11eb6d6c11c004f9a8721528d9d",
+  "release_url": "https://huggingface.co/datasets/jiamig/taf-dataset/tree/239c8ee8156bf11eb6d6c11c004f9a8721528d9d",
+  "publisher_manifest": {
+    "url": "https://huggingface.co/api/datasets/jiamig/taf-dataset/revision/239c8ee8156bf11eb6d6c11c004f9a8721528d9d?blobs=true",
+    "sha256_of_retrieved_response": "c3acac54ff30f1769376109ce86e35d15d908e051c85afcae9dcc494769229e9",
+    "modified_utc": "2026-07-25T13:51:15.000Z",
+    "total_files_listed": 7289,
+    "independently_verified_files": {
+      "card": 1,
+      "numeric": 408,
+      "episode index": 406,
+      "info": 408,
+      "canonical MP4": 8,
+      "sidecar MP4": 2
+    },
+    "verified_input_bytes": 2180898798,
+    "identity": "All fetched LFS objects matched publisher SHA-256 and byte length. Small ordinary Git blobs matched Git SHA-1 and length. Each numerical and metadata input has its own SHA-256 in taf-sequences.csv; checked videos are identified in taf-video-checks.csv."
+  },
+  "accessed_utc": "2026-11-21",
+  "rights": "The public ungated source card declares MIT. Dataset and paper attribution: Yuzhe Huang, Pei Lin, Wanlin Li, Daohan Li, Jiajun Li, Jiaming Jiang, Chenxi Xiao and Ziyuan Jiao. This repository stores independent summary statistics and checksums. Original tactile videos and measurements remain at the source.",
+  "card": {
+    "url": "https://huggingface.co/datasets/jiamig/taf-dataset/raw/239c8ee8156bf11eb6d6c11c004f9a8721528d9d/README.md",
+    "sha256": "7a12c0aaf7f26aa7acc3512038fd536e5def27b92bc3debc885b1ac240cb20e9"
+  },
+  "paper": {
+    "arxiv_id": "2601.20321v2",
+    "url": "https://arxiv.org/pdf/2601.20321v2",
+    "sha256": "6f758162e29825aae2df5361f11956ffa50277966a648c1149c1362d52b94bec",
+    "evidence": "Full text, physical apparatus in Fig. 2 and acquisition/resampling in III-A and III-B, limitations under Data Acquisition Hardware. Paper hardware and data-collection findings are distinct from subsequent task demonstrations or model evaluations."
+  },
+  "lookup": {
+    "snapshot": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "searches": [
+      "Public-source web search for independently measured six-axis wrench, optical contact and pressure-map supervision; followed the primary dataset link and author article.",
+      "Hugging Face repository API/revision, immutable card, numerical/metadata objects and matched MP4s; compared descriptions of hardware and packet timestamps against the archived files."
+    ],
+    "history_files": 582,
+    "normalized_keys": {
+      "jiamig/taf-dataset": [],
+      "2601.20321": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ],
+      "Tactile-Force Alignment in Vision-Language-Action Models for Force-aware Manipulation": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+      ]
+    },
+    "classification": "New data family (exact source slug not in the prior tracked inventory); arXiv/title bibliographic record already present. Same source data family for all six tactile configurations."
+  },
+  "physical_setup": "Real parallel-stage benchtop, three distinct modalities. An ATI Axia80, silicone and a 12-by-12 matrix force sensor are stacked on one platform; the optical tactile sensor is opposite on the other platform. Two nominally identical indenters and manual height alignment are used. Thus the array and ATI observe one side and the optical surface is separately loaded. The study describes zero-padding parts of the matrix outside the GelSight footprint. No exact contact-instant ground-truth or common-clock latency measured in these tables. No independently tared wrist, independent torque-component calibration, motorized assembly run or certified unloaded reference is supplied by this audit.",
+  "terminology": "Article III-A calls the matrix piezoresistive and calibrated. The dataset card calls it piezoelectric; no independent taxel calibration or SI conversion checked in the exported data. Use stored taxel units. Paper and card also disagree on some custom marker-grid sizes; retain archive configuration names. Files name six components fx,fy,fz,tx,ty,tz. The numeric table exposes one packaged frame timestamp; the faster force streams were resampled to nominal camera rate 30 Hz according to authors. No native source-clock/jitter measurement established.",
+  "methods": "Every numeric Parquet, all 408 info.json files and all 406 available episode indexes were read. Validate local row/episode/frame numbers, frame_index/30 grid, 6 finite wrench channels and 12x12 matrix dimensions. Summaries for whole numeric files, with separate declared prefix counts and rows having at least one strictly positive element in that prefix. These tests do not classify true contact onset. The Pearson coefficient is within-sequence between minus the stored Fz and the raw sum of all 144 taxels, using all finite pairs. No calibration to newtons, lag optimization, background subtraction or independence assumption. Episodes are packaged contiguous runs of frame indices, not necessarily physical contacts. IDs are local to each configuration.",
+  "file_coverage": "Official info prefixes collectively cover 10,053,265 rows in 3,592 episodes. Two more numeric episode chunks beyond the official prefix of two files give 10,057,742 paired numeric rows and 3,594 contiguous index runs in total. All rows have finite wrench and matrix, and all have at least one positive taxel. Twenty-seven numeric rows have six exactly zero wrench components; this is not a ground-truth unloaded label. custom_designed_no_mark_obj12 and obj13 have no published meta/episodes Parquet, even though info, numeric and video entries exist. Retained separately, without inventing an episode index file.",
+  "video_scope": "Checked all six sequences with local object ID 1 (one per released configuration), plus the two extent discrepancies, with ffprobe demuxed packet counts, container frame counts and episode clock extents. Eight canonical MP4s all match their respective declared frame counts. For 6*6_obj6 the sidecar MP4 has 831 packets for 1,477 extra numerical rows. For no_mark_obj83, 3,000 sidecar packets and 3,000 extra numerical rows occur. Neither sidecar appears in official episode indexing. Equal extents establish only packaging, not native simultaneous acquisition or contact labels. In the six local-ID-1 videos four custom sensors are 380x380 pixels and two GelSight Mini files are 320x240. Other canonical videos were enumerated but not downloaded or verified.",
+  "reproduction": "With Python 3, NumPy, PyArrow and ffprobe available, run python derive_taf.py SOURCE_ROOT OUTPUT_DIR. Download the pinned snapshot paths listed or referenced in the two result tables: all 408 numeric */data/*/*.parquet, 408 */meta/info.json, all existing */meta/episodes/*/*.parquet, plus the eight checked canonical MP4 and two temporary MP4 paths. Preserve the published relative paths starting taf_dataset/. Use the pinned HF API manifest to verify sizes and digest. Datasets are processed as plain Arrow arrays. Compare the two output tables byte-for-byte."
+}

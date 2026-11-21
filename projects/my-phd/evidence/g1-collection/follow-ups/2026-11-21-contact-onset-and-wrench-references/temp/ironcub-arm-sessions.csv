@@ -1,0 +1,17 @@
+file,arm,mass_kg,rows,elapsed_s,median_logger_step_ms,temp_min_C,temp_max_C,temp_unique_values,logger_rows_outside_pooled_training_temperature_extent,logger_rows_outside_union_of_training_session_ranges
+training/l0kg-r0kg/dataset.mat,l,0,58992,596.007535,10.086298,24.9,26.1,13,0,0
+training/l0kg-r10kg/dataset.mat,l,0,57308,579.0043416,10.086298,39.0,39.5,6,0,0
+training/l0kg-r7kg/dataset.mat,l,0,56819,573.9959419,10.0853443,36.9,37.5,7,0,0
+training/l2kg-r2kg/dataset.mat,l,2,56626,572.0037818,10.0851059,39.4,39.8,5,0,0
+training/l4kg-r4kg/dataset.mat,l,4,57327,579.0001459,10.0827217,40.0,41.0,11,0,0
+training/l5kg-r5kg/dataset.mat,l,5,56937,574.9972007,10.0827217,31.2,34.5,34,0,0
+validation/l0kg-r7kg/dataset.mat,l,0,56428,569.9979334,10.0836754,43.1,43.6,6,56428,56428
+validation/l5kg-r0kg/dataset.mat,l,5,57215,577.9968994,10.0851059,27.3,30.2,30,0,57215
+training/l0kg-r0kg/dataset.mat,r,0,58992,596.007535,10.086298,25.0,26.1,12,0,0
+training/l0kg-r10kg/dataset.mat,r,10,57308,579.0043416,10.086298,30.3,37.4,72,0,0
+training/l0kg-r7kg/dataset.mat,r,7,56819,573.9959419,10.0853443,35.7,38.2,26,0,0
+training/l2kg-r2kg/dataset.mat,r,2,56626,572.0037818,10.0851059,40.3,40.4,2,0,0
+training/l4kg-r4kg/dataset.mat,r,4,57327,579.0001459,10.0827217,40.5,41.2,8,0,0
+training/l5kg-r5kg/dataset.mat,r,5,56937,574.9972007,10.0827217,28.6,31.1,26,0,0
+validation/l0kg-r7kg/dataset.mat,r,7,56428,569.9979334,10.0836754,42.4,44.1,18,56428,56428
+validation/l5kg-r0kg/dataset.mat,r,0,57215,577.9968994,10.0851059,27.2,28.2,11,0,57215

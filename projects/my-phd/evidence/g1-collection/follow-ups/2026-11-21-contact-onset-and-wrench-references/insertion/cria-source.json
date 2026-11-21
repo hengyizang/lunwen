@@ -1,0 +1,165 @@
+{
+  "title": "CRIA: Contact-Rich Interaction Anomaly Anticipation Dataset",
+  "authors": [
+    "Yi Qiao",
+    "Maolin Zheng",
+    "Haoran Sun",
+    "Lujia Dong",
+    "Wenzhao Lian"
+  ],
+  "repository": "Joringell/CRIA",
+  "release_url": "https://huggingface.co/datasets/Joringell/CRIA/tree/af288f2a470189c3991db73873f9d64171620a43/insert",
+  "commit": "af288f2a470189c3991db73873f9d64171620a43",
+  "last_modified": "2026-10-16T02:57:38Z",
+  "accessed_utc_date": "2026-11-21",
+  "source_rights": "CC BY 4.0 (dataset card). Credit Qiao, Zheng, Sun, Dong and Lian. Derived episode, onset and descriptive torque statistics only, no raw records or videos redistributed.",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "scope": "All 600 insertion-category episodes from the pinned 2,852-trajectory multi-task dataset, 150 per task (insert_ni, insert_plug_2, insert_plug_3 and insert_typec). Read every insertion Parquet and four task metadata files per task, including reviewed manual plus automatic annotation, schema and acquisition-source index. Videos and categories outside insertion were not read.",
+  "queries": [
+    {
+      "text": "real robot connector insertion demonstration dataset raw force torque insertion multi peg rosbag sensors dataset connector insertion force control assembly GitHub dataset tactile force USB datasets",
+      "results": "The TU Wien REASSEMBLE author page and the Hugging Face CRIA author release were located. Selected CRIA to compare deposited force-based candidates to task-specific reviewer labels."
+    },
+    {
+      "text": "robot assembly real dataset force torque parquet force torque insertion peg dataset electrical connector industrial robot force signals annotations open dataset HF rosbag",
+      "result": "Followed author card to public repository and paper. Enumerated the four insertion task trees at a fixed commit, retained all numeric episode files and label metadata; excluded videos and derived aggregate stats."
+    }
+  ],
+  "retrieval": {
+    "manifest_api": "https://huggingface.co/api/datasets/Joringell/CRIA/tree/af288f2a470189c3991db73873f9d64171620a43/insert/{TASK}/data/chunk-000?limit=1000",
+    "raw_url_template": "https://huggingface.co/datasets/Joringell/CRIA/resolve/af288f2a470189c3991db73873f9d64171620a43/{path}",
+    "dataset_card": "https://huggingface.co/datasets/Joringell/CRIA/blob/af288f2a470189c3991db73873f9d64171620a43/README.md",
+    "dataset_card_sha256": "113333c31131f621bac114e8cd3ecaacedf1bd4093b2b1bb123a0d32917c5d92",
+    "public_api_receipt_sha256": "ba78d0ee0522ccfa4411203dc87b04fac69aab029bf609ff8ead8e75784354b1",
+    "all_verified_files": 616,
+    "bytes_all_verified_files": 161852312,
+    "method": "Compared every downloaded size and LFS object SHA-256 from Hugging Face tree metadata; ordinary git objects verified via SHA-1 of blob header plus bytes. Per-episode data SHA-256 and valid-raw-signal SHA-256 in cria-episodes.csv. Metadata checksums follow.",
+    "metadata_files": [
+      {
+        "path": "insert/insert_ni/meta/annotation.json",
+        "sha256": "b608d552f8e594845bee3cac3f800c2b390e1ce10258009b710836630bca3059",
+        "git_blob": "d1894b265b889763307411b712af05d5d15d58ee",
+        "bytes": 182660
+      },
+      {
+        "path": "insert/insert_ni/meta/episodes.jsonl",
+        "sha256": "d15cbe93ea5f71d4ccedad5c90f890e1ef463585351b5b1a126f444abb716ee5",
+        "git_blob": "b862b5e9ae3a1f1828bf997b4b12d78277fee861",
+        "bytes": 39215
+      },
+      {
+        "path": "insert/insert_ni/meta/info.json",
+        "sha256": "2fe56812cd2e41732dea8eb2e7e929f8272ae6a096aa1a7f5c5fa9b5d41e7afa",
+        "git_blob": "6cf3b31691bf93c07d2eb1a0a256ae765121220f",
+        "bytes": 6062
+      },
+      {
+        "path": "insert/insert_ni/meta/tasks.jsonl",
+        "sha256": "8c0f131f6dbe864e13623fb4d85ccb1eba592e90589493cce98d13e4948f57c9",
+        "git_blob": "1418db85bc909edf7b4dacd96c2ddcf5f6f9d408",
+        "bytes": 55
+      },
+      {
+        "path": "insert/insert_plug_2/meta/annotation.json",
+        "sha256": "59627c5abe1238a2f128b36300724ebea3bc4e823f117e0349590856cea01a94",
+        "git_blob": "86a367859d803e26b50b9c4a1ac1b79f75403e8f",
+        "bytes": 182622
+      },
+      {
+        "path": "insert/insert_plug_2/meta/episodes.jsonl",
+        "sha256": "2c48de74d3de6dbd88b4b89f4126f5cc6b21279f3993252282f34f54faa696e8",
+        "git_blob": "5bc4ae009af521f304dc735be5d232e66c4caf2b",
+        "bytes": 41095
+      },
+      {
+        "path": "insert/insert_plug_2/meta/info.json",
+        "sha256": "a406b912fcc8e01efb5f98a770c60fccf09e83183af00517c2cf3ee77c56125a",
+        "git_blob": "e913a11902860ec4c478773cb950469f350c17fc",
+        "bytes": 6062
+      },
+      {
+        "path": "insert/insert_plug_2/meta/tasks.jsonl",
+        "sha256": "6d21659384414885761aa00c8cd09eb4d568a11dd088340e4a2dc9db1bc6066c",
+        "git_blob": "37769ed13924c6d15f5223a1c20b105083cf74da",
+        "bytes": 54
+      },
+      {
+        "path": "insert/insert_plug_3/meta/annotation.json",
+        "sha256": "67a92b62d3b98515b00f883f6175a8e19028e69c4f9eaed6e2350869d9d5ccfa",
+        "git_blob": "278bff457056f236114aa28c2d5c673dd1fc0a44",
+        "bytes": 189920
+      },
+      {
+        "path": "insert/insert_plug_3/meta/episodes.jsonl",
+        "sha256": "0e1c67a296ce806a2db572706b8e1e8682b3cd2c8d742e7c7d65a6cd0ef78187",
+        "git_blob": "ad405b99cd87606080427452538f0b42c25c6d7b",
+        "bytes": 39997
+      },
+      {
+        "path": "insert/insert_plug_3/meta/info.json",
+        "sha256": "d6ba5de1cde90a16cf5d7f436fa378c00ec22cc51ad2bb72154e32fd63ca0fda",
+        "git_blob": "30ed18586314603f8aad8cc46b67c68d1744a985",
+        "bytes": 6062
+      },
+      {
+        "path": "insert/insert_plug_3/meta/tasks.jsonl",
+        "sha256": "170b3e8d3d2dfed3699cc46ee0451b410bb5308f2e862eb2632e72d8773655f4",
+        "git_blob": "b1bd7dde640104e7cced8b1a820fcf2f3ffd58e4",
+        "bytes": 56
+      },
+      {
+        "path": "insert/insert_typec/meta/annotation.json",
+        "sha256": "ac190eb1d42d9a7882dbce60fcbbc0db3d4a43759d1dae499d0a096f41b88cf0",
+        "git_blob": "048748d1f2ce8afe23cd36bb1dc3dcdcd5496e75",
+        "bytes": 179990
+      },
+      {
+        "path": "insert/insert_typec/meta/episodes.jsonl",
+        "sha256": "9a5b7bdb3e7f7d424eebe598250ba434cfa5c245c8facd143942f67c12959216",
+        "git_blob": "d8309d95d3df7f5d41f7ae51596f2b3a317a88fd",
+        "bytes": 38408
+      },
+      {
+        "path": "insert/insert_typec/meta/info.json",
+        "sha256": "e775aff3da7eb1b5993ffabe306c98f28f8ff0fa985efdc2e86ddfac98df2303",
+        "git_blob": "1bc2de56b5f27e8218f83191bd0825a5a6946a30",
+        "bytes": 6062
+      },
+      {
+        "path": "insert/insert_typec/meta/tasks.jsonl",
+        "sha256": "1db52e55d3d582a031e2742bcb3237452296e129000818e04bde04c4d84fe24d",
+        "git_blob": "ac969e6c2f64a66854642c1db4bdc93b446ced5b",
+        "bytes": 47
+      }
+    ]
+  },
+  "paper": {
+    "title": "MAIA: Anticipating Interaction Anomalies in Contact-Rich Manipulation via Multimodal World Models",
+    "doi": "10.48550/arXiv.2610.21686",
+    "version": "arXiv:2610.21686v2, 16 Oct 2026, as printed in PDF",
+    "url": "https://arxiv.org/pdf/2610.21686v2",
+    "sha256": "0bf7ab952b8d2889f459f8fca5e051fdb145c1f808884608cbca605851ddd2b5",
+    "locator": "Section III (platform, data collection, multimodal recording and annotation); text for category-specific onset and frame annotations; figures label force in N. Full text verified. Same study as this dataset."
+  },
+  "historical_screen": {
+    "prior_commit": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "history_text_files_examined": 582,
+    "match_rules": "Normalized release slug, full dataset title, paper title and arXiv/DOI identifier. The paper already appeared at title-screening level. This archive is newly verified.",
+    "matches": {
+      "dataset": [],
+      "paper": [
+        "g1-collection/2026-11-21/literature.csv"
+      ]
+    }
+  },
+  "signals_and_limits": {
+    "apparatus": "Physical Franka FR3; ATI Axia80-M8 six-axis wrist sensor, videos plus robot state in the source. Paper states 120 Hz F/T aligned to 30 Hz control. No independent instrument for physical first touch, contact force or moment bias was identified in the numeric part of this release.",
+    "time": "Each 30 Hz control frame has up to four aligned subsamples in raw and filtered wrench channels (fx,fy,fz,tx,ty,tz). Use only the first valid_len slots. timestamp_us is the released control-frame timestamp; no individual per-slot source timestamp or transport timing in the archived schema. Do not infer original source timestamp jitter from this timeline.",
+    "annotations": "episode_label=1 denotes successful completion; frame_label=0 denotes an anomalous frame. The manually reviewed anomaly ranges are inclusive. Checked all per-frame labels against the separate annotations and all episode outcomes/sources against metadata. Human source and pi05_joint policy rollouts have different mixtures of outcome and anomaly; episodes are not independent randomized treatments.",
+    "onset": "Paper and dataset card define manual insertion interaction onset as arrival near the target, before contact. The application used filtered wrench and a nominal force-norm threshold of 3.0. Fields first_slot_threshold_frame and any_valid_slot_threshold_frame compute the first strictly >3.0 norm using slot zero or any valid slot per frame. Absence stored as blank; matching calculations include both missing. First-slot computed onset matches the archived auto index in all 600 files. First-slot peak agrees with stored auto.max_force_norm in all files (rtol=atol=1e-5). These are comparisons to an annotation algorithm; they do not identify independently timed physical contact.",
+    "manual_difference": "auto_minus_manual = automatic threshold frame minus manual proximity frame. Positive means automated onset is later. Reported only for episodes with both bounds. None of the 532 paired onsets share a frame. 441 episodes have an earlier threshold crossing if all valid subslots are used; one other episode crosses despite no first-slot threshold hit.",
+    "wrist_window": "For manual onset m>=30, take the first 15 control frames, then [m-15,m) before the proximity onset. For each nonoverlapping window take the componentwise median of all valid raw tx,ty,tz and compute the Euclidean norm of the vector difference, in release torque units. 560 episodes qualify. There are no unloaded reference weights, independent zero or temperature-specific calibration readings. Motion, tool loading and gravity orientation can affect the difference. No torque calibration is inferred.",
+    "identity": "SHA-256 separately records whole parquet bytes and valid raw wrench samples with their valid-length vectors serialized little-endian (i8 lengths, f8 samples). All 600 of each digest are distinct. Counts correspond to different deposited records, not necessarily independent environments or sources."
+  },
+  "reproduce": "Download four insert/<task>/meta/{annotation.json,episodes.jsonl,info.json,tasks.jsonl} and all adjacent data/chunk-000/*.parquet at the fixed revision, preserving directory structure. Run python derive_cria.py DATA_ROOT OUTPUT_DIR with numpy and pyarrow; per-episode data checksums and metadata file hashes identify all inputs."
+}

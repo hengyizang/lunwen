@@ -1,0 +1,199 @@
+{
+  "title": "WireFishing-M: multimodal deformable cable insertion into a transparent pipe",
+  "authors": [
+    "Tianyu Zhou",
+    "Hengxu You",
+    "Fang Xu",
+    "Jing Du"
+  ],
+  "source_rights": "Both data partitions CC0 1.0 per fixed v1.0 Dataverse release. Credit the authors of WireFishing-M. Only independently derived per-trial statistics and checksums are included. Article CC BY 4.0.",
+  "checked_utc_date": "2026-11-21",
+  "source_releases": [
+    {
+      "dataset_doi": "10.7910/DVN/MUOJXI",
+      "version": "1.0",
+      "publisher_version_id": 446081,
+      "landing": "https://doi.org/10.7910/DVN/MUOJXI",
+      "version_api": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.7910/DVN/MUOJXI",
+      "response_sha256": "bdd82d7d4bf5cbbf91c573f95ff3486e7e0f1d46f70a80d510d865aa54776606",
+      "public_deposit_files": 529,
+      "listed_bytes": 1127644187694,
+      "file_counts_by_condition": {
+        "Cable_1_Human": 3,
+        "Cable_1_Random": 291,
+        "Cable_2_Human": 2,
+        "Cable_2_Random": 16,
+        "Cable_3_Human": 3,
+        "Cable_3_Random": 15,
+        "Cable_4_Human": 2,
+        "Cable_4_Random": 38,
+        "Cable_5_Human": 2,
+        "Cable_5_Random": 63,
+        "Cable_6_Human": 2,
+        "Cable_6_Random": 6,
+        "Cable_7_Human": 2,
+        "Cable_7_Random": 84
+      },
+      "source_rights": {
+        "name": "CC0 1.0",
+        "uri": "http://creativecommons.org/publicdomain/zero/1.0",
+        "iconUri": "https://licensebuttons.net/p/zero/1.0/88x31.png",
+        "rightsIdentifier": "CC0-1.0",
+        "rightsIdentifierScheme": "SPDX",
+        "schemeUri": "https://spdx.org/licenses/",
+        "languageCode": "en"
+      }
+    },
+    {
+      "dataset_doi": "10.7910/DVN/XOPUXY",
+      "version": "1.0",
+      "publisher_version_id": 497978,
+      "landing": "https://doi.org/10.7910/DVN/XOPUXY",
+      "version_api": "https://dataverse.harvard.edu/api/datasets/:persistentId/versions/1.0?persistentId=doi:10.7910/DVN/XOPUXY",
+      "response_sha256": "769a9faf8519500ca92386aae47883d391593c8a5fa80152b7baf9021c0cb408",
+      "public_deposit_files": 186,
+      "listed_bytes": 412070604849,
+      "file_counts_by_condition": {
+        "Cable_1_Random": 186
+      },
+      "source_rights": {
+        "name": "CC0 1.0",
+        "uri": "http://creativecommons.org/publicdomain/zero/1.0",
+        "iconUri": "https://licensebuttons.net/p/zero/1.0/88x31.png",
+        "rightsIdentifier": "CC0-1.0",
+        "rightsIdentifierScheme": "SPDX",
+        "schemeUri": "https://spdx.org/licenses/",
+        "languageCode": "en"
+      }
+    }
+  ],
+  "selection": "One published dataset family with two storage partitions and one data paper. From MUOJXI chose the smallest file in the large Cable_1_Random group, the smallest human demonstration archive across the deposit, and the smallest ZIP (Cable_4_Random). From XOPUXY chose the smallest archive. Selection was governed by transfer size and format, not by scoring outcomes; it is not a random sample of the seven cable types. Checked all state arrays and enumerated all image/frame indices in every trial in each of the four selected archives.",
+  "selected_archives": [
+    {
+      "dataset_doi": "10.7910/DVN/MUOJXI",
+      "publisher_filepath": "Cable_1_Random/20241129/20241129_113-113.7z",
+      "local_alias": "Cable1-Random.7z",
+      "file_id": 11718373,
+      "url": "https://dataverse.harvard.edu/api/access/datafile/11718373",
+      "bytes": 547314200,
+      "publisher_md5": "2185db43467fcf1ad23aa95018836317",
+      "sha256": "b0ed8e070e5a89a3a0238eda3263e5d6a4f42d12e41cf4cde9e31467014c08e6",
+      "restricted": false
+    },
+    {
+      "dataset_doi": "10.7910/DVN/MUOJXI",
+      "publisher_filepath": "Cable_3_Human/20250328.7z",
+      "local_alias": "Cable3-Human.7z",
+      "file_id": 11578149,
+      "url": "https://dataverse.harvard.edu/api/access/datafile/11578149",
+      "bytes": 716151028,
+      "publisher_md5": "89c0515823858444d1cfc9689e058edf",
+      "sha256": "7e86611458cdae58c7a9aebff42cdd3b30c1f22954c811e91697e4989ebbd2a7",
+      "restricted": false
+    },
+    {
+      "dataset_doi": "10.7910/DVN/MUOJXI",
+      "publisher_filepath": "Cable_4_Random/20250407_30.zip",
+      "local_alias": "Cable4-Random.zip",
+      "file_id": 11580198,
+      "url": "https://dataverse.harvard.edu/api/access/datafile/11580198",
+      "bytes": 813603980,
+      "publisher_md5": "ed7f71ef961b15e6c549d70e6b75b969",
+      "sha256": "9260b082ea4810a02a09df5a49762ac77186e7b936314163af02ca9daea5c34d",
+      "restricted": false
+    },
+    {
+      "dataset_doi": "10.7910/DVN/XOPUXY",
+      "publisher_filepath": "Cable_1_Random/20241201/20241201_285-287.7z",
+      "local_alias": "Cable1-Random-part2.7z",
+      "file_id": 11770800,
+      "url": "https://dataverse.harvard.edu/api/access/datafile/11770800",
+      "bytes": 1655618056,
+      "publisher_md5": "51385913292c766f6c7288fec45ddd8c",
+      "sha256": "92949d922525a5679446852e44a07203fc505fd45f9fd130c8d81736144b9073",
+      "restricted": false
+    }
+  ],
+  "coverage": {
+    "archive_files": 4,
+    "trial_folders": 7,
+    "state_vectors": 8702,
+    "common_five_stream_indices": 8702,
+    "inner_view_files": 8702,
+    "all_state_vectors_widths": [
+      34
+    ],
+    "source_folders": "global/bottom camera is archived as globel_view in these packages; preserve the source spelling."
+  },
+  "methods": {
+    "measurement": "Paper, Experimental Design / Data Collection Procedure: internal Franka Panda ROS franka_states estimates external force and moment at the end effector. This is not a dedicated calibrated wrist F/T cell for these trials. First three elements are force and next three are torque according to the data article. Calculate frame-order median and maximum Euclidean norm of each triplet in original units. No relation to unloaded bias or calibrated physical contact is established.",
+    "visual": "Paper, Data Description / limitations: human annotators used the inner/side camera observing the pipe opening to assess binary insertion outcome. No independently timestamped contact switch, initial contact annotation or fine-grained insertion label described. Presence of a camera frame does not establish an outcome or prove synchronized acquisition at sub-frame precision. Five sample inner-view JPEGs from the ZIP were opened as images and verified; no manual relabeling or outcome-rate claim. The numeric study does not require rechecking every camera image.",
+    "sample_layout": "Every parsed state vector has 34 float values. Article documents elements 0–19, including index 19 as binary trial outcome; it describes pose as position plus orientation quaternion while prescribing 6–11, a six-element slice. Summaries use the force/moment triplets and record the native index-19 code. All selected files have zero there; this selection cannot estimate success prevalence. Trailing 14 elements lack a mapping in the data article and are nonzero in four of seven trials. No attempt to reinterpret pose or infer missing time, wrench, or labels from the surplus columns.",
+    "time": "All five modalities have common numeric filename suffixes in the selected records, with contiguous index sequences. The documented 20 fields have no source acquisition timestamp. The source describes software alignment and warns of asynchronous camera and DIGIT reads. We compare indices only; neither nominal frequency nor equality of device timestamps is assumed.",
+    "counts": "This is an audit of seven selected trial directories. Frames and five streams are measurements of a trial, not independent attempts. Whole-archive hashes cover all original records and images. Each archive MD5 validated against Harvard before reading. Never load pickled NumPy payloads."
+  },
+  "image_spotcheck": [
+    {
+      "member": "inner_view/fiber_image_0.jpg",
+      "width": 640,
+      "height": 480,
+      "sha256": "6903d44815c3b7c7f772582ae8823fb7cc293fe96e75bc7d7b1d453cc5b73aee"
+    },
+    {
+      "member": "inner_view/fiber_image_400.jpg",
+      "width": 640,
+      "height": 480,
+      "sha256": "b7a5da7cb9f54d56c4b4add4d86cd2d2a109877da15dc1f4487cb58cf91fd97d"
+    },
+    {
+      "member": "inner_view/fiber_image_800.jpg",
+      "width": 640,
+      "height": 480,
+      "sha256": "2b263f196d399da31b2752676990199e9fc3f4f29d3f249a2b71276be6bc20d8"
+    },
+    {
+      "member": "inner_view/fiber_image_1200.jpg",
+      "width": 640,
+      "height": 480,
+      "sha256": "f7cb8bbb041dc0cd032f3274c0cb58e433879f3187e8114085eb1cd924d1d32b"
+    },
+    {
+      "member": "inner_view/fiber_image_1602.jpg",
+      "width": 640,
+      "height": 480,
+      "sha256": "7ae30e4b1b7d7560434c0baedcc976a5866b06af8f1011589a1333717c6986eb"
+    }
+  ],
+  "companion_paper": {
+    "doi": "10.1016/j.dib.2025.112136",
+    "source_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC12547867/fullTextXML",
+    "article_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12547867/",
+    "xml_sha256": "503e3bce8cccc1bbc061a323bafa865d0facba62c303aa5e9fefe7f638b9c467",
+    "source_version": "Published Data in Brief 63 (2025), 112136. Full text sections Data Description, Experimental Design / Materials and Methods, and Limitations.",
+    "authors": [
+      "Tianyu Zhou",
+      "Hengxu You",
+      "Fang Xu",
+      "Jing Du"
+    ]
+  },
+  "queries": [
+    {
+      "query": "robot insertion dataset electrical connector force estimate contact independent physical insertion success tactile robot joint torque insertion RSS FMB LeRobot wrench estimate dataset official",
+      "result": "Found the author data article for WireFishing-M via PubMed Central. It identifies internal robot force estimates and camera-based human outcome judgments; traced both deposited data DOIs."
+    },
+    {
+      "query": "WireFishing-M data repository cable insertion downloads task board Mendeley Zenodo GitHub robot state csv inner_view dataset file zip",
+      "result": "Followed primary DOI/Dataverse metadata records, enumerated fixed v1.0 file inventories and downloaded four non-restricted packages, spanning both releases. No issue/request for access was required."
+    }
+  ],
+  "previous_catalogue": {
+    "previous_commit": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "status": "File-level evidence upgrade of two previously listed DOI partitions; a single dataset family.",
+    "catalogues": [
+      "g1-collection/continuous/datasets-new.csv (XOPUXY)",
+      "g1-collection/continuous/datasets-new-part-02.csv (MUOJXI)"
+    ]
+  },
+  "reproduce": "Retrieve the four original files via the URLs above, leaving either the published filename or local alias. Run python derive_wirefishing.py DOWNLOAD_DIR OUTPUT_DIR with Python 3.11+, NumPy, and libarchive-c / libarchive with 7-Zip support. The script checks each publisher MD5. The listed source files together are approximately 3.7 GB."
+}

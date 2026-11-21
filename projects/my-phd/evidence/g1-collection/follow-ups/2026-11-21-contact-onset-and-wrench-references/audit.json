@@ -1,0 +1,197 @@
+{
+  "accessed_utc": "2026-11-21",
+  "prior_branch_commit": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+  "stage": "G1/topic-intelligence",
+  "history_files_screened": 582,
+  "history_method": "Compared release IDs (including known version/concept DOI), fixed repositories and distinctive dataset titles to prior project evidence, all targeted and continuous batches and the early catalogue. A prior paper alone does not mark a data release as previously retained. Per-work dedup uses DOI, arXiv, author and normalized title; see lit/search.json. Two WireFishing-M DOIs are one experimental family.",
+  "dataset_families": 9,
+  "new_dataset_families": 7,
+  "upgraded_dataset_families": 2,
+  "dataset_screening": {
+    "temp/ironcub-source.json": {
+      "keys": [
+        "ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset",
+        "7b8a7aa350312b4c609c9531325d7fc52f9c924d"
+      ],
+      "prior_files": []
+    },
+    "reference/fingertip-source.json": {
+      "keys": [
+        "10.5281/zenodo.15553350",
+        "10.5281/zenodo.15553349",
+        "MATLAB_code_and_data",
+        "mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor"
+      ],
+      "prior_files": []
+    },
+    "reference/press-source.json": {
+      "keys": [
+        "10.5281/zenodo.6417197",
+        "10.5281/zenodo.6417196",
+        "A low-cost wireless bite force measurement device - Calibration data"
+      ],
+      "prior_files": []
+    },
+    "insertion/cria-source.json": {
+      "keys": [
+        "Joringell/CRIA",
+        "af288f2a470189c3991db73873f9d64171620a43",
+        "CRIA: Contact-Rich Interaction Anomaly Anticipation Dataset"
+      ],
+      "prior_files": []
+    },
+    "event/eventtouch-source.json": {
+      "keys": [
+        "BAAI/EventTouch",
+        "EventTouch Dataset",
+        "e091194fd687fdd4b686578188745c1745ccfddc"
+      ],
+      "prior_files": []
+    },
+    "taf/taf-source.json": {
+      "keys": [
+        "jiamig/taf-dataset",
+        "239c8ee8156bf11eb6d6c11c004f9a8721528d9d"
+      ],
+      "prior_files": []
+    },
+    "ice/ice-contact-source.json": {
+      "keys": [
+        "10.5281/zenodo.18759556",
+        "10.5281/zenodo.18759555",
+        "IntelliMan_WP5_Grasping, Manipulation and Arm-Hand Coordination_T5.1_Data fusion and sensing technology_ICECS2025_Data"
+      ],
+      "prior_files": []
+    },
+    "touch/reassemble-source.json": {
+      "keys": [
+        "10.48436/0ewrv-8cb44",
+        "10.48436/sn234-58p90",
+        "REASSEMBLE: A Multimodal Dataset for Contact-rich Robotic Assembly and Disassembly"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/anchor-search.json",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv",
+        "projects/my-phd/evidence/g1-collection/2026-11-21/reading-guide.csv",
+        "projects/my-phd/evidence/literature/raw/20261108t101602z-crossref-aa43de26ee.json"
+      ]
+    },
+    "wire/wire-source.json": {
+      "keys": [
+        "10.7910/DVN/MUOJXI",
+        "10.7910/DVN/XOPUXY",
+        "WireFishing-M"
+      ],
+      "prior_files": [
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new-part-02.csv",
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv",
+        "projects/my-phd/evidence/g1-collection/continuous/queue-state.json"
+      ]
+    }
+  },
+  "evidence_table_note": "Includes archived-file summaries and separately identifiable tables reproduced from papers. Published timing/fit tables are not raw sensor waveforms or additional dataset releases.",
+  "literature_parent": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+  "intervening_paths_rechecked": [],
+  "retained_papers": 42,
+  "new_papers": 18,
+  "literature_evidence_counts": {
+    "historical / full text": 10,
+    "new bibliography record / full text": 11,
+    "new bibliography record / bibliographic screening": 1,
+    "new bibliography record / author abstract": 6,
+    "historical / bibliographic screening": 2,
+    "historical / author abstract": 12
+  },
+  "verified_citation_edges": 49,
+  "recomputed_tables": {
+    "event/eventtouch-corrections.csv": {
+      "rows": 2520,
+      "sha256": "16bdda32a156e347815a1d8a616900179e61c3dc8e08e9f26ceef74339f5bff9"
+    },
+    "event/eventtouch-by-sensor.csv": {
+      "rows": 48,
+      "sha256": "0fe5cd4fcaa62e093b11d4e21ad8bfea21c782d97d4debc8a8d65862232b674c"
+    },
+    "event/eventtouch-recordings.csv": {
+      "rows": 420,
+      "sha256": "7e1224f2414cda1dc0ca0a8bd9c5c0e67d369ddf5828c5343797fbfccdc222cc"
+    },
+    "ice/ice-code-blocks.csv": {
+      "rows": 1200,
+      "sha256": "bc6743e75845ecef28102f19d35c00fd9231414e30485485a7c04b0bc3b46ecc"
+    },
+    "ice/ice-tactile-files.csv": {
+      "rows": 300,
+      "sha256": "48996901530cfa9b8ecb2b33ff75a85cf4045b0fed4677badd79e715d51f2aa9"
+    },
+    "insertion/cria-episodes.csv": {
+      "rows": 600,
+      "sha256": "fd93e81eb2b57152be84e86528b40d398534ef24e95b5e13d1867eaa6af7bb7a"
+    },
+    "insertion/cria-pre-onset-wrist.csv": {
+      "rows": 560,
+      "sha256": "559c17e44f6792bde7f698f09a5d5f9ebd0719ef4049f2d8d263c549d0e134e3"
+    },
+    "insertion/cria-task-source.csv": {
+      "rows": 8,
+      "sha256": "f4468c3cddee4704018f3d8cfc2727507be96273757519244f0e9f2b0f911526"
+    },
+    "reference/press-paired-loads.csv": {
+      "rows": 42,
+      "sha256": "5c6c1fdccdfd917b1432132c4324c057749e79460da9fc35af7cb79d73764ab1"
+    },
+    "reference/fingertip-comparisons.csv": {
+      "rows": 24,
+      "sha256": "5f5c95ebefa6261f3d836cf29376949bf2bad3ba3feb722cf9aaf13ad3df50ce"
+    },
+    "reference/fingertip-target-matches.csv": {
+      "rows": 208,
+      "sha256": "a9e267386e588ba26c404ede043d03fc6fe1ac83855dfe7a5da94ce6f6eaf8f9"
+    },
+    "reference/press-sessions.csv": {
+      "rows": 3,
+      "sha256": "51b594e2e972246c3ec0653b053e2acf70634ce2ce37a4708f1b23aee1dacadf"
+    },
+    "switch/antenna-contact-delays.csv": {
+      "rows": 4,
+      "sha256": "9a493f1f557e87bad748249b81d658623bbff67c60baca74d9fc4dbbea72e862"
+    },
+    "taf/taf-sequences.csv": {
+      "rows": 408,
+      "sha256": "b1b80505cddd620b723e89c8fd249327a44d8160a5fe04733a5d0d08cbc30c99"
+    },
+    "taf/taf-video-checks.csv": {
+      "rows": 8,
+      "sha256": "ff87e7145eb8ce99813d0d1635ab6d65151885fc27c18e1d2088b63a21a3a8a1"
+    },
+    "temp/ironcub-arm-sessions.csv": {
+      "rows": 16,
+      "sha256": "c22bbb003699de93105111b81f80c328394dd17cde95da1f3ef5ab8bb93c7240"
+    },
+    "temp/ironcub-heldout-affine.csv": {
+      "rows": 48,
+      "sha256": "4693eff500010cf31292836d47464248856c7c29cc4d43192312527b429b3236"
+    },
+    "temp/ironcub-matched-postures.csv": {
+      "rows": 36,
+      "sha256": "67d2fbf410c033f592e1659ee7cd5d87f96dd98590e9c6290b4f2f42c63ac79f"
+    },
+    "touch/reassemble-recordings.csv": {
+      "rows": 13,
+      "sha256": "05d323e5c7eaed6fd1554bcb35d65351f2c049dd1ca9b10b852382d827c97dba"
+    },
+    "touch/reassemble-segments.csv": {
+      "rows": 236,
+      "sha256": "c741f3e586c276c0f523505bf2056ebdf545e4a5507973891c32e19c72746212"
+    },
+    "touch/reassemble-archive-splits.csv": {
+      "rows": 149,
+      "sha256": "6a8eaa3e8c8bf35e3185519b1259ab2613039f8c7a3d6128688dd25e5c8f146f"
+    },
+    "wire/wire-trials.csv": {
+      "rows": 7,
+      "sha256": "c99712bc8d870edb44133d996def02c1b6df299821a80f7fe00e99f36324c3ee"
+    }
+  }
+}

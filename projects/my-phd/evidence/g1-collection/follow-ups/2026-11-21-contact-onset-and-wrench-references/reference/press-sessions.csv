@@ -1,0 +1,4 @@
+session,role,device,paired_files,source_longitudinal_maximum_N,reference_mean_min_N,reference_mean_max_N,trial_means_above_source_max,slope_N_per_native_unit,intercept_N,file_mean_baseline_rmse_N
+1,fit,ATI Nano25,21,500,0.037601045,441.751903751,0,11.465476831,-1.200871523,0.637858607
+2,test,ATI Nano25,15,500,98.494957164,495.830246914,0,11.465476831,-1.200871523,66.758586005
+3,test,ATI Delta,6,495,14.576298702,943.710422557,3,11.465476831,-1.200871523,10.638764692

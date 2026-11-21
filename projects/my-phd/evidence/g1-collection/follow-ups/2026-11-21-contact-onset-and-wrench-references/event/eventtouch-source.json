@@ -1,0 +1,268 @@
+{
+  "title": "EventTouch Dataset",
+  "publisher_attribution": "Haptic Sensing Lab, School of Advanced Manufacturing and Robotics, Peking University; deposited under BAAI on Hugging Face",
+  "version": "e091194fd687fdd4b686578188745c1745ccfddc",
+  "fixed_url": "https://huggingface.co/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc",
+  "raw_url_template": "https://huggingface.co/datasets/BAAI/EventTouch/resolve/e091194fd687fdd4b686578188745c1745ccfddc/{path}",
+  "accessed_utc": "2026-11-21",
+  "search": [
+    {
+      "query": "robot contact wrench tactile dataset synchronized six axis force torque optical contact area indentation contact/no contact dataset calibrated tool indenter GitHub GelSight Hemispherical DIGIT ground truth",
+      "result": "Official BAAI/EventTouch model card describes raw, corrected and simulated wrench files and pose/material conventions."
+    },
+    {
+      "query": "Pinned Hugging Face recursive directory listing for ball_0010_15 and ball_PLA_15 in digit, s1, s2, s3",
+      "result": "Followed all page links on each of the eight directory listings. Took every real_sensor.csv and fem_sensor.csv; did not rely on the repository-wide capped siblings list."
+    }
+  ],
+  "rights": "Public download at fixed revision. Root listing and dataset card give no explicit data redistribution license. This collection shares newly computed factual summaries and file digests only. No physical recordings, images, simulation traces or paper copies included.",
+  "scope": "The same nominal 15 mm radius spherical indenters in two named materials (Ecoflex 00-10 and PLA), four sensor types, all available pose/cell and press-depth directories. Fixed sensor rig. Does not represent a wrist undergoing assembly. No other objects/radii or Part2 files included. Each physical file and its FEM counterpart occupy one condition directory. Numerical comparison of samples is restricted to the two wrench representations on the physical side.",
+  "coverage": {
+    "directories": 420,
+    "files": 840,
+    "bytes": 101835686,
+    "physical_files_unique_sha256": 420,
+    "simulation_files_unique_sha256": 420
+  },
+  "fixed_sources": {
+    "readme_url": "https://huggingface.co/datasets/BAAI/EventTouch/resolve/e091194fd687fdd4b686578188745c1745ccfddc/README.md",
+    "readme_sha256": "b7069b63695e25f86b5674dbd479a6e156ce84f08675bd2ad351e798fd72efd4",
+    "trees": [
+      {
+        "subtree": "digit/ball_0010_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/digit/ball_0010_15?recursive=true&limit=1000",
+            "sha256": "6286e91b81307928db7519f4448e75aaa2ca606984ef8b4621a298c557f99a0c"
+          }
+        ]
+      },
+      {
+        "subtree": "digit/ball_PLA_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/digit/ball_PLA_15?recursive=true&limit=1000",
+            "sha256": "cb0ce61e41da853742e7393b48befc02f223c667788b8b99a71dac8b4b188de3"
+          }
+        ]
+      },
+      {
+        "subtree": "s1/ball_0010_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1/ball_0010_15?recursive=true&limit=1000",
+            "sha256": "2bf88e08f01719d30c21285c784a9a5a2651b11c1ec4719160ef68d73dd916ae"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TVY5d2IzTmxNUzl3Y21WemMxOWtaWEIwYUY4d04xOHdMakEwT1RadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBeE5ESTFYekUzT0RjNU9URXdORE13TVRRd09UUXhORGN1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06MTAwMA%3D%3D",
+            "sha256": "c9daa4e2dfc34cac1041866f276b5c22dde9f0601644cc75160f9cb3647b58f9"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TWw5d2IzTmxNaTl3Y21WemMxOWtaWEIwYUY4d01WOHdMakExTlRadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBeU56QXlYekUzT0RjNU9URXhNRFk0TWpJNE1UTTNPRFF1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06MjAwMA%3D%3D",
+            "sha256": "095e6d9a186f073a220a3f7c3a6bbecb9292e0c31e75465a0739fcf2dd6ae1f0"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TWw5d2IzTmxNaTl3Y21WemMxOWtaWEIwYUY4d04xOHdMakEwT1RadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBME1ETTNYekUzT0RjNU9URXhOek15T1RnME5EVXpOak11Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06MzAwMA%3D%3D",
+            "sha256": "785c2c39d0539491bdc971068d8b4df89a00930bb434755866ed50bc1f4ffbe2"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TTE5d2IzTmxNeTl3Y21WemMxOWtaWEIwYUY4d00xOHdMakExTXpadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBMU5ETXlYekUzT0RjNU9URXlOREkzTmpjMU9EUTBNakF1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06NDAwMA%3D%3D",
+            "sha256": "707eed7226ce0d782a0312ec5c34ab63048f9871840c653f3a8214e37b49a870"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TTE5d2IzTmxNeTl3Y21WemMxOWtaWEIwYUY4d09GOHdMakEwT0RadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBMk56WXpYekUzT0RjNU9URXpNRGc0TVRFeU1UYzNOVGd1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06NTAwMA%3D%3D",
+            "sha256": "32c3a35fb4a096ae8c2e00f33e32f429e6f4101f7b8d3e105680734e0a1b0d72"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TkY5d2IzTmxOQzl3Y21WemMxOWtaWEIwYUY4d05GOHdMakExTWpadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBNE1qRTBYekUzT0RjNU9URXpPREEzTlRVeE5UUTBNRE11Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06NjAwMA%3D%3D",
+            "sha256": "91d9becda3c7c89e4234e31b3ea91cd0a2119d6784494d9cff4d5a122fdbf596"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TkY5d2IzTmxOQzl3Y21WemMxOWtaWEIwYUY4d09WOHdMakEwTnpadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBNU5EazJYekUzT0RjNU9URTBORFEyTWpVek9UZ3pPVFV1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06NzAwMA%3D%3D",
+            "sha256": "c3a37de47e117ba758eaa62bfaf660a3b3ab08bca546ea86de5a7fe1d831288f"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TlY5d2IzTmxOUzl3Y21WemMxOWtaWEIwYUY4d05WOHdMakExTVRadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURFd09UWTVYekUzT0RjNU9URTFNVGd3TXpnd09ETXpOVGt1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06ODAwMA%3D%3D",
+            "sha256": "5f4253c192688695250ca66bffbc58a53e5180ce6c26025deb0366defe05798f"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TlY5d2IzTmxOUzl3Y21WemMxOWtaWEIwYUY4eE1GOHdMakEwTmpadEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURFeU16TXhYekUzT0RjNU9URTFPRFU1TVRNNE56azJORGt1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUkzTTJOa1pXVXdOR0V5WlRjM01qTXpPV05rTVRneU1UUTNaV0psTlRaak1qVTJOek0wTlRNMUluMD06OTAwMA%3D%3D",
+            "sha256": "eb33112d1e917d8226bd25c4e389f5fecb5f886507f29f72d2f53cc27f21b5ec"
+          }
+        ]
+      },
+      {
+        "subtree": "s1/ball_PLA_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1/ball_PLA_15?recursive=true&limit=1000",
+            "sha256": "2e3c3b7905d50193647411d9327a7f7a664f6d2cf2445e47dee1935824c6904e"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF4WDNCdmMyVXhMM0J5WlhOelgyUmxjSFJvWHpBM1h6QXVNRFE1Tm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURFek9UTmZNVGM0TnprNU16ZzFNVFUzTkRnNU9Ua3dNeTV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06MTAwMA%3D%3D",
+            "sha256": "8a9df0de4dd841d56f95ff7d74adc2d82b35b93ad1799473777c03f216ee5524"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF5WDNCdmMyVXlMM0J5WlhOelgyUmxjSFJvWHpBeFh6QXVNRFUxTm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURJM016VmZNVGM0TnprNU16a3hPRFl4TmpFNE16ZzBOQzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06MjAwMA%3D%3D",
+            "sha256": "3a5ca31cd3831b08a44e565cda4cb996b9aed9e3660302d74987dbb8f6bd4392"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF5WDNCdmMyVXlMM0J5WlhOelgyUmxjSFJvWHpBM1h6QXVNRFE1Tm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURRd01qaGZNVGM0TnprNU16azRNamN4T1RNek5qQTBOUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06MzAwMA%3D%3D",
+            "sha256": "108eb106ae1e81a694c2be0097057153a2476f1c3b890ba7d147b8129a1c8bd5"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF6WDNCdmMyVXpMM0J5WlhOelgyUmxjSFJvWHpBeVh6QXVNRFUwTm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURVek56UmZNVGM0TnprNU5EQTBPVFkxTmpVM05qZ3pOUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06NDAwMA%3D%3D",
+            "sha256": "0276eaff666197a4c7b0e13b5e445da0e994f95e41dd54eaaeded1ec7669cb35"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF6WDNCdmMyVXpMM0J5WlhOelgyUmxjSFJvWHpBNFh6QXVNRFE0Tm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURZMk56WmZNVGM0TnprNU5ERXhORFUyTmpNME1ERXhPUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06NTAwMA%3D%3D",
+            "sha256": "8e8a9d3b74d99d25b011e203080f36076bbaa2fd94d03ef19aa6ef456c8d2051"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekEwWDNCdmMyVTBMM0J5WlhOelgyUmxjSFJvWHpBelh6QXVNRFV6Tm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURneE1EZGZNVGM0TnprNU5ERTROVFUzTXpjME16STROUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06NjAwMA%3D%3D",
+            "sha256": "57d2ac2fb91b3e00626d40a870dced56782e0d1c78e3a8fbf1543f63cbd79d30"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekEwWDNCdmMyVTBMM0J5WlhOelgyUmxjSFJvWHpBNVh6QXVNRFEzTm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURrMU9UaGZNVGM0TnprNU5ESTFPVGd3TnpjeU5qSXlPQzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06NzAwMA%3D%3D",
+            "sha256": "8591ae389a4dfc52da2acfe4732418ca785c37513903dbc0630dea6441960268"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s1%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNUzlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekExWDNCdmMyVTFMM0J5WlhOelgyUmxjSFJvWHpBMlh6QXVNRFV3Tm0wdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TVRFeU56QmZNVGM0TnprNU5ETTBNekE0TnpBd05ETTBOaTV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalEzTjJJMU5EbGpaV0UzWWpGbVkyUTVPV1V3WVRZeFpUQTROamN6TlRVME16TXhabUkxWWpVaWZRPT06ODAwMA%3D%3D",
+            "sha256": "57a862bf26edc8b9caa352902aac3b47cc7812b235be9d61fd14bc6f8effd5b1"
+          }
+        ]
+      },
+      {
+        "subtree": "s2/ball_0010_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2/ball_0010_15?recursive=true&limit=1000",
+            "sha256": "c76e6432a30497229f03636a7faf0924e34827bb0ef4378afb6507530d96bec1"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TVY5d2IzTmxNUzl3Y21WemMxOWtaWEIwYUY4d04xOHdMakExTURodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBeE1qZzRYekUzT0Rnd09EZ3dNRFE1T1RJeU5URXlNRGN1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06MTAwMA%3D%3D",
+            "sha256": "29462986310c217f7969760f8c8887825e6c242b9c89d715374207c85aca43a9"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TVY5d2IzTmxNUzl3Y21WemMxOWtaWEIwYUY4eE1GOHdMakEwTkRodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBeU5EVTNYekUzT0Rnd09EZ3dPREF6TmpneU9EWTBNekF1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06MjAwMA%3D%3D",
+            "sha256": "1d14402f90afc2ea6d39a4c4e997cd6d2080721f46335cdcd9178e849d16a066"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TWw5d2IzTmxNaTl3Y21WemMxOWtaWEIwYUY4d04xOHdMakExTURodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBek9EWTBYekUzT0Rnd09EZ3hOekV3TnprNE1UZzJNREV1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06MzAwMA%3D%3D",
+            "sha256": "7c9d50bc2d4377baca690ed436c036c35da719e685894bda3a136d003f61d4a9"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TWw5d2IzTmxNaTl3Y21WemMxOWtaWEIwYUY4eE1GOHdMakEwTkRodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBMU1ETXlYekUzT0Rnd09EZ3lORFl6TlRVeU1UWXdPVFl1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06NDAwMA%3D%3D",
+            "sha256": "d18aa2b6f60ca597b88e147fe056292e4bdda2121148b69852d5233eb26b2645"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TTE5d2IzTmxNeTl3Y21WemMxOWtaWEIwYUY4d04xOHdMakExTURodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBMk5EVXlYekUzT0Rnd09EZ3pNemM0T1RnNE9ERTFNVGN1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06NTAwMA%3D%3D",
+            "sha256": "99643295e09efd848235c4e39b2bec4deb6821cd826767a30afc4a6df1385959"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TTE5d2IzTmxNeTl3Y21WemMxOWtaWEIwYUY4eE1GOHdMakEwTkRodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBM05qSTVYekUzT0Rnd09EZzBNVE0zTXpnM016UXpNVE11Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06NjAwMA%3D%3D",
+            "sha256": "5ac2df387185bcd2545b6d571af795412e39d49aabac4192ebd4b550e55c199c"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TkY5d2IzTmxOQzl3Y21WemMxOWtaWEIwYUY4d04xOHdMakExTURodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURBNU1EVTVYekUzT0Rnd09EZzFNRFU1TVRReE56RXlPVGd1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06NzAwMA%3D%3D",
+            "sha256": "b7b8f0587adbdf18959f551b7b16b52b82be3d9f25c598c3437455809239bf43"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TkY5d2IzTmxOQzl3Y21WemMxOWtaWEIwYUY4eE1GOHdMakEwTkRodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURFd01qUTNYekUzT0Rnd09EZzFPREkwT0RVeU5EVXdNREV1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06ODAwMA%3D%3D",
+            "sha256": "45c530963f36d0314e7e28e8519d2c981396e18de00dca23a98bdb5eb1e0b623"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_0010_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1h6QXdNVEJmTVRVdmNHOXpaVjh3TlY5d2IzTmxOUzl3Y21WemMxOWtaWEIwYUY4d09GOHdMakEwT0RodEwyTmhiV1Z5WVY5bWNtRnRaWE12WTJGdFpYSmhYekF3TURFeE56a3pYekUzT0Rnd09EZzJPREl4TkRRek9EVXhORFV1Y0c1bklpd2lkSEpsWlY5dmFXUWlPaUk1TjJZNVpESTRNV05qWVRoaU56Um1OMlZpWWpVMU5qRXpNR0kwWkdVeFlUY3lZVFV5Wm1KbUluMD06OTAwMA%3D%3D",
+            "sha256": "71815d9efddf379c492836da9554f3a6fc2f26f269e4f7cc36b3c4f3863d5538"
+          }
+        ]
+      },
+      {
+        "subtree": "s2/ball_PLA_15",
+        "files_selected": 100,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2/ball_PLA_15?recursive=true&limit=1000",
+            "sha256": "bb7743354ef792278b7a44986ffb3bc61f75352da622fb1c0506b6955ed31886"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF4WDNCdmMyVXhMM0J5WlhOelgyUmxjSFJvWHpBNVh6QXVNRFF3TkcwdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURFME1URmZNVGM1TVRReU1qUTVNVGc0TlRBeU1EWTJNaTV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalk1WTJGbFltUmtabUl5TW1ZM1ptRTRaalJqWkRsaE9Ea3hZMkpqTmpBMVpHVmpOMkZsWm1NaWZRPT06MTAwMA%3D%3D",
+            "sha256": "962661d733e50bc8ccc4d9ca2b0eb39dbc1fafaca49db9d4533a3322a09e0102"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF5WDNCdmMyVXlMM0J5WlhOelgyUmxjSFJvWHpBNFh6QXVNRFF4TkcwdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURJNE9ETmZNVGM1TVRReU1qVTROamMxTXpnek1EY3lOQzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalk1WTJGbFltUmtabUl5TW1ZM1ptRTRaalJqWkRsaE9Ea3hZMkpqTmpBMVpHVmpOMkZsWm1NaWZRPT06MjAwMA%3D%3D",
+            "sha256": "d842eedc455473ac01164ada571a24d8b7e22e40748a6f047bcbb4373149e5bb"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekF6WDNCdmMyVXpMM0J5WlhOelgyUmxjSFJvWHpBNFh6QXVNRFF4TkcwdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURRME5EQmZNVGM1TVRReU1qWTROekUwTnpFNU9ETXlPUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalk1WTJGbFltUmtabUl5TW1ZM1ptRTRaalJqWkRsaE9Ea3hZMkpqTmpBMVpHVmpOMkZsWm1NaWZRPT06MzAwMA%3D%3D",
+            "sha256": "76e799a569309aa00e3598fce9acd379307ec67051b732cb48ab453cc8673d8e"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekEwWDNCdmMyVTBMM0J5WlhOelgyUmxjSFJvWHpBM1h6QXVNRFF5TkcwdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURVNU1UQmZNVGM1TVRReU1qYzRNVGt4Tmpnd01UWTRPUzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalk1WTJGbFltUmtabUl5TW1ZM1ptRTRaalJqWkRsaE9Ea3hZMkpqTmpBMVpHVmpOMkZsWm1NaWZRPT06NDAwMA%3D%3D",
+            "sha256": "142faab9094cba1f35fda5b81e6b552b0469f8bf8456f33b65b8726a6fa39fd3"
+          },
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s2%2Fball_PLA_15?expand=false&recursive=true&limit=1000&cursor=ZXlKbWFXeGxYMjVoYldVaU9pSnpNaTlpWVd4c1gxQk1RVjh4TlM5d2IzTmxYekExWDNCdmMyVTFMM0J5WlhOelgyUmxjSFJvWHpBMlh6QXVNRFF6TkcwdlkyRnRaWEpoWDJaeVlXMWxjeTlqWVcxbGNtRmZNREF3TURjek1qTmZNVGM1TVRReU1qZzNNekF5T1RBM09EZ3dOQzV3Ym1jaUxDSjBjbVZsWDI5cFpDSTZJalk1WTJGbFltUmtabUl5TW1ZM1ptRTRaalJqWkRsaE9Ea3hZMkpqTmpBMVpHVmpOMkZsWm1NaWZRPT06NTAwMA%3D%3D",
+            "sha256": "95d01f9969b0995683498c8f280c5e739cab615dbe757918987df4572098e4d3"
+          }
+        ]
+      },
+      {
+        "subtree": "s3/ball_0010_15",
+        "files_selected": 120,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s3/ball_0010_15?recursive=true&limit=1000",
+            "sha256": "caf742eb53d6adece9812d1da2f5e9be1591d62a4b4bb9e78d4efddffa76abad"
+          }
+        ]
+      },
+      {
+        "subtree": "s3/ball_PLA_15",
+        "files_selected": 120,
+        "query_pages": [
+          {
+            "url": "https://huggingface.co/api/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc/s3/ball_PLA_15?recursive=true&limit=1000",
+            "sha256": "33e5c00ac58df1b7e4593d909a786d5895463bc299fe31cb65bdbd609bd86b5f"
+          }
+        ]
+      }
+    ]
+  },
+  "integrity": "All selected response bodies verified against upstream byte count and Git blob SHA-1 (or LFS SHA-256 if present); per-input SHA-256 stored in the recordings table. Source files are at <sensor>/<object>/<pose>/<depth_directory>/real_sensor.csv or fem_sensor.csv.",
+  "units_and_grading": "Native device_raw_fx/fy/fz and corrected_fx_N/fy_N/fz_N in N; device_raw_mx/my/mz and corrected_mx_Nm/my_Nm/mz_Nm in N·m. Fields use actual CSV names, which differ slightly from the data card. Both sides are from the same physical acquisition. No independently applied zero wrench or temperature is recorded; processing details do not identify causes of the differences. Simulation frame index does not establish physical contact onset.",
+  "cleaning": "Keep archive order; ROS timestamps parsed as exact integers. Physical rows without a time and all 12 wrench components empty are counted separately. Rows sharing a timestamp can carry different wrench values. Keep every complete archived row for descriptive statistics, record duplicate times and flags for value changes. Distinct time labels are not automatically independent sensor observations. Rows and times are never aligned to a simulated trajectory by number. Camera filenames are counted within a file; no pixels analyzed and no contact inferred from a filename or controller phase.",
+  "statistics": "For each physical file and each axis, compute the median, range and RMS around median of (raw minus corrected), in archive coordinates. Summary medians across condition files weight each condition equally. A nonconstant difference rules out modeling these recorded numbers as the same row minus one fixed offset; it does not identify any physical bias, thermal mechanism, time shift or reference wrench.",
+  "independent_spot_check": [
+    {
+      "path": "digit/ball_0010_15/pose_01_pose1/press_depth_01_0.0299m",
+      "complete_frames": 334,
+      "excess_stamp_occurrences": 0,
+      "range_raw_minus_corrected_mz_Nm_decimal": "0.0015000949470916427"
+    },
+    {
+      "path": "s1/ball_0010_15/pose_01_pose1/press_depth_01_0.0556m",
+      "complete_frames": 254,
+      "excess_stamp_occurrences": 169,
+      "range_raw_minus_corrected_mz_Nm_decimal": "0.00182579114161467585"
+    },
+    {
+      "path": "s2/ball_0010_15/pose_01_pose1/press_depth_01_0.0628m",
+      "complete_frames": 183,
+      "excess_stamp_occurrences": 135,
+      "range_raw_minus_corrected_mz_Nm_decimal": "0.000027267211190575973"
+    },
+    {
+      "path": "s3/ball_0010_15/pose_01_cell_01/press_depth_01_0.0175m",
+      "complete_frames": 394,
+      "excess_stamp_occurrences": 0,
+      "range_raw_minus_corrected_mz_Nm_decimal": "0.013673971982702826046"
+    }
+  ],
+  "reproduce": "Download the eight enumerated fixed-version subtrees or the two named CSVs under each condition; Python 3 + NumPy: python derive_eventtouch.py ROOT OUTPUT. Derived figures are computed directly from all eligible numerical files."
+}

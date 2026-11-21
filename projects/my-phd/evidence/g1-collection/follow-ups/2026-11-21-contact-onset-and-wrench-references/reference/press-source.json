@@ -1,0 +1,55 @@
+{
+  "title": "A low-cost wireless bite force measurement device - Calibration data",
+  "doi": "10.5281/zenodo.6417197",
+  "concept_doi": "10.5281/zenodo.6417196",
+  "version": "v1, 2022-04-06",
+  "authors": [
+    "De Pasquale, Paolo"
+  ],
+  "paper_doi": "10.3390/ma15114000",
+  "rights": "CC BY 4.0, Zenodo and DataCite. This package contains independently computed trial summaries, source references and hashes.",
+  "accessed_utc": "2026-11-21",
+  "history": {
+    "git_snapshot": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "evidence_and_early_baseline_text_files": 582,
+    "release_lookup_keys": [
+      "10.5281/zenodo.6417197",
+      "10.5281/zenodo.6417196",
+      "A low-cost wireless bite force measurement device - Calibration data"
+    ],
+    "dataset_matches": [],
+    "companion_article_matches": [],
+    "lookup": "Casefolded diacritic and punctuation stripped release, concept and/or repository identifiers; bibliography separately checks author/title aliases."
+  },
+  "discovery": [
+    "zenodo six-axis force torque sensor calibration dataset ATI force torque reference 3D printed force/torque sensor benchmark raw data",
+    "A low-cost wireless bite force calibration Session 21 15 6 six-axis transducer calibration Rubino De Pasquale reference force moments calibration sampling frequency",
+    "Followed the 2022 paper §2.6 and Fig. 5 to check the reference sensors and lever arrangement. Kept only press-bench files; no human measurements are contained or requested here."
+  ],
+  "sources": [
+    {
+      "local_input_name": "load-dc.json",
+      "url": "https://api.datacite.org/dois/10.5281/zenodo.6417197",
+      "bytes": 5447,
+      "sha256": "eb6eeafcfe5e7cd0213c5cae6745cdd11e985dfe347ca807a1344b12f7727ed0"
+    },
+    {
+      "local_input_name": "load.zip",
+      "url": "https://zenodo.org/records/6417197/files/Calibration%20Data.zip?download=1",
+      "bytes": 145535,
+      "sha256": "73f1d40b1be368e1db55677f1dfb9b3bfed56ba5290e715cfb28f50de5f27487"
+    },
+    {
+      "local_input_name": "load-article.json",
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_json/PMC9182234/unicode",
+      "bytes": 89070,
+      "sha256": "d3d0d671dc638aa844e03a30f5dda69988acfef73cabbe84120fe1811a1f26a0"
+    }
+  ],
+  "publisher_archive_md5": "a565dae06f77d95a6e01bca27db97515",
+  "reference": "One-axis load cell and a separate industrial six-axis reference mounted in series on a manually loaded press. Sessions 1/2 used Nano25, session 3 Delta (paper §2.6/Fig. 5, confirmed change of serial in files). Positions 0/5/10 mm in session 2 vary relative to the ONE-axis transducer center. Reference moments remain about the six-axis instrument origin. The release lacks a common calibrated six-axis output on the low-cost side, an extrinsic reference-frame transform and independently certified wrist zero. No subject/clinical data included.",
+  "units": "Six-axis file header kg is interpreted as kgf and converted via standard gravity 9.80665. Compression is reported as minus Fz. Session 3 kg-cm interpreted as kgf cm ×0.0980665; first two use N-m. One-axis native columns have no header; retain raw second column for scalar regression, no arbitrary calibration into SI. Six-axis header states 10 Hz. Both streams contain 50 readings per equivalent trial but common per-sample timestamps are unavailable; summaries and regressions pair the two file means, never individual rows.",
+  "fit": "Fit ordinary least squares with intercept only to 21 training file means; freeze coefficients for both author-defined held-out sessions. This is a deliberate one-channel baseline; does not estimate the authors’ geometry-aware 3-parameter lever model and its errors are not paper-reported test errors. Archive filenames do not specify the individual lever arm offset; no invented per-file geometry labels.",
+  "limits": "The paper gives 500 N and 495 N longitudinal maxima for Nano25 and Delta in its setup. Three Delta file-average compressions exceed 495 N after explicit unit conversion, including a borderline 495.09 N; two greatly exceed it (737.54 and 943.71 N). Retain values as published; compare against a stated measuring range, not an overload, clipping or calibration certificate. No independent saturation or permanent drift conclusion follows.",
+  "reproduce": "Save publisher ZIP as load.zip in the input directory; python derive_press.py INPUT_DIR OUTPUT_DIR using NumPy. Both source-member hashes are preserved for every trial."
+}

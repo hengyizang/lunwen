@@ -1,0 +1,53 @@
+{
+  "scope": "Independent electrical circuit-closure reference for mechanical touch; primary full texts, one extracted publication table. No acquisition archive counted or mirrored.",
+  "checked_utc_date": "2026-11-21",
+  "query_log": [
+    {
+      "query": "robot manipulator \"contact\" \"electrical circuit\" \"contact detection\" ground truth timing robot force sensor contact onset peg insertion",
+      "result": "Verified a direct electrical closure reference on a robotic flexible probe touching a steel cylinder. First trace, figures and aggregate table found at the DOI and NCBI PMC5424729. Actions concerned deliberate touches to a target, not peg insertion."
+    },
+    {
+      "query": "robotic contact detection \"electrical contact\" \"ground truth\" contact timing robot manipulator contact detection latency metal plate force torque robot ground truth",
+      "result": "Adjacent wrist-IMU study verified at the publisher; releases participant recordings on request. The JHU thesis discovery pointer was not promoted to a file-verified experiment."
+    }
+  ],
+  "primary_studies": [
+    {
+      "doi": "10.3390/s17040852",
+      "title": "Improved Object Detection Using a Robotic Sensing Antenna with Vibration Damping Control",
+      "where": "§5.2, Fig. 10(a), Figs. 12–13; Table 5. Digital controller sample time in instrument description.",
+      "reference": "A copper wire sits very near the steel cylinder. An encounter moves the wire to touch the cylinder; the resulting voltage transition is logged at a PCI-6229 digital input, independently of the load-cell signal used by the candidate detection algorithms. This is a physical closure benchmark. No per-event switch travel, hysteresis, bounce correction, independent calibration of first material contact, or uncertainty bound was verified. The controller has 1 ms sample time; this alone does not establish submillisecond alignment.",
+      "evidence": "Table 5 reports means and standard deviations from 10 experiments at each orientation (four orientations, same recordings compared by two detection rules). Subject is a two-DOF robotic sensing antenna. The extracted table contains per-condition values (not per-event times); the difference column is a difference of published means and is not an individual latency measurement. Example trace delays in Table 9 are not added to the dataset. Exact timeseries files were not verified from the public paper.",
+      "rights": "Publisher full text CC BY 4.0; source attribution in receipt. Only factual values and independently computed differences included.",
+      "sources": [
+        {
+          "url": "https://mdpi-res.com/d_attachment/sensors/sensors-17-00852/article_deploy/sensors-17-00852.pdf",
+          "bytes": 10948869,
+          "sha256": "e248d30beec9c46cfb380bcd5be29833f90134d987731474a89e745c3ca3e5ce"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC5424729/unicode",
+          "bytes": 220140,
+          "sha256": "c28f4ecae8e6b5a97c052e995c156721ed47a34113d2c6a08707c7bc5d3da299"
+        }
+      ]
+    },
+    {
+      "doi": "10.1007/s44430-026-00030-8",
+      "title": "Single sensor Wrist-Worn contact detection system for upper limb prosthetics using deep learning",
+      "where": "§§2.2.1–2.3, Data availability",
+      "reference": "Metal probe closes a foil-covered, hand-held printed prosthesis circuit. Digital touch and wrist IMU are sampled together at 100 Hz. Each 20-sample classifier window uses a majority contact label. The window label and the first raw closure represent different endpoints. There is no six-axis wrist force–torque channel in the cited setup.",
+      "evidence": "Published description with ten participants and 400 initial recordings. The article makes data available on reasonable request; no raw logs verified here. No request was sent, and no participant data retained.",
+      "rights": "Article CC BY-NC-ND 4.0. Only factual observations with attribution, no raw publication or participant data.",
+      "sources": [
+        {
+          "url": "https://link.springer.com/article/10.1007/s44430-026-00030-8",
+          "bytes": 353528,
+          "sha256": "310249272306440be315bb745789f47a4b100d28182bb1baeb78943651e6ac53"
+        }
+      ]
+    }
+  ],
+  "reproduce": "Download NCBI BioC XML at the recorded URL and pass it to python derive_contact_delays.py INPUT_XML OUTPUT_DIRECTORY. The source is checked by SHA-256 and the 4 rows were also verified directly from the publisher PDF.",
+  "dedup": "No matches for either DOI or exact title in the historical G1 project evidence or legacy baseline at ad3315266f256e49cfb1587d024f10d829d93d5c. Signals from the two articles are not combined."
+}

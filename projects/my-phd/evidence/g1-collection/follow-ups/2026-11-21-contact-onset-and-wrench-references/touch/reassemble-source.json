@@ -1,0 +1,1150 @@
+{
+  "title": "REASSEMBLE: A Multimodal Dataset for Contact-rich Robotic Assembly and Disassembly",
+  "dataset_doi": "10.48436/0ewrv-8cb44",
+  "concept_doi": "10.48436/sn234-58p90",
+  "creators": [
+    "Sliwowski, Daniel Jan",
+    "Jadav, Shail",
+    "Stanovcic, Sergej",
+    "Orbik, Jędrzej",
+    "Heidersberger, Johannes",
+    "Lee, Dongheui"
+  ],
+  "version": "1.0.0",
+  "release": "https://researchdata.tuwien.at/records/0ewrv-8cb44",
+  "rights": "CC BY 4.0 (TU Wien Research Data v1.0.0). Derived split coverage, sensor timing and per-segment/skill descriptive summaries. Cite the deposit and named dataset authors.",
+  "checked_utc_date": "2026-11-21",
+  "history": "REASSEMBLE was already catalogued in the first G1 collection, per dataset title and official project URL. File-level and timestamp/segment audit for the selected HDF5 files is the increment.",
+  "publisher_files": [
+    {
+      "key": "poses.zip",
+      "size": 89431,
+      "checksum": "md5:2f3f86b65dc6312b504072a2460314c2",
+      "links": {
+        "self": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/poses.zip",
+        "content": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/poses.zip/content",
+        "container": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/poses.zip/container"
+      }
+    },
+    {
+      "key": "data.zip",
+      "size": 58881334586,
+      "checksum": "md5:812103a652ca9201e87a3bcecfee4ef3",
+      "links": {
+        "self": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/data.zip",
+        "content": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/data.zip/content",
+        "container": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/data.zip/container"
+      }
+    },
+    {
+      "key": "README.txt",
+      "size": 8138,
+      "checksum": "md5:2e1394a2fa65e4ebb6c1fd64136cb0a0",
+      "links": {
+        "self": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/README.txt",
+        "content": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/README.txt/content"
+      }
+    },
+    {
+      "key": "splits.zip",
+      "size": 1094,
+      "checksum": "md5:641882928ef3a8b2c3db41ac7c60b994",
+      "links": {
+        "self": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/splits.zip",
+        "content": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/splits.zip/content",
+        "container": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44/files/splits.zip/container"
+      }
+    }
+  ],
+  "selection": "Given the 58,881,334,586 byte archive, kept every complete HDF5 member having compressed size <=100,000,000 bytes, without using labels, split, success, or measured values for selection. This overrepresents smaller/shorter recordings. All ZIP central-directory entries were inspected; full-content assertions apply only to the selected members. The MD5 of the entire data.zip was not checked; publisher MD5 is provided as a reference. Selected members were downloaded by HTTP 206 byte ranges and raw DEFLATE, checked for uncompressed length and ZIP CRC32; SHA-256 computed on the decompressed HDF5. Both official split files and the README were read and their archive/content MD5 verified.",
+  "reference_methods": "In §III-B, wrist-mounted AIDIN ROBOTICS AFT200-D80-C and a six-orientation calibration are described. Annotation section: the teleoperator dictated the high-level actions and keyed the boundaries, then the authors verified actions and success labels against video. Low-level skills were manually added offline. In particular the Grasp skill includes reaching in free space and the grasp itself. Labels are useful independent temporal context; they do not directly observe a discrete contact onset. The operator received haptic feedback, so these markers are not blinded. The archive supplies measured and compensated data on separate time bases, without individual force/torque zero reference, temperature or independent physical contact switch.",
+  "analysis": "Read each marker time against the specific channel timestamps; intervals are half-open [start,end). For each segment or nested skill compute median and 95th percentile over the Euclidean magnitude, using the channel’s own clock (linear sample quantile). Times are offset by first measured-force timestamp for readability, calculated using original timestamps before rounding. Keep high and low labels as separate levels; never sum rows across levels. No action or Align does not imply zero external load. Counts are recorded sample rows, not statistically independent replicates. No interpolation or downsampling. Frame differs between measured sensor and compensated base signals; the difference of their vector components would not identify sensor bias.",
+  "queries": [
+    {
+      "query": "robot industrial contact detection dataset force torque contact states peg in hole dataset contact state ground truth robotic assembly raw force contact labels electrical continuity",
+      "url": "https://tuwien-asl.github.io/REASSEMBLE_page/",
+      "finding": "Reviewed author collection and annotation protocol; followed official link to fixed dataset."
+    },
+    {
+      "query": "REASSEMBLE hierarchical segments manual annotations high-level contact start ending sensor calibration frame",
+      "url": "https://arxiv.org/pdf/2502.05086",
+      "sha256": "5a01295ce17aea2a24e2da4cc57afef675751219443814dcf1fddf0ec9afbf60",
+      "finding": "Sections III-B and data collection/annotation describe hardware, feedback to the operator, keyboard, video auditing and manually annotated skills."
+    }
+  ],
+  "source_api": "https://researchdata.tuwien.at/api/records/0ewrv-8cb44",
+  "api_sha256": "fce07511bc9348f9c414ea81c43c7a1cd2668b9f77680d67feb7f171559098c4",
+  "archive_members": [
+    {
+      "file": "data/2025-01-09-14-28-47.h5",
+      "size": 3083371092,
+      "cs": 717378111,
+      "crc32": "e372414b",
+      "offset": 67
+    },
+    {
+      "file": "data/2025-01-09-13-59-54.h5",
+      "size": 3268349083,
+      "cs": 749570406,
+      "crc32": "db7447b1",
+      "offset": 717378283
+    },
+    {
+      "file": "data/2025-01-11-11-35-53.h5",
+      "size": 1376410768,
+      "cs": 317210941,
+      "crc32": "88c039cc",
+      "offset": 1466948794
+    },
+    {
+      "file": "data/2025-01-11-13-46-54.h5",
+      "size": 2009386634,
+      "cs": 472148561,
+      "crc32": "44e3b749",
+      "offset": 1784159840
+    },
+    {
+      "file": "data/2025-01-13-15-50-28.h5",
+      "size": 2742541882,
+      "cs": 604347889,
+      "crc32": "701ae4fa",
+      "offset": 2256308506
+    },
+    {
+      "file": "data/2025-01-13-17-02-10.h5",
+      "size": 1355669125,
+      "cs": 299148060,
+      "crc32": "aaae299d",
+      "offset": 2860656500
+    },
+    {
+      "file": "data/2025-01-09-15-49-10.h5",
+      "size": 2366932129,
+      "cs": 515221354,
+      "crc32": "4e4e6d59",
+      "offset": 3159804665
+    },
+    {
+      "file": "data/2025-01-10-16-30-49.h5",
+      "size": 1899589409,
+      "cs": 417889466,
+      "crc32": "0a1a1bbc",
+      "offset": 3675026124
+    },
+    {
+      "file": "data/2025-01-13-18-53-43.h5",
+      "size": 1500248969,
+      "cs": 328124706,
+      "crc32": "eb4120a6",
+      "offset": 4092915695
+    },
+    {
+      "file": "data/2025-01-13-10-14-56.h5",
+      "size": 2184367969,
+      "cs": 464275113,
+      "crc32": "729f5443",
+      "offset": 4421040506
+    },
+    {
+      "file": "data/2025-01-13-18-32-31.h5",
+      "size": 2173244164,
+      "cs": 497136489,
+      "crc32": "3ee98c00",
+      "offset": 4885315724
+    },
+    {
+      "file": "data/2025-01-13-11-16-17.h5",
+      "size": 779730941,
+      "cs": 166146072,
+      "crc32": "cac35c52",
+      "offset": 5382452318
+    },
+    {
+      "file": "data/2025-01-10-16-29-00.h5",
+      "size": 436249476,
+      "cs": 99377321,
+      "crc32": "cd7431d2",
+      "offset": 5548598495,
+      "selected_sha256": "2ce22bbf28924bc35e6f1ed32a64a01df4479db9d89fba4857075004e9d50065"
+    },
+    {
+      "file": "data/2025-01-13-19-19-46.h5",
+      "size": 3013899911,
+      "cs": 667804840,
+      "crc32": "51bf7081",
+      "offset": 5647975921
+    },
+    {
+      "file": "data/2025-01-09-19-28-18.h5",
+      "size": 680000833,
+      "cs": 150346853,
+      "crc32": "358fe866",
+      "offset": 6315780866
+    },
+    {
+      "file": "data/2025-01-10-18-31-44.h5",
+      "size": 2646890187,
+      "cs": 608549250,
+      "crc32": "86f6557a",
+      "offset": 6466127824
+    },
+    {
+      "file": "data/2025-01-11-15-27-19.h5",
+      "size": 1279621445,
+      "cs": 283908958,
+      "crc32": "bc1dc26f",
+      "offset": 7074677179
+    },
+    {
+      "file": "data/2025-01-14-12-05-01.h5",
+      "size": 1819979888,
+      "cs": 389690814,
+      "crc32": "0f13dd4c",
+      "offset": 7358586242
+    },
+    {
+      "file": "data/2025-01-09-17-23-07.h5",
+      "size": 3128882436,
+      "cs": 714206055,
+      "crc32": "31447cd6",
+      "offset": 7748277161
+    },
+    {
+      "file": "data/2025-01-14-11-19-51.h5",
+      "size": 2794293475,
+      "cs": 618175225,
+      "crc32": "f461efae",
+      "offset": 8462483321
+    },
+    {
+      "file": "data/2025-01-09-18-52-39.h5",
+      "size": 2566237483,
+      "cs": 591008282,
+      "crc32": "c592fc7c",
+      "offset": 9080658651
+    },
+    {
+      "file": "data/2025-01-11-11-55-48.h5",
+      "size": 840934992,
+      "cs": 183956720,
+      "crc32": "699dfd04",
+      "offset": 9671667038
+    },
+    {
+      "file": "data/2025-01-10-16-19-15.h5",
+      "size": 3057422102,
+      "cs": 685242389,
+      "crc32": "0c3129bc",
+      "offset": 9855623863
+    },
+    {
+      "file": "data/2025-01-11-15-35-08.h5",
+      "size": 904787849,
+      "cs": 206364858,
+      "crc32": "f669f57d",
+      "offset": 10540866357
+    },
+    {
+      "file": "data/2025-01-11-14-54-27.h5",
+      "size": 1489474411,
+      "cs": 333881704,
+      "crc32": "7e7256ac",
+      "offset": 10747231320
+    },
+    {
+      "file": "data/2025-01-09-19-14-15.h5",
+      "size": 182430491,
+      "cs": 42582966,
+      "crc32": "ebbacb32",
+      "offset": 11081113129,
+      "selected_sha256": "47edc4387d6ea9fbf79f12d0c6abc43a94e89b923312638ce01120227edae8e7"
+    },
+    {
+      "file": "data/2025-01-11-14-22-09.h5",
+      "size": 1690374606,
+      "cs": 370970967,
+      "crc32": "e8b86f89",
+      "offset": 11123696200
+    },
+    {
+      "file": "data/2025-01-09-19-24-18.h5",
+      "size": 1233126679,
+      "cs": 266763440,
+      "crc32": "d1a1ae5b",
+      "offset": 11494667272
+    },
+    {
+      "file": "data/2025-01-11-14-04-40.h5",
+      "size": 508163673,
+      "cs": 135332444,
+      "crc32": "23ae80e5",
+      "offset": 11761430817
+    },
+    {
+      "file": "data/2025-01-10-15-39-56.h5",
+      "size": 133675078,
+      "cs": 30094802,
+      "crc32": "7f129bc7",
+      "offset": 11896763366,
+      "selected_sha256": "997290b7718a0bd12117e4e59c7a61756d273b0b495746edd5bee8593c6976ff"
+    },
+    {
+      "file": "data/2025-01-11-11-59-40.h5",
+      "size": 2576251000,
+      "cs": 581078662,
+      "crc32": "4d966abd",
+      "offset": 11926858273
+    },
+    {
+      "file": "data/2025-01-09-15-37-27.h5",
+      "size": 2725492040,
+      "cs": 619203909,
+      "crc32": "53be6d23",
+      "offset": 12507937040
+    },
+    {
+      "file": "data/2025-01-13-19-29-01.h5",
+      "size": 1507232215,
+      "cs": 320372691,
+      "crc32": "692cab28",
+      "offset": 13127141054
+    },
+    {
+      "file": "data/2025-01-13-11-07-43.h5",
+      "size": 3039806256,
+      "cs": 658496004,
+      "crc32": "b76d86b1",
+      "offset": 13447513850
+    },
+    {
+      "file": "data/2025-01-13-16-57-41.h5",
+      "size": 948412740,
+      "cs": 214498602,
+      "crc32": "23e41b2e",
+      "offset": 14106009959
+    },
+    {
+      "file": "data/2025-01-13-09-51-50.h5",
+      "size": 1615026006,
+      "cs": 350067945,
+      "crc32": "c8d9988e",
+      "offset": 14320508666
+    },
+    {
+      "file": "data/2025-01-11-15-10-57.h5",
+      "size": 2019101212,
+      "cs": 428675034,
+      "crc32": "01b85922",
+      "offset": 14670576716
+    },
+    {
+      "file": "data/2025-01-09-16-55-42.h5",
+      "size": 2207257578,
+      "cs": 474753369,
+      "crc32": "455839b9",
+      "offset": 15099251855
+    },
+    {
+      "file": "data/2025-01-11-11-21-44.h5",
+      "size": 2052225741,
+      "cs": 459700111,
+      "crc32": "74ff71e9",
+      "offset": 15574005329
+    },
+    {
+      "file": "data/2025-01-11-13-55-45.h5",
+      "size": 376933355,
+      "cs": 89175160,
+      "crc32": "e0288377",
+      "offset": 16033705545,
+      "selected_sha256": "2d8136111057df982afcafe8e068760f231f88a26a8b6cce580a4dde238d7990"
+    },
+    {
+      "file": "data/2025-01-14-10-49-57.h5",
+      "size": 1308855377,
+      "cs": 285929115,
+      "crc32": "c1889688",
+      "offset": 16122880810
+    },
+    {
+      "file": "data/2025-01-10-16-37-45.h5",
+      "size": 2788600595,
+      "cs": 632326954,
+      "crc32": "37160f4d",
+      "offset": 16408810030
+    },
+    {
+      "file": "data/2025-01-09-14-40-21.h5",
+      "size": 1616602437,
+      "cs": 372200602,
+      "crc32": "556b2ade",
+      "offset": 17041137089
+    },
+    {
+      "file": "data/2025-01-09-18-08-36.h5",
+      "size": 2530007432,
+      "cs": 594469518,
+      "crc32": "2dcdb0ce",
+      "offset": 17413337796
+    },
+    {
+      "file": "data/2025-01-09-14-11-58.h5",
+      "size": 1802541010,
+      "cs": 419555065,
+      "crc32": "2bec9f7e",
+      "offset": 18007807419
+    },
+    {
+      "file": "data/2025-01-09-14-57-02.h5",
+      "size": 1223824262,
+      "cs": 281257505,
+      "crc32": "e248506b",
+      "offset": 18427362589
+    },
+    {
+      "file": "data/2025-01-13-10-05-22.h5",
+      "size": 3132829709,
+      "cs": 691944293,
+      "crc32": "790a188a",
+      "offset": 18708620199
+    },
+    {
+      "file": "data/2025-01-10-17-25-29.h5",
+      "size": 3050575599,
+      "cs": 692672013,
+      "crc32": "3258f9ef",
+      "offset": 19400564597
+    },
+    {
+      "file": "data/2025-01-09-18-18-47.h5",
+      "size": 601959210,
+      "cs": 137562823,
+      "crc32": "da8940ce",
+      "offset": 20093236715
+    },
+    {
+      "file": "data/2025-01-13-17-40-45.h5",
+      "size": 1003655666,
+      "cs": 226494967,
+      "crc32": "67848f09",
+      "offset": 20230799643
+    },
+    {
+      "file": "data/2025-01-13-17-34-32.h5",
+      "size": 1660694262,
+      "cs": 357135521,
+      "crc32": "c571a350",
+      "offset": 20457294715
+    },
+    {
+      "file": "data/2025-01-09-19-15-33.h5",
+      "size": 2385708909,
+      "cs": 545565788,
+      "crc32": "1de6fea4",
+      "offset": 20814430341
+    },
+    {
+      "file": "data/2025-01-14-10-05-38.h5",
+      "size": 1300223425,
+      "cs": 289391592,
+      "crc32": "f86812b0",
+      "offset": 21359996234
+    },
+    {
+      "file": "data/2025-01-13-09-43-29.h5",
+      "size": 2430490206,
+      "cs": 546756761,
+      "crc32": "eb6e603d",
+      "offset": 21649387931
+    },
+    {
+      "file": "data/2025-01-13-15-18-12.h5",
+      "size": 1069600034,
+      "cs": 240532583,
+      "crc32": "fe1c069f",
+      "offset": 22196144797
+    },
+    {
+      "file": "data/2025-01-09-17-14-59.h5",
+      "size": 2131263990,
+      "cs": 461431148,
+      "crc32": "d1227347",
+      "offset": 22436677485
+    },
+    {
+      "file": "data/2025-01-10-15-28-50.h5",
+      "size": 1194577758,
+      "cs": 277895994,
+      "crc32": "57ac837a",
+      "offset": 22898108738
+    },
+    {
+      "file": "data/2025-01-14-11-30-33.h5",
+      "size": 1067089543,
+      "cs": 232704537,
+      "crc32": "793d42be",
+      "offset": 23176004837
+    },
+    {
+      "file": "data/2025-01-10-17-54-09.h5",
+      "size": 3019482301,
+      "cs": 661839106,
+      "crc32": "c8c3e399",
+      "offset": 23408709479
+    },
+    {
+      "file": "data/2025-01-14-11-50-46.h5",
+      "size": 695991766,
+      "cs": 145768447,
+      "crc32": "92f27729",
+      "offset": 24070548690
+    },
+    {
+      "file": "data/2025-01-13-11-01-25.h5",
+      "size": 1703564681,
+      "cs": 373102125,
+      "crc32": "b0f46aa0",
+      "offset": 24216317242
+    },
+    {
+      "file": "data/2025-01-11-14-09-00.h5",
+      "size": 1505842772,
+      "cs": 348941968,
+      "crc32": "9d2ec080",
+      "offset": 24589419472
+    },
+    {
+      "file": "data/2025-01-13-11-18-57.h5",
+      "size": 1157012353,
+      "cs": 248715778,
+      "crc32": "b4ed2561",
+      "offset": 24938361545
+    },
+    {
+      "file": "data/2025-01-13-15-11-07.h5",
+      "size": 1919725112,
+      "cs": 441564501,
+      "crc32": "4b77472d",
+      "offset": 25187077428
+    },
+    {
+      "file": "data/2025-01-13-16-52-33.h5",
+      "size": 1350539762,
+      "cs": 294794597,
+      "crc32": "68128af2",
+      "offset": 25628642034
+    },
+    {
+      "file": "data/2025-01-10-18-23-40.h5",
+      "size": 1879604370,
+      "cs": 431144056,
+      "crc32": "8320389c",
+      "offset": 25923436736
+    },
+    {
+      "file": "data/2025-01-11-15-02-03.h5",
+      "size": 2849788808,
+      "cs": 621369749,
+      "crc32": "e4cc904e",
+      "offset": 26354580897
+    },
+    {
+      "file": "data/2025-01-09-13-57-17.h5",
+      "size": 382120140,
+      "cs": 92626662,
+      "crc32": "6cab1d69",
+      "offset": 26975950751,
+      "selected_sha256": "1c65804881cbaa10e5f8e382530c15429ec9e7e833a2ba50725741c0ff5b6193"
+    },
+    {
+      "file": "data/2025-01-09-17-40-57.h5",
+      "size": 1099350159,
+      "cs": 259434143,
+      "crc32": "980cfd9c",
+      "offset": 27068577518
+    },
+    {
+      "file": "data/2025-01-11-13-42-45.h5",
+      "size": 648715712,
+      "cs": 152961582,
+      "crc32": "3ae31ee9",
+      "offset": 27328011766
+    },
+    {
+      "file": "data/2025-01-11-15-18-22.h5",
+      "size": 2332023867,
+      "cs": 546192734,
+      "crc32": "62b05759",
+      "offset": 27480973453
+    },
+    {
+      "file": "data/2025-01-13-17-52-32.h5",
+      "size": 1567406910,
+      "cs": 330875276,
+      "crc32": "14cbcf90",
+      "offset": 28027166292
+    },
+    {
+      "file": "data/2025-01-11-12-22-42.h5",
+      "size": 2135338651,
+      "cs": 478774975,
+      "crc32": "1f714234",
+      "offset": 28358041673
+    },
+    {
+      "file": "data/2025-01-14-10-28-24.h5",
+      "size": 1362584481,
+      "cs": 303560668,
+      "crc32": "0a4851e9",
+      "offset": 28836816753
+    },
+    {
+      "file": "data/2025-01-09-19-06-44.h5",
+      "size": 1729515061,
+      "cs": 394286616,
+      "crc32": "1a309285",
+      "offset": 29140377526
+    },
+    {
+      "file": "data/2025-01-09-18-44-37.h5",
+      "size": 1978562065,
+      "cs": 436933402,
+      "crc32": "25293b48",
+      "offset": 29534664247
+    },
+    {
+      "file": "data/2025-01-09-17-51-35.h5",
+      "size": 2575814219,
+      "cs": 583463817,
+      "crc32": "3cda7221",
+      "offset": 29971597754
+    },
+    {
+      "file": "data/2025-01-10-18-12-06.h5",
+      "size": 3244181497,
+      "cs": 741170426,
+      "crc32": "1c1a98dc",
+      "offset": 30555061676
+    },
+    {
+      "file": "data/2025-01-10-15-40-55.h5",
+      "size": 2131094625,
+      "cs": 481328342,
+      "crc32": "68ef39a3",
+      "offset": 31296232207
+    },
+    {
+      "file": "data/2025-01-13-19-08-03.h5",
+      "size": 1808669666,
+      "cs": 412592465,
+      "crc32": "123fe628",
+      "offset": 31777560654
+    },
+    {
+      "file": "data/2025-01-14-11-36-55.h5",
+      "size": 3085984132,
+      "cs": 658376005,
+      "crc32": "04f9c5e1",
+      "offset": 32190153224
+    },
+    {
+      "file": "data/2025-01-13-16-06-01.h5",
+      "size": 2690166422,
+      "cs": 593327659,
+      "crc32": "0fa61e15",
+      "offset": 32848529334
+    },
+    {
+      "file": "data/2025-01-14-10-34-43.h5",
+      "size": 2381628330,
+      "cs": 552075536,
+      "crc32": "d8d15e3e",
+      "offset": 33441857098
+    },
+    {
+      "file": "data/2025-01-13-14-57-37.h5",
+      "size": 2526968945,
+      "cs": 570356883,
+      "crc32": "97497a9f",
+      "offset": 33993932739
+    },
+    {
+      "file": "data/2025-01-13-16-14-09.h5",
+      "size": 1637989451,
+      "cs": 354490892,
+      "crc32": "61970542",
+      "offset": 34564289727
+    },
+    {
+      "file": "data/2025-01-14-10-57-14.h5",
+      "size": 3123151042,
+      "cs": 682580494,
+      "crc32": "12b64fa5",
+      "offset": 34918780724
+    },
+    {
+      "file": "data/2025-01-10-17-19-03.h5",
+      "size": 1603647908,
+      "cs": 360959158,
+      "crc32": "e6aba590",
+      "offset": 35601361323
+    },
+    {
+      "file": "data/2025-01-09-15-30-21.h5",
+      "size": 2010820296,
+      "cs": 437872059,
+      "crc32": "f5e862f2",
+      "offset": 35962320586
+    },
+    {
+      "file": "data/2025-01-10-17-36-05.h5",
+      "size": 1600748730,
+      "cs": 357452489,
+      "crc32": "c370718a",
+      "offset": 36400192750
+    },
+    {
+      "file": "data/2025-01-09-17-03-05.h5",
+      "size": 3596796616,
+      "cs": 809379178,
+      "crc32": "434cc237",
+      "offset": 36757645344
+    },
+    {
+      "file": "data/2025-01-09-15-27-49.h5",
+      "size": 638989160,
+      "cs": 145316752,
+      "crc32": "d4da1dd0",
+      "offset": 37567024627
+    },
+    {
+      "file": "data/2025-01-13-16-19-55.h5",
+      "size": 2876686269,
+      "cs": 619907124,
+      "crc32": "6aa5bfc9",
+      "offset": 37712341484
+    },
+    {
+      "file": "data/2025-01-11-13-59-43.h5",
+      "size": 1046694398,
+      "cs": 262374776,
+      "crc32": "b26194ce",
+      "offset": 38332248713
+    },
+    {
+      "file": "data/2025-01-11-14-45-48.h5",
+      "size": 1901970690,
+      "cs": 420480940,
+      "crc32": "2ab8735d",
+      "offset": 38594623594
+    },
+    {
+      "file": "data/2025-01-10-15-34-33.h5",
+      "size": 1478556134,
+      "cs": 337767018,
+      "crc32": "d1514ba9",
+      "offset": 39015104639
+    },
+    {
+      "file": "data/2025-01-09-18-41-38.h5",
+      "size": 897860450,
+      "cs": 196544157,
+      "crc32": "a17f70af",
+      "offset": 39352871762
+    },
+    {
+      "file": "data/2025-01-11-11-29-58.h5",
+      "size": 1161264847,
+      "cs": 271891693,
+      "crc32": "32e0692d",
+      "offset": 39549416024
+    },
+    {
+      "file": "data/2025-01-13-10-51-29.h5",
+      "size": 2932237713,
+      "cs": 660913741,
+      "crc32": "1bfc7dc0",
+      "offset": 39821307822
+    },
+    {
+      "file": "data/2025-01-13-18-45-09.h5",
+      "size": 3165892683,
+      "cs": 678822635,
+      "crc32": "a7ae7c26",
+      "offset": 40482221668
+    },
+    {
+      "file": "data/2025-01-13-17-46-07.h5",
+      "size": 1539725497,
+      "cs": 340654493,
+      "crc32": "9b7b13a3",
+      "offset": 41161044408
+    },
+    {
+      "file": "data/2025-01-09-18-21-40.h5",
+      "size": 1760209539,
+      "cs": 400101678,
+      "crc32": "9f23abde",
+      "offset": 41501699006
+    },
+    {
+      "file": "data/2025-01-13-11-44-13.h5",
+      "size": 2519930267,
+      "cs": 563067653,
+      "crc32": "b1155604",
+      "offset": 41901800789
+    },
+    {
+      "file": "data/2025-01-14-09-57-36.h5",
+      "size": 2299602009,
+      "cs": 514690863,
+      "crc32": "a772a999",
+      "offset": 42464868547
+    },
+    {
+      "file": "data/2025-01-13-18-06-08.h5",
+      "size": 981122644,
+      "cs": 212949853,
+      "crc32": "5258426c",
+      "offset": 42979559515
+    },
+    {
+      "file": "data/2025-01-13-16-27-57.h5",
+      "size": 1481491385,
+      "cs": 320752636,
+      "crc32": "c8e1cb22",
+      "offset": 43192509473
+    },
+    {
+      "file": "data/2025-01-13-11-31-57.h5",
+      "size": 1488324716,
+      "cs": 349499369,
+      "crc32": "38ae08bf",
+      "offset": 43513262214
+    },
+    {
+      "file": "data/2025-01-09-15-08-11.h5",
+      "size": 303154613,
+      "cs": 72717044,
+      "crc32": "3dde59a2",
+      "offset": 43862761688,
+      "selected_sha256": "6b9f9d691575381a702149b2b59ba277c88ff2ac60aadbe7939e389fd99ad488"
+    },
+    {
+      "file": "data/2025-01-13-17-51-11.h5",
+      "size": 159616702,
+      "cs": 34116508,
+      "crc32": "88331672",
+      "offset": 43935478837,
+      "selected_sha256": "835e10bdd57cdc837be966f98b36fe06caab203de7a46eca41848e97de8bd4bd"
+    },
+    {
+      "file": "data/2025-01-13-19-04-46.h5",
+      "size": 261423980,
+      "cs": 63005412,
+      "crc32": "c17b0bd6",
+      "offset": 43969595450,
+      "selected_sha256": "761da327b7b03091f8a8b5b471207cedff04d359d58340d586bab2202822ca7a"
+    },
+    {
+      "file": "data/2025-01-09-15-46-39.h5",
+      "size": 567291591,
+      "cs": 127635595,
+      "crc32": "77a52c13",
+      "offset": 44032600967
+    },
+    {
+      "file": "data/2025-01-14-11-28-33.h5",
+      "size": 473143263,
+      "cs": 109087231,
+      "crc32": "df881022",
+      "offset": 44160236667
+    },
+    {
+      "file": "data/2025-01-09-15-18-29.h5",
+      "size": 2493347265,
+      "cs": 559637434,
+      "crc32": "be3d916c",
+      "offset": 44269324003
+    },
+    {
+      "file": "data/2025-01-13-18-16-38.h5",
+      "size": 3209818358,
+      "cs": 682482456,
+      "crc32": "68a28175",
+      "offset": 44828961542
+    },
+    {
+      "file": "data/2025-01-09-18-00-33.h5",
+      "size": 1875566503,
+      "cs": 426222112,
+      "crc32": "10825335",
+      "offset": 45511444103
+    },
+    {
+      "file": "data/2025-01-14-11-06-43.h5",
+      "size": 1711781696,
+      "cs": 385215677,
+      "crc32": "e6807ca1",
+      "offset": 45937666320
+    },
+    {
+      "file": "data/2025-01-11-11-12-32.h5",
+      "size": 3000652984,
+      "cs": 650485738,
+      "crc32": "14c35807",
+      "offset": 46322882102
+    },
+    {
+      "file": "data/2025-01-09-16-44-57.h5",
+      "size": 3309374356,
+      "cs": 737606866,
+      "crc32": "d140858b",
+      "offset": 46973367945
+    },
+    {
+      "file": "data/2025-01-13-18-25-52.h5",
+      "size": 2679754704,
+      "cs": 539225260,
+      "crc32": "535b9efe",
+      "offset": 47710974916
+    },
+    {
+      "file": "data/2025-01-13-17-57-45.h5",
+      "size": 2731321653,
+      "cs": 603510208,
+      "crc32": "d4cdff1d",
+      "offset": 48250200281
+    },
+    {
+      "file": "data/2025-01-11-14-43-37.h5",
+      "size": 102449944,
+      "cs": 23977315,
+      "crc32": "1f3985c6",
+      "offset": 48853710594,
+      "selected_sha256": "bef0903e9c3a4172cf0598dbc14f9bd1d5b8f25ed5f6f31ca99c7178726ec603"
+    },
+    {
+      "file": "data/2025-01-11-14-59-16.h5",
+      "size": 381511180,
+      "cs": 83406982,
+      "crc32": "33b2c542",
+      "offset": 48877688014,
+      "selected_sha256": "f36b5216cd41e6b525f9e7daacc005c6c537c513e3e05ea9757f6545a325e188"
+    },
+    {
+      "file": "data/2025-01-10-16-17-40.h5",
+      "size": 218979938,
+      "cs": 48719349,
+      "crc32": "045b6595",
+      "offset": 48961095101,
+      "selected_sha256": "56528867087538bb0dcd860008db9a42f4d7475b5d241208ead71e8362919812"
+    },
+    {
+      "file": "data/2025-01-13-11-23-17.h5",
+      "size": 2181798322,
+      "cs": 481337003,
+      "crc32": "df79ff2a",
+      "offset": 49009814555
+    },
+    {
+      "file": "data/2025-01-13-15-58-56.h5",
+      "size": 1618997237,
+      "cs": 349815002,
+      "crc32": "97ac51ce",
+      "offset": 49491151663
+    },
+    {
+      "file": "data/2025-01-11-14-35-33.h5",
+      "size": 1242248068,
+      "cs": 273490528,
+      "crc32": "7844562f",
+      "offset": 49840966770
+    },
+    {
+      "file": "data/2025-01-09-15-02-21.h5",
+      "size": 1442083499,
+      "cs": 321714587,
+      "crc32": "02db85f8",
+      "offset": 50114457403
+    },
+    {
+      "file": "data/2025-01-14-11-53-50.h5",
+      "size": 3009363210,
+      "cs": 668811247,
+      "crc32": "460f8909",
+      "offset": 50436172095
+    },
+    {
+      "file": "data/2025-01-10-15-49-06.h5",
+      "size": 3032145536,
+      "cs": 697943746,
+      "crc32": "dcb81462",
+      "offset": 51104983447
+    },
+    {
+      "file": "data/2025-01-11-15-32-26.h5",
+      "size": 292429147,
+      "cs": 70429126,
+      "crc32": "575a10af",
+      "offset": 51802927298,
+      "selected_sha256": "3e3b87b28825b28efda8fed36c06a1c028993353ca8b71aee85e9ee101c8dd77"
+    },
+    {
+      "file": "data/2025-01-14-11-45-36.h5",
+      "size": 1883923588,
+      "cs": 388929489,
+      "crc32": "035c9cda",
+      "offset": 51873356529
+    },
+    {
+      "file": "data/2025-01-14-10-54-26.h5",
+      "size": 391059914,
+      "cs": 89223938,
+      "crc32": "a45fe9d5",
+      "offset": 52262286123,
+      "selected_sha256": "b92532bb291a075c6c28f3548aecf31be875bc996ed025442543e710ad38b5f7"
+    },
+    {
+      "file": "data/2025-01-13-19-14-28.h5",
+      "size": 1664911328,
+      "cs": 350818331,
+      "crc32": "3a61763e",
+      "offset": 52351510166
+    },
+    {
+      "file": "data/2025-01-09-17-34-18.h5",
+      "size": 1746130972,
+      "cs": 383025818,
+      "crc32": "fed2afdd",
+      "offset": 52702328602
+    },
+    {
+      "file": "data/2025-01-13-11-37-50.h5",
+      "size": 1440364101,
+      "cs": 324077075,
+      "crc32": "a7c989e2",
+      "offset": 53085354525
+    },
+    {
+      "file": "data/2025-01-10-18-03-36.h5",
+      "size": 2197010826,
+      "cs": 481576595,
+      "crc32": "fca1bb8b",
+      "offset": 53409431705
+    },
+    {
+      "file": "data/2025-01-10-17-10-38.h5",
+      "size": 2345254686,
+      "cs": 531742779,
+      "crc32": "eae4d137",
+      "offset": 53891008405
+    },
+    {
+      "file": "data/2025-01-13-15-06-09.h5",
+      "size": 1218238744,
+      "cs": 270603326,
+      "crc32": "c754920a",
+      "offset": 54422751289
+    },
+    {
+      "file": "data/2025-01-11-11-51-20.h5",
+      "size": 1187641676,
+      "cs": 266138982,
+      "crc32": "4472b8a7",
+      "offset": 54693354720
+    },
+    {
+      "file": "data/2025-01-11-14-40-46.h5",
+      "size": 601925940,
+      "cs": 135058990,
+      "crc32": "4133d010",
+      "offset": 54959493807
+    },
+    {
+      "file": "data/2025-01-09-18-34-34.h5",
+      "size": 1897803328,
+      "cs": 425502531,
+      "crc32": "db5cc4ea",
+      "offset": 55094552902
+    },
+    {
+      "file": "data/2025-01-10-18-41-18.h5",
+      "size": 1642470636,
+      "cs": 367224318,
+      "crc32": "84062b93",
+      "offset": 55520055538
+    },
+    {
+      "file": "data/2025-01-13-18-59-44.h5",
+      "size": 977369378,
+      "cs": 219577666,
+      "crc32": "b30431fb",
+      "offset": 55887279961
+    },
+    {
+      "file": "data/2025-01-13-18-40-21.h5",
+      "size": 1065461577,
+      "cs": 232503850,
+      "crc32": "b83f83d4",
+      "offset": 56106857732
+    },
+    {
+      "file": "data/2025-01-11-14-14-43.h5",
+      "size": 2006214246,
+      "cs": 453490757,
+      "crc32": "d3035f69",
+      "offset": 56339361687
+    },
+    {
+      "file": "data/2025-01-10-16-47-15.h5",
+      "size": 1845443553,
+      "cs": 408998782,
+      "crc32": "f8924f57",
+      "offset": 56792852549
+    },
+    {
+      "file": "data/2025-01-13-11-52-19.h5",
+      "size": 1532643713,
+      "cs": 330972865,
+      "crc32": "ff39f44a",
+      "offset": 57201851436
+    },
+    {
+      "file": "data/2025-01-09-14-47-32.h5",
+      "size": 1830219506,
+      "cs": 424660949,
+      "crc32": "35e51f54",
+      "offset": 57532824406
+    },
+    {
+      "file": "data/2025-01-13-16-45-31.h5",
+      "size": 2545584956,
+      "cs": 547578026,
+      "crc32": "5660b820",
+      "offset": 57957485460
+    },
+    {
+      "file": "data/2025-01-10-15-59-54.h5",
+      "size": 1647138964,
+      "cs": 376253384,
+      "crc32": "dc124c3f",
+      "offset": 58505063591
+    }
+  ],
+  "reproduce": "Install numpy and h5py. Extract data/*.h5 from data.zip (only selected members are needed), preserve official splits.zip. Run python derive_reassemble.py DATA_DIRECTORY SPLITS_ZIP OUTPUT_DIRECTORY. The frozen member inventory is embedded in this receipt.",
+  "observed_subset": {
+    "selected_hdf5": 13,
+    "official_train": 7,
+    "official_test": 5,
+    "omitted_from_both_lists": "2025-01-10-16-17-40.h5",
+    "measured_wrench_rows": 780098,
+    "base_compensated_wrench_rows": 396811,
+    "high_level_segments": 94,
+    "nested_skills": 142,
+    "manual_insert_segments": 6,
+    "successful_insert_segments": 1,
+    "no_action_segments": 26,
+    "finding": "Across the selected No action segments with samples, median compensated force magnitude varies from 0.196990 to 4.506123 in the released force scale. The only successful insertion marker in this small-file subset is a BNC insertion in the file omitted from both splits. These are not population-level success rates."
+  }
+}

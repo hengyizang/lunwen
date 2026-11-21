@@ -1,0 +1,8 @@
+dataset,file_id,condition,trial_in_archive,state_frames,vector_columns,first_index,last_index,internal_index_gaps,five_stream_common_indices,inner_view_images,inner_view_missing_for_state,inner_view_additional_indices,global_images,local_images,tactile_images,outcome_column19_values,outcome_column19_changes,median_force_norm,max_force_norm,median_moment_norm,max_moment_norm,columns_after_index19,nonzero_tail_cells
+MUOJXI,11718373,cable1_random,trial_113,1375,34,0,1374,0,1375,1375,0,0,1375,1375,1375,0:1375,0,4.8382113,6.8166626,1.0851636,1.5933167,14,18533
+MUOJXI,11578149,cable3_human,20250328/trial_1,675,34,0,674,0,675,675,0,0,675,675,675,0:675,0,1.7307193,7.458902,0.3358164,1.3945676,14,0
+MUOJXI,11578149,cable3_human,20250328/trial_2,890,34,0,889,0,890,890,0,0,890,890,890,0:890,0,1.7628304,6.8894653,0.3137539,0.9273674,14,0
+MUOJXI,11580198,cable4_random,(archive root),1603,34,0,1602,0,1603,1603,0,0,1603,1603,1603,0:1603,0,7.8381833,9.2179091,1.1015152,1.5385045,14,0
+XOPUXY,11770800,cable1_random,trial_285,1386,34,0,1385,0,1386,1386,0,0,1386,1386,1386,0:1386,0,4.6192468,6.5327883,1.0366875,1.5504619,14,18691
+XOPUXY,11770800,cable1_random,trial_286,1387,34,0,1386,0,1387,1387,0,0,1387,1387,1387,0:1387,0,4.8085603,6.6908316,1.0965926,1.5980787,14,18784
+XOPUXY,11770800,cable1_random,trial_287,1386,34,0,1385,0,1386,1386,0,0,1386,1386,1386,0:1386,0,4.6446179,6.2526609,1.0565527,1.5192397,14,18712

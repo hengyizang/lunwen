@@ -1,0 +1,5 @@
+object_orientation_deg,reported_trials_at_orientation,filtered_residual_mean_ms,filtered_residual_sd_ms,residual_derivative_mean_ms,residual_derivative_sd_ms,difference_of_published_means_ms
+90,10,21.2,3.5,6.6,1.9,14.6
+75,10,41.4,1.5,4.8,1.9,36.6
+60,10,42.0,3.4,6.4,1.9,35.6
+45,10,46.2,2.2,6.5,3.8,39.7

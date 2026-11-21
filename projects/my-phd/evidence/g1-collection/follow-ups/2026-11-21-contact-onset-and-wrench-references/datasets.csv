@@ -1,0 +1,10 @@
+source,landing,evidence_level_and_reference,file_scope,rights,history_status,source_and_reproduction
+iRonCub-Mk3 双臂上臂六轴与温度,https://huggingface.co/datasets/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset/tree/7b8a7aa350312b4c609c9531325d7fc52f9c924d,原始文件、URDF 模型参考,全部 8 份 MAT，将两臂同一时刻计一次,BSD-3-Clause,new,temp/ironcub-source.json
+指尖六轴标定原始矩阵与论文 Source Data,https://doi.org/10.5281/zenodo.15553350,原始文件、单轴测力及力臂推算的六维参照、出版图源表,418 行原表，图 3 六个工作表各 208 组，另核固定模型,CC BY 4.0,new,reference/fingertip-source.json
+压机及 ATI Nano25/Delta 参照标定,https://doi.org/10.5281/zenodo.6417197,原始台架成对加载文件,42 个载荷平台，标定和两次测试会话分开,CC BY 4.0,new,reference/press-source.json
+CRIA 连接器插入,https://huggingface.co/datasets/Joringell/CRIA/tree/af288f2a470189c3991db73873f9d64171620a43/insert,原始扳手、人工接近标签、扳手阈值和结局,4 类插入，各 150 条，以有效掩码排除填充槽,CC BY 4.0,new,insertion/cria-source.json
+EventTouch 15 mm 球形压入,https://huggingface.co/datasets/BAAI/EventTouch/tree/e091194fd687fdd4b686578188745c1745ccfddc,实物原始／校正扳手列与单列的 FEM 输出,4 个传感器、2 种材料，420 个条件目录、840 个输入文件,公开获取，未发现数据再分发许可，仅提供独立统计,new,event/eventtouch-source.json
+TaF-Dataset 视触觉、扳手和 12×12 压力阵列,https://huggingface.co/datasets/jiamig/taf-dataset/tree/239c8ee8156bf11eb6d6c11c004f9a8721528d9d,平行物理压头，重采样对齐，不同测量界面,全部 408 份数值文件及 info，分离正式索引与额外数据行,数据卡 MIT,new,taf/taf-source.json
+IntelliMan ICECS 指腹触觉,https://doi.org/10.5281/zenodo.18759556,原始触觉文件，六轴参考仅见论文和发布说明,全部 300 份文件，八个 PVDF 通道与未单列时戳的数字码,CC BY 4.0,new,ice/ice-contact-source.json
+REASSEMBLE 装配与拆卸,https://doi.org/10.48436/0ewrv-8cb44,腕部实测与基座补偿扳手、任务／技能人工分段,全量归档成员清单，13 个压缩大小不超过 100 MB 的完整 HDF5,CC BY 4.0,upgrade,touch/reassemble-source.json
+WireFishing-M 柔性线缆插入,https://doi.org/10.7910/DVN/MUOJXI,实物摄像机与机器人状态估计，两个关联数据发布,固定四个源包，按档案内逐试次配对范围,CC0 1.0，逐发布见来源记录,upgrade,wire/wire-source.json

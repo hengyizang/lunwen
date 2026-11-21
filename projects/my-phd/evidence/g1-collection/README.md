@@ -13,3 +13,4 @@
 - [R1 腕部重力与偏置标定、装配试次排重和标签核验](follow-ups/2026-11-21-wrist-calibration-contact/README.md)
 - [R5 从消息发布、接收回调到控制更新的计时证据](follow-ups/2026-11-21-message-age-control-updates/README.md)
 - [R2 驱动电流、反馈与限幅的实物证据](follow-ups/2026-11-21-drive-current-and-feedback/README.md)
+- [R1 接触起点、载荷参照与六轴扳手校正](follow-ups/2026-11-21-contact-onset-and-wrench-references/README.md)

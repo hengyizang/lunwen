@@ -1,0 +1,25 @@
+group,axis,unit,samples,reference_min,reference_max,mean_output_minus_reference,rmse,max_abs_error
+"deposited model on full matrix, native sign",Fx,N,418,-7.53068722,5.409366876,0.01869133,0.248162886,2.009561219
+"deposited model on full matrix, native sign",Fy,N,418,-7.53068722,6.210165306,-0.004068389,0.173105022,1.598865557
+"deposited model on full matrix, native sign",Fz,N,418,0.0,14.181231643,0.00112762,0.158790352,1.909894126
+"deposited model on full matrix, native sign",Mx,mN m,418,-56.12,56.724926574,-0.046341046,1.099273386,20.383457742
+"deposited model on full matrix, native sign",My,mN m,418,-54.502172006,56.724926574,-0.031843562,0.981065824,18.253488336
+"deposited model on full matrix, native sign",Mz,mN m,418,-24.203823846,27.667040847,0.035024861,0.449882575,6.710113589
+deposited model on zero-target rows of full matrix,Fx,N,48,0.0,0.0,-0.026473898,0.039392788,0.136506848
+deposited model on zero-target rows of full matrix,Fy,N,48,0.0,0.0,0.011174682,0.052760421,0.126947344
+deposited model on zero-target rows of full matrix,Fz,N,48,0.0,0.0,0.006626931,0.04545828,0.139524266
+deposited model on zero-target rows of full matrix,Mx,mN m,48,0.0,0.0,-0.018032329,0.159076246,0.484761363
+deposited model on zero-target rows of full matrix,My,mN m,48,0.0,0.0,-0.045814923,0.140750806,0.436474685
+deposited model on zero-target rows of full matrix,Mz,mN m,48,0.0,0.0,-0.008121563,0.132889809,0.414102211
+"article Fig. 3 displayed pairs, plot sign",Fx,N,208,-5.35633,5.40937,0.00954726,0.178005045,1.38997
+"article Fig. 3 displayed pairs, plot sign",Fy,N,208,-5.40937,4.56614,-0.017429808,0.150189815,0.93588
+"article Fig. 3 displayed pairs, plot sign",Fz,N,208,-14.18123,0.0,0.017145323,0.183425655,1.44677
+"article Fig. 3 displayed pairs, plot sign",Mx,mN m,208,-55.93708,56.72493,-0.002466631,0.582821465,5.07366
+"article Fig. 3 displayed pairs, plot sign",My,mN m,208,-50.32,56.72493,-0.009433662,0.618660681,5.40886
+"article Fig. 3 displayed pairs, plot sign",Mz,mN m,208,-20.58583,18.18673,-6.5618e-05,0.258964259,1.50188
+"model vs plotted output, uniquely matched targets only",Fx,N,185,-5.32988,5.2714,-0.009823099,0.239663643,1.860727459
+"model vs plotted output, uniquely matched targets only",Fy,N,185,-5.27151,4.6616,0.020423427,0.211909881,1.063710513
+"model vs plotted output, uniquely matched targets only",Fz,N,185,-13.87201,-0.38641,-0.014560739,0.247339765,1.88701783
+"model vs plotted output, uniquely matched targets only",Mx,mN m,185,-53.91689,56.53122,-0.080282344,1.617745418,20.334672927
+"model vs plotted output, uniquely matched targets only",My,mN m,185,-49.40933,56.62714,-0.045392268,1.508773139,18.23277352
+"model vs plotted output, uniquely matched targets only",Mz,mN m,185,-20.45729,18.2616,0.046363623,0.598884193,6.592783589

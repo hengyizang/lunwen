@@ -1,0 +1,125 @@
+{
+  "title": "Nonlinear In-situ Calibration of Strain-Gauge Force/Torque Sensors for Humanoid Robots — iRonCub-Mk3 data release",
+  "source": "ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset",
+  "hf_revision": "7b8a7aa350312b4c609c9531325d7fc52f9c924d",
+  "fixed_url": "https://huggingface.co/datasets/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset/tree/7b8a7aa350312b4c609c9531325d7fc52f9c924d",
+  "download_template": "https://huggingface.co/datasets/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset/resolve/7b8a7aa350312b4c609c9531325d7fc52f9c924d/{path}",
+  "checked_utc_date": "2026-11-21",
+  "authors": [
+    "Hosameldin Awadalla Omer Mohamed",
+    "Gabriele Nava",
+    "Punith Reddy Vanteddu",
+    "Francesco Braghin",
+    "Daniele Pucci"
+  ],
+  "rights": "BSD-3-Clause per the fixed HF dataset card. Original measured arrays and paper text are not redistributed. G1 publishes original computed summaries, script and source checksums.",
+  "release_time_utc": "2023-12-10T23:15:46.000Z",
+  "evidence_grade": "Primary full text, official code and all eight file-verified real upper-arm F/T, temperature and computed reference series.",
+  "prior_inventory": {
+    "commit": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "corpus_files": 582,
+    "dataset_keys": [
+      "ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset",
+      "paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset",
+      "7b8a7aa350312b4c609c9531325d7fc52f9c924d"
+    ],
+    "dataset_hits": [],
+    "article_keys": [
+      "10.1109/humanoids57100.2023.10375227",
+      "2312.09846",
+      "Nonlinear In-situ Calibration of Strain-Gauge Force/Torque Sensors for Humanoid Robots"
+    ],
+    "article_hits": [
+      "projects/my-phd/evidence/g1-collection/2026-11-21/citation-edges.csv",
+      "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+    ],
+    "interpretation": "The bibliographic article was already present. The specific released dataset is newly file-verified and had no fixed-repository/slug match in the compared catalogues."
+  },
+  "queries": [
+    {
+      "query": "Andrade Chavez iCub force torque sensor calibration temperature datasets github mat in situ calibration temperature data dataset robot ft",
+      "result": "Original near-hip temperature study, its thesis, and previously checked Skrede and iCub records. Scope narrowed to repositories containing paired same-session samples."
+    },
+    {
+      "query": "GitHub search/repositories?q=ft-calibration+in:name",
+      "result": "The original insitu-ft-calibration at 5ba3c92c3b001b8dce7738dccf55c6bca3d2bf5e is a C++ estimator and unit tests. The separate Mohamed et al. repository names a complete Hugging Face acquisition release in instructions/installation.md."
+    },
+    {
+      "query": "six axis force torque sensor dataset applied weights temperature drift calibration calibration dataset CSV github ATI sensor ground truth optical open source force torque calibration data",
+      "result": "The dimensionalOS/openFT-sensor calibration guide describes collection but the fixed tree 876b60efbf6483fe401966c4d9fde0a9755bbc94 does not contain actual paired calibration logs. No new experimental data attributed to this guide."
+    },
+    {
+      "query": "Crossref author/title plus arXiv:2312.09846; publisher and HF tree at fixed revision",
+      "result": "10.1109/Humanoids57100.2023.10375227; full text §§III–V, Fig. 7; training/validation by fixed source directories."
+    }
+  ],
+  "documents": [
+    {
+      "url": "https://huggingface.co/datasets/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset/resolve/7b8a7aa350312b4c609c9531325d7fc52f9c924d/README.md",
+      "bytes": 854,
+      "sha256": "b1f22547fcd2721d91a0f937eb3465db471d470138e015eff097017268d44eec"
+    },
+    {
+      "url": "https://huggingface.co/api/datasets/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration_dataset/tree/7b8a7aa350312b4c609c9531325d7fc52f9c924d?recursive=true&limit=1000",
+      "bytes": 3763,
+      "sha256": "fe4317f5767fda03adc1baf004866d71421c9bc1232a137ba87b2d6efc0ad5b8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration/6aae437dad26efe775fe694dc8a7577277d438d2/instructions/installation.md",
+      "bytes": 2382,
+      "sha256": "575e15c88ff1511acbf275d50ca4686319d740dc9cdc75b08bd0f4e35f4031ac"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration/6aae437dad26efe775fe694dc8a7577277d438d2/instructions/usage.md",
+      "bytes": 1532,
+      "sha256": "b3188ed1df3cba5ead98b01be43d68a906f778323b3abc336e8de9f536c8f0e4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration/6aae437dad26efe775fe694dc8a7577277d438d2/software/calibration_scripts/parse_data.m",
+      "bytes": 1543,
+      "sha256": "28762fffe17ad80a4ea6ccd55e9dd7a333590ef60f822bd96b68edf809452734"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration/6aae437dad26efe775fe694dc8a7577277d438d2/software/matlab_classes/@FTCalibParser/parseInputOutput.m",
+      "bytes": 5027,
+      "sha256": "b4749459ae9b680b3896e2f25d5c70b0fda50eabef26eb5ee2a25dafa8a83769"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ami-iit/paper_Mohamed_2023_humanoids_nonlinear-ft-calibration/6aae437dad26efe775fe694dc8a7577277d438d2/software/matlab_classes/@FTCalibParser/computeExpectedValues.m",
+      "bytes": 8382,
+      "sha256": "f6a8ea9f290cab6d8b397534156959d2fcda43e527049dac58fc132ebcb9d7ca"
+    },
+    {
+      "url": "https://arxiv.org/pdf/2312.09846",
+      "bytes": 3975913,
+      "sha256": "24c1e287f00147568232c47298daddbd2e65812ed62c9933f849d7e33d20c7f7"
+    }
+  ],
+  "raw_file_sha256": {
+    "training/l0kg-r0kg/dataset.mat": "41add90e2b4b81965b4bef01ffc4d75788de0d9f8aebb915a1fc7a4c65de3306",
+    "training/l0kg-r10kg/dataset.mat": "b2044e0fd43051310a727a89f6a1481fe4dfc5fa8f024f21236606820440e36f",
+    "training/l0kg-r7kg/dataset.mat": "79f1cd16a1056177b1cd8c7ad3e6d0825d80b3531ce0c160fee8aa3e7c3e8868",
+    "training/l2kg-r2kg/dataset.mat": "480cbe7db2c77a2e783f816db98a5625e5609b47590479818214b00f765fee0b",
+    "training/l4kg-r4kg/dataset.mat": "823d3a5306366474d9cdbb3f4109b5e735a617a3964c250b763ff335662ac360",
+    "training/l5kg-r5kg/dataset.mat": "eb5d8a4f8dacbd7a429904c53de3366a4fc70cab4ed0c275e14e1f3cb6019cee",
+    "validation/l0kg-r7kg/dataset.mat": "895d1ac8664426925b341b8ec4a729196fe155d48d330b5068b8676ce9997555",
+    "validation/l5kg-r0kg/dataset.mat": "ac11b9a9a157b72a8a0dc7011311b6d764323befe1aaa19f385e9b79f3d12d20"
+  },
+  "raw_file_bytes": {
+    "training/l0kg-r0kg/dataset.mat": 74759359,
+    "training/l0kg-r10kg/dataset.mat": 74030904,
+    "training/l0kg-r7kg/dataset.mat": 72809995,
+    "training/l2kg-r2kg/dataset.mat": 72699889,
+    "training/l4kg-r4kg/dataset.mat": 73967708,
+    "training/l5kg-r5kg/dataset.mat": 73792710,
+    "validation/l0kg-r7kg/dataset.mat": 72253694,
+    "validation/l5kg-r0kg/dataset.mat": 73704964
+  },
+  "scope": "8 different MAT files. Six calibration training files and two held-out validation files, both upper-arm sensors of the same physical iRonCub-Mk3; both arms share the acquisition so do not double-count sessions or times. The folder describes separately the mass attached to each forearm; 0 kg means no added weight, not zero physical force or moment. These sensors are not mounted at the wrist. No individually measured reference zero-bias or contact-state onset.",
+  "time_and_channels": "Require bytewise equality of the FTs/temperatures/joints_state timestamps as numeric arrays, and exact equality of each relative logger stamp to expectedValues.FTs.time. Index only after verifying these alignments. These are logger timestamps, not independent hardware sampling IDs. Temperatures are internal sensor readings, not chamber reference temperatures. Count rows and distinct recorded temperatures separately; do not infer independent samples. Log fields use n.d. for units; force (N), torque (Nm) and temperature (°C) from paper, parser and plots. Positions enter iDynTree directly and are interpreted as radians.",
+  "reference": "Precomputed expectations in expectedValues are generated by the robot model, posture and the URDF selected for each nominal load; the supplied parser uses fixed root, zero velocity and acceleration. Artifact is not an external load cell. Use FTs (measured output), not cartesian_wrenches (a different estimation/processing stream).",
+  "model": "Independent affine calibration comparison on the authors’ intact splits. Regress the six deposited model-expected channels on the six unfiltered stored FTs channels and intercept, with or without an additional internal temperature regressor centered at that arm’s training mean. Separate ordinary least squares per arm. All logger rows weighted equally and no session trimming or Savitzky–Golay filtering. Evaluate each file and channel; not a replication of the paper’s filtered nonlinear fits. Per-axis RMSE is over logger rows and no standard error treating adjacent rows as independent is given. The conditional temperature coefficient depends on loads and postures represented in training and is not a thermal-only drift rate.",
+  "pose_match": "Compare only training and validation l0kg-r7kg with identical attached masses. For each integer second from zero through floor(last relative timestamp), select first observed row on or after that instant. Match mutual nearest postures in seven-dimensional Euclidean angle space (torso pitch/roll/yaw plus ipsilateral shoulder pitch/roll/yaw and elbow); break ties by earliest timestamp; retain distances at most 0.5, 1 or 2 degrees. Limits are sensitivity analyses on the same acquisitions. The per-match measured difference minus the per-match modeled difference is summarized by its median; the median of differences need not equal the difference of two medians. A session-level temperature difference is associated with a residual, not isolated as its sole cause. Unmatched dynamics, hysteresis and session changes remain possible.",
+  "validation_boundaries": "The session coverage table separately counts samples outside the pooled min–max and samples outside the union of six session-specific ranges. A value inside the overall range can fall in a completely unobserved gap.",
+  "reproduce": "Supply the fixed HF directory with training/ and validation/. Use Python 3.11+, NumPy and SciPy: python derive_ironcub_temperature.py INPUT_REPO_DIRECTORY OUTPUT_DIRECTORY. For matching last reported decimals across BLAS installations set OPENBLAS_NUM_THREADS=1. Script verifies all input LFS SHA-256 digests."
+}

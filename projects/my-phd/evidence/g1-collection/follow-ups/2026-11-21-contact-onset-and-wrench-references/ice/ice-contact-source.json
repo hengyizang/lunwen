@@ -1,0 +1,66 @@
+{
+  "title": "IntelliMan_WP5_Grasping, Manipulation and Arm-Hand Coordination_T5.1_Data fusion and sensing technology_ICECS2025_Data",
+  "doi": "10.5281/zenodo.18759556",
+  "concept_doi": "10.5281/zenodo.18759555",
+  "version": "Zenodo v1, published 2026-02-24",
+  "authors": [
+    "Khalifeh, Razan",
+    "Yaacoub, Mohamad",
+    "Micheli, Chiara",
+    "valle, Maurizio",
+    "Abbass, Yahya"
+  ],
+  "rights": "CC BY 4.0 (DataCite license). Original dataset by Razan Khalifeh, Mohamad Yaacoub, Chiara Micheli, Maurizio Valle and Yahya Abbass. Derived per-file and block counts, SHA-256 and channel ranges only.",
+  "record": "https://zenodo.org/records/18759556",
+  "verified_utc_date": "2026-11-21",
+  "archive": {
+    "name": "Dataset_Contact_slippage_ICECS.zip",
+    "url": "https://zenodo.org/records/18759556/files/Dataset_Contact_slippage_ICECS.zip?download=1",
+    "bytes": 76914965,
+    "publisher_md5_verified": "50479117586f4d61890cc8bb5505e4c8",
+    "sha256": "aac47f7329f2104b28685d91266a19becf687bb5b3573de86e08dfcd88c023af",
+    "catalogue_metadata": "https://api.datacite.org/dois/10.5281/zenodo.18759556",
+    "catalogue_sha256": "0ff1f540664c8a651c1103fda3de3aec4cc8f6e6eb7cfaabaaebdc50e9c38a54"
+  },
+  "queries": [
+    {
+      "query": "robot force torque data electrical contact ground truth detection external contact tactile independent contact onset benchmark force sensor force plate labels industrial robot physical contact dataset data force/torque six-axis",
+      "source": "https://zenodo.org/records/18759556",
+      "result": "Human-worn PVDF cap, two texture conditions, and a reported external six-axis transducer used as reference in the experiment. Searched and read complete deposit to locate released reference arrays."
+    },
+    {
+      "query": "Razan Khalifeh Mohamad Yaacoub ICECS 2025 contact slippage force torque ground truth contact release threshold 8 sensor finger cap data ICECS contact slippage PDF",
+      "result": "Matching paper via IEEE and university title/author metadata. Public publisher abstract confirms target events; the paper is not used as a source of sample-wise measurements.",
+      "paper_doi": "10.1109/ICECS66544.2025.11270690",
+      "source": "https://ieeexplore.ieee.org/document/11270690/",
+      "crossref_metadata_sha256": "80080eebadf474db3703a6392b0775183a033946b40d1d8a02f15c622381766d"
+    }
+  ],
+  "selection": "All non-directory members of the ZIP; each was opened, checked by ZIP CRC, read as nine finite tab-separated numeric columns, and SHA-256 hashed. Within each texture folder trial suffix is a local identifier.",
+  "lab_reference_vs_files": "A six-axis F/T transducer is described by the authors as the hardware reference in human fingertip press/slide/release tasks. The actual archive has two directories, 150 traces each. The files have eight real-valued tactile signal columns (filenames say Voltage), one numeric code column, no headers, no six separate reference-wrench channels, subject ID, timestamp, external event timestamp or README defining the numeric code. Thus one cannot reproduce the temporal error against an independent measured force onset, determine physical torque bias, or infer sensor synchronization from these files. T9sec names a nominal duration; no conversion from row index to seconds was assumed. Never treat a numeric code transition as metrologically timed contact. No robot or insertion trial is present.",
+  "counting": "The metadata mentions two people and 150 trials per person/texture. The source archive gives 150 files per texture with trial suffixes 1–150 and no subject folder. Count only the 300 deposited files, do not infer a 600-file archive or assign subjects. The authors describe smooth and rough materials; retain the literal folder name PVDF_softtex rather than infer a material specification.",
+  "fields": "For each trace, retain original identifier, content hash, row/column count, ordered code blocks and peak-to-peak range of each analogue channel in original scale. For each maximal run of equal ninth-column code, store ordinal, code, zero-based starting row and exclusive ending row. No labels mapped to code numbers, timing inferred, or raw waveform values redistributed.",
+  "historical_commit": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+  "dedup": "Compared version DOI, concept DOI and identifiable title string against the project evidence tree and historical baseline; no prior dataset match.",
+  "reproduce": "Python 3.11+ and NumPy: python derive_ice_contact.py Dataset_Contact_slippage_ICECS.zip OUTPUT_DIRECTORY.",
+  "observed_archive": {
+    "files": 300,
+    "distinct_file_sha256": 300,
+    "numeric_rows": 4856224,
+    "files_each_texture": 150,
+    "local_trial_indices": [
+      1,
+      150
+    ],
+    "code_sequence_all_files": [
+      1,
+      2,
+      3,
+      0
+    ],
+    "terminal_code_zero_rows_per_file": 1,
+    "code_3_start_index_10859_files": 202,
+    "code_3_start_index_10858_files": 51,
+    "finding": "The repeated transition indices are compatible with protocol timing, but without the external force stream and code legend the source does not establish their derivation."
+  }
+}

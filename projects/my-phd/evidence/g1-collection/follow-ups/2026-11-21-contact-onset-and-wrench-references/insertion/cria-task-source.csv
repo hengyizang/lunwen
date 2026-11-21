@@ -1,0 +1,9 @@
+task,source,episodes,successful,frames,valid_wrenches,padded_slots,anomaly_episodes,success_with_anomaly,failed_without_anomaly,annotated_anomaly_ranges,anomalous_frames,manual_frame_available,manual_only,auto_only,both_onsets,auto_earlier,auto_same,auto_later,median_auto_minus_manual_frames,first_slot_matches_auto,first_slot_peak_matches_auto,any_slot_matches_auto
+insert_ni,human,100,50,38401,153489,115,90,40,0,109,10913,98,0,2,98,4,0,94,24.5,100,100,20
+insert_ni,pi05_joint,50,14,48513,194052,0,50,14,0,52,32809,40,6,7,34,0,0,34,35.5,50,50,14
+insert_plug_2,human,100,50,51483,205811,121,83,33,0,129,13371,98,0,2,98,35,0,63,5.0,100,100,23
+insert_plug_2,pi05_joint,50,12,37081,148324,0,45,7,0,92,17743,30,10,7,20,6,0,14,23.5,50,50,25
+insert_plug_3,human,100,50,46663,186529,123,83,33,0,112,12504,98,0,2,98,8,0,90,39.5,100,100,20
+insert_plug_3,pi05_joint,50,15,47225,188900,0,50,15,0,59,28909,47,2,2,45,11,0,34,50.0,50,50,14
+insert_typec,human,100,50,42577,170204,104,91,41,0,108,11643,99,0,1,99,4,0,95,30.0,100,100,20
+insert_typec,pi05_joint,50,15,43180,172720,0,48,13,0,48,21653,50,10,0,40,0,0,40,130.5,50,50,22

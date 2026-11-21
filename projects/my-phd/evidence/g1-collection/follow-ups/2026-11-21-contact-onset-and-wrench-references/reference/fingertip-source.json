@@ -1,0 +1,80 @@
+{
+  "title": "mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations: MATLAB_code_and_data",
+  "doi": "10.5281/zenodo.15553350",
+  "concept_doi": "10.5281/zenodo.15553349",
+  "version": "matlab",
+  "author_deposit": "mq-0109",
+  "article_authors": [
+    "Qian Mao",
+    "Zijian Liao",
+    "Shiqiang Liu",
+    "Jinfeng Yuan",
+    "Rong Zhu"
+  ],
+  "paper_doi": "10.1038/s41467-025-60861-8",
+  "rights": "Zenodo release CC BY 4.0. Article and accompanying Source Data are published under CC BY 4.0 unless material is separately credited. Original aggregate summaries only.",
+  "accessed_utc": "2026-11-21",
+  "history": {
+    "git_snapshot": "ad3315266f256e49cfb1587d024f10d829d93d5c",
+    "evidence_and_early_baseline_text_files": 582,
+    "release_lookup_keys": [
+      "10.5281/zenodo.15553350",
+      "10.5281/zenodo.15553349",
+      "mq-0109/An-ultralight-tiny-flexible"
+    ],
+    "dataset_matches": [],
+    "companion_article_matches": [
+      "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv",
+      "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv"
+    ],
+    "lookup": "Casefolded diacritic and punctuation stripped release, concept and/or repository identifiers; bibliography separately checks author/title aliases."
+  },
+  "discovery": [
+    "six axis force torque sensor open source calibration dataset ATI Nano17 ground truth force torque calibration data csv optoforce low cost sensor GitHub",
+    "zenodo six-axis force torque sensor calibration dataset ATI force torque reference 3D printed force/torque sensor benchmark raw data",
+    "Followed the 2025 article Data availability to Zenodo; retrieved the article, its figure source data, and Supplementary Fig. S6 via public PMC OA bucket."
+  ],
+  "receipt": [
+    {
+      "local_input_name": "z.json",
+      "url": "https://zenodo.org/api/records/15553350",
+      "bytes": 4717,
+      "sha256": "47b2099c8c9e8aa6c7d3b1c4ebb900f31edccfaa013b7a5d5b304c29fc4a7aaf"
+    },
+    {
+      "local_input_name": "fingertip.zip",
+      "url": "https://zenodo.org/api/records/15553350/files/mq-0109/An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations-matlab.zip/content",
+      "bytes": 43319,
+      "sha256": "07dbc05c07c4495286b8e92831257c34226d4e608814f43b1a5c81f1f3899802"
+    },
+    {
+      "local_input_name": "primary.pdf",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12214963.1/PMC12214963.1.pdf",
+      "bytes": 2522724,
+      "sha256": "15de638a2525d92afb988d0a33cd5efe783e3c0dc02e653794deb3f15ec436e8"
+    },
+    {
+      "local_input_name": "supplement.pdf",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12214963.1/41467_2025_60861_MOESM1_ESM.pdf",
+      "bytes": 19893493,
+      "sha256": "46eb2c3af0a52e1c2a27e7cd353559b5ed2a6311f8a0c6275494b1f2d6356a3f"
+    },
+    {
+      "local_input_name": "figures.xlsx",
+      "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12214963.1/41467_2025_60861_MOESM7_ESM.xlsx",
+      "bytes": 250034,
+      "sha256": "249c2b581375d730f2b60be0b437f1fda79dbd8f0a3bd5799c0d3bb2e5caf3bb"
+    }
+  ],
+  "publisher_archive_md5": "md5:5a1f55365e34690f7ef63f9c8c56c2a3",
+  "reference": "SH-50 single-axis force gauge (stated resolution 0.01 N); incline and turntable resolve the loading direction. Supplementary Fig. S6 defines moment components by applied force and perpendicular lever arm with axes at the sensor top. Moments are geometrically derived. No independent six-axis torque reference, calibrated robot wrist, synchronized temperature or time channel in the matrix.",
+  "fields": "418 distinct eight-voltage vectors and six load targets. Archive does not encode run IDs, split membership, zeroing history, gauge location per row, units per column or time. The paper figures establish N and mN m. MAT Fz targets are nonnegative; the plotted compression channel is negative. The sign is changed ONLY for matching the MAT into the plot convention.",
+  "partitions": "Paper methods describe 40% training, 10% validation and 50% testing; no split index list in release. Native frozen network replay covers all 418 rows and is NOT an independent test error. Fig. 3b–g source sheets give 208 plotted pairs per axis and reproduce paper-reported RMSE at its precision. Do not infer the original split from row order or silently assume 209 published test pairs. Figure workbook and MAT are two representations of the same study.",
+  "matching": "Joint load labels matched at 0.00000501 in each native plotted unit (five decimal places), with Fz sign reversed. 185 uniquely match, 22 all-zero targets each match 48 same-label raw rows, one has no matching label. No nearest-neighbor substitution. For uniquely matched loads, the frozen model outputs are not identical to published plot values at printed precision; training state/history is unavailable. Model-vs-plot discrepancy table uses plotted output as comparator, not the load reference.",
+  "reproduce": "Save the Zenodo ZIP as fingertip.zip and publisher source spreadsheet as figures.xlsx in one input directory; run python derive_fingertip.py INPUT_DIR OUTPUT_DIR using NumPy, SciPy and openpyxl. Read SHA-256 values above. Column summary native torque unit is mN m, equal to 0.001 N m.",
+  "archive_members": {
+    "mq-0109-An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations-0c688b3/README.md": "92cd4077630b5d141024ea99075c721179e1f66ecd8c3413c0b82abc8cbf51e5",
+    "mq-0109-An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations-0c688b3/data.mat": "9274838820e95669e38d932a1bb62f29b4a508695dbe768775814642db3b92f1",
+    "mq-0109-An-ultralight-tiny-flexible-six-axis-force-torque-sensor-enables-dexterous-fingertip-manipulations-0c688b3/six_force.m": "3146d0873d3e978fe66dc866dded2dc9522c98a8cd41f42fc5810a3245c0e717"
+  }
+}
