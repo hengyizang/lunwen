@@ -1,0 +1,73 @@
+{
+  "title": "Force/Torque Sensor Measurements for Estimating the Mass Center of an Unknown Robot End Effector",
+  "creator": "Aleksander Skrede, Norwegian University of Science and Technology (NTNU)",
+  "retrieved_utc_date": "2026-11-21",
+  "published": "2024-04-27",
+  "version_doi": "10.5281/zenodo.11078469",
+  "concept_doi": "10.5281/zenodo.11078468",
+  "release": "Only release returned by https://zenodo.org/api/records/11078469/versions on audit date. Primary record 11078469.",
+  "license": {
+    "id": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "scope": "Zenodo dataset. Computed model fits, group holdout and inter-deposit comparisons are original transformations."
+  },
+  "evidence": "Available original measurement file and depositor metadata, with publisher checksum verified. Companion paper DOI and publisher abstract verified.",
+  "hardware": "KUKA Agilus KR6 R900 sixx, wrist-mounted ATI Gamma F/T sensor, ATI Netbox. Unknown end effector. Flange orientation matrix expressed in the world frame.",
+  "companion_paper": {
+    "doi": "10.1109/RCAR61438.2024.10671110",
+    "title": "A Geometric Perspective on Moment Arm Estimation Using Force/Torque Sensors",
+    "provenance": "Author dataset explicitly cites the conference publication. Crossref DOI checked and IEEE abstract inspected. Model below was computed for this collection and is not asserted to reproduce any of the four geometric methods in the article."
+  },
+  "query_log": [
+    {
+      "query": "robot wrist force torque sensor calibration payload known mass experiment dataset gravity compensation",
+      "provider": "public web search",
+      "selected": "https://zenodo.org/records/11078469"
+    },
+    {
+      "query": "A Geometric Perspective on Moment Arm Estimation Using Force/Torque Sensors Skrede",
+      "provider": "Crossref works?query.bibliographic and IEEE Xplore",
+      "result": "https://doi.org/10.1109/RCAR61438.2024.10671110"
+    },
+    {
+      "query": "10.5281/zenodo.11078469, 11078468, author + dataset title",
+      "provider": "Zenodo record/versions APIs, DataCite DOI",
+      "url": "https://api.datacite.org/dois/10.5281/zenodo.11078469"
+    },
+    {
+      "query": "24-pose calibration file in the prior related release 11096791",
+      "provider": "Zenodo official per-file endpoint",
+      "result": "Both primary and comparison files verified; only the new primary release is used to fit the model."
+    }
+  ],
+  "source_receipts": {
+    "record_url": "https://zenodo.org/api/records/11078469",
+    "metadata_sha256": "893dd02122228021bd5e629387be6c28f5011f516ebc49195e1d2490c1864896",
+    "datacite_sha256": "0c39097451d3aa049eb8b92ced7a19a8dde1def893c92ca6c447f5e3e83ea2fa",
+    "paper_crossref_sha256": "783dcfd3437d3461ec6979991ec2014fecd1f391c90277090e27146b184891b4"
+  },
+  "files": [
+    {
+      "file": "fts_measurements.csv",
+      "version_doi": "10.5281/zenodo.11078469",
+      "concept_doi": "10.5281/zenodo.11078468",
+      "permanent_url": "https://zenodo.org/api/records/11078469/files/fts_measurements.csv/content",
+      "bytes": 4083,
+      "published_checksum_verified": "md5:cbfbbe5b4f880af65ec5d03de979d36d",
+      "sha256": "742411fc66461bff69e472de020febd11456b1338130607da5f114583b593aef"
+    },
+    {
+      "file": "0-calibration_fts-accel.csv",
+      "version_doi": "10.5281/zenodo.11096791",
+      "concept_doi": "10.5281/zenodo.11075229",
+      "permanent_url": "https://zenodo.org/api/records/11096791/files/0-calibration_fts-accel.csv/content",
+      "bytes": 5127,
+      "published_checksum_verified": "md5:9cccc9553ed4cf8fbe22b664a30f3e3e",
+      "sha256": "ae7966b36fd1338de666665eeff2d5ec7c32c6d7dfeee30a0948c3ae172c5edd"
+    }
+  ],
+  "processing": "24 ordered numeric rows. Six published force/moment readings plus the three sensor-frame gravity components and a 3x3 orientation matrix. Dominant signed gravity axis defines six groups; each has four poses. No time stamps, known independent load-cell input, per-row contact flags or temperature. The writer names the units of the fields only generically in repository prose. Derived column labels follow a working SI convention (N, N m, m/s^2), consistent with gravity magnitude about 9.821. Do not treat this as an instrument-unit certificate.",
+  "fit": "Two ordinary least-squares fits on all axes: force = mass * g + force_offset and torque = (mass * COM) cross g + torque_offset. g has the sign and magnitude archived. Effective force and moment offsets absorb constant unmodelled terms. No reference weights, contact transducer, independently measured COM or unloaded bias channel appear in this CSV. One full fit and six fits withholding all four rows of one gravity direction at a time. Vector RMSE = sqrt(mean(sum of squared Cartesian residuals over each evaluated pose)). Held-out poses share apparatus and protocol. Physical independence between sessions or a temperature trend is unestablished.",
+  "duplicate_check": "The older, separate concept DOI for record 11096791 supplies an accelerometer in addition to wrench, gravity, and rotation. When the rotations are rounded to their nearest integer signed-permutation entries, both 24-row protocols have identical ordered matrices. All 144 paired wrench component values differ; no six-component wrench row recurs even after disregarding row order. The largest same-row rotation element difference is 0.0002521485. These are distinct numerical records with shared protocol; dates or trial independence require additional metadata. Do not pool as independent pose experiments.",
+  "reproduction": "Python 3 and NumPy. Download both CSVs by the URLs listed in files, preserve filenames, then run python derive_static_calibration.py INPUT_DIR OUTPUT_DIR. Two outputs: static-wrist-fits.csv and static-wrist-deposit-comparison.csv."
+}

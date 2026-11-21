@@ -1,0 +1,995 @@
+{
+  "historical_commit": "257c497cf1d756683b8a20dfb0a7c58c29109cfb",
+  "query_utc_date": "2026-11-21",
+  "scope": "R1 loaded-tool gravity, sensor offset and thermal calibration; contact and restricted sensing references",
+  "records": 20,
+  "new": 11,
+  "fulltext": 13,
+  "edges": 25,
+  "seeds": [
+    "10.3390/s19245521",
+    "10.1109/tro.2021.3127391",
+    "10.1109/jsen.2021.3056943",
+    "10.1109/icra.2015.7139477",
+    "10.1109/case58245.2025.11163796",
+    "10.1109/humanoids.2016.7803310"
+  ],
+  "queries": [
+    "wrist force torque robot sensor gravity compensation inertial parameter identification payload bias free motion contact accelerometer",
+    "robot force torque sensor calibration temperature drift strain gauge multiaxial in situ external wrench",
+    "industrial force sensor end effector load identification bias gravity compensation tools robotic force control dynamic calibration",
+    "robot end effector force observer inertial force compensation dynamic force measurement wrist industrial manipulator contact Kalman external force",
+    "temperature compensation six axis force torque sensor iCub Traversaro Andrade Chavez"
+  ],
+  "graph_fanout": {
+    "1refs": 38,
+    "1cites": 21,
+    "5cites": 15
+  },
+  "browser_queries": [
+    "On-line Estimation of F/T Sensor Offset for Arbitrary Orientation of Robot Tool",
+    "A Geometric Perspective on Moment Arm Estimation Using Force/Torque Sensors",
+    "Towards Model-Free Tool Dynamic Identification and Calibration",
+    "Robust Insertion Control for Precision Assembly With Passive Compliance Combining Vision and Force Information"
+  ],
+  "selection": "Used primary registries, public papers, cited/citing neighbours and relevant author abstracts. Excluded generic sensor hardware without calibration context, unrelated space systems, publisher supplements, and retracted work 10.1155/2021/5551544 identified by notice 10.1155/2023/9782470. Conference/journal extensions and reuse of a pushing platform do not imply independent trials.",
+  "dedup": "Compared DOI, arXiv and other version IDs, normalized author/title and fuzzy candidates across historical G1 branch and the legacy catalogue. Earlier reference-only mentions conservatively counted as historical; see each match. Supplementary datasets distinguished from papers.",
+  "early_catalogue_commit": "ab7d82f435520c996cf592faefca9b1c5a945d5b",
+  "history_files_scanned": 424,
+  "prior_catalogues": [
+    "g1-collection/2026-11-21/audit/literature-exclusions.csv",
+    "g1-collection/2026-11-21/citation-edges.csv",
+    "g1-collection/2026-11-21/datasets.csv",
+    "g1-collection/2026-11-21/literature.csv",
+    "g1-collection/2026-11-21/r1-reading-queue.csv",
+    "g1-collection/2026-11-21/r2-reading-queue.csv",
+    "g1-collection/2026-11-21/r5-reading-queue.csv",
+    "g1-collection/2026-11-21/reading-guide.csv",
+    "g1-collection/continuous/data/figshare-30944375-the-datasets-of-the-2017-cleaned.csv",
+    "g1-collection/continuous/datasets-new-part-02.csv",
+    "g1-collection/continuous/datasets-new.csv",
+    "g1-collection/continuous/literature-new-part-02.csv",
+    "g1-collection/continuous/literature-new-part-03.csv",
+    "g1-collection/continuous/literature-new.csv",
+    "g1-collection/continuous/reading-queue-new.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/coupled-drives/ced-runs.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/datasets.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/double-pendulum/dfki-sysid-runs.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/double-pendulum/leaderboard-runs.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/finger/finger-torque-groups.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/finger/finger-torque-rollouts.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/r2-citation-edges.csv",
+    "g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/datasets.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/mrclam1-directed-sightings.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/mrclam1-robots.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-citation-edges.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-literature.csv",
+    "g1-collection/follow-ups/2026-11-21-cooperative-timing/tsn-packet-timing.csv",
+    "g1-collection/follow-ups/2026-11-21-peg-in-hole/citation-neighbours.csv",
+    "g1-collection/follow-ups/2026-11-21-peg-in-hole/dual-arm-class-counts.csv",
+    "g1-collection/follow-ups/2026-11-21-peg-in-hole/dual-arm-contact-magnitudes.csv"
+  ],
+  "fuzzy_review": [],
+  "retained_fulltext_inputs": [
+    {
+      "doi": "10.3390/s19245521",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-05521/article_deploy/sensors-19-05521-v2.pdf",
+      "sha256": "72841bcf6fed7c8928c9e111d14fce66db7baa1d324c9994fba6df7a0377ccdb",
+      "bytes": 20834013
+    },
+    {
+      "doi": "10.1109/icra.2015.7139477",
+      "url": "https://arxiv.org/pdf/1410.0885",
+      "sha256": "1d4c0fa9efb21643bba26b73030b79cf08109327ccd53f0162739107a2c559f7",
+      "bytes": 2812695
+    },
+    {
+      "doi": "10.1109/humanoids.2016.7803310",
+      "url": "https://arxiv.org/pdf/1610.03305",
+      "sha256": "b0603632fc9e10a12e3a1710aa65679082caffbff8c7b998a585e88ece740333",
+      "bytes": 4367955
+    },
+    {
+      "doi": "10.3390/s19173636",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-03636/article_deploy/sensors-19-03636.pdf",
+      "sha256": "ca33fcccd8826dbda1fe7e14d5549dfc0b56c6522a3c044d7744d45de7bb612e",
+      "bytes": 2704672
+    },
+    {
+      "doi": "10.1109/icra.2019.8794382",
+      "url": "https://arxiv.org/pdf/1812.00650",
+      "sha256": "1cc0f403d33d3350b818284a067665939f2bcc5f14a446f61c478c88984e410e",
+      "bytes": 825908
+    },
+    {
+      "doi": "10.3390/s22020439",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-00439/article_deploy/sensors-22-00439.pdf",
+      "sha256": "db9da58acaf9df3603c0627fb49ffcbccee63071607dccd642c4156ca80f81ad",
+      "bytes": 3055478
+    },
+    {
+      "doi": "10.1109/lra.2018.2856914",
+      "url": "https://arxiv.org/pdf/1709.06902",
+      "sha256": "57d852c9a5744318249f3a00551c5504a8bbde4b4a225171c1d3d63e9ead63b8",
+      "bytes": 2708030
+    },
+    {
+      "doi": "10.1109/jsen.2025.3573643",
+      "url": "https://arxiv.org/pdf/2502.17528",
+      "sha256": "14ffd2735fe1b8d166743a21f4c09a84c9b936ab8d623df343de213f3a821bfd",
+      "bytes": 7121025
+    },
+    {
+      "doi": "10.3390/s22134809",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-04809/article_deploy/sensors-22-04809.pdf",
+      "sha256": "da47f0ee9a7670264ce9138dd5bd5ccdcd00a763f4a98de297b4b896c9e8750d",
+      "bytes": 2382186
+    },
+    {
+      "doi": "10.1109/iros.2016.7758091",
+      "url": "https://arxiv.org/pdf/1604.04038",
+      "sha256": "b4a40cebf5cbcf95aef082938247a07e94c5c30064db7882147287ed99111882",
+      "bytes": 3916215
+    },
+    {
+      "doi": "10.1109/icra.2017.7989345",
+      "url": "https://arxiv.org/pdf/1704.03033",
+      "sha256": "f331c0c7ffce53b542b6c1cee7471c0a9cb9ed2657754c856cc3e1906c9b0a02",
+      "bytes": 4988182
+    },
+    {
+      "doi": "10.3390/s22207962",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-07962/article_deploy/sensors-22-07962.pdf",
+      "sha256": "92c2d1170745a48be306dea7193b060a59e03c3d3121e1a9a599bb13abbe7b1c",
+      "bytes": 5618202
+    },
+    {
+      "doi": "10.1109/icra.2016.7487177",
+      "url": "https://arxiv.org/pdf/1601.04549",
+      "sha256": "2c5636e8966915451b26a35931500560bce003959e1cd79df83ffb7b1b28f616",
+      "bytes": 1478509
+    }
+  ],
+  "receipts": [
+    {
+      "key": "su",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-03636/article_deploy/sensors-19-03636.pdf",
+      "status": 200,
+      "final_url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-03636/article_deploy/sensors-19-03636.pdf",
+      "bytes": 2704672,
+      "sha256": "ca33fcccd8826dbda1fe7e14d5549dfc0b56c6522a3c044d7744d45de7bb612e",
+      "utc": "2026-11-21T12:09:05.375852+00:00"
+    },
+    {
+      "key": "r25",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-07962/article_deploy/sensors-22-07962.pdf",
+      "status": 200,
+      "final_url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-07962/article_deploy/sensors-22-07962.pdf",
+      "bytes": 5618202,
+      "sha256": "92c2d1170745a48be306dea7193b060a59e03c3d3121e1a9a599bb13abbe7b1c",
+      "utc": "2026-11-21T12:09:05.378917+00:00"
+    },
+    {
+      "key": "p24",
+      "url": "https://arxiv.org/pdf/1704.03033",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1704.03033",
+      "bytes": 4988182,
+      "sha256": "f331c0c7ffce53b542b6c1cee7471c0a9cb9ed2657754c856cc3e1906c9b0a02",
+      "utc": "2026-11-21T12:09:05.654812+00:00"
+    },
+    {
+      "key": "p23",
+      "url": "https://arxiv.org/pdf/1604.04038",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1604.04038",
+      "bytes": 3916215,
+      "sha256": "b4a40cebf5cbcf95aef082938247a07e94c5c30064db7882147287ed99111882",
+      "utc": "2026-11-21T12:09:05.329638+00:00"
+    },
+    {
+      "key": "ot",
+      "url": "https://api.openalex.org/works?filter=cites:W3128809819&per_page=50",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "ot2",
+      "url": "https://api.openalex.org/works?filter=cites:W4414432698&per_page=10",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "cr-0",
+      "url": "https://api.crossref.org/works/10.3390/s19245521",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.3390/s19245521",
+      "bytes": 17004,
+      "sha256": "9d4b35d25338882d83e939f316372a1baa35e8bf154c11decc62902c6ff598a5",
+      "utc": "2026-11-21T12:07:05.664664+00:00"
+    },
+    {
+      "key": "oa-0",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521",
+      "bytes": 23346,
+      "sha256": "514d58de85a0c9382d6278a5ff0c51749a1d9ee314b6c9f5e25d21208eb090c5",
+      "utc": "2026-11-21T12:07:05.872514+00:00"
+    },
+    {
+      "key": "cr-1",
+      "url": "https://api.crossref.org/works/10.1109/tro.2021.3127391",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/tro.2021.3127391",
+      "bytes": 9328,
+      "sha256": "929e83a308102f1a53504aa933731eea0f6db3877624ac313a803e3b5bd651e4",
+      "utc": "2026-11-21T12:07:05.418625+00:00"
+    },
+    {
+      "key": "oa-1",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/tro.2021.3127391",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/tro.2021.3127391",
+      "bytes": 20314,
+      "sha256": "e9d4b80f1ab01795307a63a2e9f7c4074624d7b7152922b5a31c5810e9ced4bd",
+      "utc": "2026-11-21T12:07:05.645835+00:00"
+    },
+    {
+      "key": "cr-2",
+      "url": "https://api.crossref.org/works/10.1109/jsen.2021.3056943",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/jsen.2021.3056943",
+      "bytes": 5914,
+      "sha256": "7b04fad55643d40a5f264106087cfae2e95d119ac7fb9101bf8eb69daf50bbfe",
+      "utc": "2026-11-21T12:07:05.559298+00:00"
+    },
+    {
+      "key": "oa-2",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2021.3056943",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2021.3056943",
+      "bytes": 16792,
+      "sha256": "ffec3045c35e546ddffe7132ffedd2c42cfeb162bdba00f2221892c383d04512",
+      "utc": "2026-11-21T12:07:05.871879+00:00"
+    },
+    {
+      "key": "cr-3",
+      "url": "https://api.crossref.org/works/10.1109/icra.2015.7139477",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/icra.2015.7139477",
+      "bytes": 3723,
+      "sha256": "7b24611456b5508166a6bc0ab9b772b4257414f1c771f564c1ad87b543082831",
+      "utc": "2026-11-21T12:07:05.781324+00:00"
+    },
+    {
+      "key": "oa-3",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2015.7139477",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2015.7139477",
+      "bytes": 17736,
+      "sha256": "21869f66151247976852fc88d3d1ef09b9614ae1784040eb83892db80b6cefa3",
+      "utc": "2026-11-21T12:07:05.835344+00:00"
+    },
+    {
+      "key": "cr-4",
+      "url": "https://api.crossref.org/works/10.1109/case58245.2025.11163796",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/case58245.2025.11163796",
+      "bytes": 5110,
+      "sha256": "fa52edba26d369eb39d468acd810d23bee5639c944fc68d390bf9fdd6adcf4c0",
+      "utc": "2026-11-21T12:07:06.096172+00:00"
+    },
+    {
+      "key": "oa-4",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/case58245.2025.11163796",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/case58245.2025.11163796",
+      "bytes": 19442,
+      "sha256": "b3fb6029c9288bd93e8ba7c4c4f71886219f283cea9540f9d9e9c5f68d9eb0f1",
+      "utc": "2026-11-21T12:07:06.067137+00:00"
+    },
+    {
+      "key": "cr-5",
+      "url": "https://api.crossref.org/works/10.1109/humanoids.2016.7803310",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/humanoids.2016.7803310",
+      "bytes": 4726,
+      "sha256": "15a243828ba80bf82d29af041b3aba76fdd41542c4eb1c01ecc17e5d9a4e2b03",
+      "utc": "2026-11-21T12:07:06.130746+00:00"
+    },
+    {
+      "key": "oa-5",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/humanoids.2016.7803310",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/humanoids.2016.7803310",
+      "bytes": 18917,
+      "sha256": "9a40c6232f3e5086396b597f4bcea0184ec88f8d19d78ebaac944256c27c72a5",
+      "utc": "2026-11-21T12:07:06.072353+00:00"
+    },
+    {
+      "key": "cr-6",
+      "url": "https://api.crossref.org/works/10.1109/med.2018.8443011",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/med.2018.8443011",
+      "bytes": 3859,
+      "sha256": "a1808e1519d1ca1dca8476296fce48d5d6ec36b681bba5040e24e9c0fbe27016",
+      "utc": "2026-11-21T12:07:06.208956+00:00"
+    },
+    {
+      "key": "oa-6",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/med.2018.8443011",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/med.2018.8443011",
+      "bytes": 14045,
+      "sha256": "6f7da937abc3a571c187911973057355b2f134e90750dfddaf06640a11581870",
+      "utc": "2026-11-21T12:07:06.259607+00:00"
+    },
+    {
+      "key": "cr-7",
+      "url": "https://api.crossref.org/works/10.3390/s19173636",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.3390/s19173636",
+      "bytes": 21535,
+      "sha256": "9736f7eb3c36a527a24f04644da43969c6a12907e89aa1637b89f6a4e034e884",
+      "utc": "2026-11-21T12:07:06.344339+00:00"
+    },
+    {
+      "key": "oa-7",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s19173636",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s19173636",
+      "bytes": 32974,
+      "sha256": "a3087608c51afd7d4ff0a1b1dd8ef49befb7237cc376afe0b3a04860155ffaf6",
+      "utc": "2026-11-21T12:07:06.322749+00:00"
+    },
+    {
+      "key": "cr-8",
+      "url": "https://api.crossref.org/works/10.1109/rcar61438.2024.10671110",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/rcar61438.2024.10671110",
+      "bytes": 3552,
+      "sha256": "783dcfd3437d3461ec6979991ec2014fecd1f391c90277090e27146b184891b4",
+      "utc": "2026-11-21T12:07:06.315616+00:00"
+    },
+    {
+      "key": "oa-8",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/rcar61438.2024.10671110",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/rcar61438.2024.10671110",
+      "bytes": 11925,
+      "sha256": "770186be16d3d9d70188c4696244cd7ee94800976c4ea9704e5da27ee3db4167",
+      "utc": "2026-11-21T12:07:06.501851+00:00"
+    },
+    {
+      "key": "cr-9",
+      "url": "https://api.crossref.org/works/10.1109/aim.2014.6878122",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/aim.2014.6878122",
+      "bytes": 4820,
+      "sha256": "a6a608ed5d0c3817340699265e86dc925dca970dc4d8993d2c795555678f8901",
+      "utc": "2026-11-21T12:07:06.585348+00:00"
+    },
+    {
+      "key": "oa-9",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/aim.2014.6878122",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/aim.2014.6878122",
+      "bytes": 20455,
+      "sha256": "5839c814c4b0265e7b811f27f0427d7e676bc532f6ea899bf5864307fd410022",
+      "utc": "2026-11-21T12:07:06.504886+00:00"
+    },
+    {
+      "key": "cr-10",
+      "url": "https://api.crossref.org/works/10.1109/tmech.2019.2932772",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/tmech.2019.2932772",
+      "bytes": 6398,
+      "sha256": "3a21f8d024ee0785c78db523daf1752c8ae3430c9874a5cd749423b2cdd8e8ae",
+      "utc": "2026-11-21T12:07:06.663150+00:00"
+    },
+    {
+      "key": "oa-10",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/tmech.2019.2932772",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/tmech.2019.2932772",
+      "bytes": 16277,
+      "sha256": "ce0b36990f65546ccbf1c259907c2dd65d6d3e79747fb9b8717bdc4bdda110ed",
+      "utc": "2026-11-21T12:07:06.764994+00:00"
+    },
+    {
+      "key": "cr-11",
+      "url": "https://api.crossref.org/works/10.1007/s10514-012-9291-2",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1007/s10514-012-9291-2",
+      "bytes": 20672,
+      "sha256": "69db206485b90f12637baeb11ed7cd2fb15e3b7fe2fca926c4b35e0d75f09cd1",
+      "utc": "2026-11-21T12:07:06.642880+00:00"
+    },
+    {
+      "key": "oa-11",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1007/s10514-012-9291-2",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1007/s10514-012-9291-2",
+      "bytes": 22845,
+      "sha256": "28500bde7cb73d512847838bd5af5aa4f4a7da29b1862ce64fc03217f4f0d899",
+      "utc": "2026-11-21T12:07:06.816909+00:00"
+    },
+    {
+      "key": "cr-12",
+      "url": "https://api.crossref.org/works/10.1088/0957-0233/18/3/011",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1088/0957-0233/18/3/011",
+      "bytes": 4832,
+      "sha256": "65ed80a9508edd944b8db0d87643c239c9aab15c95e6b2ca9073f6d26a98b047",
+      "utc": "2026-11-21T12:07:06.919389+00:00"
+    },
+    {
+      "key": "oa-12",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1088/0957-0233/18/3/011",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1088/0957-0233/18/3/011",
+      "bytes": 20221,
+      "sha256": "4fd587f53e43b89a52124f404ce883df1e54de3fb6b6c67969f4613e579a772d",
+      "utc": "2026-11-21T12:07:06.815242+00:00"
+    },
+    {
+      "key": "cr-13",
+      "url": "https://api.crossref.org/works/10.1109/icra.2019.8794382",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/icra.2019.8794382",
+      "bytes": 4273,
+      "sha256": "8ab796d69572919a58a69581c812af84a9565ee3c8670f787cb422bd5d8d9021",
+      "utc": "2026-11-21T12:07:07.071081+00:00"
+    },
+    {
+      "key": "oa-13",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2019.8794382",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2019.8794382",
+      "bytes": 19683,
+      "sha256": "e0fdc0eed2f4fdf17e11123452640261802109e81b7072338f304bea726c3bfb",
+      "utc": "2026-11-21T12:07:07.084800+00:00"
+    },
+    {
+      "key": "cr-14",
+      "url": "https://api.crossref.org/works/10.3390/s22020439",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.3390/s22020439",
+      "bytes": 11015,
+      "sha256": "3e7e49cb163ca5b7ed0877ec751c93ccaa9f4b74beb92957d4ba613f8d1468ac",
+      "utc": "2026-11-21T12:07:06.940264+00:00"
+    },
+    {
+      "key": "oa-14",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s22020439",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s22020439",
+      "bytes": 23047,
+      "sha256": "d49f03ebe4740ca5614ea8262ae51f31e251a24c0e5e46dd5bd0b38d534168ed",
+      "utc": "2026-11-21T12:07:07.180152+00:00"
+    },
+    {
+      "key": "cr-15",
+      "url": "https://api.crossref.org/works/10.1109/lra.2018.2856914",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/lra.2018.2856914",
+      "bytes": 5744,
+      "sha256": "6cf1736bd76df89e1bc42672b767e93e90d67b0e56241942bd6fefd82b826457",
+      "utc": "2026-11-21T12:07:07.255326+00:00"
+    },
+    {
+      "key": "oa-15",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/lra.2018.2856914",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/lra.2018.2856914",
+      "bytes": 20150,
+      "sha256": "c7b36a0fa78df755214b561a5b9db91a560c50d6683c1ca7b94d33cdc4318d26",
+      "utc": "2026-11-21T12:07:07.330115+00:00"
+    },
+    {
+      "key": "cr-16",
+      "url": "https://api.crossref.org/works/10.1109/eecr60807.2024.10607240",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/eecr60807.2024.10607240",
+      "bytes": 5080,
+      "sha256": "a81957eb2c6bf0971a02f1e1190d7756322162a96498e78abff7361dce2eee35",
+      "utc": "2026-11-21T12:07:07.387982+00:00"
+    },
+    {
+      "key": "oa-16",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/eecr60807.2024.10607240",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/eecr60807.2024.10607240",
+      "bytes": 13971,
+      "sha256": "633e76b89e1fd67c2e23e4b534b99dba23e19a4972f608c43081e90201f0795c",
+      "utc": "2026-11-21T12:07:07.350489+00:00"
+    },
+    {
+      "key": "cr-17",
+      "url": "https://api.crossref.org/works/10.23919/ccc63176.2024.10662748",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.23919/ccc63176.2024.10662748",
+      "bytes": 6148,
+      "sha256": "c522c375f3fd865c24057ad640c046bbbb300c31fee8499f30a3fc8a79501a8e",
+      "utc": "2026-11-21T12:07:07.581826+00:00"
+    },
+    {
+      "key": "oa-17",
+      "url": "https://api.openalex.org/works/https://doi.org/10.23919/ccc63176.2024.10662748",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.23919/ccc63176.2024.10662748",
+      "bytes": 15394,
+      "sha256": "c505c2e071e02cd9e84cd7bbf7b7a1c434fb8fcc228ebfbe788d4ec674b49e9b",
+      "utc": "2026-11-21T12:07:07.494346+00:00"
+    },
+    {
+      "key": "cr-18",
+      "url": "https://api.crossref.org/works/10.1108/ir-03-2018-0051",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1108/ir-03-2018-0051",
+      "bytes": 11578,
+      "sha256": "17fd5a072ad4877582ed7038a47867b6d8a0c8df2e54316ca63311dd37a2c691",
+      "utc": "2026-11-21T12:07:07.464290+00:00"
+    },
+    {
+      "key": "oa-18",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1108/ir-03-2018-0051",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1108/ir-03-2018-0051",
+      "bytes": 18687,
+      "sha256": "bb4516cf8d0cdacdc9c1197df0feee9d05f681e991abee19ec28521ec0feb4fa",
+      "utc": "2026-11-21T12:07:07.540897+00:00"
+    },
+    {
+      "key": "cr-19",
+      "url": "https://api.crossref.org/works/10.1109/jsen.2025.3573643",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/jsen.2025.3573643",
+      "bytes": 6724,
+      "sha256": "6c3c69f330cd0cd5b1860143a0784747bb370479da0722c0455486e66900413d",
+      "utc": "2026-11-21T12:07:07.794324+00:00"
+    },
+    {
+      "key": "oa-19",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2025.3573643",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2025.3573643",
+      "bytes": 16635,
+      "sha256": "d58afd3057524b6583bf6c45110a1a311c685f20c00e67e3c194d673117fc3d6",
+      "utc": "2026-11-21T12:07:07.749539+00:00"
+    },
+    {
+      "key": "cr-20",
+      "url": "https://api.crossref.org/works/10.3390/s22134809",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.3390/s22134809",
+      "bytes": 18479,
+      "sha256": "2711c77634db971912a63bafc5433319b662050f6708e72895a7f9193871a1d1",
+      "utc": "2026-11-21T12:07:07.864267+00:00"
+    },
+    {
+      "key": "oa-20",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s22134809",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s22134809",
+      "bytes": 25996,
+      "sha256": "4ff3959c138e6e99293199c5a8dfb2319cd8c0284c695cd5c23145bf5c88dbb1",
+      "utc": "2026-11-21T12:07:07.817372+00:00"
+    },
+    {
+      "key": "cr-21",
+      "url": "https://api.crossref.org/works/10.1109/jsen.2024.3495507",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/jsen.2024.3495507",
+      "bytes": 13240,
+      "sha256": "8b1d44f6b01eabf1a53a93b369e347e37be18f00241d0e0632760f903f96c219",
+      "utc": "2026-11-21T12:07:08.089598+00:00"
+    },
+    {
+      "key": "oa-21",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2024.3495507",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2024.3495507",
+      "bytes": 17558,
+      "sha256": "c87419640c1198bd3a4dbaea4aefa51e80f406dc35f06a3535ad36eb34158af4",
+      "utc": "2026-11-21T12:07:08.058200+00:00"
+    },
+    {
+      "key": "cr-22",
+      "url": "https://api.crossref.org/works/10.1109/tie.2017.2748056",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/tie.2017.2748056",
+      "bytes": 6624,
+      "sha256": "9dfc099f9ccff0ba22125b8ce81b784adc40dd9dab16d2028d948f08fd97085b",
+      "utc": "2026-11-21T12:07:07.950571+00:00"
+    },
+    {
+      "key": "oa-22",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/tie.2017.2748056",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/tie.2017.2748056",
+      "bytes": 16777,
+      "sha256": "47ac042ff22a5603e84870641a34456a2b2f8e2dcf09a2dcec4ed041b4d6c33d",
+      "utc": "2026-11-21T12:07:08.107447+00:00"
+    },
+    {
+      "key": "epmc",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.3390%2Fs19245521+OR+DOI%3A10.3390%2Fs19173636+OR+DOI%3A10.3390%2Fs22020439+OR+DOI%3A10.3390%2Fs22134809&format=json",
+      "status": 200,
+      "final_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.3390%2Fs19245521+OR+DOI%3A10.3390%2Fs19173636+OR+DOI%3A10.3390%2Fs22020439+OR+DOI%3A10.3390%2Fs22134809&format=json",
+      "bytes": 3669,
+      "sha256": "68555811d45b4f041b321e14041aff09292857923e166b228ff42a305007c71c",
+      "utc": "2026-11-21T12:07:18.338122+00:00"
+    },
+    {
+      "key": "q0",
+      "url": "https://api.crossref.org/works?query.bibliographic=wrist+force+torque+robot+sensor+gravity+compensation+inertial+parameter+identification+payload+bias+free+motion+contact+accelerometer&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "q1",
+      "url": "https://api.crossref.org/works?query.bibliographic=robot+force+torque+sensor+calibration+temperature+drift+strain+gauge+multiaxial+in+situ+external+wrench&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "q2",
+      "url": "https://api.crossref.org/works?query.bibliographic=industrial+force+sensor+end+effector+load+identification+bias+gravity+compensation+tools+robotic+force+control+dynamic+calibration&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works?query.bibliographic=industrial+force+sensor+end+effector+load+identification+bias+gravity+compensation+tools+robotic+force+control+dynamic+calibration&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "bytes": 9659,
+      "sha256": "9d52d852990b4425f42b07a0c1d6893a0fe08e58a2903df32586847818500438",
+      "utc": "2026-11-21T12:05:50.881340+00:00"
+    },
+    {
+      "key": "q3",
+      "url": "https://api.crossref.org/works?query.bibliographic=robot+end+effector+force+observer+inertial+force+compensation+dynamic+force+measurement+wrist+industrial+manipulator+contact+Kalman+external+force&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works?query.bibliographic=robot+end+effector+force+observer+inertial+force+compensation+dynamic+force+measurement+wrist+industrial+manipulator+contact+Kalman+external+force&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "bytes": 10984,
+      "sha256": "1def7f0d5264c329f03bf87ca68990417fff6ebce25893971a770fd2863a5e58",
+      "utc": "2026-11-21T12:05:50.842424+00:00"
+    },
+    {
+      "key": "q4",
+      "url": "https://api.crossref.org/works?query.bibliographic=temperature+compensation+six+axis+force+torque+sensor+iCub+Traversaro+Andrade+Chavez&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works?query.bibliographic=temperature+compensation+six+axis+force+torque+sensor+iCub+Traversaro+Andrade+Chavez&rows=18&select=DOI%2Ctitle%2Cauthor",
+      "bytes": 10909,
+      "sha256": "c451a12d9774932dfa2f08b13e1f1693c4b2e4606e01d31b8b022e9312af8828",
+      "utc": "2026-11-21T12:05:50.806860+00:00"
+    },
+    {
+      "key": "seed-0",
+      "url": "https://api.crossref.org/works/10.3390/s19245521",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "seed-1",
+      "url": "https://api.crossref.org/works/10.1109/tro.2021.3127391",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "seed-2",
+      "url": "https://api.crossref.org/works/10.1109/jsen.2021.3056943",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "seed-3",
+      "url": "https://api.crossref.org/works/10.1109/icra.2015.7139477",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/icra.2015.7139477",
+      "bytes": 3723,
+      "sha256": "7b24611456b5508166a6bc0ab9b772b4257414f1c771f564c1ad87b543082831",
+      "utc": "2026-11-21T12:05:50.829069+00:00"
+    },
+    {
+      "key": "seed-4",
+      "url": "https://api.crossref.org/works/10.1109/case58245.2025.11163796",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "seed-5",
+      "url": "https://api.crossref.org/works/10.1109/humanoids.2016.7803310",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/humanoids.2016.7803310",
+      "bytes": 4726,
+      "sha256": "15a243828ba80bf82d29af041b3aba76fdd41542c4eb1c01ecc17e5d9a4e2b03",
+      "utc": "2026-11-21T12:05:50.885394+00:00"
+    },
+    {
+      "key": "oa-seed-0",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s19245521",
+      "bytes": 23346,
+      "sha256": "514d58de85a0c9382d6278a5ff0c51749a1d9ee314b6c9f5e25d21208eb090c5",
+      "utc": "2026-11-21T12:05:51.196084+00:00"
+    },
+    {
+      "key": "oa-seed-1",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/tro.2021.3127391",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/tro.2021.3127391",
+      "bytes": 20314,
+      "sha256": "f0d0d1a7cd23f1a273a51f9013a912ed8292231e258da149057221190777b5b3",
+      "utc": "2026-11-21T12:05:51.223636+00:00"
+    },
+    {
+      "key": "oa-seed-2",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2021.3056943",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/jsen.2021.3056943",
+      "bytes": 16792,
+      "sha256": "ffec3045c35e546ddffe7132ffedd2c42cfeb162bdba00f2221892c383d04512",
+      "utc": "2026-11-21T12:05:51.205631+00:00"
+    },
+    {
+      "key": "oa-seed-3",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2015.7139477",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2015.7139477",
+      "bytes": 17736,
+      "sha256": "4ca327a0aceb23fc8b326a61145cfdc145488a62ac0b2b332443c289b647820a",
+      "utc": "2026-11-21T12:05:51.224521+00:00"
+    },
+    {
+      "key": "oa-seed-4",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/case58245.2025.11163796",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/case58245.2025.11163796",
+      "bytes": 19442,
+      "sha256": "b3fb6029c9288bd93e8ba7c4c4f71886219f283cea9540f9d9e9c5f68d9eb0f1",
+      "utc": "2026-11-21T12:05:51.206448+00:00"
+    },
+    {
+      "key": "oa-seed-5",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/humanoids.2016.7803310",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/humanoids.2016.7803310",
+      "bytes": 18917,
+      "sha256": "9a40c6232f3e5086396b597f4bcea0184ec88f8d19d78ebaac944256c27c72a5",
+      "utc": "2026-11-21T12:05:51.225348+00:00"
+    },
+    {
+      "key": "acc",
+      "url": "https://arxiv.org/pdf/1410.0885",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1410.0885",
+      "bytes": 2812695,
+      "sha256": "1d4c0fa9efb21643bba26b73030b79cf08109327ccd53f0162739107a2c559f7",
+      "utc": "2026-11-21T12:06:21.934114+00:00"
+    },
+    {
+      "key": "model",
+      "url": "https://arxiv.org/pdf/1610.03305",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1610.03305",
+      "bytes": 4367955,
+      "sha256": "b0603632fc9e10a12e3a1710aa65679082caffbff8c7b998a585e88ece740333",
+      "utc": "2026-11-21T12:06:22.112818+00:00"
+    },
+    {
+      "key": "icub",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6960532/fullTextXML",
+      "error": "The read operation timed out"
+    },
+    {
+      "key": "0refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW618254468%7CW1501589002%7CW1839010761%7CW1966413418%7CW1986621758%7CW1989927461%7CW2030421203%7CW2082786478%7CW2092463101%7CW2106613397%7CW2107523033%7CW2120693140%7CW2125708330%7CW2127763473%7CW2129748948%7CW2130280438%7CW2133319100%7CW2142992961%7CW2166162370%7CW2201087437%7CW2223055204%7CW2271348937%7CW2530825138%7CW2540104143%7CW2540120844%7CW2570779523%7CW2580891082%7CW2726964406%7CW2765971924%7CW2767518630%7CW2784236316%7CW2885002379%7CW2891428573%7CW2902168191%7CW3094287715%7CW3147253688%7CW4300839023%7CW6650575149%7CW6681338125%7CW6930911246&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "0cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW2994672405&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "1refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW55559114%7CW1839010761%7CW1966413418%7CW2030421203%7CW2034883664%7CW2062525513%7CW2067375240%7CW2082786478%7CW2103791399%7CW2106613397%7CW2107523033%7CW2133319100%7CW2165624540%7CW2223055204%7CW2277152661%7CW2326047893%7CW2417520008%7CW2530825138%7CW2533352770%7CW2576221110%7CW2580891082%7CW2726964406%7CW2767518630%7CW2799701748%7CW2811051152%7CW2875160238%7CW2885002379%7CW2889343662%7CW2915117230%7CW2917669556%7CW2958862359%7CW2965157250%7CW2969346182%7CW2994672405%7CW3006146274%7CW3035761554%7CW3091358089%7CW4250310797%7CW6930911246%7CW7099381766&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works?filter=openalex%3AW55559114%7CW1839010761%7CW1966413418%7CW2030421203%7CW2034883664%7CW2062525513%7CW2067375240%7CW2082786478%7CW2103791399%7CW2106613397%7CW2107523033%7CW2133319100%7CW2165624540%7CW2223055204%7CW2277152661%7CW2326047893%7CW2417520008%7CW2530825138%7CW2533352770%7CW2576221110%7CW2580891082%7CW2726964406%7CW2767518630%7CW2799701748%7CW2811051152%7CW2875160238%7CW2885002379%7CW2889343662%7CW2915117230%7CW2917669556%7CW2958862359%7CW2965157250%7CW2969346182%7CW2994672405%7CW3006146274%7CW3035761554%7CW3091358089%7CW4250310797%7CW6930911246%7CW7099381766&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "bytes": 308843,
+      "sha256": "8e5da17bd38064f1719d58357ca7160e1dacdb905706627b43bc545a7f754426",
+      "utc": "2026-11-21T12:06:21.963015+00:00"
+    },
+    {
+      "key": "1cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW4206246826&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW4206246826&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "bytes": 137159,
+      "sha256": "cfb18ec7e81229158ed7714e82fe33fe25688c6d753794a319c07173be1d2e42",
+      "utc": "2026-11-21T12:06:21.804473+00:00"
+    },
+    {
+      "key": "2refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW49589094%7CW1977215980%7CW1977797250%7CW2027995116%7CW2089004860%7CW2121693658%7CW2121899567%7CW2128019145%7CW2147618833%7CW2157702526%7CW2165356344%7CW2460622472%7CW2732475570%7CW2886868932%7CW2900770881%7CW2964935532%7CW3002145954%7CW3003390524%7CW4234115536%7CW4250391287&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "2cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW3128809819&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "3refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW2030421203%7CW2050874913%7CW2067375240%7CW2082786478%7CW2106613397%7CW2107523033%7CW2133319100%7CW2223055204%7CW2726964406&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "3cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW1839010761&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "4refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW618254468%7CW1564897360%7CW1839010761%7CW1937147573%7CW1966837128%7CW2001524797%7CW2026673180%7CW2050708324%7CW2079315820%7CW2082561843%7CW2115749058%7CW2133443903%7CW2153976561%7CW2157702526%7CW2168337660%7CW2474963033%7CW2530825138%7CW2782844941%7CW2886868932%7CW2900770881%7CW3002145954%7CW3003599332%7CW3089931253%7CW3126587741%7CW3128809819%7CW3217246742%7CW4220817829%7CW4306631513%7CW4387319296%7CW4389665456%7CW4393967693%7CW4401387467%7CW4401691913&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "4cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW4414432698&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "5refs",
+      "url": "https://api.openalex.org/works?filter=openalex%3AW1839010761%7CW2030421203%7CW2082786478%7CW2106613397%7CW2107523033%7CW2129748948%7CW2133319100%7CW2138607693%7CW2156102255%7CW2223055204%7CW2301503227%7CW2726964406&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "error": "HTTP Error 429: Too Many Requests"
+    },
+    {
+      "key": "5cites",
+      "url": "https://api.openalex.org/works?filter=cites%3AW2530825138&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works?filter=cites%3AW2530825138&per_page=100&select=id%2Cdoi%2Ctitle%2Cpublication_year%2Cauthorships%2Clocations",
+      "bytes": 85359,
+      "sha256": "acffa1dc4852f3952202fe90b8fb598f1f4bba121647e1562ac17f8caa89aaa1",
+      "utc": "2026-11-21T12:06:21.827878+00:00"
+    },
+    {
+      "key": "pdf-0",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-05521/article_deploy/sensors-19-05521-v2.pdf",
+      "status": 200,
+      "final_url": "https://mdpi-res.com/d_attachment/sensors/sensors-19-05521/article_deploy/sensors-19-05521-v2.pdf",
+      "bytes": 20834013,
+      "sha256": "72841bcf6fed7c8928c9e111d14fce66db7baa1d324c9994fba6df7a0377ccdb",
+      "utc": "2026-11-21T12:08:03.049526+00:00"
+    },
+    {
+      "key": "pdf-4",
+      "url": "https://lirias.kuleuven.be/retrieve/b3e7ed62-95d4-41df-a75e-40b489699f64",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "key": "pdf-7",
+      "url": "https://re.public.polimi.it/retrieve/handle/11311/1100082/406118/sensors-19-03636.pdf",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "key": "pdf-13",
+      "url": "https://arxiv.org/pdf/1812.00650",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1812.00650",
+      "bytes": 825908,
+      "sha256": "1cc0f403d33d3350b818284a067665939f2bcc5f14a446f61c478c88984e410e",
+      "utc": "2026-11-21T12:08:02.523008+00:00"
+    },
+    {
+      "key": "pdf-14",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-00439/article_deploy/sensors-22-00439.pdf",
+      "status": 200,
+      "final_url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-00439/article_deploy/sensors-22-00439.pdf",
+      "bytes": 3055478,
+      "sha256": "db9da58acaf9df3603c0627fb49ffcbccee63071607dccd642c4156ca80f81ad",
+      "utc": "2026-11-21T12:08:02.756431+00:00"
+    },
+    {
+      "key": "pdf-15",
+      "url": "https://arxiv.org/pdf/1709.06902",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1709.06902",
+      "bytes": 2708030,
+      "sha256": "57d852c9a5744318249f3a00551c5504a8bbde4b4a225171c1d3d63e9ead63b8",
+      "utc": "2026-11-21T12:08:02.657279+00:00"
+    },
+    {
+      "key": "pdf-19",
+      "url": "https://arxiv.org/pdf/2502.17528",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/2502.17528",
+      "bytes": 7121025,
+      "sha256": "14ffd2735fe1b8d166743a21f4c09a84c9b936ab8d623df343de213f3a821bfd",
+      "utc": "2026-11-21T12:08:02.662080+00:00"
+    },
+    {
+      "key": "pdf-20",
+      "url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-04809/article_deploy/sensors-22-04809.pdf",
+      "status": 200,
+      "final_url": "https://mdpi-res.com/d_attachment/sensors/sensors-22-04809/article_deploy/sensors-22-04809.pdf",
+      "bytes": 2382186,
+      "sha256": "da47f0ee9a7670264ce9138dd5bd5ccdcd00a763f4a98de297b4b896c9e8750d",
+      "utc": "2026-11-21T12:08:02.734840+00:00"
+    },
+    {
+      "key": "cr-23",
+      "url": "https://api.crossref.org/works/10.1109/iros.2016.7758091",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/iros.2016.7758091",
+      "bytes": 5479,
+      "sha256": "7826c0203f2e5408674c699bb76625802d505ee703892bd9e556e7f4ccc0241d",
+      "utc": "2026-11-21T12:08:23.193856+00:00"
+    },
+    {
+      "key": "oa-23",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/iros.2016.7758091",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/iros.2016.7758091",
+      "bytes": 21711,
+      "sha256": "e16775519af7ba4bb953073f746d2e88d8290468c7ef0da84be6e261bf7d9d37",
+      "utc": "2026-11-21T12:08:23.188684+00:00"
+    },
+    {
+      "key": "cr-24",
+      "url": "https://api.crossref.org/works/10.1109/icra.2017.7989345",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/icra.2017.7989345",
+      "bytes": 5143,
+      "sha256": "a20ff8417894cffd4d2cd026ac8f1765e467770e44ccb1aa829ed3291a582dab",
+      "utc": "2026-11-21T12:08:23.228272+00:00"
+    },
+    {
+      "key": "oa-24",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2017.7989345",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2017.7989345",
+      "bytes": 18268,
+      "sha256": "2646056b9531a4cb5cfc78d4585669d36822e8e8cebc9c398a6fc98ab75627e6",
+      "utc": "2026-11-21T12:08:23.193653+00:00"
+    },
+    {
+      "key": "cr-25",
+      "url": "https://api.crossref.org/works/10.3390/s22207962",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.3390/s22207962",
+      "bytes": 23276,
+      "sha256": "436431f5f0b2597d7ac599150a5dc9b3950de12db190a00cea9c894d40670a6e",
+      "utc": "2026-11-21T12:08:23.274708+00:00"
+    },
+    {
+      "key": "oa-25",
+      "url": "https://api.openalex.org/works/https://doi.org/10.3390/s22207962",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.3390/s22207962",
+      "bytes": 29568,
+      "sha256": "8eb06e77c2b3be10b738724074461d12fb0de311666cc68b7590a122a1145342",
+      "utc": "2026-11-21T12:08:23.254276+00:00"
+    },
+    {
+      "key": "cr-26",
+      "url": "https://api.crossref.org/works/10.1109/icra.2016.7487177",
+      "status": 200,
+      "final_url": "https://api.crossref.org/works/10.1109/icra.2016.7487177",
+      "bytes": 6338,
+      "sha256": "5e5eee590d49c2fb2da7be885974a76a15becc0018d8f2740251d6ee6c0e3562",
+      "utc": "2026-11-21T12:11:59.214668+00:00"
+    },
+    {
+      "key": "oa-26",
+      "url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2016.7487177",
+      "status": 200,
+      "final_url": "https://api.openalex.org/works/https://doi.org/10.1109/icra.2016.7487177",
+      "bytes": 24183,
+      "sha256": "49119bbe7213756f6425ae0c94e5cbf241cd3bbe8b675cdd4f78e49ae15f6b37",
+      "utc": "2026-11-21T12:11:59.336630+00:00"
+    },
+    {
+      "key": "pdf-26",
+      "url": "https://arxiv.org/pdf/1601.04549",
+      "status": 200,
+      "final_url": "https://arxiv.org/pdf/1601.04549",
+      "bytes": 1478509,
+      "sha256": "2c5636e8966915451b26a35931500560bce003959e1cd79df83ffb7b1b28f616",
+      "utc": "2026-11-21T12:11:59.359521+00:00"
+    }
+  ],
+  "limits": "OpenAlex graph coverage and deposited references vary; failed source accesses are recorded. No global exhaustiveness or data release based on article accessibility is claimed."
+}

@@ -1,0 +1,100 @@
+{
+  "checked_utc_date": "2026-11-21",
+  "prepublication_branch_commit": "6df43bf344381b96fb16a9710eba2528fe652637",
+  "stage": "topic-intelligence",
+  "gate": "G1",
+  "identity_queries_for_two_new_releases": {
+    "Skrede static calibration": [
+      "10.5281/zenodo.11078469",
+      "10.5281/zenodo.11078468",
+      "zenodo.org/records/11078469",
+      "Force/Torque Sensor Measurements for Estimating the Mass Center of an Unknown Robot End Effector"
+    ],
+    "iCub upper arm": [
+      "10.5281/zenodo.344894",
+      "zenodo.org/record/344894",
+      "zenodo.org/records/344894",
+      "icubdyn_2.0.mat",
+      "Dataset for: Incremental Semiparametric Inverse Dynamics Learning"
+    ]
+  },
+  "historical_text_files_scanned": 430,
+  "matches_for_new_data_release_keys": {
+    "Skrede static calibration": [],
+    "iCub upper arm": []
+  },
+  "literature_screening_reference": "257c497cf1d756683b8a20dfb0a7c58c29109cfb",
+  "intervening_files_checked": [
+    "projects/my-phd/evidence/dataset-search-log.jsonl",
+    "projects/my-phd/evidence/g1-collection/continuous/README.md",
+    "projects/my-phd/evidence/g1-collection/continuous/data/dataverse-4saz4x-the-effect-of-vibration-cleaned.csv",
+    "projects/my-phd/evidence/g1-collection/continuous/data/dataverse-4saz4x-the-effect-of-vibration-provenance.json",
+    "projects/my-phd/evidence/g1-collection/continuous/data/dataverse-lpnslg-tensile-test-and-finite-cleaned.csv",
+    "projects/my-phd/evidence/g1-collection/continuous/data/dataverse-lpnslg-tensile-test-and-finite-provenance.json",
+    "projects/my-phd/evidence/g1-collection/continuous/data/derive_dataverse_4saz4x_the_effect_of_vibration.py",
+    "projects/my-phd/evidence/g1-collection/continuous/data/derive_dataverse_lpnslg_tensile_test_and_finite.py",
+    "projects/my-phd/evidence/g1-collection/continuous/datasets-new-part-02.csv",
+    "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv",
+    "projects/my-phd/evidence/g1-collection/continuous/queue-state.json",
+    "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv",
+    "projects/my-phd/evidence/g1-collection/continuous/rounds/round-45-audit.json"
+  ],
+  "verified_data_releases": {
+    "new_catalogue_entries": 2,
+    "earlier_catalogue_entries_now_file_verified": 4,
+    "overlap": "Two older copper ring deposits contain the same 300 acquisition trials; MCube example trials are included in the condition table. The Skrede cross-release comparison reuses an earlier calibration file."
+  },
+  "recomputed_tables": {
+    "pushing/push-validation-conditions.csv": {
+      "rows": 341,
+      "sha256": "723fef873efe82f889ea56db085bec8e33563a9dafca76ad48f234028e28bcee"
+    },
+    "pushing/push-validation-examples.csv": {
+      "rows": 341,
+      "sha256": "0890dccd8c0e48ad03169fd84e99cd76af8c1a57acaa84a442acc342562aeea3"
+    },
+    "wheels/wheel-days.csv": {
+      "rows": 6,
+      "sha256": "3e8bce0298e5199f458943b41b0e68770946a9e33eb819553aabfd1d062b248b"
+    },
+    "wheels/wheel-episodes.csv": {
+      "rows": 524,
+      "sha256": "9078554a578bd3fd1df783535d014b9381373173453a22d30cf46a19c01648da"
+    },
+    "calibration/icub-temperature-reference-contrasts.csv": {
+      "rows": 3,
+      "sha256": "950170a24df6d5af84af9a63def577d6f411b0b457eb1d7adfeef1346f60d866"
+    },
+    "calibration/icub-temperature-sessions.csv": {
+      "rows": 13,
+      "sha256": "f34ab26139286ce3a2662b0aecdd16ed9c6c8a1947c281a9e8d1bdbacd989763"
+    },
+    "calibration/static-wrist-deposit-comparison.csv": {
+      "rows": 6,
+      "sha256": "a1aac3a519b2b9d755fd19317e54a0d7a6303dac1b1f686d9866192ea71babc2"
+    },
+    "calibration/static-wrist-fits.csv": {
+      "rows": 7,
+      "sha256": "8d149c189be58464749ecd3fc08e73f81e0f4f0db2eea57fe9d234ee092114c7"
+    },
+    "upper-arm/icub-arm-coverage.csv": {
+      "rows": 12,
+      "sha256": "a2c2bb97670a037409c8086083dd33ac50461c2d34c8cc1af1b07a3a96cd9eda"
+    },
+    "rings/ring-attempts.csv": {
+      "rows": 300,
+      "sha256": "2ca66f3d3c5b714d86fb9aadc094929802712f5fd4255a3cd53d7c016b549151"
+    },
+    "rings/ring-label-crosswalk.csv": {
+      "rows": 56,
+      "sha256": "a06c716db85f7145939b2ffcc5a6baf845705226ac5f5e9130836cf8a10f84e1"
+    }
+  },
+  "wheel_label_audit": {
+    "physically_recorded_episodes": 524,
+    "wrench_sequence_hashes": 524,
+    "stored_labels_known_invalid": 132,
+    "cnn_labelled": 132,
+    "human_labelled": 260
+  }
+}

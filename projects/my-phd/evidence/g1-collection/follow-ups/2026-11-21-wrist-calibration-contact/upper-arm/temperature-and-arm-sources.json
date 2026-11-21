@@ -1,0 +1,97 @@
+{
+  "retrieved_utc_date": "2026-11-21",
+  "arm_dataset": {
+    "title": "Dataset for: \"Incremental Semiparametric Inverse Dynamics Learning\"",
+    "authors": [
+      "Camoriano, Raffaello",
+      "Traversaro, Silvio",
+      "Rosasco, Lorenzo",
+      "Metta, Giorgio",
+      "Nori, Francesco"
+    ],
+    "data_doi": "10.5281/zenodo.344894",
+    "landing": "https://doi.org/10.5281/zenodo.344894",
+    "concept_record": "780199",
+    "version": "Zenodo record 344894, iCubDyn_2.0.mat. API version relation index 0 and is_last true.",
+    "source_api": "https://zenodo.org/api/records/344894?brief=true",
+    "api_sha256": "fab5e82b3f9e7cebcd9bb4eba89647f381a38c6aff751396012d1be07c93b0e9",
+    "data_rights": "CC BY 4.0 in both release metadata and embedded license.txt. Derived channel summaries by G1, 2026-11-21.",
+    "files": {
+      "iCubDyn_2.0.mat": {
+        "size": 1670783,
+        "publisher_md5": "1855f2112733d9f1aea28d39a752baf9",
+        "sha256": "2adb2b232d839e8f678e156bec8bf8887befa2f7342947dba108bc3a60235423",
+        "url": "https://zenodo.org/api/records/344894/files/iCubDyn_2.0.mat/content"
+      },
+      "license.txt": {
+        "size": 13135,
+        "publisher_md5": "bef932701f4aa5f6295ee7ab0f178fa1",
+        "sha256": "767b617e6eaed886c24153a5edb2e48367cf761aac6757ea46ca99d0b931722a",
+        "url": "https://zenodo.org/api/records/344894/files/license.txt/content"
+      },
+      "readme.txt": {
+        "size": 2874,
+        "publisher_md5": "a2b6660ed989d7594377a873853940e5",
+        "sha256": "73b567d594da4bb8a9118492ebdaefa2d3460751d37d3deffa79ce51a4654901",
+        "url": "https://zenodo.org/api/records/344894/files/readme.txt/content"
+      }
+    },
+    "paper": {
+      "doi": "10.1109/ICRA.2016.7487177",
+      "arxiv": "1601.04549",
+      "fulltext": "https://arxiv.org/pdf/1601.04549",
+      "sha256": "2c5636e8966915451b26a35931500560bce003959e1cd79df83ffb7b1b28f616",
+      "locator": "Experimental results, Sec. IV; describes training on XY and evaluating/updating on XZ."
+    },
+    "scope": "10,000 paired kinematics/wrench rows in the training matrices, 10,000 in the test matrices. Four joints in right arm (3 shoulder, 1 elbow), 12 kinematics columns. The upper-arm sensor supplies three forces and three torques in that order. Authors describe 10 cm circular motions in the transverse and sagittal planes. The preload, true mass, independent applied wrench and contact state are not published channels.",
+    "time_and_temperature": "No timestamp or thermometer variable occurs in the MAT. Repository README describes trials at 10 Hz while its preprocessing section describes acquisition of wrench at 20 Hz and joint data at 9 Hz interpolated to 20 Hz; the experimental section reports 10 Hz. Treat the MAT row order and count as directly verified. A per-row time base, clock alignment, or temperature trace cannot be derived from the released arrays alone.",
+    "reproduction": "Requires Python 3, NumPy and SciPy. Download the byte-pinned source_mat using files.iCubDyn_2.0.mat.url and run python derive_icub_arm.py iCubDyn_2.0.mat icub-arm-coverage.csv. Per-axis summaries retain release units. Repeated input pairs refer to all 12 values being identical to the preceding row of the same split; no observations were dropped."
+  },
+  "chamber_experiment": {
+    "title": "A Temperature Compensation Method for aSix-Axis Force/Torque Sensor Utilizing Ensemble hWOA-LSSVM Based on Improved Trimmed Bagging",
+    "authors": [
+      "Xuhao Li",
+      "Lifu Gao",
+      "Huibin Cao",
+      "Yuxiang Sun",
+      "Man Jiang",
+      "Yue Zhang"
+    ],
+    "doi": "10.3390/s22134809",
+    "pmcid": "PMC9268780",
+    "url": "https://www.mdpi.com/1424-8220/22/13/4809",
+    "machine_readable_fulltext": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC9268780/unicode",
+    "fulltext_sha256": "6a854fbe4c431530dcc9cf81793d5b0b7adb0deff01da00147196612c7759cf1",
+    "locator": "Sections 4.1–4.4; Fig. 3; Data Availability Statement.",
+    "evidence_level": "Publisher full text and NCBI BioC XML reviewed. Article in frozen G1 literature.csv, newly detailed field/access audit. No raw files verified for this experiment.",
+    "temperature_setpoints_C": [
+      -30,
+      -20,
+      -10,
+      0,
+      10,
+      20,
+      25,
+      30,
+      35,
+      40,
+      50,
+      60,
+      70
+    ],
+    "conditions": "Six-channel strain-gauge F/T transducer under zero imposed load in a temperature chamber. Test employed two hours per setpoint and about 450 sensor outputs per setpoint. Temperatures are chamber test conditions; the publication does not establish a separate time-resolved thermometer on the sensor. Fig. 3 normalizes the change relative to the 25°C measurement by the axis full scale. Fx reaches a reported 3.3% full scale at −30°C.",
+    "access_and_use": "Data availability section says “Not applicable”. No per-sample public file was identified in the article or this focused search. The counts and test settings are reported numbers. No reconstructed raw series, plot digitization or matched machine data is claimed. Article is CC BY 4.0."
+  },
+  "screening": {
+    "date": "2026-11-21",
+    "queries": [
+      "temperature thermal drift force torque sensor dataset six axis temperature calibration strain gauge open data csv Zenodo",
+      "iCub force torque sensor temperature calibration dataset",
+      "multi-axis force torque sensor thermal drift calibration chamber Mendeley",
+      "force torque sensor temperature Fx Fy Fz Tx Ty Tz Bota sensor sample logs",
+      "six axis sensor temperature Data Availability Li 4809",
+      "Camoriano incremental semiparametric inverse dynamics learning iCubDyn Zenodo"
+    ],
+    "selection": "Public physical data and a direct zero-imposed-load thermal experiment. Primary checks through Zenodo, arXiv, MDPI and NCBI. Driver manuals that describe temperature fields without recorded trials and simulations were excluded. Searches do not establish universal nonavailability. iCub arm and chamber tests are distinct, cannot be synchronized, and have no common sensor ID."
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "releases": [
+    {
+      "record_doi": "10.5281/zenodo.6364950",
+      "concept_doi": "10.5281/zenodo.6364949",
+      "title": "Copper Rings Insertion Attempts Dataset",
+      "authors": [
+        "Simonič, Mihael",
+        "Majcen Horvat, Matevž"
+      ],
+      "publication_date": "2022-03-17",
+      "version_label": "v0.1",
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "metadata_url": "https://zenodo.org/api/records/6364950",
+      "metadata_sha256": "293bb05b06beb7ca7485f8c773a085529ec8c4b9b76b1a7e259ef0db04bdab3a",
+      "filename": "insertion-dataset.zip",
+      "download_url": "https://zenodo.org/api/records/6364950/files/insertion-dataset.zip/content",
+      "bytes": 12140514,
+      "verified_publisher_md5": "61029a290d4512382cd6a11e53def18a",
+      "sha256": "15e5af2cba6ee3fd559ab7c9c66884e3105e59b7dde49c3430df2ae8327b625c",
+      "archive_members": {
+        ".csv": 1200,
+        ".jpg": 300
+      }
+    },
+    {
+      "record_doi": "10.5281/zenodo.7221387",
+      "concept_doi": "10.5281/zenodo.7221386",
+      "title": "Rings Insertion Dataset for Determining Exception Context in Assembly Operations form Multimodal Data",
+      "authors": [
+        "Simonič, Mihael",
+        "Majcen Horvat, Matevž"
+      ],
+      "publication_date": "2022-08-27",
+      "version_label": null,
+      "license": "CC BY 4.0",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "metadata_url": "https://zenodo.org/api/records/7221387",
+      "metadata_sha256": "ea998af833448066fc6fcde1b04917fccf2b37faa058ee4d95368c003caa1a59",
+      "filename": "rings-database.zip",
+      "download_url": "https://zenodo.org/api/records/7221387/files/rings-database.zip/content",
+      "bytes": 95316987,
+      "verified_publisher_md5": "2684f475f3af76ec44e49e1288c59690",
+      "sha256": "dfcc16cf085b2939fae056d5dabfbac3f797c25ba9df4b9c9d3e730d1006bd8b",
+      "archive_members": {
+        ".jpg": 300,
+        ".mat": 300
+      }
+    }
+  ],
+  "checked_utc_date": "2026-11-21",
+  "evidence": "Both versioned archives and all record-level numerical matrices and images compared. The archived images and MAT/CSV inputs are not redistributed. The current files are newly computed facts and metadata, attributed to the dataset creators.",
+  "prior_history": {
+    "branch_commit": "d6c6e456a512dc79c3b63d563734ecf7ec88ef46",
+    "baseline_entries": "2026-11-21/datasets.csv: Copper Rings Insertion Attempts and Rings Insertion exception context",
+    "new_evidence": "Exact record-level deduplication of two known deposits, reconciliation of labels, full time-series and timestamp audit."
+  },
+  "query_log": [
+    "Read both records from the project’s G1 baseline catalog, matched DOI and source title.",
+    "Read both immutable Zenodo records by numeric ID and fetched all published file objects, one per record. Compared bytes and digest against each official manifest.",
+    "Queried Europe PMC with DOI:10.3390/s22207962 and inspected its full-text XML at the URL below, especially §§3.1 and 3.3."
+  ],
+  "paper": {
+    "doi": "10.3390/s22207962",
+    "full_text_xml": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC9610822/fullTextXML",
+    "retrieved_xml_sha256": "18ce0fdb73ffc958bde18fbf0dfa66d2fda9180951511125eb2b5f8457b8edc1",
+    "locator": "§§3.1, 3.3. The copper ring uses a wrist-mounted ATI Nano25. The ATI Delta mounted below the plate belongs to the paper’s separate Cranfield peg experiment. Each copper-ring attempt has an outcome snapshot and a force/torque time series."
+  },
+  "method": {
+    "identity": "Pair by the source attempt identifier in the JPG filenames, which includes slot, scenario, trial and acquisition date-time. Compare actual image bytes and compute image SHA-256. Paths may change while the contained filename remains identical. Index and labels are reported as archive strings.",
+    "numeric_cross_check": "At all corresponding rows compare early ft, ft_tool, x, x_ref CSV matrices against late states.ATIFT, ATIFTS, x, x_ref. Allow half one unit at the fifth significant decimal digit for each scalar (plus 2e-7 of that unit as numerical margin). Per-run peaks use higher-precision ATIFT. Six raw channels ordered Fx,Fy,Fz,Tx,Ty,Tz.",
+    "time": "Use states.t separately for each sequence. The early 4 matrices are headerless and contain no separate sample time column. Preserve all rows, including ties; no common fixed sample period was assumed.",
+    "classes": "The earlier directory 0 indicates no commanded target displacement. Later label bad is among those same zero-displacement attempts. Archive summary calls this category other unidentified error; the paper discusses failed attempts with deformed rings. No per-sample failure mechanism was assigned. Nonzero x/y labels encode a prescribed millimetre target shift."
+  },
+  "limitations": [
+    "A raw and a tool-frame wrench are derived from the same ATI sensor. The documented archive supplies no independent six-axis force reference, per-sample contact annotation, or sensor-zero/temperature truth. Peak norms are recorded load magnitudes and include sensor/load effects.",
+    "The late MAT also carries robot channels such as FT and trqExt. These were not validated as independent contact-force metrology; numeric parity with early raw wrist values specifically identifies ATIFT.",
+    "Evidence pertains to supplied files, not the number of independent robots or parts. Split train/test by attempt at minimum; both archives contain the same attempts."
+  ],
+  "reproduce": "Python 3.9+ with NumPy/SciPy. Retain archive filenames from releases. Run python derive_ring_attempts.py /path/to/archives /path/to/output. The script verifies archive SHA-256 and CRC, image equality, all four matrix pairs and writes two CSVs."
+}

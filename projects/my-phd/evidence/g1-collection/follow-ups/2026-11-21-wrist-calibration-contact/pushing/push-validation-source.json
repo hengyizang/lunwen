@@ -1,0 +1,138 @@
+{
+  "dataset": "MIT MCube planar pushing, repeated experiments for validating probabilistic planar-pushing models",
+  "data_creators": "Maria Bauza and Alberto Rodriguez, MIT MCube Lab (2017 validation release); instrumentation and 2016 dataset described by Kuan-Ting (Peter) Yu, Maria Bauza, Nima Fazeli and Alberto Rodriguez.",
+  "checked_utc_date": "2026-11-21",
+  "version": "Publisher-hosted rect1_json.zip without a formal version; archive and author exclusion-list hashes fix the inspected release.",
+  "data_access": "Author website directly links to Dropbox. The Dropbox user-content URLs below serve the exact bytes. No upstream hash was found on the dataset page. Python zipfile checked member CRCs when reading each selected JSON.",
+  "rights": "Original MIT webpage provides public download and citation information; no explicit licence for distributing the original measurements was found. The Creative Commons notice in an HTML comment credits the webpage template. This package distributes independent aggregate results, a small per-trial statistical cross-check per condition, and an original analysis script.",
+  "historical_match": {
+    "branch_head": "d6c6e456a512dc79c3b63d563734ecf7ec88ef46",
+    "file": "g1-collection/2026-11-21/datasets.csv",
+    "label": "MIT MCube planar pushing",
+    "upgrade": "The original catalogue provided an access lead. This follow-up parses the complete side-0 validation grid, verifies the author exclusion list, and reports observed data and timestamp faults."
+  },
+  "query_log": [
+    {
+      "query": "MIT MCube planar pushing, planar pushing, MIT surface/contact position/angle; canonical URL and title",
+      "source": "existing G1 datasets and literature, follow-ups and continuous data shards through round 43",
+      "result": "Existing data-source entry; this is a file-level evidence upgrade."
+    },
+    {
+      "query": "Validation dataset for modeling [2], rect1_json.zip, unreliable_files.txt",
+      "source": "https://mcube.mit.edu/push-dataset/index.html",
+      "result": "Resolved official archive and exclusion file. Verified all 35,130 member filenames. Selected the paper-defined side-0 grid and removed 11 trials flagged by the authors."
+    },
+    {
+      "query": "source and validation paper titles, Crossref title search and direct DOI; arXiv version query",
+      "source": [
+        "https://export.arxiv.org/api/query?id_list=1604.04038",
+        "https://export.arxiv.org/api/query?id_list=1704.03033",
+        "https://api.crossref.org/works/10.1109/IROS.2016.7758091",
+        "https://api.crossref.org/works/10.1109/ICRA.2017.7989345"
+      ],
+      "result": "Checked author lists and DOI aliases and retrieved both v2 full texts. Bauza and Rodriguez explicitly cite Yu et al. in ref. [2]."
+    },
+    {
+      "query": "ft_wrench; object_pose; setZero; resample",
+      "source": "peterkty/pnpush and mcubelab/pdproc Git trees linked by MIT",
+      "result": "Checked extraction of robot-base planar wrench and the collection code zeroing call before its recorder starts. Inspected author resampling description."
+    }
+  ],
+  "inputs": [
+    {
+      "name": "rect1_json.zip",
+      "url": "https://dl.dropboxusercontent.com/s/5h3dsjorbrpmjqh/rect1_json.zip",
+      "bytes": 638698291,
+      "sha256": "c68b7a1739cf433cc385fe09bdf60f4a4d85b440eb1131e11ecf3c64713005a7",
+      "landing": "https://www.dropbox.com/s/5h3dsjorbrpmjqh/rect1_json.zip?dl=0"
+    },
+    {
+      "name": "unreliable.txt",
+      "url": "https://dl.dropboxusercontent.com/s/buolrd3y9v3x31l/unreliable_files.txt",
+      "bytes": 906,
+      "sha256": "b271a915b4e9ec0d43c4a07683ec8a70a67f77841b39f193190b50fc3149a0f8",
+      "landing": "https://www.dropbox.com/s/buolrd3y9v3x31l/unreliable_files.txt?dl=0"
+    }
+  ],
+  "documentation": [
+    {
+      "name": "index.html",
+      "url": "https://mcube.mit.edu/push-dataset/index.html",
+      "bytes": 15516,
+      "sha256": "9f80b0caffdf3ccf67571ee8bae9ec0f0d835b79463ca7bc2fc922e8811cdbcc"
+    },
+    {
+      "name": "source.pdf",
+      "url": "https://arxiv.org/pdf/1604.04038v2",
+      "bytes": 3916215,
+      "sha256": "b4a40cebf5cbcf95aef082938247a07e94c5c30064db7882147287ed99111882",
+      "doi": "10.1109/iros.2016.7758091",
+      "title": "More than a million ways to be pushed. A high-fidelity experimental dataset of planar pushing",
+      "locator": "The Experimental Setup, force and motion sensing, Fig. 1"
+    },
+    {
+      "name": "model.pdf",
+      "url": "https://arxiv.org/pdf/1704.03033v2",
+      "bytes": 4988182,
+      "sha256": "f331c0c7ffce53b542b6c1cee7471c0a9cb9ed2657754c856cc3e1906c9b0a02",
+      "doi": "10.1109/icra.2017.7989345",
+      "title": "A probabilistic data-driven model for planar pushing",
+      "locator": "The Data, validation dataset; Figure 2; reference [2]"
+    },
+    {
+      "name": "parse_bagfile_to_rawjson.py",
+      "url": "https://github.com/peterkty/pnpush/blob/c8352f5fe9a4f03aa07bf3753e04ca7898df6e1f/catkin_ws/src/pnpush_planning/src/analyze/parse_bagfile_to_rawjson.py",
+      "bytes": 5666,
+      "sha256": "617d8d9fd5f6c23035950712383af916bd1f2049c26b4a7c026d6db57d08692b",
+      "locator": "lines 26–29 and 98–133"
+    },
+    {
+      "name": "collect_push_dataset.py",
+      "url": "https://github.com/peterkty/pnpush/blob/c8352f5fe9a4f03aa07bf3753e04ca7898df6e1f/catkin_ws/src/pnpush_planning/src/collect_push_dataset.py",
+      "bytes": 15557,
+      "sha256": "00c151e77ee72d7f36d9444a10c0bce919072c45f9c0759b14aaab049fd344d8",
+      "locator": "lines 315–337"
+    },
+    {
+      "name": "pdproc-preprocess.py",
+      "url": "https://github.com/mcubelab/pdproc/blob/b187315443eb269c95d2b1d6ce9e1ef047facf1b/scripts/preprocess.py",
+      "bytes": 27068,
+      "sha256": "fb8ec8290915f507e228b6db20fcf2b18e59a540a35a058860386b67d5d34944"
+    }
+  ],
+  "scope": {
+    "archive_json_members": 35130,
+    "side_0_validation_grid": 34100,
+    "excluded_outside_documented_grid": {
+      "side_1": 630,
+      "side_2": 200,
+      "side_3": 200
+    },
+    "publisher_flagged_on_side_0": 11,
+    "retained_trials": 34089,
+    "conditions": 341,
+    "grid": "One square (rect1) on plywood. Side 0. Eleven nominal contact positions along the side × 31 angles from -1.5 to +1.5 rad in 0.1-rad increments × 100 repeats before exclusions. Nominal straight travel 1 cm at 20 mm/s."
+  },
+  "schema": "All retained JSONs contain three finite four-column arrays. ft_wrench = time [s], Fx [N], Fy [N], Mz [N·m]. tip_pose and object_pose = time [s], x [m], y [m], yaw [rad] in the robot frame. The actual key is object_pose; the website labels it obj_pose. The source paper describes an ATI Gamma on link 6, an ABB arm and Vicon object tracking. The converter projects and sign-adjusts the F/T channels. No Fz/Mx/My channels are present.",
+  "time_and_inference": "The streams retain their own timestamps. No signal was interpolated. Timestamp reversals count adjacent rows with a decreasing time in stored order, including movements across different object-pose messages; the counts do not establish the cause. Displacements join each stream’s earliest and latest timestamps. The shared extent intersects only timestamp ranges and does not establish sample synchrony. Parameters named contact point and angle are trial settings; the data do not mark per-sample contact onset or independently measured force at the interface. The related collection script calls a zero service before rosbag recording. These JSONs have no per-run bias vector, tare confirmation, temperature trace, known-zero labels or independent wrench reference.",
+  "computed": {
+    "wrench_rows": 8281711,
+    "tip_pose_rows": 8217964,
+    "object_pose_rows": 8348646,
+    "adjacent_time_reversals": {
+      "wrench": 0,
+      "tip_pose": 0,
+      "object_pose": 17809
+    },
+    "equal_adjacent_timestamps": {
+      "wrench": 0,
+      "tip_pose": 0,
+      "object_pose": 6
+    }
+  },
+  "reproduction": "Python 3 standard library. Download inputs to local paths then run python derive_push_validation.py rect1_json.zip unreliable.txt OUTPUT_DIR. Both hashes are checked, and count/time summaries use all eligible records. Each example is the lowest surviving repeat index in the corresponding cell. Compare both generated CSVs to the published outputs. A second full derivation matched them byte for byte.",
+  "derived_sha256": {
+    "push-validation-conditions.csv": "723fef873efe82f889ea56db085bec8e33563a9dafca76ad48f234028e28bcee",
+    "push-validation-examples.csv": "0890dccd8c0e48ad03169fd84e99cd76af8c1a57acaa84a442acc342562aeea3"
+  }
+}

@@ -1,0 +1,7 @@
+meas_id,label_source_or_status,episodes,released_true,released_false,sensor_rows,consecutive_identical_six_axis_rows
+1,vision_CNN,100,18,82,100725,41336
+2,vision_CNN,32,2,30,32232,13772
+3,invalid_day,16,1,15,16116,7012
+4,invalid_day,116,29,87,116841,51611
+5,human,60,30,30,60435,26431
+6,human,200,57,143,201450,87489

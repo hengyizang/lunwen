@@ -1,0 +1,14 @@
+role,condition,study_day,start_C,end_C,delta_C
+validation,Balancing Support Leg,1,38.0,38.2,0.2
+validation,Balancing No Support Leg,1,38.3,38.4,0.1
+validation,Grid,2,27.3,27.7,0.4
+validation,Z-Torque,2,27.7,27.8,0.1
+validation,Balancing Support Leg,2,34.7,34.8,0.1
+calibration,Grid,3,28.8,29.7,0.9
+calibration,Grid_2,3,42.2,41.9,-0.3
+calibration,Z-Torque,3,29.7,29.8,0.1
+calibration,Z-Torque_2,3,41.9,41.8,-0.1
+calibration,Balancing Support leg Left,3,30.8,31.0,0.2
+calibration,Balancing Support leg Left_2,3,41.8,41.8,0.0
+calibration,Balancing No Support leg Left,3,31.4,31.6,0.2
+calibration,Balancing No Support leg Left_2,3,41.9,41.8,-0.1

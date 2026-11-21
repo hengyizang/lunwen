@@ -1,0 +1,41 @@
+{
+  "title": "Six-Axis Force Torque Sensor Model-Based In Situ Calibration Method and Its Impact in Floating-Based Robot Dynamic Performance",
+  "authors": [
+    "Francisco Javier Andrade Chavez",
+    "Silvio Traversaro",
+    "Daniele Pucci"
+  ],
+  "article_doi": "10.3390/s19245521",
+  "publication_date": "2019-12-13",
+  "retrieved_utc_date": "2026-11-21",
+  "license": {
+    "id": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/",
+    "scope": "Open-access published article. Condition/temperature endpoint table reformatted; end minus start and between-method differences calculated for this collection."
+  },
+  "source": {
+    "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC6960532/fullTextXML",
+    "full_text": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6960532/",
+    "input_name": "chavez.xml",
+    "bytes": 316204,
+    "sha256": "a6d07083c0c3753b8c91e2489df161d4b545624730bd6af012e63bea19f9c665",
+    "locator": "Sections 2.3, 2.5, 4 and 5. Tables 2, 3 and 5. Supplementary Materials."
+  },
+  "evidence": "Previously catalogued article, new table-level factual extraction. Source is published endpoint and calibration summaries. No per-sample force/temperature or assembly-contact trace was obtained from this source.",
+  "sample": "Calibration sensor is near the hip of the left leg of a floating-base iCub. This study reports temperature sensing only on the legs and feet. Table 2 has five validation sets on two days and eight calibration sets on a separate day; the endpoints are not per-axis time series or sample counts. Grid support at waist and balancing support-leg contact at foot are protocol descriptions, not direct wrist measurements.",
+  "contrasts": "For each of three estimator families, the CSV subtracts the uncentered-temperature estimate (wTdTO) from the estimate using first temperature value as reference (wTrTO). Published six-axis Table 5 offsets and Table 3 same-calibration-set MSE provide source quantities. Fit equality is at printed precision. Three summaries of parameterizations must not be counted as independent physical data. These are estimated offsets, not independently measured instrument bias.",
+  "query_log": [
+    {
+      "query": "iCub force torque sensor temperature compensation calibration, Andrade, raw dataset",
+      "provider": "public web and Europe PMC",
+      "result": "Paper and explicit supplementary-material description Video S1; raw temperature time series not established."
+    },
+    {
+      "query": "calibration user:robotology-playground (GitHub API), inspect recursive tree for insitu-ft-calibration",
+      "provider": "GitHub",
+      "result": "https://github.com/robotology-playground/insitu-ft-calibration/tree/5ba3c92c3b001b8dce7738dccf55c6bca3d2bf5e",
+      "outcome": "The inspected pinned tree contains library code and unit tests. No experimental measurement file found. No raw iCub data release is counted."
+    }
+  ],
+  "reproduction": "Fetch the article XML from source.url into chavez.xml. With the Python 3 standard library run python derive_icub_temperature.py chavez.xml OUTPUT_DIR. The script validates the exact XML bytes and uses Decimal for printed-precision subtraction. Outputs: icub-temperature-sessions.csv and icub-temperature-reference-contrasts.csv."
+}

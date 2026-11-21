@@ -1,0 +1,56 @@
+{
+  "title": "Labeled Time Series Data of Force/Torque for Monitoring Assembly Processes with a Delta Robot",
+  "authors": [
+    "Martin Macas",
+    "Ales Trna",
+    "Vojtech Hanzlik"
+  ],
+  "record_doi": "10.5281/zenodo.13641620",
+  "concept_doi": "10.5281/zenodo.13641619",
+  "version": "1.0.0",
+  "released": "2024-09-03",
+  "accessed_utc": "2026-11-21",
+  "source": "https://doi.org/10.5281/zenodo.13641620",
+  "rights": "CC BY 4.0. Derived statistics by G1 on the data by Macas, Trna and Hanzlik. Source metadata and two author theses checked; no video or thesis text redistributed.",
+  "rights_url": "https://creativecommons.org/licenses/by/4.0/",
+  "query_history": [
+    {
+      "query": "Delta robot force/torque assembly time series",
+      "source": "historical 2026-11-21/datasets.csv",
+      "result": "Known catalogue entry, upgraded to all wheel-assembly records."
+    },
+    {
+      "query": "record 13641620 v1.0.0, verify ForceTorqueTimeSeries.csv and the two linked subject theses from files API",
+      "url": "https://zenodo.org/api/records/13641620",
+      "metadata_sha256": "b38fdc009cf897d22995b451e125b512d33484d847bd1482ebd20096f0260f58"
+    }
+  ],
+  "checked_files": [
+    {
+      "name": "F3-BP-2024-Trna-Ales-Ales Trna - 2024 - Anomaly detection in robotic assembly process using force and torque sensors.pdf",
+      "url": "https://zenodo.org/api/records/13641620/files/F3-BP-2024-Trna-Ales-Ales%20Trna%20-%202024%20-%20Anomaly%20detection%20in%20robotic%20assembly%20process%20using%20force%20and%20torque%20sensors.pdf/content",
+      "bytes": 15530925,
+      "publisher_md5": "md5:49ad730b368cfea8fa34faaf27074a6e",
+      "sha256": "56c32fa49849757249e446de23670f4c692ae4219982b7a5c73795ea074b9a28"
+    },
+    {
+      "name": "F3-BP-2024-Hanzlik-Vojtech-Anomaly_Detection_Bachelors_Thesis.pdf",
+      "url": "https://zenodo.org/api/records/13641620/files/F3-BP-2024-Hanzlik-Vojtech-Anomaly_Detection_Bachelors_Thesis.pdf/content",
+      "bytes": 1153408,
+      "publisher_md5": "md5:be781c4d1c9fa30ef261e55c9719a87e",
+      "sha256": "8a9585ced082ab78b0c5d304bcf767447884c68a2103e52cdfcc62e4ec5133bb"
+    },
+    {
+      "name": "ForceTorqueTimeSeries.csv",
+      "url": "https://zenodo.org/api/records/13641620/files/ForceTorqueTimeSeries.csv/content",
+      "bytes": 64982239,
+      "publisher_md5": "md5:4d3fc96dd31f8e15c8ceaac6e6f0e838",
+      "sha256": "9059ab6729aaadfb21b462fbc69d5bf0587b2f35fdefbfe8cedf4e1d630433a1"
+    }
+  ],
+  "locators": "Trna, ch. 2 §§2.1–2.3.3, table 2.1 and fig. 2.7, discusses six-axis end-effector SCHUNK Mini58, wheel segmentation, label origin, worn tires and a poorly assembled wheel that a top view misses. See §5.4 for camera predictions versus manual outcomes. Both theses are linked in the record.",
+  "cleaning": "Preserve ordered source rows. One idx is one wheel operation; published groups of four wheels share a pallet. No pallet ID is in this CSV. Counts are episodes, not necessarily independent experiments. Static label and meas_id checked within each contiguous idx. Label strings are reproduced exactly as deposited (record defines True as product OK). Invalid labels on days 3 and 4 retained as provenance only. For days 1 and 2 stored labels come from computer vision; days 5 and 6 are human-labelled. No per-sample contact or bias field.",
+  "time_and_units": "No measured individual timestamps. A nominal 0.004 s interval is documented; span is (n–1) times that value. Summaries retain unconverted source channel values; the CSV lacks explicit units for these columns. Consecutive identical six-axis vectors count only within an episode. They are retained in all statistics and do not prove distinct force updates or dropped frames.",
+  "hash_convention": "For within-release exact-episode comparisons, hash each ordered six-channel row encoded as six network-order IEEE 754 binary64 values. Filename SHA-256 and publisher MD5 refer to the original bytes.",
+  "recompute": "Python 3 standard library: python derive_wheels.py ForceTorqueTimeSeries.csv OUTPUT_DIRECTORY"
+}

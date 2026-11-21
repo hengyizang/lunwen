@@ -1,0 +1,4 @@
+family,from,to,delta_Fx_N,delta_Fy_N,delta_Fz_N,delta_Tx_Nm,delta_Ty_Nm,delta_Tz_Nm,delta_MSE_Fx_N2,delta_MSE_Fy_N2,delta_MSE_Fz_N2,delta_MSE_Tx_Nm2,delta_MSE_Ty_Nm2,delta_MSE_Tz_Nm2
+sphere,SwTdTO,SwTrTO,-1.2269,0.6868,-7.4178,0.0187,0.1222,0.0148,2.6785,-0.0669,-36.0444,-0.0001,0.0042,0.0000
+centralized,CwTdTO,CwTrTO,-2.5953,-2.4266,38.3214,-0.2403,-0.1415,-0.0301,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
+one_shot,OwTdTO,OwTrTO,-2.5953,-2.4266,38.3214,-0.2403,-0.1415,-0.0301,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000
