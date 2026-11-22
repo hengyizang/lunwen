@@ -1,0 +1,36 @@
+motor,group,field,interpretation,unit,n,minimum,maximum
+MD300,id_1,at32_live_max_current_mA,per-run configuration,mA,163,1500,1500
+MD300,id_1,at32_max_pwm_duty_cycle,per-run configuration,fraction,163,0.99000001,0.99000001
+MD300,id_1,cur_cap_ma,per-run configuration,mA,163,1500,1500
+MD300,id_1,duty_cycle,recorder reconstruction,fraction,177254,-1,1
+MD300,id_1,load,supply-side current readback,mA,177254,-1544,1465
+MD300,id_2,at32_live_max_current_mA,per-run configuration,mA,168,1500,1500
+MD300,id_2,at32_max_pwm_duty_cycle,per-run configuration,fraction,168,0.99000001,0.99000001
+MD300,id_2,cur_cap_ma,per-run configuration,mA,168,1500,1500
+MD300,id_2,duty_cycle,recorder reconstruction,fraction,194673,-1,1
+MD300,id_2,load,supply-side current readback,mA,194673,-1248,1323
+MD300,id_3,at32_live_max_current_mA,per-run configuration,mA,158,1500,1500
+MD300,id_3,at32_max_pwm_duty_cycle,per-run configuration,fraction,158,0.99000001,0.99000001
+MD300,id_3,cur_cap_ma,per-run configuration,mA,158,1500,1500
+MD300,id_3,duty_cycle,recorder reconstruction,fraction,184302,-1,1
+MD300,id_3,load,supply-side current readback,mA,184302,-1447,1521
+J288,train,goal_torque,feedforward command,Nm,650148,-0.3,0.3
+J288,train,torque,current-derived reply,Nm,650148,-1.0295136,1.0137442
+J288,validation,goal_torque,feedforward command,Nm,41681,-0.15,0.15
+J288,validation,torque,current-derived reply,Nm,41681,-0.57332867,0.63640609
+HLS2915,lift_and_drop,control,calculated signed voltage,V,6342,-2.952,0.264
+HLS2915,lift_and_drop,control_reconstruction_abs_diff,abs(control + input_volts * load / 100),V,6342,0,0
+HLS2915,lift_and_drop,measured_current,onboard current readback,A,6342,-0.032949,0.296541
+HLS2915,sin_sin,control,calculated signed voltage,V,19009,-4.6172,4.7838
+HLS2915,sin_sin,control_reconstruction_abs_diff,abs(control + input_volts * load / 100),V,19009,0,0
+HLS2915,sin_sin,measured_current,onboard current readback,A,19009,-0.338904,0.334197
+HLS2915,sin_time_square,control,calculated signed voltage,V,19015,-12,11.6382
+HLS2915,sin_time_square,control_reconstruction_abs_diff,abs(control + input_volts * load / 100),V,19015,0,0
+HLS2915,sin_time_square,measured_current,onboard current readback,A,19015,-0.478545,0.563271
+HLS2915,up_and_down,control,calculated signed voltage,V,18992,-0.312,2.7846
+HLS2915,up_and_down,control_reconstruction_abs_diff,abs(control + input_volts * load / 100),V,18992,0,0
+HLS2915,up_and_down,measured_current,onboard current readback,A,18992,-0.225936,0.095709
+STS3215-12V,lift_and_drop,load,recorded load field,raw,10632,0,0
+STS3215-12V,sin_sin,load,recorded load field,raw,32011,0,0
+STS3215-12V,sin_time_square,load,recorded load field,raw,33338,0,0
+STS3215-12V,up_and_down,load,recorded load field,raw,31790,0,0

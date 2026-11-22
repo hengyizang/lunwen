@@ -1,0 +1,4 @@
+figure6_curve,plotted_cdf_vertices,p1_ms,p50_ms,p90_ms,p95_ms,p99_ms,p100_ms,mean_plotted_vertices_ms
+model_update_feedback,100,4.524,6.709,7.777,8.11,8.726,8.755,6.78
+robot_object_interaction,100,3.552,4.625,5.329,5.628,5.805,5.98,4.664
+predictive_force_feedback,100,6.25,6.25,6.25,6.25,6.25,6.25,6.25

@@ -1,0 +1,5 @@
+paper,sheet,independent_variable,unit,rows,min_value,max_value
+Yu et al.,Fig 3b,temperature difference,K,5,3.3,35.16
+Yu et al.,Fig 3d,pressure,kPa,10,0,24.21176
+robot housekeeping,Figure 2c,normal load (sheet label Pressure(N)),N,29,0,19.12
+robot housekeeping,Figure 2e,temperature,degC,8,33.91352,53.7987

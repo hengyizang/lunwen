@@ -1,0 +1,2 @@
+member,sha256,n,start_s,end_s,median_dt_s,min_current_percent,max_current_percent,max_reported_Nm,max_abs_difference_Nm_from_pct_times_0_32,first_final_zero_rpm_s,final_zero_rpm_samples,final_position_mm
+pressing/pressing_data_0_60s.csv,c3264ffea8444392770a919837d902a1d8969f8bf6d07676c784b74ee66f0f15,301,0.001,59.802,0.2,0.6,100.4,32.128,0.0,43.001,86,3.556333

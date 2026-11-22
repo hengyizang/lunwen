@@ -1,0 +1,13 @@
+file,pair_rule,source_triggers,mic_boxes,positive_one_to_one_pairs,retained,mean_sample_steps,median_sample_steps,p95_sample_steps,max_sample_steps
+ET_computer_to_motor_external.vmrk,all_one_to_one,300,157,155,155,50.51,4.0,36.0,2768.0
+ET_computer_to_motor_external.vmrk,positive_up_to_100,300,157,155,150,8.48,3.0,29.0,68.0
+ET_computer_to_motor_external.vmrk,positive_up_to_100_drop_last_sensitivity,300,157,155,149,8.517,3.0,29.0,68.0
+ET_computer_to_motor_internal.vmrk,all_one_to_one,291,235,169,169,581.059,27.0,4538.2,14966.0
+ET_computer_to_motor_internal.vmrk,positive_up_to_100,291,235,169,129,24.767,19.0,71.6,86.0
+ET_computer_to_motor_internal_2.vmrk,all_one_to_one,242,125,125,125,27.272,3.0,30.8,653.0
+ET_computer_to_motor_internal_2.vmrk,positive_up_to_100,242,125,125,121,10.421,3.0,28.0,82.0
+ET_manual_validation.vmrk,all_one_to_one,146,205,144,144,84.549,22.0,48.85,8960.0
+ET_manual_validation.vmrk,positive_up_to_100,146,205,144,143,22.483,22.0,47.8,93.0
+ET_manual_validation_external_motor.vmrk,all_one_to_one,186,200,185,185,12.784,8.0,29.0,30.0
+ET_manual_validation_external_motor.vmrk,positive_up_to_100,186,200,185,185,12.784,8.0,29.0,30.0
+ET_manual_validation_external_motor.vmrk,positive_up_to_100_drop_last_sensitivity,186,200,185,184,12.81,8.0,29.0,30.0

@@ -1,0 +1,11 @@
+from_id,to_id,relation,locator,url
+10.3390/jmse10121898,10.1016/j.ifacol.2019.11.037,cites and reuses static force fit,§4.1 eq. 18; ref. 4,https://doi.org/10.3390/jmse10121898
+10.3390/jmse10121898,mathworks:fileexchange:65919,cites dynamic identification files,§4.1 eq. 19; ref. 32,https://doi.org/10.3390/jmse10121898
+10.3390/app15137085,10.1109/oceanslimerick52467.2023.10244513,cites individual-thruster characterization,§4.2.1 and ref. 46,https://doi.org/10.3390/app15137085
+10.3390/data5030057,10.7488/ds/2835,describes measurement release,"Data records, references 3–4",https://doi.org/10.3390/data5030057
+10.3390/data5030057,10.1016/j.oceaneng.2021.109279,names companion analysis (then submitted),Reference 3; matched authors and final publication title at Crossref,https://doi.org/10.3390/data5030057
+10.1016/j.oceaneng.2021.109279,10.7488/ds/2835,data provider records work as citing release,DataCite relatedIdentifiers with IsCitedBy for article DOI,https://api.datacite.org/dois/10.7488/ds/2835
+10.1038/s41597-025-06347-0,10.5281/zenodo.15976877,describes released sensor files,Data Records and Zenodo release family,https://doi.org/10.1038/s41597-025-06347-0
+10.1016/j.ifacol.2019.12.316,10.1109/oceans.1998.724397,cites,Crossref reference 6,https://api.crossref.org/works/10.1016/j.ifacol.2019.12.316
+10.1016/j.ifacol.2019.12.316,10.1109/48.468242,cites,Crossref reference 8,https://api.crossref.org/works/10.1016/j.ifacol.2019.12.316
+10.1016/j.ifacol.2019.12.316,10.1007/s10846-011-9625-x,cites,Crossref reference 9,https://api.crossref.org/works/10.1016/j.ifacol.2019.12.316

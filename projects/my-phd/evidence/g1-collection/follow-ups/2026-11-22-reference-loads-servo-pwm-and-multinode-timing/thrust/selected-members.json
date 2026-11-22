@@ -1,0 +1,402 @@
+[
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot09_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "b111c0393c5b5f8ea4fb76b4e2707cbf6a7c4d09e7147049701468ac700d5099",
+    "header_offset": 33270277,
+    "compressed_bytes": 1089094,
+    "compression": 8,
+    "crc32": "60a45ec5"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot10_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "3dd288b98e6afbb8b5ee3b72769ddbe65590c235bff8addf431f75da42f2f12b",
+    "header_offset": 34359483,
+    "compressed_bytes": 1041352,
+    "compression": 8,
+    "crc32": "fe139366"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot16_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "2bd72c37fee32b805fd067d7cb1a54868988da1a4e47f959768e161f1f281e36",
+    "header_offset": 81360987,
+    "compressed_bytes": 1360031,
+    "compression": 8,
+    "crc32": "618561e0"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot06_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "c45ef7bb645ec811e6a2f355abef07c7052349abd4a5b0a7450a57a859257999",
+    "header_offset": 95428851,
+    "compressed_bytes": 1056190,
+    "compression": 8,
+    "crc32": "274e4f7a"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot01_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "a6a44f1fad4c4875b62f74fcaa5ead79ddbbd7d866463c06f70bf12a8fe9176d",
+    "header_offset": 104080497,
+    "compressed_bytes": 943822,
+    "compression": 8,
+    "crc32": "f091768c"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot11_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "f59a624b1ba4b8c1d15bb54b99d88a0bd5228db1966838ff079962009dabac17",
+    "header_offset": 122049861,
+    "compressed_bytes": 1340426,
+    "compression": 8,
+    "crc32": "4d66346a"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot08_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "eef2f6bbce1424b42a2b46ce30b58eda6c65141fea111dfddd84b4859d8fe75c",
+    "header_offset": 137273897,
+    "compressed_bytes": 1367952,
+    "compression": 8,
+    "crc32": "4da61623"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot18_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "679e2c860c0b4e49e8223a005c025a85b6f6e473ac04782b2ff23bd43cc68b33",
+    "header_offset": 159598933,
+    "compressed_bytes": 955505,
+    "compression": 8,
+    "crc32": "1d51d214"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot07_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "bacab05688208037d4fae73560ccaddc6450f54e93f72e79a26a8192741b75e2",
+    "header_offset": 171167817,
+    "compressed_bytes": 1304335,
+    "compression": 8,
+    "crc32": "7b881b73"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot17_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "bf3f20616ded406d9390c90ec3dd04ef9927eccc0a26ac7146eb33c6be9a1fe8",
+    "header_offset": 178100773,
+    "compressed_bytes": 1055258,
+    "compression": 8,
+    "crc32": "96e7a1cc"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot10_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "60a0c4bc58ee12667bb9181d09be2f3ec0d420bb633ddad192692b8b8b47b4a5",
+    "header_offset": 224276612,
+    "compressed_bytes": 1337532,
+    "compression": 8,
+    "crc32": "47f4a271"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot09_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "a45c5bd89303d847ed7d592a177deccc0b9af57a11c4cd21ce024f40c2ef38d7",
+    "header_offset": 248226388,
+    "compressed_bytes": 1356208,
+    "compression": 8,
+    "crc32": "cf4cd96e"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot16_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "fbdb308893e686ef5dc16e4dcb230ea32d5257d378cbec0eff84a1bd70907615",
+    "header_offset": 253717624,
+    "compressed_bytes": 1062244,
+    "compression": 8,
+    "crc32": "1d99b85c"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot06_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "8bbe148ac9a623f927c10c52bd07ffef0494777f23dc4383df041a5235243f28",
+    "header_offset": 271946723,
+    "compressed_bytes": 1323544,
+    "compression": 8,
+    "crc32": "f327ee48"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot08_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "8f753e3f566bdb9b99b2865ed42ba2d7d957e737ec6032609be01f5c4ff03ba5",
+    "header_offset": 315307017,
+    "compressed_bytes": 1091895,
+    "compression": 8,
+    "crc32": "080c20ca"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot18_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "e829bcce516cf072bc1068aaad53ba789c77475add77f6ac43921fca42143289",
+    "header_offset": 316399024,
+    "compressed_bytes": 1218994,
+    "compression": 8,
+    "crc32": "fcb763e4"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot01_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "df4bfa71df835690ece1c4a0f159fb7764b7cb5127963eae5c86f7f244a549f1",
+    "header_offset": 347347972,
+    "compressed_bytes": 1216779,
+    "compression": 8,
+    "crc32": "1a7c53d2"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot11_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "d29a8cd52df1318b2c507cdc36196691a86f2213d18b84f75d0ef082275d1935",
+    "header_offset": 353527514,
+    "compressed_bytes": 1041422,
+    "compression": 8,
+    "crc32": "bd51151e"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot07_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "c1939a57af24d75c9e4bdc5c33d2fe9f82e3f35733f7a99982d2383fa0cf86d8",
+    "header_offset": 393374027,
+    "compressed_bytes": 1042216,
+    "compression": 8,
+    "crc32": "92df45f9"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot17_CaptureTime.txt",
+    "size": 3572541,
+    "sha256": "8b9f6ef5da86cab0efebec5f7c221680389c183f2e2dd092a16169c9a8e32ade",
+    "header_offset": 411887580,
+    "compressed_bytes": 1368583,
+    "compression": 8,
+    "crc32": "24a9e5ce"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot12_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "371bd86178560472835cee178401a8e06ccce99bdfb092d4ce8b220328b9e323",
+    "header_offset": 462664222,
+    "compressed_bytes": 1336295,
+    "compression": 8,
+    "crc32": "6b1b20d6"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot02_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "1f3b7e8a9e020b100833cfde3751ff18b77394525b6d8d29dbc95473a3297ac8",
+    "header_offset": 477993577,
+    "compressed_bytes": 1071446,
+    "compression": 8,
+    "crc32": "7317d8b3"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot14_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "027f41b328be00cb691ef2fcbb586517abdd21e0ee553dd4ff92173c86248b4d",
+    "header_offset": 565560979,
+    "compressed_bytes": 1022014,
+    "compression": 8,
+    "crc32": "65f2404b"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot04_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "006f75c5d792e69f0bbb67263a6243bfc06cb356f9efa0ee6ad1d9bac3c86210",
+    "header_offset": 584200489,
+    "compressed_bytes": 1347234,
+    "compression": 8,
+    "crc32": "89adf1d3"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot03_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "44d51cccb836c5a1e20fcdb1c7fb5812d500dea2b8956ef20b6f6bf9c1c2b63e",
+    "header_offset": 590509196,
+    "compressed_bytes": 1358943,
+    "compression": 8,
+    "crc32": "217c0bb3"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot13_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "e2597fc004db27d6480c285d8f0defe6ae0f244c97872c850a673ebb97c0cea1",
+    "header_offset": 604489590,
+    "compressed_bytes": 1023855,
+    "compression": 8,
+    "crc32": "c763e08a"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot05_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "8473b0481600cb851b842a99a5e8b0e5370d221485cc7e9c781a5abdcc179332",
+    "header_offset": 704329654,
+    "compressed_bytes": 1067978,
+    "compression": 8,
+    "crc32": "6ec8b5c9"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot15_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "efc77c3b90dc0753f8dd6d1b5adca192685cf225219c5f844b7381f182c5f14a",
+    "header_offset": 718859258,
+    "compressed_bytes": 1310458,
+    "compression": 8,
+    "crc32": "621386fe"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot12_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "957bc53c7f1029f60789b9cbf7ed36d32ab7d082c86f30037499de513b37005b",
+    "header_offset": 786330060,
+    "compressed_bytes": 1036751,
+    "compression": 8,
+    "crc32": "43519a13"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot02_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "6fddebc9208b63d0455bc83609db87c184f765083738be3c66e3fdb6547f51f0",
+    "header_offset": 811661246,
+    "compressed_bytes": 1355100,
+    "compression": 8,
+    "crc32": "6d287464"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot14_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "1e998e33483d9ce018c927304ce861463a0a91350fd58ee7a9a3fa4d6b9abaf1",
+    "header_offset": 859673957,
+    "compressed_bytes": 1318202,
+    "compression": 8,
+    "crc32": "9b2fb1ed"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot04_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "3b224988d8f5ac4412e8c3a11fa058e8befe1b9ec82346a5986a5f945b1b274e",
+    "header_offset": 876728183,
+    "compressed_bytes": 1073455,
+    "compression": 8,
+    "crc32": "2fe033d8"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot03_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "670fc708a6c8884216adc16c6d07639f9352848e1a4dfb853d1ffd128eecd258",
+    "header_offset": 989922447,
+    "compressed_bytes": 1067379,
+    "compression": 8,
+    "crc32": "e053861c"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot13_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "9ea82152abb1ee5aa8a82fe67315ab303de5090905e13161935f308d12e81e4d",
+    "header_offset": 1023738339,
+    "compressed_bytes": 1320038,
+    "compression": 8,
+    "crc32": "423d3836"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/RD_Mot05_CaptureTime.txt",
+    "size": 3572573,
+    "sha256": "ef6cc65576d63eb4c8bec7ff41d561f813e9d27e7b025a98f01183c1a4f9988a",
+    "header_offset": 1083856817,
+    "compressed_bytes": 1355739,
+    "compression": 8,
+    "crc32": "c09f9b04"
+  },
+  {
+    "source": "edin",
+    "path": "DataShare/PD_Mot15_CaptureTime.txt",
+    "size": 2794148,
+    "sha256": "f6ec8da3f3b90aba4e3f59feaa2513cb85b6709f626ee1663f52c3068785d4c9",
+    "header_offset": 1100260426,
+    "compressed_bytes": 1021742,
+    "compression": 8,
+    "crc32": "9891aab7"
+  },
+  {
+    "source": "rov",
+    "path": "rov_tether_dataset/limited cable length/5m/tension.csv",
+    "size": 9106797,
+    "sha256": "fce329e20d08e771d334da187e9a3521c128ebb8d5dde21998241b6bb7de1667",
+    "header_offset": 218196968,
+    "compressed_bytes": 2173317,
+    "compression": 8,
+    "crc32": "8b8eeee7"
+  },
+  {
+    "source": "rov",
+    "path": "rov_tether_dataset/limited cable length/5m/rc-out.csv",
+    "size": 124670,
+    "sha256": "70df8986bbc270e7e0a94297bb58b9c5a5e38bb3280302df717f820e90ceef09",
+    "header_offset": 220518655,
+    "compressed_bytes": 15741,
+    "compression": 8,
+    "crc32": "c03c95bf"
+  },
+  {
+    "source": "rov",
+    "path": "rov_tether_dataset/limited cable length/5m/rc-in.csv",
+    "size": 140280,
+    "sha256": "b92990115aac5f08a5c1c09728da3562fd7573427bb2c5057e8409aecb266e86",
+    "header_offset": 220534507,
+    "compressed_bytes": 12245,
+    "compression": 8,
+    "crc32": "ca089cc3"
+  },
+  {
+    "source": "rov",
+    "path": "rov_tether_dataset/limited cable length/5m/qtm_rov.csv",
+    "size": 5443982,
+    "sha256": "8b50d5aad031c641a70c0119cf541aa56f5f76c739bdc3551b7a91beef93cd6d",
+    "header_offset": 221276574,
+    "compressed_bytes": 2052872,
+    "compression": 8,
+    "crc32": "53203074"
+  }
+]

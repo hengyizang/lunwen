@@ -1,0 +1,13 @@
+source,sample_unit,color_threshold_or_profile,region_start_inclusive,region_end_exclusive,peak_lag_units,approx_physical_lag_ms,peak_pearson_r,valid_pairs_at_peak
+Duarte_Fig4,published pixel columns,16,91,764,21,154.639,0.96128,531
+Duarte_Fig4,published pixel columns,16,191,651,20,147.275,0.96895,364
+Duarte_Fig4,published pixel columns,16,291,691,21,154.639,0.97069,286
+Duarte_Fig4,published pixel columns,40,91,764,21,154.639,0.96146,539
+Duarte_Fig4,published pixel columns,40,191,651,20,147.275,0.96954,367
+Duarte_Fig4,published pixel columns,40,291,691,21,154.639,0.97094,291
+Duarte_Fig4,published pixel columns,75,91,764,21,154.639,0.9625,551
+Duarte_Fig4,published pixel columns,75,191,651,20,147.275,0.97107,372
+Duarte_Fig4,published pixel columns,75,291,691,21,154.639,0.97222,297
+ExtremControl_overlay,decoded presentation frames; 0.5x,0,100,246,3,50.05,0.98731,118
+ExtremControl_overlay,decoded presentation frames; 0.5x,1,100,246,4,66.733,0.98662,119
+ExtremControl_overlay,decoded presentation frames; 0.5x,2,100,246,4,66.733,0.98593,116

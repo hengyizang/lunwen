@@ -1,0 +1,5 @@
+motor,file,url,bytes,sha256
+MD300,md300_logs.zip,https://github.com/mangdangroboticsclub/bam/releases/download/md300-data-v1/md300_logs.zip,58305041,d0ad06eb792c02e94801a91a8fd85c342af4a6f2f82b99c413e2f5c1ebbdf1f6
+J288,unitree_j288_raw.zip,https://github.com/lachlanhurst/bam/releases/download/unitree-j288-v1.0.0/unitree_j288_raw.zip,39766819,4e617b21c61f2f7667e574dc09555164734333c5b8d98089d17eb9bd7cc007d3
+HLS2915,feetech_hls2915_raw.zip,https://raw.githubusercontent.com/Seamus-Z/bam/9b4342661ce56e7ddb9c5331d2a1091434c35fcd/feetech_hls2915_raw.zip,2451510,fe99b40a854512b91dd8c416b63c9d759e2129bc5acc4693cd4142f7149b1458
+STS3215-12V,feetech_sts3215_12V_raw.zip,https://github.com/T-K-233/bam/releases/download/sts3215-12v-bam-data-v1/feetech_sts3215_12V_raw.zip,3804200,435ddbcbb91d98009b7cc06f41b0f87f5fef2b9aa2fffb853d2cd660744876a3

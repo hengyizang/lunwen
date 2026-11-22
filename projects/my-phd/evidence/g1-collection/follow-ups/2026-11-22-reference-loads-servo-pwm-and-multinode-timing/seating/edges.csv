@@ -1,0 +1,7 @@
+from_id,to_id,relation,locator,url
+HARTU-D4.1-assembly-dataset,10.5281/zenodo.12513790,documents dataset,"§2 and links summary, pp. 8 and 17 (report pagination).",https://www.hartu-project.eu/wp-content/uploads/2024/11/HARTU_D4.1_Assembly_Dataset.pdf
+HARTU-D4.1-assembly-dataset,10.5281/zenodo.11387093,documents separate calibration dataset,"§3, especially tactileFingers tests 3/6/9 and processing, pp. 12–15.",https://www.hartu-project.eu/wp-content/uploads/2024/11/HARTU_D4.1_Assembly_Dataset.pdf
+rug:31249,10.1007/978-3-030-98260-7_9,cites force-feedback comparator,"Bibliography, ref. [2].",https://fse.studenttheses.ub.rug.nl/31249/1/mME_2023_RouwhorstE.pdf
+rug:31249,10.1504/ijma.2013.053409,cites snap-sensing study,"Bibliography, ref. [3].",https://fse.studenttheses.ub.rug.nl/31249/1/mME_2023_RouwhorstE.pdf
+rug:31249,10.1109/tase.2019.2932834,cites pre-existing force-profile classifier,"Bibliography, ref. [1]. CERTH study present in earlier history.",https://fse.studenttheses.ub.rug.nl/31249/1/mME_2023_RouwhorstE.pdf
+10.1016/j.asoc.2021.107465,10.17632/2p4ng7zz3s.1,associated same-team data; mapping unverified,Institutional abstract reports a released acoustic dataset. Dataset deposit has same three named researchers and task. The release does not link individual rows to the paper’s sound clips.,https://doi.org/10.17632/2p4ng7zz3s.1

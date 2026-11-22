@@ -1,0 +1,5 @@
+pressure_kPa,temperature_gradient_series,span_of_reported_current_increments_uA
+2,4,0.18
+4,4,0.27
+6,4,0.1
+8,4,0.1

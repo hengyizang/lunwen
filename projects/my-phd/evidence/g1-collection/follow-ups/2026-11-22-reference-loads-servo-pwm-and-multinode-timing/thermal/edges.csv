@@ -1,0 +1,15 @@
+from_id,to_id,relation,locator,url
+10.1038/s41467-026-75631-3,file:41467_2026_75631_moesm8_esm.xlsx,links source data,Publisher Source Data and Methods,https://doi.org/10.1038/s41467-026-75631-3
+10.1038/s41467-026-71572-z,file:41467_2026_71572_moesm3_esm.xlsx,links source data,Publisher Source Data and Methods,https://doi.org/10.1038/s41467-026-71572-z
+10.1038/s41467-024-46836-1,10.6084/m9.figshare.25133534,links source data,Data availability; reference 52; publisher Source Data,https://doi.org/10.1038/s41467-024-46836-1
+10.1038/s41467-024-51261-5,file:41467_2024_51261_moesm9_esm.xlsx,links source data,Publisher Source Data and Methods,https://doi.org/10.1038/s41467-024-51261-5
+10.1038/s41467-026-69450-9,file:41467_2026_69450_moesm10_esm.xlsx,links source data,Publisher Source Data and Methods,https://doi.org/10.1038/s41467-026-69450-9
+10.1038/s41467-024-52331-4,file:41467_2024_52331_moesm12_esm.xlsx,links source data,Publisher Source Data and Methods,https://doi.org/10.1038/s41467-024-52331-4
+10.3390/s23167224,10.3390/s22134809,cites,Reference 4,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10457871/fullTextXML
+10.3390/s23167224,10.1109/jsen.2015.2485258,cites,Reference 15,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10457871/fullTextXML
+10.3390/s23167224,10.1109/tim.2021.3086898,cites,Reference 19,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10457871/fullTextXML
+10.1038/s41467-026-75631-3,10.1038/s41467-025-60861-8,cites,Reference 22,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13500680/fullTextXML
+10.1038/s41467-026-71572-z,10.1021/acsnano.3c04650,cites,Reference 42,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13243633/fullTextXML
+10.1038/s41467-026-71572-z,10.1039/d2ta04862k,cites,Reference 43,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13243633/fullTextXML
+10.1038/s41467-026-71572-z,10.1016/j.snb.2023.135255,cites,Reference 50,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13243633/fullTextXML
+10.1038/s41467-024-46836-1,10.1021/acsnano.3c04650,cites,Reference 45,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10958038/fullTextXML

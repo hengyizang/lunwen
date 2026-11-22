@@ -1,0 +1,15 @@
+sheet,primary_control,setpoint,unit,secondary_control,levels,span_of_deltaR_over_R0_across_secondary_levels
+Fig 2.,temperature,300,K,pressure,6,0
+Fig 2.,temperature,310,K,pressure,6,0.01355
+Fig 2.,temperature,315,K,pressure,6,0.00841
+Fig 2.,temperature,320,K,pressure,6,0.01889
+Fig 2.,temperature,324,K,pressure,6,0.01429
+Fig 3.,pressure,0,kPa,temperature,5,0
+Fig 3.,pressure,22,kPa,temperature,5,0.01986
+Fig 3.,pressure,44,kPa,temperature,5,0.03828
+Fig 3.,pressure,88,kPa,temperature,5,0.01812
+Fig 3.,pressure,110,kPa,temperature,5,0.00742
+Fig 3.,pressure,132,kPa,temperature,5,0.01941
+Fig 3.,pressure,154,kPa,temperature,5,0.01184
+Fig 3.,pressure,176,kPa,temperature,5,0.01616
+Fig 3.,pressure,198,kPa,temperature,5,0.0154

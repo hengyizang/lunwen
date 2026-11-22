@@ -1,0 +1,390 @@
+site,phase,index,coordinate_variable,coordinate_unit,coordinate_value,response_variable,response_unit,response_value
+1,indent,0,displ_exp,mm,-0,force_exp,N,-0.0290646000317
+1,indent,1,displ_exp,mm,0.472054249688,force_exp,N,1.62244675783
+1,indent,2,displ_exp,mm,0.944108499375,force_exp,N,2.6552865366
+1,indent,3,displ_exp,mm,1.41616274906,force_exp,N,3.4092816335
+1,indent,4,displ_exp,mm,1.88821699875,force_exp,N,4.56551961222
+1,indent,5,displ_exp,mm,2.36027124844,force_exp,N,5.16405872107
+1,indent,6,displ_exp,mm,2.83232549813,force_exp,N,5.61743922954
+1,indent,7,displ_exp,mm,3.30437974781,force_exp,N,6.37752395357
+1,indent,8,displ_exp,mm,3.7764339975,force_exp,N,7.30769568145
+1,indent,9,displ_exp,mm,4.24848824719,force_exp,N,8.00211026125
+1,indent,10,displ_exp,mm,4.72054249688,force_exp,N,8.77168462801
+1,indent,11,displ_exp,mm,5.19259674656,force_exp,N,9.62164955496
+1,indent,12,displ_exp,mm,5.66465099625,force_exp,N,10.5469896772
+1,indent,13,displ_exp,mm,6.13670524594,force_exp,N,11.1185584266
+1,indent,14,displ_exp,mm,6.60875949563,force_exp,N,11.7865158489
+1,indent,15,displ_exp,mm,7.08081374531,force_exp,N,12.5056972474
+1,indent,16,displ_exp,mm,7.552867995,force_exp,N,13.3418467584
+1,indent,17,displ_exp,mm,8.02492224469,force_exp,N,13.9342628181
+1,indent,18,displ_exp,mm,8.49697649438,force_exp,N,14.4732548805
+1,indent,19,displ_exp,mm,8.96903074406,force_exp,N,15.2545885637
+1,indent,20,displ_exp,mm,9.44108499375,force_exp,N,16.0777367645
+1,twist,0,rot_exp,degree,0,torque_exp,N mm,-0.272517630293
+1,twist,1,rot_exp,degree,-1.41,torque_exp,N mm,-1.49470607769
+1,twist,2,rot_exp,degree,-2.819,torque_exp,N mm,-3.46727062971
+1,twist,3,rot_exp,degree,-4.207,torque_exp,N mm,-5.35065714575
+1,twist,4,rot_exp,degree,-5.593,torque_exp,N mm,-7.14322112725
+1,twist,5,rot_exp,degree,-6.938,torque_exp,N mm,-9.00653850785
+1,twist,6,rot_exp,degree,-8.276,torque_exp,N mm,-10.7595434281
+1,twist,7,rot_exp,degree,-9.561,torque_exp,N mm,-12.3935182863
+1,twist,8,rot_exp,degree,-10.83,torque_exp,N mm,-14.0443962614
+1,twist,9,rot_exp,degree,-12.03,torque_exp,N mm,-15.5544254549
+1,twist,10,rot_exp,degree,-13.21,torque_exp,N mm,-16.9226875077
+1,twist,11,rot_exp,degree,-14.32,torque_exp,N mm,-18.2428354939
+1,twist,12,rot_exp,degree,-15.38,torque_exp,N mm,-19.4023050265
+1,twist,13,rot_exp,degree,-16.38,torque_exp,N mm,-20.3965665575
+1,twist,14,rot_exp,degree,-17.31,torque_exp,N mm,-21.2975816493
+1,twist,15,rot_exp,degree,-18.18,torque_exp,N mm,-22.0345134734
+1,twist,16,rot_exp,degree,-18.96,torque_exp,N mm,-22.5891956603
+1,twist,17,rot_exp,degree,-19.69,torque_exp,N mm,-22.9812540514
+1,twist,18,rot_exp,degree,-20.32,torque_exp,N mm,-23.0230503251
+1,twist,19,rot_exp,degree,-20.9,torque_exp,N mm,-22.5015947438
+1,twist,20,rot_exp,degree,-20.32,torque_exp,N mm,-21.1922563837
+1,twist,21,rot_exp,degree,-19.69,torque_exp,N mm,-19.2519308513
+1,twist,22,rot_exp,degree,-18.96,torque_exp,N mm,-17.7492564392
+1,twist,23,rot_exp,degree,-18.18,torque_exp,N mm,-16.3386545367
+1,twist,24,rot_exp,degree,-17.31,torque_exp,N mm,-14.821328171
+1,twist,25,rot_exp,degree,-16.38,torque_exp,N mm,-13.2259941281
+1,twist,26,rot_exp,degree,-15.38,torque_exp,N mm,-11.7245048813
+1,twist,27,rot_exp,degree,-14.32,torque_exp,N mm,-10.1932205302
+1,twist,28,rot_exp,degree,-13.21,torque_exp,N mm,-8.64867943656
+1,twist,29,rot_exp,degree,-12.03,torque_exp,N mm,-6.95278133547
+1,twist,30,rot_exp,degree,-10.83,torque_exp,N mm,-5.12595657925
+1,twist,31,rot_exp,degree,-9.561,torque_exp,N mm,-3.34101505349
+1,twist,32,rot_exp,degree,-8.276,torque_exp,N mm,-1.61066837254
+1,twist,33,rot_exp,degree,-6.938,torque_exp,N mm,0.193055384569
+1,twist,34,rot_exp,degree,-5.593,torque_exp,N mm,2.05363030396
+1,twist,35,rot_exp,degree,-4.207,torque_exp,N mm,3.83471945104
+1,twist,36,rot_exp,degree,-2.819,torque_exp,N mm,5.66852239467
+1,twist,37,rot_exp,degree,-1.41,torque_exp,N mm,10.8889710646
+1,twist,38,rot_exp,degree,2.819,torque_exp,N mm,12.466001999
+1,twist,39,rot_exp,degree,4.207,torque_exp,N mm,14.1380741009
+1,twist,40,rot_exp,degree,5.593,torque_exp,N mm,15.7891193326
+1,twist,41,rot_exp,degree,6.938,torque_exp,N mm,17.3057509056
+1,twist,42,rot_exp,degree,8.276,torque_exp,N mm,18.7943268606
+1,twist,43,rot_exp,degree,9.561,torque_exp,N mm,20.1465077902
+1,twist,44,rot_exp,degree,10.83,torque_exp,N mm,21.3612043994
+1,twist,45,rot_exp,degree,12.03,torque_exp,N mm,22.5341207334
+1,twist,46,rot_exp,degree,13.21,torque_exp,N mm,23.5620781462
+1,twist,47,rot_exp,degree,14.32,torque_exp,N mm,24.5288344237
+1,twist,48,rot_exp,degree,15.38,torque_exp,N mm,25.4229645787
+1,twist,49,rot_exp,degree,16.38,torque_exp,N mm,26.1552384613
+1,twist,50,rot_exp,degree,17.31,torque_exp,N mm,26.7978536592
+1,twist,51,rot_exp,degree,18.18,torque_exp,N mm,27.337080752
+1,twist,52,rot_exp,degree,18.96,torque_exp,N mm,27.7921831936
+1,twist,53,rot_exp,degree,19.69,torque_exp,N mm,28.1100749027
+1,twist,54,rot_exp,degree,20.32,torque_exp,N mm,28.2216249871
+1,twist,55,rot_exp,degree,20.9,torque_exp,N mm,27.872321122
+1,twist,56,rot_exp,degree,21.35,torque_exp,N mm,27.2771756695
+1,twist,57,rot_exp,degree,20.9,torque_exp,N mm,26.3963587194
+1,twist,58,rot_exp,degree,20.32,torque_exp,N mm,24.7366931473
+1,twist,59,rot_exp,degree,19.69,torque_exp,N mm,23.3790057477
+1,twist,60,rot_exp,degree,18.96,torque_exp,N mm,22.0352532332
+1,twist,61,rot_exp,degree,18.18,torque_exp,N mm,20.5772207949
+1,twist,62,rot_exp,degree,17.31,torque_exp,N mm,18.9982470915
+1,twist,63,rot_exp,degree,16.38,torque_exp,N mm,17.3946098394
+1,twist,64,rot_exp,degree,15.38,torque_exp,N mm,15.875253811
+1,twist,65,rot_exp,degree,14.32,torque_exp,N mm,14.3098626158
+1,twist,66,rot_exp,degree,13.21,torque_exp,N mm,12.6938771179
+1,twist,67,rot_exp,degree,12.03,torque_exp,N mm,11.0253467852
+1,twist,68,rot_exp,degree,10.83,torque_exp,N mm,9.30412798404
+1,twist,69,rot_exp,degree,9.561,torque_exp,N mm,7.53132048
+1,twist,70,rot_exp,degree,8.276,torque_exp,N mm,5.86318134107
+1,twist,71,rot_exp,degree,6.938,torque_exp,N mm,4.15403665602
+1,twist,72,rot_exp,degree,5.593,torque_exp,N mm,2.40842693808
+1,twist,73,rot_exp,degree,4.207,torque_exp,N mm,0.790361845737
+1,twist,74,rot_exp,degree,2.819,torque_exp,N mm,-1.02134296993
+1,twist,75,rot_exp,degree,1.41,torque_exp,N mm,-2.86249318779
+2,indent,0,displ_exp,mm,-0,force_exp,N,-0.0111356557471
+2,indent,1,displ_exp,mm,0.284666009874,force_exp,N,0.616372060592
+2,indent,2,displ_exp,mm,0.607287487731,force_exp,N,1.04629381756
+2,indent,3,displ_exp,mm,0.960273339975,force_exp,N,1.68606643727
+2,indent,4,displ_exp,mm,1.33755069175,force_exp,N,2.61780473337
+2,indent,5,displ_exp,mm,1.73426124307,force_exp,N,3.20611192371
+2,indent,6,displ_exp,mm,2.14651835415,force_exp,N,3.81438522587
+2,indent,7,displ_exp,mm,2.5712127129,force_exp,N,4.45100258376
+2,indent,8,displ_exp,mm,3.00585686993,force_exp,N,5.09179788515
+2,indent,9,displ_exp,mm,3.4484608655,force_exp,N,5.9162521633
+2,indent,10,displ_exp,mm,3.8974327319,force_exp,N,6.38775900624
+2,indent,11,displ_exp,mm,4.35149889494,force_exp,N,7.35769639424
+2,indent,12,displ_exp,mm,4.80964049539,force_exp,N,7.76105986829
+2,indent,13,displ_exp,mm,5.2710424457,force_exp,N,8.19491350611
+2,indent,14,displ_exp,mm,5.73505267588,force_exp,N,8.58809810413
+2,indent,15,displ_exp,mm,6.20114952996,force_exp,N,9.09140773692
+2,indent,16,displ_exp,mm,6.6689156832,force_exp,N,9.75111787172
+2,indent,17,displ_exp,mm,7.13801727581,force_exp,N,10.3771631971
+2,indent,18,displ_exp,mm,7.6081872198,force_exp,N,11.2600929556
+2,indent,19,displ_exp,mm,8.07921184499,force_exp,N,11.9534621884
+2,indent,20,displ_exp,mm,8.55092021501,force_exp,N,12.6187306822
+2,indent,21,displ_exp,mm,9.0231755811,force_exp,N,13.0385366476
+2,indent,22,displ_exp,mm,9.4888669958,force_exp,N,13.4351670163
+2,twist,0,rot_exp,degree,0,torque_exp,N mm,-0.615759295031
+2,twist,1,rot_exp,degree,-1.41,torque_exp,N mm,-1.69959377027
+2,twist,2,rot_exp,degree,-2.819,torque_exp,N mm,-3.44879785288
+2,twist,3,rot_exp,degree,-4.207,torque_exp,N mm,-5.28006473165
+2,twist,4,rot_exp,degree,-5.593,torque_exp,N mm,-7.0168203589
+2,twist,5,rot_exp,degree,-6.938,torque_exp,N mm,-8.65138409752
+2,twist,6,rot_exp,degree,-8.276,torque_exp,N mm,-10.3211467346
+2,twist,7,rot_exp,degree,-9.561,torque_exp,N mm,-11.868971757
+2,twist,8,rot_exp,degree,-10.83,torque_exp,N mm,-13.4043293195
+2,twist,9,rot_exp,degree,-12.03,torque_exp,N mm,-14.7967039881
+2,twist,10,rot_exp,degree,-13.21,torque_exp,N mm,-15.9492400763
+2,twist,11,rot_exp,degree,-14.32,torque_exp,N mm,-17.0542838581
+2,twist,12,rot_exp,degree,-15.38,torque_exp,N mm,-18.0837040889
+2,twist,13,rot_exp,degree,-16.38,torque_exp,N mm,-18.9495043751
+2,twist,14,rot_exp,degree,-17.31,torque_exp,N mm,-19.6611393051
+2,twist,15,rot_exp,degree,-18.18,torque_exp,N mm,-20.233809094
+2,twist,16,rot_exp,degree,-18.96,torque_exp,N mm,-20.6562359887
+2,twist,17,rot_exp,degree,-19.69,torque_exp,N mm,-20.9334682313
+2,twist,18,rot_exp,degree,-20.32,torque_exp,N mm,-20.7130303928
+2,twist,19,rot_exp,degree,-20.9,torque_exp,N mm,-20.105272356
+2,twist,20,rot_exp,degree,-20.32,torque_exp,N mm,-18.8690010027
+2,twist,21,rot_exp,degree,-19.69,torque_exp,N mm,-16.8315920415
+2,twist,22,rot_exp,degree,-18.96,torque_exp,N mm,-15.2257823393
+2,twist,23,rot_exp,degree,-18.18,torque_exp,N mm,-13.7007366477
+2,twist,24,rot_exp,degree,-17.31,torque_exp,N mm,-12.2121510555
+2,twist,25,rot_exp,degree,-16.38,torque_exp,N mm,-10.6560700512
+2,twist,26,rot_exp,degree,-15.38,torque_exp,N mm,-9.0567674813
+2,twist,27,rot_exp,degree,-14.32,torque_exp,N mm,-7.58040062593
+2,twist,28,rot_exp,degree,-13.21,torque_exp,N mm,-5.94975445008
+2,twist,29,rot_exp,degree,-12.03,torque_exp,N mm,-4.18189509857
+2,twist,30,rot_exp,degree,-10.83,torque_exp,N mm,-2.4435232602
+2,twist,31,rot_exp,degree,-9.561,torque_exp,N mm,-0.74960051359
+2,twist,32,rot_exp,degree,-8.276,torque_exp,N mm,0.889017728886
+2,twist,33,rot_exp,degree,-6.938,torque_exp,N mm,2.71963576942
+2,twist,34,rot_exp,degree,-5.593,torque_exp,N mm,4.58464248483
+2,twist,35,rot_exp,degree,-4.207,torque_exp,N mm,6.23162790604
+2,twist,36,rot_exp,degree,-2.819,torque_exp,N mm,7.90260925223
+2,twist,37,rot_exp,degree,-1.41,torque_exp,N mm,12.378369033
+2,twist,38,rot_exp,degree,2.819,torque_exp,N mm,14.0934491499
+2,twist,39,rot_exp,degree,4.207,torque_exp,N mm,15.5881150902
+2,twist,40,rot_exp,degree,5.593,torque_exp,N mm,16.9728407043
+2,twist,41,rot_exp,degree,6.938,torque_exp,N mm,18.3418307444
+2,twist,42,rot_exp,degree,8.276,torque_exp,N mm,19.6906231631
+2,twist,43,rot_exp,degree,9.561,torque_exp,N mm,20.8346405108
+2,twist,44,rot_exp,degree,10.83,torque_exp,N mm,21.9426866082
+2,twist,45,rot_exp,degree,12.03,torque_exp,N mm,22.9238461222
+2,twist,46,rot_exp,degree,13.21,torque_exp,N mm,23.7727263416
+2,twist,47,rot_exp,degree,14.32,torque_exp,N mm,24.6312282481
+2,twist,48,rot_exp,degree,15.38,torque_exp,N mm,25.3409691775
+2,twist,49,rot_exp,degree,16.38,torque_exp,N mm,25.9559205143
+2,twist,50,rot_exp,degree,17.31,torque_exp,N mm,26.4653031227
+2,twist,51,rot_exp,degree,18.18,torque_exp,N mm,26.8454444062
+2,twist,52,rot_exp,degree,18.96,torque_exp,N mm,27.1007020499
+2,twist,53,rot_exp,degree,19.69,torque_exp,N mm,27.1639170116
+2,twist,54,rot_exp,degree,20.32,torque_exp,N mm,26.8458059058
+2,twist,55,rot_exp,degree,20.9,torque_exp,N mm,26.1450697503
+2,twist,56,rot_exp,degree,20.32,torque_exp,N mm,24.5329331857
+2,twist,57,rot_exp,degree,19.69,torque_exp,N mm,22.3158775539
+2,twist,58,rot_exp,degree,18.96,torque_exp,N mm,20.7943043357
+2,twist,59,rot_exp,degree,18.18,torque_exp,N mm,19.1794914676
+2,twist,60,rot_exp,degree,17.31,torque_exp,N mm,17.5646436144
+2,twist,61,rot_exp,degree,16.38,torque_exp,N mm,15.9188499686
+2,twist,62,rot_exp,degree,15.38,torque_exp,N mm,14.347448847
+2,twist,63,rot_exp,degree,14.32,torque_exp,N mm,12.7247160308
+2,twist,64,rot_exp,degree,13.21,torque_exp,N mm,11.0499503923
+2,twist,65,rot_exp,degree,12.03,torque_exp,N mm,9.45540277689
+2,twist,66,rot_exp,degree,10.83,torque_exp,N mm,7.81565846286
+2,twist,67,rot_exp,degree,9.561,torque_exp,N mm,6.13243156482
+2,twist,68,rot_exp,degree,8.276,torque_exp,N mm,4.55370612776
+2,twist,69,rot_exp,degree,6.938,torque_exp,N mm,2.94139059963
+2,twist,70,rot_exp,degree,5.593,torque_exp,N mm,1.29959260164
+2,twist,71,rot_exp,degree,4.207,torque_exp,N mm,-0.217816201193
+2,twist,72,rot_exp,degree,2.819,torque_exp,N mm,-1.91203846692
+2,twist,73,rot_exp,degree,1.41,torque_exp,N mm,-3.62915896766
+3,indent,0,displ_exp,mm,-0,force_exp,N,-0.0167853302998
+3,indent,1,displ_exp,mm,0.482312599597,force_exp,N,1.06364141847
+3,indent,2,displ_exp,mm,0.964625199193,force_exp,N,2.02551953741
+3,indent,3,displ_exp,mm,1.44693779879,force_exp,N,3.07828092528
+3,indent,4,displ_exp,mm,1.92925039839,force_exp,N,4.38727300946
+3,indent,5,displ_exp,mm,2.41156299798,force_exp,N,5.37859200615
+3,indent,6,displ_exp,mm,2.89387559758,force_exp,N,6.27128235687
+3,indent,7,displ_exp,mm,3.37618819718,force_exp,N,7.48220572487
+3,indent,8,displ_exp,mm,3.85850079677,force_exp,N,8.38116905197
+3,indent,9,displ_exp,mm,4.34081339637,force_exp,N,9.16785167584
+3,indent,10,displ_exp,mm,4.82312599597,force_exp,N,10.3489296231
+3,indent,11,displ_exp,mm,5.30543859556,force_exp,N,11.3247339179
+3,indent,12,displ_exp,mm,5.78775119516,force_exp,N,12.2436263017
+3,indent,13,displ_exp,mm,6.27006379476,force_exp,N,13.4993692036
+3,indent,14,displ_exp,mm,6.75237639435,force_exp,N,14.3518462719
+3,indent,15,displ_exp,mm,7.23468899395,force_exp,N,15.1035723516
+3,indent,16,displ_exp,mm,7.71700159355,force_exp,N,16.1793467203
+3,indent,17,displ_exp,mm,8.19931419314,force_exp,N,17.010213351
+3,indent,18,displ_exp,mm,8.68162679274,force_exp,N,17.9579155593
+3,indent,19,displ_exp,mm,9.16393939234,force_exp,N,18.8822331721
+3,indent,20,displ_exp,mm,9.64625199193,force_exp,N,19.8006261498
+3,twist,0,rot_exp,degree,0,torque_exp,N mm,0.153266915712
+3,twist,1,rot_exp,degree,-1.41,torque_exp,N mm,-0.998515662593
+3,twist,2,rot_exp,degree,-2.819,torque_exp,N mm,-2.86418067508
+3,twist,3,rot_exp,degree,-4.207,torque_exp,N mm,-4.82798990883
+3,twist,4,rot_exp,degree,-5.593,torque_exp,N mm,-6.70081492384
+3,twist,5,rot_exp,degree,-6.938,torque_exp,N mm,-8.47418243224
+3,twist,6,rot_exp,degree,-8.276,torque_exp,N mm,-10.2972612004
+3,twist,7,rot_exp,degree,-9.561,torque_exp,N mm,-11.999399573
+3,twist,8,rot_exp,degree,-10.83,torque_exp,N mm,-13.578058758
+3,twist,9,rot_exp,degree,-12.03,torque_exp,N mm,-15.0313539427
+3,twist,10,rot_exp,degree,-13.21,torque_exp,N mm,-16.3582891531
+3,twist,11,rot_exp,degree,-14.32,torque_exp,N mm,-17.559084798
+3,twist,12,rot_exp,degree,-15.38,torque_exp,N mm,-18.718078164
+3,twist,13,rot_exp,degree,-16.38,torque_exp,N mm,-19.740624211
+3,twist,14,rot_exp,degree,-17.31,torque_exp,N mm,-20.630596564
+3,twist,15,rot_exp,degree,-18.18,torque_exp,N mm,-21.4670683091
+3,twist,16,rot_exp,degree,-18.96,torque_exp,N mm,-22.1544544237
+3,twist,17,rot_exp,degree,-19.69,torque_exp,N mm,-22.6628773273
+3,twist,18,rot_exp,degree,-20.32,torque_exp,N mm,-22.9292493515
+3,twist,19,rot_exp,degree,-20.9,torque_exp,N mm,-22.5622487542
+3,twist,20,rot_exp,degree,-20.9,torque_exp,N mm,-21.5757224114
+3,twist,21,rot_exp,degree,-20.32,torque_exp,N mm,-20.0954122282
+3,twist,22,rot_exp,degree,-19.69,torque_exp,N mm,-18.4336148539
+3,twist,23,rot_exp,degree,-18.96,torque_exp,N mm,-16.885385963
+3,twist,24,rot_exp,degree,-18.18,torque_exp,N mm,-15.3327014168
+3,twist,25,rot_exp,degree,-17.31,torque_exp,N mm,-13.8297646665
+3,twist,26,rot_exp,degree,-16.38,torque_exp,N mm,-12.1030782643
+3,twist,27,rot_exp,degree,-15.38,torque_exp,N mm,-10.3295434849
+3,twist,28,rot_exp,degree,-14.32,torque_exp,N mm,-8.69770614269
+3,twist,29,rot_exp,degree,-13.21,torque_exp,N mm,-7.066984753
+3,twist,30,rot_exp,degree,-12.03,torque_exp,N mm,-5.29373566315
+3,twist,31,rot_exp,degree,-10.83,torque_exp,N mm,-3.40190095122
+3,twist,32,rot_exp,degree,-9.561,torque_exp,N mm,-1.57117663118
+3,twist,33,rot_exp,degree,-8.276,torque_exp,N mm,0.187090652911
+3,twist,34,rot_exp,degree,-6.938,torque_exp,N mm,2.00279232124
+3,twist,35,rot_exp,degree,-5.593,torque_exp,N mm,3.85887482016
+3,twist,36,rot_exp,degree,-4.207,torque_exp,N mm,5.62170077695
+3,twist,37,rot_exp,degree,-2.819,torque_exp,N mm,7.42725112527
+3,twist,38,rot_exp,degree,-1.41,torque_exp,N mm,12.2429548298
+3,twist,39,rot_exp,degree,2.819,torque_exp,N mm,14.2759398789
+3,twist,40,rot_exp,degree,4.207,torque_exp,N mm,15.9754917876
+3,twist,41,rot_exp,degree,5.593,torque_exp,N mm,17.5685968216
+3,twist,42,rot_exp,degree,6.938,torque_exp,N mm,19.1645186431
+3,twist,43,rot_exp,degree,8.276,torque_exp,N mm,20.75580762
+3,twist,44,rot_exp,degree,9.561,torque_exp,N mm,22.3319824709
+3,twist,45,rot_exp,degree,10.83,torque_exp,N mm,23.7686955577
+3,twist,46,rot_exp,degree,12.03,torque_exp,N mm,25.0540471753
+3,twist,47,rot_exp,degree,13.21,torque_exp,N mm,26.1805435099
+3,twist,48,rot_exp,degree,14.32,torque_exp,N mm,27.2334552158
+3,twist,49,rot_exp,degree,15.38,torque_exp,N mm,28.1950203963
+3,twist,50,rot_exp,degree,16.38,torque_exp,N mm,28.965845905
+3,twist,51,rot_exp,degree,17.31,torque_exp,N mm,29.6210526766
+3,twist,52,rot_exp,degree,18.18,torque_exp,N mm,30.1866118309
+3,twist,53,rot_exp,degree,18.96,torque_exp,N mm,30.5814628913
+3,twist,54,rot_exp,degree,19.69,torque_exp,N mm,30.7883318208
+3,twist,55,rot_exp,degree,20.32,torque_exp,N mm,30.7233663583
+3,twist,56,rot_exp,degree,20.9,torque_exp,N mm,30.1009962219
+3,twist,57,rot_exp,degree,20.9,torque_exp,N mm,28.8396254659
+3,twist,58,rot_exp,degree,20.32,torque_exp,N mm,27.2602876601
+3,twist,59,rot_exp,degree,19.69,torque_exp,N mm,25.6061703236
+3,twist,60,rot_exp,degree,18.96,torque_exp,N mm,23.9937326051
+3,twist,61,rot_exp,degree,18.18,torque_exp,N mm,22.3802334172
+3,twist,62,rot_exp,degree,17.31,torque_exp,N mm,20.7410078804
+3,twist,63,rot_exp,degree,16.38,torque_exp,N mm,19.0558475518
+3,twist,64,rot_exp,degree,15.38,torque_exp,N mm,17.4465925466
+3,twist,65,rot_exp,degree,14.32,torque_exp,N mm,15.6382858698
+3,twist,66,rot_exp,degree,13.21,torque_exp,N mm,13.9098502577
+3,twist,67,rot_exp,degree,12.03,torque_exp,N mm,12.2706703437
+3,twist,68,rot_exp,degree,10.83,torque_exp,N mm,10.4267484936
+3,twist,69,rot_exp,degree,9.561,torque_exp,N mm,8.68670444894
+3,twist,70,rot_exp,degree,8.276,torque_exp,N mm,6.89874472523
+3,twist,71,rot_exp,degree,6.938,torque_exp,N mm,5.06770355119
+3,twist,72,rot_exp,degree,5.593,torque_exp,N mm,3.36590921405
+3,twist,73,rot_exp,degree,4.207,torque_exp,N mm,1.63120464014
+3,twist,74,rot_exp,degree,2.819,torque_exp,N mm,-0.134424490266
+3,twist,75,rot_exp,degree,1.41,torque_exp,N mm,-1.92893474645
+4,indent,0,displ_exp,mm,-0,force_exp,N,-0.0211020882494
+4,indent,1,displ_exp,mm,0.461030251801,force_exp,N,1.19126017356
+4,indent,2,displ_exp,mm,0.922060503602,force_exp,N,1.8750516184
+4,indent,3,displ_exp,mm,1.3830907554,force_exp,N,2.36566573028
+4,indent,4,displ_exp,mm,1.8441210072,force_exp,N,3.16543987559
+4,indent,5,displ_exp,mm,2.305151259,force_exp,N,3.70821774428
+4,indent,6,displ_exp,mm,2.7661815108,force_exp,N,4.43683995872
+4,indent,7,displ_exp,mm,3.22721176261,force_exp,N,5.28376227742
+4,indent,8,displ_exp,mm,3.68824201441,force_exp,N,5.94817676255
+4,indent,9,displ_exp,mm,4.14927226621,force_exp,N,6.77570858788
+4,indent,10,displ_exp,mm,4.61030251801,force_exp,N,7.27281843104
+4,indent,11,displ_exp,mm,5.07133276981,force_exp,N,7.74157294518
+4,indent,12,displ_exp,mm,5.53236302161,force_exp,N,8.15736091285
+4,indent,13,displ_exp,mm,5.99339327341,force_exp,N,8.93611731441
+4,indent,14,displ_exp,mm,6.45442352521,force_exp,N,9.67947173109
+4,indent,15,displ_exp,mm,6.91545377701,force_exp,N,10.1677248928
+4,indent,16,displ_exp,mm,7.37648402881,force_exp,N,10.6957445439
+4,indent,17,displ_exp,mm,7.83751428061,force_exp,N,11.0916014771
+4,indent,18,displ_exp,mm,8.29854453241,force_exp,N,12.0055726484
+4,indent,19,displ_exp,mm,8.75957478422,force_exp,N,12.4993013669
+4,twist,0,rot_exp,degree,0,torque_exp,N mm,-0.303912498728
+4,twist,1,rot_exp,degree,-1.41,torque_exp,N mm,-1.27488303279
+4,twist,2,rot_exp,degree,-2.819,torque_exp,N mm,-2.99582020366
+4,twist,3,rot_exp,degree,-4.207,torque_exp,N mm,-4.63659635773
+4,twist,4,rot_exp,degree,-5.593,torque_exp,N mm,-6.19048691424
+4,twist,5,rot_exp,degree,-6.938,torque_exp,N mm,-7.7889593626
+4,twist,6,rot_exp,degree,-8.276,torque_exp,N mm,-9.28315061743
+4,twist,7,rot_exp,degree,-9.561,torque_exp,N mm,-10.6712019469
+4,twist,8,rot_exp,degree,-10.83,torque_exp,N mm,-11.9514604867
+4,twist,9,rot_exp,degree,-12.03,torque_exp,N mm,-13.1225863287
+4,twist,10,rot_exp,degree,-13.21,torque_exp,N mm,-14.1837178478
+4,twist,11,rot_exp,degree,-14.32,torque_exp,N mm,-15.1347222614
+4,twist,12,rot_exp,degree,-15.38,torque_exp,N mm,-16.0402827678
+4,twist,13,rot_exp,degree,-16.38,torque_exp,N mm,-16.8245772937
+4,twist,14,rot_exp,degree,-17.31,torque_exp,N mm,-17.4889102214
+4,twist,15,rot_exp,degree,-18.18,torque_exp,N mm,-18.0519625829
+4,twist,16,rot_exp,degree,-18.96,torque_exp,N mm,-18.4585642582
+4,twist,17,rot_exp,degree,-19.69,torque_exp,N mm,-18.7874655334
+4,twist,18,rot_exp,degree,-20.32,torque_exp,N mm,-18.9140115171
+4,twist,19,rot_exp,degree,-20.9,torque_exp,N mm,-18.6253579194
+4,twist,20,rot_exp,degree,-21.35,torque_exp,N mm,-18.0677393801
+4,twist,21,rot_exp,degree,-20.9,torque_exp,N mm,-16.9618587022
+4,twist,22,rot_exp,degree,-20.32,torque_exp,N mm,-15.1614762898
+4,twist,23,rot_exp,degree,-19.69,torque_exp,N mm,-13.9010270399
+4,twist,24,rot_exp,degree,-18.96,torque_exp,N mm,-12.7509284004
+4,twist,25,rot_exp,degree,-18.18,torque_exp,N mm,-11.5316113993
+4,twist,26,rot_exp,degree,-17.31,torque_exp,N mm,-10.2609554391
+4,twist,27,rot_exp,degree,-16.38,torque_exp,N mm,-8.9572226033
+4,twist,28,rot_exp,degree,-15.38,torque_exp,N mm,-7.63804532316
+4,twist,29,rot_exp,degree,-14.32,torque_exp,N mm,-6.18790074573
+4,twist,30,rot_exp,degree,-13.21,torque_exp,N mm,-4.75417465298
+4,twist,31,rot_exp,degree,-12.03,torque_exp,N mm,-3.35092048334
+4,twist,32,rot_exp,degree,-10.83,torque_exp,N mm,-1.98495904811
+4,twist,33,rot_exp,degree,-9.561,torque_exp,N mm,-0.664549304697
+4,twist,34,rot_exp,degree,-8.276,torque_exp,N mm,0.834782847116
+4,twist,35,rot_exp,degree,-6.938,torque_exp,N mm,2.37663042668
+4,twist,36,rot_exp,degree,-5.593,torque_exp,N mm,3.84873064826
+4,twist,37,rot_exp,degree,-4.207,torque_exp,N mm,5.26291060544
+4,twist,38,rot_exp,degree,-2.819,torque_exp,N mm,6.63068122647
+4,twist,39,rot_exp,degree,-1.41,torque_exp,N mm,7.86572043626
+4,twist,40,rot_exp,degree,-5.511e-15,torque_exp,N mm,9.88295652596
+4,twist,41,rot_exp,degree,1.41,torque_exp,N mm,9.06780202692
+4,twist,42,rot_exp,degree,2.819,torque_exp,N mm,11.3706485556
+4,twist,43,rot_exp,degree,4.207,torque_exp,N mm,13.2284670929
+4,twist,44,rot_exp,degree,5.593,torque_exp,N mm,14.3594943949
+4,twist,45,rot_exp,degree,6.938,torque_exp,N mm,15.4539317666
+4,twist,46,rot_exp,degree,8.276,torque_exp,N mm,16.5125015246
+4,twist,47,rot_exp,degree,9.561,torque_exp,N mm,17.463906392
+4,twist,48,rot_exp,degree,10.83,torque_exp,N mm,18.3117662255
+4,twist,49,rot_exp,degree,12.03,torque_exp,N mm,19.1233008905
+4,twist,50,rot_exp,degree,13.21,torque_exp,N mm,19.8248940252
+4,twist,51,rot_exp,degree,14.32,torque_exp,N mm,20.4686353122
+4,twist,52,rot_exp,degree,15.38,torque_exp,N mm,21.0406441929
+4,twist,53,rot_exp,degree,16.38,torque_exp,N mm,21.4784348485
+4,twist,54,rot_exp,degree,17.31,torque_exp,N mm,21.8491147801
+4,twist,55,rot_exp,degree,18.18,torque_exp,N mm,22.1028076835
+4,twist,56,rot_exp,degree,18.96,torque_exp,N mm,22.1772602775
+4,twist,57,rot_exp,degree,19.69,torque_exp,N mm,22.0155682138
+4,twist,58,rot_exp,degree,20.32,torque_exp,N mm,21.3291161486
+4,twist,59,rot_exp,degree,20.32,torque_exp,N mm,20.1273324842
+4,twist,60,rot_exp,degree,19.7,torque_exp,N mm,18.8040468833
+4,twist,61,rot_exp,degree,18.98,torque_exp,N mm,17.5032299339
+4,twist,62,rot_exp,degree,18.2,torque_exp,N mm,16.2990249567
+4,twist,63,rot_exp,degree,17.34,torque_exp,N mm,15.0610948088
+4,twist,64,rot_exp,degree,16.41,torque_exp,N mm,13.7610025692
+4,twist,65,rot_exp,degree,15.43,torque_exp,N mm,12.4882953311
+4,twist,66,rot_exp,degree,14.37,torque_exp,N mm,11.2533364605
+4,twist,67,rot_exp,degree,13.27,torque_exp,N mm,9.9617834124
+4,twist,68,rot_exp,degree,12.09,torque_exp,N mm,8.61543670117
+4,twist,69,rot_exp,degree,10.9,torque_exp,N mm,7.21676003285
+4,twist,70,rot_exp,degree,9.631,torque_exp,N mm,5.89155398555
+4,twist,71,rot_exp,degree,8.352,torque_exp,N mm,4.65174144717
+4,twist,72,rot_exp,degree,7.015,torque_exp,N mm,3.25118473765
+4,twist,73,rot_exp,degree,5.673,torque_exp,N mm,1.81543597501
+4,twist,74,rot_exp,degree,4.288,torque_exp,N mm,0.614772810459
+4,twist,75,rot_exp,degree,2.903,torque_exp,N mm,-0.609250244491
+4,twist,76,rot_exp,degree,1.494,torque_exp,N mm,-1.9944124469
+4,twist,77,rot_exp,degree,0.0845,torque_exp,N mm,-3.26305376371

@@ -1,0 +1,5 @@
+member,rows,selected_channels,complete_selected_rows,first_s,last_s,median_dt_s,duplicate_time_steps
+rc-in.csv,1732,channel1 | channel2 | channel3 | channel4 | channel5 | channel6,1732,0.72008677,173.81035,0.1,0
+rc-out.csv,1732,channel1 | channel2 | channel3 | channel4 | channel5 | channel6,1732,0.71104045,173.80117,0.100026,0
+qtm_rov.csv,45625,rov_origin_x | rov_origin_y | rov_origin_z,45618,0.0,182.496,0.004,0
+tension.csv,353160,Tension_horizontal_Fy | Tenion_vertical_Fx,353160,0.0,176.5795,0.0005,0

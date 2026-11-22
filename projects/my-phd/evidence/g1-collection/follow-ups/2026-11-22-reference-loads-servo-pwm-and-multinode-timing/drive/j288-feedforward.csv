@@ -1,0 +1,14 @@
+member,split,profile,nonzero_feedforward_zero_feedback_samples,mean_abs_request_vs_reply_Nm,min_request_Nm,max_request_Nm
+unitree_j288_raw/train/l150_m108/2026-09-30_19h59m50_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5973,0.003802,-0.036999999980219564,0.03699999735378438
+unitree_j288_raw/train/l150_m108/2026-09-30_19h59m58_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3490,0.004058,-0.073,0.073
+unitree_j288_raw/train/l150_m333/2026-09-30_20h08m39_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5978,0.004266,-0.11899991822787838,0.11899997043028762
+unitree_j288_raw/train/l150_m333/2026-09-30_20h11m04_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3465,0.005018,-0.239,0.239
+unitree_j288_raw/train/l150_m417/2026-09-30_20h18m38_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5919,0.004506,-0.14999999787830878,0.14999998253603902
+unitree_j288_raw/train/l150_m417/2026-09-30_20h18m46_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3493,0.004852,-0.3,0.3
+unitree_j288_raw/train/l75_m246/2026-09-29_23h48m48_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5983,0.003790,-0.04399999869128088,0.043999996125911614
+unitree_j288_raw/train/l75_m246/2026-09-29_23h48m56_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3486,0.004254,-0.088,0.088
+unitree_j288_raw/train/l75_m586/2026-09-29_23h25m55_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3483,0.004806,-0.213,0.213
+unitree_j288_raw/train/l75_m586/2026-09-29_23h32m06_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5953,0.004563,-0.10599999786212126,0.10599999812084267
+unitree_j288_raw/train/l75_m70/2026-09-29_23h54m46_torque_chirp_kp0.97_kd0.020.json,train,torque_chirp,5987,0.003830,-0.039999999964939824,0.039999998079511656
+unitree_j288_raw/train/l75_m70/2026-09-29_23h54m54_torque_steps_kp0.97_kd0.020.json,train,torque_steps,3489,0.003906,-0.04,0.04
+unitree_j288_raw/validation/l75_m415/2026-09-29_23h42m38_torque_steps_kp0.97_kd0.020.json,validation,torque_steps,3485,0.004471,-0.15,0.15

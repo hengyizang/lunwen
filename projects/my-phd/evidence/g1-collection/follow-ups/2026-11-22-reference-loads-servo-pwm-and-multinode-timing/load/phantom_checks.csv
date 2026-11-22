@@ -1,0 +1,17 @@
+site,fit_candidate,phase,paired_points,finite_xy,equal_to_first_xy,response_min,response_max,member_crc32,member
+1,1,indent,21,21,True,-0.02906460003,16.07773676,ca6292f0,datashare-figshare/Neo hookean model/phantom_1/output_mats/FEBioData_1.mat
+1,1,twist,76,76,True,-23.02305033,28.22162499,ca6292f0,datashare-figshare/Neo hookean model/phantom_1/output_mats/FEBioData_1.mat
+1,2,indent,23,23,False,-0.02906460003,16.07773676,7e77b724,datashare-figshare/Neo hookean model/phantom_1/output_mats/FEBioData_2.mat
+1,2,twist,76,76,True,-23.02305033,28.22162499,7e77b724,datashare-figshare/Neo hookean model/phantom_1/output_mats/FEBioData_2.mat
+2,1,indent,23,23,True,-0.01113565575,13.43516702,94cb5d10,datashare-figshare/Neo hookean model/phantom_2/output_mats/FEBioData_1.mat
+2,1,twist,74,74,True,-20.93346823,27.16391701,94cb5d10,datashare-figshare/Neo hookean model/phantom_2/output_mats/FEBioData_1.mat
+2,2,indent,24,24,False,-0.01113565575,13.43516702,f16fca95,datashare-figshare/Neo hookean model/phantom_2/output_mats/FEBioData_2.mat
+2,2,twist,74,74,True,-20.93346823,27.16391701,f16fca95,datashare-figshare/Neo hookean model/phantom_2/output_mats/FEBioData_2.mat
+3,1,indent,21,21,True,-0.0167853303,19.80062615,abc6730c,datashare-figshare/Neo hookean model/phantom_3/output_mats/FEBioData_1.mat
+3,1,twist,76,76,True,-22.92924935,30.78833182,abc6730c,datashare-figshare/Neo hookean model/phantom_3/output_mats/FEBioData_1.mat
+3,2,indent,24,24,False,-0.0167853303,19.80062615,6a2ce095,datashare-figshare/Neo hookean model/phantom_3/output_mats/FEBioData_2.mat
+3,2,twist,77,77,False,-22.92924935,30.78833182,6a2ce095,datashare-figshare/Neo hookean model/phantom_3/output_mats/FEBioData_2.mat
+4,1,indent,21,20,True,-0.02110208825,12.49930137,aaa3f661,datashare-figshare/Neo hookean model/phantom_4/output_mats/FEBioData_1.mat
+4,1,twist,78,78,True,-18.91401152,22.17726028,aaa3f661,datashare-figshare/Neo hookean model/phantom_4/output_mats/FEBioData_1.mat
+4,2,indent,22,21,False,-0.02110208825,12.65352453,084d1521,datashare-figshare/Neo hookean model/phantom_4/output_mats/FEBioData_2.mat
+4,2,twist,75,75,False,-18.91401152,22.17726028,084d1521,datashare-figshare/Neo hookean model/phantom_4/output_mats/FEBioData_2.mat

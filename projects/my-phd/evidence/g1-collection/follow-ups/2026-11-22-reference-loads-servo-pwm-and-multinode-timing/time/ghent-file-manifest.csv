@@ -1,0 +1,7 @@
+run,cache_filename,source_url,bytes,sha256
+tdoa-random,tdoa-random-processed_full.csv,https://cloud.ilabt.imec.be/public.php/dav/files/XAmg5spW2As3toD/processed_full.csv,61450640,db0fcf111a90c9bb7656540ca55e7fa569a1787c9c9496fd6ce281999e4c83f1
+tdoa-random,tdoa-random-gt.csv,https://cloud.ilabt.imec.be/public.php/dav/files/XAmg5spW2As3toD/gt.csv,1876279,f2a2a41af2ebe605a9f32907784605537fc96aec204af5e5c803025cf383ce7b
+twr-one,twr-one-processed_full.csv,https://cloud.ilabt.imec.be/public.php/dav/files/iS3RkgeHAwitPTp/processed_full.csv,5128842,687d097014bb9e40de1b3feaf8ff04ca675ac0b200b7badaa4da8f3368613138
+twr-one,twr-one-gt.csv,https://cloud.ilabt.imec.be/public.php/dav/files/iS3RkgeHAwitPTp/gt.csv,3627423,8112cc9df17d5f833cbdede0d72b37af0996d6acec0eef0c8c127906ab6705d4
+twr-two,twr-two-processed_full.csv,https://cloud.ilabt.imec.be/public.php/dav/files/QtwFWDZG6PyrNXc/processed_full.csv,4738418,8ad8935f594f9a4ba9154f6fe64fd27b787aeafe56fe3cadca93fa341671ad4a
+twr-two,twr-two-gt.csv,https://cloud.ilabt.imec.be/public.php/dav/files/QtwFWDZG6PyrNXc/gt.csv,3742863,6948c6c00c771142df2c5723a971a1c3037f263b02af134d651d45540020a4f9

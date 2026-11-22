@@ -1,0 +1,7 @@
+from_id,to_id,relation,locator,url
+10.1016/j.jmbbm.2026.107518,10.6084/m9.figshare.30023476.v1,links author dataset,"Supplementary data, after references. The unversioned Figshare DOI resolves to v1.",https://cris.vub.be/ws/portalfiles/portal/278800726/Elsevier_JMBBM_107518_Accepted_version.pdf
+10.1016/j.mechmachtheory.2016.04.004,10.1016/j.mechatronics.2015.07.004,cites and reuses test setup,"Ref. [32] and §§1, 4.1 on reused pendulum apparatus.",https://cris.vub.be/ws/files/26793296/201602_seapea.pdf
+10.1109/tmech.2016.2621062,10.1016/j.mechmachtheory.2016.04.004,cites prior natural-dynamics work,Ref. [19].,https://cris.vub.be/ws/files/26793647/201605offset.pdf
+10.1109/tmech.2016.2621062,10.1016/j.mechatronics.2015.07.004,cites drive and loss modeling paper,Ref. [21].,https://cris.vub.be/ws/files/26793647/201605offset.pdf
+10.1017/s0263574721001211,10.1109/tmech.2016.2621062,cites operating-position experiments,Ref. [4].,https://cris.vub.be/ws/files/75639271/Calanca_and_Verstraten_2021_An_Energy_Efficiency_Index_for_Elastic_Actuators_During_Resonant_Motion.pdf
+10.1017/s0263574721001211,10.1016/j.mechmachtheory.2016.04.004,cites SEA/PEA energy benchmark,Ref. [49].,https://cris.vub.be/ws/files/75639271/Calanca_and_Verstraten_2021_An_Energy_Efficiency_Index_for_Elastic_Actuators_During_Resonant_Motion.pdf

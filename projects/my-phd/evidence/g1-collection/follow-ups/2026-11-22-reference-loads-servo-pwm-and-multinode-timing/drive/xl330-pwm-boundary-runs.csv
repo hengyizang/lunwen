@@ -1,0 +1,8 @@
+archive,member,trajectory,mass_kg,length_m,kp,first_entry_index0,last_entry_index0,samples,first_s,last_s,reported_duty,median_abs_tracking_error_rad,min_input_V,max_input_V
+xl330_raw.zip,data_raw_2/2026-07-20_15h45m54.json,sin_time_square,0.117,0.17,300,550,557,8,5.630737,5.708769,1.0,1.299880,6.9,7.2
+xl330_raw.zip,data_raw_2/2026-07-20_15h45m54.json,sin_time_square,0.117,0.17,300,573,581,9,5.900579,6.002113,-1.0,1.398780,6.7,7.2
+xl330_raw.zip,data_raw_2/2026-07-20_15h53m18.json,sin_time_square,0.159,0.17,300,416,424,9,5.327775,5.431755,-1.0,1.329431,6.4,7.0
+xl330_raw.zip,data_raw_2/2026-07-20_15h53m18.json,sin_time_square,0.159,0.17,300,439,449,11,5.624779,5.752344,1.0,1.500915,6.4,7.1
+xl330_raw.zip,data_raw_2/2026-07-20_15h53m18.json,sin_time_square,0.159,0.17,300,461,469,9,5.904993,6.003944,-1.0,1.583611,6.4,7.0
+xl330_raw.zip,data_raw_2/2026-07-20_16h20m55.json,sin_time_square,0.159,0.14,300,578,581,4,5.647024,5.680516,1.0,1.215657,6.8,7.0
+xl330_raw.zip,data_raw_2/2026-07-20_16h20m55.json,sin_time_square,0.159,0.14,300,602,611,10,5.902368,5.981504,-1.0,1.303411,6.6,7.1

@@ -1,0 +1,4 @@
+motor,member,group,field,condition,enabled_condition_samples,enabled_rows,first_match_s,signed_first_value,first_abs_tracking_error_rad,first_onboard_current_A
+MD300,md300_logs/id_1/raw/2026-10-30_10h23m11.json,id_1,load,abs(supply current readback) > 1500 mA configured limit,1,1271,5.773041,-1544.0,0.213467,-1.544
+MD300,md300_logs/id_3/raw/2026-11-06_14h01m43.json,id_3,load,abs(supply current readback) > 1500 mA configured limit,1,1356,5.768829,1521.0,0.185980,1.521
+HLS2915,l15cm_m100g/2026-09-20_10h39m57_sin_time_square.json,sin_time_square,load,abs(reported PWM percent) == 100,1,1188,5.929693,100.0,0.730327,0.257316

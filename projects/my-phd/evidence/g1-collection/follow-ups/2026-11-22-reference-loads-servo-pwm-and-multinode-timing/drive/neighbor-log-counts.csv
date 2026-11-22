@@ -1,0 +1,14 @@
+motor,group,logs,samples,enabled,enabled_with_live_pwm_field
+MD300,id_1,163,211605,177254,0
+MD300,id_2,168,230727,194673,0
+MD300,id_3,158,218796,184302,0
+J288,train,124,737850,650148,
+J288,validation,7,41681,41681,
+HLS2915,lift_and_drop,16,19008,6342,
+HLS2915,sin_sin,16,19009,19009,
+HLS2915,sin_time_square,16,19015,19015,
+HLS2915,up_and_down,16,18992,18992,
+STS3215-12V,lift_and_drop,24,42412,10632,
+STS3215-12V,sin_sin,24,32011,32011,
+STS3215-12V,sin_time_square,25,33338,33338,
+STS3215-12V,up_and_down,24,31790,31790,

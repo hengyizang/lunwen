@@ -1,0 +1,14 @@
+from_id,to_id,relation,locator,url
+10.1109/icra55743.2025.11128640,10.1007/978-3-319-68792-6_14,cites,ref. 6,https://arxiv.org/pdf/2410.08650v4
+10.1109/icra55743.2025.11128640,10.1109/icra.2015.7139307,cites,ref. 21,https://arxiv.org/pdf/2410.08650v4
+10.1109/icra55743.2025.11128640,10.1109/aim.2019.8868596,cites,ref. 19,https://arxiv.org/pdf/2410.08650v4
+10.1109/icra55743.2025.11128640,10.1109/icmae52228.2021.9522368,cites,ref. 18,https://arxiv.org/pdf/2410.08650v4
+10.1109/icra55743.2025.11128640,10.1109/coase.2019.8843119,cites,ref. 22,https://arxiv.org/pdf/2410.08650v4
+10.1109/coase.2019.8843119,10.1109/tmech.2013.2276397,cites,ref. 13 and Section V-A,https://ericsihite.wordpress.com/wp-content/uploads/2018/04/drive_coast_case_2019.pdf
+10.1115/1.4067431,10.1109/iros.2017.8206351,cites,"ref. 25, prior G1 paper on torque bandwidth",https://minerva-access.unimelb.edu.au/server/api/core/bitstreams/9b793fb1-85e9-4ebe-83f8-1f5045bddc58/content
+gregwar-bam-pendulum,10.1109/icra55743.2025.11128640,implements paper methodology,"BAM documentation, Reference paper and Identified actuators. The later XL330 and STS logs extend the original campaign.",https://github.com/Rhoban/bam/blob/b9e11118e17fe8ec803d430202f6fcf31d57901e/docs/index.rst
+i1cps-st3025-pendulum,gregwar-bam-pendulum,independent hardware extension of BAM pendulum method,BAM actuator table for ST3025 and upstream raw-file link,https://github.com/Rhoban/bam/blob/b9e11118e17fe8ec803d430202f6fcf31d57901e/docs/usage/actuators.rst
+seamusz-hls2915-pendulum,gregwar-bam-pendulum,independent hardware extension of BAM pendulum method,Contributor integration PR 15; see immutable data release in sources.csv,https://github.com/Rhoban/bam/pull/15
+tk233-sts3215-12v-pendulum,gregwar-bam-pendulum,independent hardware extension of BAM pendulum method,Contributor integration PR 20; see immutable data release in sources.csv,https://github.com/Rhoban/bam/pull/20
+lachlanhurst-j288-pendulum,gregwar-bam-pendulum,independent hardware extension of BAM pendulum method,Contributor integration PR 21; see immutable data release in sources.csv,https://github.com/Rhoban/bam/pull/21
+mangdang-md300-pendulum,gregwar-bam-pendulum,independent hardware extension of BAM pendulum method,Contributor integration PR 26; see immutable data release in sources.csv,https://github.com/Rhoban/bam/pull/26

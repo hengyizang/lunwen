@@ -1,0 +1,644 @@
+{
+  "project": "my-phd",
+  "branch": "cloud-state/my-phd",
+  "date_utc": "2026-11-22",
+  "parent_commit": "49343b1f18874eaade2caa56c6cea4908e5dcaf3",
+  "project_state": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "preflight": {
+    "queued_github_actions": 0,
+    "in_progress_github_actions": 0,
+    "numbered_collection_rounds": 55,
+    "older_followup_batches": 16
+  },
+  "funding": "Free public metadata and primary materials",
+  "works": 74,
+  "first_work_entries": 70,
+  "first_work_entries_by_level": {
+    "full text": 48,
+    "bibliographic screening": 22
+  },
+  "all_work_entries_by_level": {
+    "full text": 50,
+    "bibliographic screening": 24
+  },
+  "previous_works_retained": 4,
+  "materials": 32,
+  "materials_by_grade": {
+    "measured files": 21,
+    "annotated video": 1,
+    "experimental and simulated files": 1,
+    "derived feature table": 1,
+    "numerical supplement": 6,
+    "manufacturer-aggregated bench measurements": 2
+  },
+  "directed_relations": 88,
+  "source_history": {
+    "first entry; no historical identity hit": 31,
+    "first file entry; existing parent article": 1
+  },
+  "domain_file_manifest": [
+    {
+      "path": "drive/README.md",
+      "bytes": 4678,
+      "sha256": "b93774fd159b10087143f5ae4d8fbae273cd486489d661bba7a0f04409ae04ed"
+    },
+    {
+      "path": "drive/archive-receipts.csv",
+      "bytes": 1152,
+      "sha256": "bd79dda1421c1ba89db466fe2adb6a470c4d2cd4dedda82b966df6748bf30d89",
+      "data_rows": 6
+    },
+    {
+      "path": "drive/edges.csv",
+      "bytes": 2351,
+      "sha256": "4965b8ea9a90620df1e53e1eca47c98c62575786c16be3fa5651d82e54fba696",
+      "data_rows": 13
+    },
+    {
+      "path": "drive/j288-feedforward.csv",
+      "bytes": 2003,
+      "sha256": "4e87ca253e2d0b3be4bbfe0c15c84d8a539e904da15b2ffd0dab7e263880b208",
+      "data_rows": 13
+    },
+    {
+      "path": "drive/literature.csv",
+      "bytes": 5674,
+      "sha256": "c74ed343518eb4f74c9c212eab627b3a2ee2f69fad4fcf90d4eb08cba9a78386",
+      "data_rows": 8
+    },
+    {
+      "path": "drive/neighbor-boundary-observations.csv",
+      "bytes": 627,
+      "sha256": "142886b28a988f672c93074848afa67b0196bcdb9dd18281fc7157fa52309d9f",
+      "data_rows": 3
+    },
+    {
+      "path": "drive/neighbor-field-ranges.csv",
+      "bytes": 2748,
+      "sha256": "c2b9b9827f17fa9b02b9df1fdb67d356daeeb1def557c8a3c6351b53b8c3bcb1",
+      "data_rows": 35
+    },
+    {
+      "path": "drive/neighbor-log-counts.csv",
+      "bytes": 522,
+      "sha256": "956f505fbb73c85df3c6c0ec458d0c810fbe916f2c44b82370d26ecf8b829088",
+      "data_rows": 13
+    },
+    {
+      "path": "drive/neighbor-receipts.csv",
+      "bytes": 840,
+      "sha256": "5cf5d35253b9e8bb28c8c005ffab708b11a458120823c3c620389c58382ae4d9",
+      "data_rows": 4
+    },
+    {
+      "path": "drive/replay.py",
+      "bytes": 6686,
+      "sha256": "82e93d4f38f981c16431a6abe27879afc6d60b06aa2df949d062c3aa202b6149"
+    },
+    {
+      "path": "drive/replay_neighbors.py",
+      "bytes": 7739,
+      "sha256": "d7e55ef80c0249d9d8befd84f72eafc95f3361fa0945d6628fec2921fab954e4"
+    },
+    {
+      "path": "drive/search.md",
+      "bytes": 5622,
+      "sha256": "76e1dd4e20194a84cf8ae0aaf365186b7b9bb73c0e0d2ae0e0124956d36f3d18"
+    },
+    {
+      "path": "drive/servo-waveform-summary.csv",
+      "bytes": 1863,
+      "sha256": "b4cb8dbc5fa4d2c7ac5ef217f92e677bcc53b448a3d5019425880f454a6a1837",
+      "data_rows": 28
+    },
+    {
+      "path": "drive/sources.csv",
+      "bytes": 4793,
+      "sha256": "1bdb6afda0529a9cfc0d7f2f6f1c4245ab053c97d11ab5bcb014b39f96c06d7d",
+      "data_rows": 6
+    },
+    {
+      "path": "drive/xl330-pwm-boundary-runs.csv",
+      "bytes": 1090,
+      "sha256": "7e1ed1e52ad1a2b62bea2e8658ac6ee6e1c2e1958d597840f632b9fcb5acde24",
+      "data_rows": 7
+    },
+    {
+      "path": "latency/README.md",
+      "bytes": 7552,
+      "sha256": "1f3bc1125f80c9bc29eddc830b4edf36db9127460d81465bcdbe8aca4f99a555"
+    },
+    {
+      "path": "latency/edges.csv",
+      "bytes": 1923,
+      "sha256": "6402ebae24203a194572df586470ce5903bc96ad82667afbe5c97ccc9aa4d8bc",
+      "data_rows": 9
+    },
+    {
+      "path": "latency/file-manifest.csv",
+      "bytes": 3686,
+      "sha256": "b525594d648c2d61f13dbb5f3786120b3380914d3f16c924a92bf4e4b378b0e0",
+      "data_rows": 16
+    },
+    {
+      "path": "latency/graph-video-lags.csv",
+      "bytes": 1049,
+      "sha256": "07dca69d56672fbefe79ddf5a3ca2402928b325a46d2f2ffa2f06350a26643ae",
+      "data_rows": 12
+    },
+    {
+      "path": "latency/haptic-loop-cdf.csv",
+      "bytes": 303,
+      "sha256": "863d3f2e98950282c3d47a0f44b0b8d5826d447036182ca9b9f5dcf35024bc28",
+      "data_rows": 3
+    },
+    {
+      "path": "latency/literature-upgrades.csv",
+      "bytes": 1023,
+      "sha256": "0512733f5cb65239828f64b7e6bf3ce0defaa3ee2969c8b59d769f6df77ef808",
+      "data_rows": 1
+    },
+    {
+      "path": "latency/literature.csv",
+      "bytes": 9218,
+      "sha256": "773a85392db6ccf4d7d76be9b58afe945134a1a66814ba8df0a70436845f2c0f",
+      "data_rows": 13
+    },
+    {
+      "path": "latency/measure.py",
+      "bytes": 4747,
+      "sha256": "17ae159ca38f1be545ca159eb70639059b92ec6a2140a78c7c629f5833bae5a7"
+    },
+    {
+      "path": "latency/measure_figures.py",
+      "bytes": 6526,
+      "sha256": "d4777c86079c6ce70c00bd677c0d9edbca340549f61c52026cf6252151742826"
+    },
+    {
+      "path": "latency/pcd-paired-delay.csv",
+      "bytes": 1153,
+      "sha256": "09d6cd4cbc9c4f40e39e57d5a91517633bb7a3c299c92c9f1466ebe457076b5f",
+      "data_rows": 21
+    },
+    {
+      "path": "latency/pcd-validation-files.csv",
+      "bytes": 8537,
+      "sha256": "17f58c163fb78591954de8e0c1ddc13f6ccf67fda46287578e3a3d9f332add39",
+      "data_rows": 44
+    },
+    {
+      "path": "latency/pcd_pairing.py",
+      "bytes": 3505,
+      "sha256": "d384820f765576d1cae23b54c07d872ff4ca1e5e71480eefcd08c7a029660b08"
+    },
+    {
+      "path": "latency/search.md",
+      "bytes": 4411,
+      "sha256": "0d964be15e50b875f4445141883cde32bb1889be8ddb4be7b2afa326887e9ee2"
+    },
+    {
+      "path": "latency/sources.csv",
+      "bytes": 2784,
+      "sha256": "9b4c783483b9e090d2a3e4b5286f78489611ddfdf04c85c18119250e624b3b7d",
+      "data_rows": 3
+    },
+    {
+      "path": "latency/torch-marker-check.csv",
+      "bytes": 1279,
+      "sha256": "5cad7fffc266d2b92ace22d66b9cad078b3fe377cb44ae6bab9e8ba8b8a64db3",
+      "data_rows": 12
+    },
+    {
+      "path": "load/README.md",
+      "bytes": 4068,
+      "sha256": "9a73621d0609165d2a496ca82ba89d4c287d10ed94e036b2f92f03df7d07e6be"
+    },
+    {
+      "path": "load/audit_phantom.py",
+      "bytes": 4814,
+      "sha256": "6195ee3891a30b12e96f2858b03f0b4a17b72c8f01722d6359562bb436dc01d5"
+    },
+    {
+      "path": "load/audit_ppea.py",
+      "bytes": 3570,
+      "sha256": "a4715fcf940591585baeb5acc7a414feb67107353187127bb2f5c6a8ed8c013e"
+    },
+    {
+      "path": "load/edges.csv",
+      "bytes": 1326,
+      "sha256": "fff3b7b8e7815bf15225dfe57ce76cb44ac110dfa809f80ff5377013c627d9f2",
+      "data_rows": 6
+    },
+    {
+      "path": "load/literature.csv",
+      "bytes": 5069,
+      "sha256": "e218fca3f737430a014ed5e433d300ea5128a0dc417dc07ff50778624953bf25",
+      "data_rows": 6
+    },
+    {
+      "path": "load/phantom_checks.csv",
+      "bytes": 2221,
+      "sha256": "9cf20618888037ededbc17a605dce9f62ce37b1f8b539dd8da2f1e88b75df0ce",
+      "data_rows": 16
+    },
+    {
+      "path": "load/phantom_curves.csv",
+      "bytes": 24605,
+      "sha256": "8fc72c31083224174e80c7eb469c35e2815db2ce256950c608f45d4ed6c7e944",
+      "data_rows": 389
+    },
+    {
+      "path": "load/ppea_channels.csv",
+      "bytes": 4508,
+      "sha256": "c0da7a2ac8932b338867db58a067020e1f1d2cb3fac8181f10b10f41dd9e7dc8",
+      "data_rows": 56
+    },
+    {
+      "path": "load/ppea_traces.csv",
+      "bytes": 1109,
+      "sha256": "5f989544d79fd0500536bd42cbf73d744d6c2dde34bdbb0a8d82ab92f95875b5",
+      "data_rows": 8
+    },
+    {
+      "path": "load/search.md",
+      "bytes": 3837,
+      "sha256": "f5a4b92c7f214699aa1b5da57a8735b86af7f0a96226fecb528e1867ab32a273"
+    },
+    {
+      "path": "load/sources.csv",
+      "bytes": 1484,
+      "sha256": "953237b4eafe20956d645991d998d882efbd940d7c091e71289ef9b7ee1d8418",
+      "data_rows": 2
+    },
+    {
+      "path": "load/verified_objects.csv",
+      "bytes": 3152,
+      "sha256": "cfd1d14b383fe59c4f9e9191e77d7f86fd92341a4d6956ce54e1fd5b2a535931",
+      "data_rows": 13
+    },
+    {
+      "path": "seating/README.md",
+      "bytes": 4672,
+      "sha256": "c36b5f02a73f4b8fca6a8211088676294e6dbda6b04c95ae90510a11f7235e14"
+    },
+    {
+      "path": "seating/audit.py",
+      "bytes": 6694,
+      "sha256": "b2f5c4d5e98a57c9e8dcf1c2da808a6226242a067130ffbf166c5d21061f54f4"
+    },
+    {
+      "path": "seating/audit_clicks.py",
+      "bytes": 2725,
+      "sha256": "90acad32871ab280dfa4a5cee88e7bf9041ac2bd429c842db3c82281ba7908cb"
+    },
+    {
+      "path": "seating/click-features.csv",
+      "bytes": 328,
+      "sha256": "3fe6b602cfa129d96a6602226fae6f05a0cae3fb1dce3e7ff0fec89c7da9e727",
+      "data_rows": 2
+    },
+    {
+      "path": "seating/demo-channels.csv",
+      "bytes": 2249,
+      "sha256": "4cf3de580a5de5b8007bdf56cb7f5fcc9b1fff0d01fb3c46b4787304b5fdf894",
+      "data_rows": 8
+    },
+    {
+      "path": "seating/edges.csv",
+      "bytes": 1368,
+      "sha256": "557ac77bf626af3afd4e626f8ab453a6524ebcb8ce7cac50dbb3b5bae1be5678",
+      "data_rows": 6
+    },
+    {
+      "path": "seating/hartu-members.csv",
+      "bytes": 4426,
+      "sha256": "0be55ba786d83dae8d39b6df99e7aa235efdec505197460fc95bae63e404da87",
+      "data_rows": 34
+    },
+    {
+      "path": "seating/literature.csv",
+      "bytes": 5749,
+      "sha256": "d43fb47e140a5279771e021efcb72669d3e221cbd079e486616028a72653a9f2",
+      "data_rows": 9
+    },
+    {
+      "path": "seating/measurements.py",
+      "bytes": 5742,
+      "sha256": "d7a6d2eaea603d3cd7cae788303c4b917828aed30bec7d14a89ac4262ee7aff5"
+    },
+    {
+      "path": "seating/patch-tests.csv",
+      "bytes": 904,
+      "sha256": "52cd3eef09588630e3652593ef9102054a9a1f1676ccf6785d2804179dd2e87e",
+      "data_rows": 3
+    },
+    {
+      "path": "seating/pressing.csv",
+      "bytes": 365,
+      "sha256": "e4e48a813d860654033473983b2a63a35c4e387e447271e4b95ae30d7b458072",
+      "data_rows": 1
+    },
+    {
+      "path": "seating/rivet-tests.csv",
+      "bytes": 2823,
+      "sha256": "8d333a1b8802d3d1f9300c323498ed6a1c68a7790e41b88c2dcb43d590bf3ef6",
+      "data_rows": 17
+    },
+    {
+      "path": "seating/search.md",
+      "bytes": 5930,
+      "sha256": "720dba87190c124319e9140bdd2d692a96e42f79e299c1685f79ea20b77b1cb8"
+    },
+    {
+      "path": "seating/sources.csv",
+      "bytes": 3629,
+      "sha256": "4486d3f9b5a0baf1dc72db3b76fc26ac819526fea10f2a2a0868aaefc2f36285",
+      "data_rows": 5
+    },
+    {
+      "path": "thermal/README.md",
+      "bytes": 5426,
+      "sha256": "8c4caba367cfbaa02efe71c6e06c0c44f7a0d083a4dd8560a846c07e29548bfa"
+    },
+    {
+      "path": "thermal/balance-heldout.csv",
+      "bytes": 169,
+      "sha256": "32648687b6087421d2a3c4f91b092bc3546d9ceebad54a0f931b625a5fd595b2",
+      "data_rows": 6
+    },
+    {
+      "path": "thermal/edges.csv",
+      "bytes": 2122,
+      "sha256": "2fb7e6e64bfb6cbef36264597dda1c5452330bfe5f460467e63e87536d761531",
+      "data_rows": 14
+    },
+    {
+      "path": "thermal/hydrogel-thermal-conditions.csv",
+      "bytes": 114,
+      "sha256": "5814d1f5e10abc6a9ba8d90d7c1fe4654d4ed95baa874676c1417820f3adee78",
+      "data_rows": 4
+    },
+    {
+      "path": "thermal/inputs.csv",
+      "bytes": 1550,
+      "sha256": "0e93f802a6b6db11edbe13144598b7eadde522d4dab42476d4edc409aedd84c0",
+      "data_rows": 7
+    },
+    {
+      "path": "thermal/literature-upgrades.csv",
+      "bytes": 800,
+      "sha256": "f75e9eb089b38751525d5d5e0d7a345ab23385a9c44c60e9ed7cfa1b4642be55",
+      "data_rows": 1
+    },
+    {
+      "path": "thermal/literature.csv",
+      "bytes": 8733,
+      "sha256": "17297fd6f6115720e02f6bedd63ed22d7a744b9cdf9d12ea3e29811fb304f47c",
+      "data_rows": 11
+    },
+    {
+      "path": "thermal/optical-hysteresis.csv",
+      "bytes": 209,
+      "sha256": "f3c414445c5de353e3da88cdfed9663140e7c2bd3f07c176a4fe52780f83f80f",
+      "data_rows": 12
+    },
+    {
+      "path": "thermal/pzt-coefficient-change.csv",
+      "bytes": 326,
+      "sha256": "c23e41816ea6d21f44e11ae04c58d5900142add52819f26a1085a2dd81b284df",
+      "data_rows": 12
+    },
+    {
+      "path": "thermal/pzt-eight-units.csv",
+      "bytes": 1089,
+      "sha256": "0a6fe6054c9721f6d89f2f0d9295c56d022adb63e671a3be770cd016bab5948e",
+      "data_rows": 48
+    },
+    {
+      "path": "thermal/pzt-loaded-drift.csv",
+      "bytes": 646,
+      "sha256": "3f8a1ad595f6c18388d7133f2bbd98b86240ce8cc4d82a0b7f1f98cef149017a",
+      "data_rows": 18
+    },
+    {
+      "path": "thermal/pzt-paired-loads.csv",
+      "bytes": 1591,
+      "sha256": "9b8c6dd554be01ea35308607aff765cfdc2f268b4fa39bb0de2d45426b392192",
+      "data_rows": 30
+    },
+    {
+      "path": "thermal/pzt-unloaded-drift.csv",
+      "bytes": 248,
+      "sha256": "999c90d3533e6027b82d5763ac5c5eb066e3055c5b9cfbde010edc853796f4b1",
+      "data_rows": 6
+    },
+    {
+      "path": "thermal/recompute.py",
+      "bytes": 7903,
+      "sha256": "bb5f88bd467fbc7cc962770d9caac825ca46613d2e24387e53ce873e09faa690"
+    },
+    {
+      "path": "thermal/search.md",
+      "bytes": 4480,
+      "sha256": "ccf4e5ec176e16ddaa4d2cea6fc1b8ebda9c5ae61c62ad5d43f2184e249cd5ff"
+    },
+    {
+      "path": "thermal/separate-sweeps.csv",
+      "bytes": 306,
+      "sha256": "b4e1ca71376649f5d9377ebc12b06c6c034d24b5b9a268c2589e46795e8d5da5",
+      "data_rows": 4
+    },
+    {
+      "path": "thermal/skin-crossed-conditions.csv",
+      "bytes": 724,
+      "sha256": "8c6f4f69521e56252cdc54571c22a2b8be27994ee9708a37f21d463937a4d2c6",
+      "data_rows": 14
+    },
+    {
+      "path": "thermal/sources.csv",
+      "bytes": 6021,
+      "sha256": "28d2f0ffc39dc1208db073aec423e312d68d793a956c06fd6f00712fcca20a69",
+      "data_rows": 6
+    },
+    {
+      "path": "thrust/README.md",
+      "bytes": 3815,
+      "sha256": "beebfdd98a5ac47ffba26628422598d33b753f331138a370eb6f4e0fe2c79507"
+    },
+    {
+      "path": "thrust/dynamic-force-files.csv",
+      "bytes": 3492,
+      "sha256": "c4696046432331722849e69c4d5aeb870781e77dff063b0aff66a1c613ab814e",
+      "data_rows": 18
+    },
+    {
+      "path": "thrust/edges.csv",
+      "bytes": 1596,
+      "sha256": "4c407806a9a429d90077db3b7be967794de28767450942e0073f2982bf85b943",
+      "data_rows": 10
+    },
+    {
+      "path": "thrust/literature.csv",
+      "bytes": 6749,
+      "sha256": "609dc41ea6beac0eff8d39e05491ccd71e9b7273dd29c0581e1ad56b03dc8cc2",
+      "data_rows": 11
+    },
+    {
+      "path": "thrust/replay.py",
+      "bytes": 7878,
+      "sha256": "d9d640864e2f5224b7a1f1c4cf2c60694821ff4ee7cc18936bd55f3896e32e09"
+    },
+    {
+      "path": "thrust/restrained-runs.csv",
+      "bytes": 2921,
+      "sha256": "25b9d3e4bdee1f2e1d5a183c6e17e5e5d4a26171f63a8b6aecdfbd576e9c237c",
+      "data_rows": 18
+    },
+    {
+      "path": "thrust/search.md",
+      "bytes": 4360,
+      "sha256": "8f847690cc44f47c3f849e88d3ca0df7fac9a2868ba9255e619f7a750abfc381"
+    },
+    {
+      "path": "thrust/selected-members.json",
+      "bytes": 11867,
+      "sha256": "731a8028bb1b8d92ad72de5567e47eaf1732393fab5ede6176a44c8d7feec99b"
+    },
+    {
+      "path": "thrust/sources.csv",
+      "bytes": 4219,
+      "sha256": "298e89e1228b63e60861b5377ded535967dcb54863634eed7850345a0f9c069c",
+      "data_rows": 6
+    },
+    {
+      "path": "thrust/static-voltage-sheets.csv",
+      "bytes": 819,
+      "sha256": "146e7741abe27419b91fa7adbe5464cc403538b982c1831ccc2c47d5c879a15e",
+      "data_rows": 13
+    },
+    {
+      "path": "thrust/tank-trajectory-files.csv",
+      "bytes": 8055,
+      "sha256": "22c7800af1c5850b2d725e4b91b07bcae84616d7739f11ce3fd2ce17fad2f635",
+      "data_rows": 39
+    },
+    {
+      "path": "thrust/tether-streams.csv",
+      "bytes": 507,
+      "sha256": "b642006ee5c4d0870d1c189887efcf5ad7203245e435254316f2a7767b4fd300",
+      "data_rows": 4
+    },
+    {
+      "path": "thrust/trajectory.py",
+      "bytes": 2010,
+      "sha256": "1a0f594f728a8ed73b60f11b2ceb3c2415066cbfd239a8a2c3d67c2b09b07306"
+    },
+    {
+      "path": "time/README.md",
+      "bytes": 4057,
+      "sha256": "e06d35e89e23c0fb3038375ee7dc9d020dd567aca8491e2db0cc5faa1eff67c8"
+    },
+    {
+      "path": "time/document-versions.csv",
+      "bytes": 2384,
+      "sha256": "919f9aca3e02ee41946cab282fa0c9bfd452375e7d7c6fed83fce9979662cd6b",
+      "data_rows": 12
+    },
+    {
+      "path": "time/edges.csv",
+      "bytes": 6642,
+      "sha256": "91449b3af76c5c35ebe3ffe06ff4a9509dfaef77cc233e923c7ba674441807a3",
+      "data_rows": 30
+    },
+    {
+      "path": "time/ghent-file-manifest.csv",
+      "bytes": 1147,
+      "sha256": "35dfa5f6691aac6d06736b97bb429ebf5b1f7cce609d6f1096080dffa96b7d74",
+      "data_rows": 6
+    },
+    {
+      "path": "time/ghent-motion-summary.csv",
+      "bytes": 1176,
+      "sha256": "8f3926d0f04caf0ce73344c841b42836fbdc4f0712a39f7010391d9aef408f13",
+      "data_rows": 3
+    },
+    {
+      "path": "time/ghent-tdoa-superframes.csv",
+      "bytes": 534,
+      "sha256": "49728a040eb80f25bb5e07e26ae510f63b75ab1d5ba285db0e60b25561826dcd",
+      "data_rows": 12
+    },
+    {
+      "path": "time/ghent_motion.py",
+      "bytes": 5839,
+      "sha256": "d8d9927d5557fa4959a1356a9d39f41117f911ec136fc167abeeb6177bccee9c"
+    },
+    {
+      "path": "time/linz-clock-summary.csv",
+      "bytes": 19699,
+      "sha256": "55fc9be5b4a4921a2222b62f68e03d4cb6360bfde7f573a3ec5886632f43d96d",
+      "data_rows": 107
+    },
+    {
+      "path": "time/linz-rail-exchanges.csv",
+      "bytes": 4096,
+      "sha256": "188b98296b65016a18ed8dc5a37b0c836b7e49a3dda79a42c8b09ae122df87ae",
+      "data_rows": 24
+    },
+    {
+      "path": "time/linz_clocks.py",
+      "bytes": 6331,
+      "sha256": "efbee63d930b4d6f0a96362b8cb0ef09cbca4f98d801ed5d4d35e9de62b92e53"
+    },
+    {
+      "path": "time/linz_rail.py",
+      "bytes": 3451,
+      "sha256": "1972ddec5aa942d1988239ece6196cb236b631581eb79410c4a50fc5a678c329"
+    },
+    {
+      "path": "time/literature.csv",
+      "bytes": 8676,
+      "sha256": "5cbbe605469fae6265c6468838982e2c94964f0990a3ee2d29ed0e050aacbb43",
+      "data_rows": 14
+    },
+    {
+      "path": "time/search.md",
+      "bytes": 3610,
+      "sha256": "353f2e35a3026a82f9e65abb3ff3671a7b55f2784a52cdef66535dfa9f78bc6c"
+    },
+    {
+      "path": "time/sources.csv",
+      "bytes": 3733,
+      "sha256": "6fa4417ec933e6cef500fc9b7b552d9db3f3e8de16fdd16999c4fad10d933fcf",
+      "data_rows": 4
+    }
+  ],
+  "search_logs": [
+    "drive/search.md",
+    "latency/search.md",
+    "load/search.md",
+    "seating/search.md",
+    "thermal/search.md",
+    "thrust/search.md",
+    "time/search.md"
+  ],
+  "within_batch_merges": [],
+  "history_coverage": {
+    "git_blobs_checked": 1727,
+    "evidence_git_blobs_checked": 1665,
+    "gzip_files_decoded": 7,
+    "archive_members_read": 301,
+    "nested_gzip_payloads": 256,
+    "early_files_compared": 7,
+    "distinct_early_files": 1
+  },
+  "searchable_payloads": 2027,
+  "historical_catalogues_with_titles": 71,
+  "historical_title_rows": 45897,
+  "dedup_method": "Compared every project Git blob to the baseline recursive Git tree and searched all decoded contents, including TAR, GZIP, nested GZIP and differing early snapshots. Matched DOI/arXiv/version aliases, URLs, native identifiers and normalized titles. Reviewed title-token Jaccard >= 0.67 and shared author token with >= 3 title tokens and Jaccard >= 0.38. Reviewed related-work, data-versus-paper and provider-only hits manually. No guarantee for material under an unrecognized identity.",
+  "unit": "A work is a publication, report or dissertation identity. A material entry is a source release, supplement or video, with duplicates and mirror versions consolidated. The same apparatus may supply multiple sources. Relations include explicit citations and documented work–data associations."
+}

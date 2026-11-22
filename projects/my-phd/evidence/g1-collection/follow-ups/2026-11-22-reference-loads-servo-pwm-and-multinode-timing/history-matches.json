@@ -1,0 +1,1084 @@
+{
+  "parent_commit": "49343b1f18874eaade2caa56c6cea4908e5dcaf3",
+  "records": {
+    "10.1109/icra55743.2025.11128640": {
+      "kind": "works",
+      "status": "first work entry; earlier discovery mention",
+      "interpretation": "Earlier in a compressed provider response only. Now separately catalogued with physical pendulum logs.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/c2b189c90592bf7f598aab0e3e7bebd30487432403dddb9c0c636898d4852f03.json.gz!c2b189c90592bf7f598aab0e3e7bebd30487432403dddb9c0c636898d4852f03.json": [
+          "10.1109/icra55743.2025.11128640",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/978-3-319-68792-6_14": {
+      "kind": "works",
+      "status": "first work entry; related or homonymous hit",
+      "interpretation": "A shared event string (RoboCup 2016) matched unrelated works. The Dynaban chapter title and DOI are distinct.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!nav-raw/1997e2e0ac01bf7e.json.gz!1997e2e0ac01bf7e.json": [
+          "robocup 2016"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!nav-literature.csv": [
+          "robocup 2016"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "robocup 2016"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/coase.2019.8843119": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1115/1.4067431": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tmech.2013.2276397": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icra.2015.7139307": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/aim.2019.8868596": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icmae52228.2021.9522368": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.ohx.2026.e00784": {
+      "kind": "works",
+      "status": "previous work",
+      "interpretation": "Previously in the continuous catalogue. This batch checks full-text validation and recalculates event pairs in the companion OSF deposit.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv": [
+          "10.1016/j.ohx.2026.e00784",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "10.1016/j.ohx.2026.e00784",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "The Enactive Torch: Open-source sensory substitution device for neurophysiological research.",
+          "Estelle S; Dayantri L; Meng Z; Morrissey B; Froese T.",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv"
+        ],
+        [
+          1.0,
+          "The Enactive Torch: Open-source sensory substitution device for neurophysiological research.",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "The Enactive Torch: Open-source sensory substitution device for neurophysiological research.",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-03.csv",
+          [
+            "dayantri",
+            "estelle",
+            "froese",
+            "meng",
+            "morrissey"
+          ]
+        ]
+      ]
+    },
+    "10.1109/icmla.2015.98": {
+      "kind": "works",
+      "status": "first work entry; earlier discovery mention",
+      "interpretation": "Earlier in a compressed provider response only. Now a distinct full-text entry with physical motion and command timing.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/ef16d741f8610cce785a168ac17e2ad116794233f89532a8f43c5699a7109777.json.gz!ef16d741f8610cce785a168ac17e2ad116794233f89532a8f43c5699a7109777.json": [
+          "10.1109/icmla.2015.98",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "dtu:ur10-performance-analysis-2014": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1162/pres_a_00023": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/978-3-031-64553-2_41": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3389/fnins.2013.00223": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iscas.2007.378038": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iccvw.2009.5457625": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/robotics10010041": {
+      "kind": "works",
+      "status": "first work entry; related or homonymous hit",
+      "interpretation": "Overlapping author and common words with a cable-connector manipulation paper. The telemanipulation work has a distinct title and DOI.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": [
+        [
+          0.4,
+          "High-speed manipulation of cable connector using a high-speed robot hand",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "ishikawa",
+            "masatoshi",
+            "yamakawa",
+            "yuji"
+          ]
+        ]
+      ]
+    },
+    "10.1109/iros.2015.7353527": {
+      "kind": "works",
+      "status": "first work entry; related or homonymous hit",
+      "interpretation": "Overlapping author and generic terms with a proximity/contact/slip sensing article. The high-speed master–slave paper has a distinct title and DOI.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": [
+        [
+          0.4,
+          "Development of Intelligent Robot Hand Using Proximity, Contact and Slip Sensing",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "ishikawa",
+            "masatoshi"
+          ]
+        ]
+      ]
+    },
+    "10.1145/2701973.2701983": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1145/3716550.3722020": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "arxiv:2602.11321": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1371/journal.pone.0305283": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.jmbbm.2026.107518": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.mechatronics.2015.07.004": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.mechmachtheory.2016.04.004": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tmech.2016.2621062": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1017/s0263574721001211": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icra.2016.7487193": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "hartu-d4.1-assembly-dataset": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/978-3-030-49186-4_11": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1142/s0129065721500179": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "rug:31249": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.asoc.2021.107465": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/978-3-030-98260-7_9": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1504/ijma.2013.053409": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.autcon.2024.105774": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.2139/ssrn.7619696": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-026-75631-3": {
+      "kind": "works",
+      "status": "previous work",
+      "interpretation": "Previously in the continuous catalogue. Full-text methods and the newly checked supplementary workbook add conditional paired loads, unloaded drifts, and temperature-stratified tables.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv": [
+          "10.1038/s41467-026-75631-3",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "10.1038/s41467-026-75631-3",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "Shoulu Gong; Xingyu Wei; Qi Zhou; Tianxiang Zheng; G L Zhang; Zheng Dou; Shuke Zang; Zhao Zh; Yiyuan Yang; Zhiran Yi; Wenming Zhang; Lei Shao",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv"
+        ],
+        [
+          1.0,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv",
+          [
+            "gong",
+            "shao",
+            "shoulu",
+            "shuke",
+            "tianxiang",
+            "wenming",
+            "xingyu",
+            "yang",
+            "yiyuan",
+            "zang",
+            "zhang",
+            "zhao",
+            "zheng",
+            "zhiran",
+            "zhou"
+          ]
+        ]
+      ]
+    },
+    "10.3390/s23167224": {
+      "kind": "works",
+      "status": "first work entry; earlier discovery mention",
+      "interpretation": "Earlier screening log mentioned the paper when it was excluded from assembly evidence. Now included for thermal calibration.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.3390/s23167224"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s26154908": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-026-71572-z": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-024-46836-1": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-024-51261-5": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-026-69450-9": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41467-024-52331-4": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tim.2021.3086898": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1021/acsnano.3c04650": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1039/d2ta04862k": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.snb.2023.135255": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/jmse10121898": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.ifacol.2019.11.037": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/data5030057": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.oceaneng.2021.109279": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41597-025-06347-0": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/app15137085": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/oceanslimerick52467.2023.10244513": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.ifacol.2019.12.316": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/oceans.1998.724397": {
+      "kind": "works",
+      "status": "previous work",
+      "interpretation": "Previously in the continuous literature and reading queues. Retained as a backwards citation, bibliographic evidence only.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv": [
+          "10.1109/oceans.1998.724397",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "10.1109/oceans.1998.724397",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Force control of underwater thrusters with application to AUV motion control",
+          "L. Deniellou; Y. Gallou; P. Gourmelen; Nicolas Seube",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv"
+        ],
+        [
+          1.0,
+          "Force control of underwater thrusters with application to AUV motion control",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Force control of underwater thrusters with application to AUV motion control",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv",
+          [
+            "deniellou",
+            "gallou",
+            "gourmelen",
+            "seube"
+          ]
+        ]
+      ]
+    },
+    "10.1109/48.468242": {
+      "kind": "works",
+      "status": "previous work",
+      "interpretation": "Previously in the continuous literature and reading queues. Retained as a backwards citation, bibliographic evidence only.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv": [
+          "10.1109/48.468242",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv": [
+          "10.1109/48.468242",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Toward an improved understanding of thruster dynamics for underwater vehicles",
+          "ANTHONY J. HEALEY; Stephen M. Rock; S. Cody; David Miles; Joel Brown",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv"
+        ],
+        [
+          1.0,
+          "Toward an improved understanding of thruster dynamics for underwater vehicles",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Toward an improved understanding of thruster dynamics for underwater vehicles",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-02.csv",
+          [
+            "brown",
+            "cody",
+            "healey",
+            "miles",
+            "rock"
+          ]
+        ]
+      ]
+    },
+    "10.1007/s10846-011-9625-x": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icl-gnss54081.2022.9797024": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/gcwkshps56602.2022.10008777": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tmlcn.2024.3469128": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/twc.2025.3628168": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/ipin62893.2024.10786138": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/jsen.2024.3496086": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tccn.2023.3322448": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/access.2020.3012822": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/s11276-021-02631-0": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s18041183": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s19071548": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/issse.2007.4294528": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s19030467": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "insectt-open-datasets-2023": {
+      "kind": "works",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "gregwar-bam-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "i1cps-st3025-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "mangdang-md300-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "lachlanhurst-j288-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "seamusz-hls2915-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "tk233-sts3215-12v-pendulum": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "osf:9ecxu": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "osf:vrsya": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "github:extremcontrol/flow-wave": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.23769731": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.6084/m9.figshare.30023476.v1": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.12513790": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.11387093": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.18419/darus-6450": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.17632/2p4ng7zz3s.1": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.12741922": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "file:41467_2026_75631_moesm8_esm.xlsx": {
+      "kind": "materials",
+      "status": "first file entry; existing parent article",
+      "interpretation": "The title and authors match the historical parent paper. This independently addressed XLSX had no historical file key and no earlier file audit was found.",
+      "matched_terms_by_path": {},
+      "similar_titles": [
+        [
+          0.8,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "Shoulu Gong; Xingyu Wei; Qi Zhou; Tianxiang Zheng; G L Zhang; Zheng Dou; Shuke Zang; Zhao Zh; Yiyuan Yang; Zhiran Yi; Wenming Zhang; Lei Shao",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv"
+        ],
+        [
+          0.8,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          0.8,
+          "Monolithic 6-Axis Force/Torque Sensing by a Single Ultrathin Piezoceramic Shell",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new.csv",
+          [
+            "gong",
+            "shao",
+            "shoulu",
+            "shuke",
+            "tianxiang",
+            "wenming",
+            "xingyu",
+            "yang",
+            "yiyuan",
+            "zang",
+            "zhang",
+            "zhao",
+            "zheng",
+            "zhiran",
+            "zhou"
+          ]
+        ]
+      ]
+    },
+    "file:41467_2026_71572_moesm3_esm.xlsx": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.6084/m9.figshare.25133534": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "file:41467_2024_51261_moesm9_esm.xlsx": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "file:41467_2026_69450_moesm10_esm.xlsx": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "file:41467_2024_52331_moesm12_esm.xlsx": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "blue-robotics:t200-2019-performance": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "blue-robotics:t500-2022-performance": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "mathworks:fileexchange:65919": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.7488/ds/2835": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.15976877": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "github:oceansystemslab/bluerov2_trajectory_dataset": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "ghent-uwb-cir-tdoa": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "ghent-uwb-twr-correction": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "jku-weak-nlos": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "jku-aec-trust": {
+      "kind": "materials",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with recorded aliases, normalized titles and author/title checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    }
+  }
+}
