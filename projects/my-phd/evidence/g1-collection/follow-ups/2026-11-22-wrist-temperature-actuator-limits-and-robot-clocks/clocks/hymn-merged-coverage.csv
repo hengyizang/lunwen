@@ -1,0 +1,16 @@
+systems_at_exact_point_time,rows
+ble,13109
+ble+gnss,3
+ble+nr5g,178
+ble+uwb,13
+ble+wifi,21
+gnss,2134
+gnss+nr5g,28
+nr5g,94253
+uwb,6651
+uwb+gnss,4
+uwb+nr5g,75
+wifi,10507
+wifi+gnss,3
+wifi+nr5g,124
+wifi+uwb,12

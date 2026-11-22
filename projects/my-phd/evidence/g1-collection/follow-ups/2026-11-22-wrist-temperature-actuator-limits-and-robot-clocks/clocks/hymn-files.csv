@@ -1,0 +1,6 @@
+system,rows,missing_timestamp_rows,point_ids,reference_window_missing,outside_inclusive_reference_window,duplicate_point_timestamp_rows
+ble,13324,0,45,0,0,0
+wifi,10668,1,47,0,0,0
+uwb,6755,0,48,0,0,0
+gnss,2208,36,12,0,0,0
+nr5g,94658,0,47,0,0,0

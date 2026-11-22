@@ -1,0 +1,11 @@
+method,rpm,finite_pairs,slope_Nm_per_native_twist,intercept_Nm,fit_rmse_Nm,note
+Cross Correlation_data,1600,16142,160.2009033,5.066816,0.2671695,within-speed fit to calibration pairs
+Cross Correlation_data,1700,20754,163.5596508,4.9818,0.2524687,within-speed fit to calibration pairs
+Cross Correlation_data,1800,13836,162.1420671,5.0059874,0.3221956,within-speed fit to calibration pairs
+Cross Correlation_data,1900,13836,162.9845631,4.963214,0.2398008,within-speed fit to calibration pairs
+Cross Correlation_data,all,64568,162.4636303,5.0100888,0.2743529,pooled source array; overlaps rpm strata
+Rising Edge_data,1600,16142,157.9933891,0.0021015,0.082913,within-speed fit to calibration pairs
+Rising Edge_data,1700,20754,160.2991265,-0.0561007,0.0830447,within-speed fit to calibration pairs
+Rising Edge_data,1800,16142,159.6949413,-0.0084264,0.0630954,within-speed fit to calibration pairs
+Rising Edge_data,1900,13836,159.5373206,0.0844147,0.0772519,within-speed fit to calibration pairs
+Rising Edge_data,all,66874,159.4509608,0.0027597,0.0929634,pooled source array; overlaps rpm strata

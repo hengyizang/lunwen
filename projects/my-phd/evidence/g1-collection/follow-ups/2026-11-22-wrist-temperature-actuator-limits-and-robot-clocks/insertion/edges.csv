@@ -1,0 +1,5 @@
+from_id,to_id,relation,locator,url
+10.31937/sk.v17i2.4344,10.55981/j.mev.2024.1104,cites and identifies same flexible tube,"§II.A, ref. [15]. Same physical compliant component; protocols differ.",https://ejournals.umn.ac.id/index.php/SK/article/download/4344/1808
+10.31937/sk.v17i2.4344,10.1088/1757-899x/1207/1/012011,cites,Reference [16].,https://ejournals.umn.ac.id/index.php/SK/article/download/4344/1808
+10.1177/16878132261422288,10.3390/machines13090878,cites,Reference [37]. Prior by-pass-switch model leaves validation to future work.,https://journals.sagepub.com/doi/full/10.1177/16878132261422288
+10.1109/iros45743.2020.9341714,10.1109/robot.2010.5509643,workshop version cites,"Same-title earlier workshop paper, discussion of electrical success and alphabetic bibliography (Mayton et al., 2010). Edge is verified in this version only.",https://realworld-sdm.github.io/paper/13.pdf

@@ -1,0 +1,17 @@
+from_id,to_id,relation,locator,url
+10.18419/darus-5687,10.1109/icit64854.2026.11491561,is_cited_by_according_to_deposit,"Dataverse V1 citation block, Related Publication",https://doi.org/10.18419/DARUS-5687
+10.18419/darus-5160,10.1109/iecon58223.2025.11221193,is_cited_by_according_to_deposit,"Dataverse V1 citation block, Related Publication",https://doi.org/10.18419/DARUS-5160
+10.18419/darus-4224,10.1007/s11740-024-01318-7,is_supplement_to,"Dataverse V1 citation block, Related Publication",https://doi.org/10.18419/DARUS-4224
+10.23919/ecc64448.2024.10591213,10.18419/darus-3759,cites_data,Reference 14.,https://www.paperhost.org/proceedings/controls/ECC24/files/0161.pdf
+10.1007/s11740-024-01318-7,10.18419/darus-4224,cites_data,Reference 16.,https://link.springer.com/article/10.1007/s11740-024-01318-7
+10.3390/s24020538,10.3182/20140824-6-za-1003.00147,cites,Reference 6.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML
+10.3390/s24020538,10.1109/access.2020.3036010,cites,Reference 8.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML
+10.3390/s24020538,10.1016/j.ifacol.2023.10.263,cites,Reference 13.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML
+10.3390/s24020538,10.1109/educon45650.2020.9125091,cites,Reference 16.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML
+10.3390/s24020538,github:gergelytakacs/automationshield-magnetoshield,links_hardware_software_project,§4.1.2 and reference 17 link the project wiki; reviewed Git commit is our version pin.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML
+10.1007/s11740-024-01318-7,10.1007/s11740-015-0601-3,cites,Reference 7.,https://link.springer.com/article/10.1007/s11740-024-01318-7
+10.1007/s11740-024-01318-7,10.1016/j.cirp.2018.03.006,cites,Reference 8.,https://link.springer.com/article/10.1007/s11740-024-01318-7
+10.1007/s11740-024-01318-7,10.23919/ecc64448.2024.10590860,cites,Reference 17.,https://link.springer.com/article/10.1007/s11740-024-01318-7
+10.23919/ecc64448.2024.10591213,10.1007/s11740-021-01090-y,cites,Reference 4.,https://www.paperhost.org/proceedings/controls/ECC24/files/0161.pdf
+10.23919/ecc64448.2024.10591213,10.1007/s11740-015-0601-3,cites,Reference 9.,https://www.paperhost.org/proceedings/controls/ECC24/files/0161.pdf
+10.23919/ecc64448.2024.10591213,10.1016/j.cirp.2022.03.026,cites,Reference 13.,https://www.paperhost.org/proceedings/controls/ECC24/files/0161.pdf

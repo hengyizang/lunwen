@@ -1,0 +1,825 @@
+{
+  "project": "my-phd",
+  "branch": "cloud-state/my-phd",
+  "observed_utc_date": "2026-11-22",
+  "parent_commit": "0b8440df47e480d84147cef4e98151c092f724d2",
+  "project_state": {
+    "gate": "G1",
+    "stage": "topic-intelligence",
+    "status": "awaiting_work"
+  },
+  "preflight": {
+    "prior_published_commit": "0b8440df47e480d84147cef4e98151c092f724d2",
+    "queued_github_actions": 0,
+    "in_progress_github_actions": 0,
+    "numbered_collection_rounds": 55,
+    "older_followup_batches": 15
+  },
+  "funding": "Free public records and files; no paid cycle",
+  "works": 98,
+  "work_evidence": {
+    "full text": 78,
+    "bibliographic screening": 20
+  },
+  "first_work_entries": 86,
+  "first_work_entries_by_level": {
+    "full text": 66,
+    "bibliographic screening": 20
+  },
+  "materials": 31,
+  "material_types": {
+    "measured files": 23,
+    "published figure/table": 7,
+    "publisher numerical supplement": 1
+  },
+  "source_history": {
+    "previous measured release; new partitions": 1,
+    "first entry; no historical identity hit": 25,
+    "first measured release entry; existing study family": 1,
+    "previous dataset listing; first file inspection": 1,
+    "first measured release entry; earlier related paper": 1,
+    "new figure extraction; existing work": 1,
+    "new table extraction; existing work": 1
+  },
+  "directed_relations": 67,
+  "within_batch_overlaps": [
+    {
+      "kind": "work",
+      "id": "10.37221/eaef.19.1_60",
+      "details": [
+        "clocks/literature.csv",
+        "reading/literature.csv"
+      ]
+    },
+    {
+      "kind": "work",
+      "id": "10.1155/2018/8638019",
+      "details": [
+        "clocks/literature.csv",
+        "reading/literature.csv"
+      ]
+    },
+    {
+      "kind": "work",
+      "id": "10.1016/j.compag.2021.106475",
+      "details": [
+        "clocks/literature.csv",
+        "reading/literature.csv"
+      ]
+    }
+  ],
+  "unit": "Works are publication/report identities, not necessarily independent experiments. One stable deposit family may have several version DOIs. Methods, figure extractions, publisher supplements and measured files have different units. A signal reconstructed in software is graded separately from an independently measured sensor output.",
+  "history_coverage": {
+    "git_blobs_checked": 1593,
+    "evidence_git_blobs_checked": 1531,
+    "gzip_files_decoded": 7,
+    "archive_members_read": 301,
+    "nested_gzip_payloads": 256,
+    "early_files_compared": 7,
+    "distinct_early_files": 1
+  },
+  "searchable_payloads": 1893,
+  "historical_catalogues_with_titles": 55,
+  "historical_title_rows": 45638,
+  "history_method": "All parent-project Git blobs verified against the full recursive tree. Extracted gzip, tar and nested gzip and compared seven immutable early files. Match canonical DOI, concept/version DOI, arXiv and repository aliases plus normalized titles. Review title-set Jaccard >=0.67 across titled catalogues, and title similarity >=0.38 with shared author-name tokens and at least three title tokens. Distinguish paper, companion dataset, figure and version/partition for each hit. Literal and approximate checks cannot guarantee completeness for unnamed works.",
+  "search_logs": [
+    "clocks/search.md",
+    "effort/search.md",
+    "ident/search.json",
+    "insertion/search.md",
+    "motor/search.json",
+    "reading/search.md",
+    "wrist/search.md"
+  ],
+  "domain_file_manifest": [
+    {
+      "path": "clocks/README.md",
+      "bytes": 3791,
+      "sha256": "aae359c897c6b41be34a63e4cfd7d2d5c08ed1e9878d3a377eec54e5cbbd6695"
+    },
+    {
+      "path": "clocks/aalto-vpn.csv",
+      "bytes": 945,
+      "sha256": "c8ca20148d30e07d04092194c0fa9fc7b1c9836398d83e4042b3b2a0d40c31f0",
+      "data_rows": 3
+    },
+    {
+      "path": "clocks/audit_tables.py",
+      "bytes": 3808,
+      "sha256": "ec53deb0495bf1c3c1531b3c3535d0034b39a20b850af9b6cb8af7ba9838ef16"
+    },
+    {
+      "path": "clocks/audit_timing.py",
+      "bytes": 9267,
+      "sha256": "417d59b165dd10a625df03a70ead098b2f3bd379388a9294b5148e2fd202d7b2"
+    },
+    {
+      "path": "clocks/crawler-observer-contrasts.csv",
+      "bytes": 334,
+      "sha256": "5d616d995399d130fbbc28ff4429caee2da4c65103e9ad1248e0a18fa5bab5a8",
+      "data_rows": 5
+    },
+    {
+      "path": "clocks/edges.csv",
+      "bytes": 1871,
+      "sha256": "7b1430977eab3355193710ca2bba4aa2fd0f5ef853f317c36521e698553ab71f",
+      "data_rows": 9
+    },
+    {
+      "path": "clocks/file-provenance.json",
+      "bytes": 6331,
+      "sha256": "6828537e9dd0e84699c1532c181867fab06f7c7b12ddfccf4fb462e2d73c8226"
+    },
+    {
+      "path": "clocks/hymn-asof.csv",
+      "bytes": 474,
+      "sha256": "8698a5d369f66ad5e7b42437859dd71e5ed8f48d87ec8fe9c851644382635a97",
+      "data_rows": 4
+    },
+    {
+      "path": "clocks/hymn-files.csv",
+      "bytes": 243,
+      "sha256": "d2994b54a208780714bbe7adc679f5c4f9edf5550f2a439514d17f3883573fd5",
+      "data_rows": 5
+    },
+    {
+      "path": "clocks/hymn-merged-coverage.csv",
+      "bytes": 205,
+      "sha256": "0cdbbca2b6a127e564d747a99eebb0e45575e214bb15e54de3753c21e91cf430",
+      "data_rows": 15
+    },
+    {
+      "path": "clocks/kista-trial-contrasts.csv",
+      "bytes": 501,
+      "sha256": "67746685de79b92efdd3a757e9116bb41a07a308889770f251c22c49378cb0f7",
+      "data_rows": 7
+    },
+    {
+      "path": "clocks/literature.csv",
+      "bytes": 7967,
+      "sha256": "429d7350c719cf0615bd9837786ea390307138c122e6cde1bcb9990b232e9619",
+      "data_rows": 12
+    },
+    {
+      "path": "clocks/roa-members.csv",
+      "bytes": 885,
+      "sha256": "649fe46b24d99e3bb26949196527d31211adc69d282f5d91e404ebebe7cad7d5",
+      "data_rows": 13
+    },
+    {
+      "path": "clocks/roa-testbed.csv",
+      "bytes": 2091,
+      "sha256": "955f4759f02017a1256e9521f4e3c7d20d778eb85b3f26ab71f5e837c57963bc",
+      "data_rows": 13
+    },
+    {
+      "path": "clocks/search.md",
+      "bytes": 4440,
+      "sha256": "6a4addbb2b9f8b0a7b6a20b1688fe0890ea89182fe8003da05cd8ce97c4d3039"
+    },
+    {
+      "path": "clocks/sources.csv",
+      "bytes": 2982,
+      "sha256": "dc42cba0d3881aeaae0542209beef7e95023c3aab1e4d156c0b7332119436c4d",
+      "data_rows": 5
+    },
+    {
+      "path": "effort/README.md",
+      "bytes": 6580,
+      "sha256": "87bc7e619d67e2330bc206a86477afcdb8fdd2729a1abd0fbc55695c06146ce1"
+    },
+    {
+      "path": "effort/analyze_benches.py",
+      "bytes": 5987,
+      "sha256": "bdd69cc8b81580a683fcf9eff68ae7167ca613ccce286dade35ef82cf0b060b1"
+    },
+    {
+      "path": "effort/analyze_tribometer.py",
+      "bytes": 4293,
+      "sha256": "7d5a97b8624ee0e8112409cfbba8786be820af8ff01453a070b37e9973d59c68"
+    },
+    {
+      "path": "effort/analyze_wrist.py",
+      "bytes": 4700,
+      "sha256": "eeca6587b93649ece9084660e4347a71839ccbea092816c5113214f967ebe04a"
+    },
+    {
+      "path": "effort/dc-clock-segments.csv",
+      "bytes": 28108,
+      "sha256": "6a6df9d7b5fabb4a5203f78a13a55b760b3516caea4cbbad97e65ee2e6a8b580",
+      "data_rows": 213
+    },
+    {
+      "path": "effort/dc-sheets.csv",
+      "bytes": 2071,
+      "sha256": "aae2d26de212d730af022e70cd448cf747e3d7805710ccabe2be20b9bd858fd1",
+      "data_rows": 22
+    },
+    {
+      "path": "effort/delta-feature-classes.csv",
+      "bytes": 490,
+      "sha256": "0c1ec8d61fc8698e76bb5401ea4c878438126e04abf307606af9b751b45dd996",
+      "data_rows": 6
+    },
+    {
+      "path": "effort/edges.csv",
+      "bytes": 2260,
+      "sha256": "b630dce7a17aa6a1d03d7827298b62890982b7a86e95b5941a94a70bbcd334f5",
+      "data_rows": 11
+    },
+    {
+      "path": "effort/im-drive-cycles.csv",
+      "bytes": 916,
+      "sha256": "71b6cc95f18e8fed63d34a86aaff44b19c9e4827849edd3f20fb975adaa620e7",
+      "data_rows": 6
+    },
+    {
+      "path": "effort/literature.csv",
+      "bytes": 9869,
+      "sha256": "18ea51409ee36b8660899c5b1b200851187d47bf9f76b134a07e9eee52e63dd9",
+      "data_rows": 16
+    },
+    {
+      "path": "effort/roller-test-groups.csv",
+      "bytes": 539,
+      "sha256": "87ccc01066a481895a7fbdd36b9b15cafad99e763213197b6ed3403cc8c6a06b",
+      "data_rows": 3
+    },
+    {
+      "path": "effort/search.md",
+      "bytes": 4876,
+      "sha256": "bef425a5b5a3092265a32c3b098b8b82acc2c869c09a271673f353e58fb0322e"
+    },
+    {
+      "path": "effort/source-receipts.csv",
+      "bytes": 3726,
+      "sha256": "c9371e21a730327cb87793867d05356006da4a027b4721863fe6cc9eb59721bf",
+      "data_rows": 19
+    },
+    {
+      "path": "effort/sources.csv",
+      "bytes": 3728,
+      "sha256": "30f87703c2018ae1d938978e898e0befc84077ed142b0a0a214b7739b5435ff4",
+      "data_rows": 5
+    },
+    {
+      "path": "effort/wrist-headline-reconstruction.csv",
+      "bytes": 374,
+      "sha256": "ef043d196be6381f9de2a0896d2a417b90915c05c4aae1955811a321811fdca2",
+      "data_rows": 1
+    },
+    {
+      "path": "effort/wrist-runs.csv",
+      "bytes": 3831,
+      "sha256": "e715e7419896bb54ed3e4f22499301d203367b34de2e2269d53f2fc6ca9867e0",
+      "data_rows": 16
+    },
+    {
+      "path": "effort/wrist-trial-campaigns.csv",
+      "bytes": 1144,
+      "sha256": "eea7aa8dee5912c2cf2e9849e429927000df48f6a7b81dd569e096dfcde09d1d",
+      "data_rows": 11
+    },
+    {
+      "path": "ident/README.md",
+      "bytes": 6283,
+      "sha256": "01ea278f84dab71d797115ce7e306c098f044d7a1fc565fc7103b7a9ce6443d9"
+    },
+    {
+      "path": "ident/check_magneto.py",
+      "bytes": 4342,
+      "sha256": "ab242ac8e77f09b3786bfe8bb89ccb83d3f6272cbe69d8e7a3d86264f07b1176"
+    },
+    {
+      "path": "ident/check_preload.py",
+      "bytes": 6707,
+      "sha256": "725574e7e60ae575e290948e79e457560ff1857944e715cba764b99f216216de"
+    },
+    {
+      "path": "ident/check_preload_identity.py",
+      "bytes": 2088,
+      "sha256": "c3522a2e2b53834274368c8f2616144bfc7e51c037974f10a7667174d9f6a02f"
+    },
+    {
+      "path": "ident/check_transmission.py",
+      "bytes": 6140,
+      "sha256": "f181b11ed71c7b023c53fd4064c51a6eaa251b8273e2c1a34f6f64c7929abd6a"
+    },
+    {
+      "path": "ident/compare_conditions.py",
+      "bytes": 2041,
+      "sha256": "441b75a476aa7124c8afcd9729e2e9477fcf75539791d03611f41f1be40f473a"
+    },
+    {
+      "path": "ident/compensation-on-off.csv",
+      "bytes": 5499,
+      "sha256": "49b2c8871650cb729cdfcc362c68f993a349070df7ac82f5adf23a33632ee55c",
+      "data_rows": 66
+    },
+    {
+      "path": "ident/edges.csv",
+      "bytes": 2482,
+      "sha256": "553378132774af5fef713692893b37bd3049cbfdcfb97f5cdcc63c0565043d57",
+      "data_rows": 16
+    },
+    {
+      "path": "ident/literature.csv",
+      "bytes": 11570,
+      "sha256": "0ba4afd1045d073bc9e4c6086f83b0002c55385a1aae51cc698aae966fb63675",
+      "data_rows": 18
+    },
+    {
+      "path": "ident/magnetic-fft-identity.csv",
+      "bytes": 1123,
+      "sha256": "590746e47c7b4f06127b8811633639f2e4a129ccff04ec7d9144511420472927",
+      "data_rows": 3
+    },
+    {
+      "path": "ident/magnetic-input-current.csv",
+      "bytes": 1880,
+      "sha256": "0c3c60884839a2cd6e11a9766a9f55a545946cff3f74786e65315bfd70a8982a",
+      "data_rows": 5
+    },
+    {
+      "path": "ident/mpc-drive-comparisons.csv",
+      "bytes": 2918,
+      "sha256": "af0e363765e258a163c5987e86839387b4768ab67e52854e85efff2c971c69e4",
+      "data_rows": 32
+    },
+    {
+      "path": "ident/preload-column-identity.csv",
+      "bytes": 455,
+      "sha256": "2a0fdfacb927fe5204ffdeb74da82d7decff0bc092abd022b99146b1232c128f",
+      "data_rows": 2
+    },
+    {
+      "path": "ident/preload-files.csv",
+      "bytes": 4542,
+      "sha256": "cc16fbd58dbe77091b2e93dfcaf175608666d2f6b3366c1c39644259397df6cd",
+      "data_rows": 21
+    },
+    {
+      "path": "ident/preload-law-replay.csv",
+      "bytes": 1806,
+      "sha256": "523d0a243fe87d5ae1a296f062f7a789d5c8e1837bf970cd47436210b390dabd",
+      "data_rows": 11
+    },
+    {
+      "path": "ident/preload-sheets.csv",
+      "bytes": 9905,
+      "sha256": "0242826178a0077633715d6fbc1a24f9b32c5ce6d85dc17677014b708b7c3abc",
+      "data_rows": 53
+    },
+    {
+      "path": "ident/reused-signals.csv",
+      "bytes": 1010,
+      "sha256": "5f6f80753de8dc31cc66e11f6729cb13acdaefb20f9581651961107d453daa66",
+      "data_rows": 8
+    },
+    {
+      "path": "ident/search.json",
+      "bytes": 13533,
+      "sha256": "7d207218966d1275cd237dbaa2cc2de936e55ee04575d0aeef103e5e0b2af0db"
+    },
+    {
+      "path": "ident/sources.csv",
+      "bytes": 3786,
+      "sha256": "e1dc165a86aab8407a89e38c77c2200f71d2bf6258eeba7cb1529fdad9e2fe6f",
+      "data_rows": 5
+    },
+    {
+      "path": "ident/transmission-channels.csv",
+      "bytes": 20513,
+      "sha256": "4bcb9cf7ea548c8cf72e6a9b6ba0829daf4251b9cee36a4942f907c64b04a552",
+      "data_rows": 200
+    },
+    {
+      "path": "ident/transmission-conditions.csv",
+      "bytes": 30631,
+      "sha256": "226a82c65b286d85fa84139a0d9c509fd5cc3ba808e224c57d2430d3e8c86564",
+      "data_rows": 149
+    },
+    {
+      "path": "ident/transmission-files.csv",
+      "bytes": 7318,
+      "sha256": "9d0b722615f9829c3b3a6e5ff29b928854e255882eed593ca5d1e306cdd696c6",
+      "data_rows": 25
+    },
+    {
+      "path": "insertion/README.md",
+      "bytes": 6132,
+      "sha256": "0d320fce7a3ecc87caeb4a45e1da72a59b5d7d1cf8c1f474ed087f8872c224de"
+    },
+    {
+      "path": "insertion/canted-coil-contrasts.csv",
+      "bytes": 168,
+      "sha256": "553e675c77dd9139c0c6b14e3318bcdc2c85515d8a8d9a2a5a7ff0324cbfbd77",
+      "data_rows": 3
+    },
+    {
+      "path": "insertion/contact-degradation-contrasts.csv",
+      "bytes": 293,
+      "sha256": "2d50ef870d16ed6ac8ea78bc8fb6d9bfe22548b4f57102136bfe0b79b99becc9",
+      "data_rows": 10
+    },
+    {
+      "path": "insertion/derive_published_contrasts.py",
+      "bytes": 1582,
+      "sha256": "a30e44be79701625ba8c3ff7ac6ccfb197450dafc29ded763928e04c0778eeea"
+    },
+    {
+      "path": "insertion/derive_tactile_timing.py",
+      "bytes": 6298,
+      "sha256": "d912ef1bd6b7458092d227f986cc2b625c0952cccc008f869066d068317c4f1d"
+    },
+    {
+      "path": "insertion/derive_usb_logs.py",
+      "bytes": 3491,
+      "sha256": "7b56d7b07e50b897b8781f3349c414056d9955681f4d23fd855c82a689d78c3f"
+    },
+    {
+      "path": "insertion/edges.csv",
+      "bytes": 894,
+      "sha256": "3ef01f6527c69195c5650e70691601aaef0b31946eee9012051d6e8a9309283f",
+      "data_rows": 4
+    },
+    {
+      "path": "insertion/literature.csv",
+      "bytes": 11944,
+      "sha256": "d7f93ed1742cee8bce195b6e5e7774af4b71721b3146d279def83f90c2adddd6",
+      "data_rows": 16
+    },
+    {
+      "path": "insertion/search.md",
+      "bytes": 5880,
+      "sha256": "c941c88e1e02530cd142878f675c4482e603bfa0059f8d16ffefd10b538a499f"
+    },
+    {
+      "path": "insertion/sources.csv",
+      "bytes": 2828,
+      "sha256": "fccf857c8a1792776e57e507e9287bf9954a2079fa71eaba4de2e8745a1d08f8",
+      "data_rows": 4
+    },
+    {
+      "path": "insertion/tacrich-episodes.csv",
+      "bytes": 8609,
+      "sha256": "cc3229e060e20ab653769bfb7f93b0d46deca642d53c3eb845efc2abe0b238d7",
+      "data_rows": 79
+    },
+    {
+      "path": "insertion/tacrich-shards.csv",
+      "bytes": 11945,
+      "sha256": "74d08fdc20d74806e774451862e35f7bd82db09fdd84b9393a3efb4fae504159",
+      "data_rows": 44
+    },
+    {
+      "path": "insertion/usb-controller-files.csv",
+      "bytes": 10404,
+      "sha256": "28661ed7ecb33af98d32113996034c95f75387240542d88d6427f2c7671f70ba",
+      "data_rows": 77
+    },
+    {
+      "path": "insertion/usb-observed-clips.csv",
+      "bytes": 811,
+      "sha256": "92020dcb95ff718bc0dda898e1d4358ae2865edf04a0c3df898ed20decaf1ac8",
+      "data_rows": 9
+    },
+    {
+      "path": "motor/README.md",
+      "bytes": 5477,
+      "sha256": "298c79a276bbfe10158be80ec16b593df2d1fce63d7a1f0efa33541d43e5aed3"
+    },
+    {
+      "path": "motor/backlash-condition-comparison.csv",
+      "bytes": 1491,
+      "sha256": "93f92ea419282f57046e0846864a2ed835607aefb90cffb97de655012ba689d3",
+      "data_rows": 30
+    },
+    {
+      "path": "motor/backlash-physical-probes.csv",
+      "bytes": 1195,
+      "sha256": "41d24637a3563af982d29714abd891089976c3691e7c7c87b5f39c2cc88da80b",
+      "data_rows": 9
+    },
+    {
+      "path": "motor/backlash-trial-quality.csv",
+      "bytes": 19310,
+      "sha256": "074c4b457e4c0f371f9175fa3bf66119426423aac686a5c0497acb125c71ccd7",
+      "data_rows": 300
+    },
+    {
+      "path": "motor/edges.csv",
+      "bytes": 1658,
+      "sha256": "0b2ccac6839c911d72d91afff25c2b049c92adceca103c9d51f0c2939235a10d",
+      "data_rows": 9
+    },
+    {
+      "path": "motor/harmonic-cam-windows.csv",
+      "bytes": 6641,
+      "sha256": "948a9aa063fce79ecbf23c4432400ba215b7d2346b6b25f29f611ef538f510a2",
+      "data_rows": 51
+    },
+    {
+      "path": "motor/harmonic-raw-verification.csv",
+      "bytes": 15669,
+      "sha256": "8405f9a1c4caffafdaf652c6eecf7059fc85688e953bebce9ae0f27c5306ec99",
+      "data_rows": 105
+    },
+    {
+      "path": "motor/literature.csv",
+      "bytes": 6124,
+      "sha256": "8087a33eb95505464de63da7071dd7fa2eed158c6e0f8ef6b8b41090eece011d",
+      "data_rows": 10
+    },
+    {
+      "path": "motor/optical-calibration.csv",
+      "bytes": 1090,
+      "sha256": "f8857f57df24b1411db5de830409fbbc2a680bc65effbfd4e7fe4c7ff1f7dd2b",
+      "data_rows": 10
+    },
+    {
+      "path": "motor/optical-clock-matched.csv",
+      "bytes": 1090,
+      "sha256": "05a5dd3dbf736bb025b964a1f4f155e9b5c6c5ed1f876216db6530ff5a300dec",
+      "data_rows": 9
+    },
+    {
+      "path": "motor/optical-files.csv",
+      "bytes": 1776,
+      "sha256": "53f27c09a3be0d1abff447ffbae4a16df5d83abbde9817b4cc574f4b6ab3027c",
+      "data_rows": 13
+    },
+    {
+      "path": "motor/ptb-aligned-files.csv",
+      "bytes": 819,
+      "sha256": "3cf266856cc6f102b85020a78a948c50fbc55ce7701a516e368c5e2f72ab5f28",
+      "data_rows": 8
+    },
+    {
+      "path": "motor/ptb-calibration-steps.csv",
+      "bytes": 9107,
+      "sha256": "e00fca71ae665a150fa8e7c34870564b5ea76c77b420fffbf5e2f2df8f82b9f1",
+      "data_rows": 76
+    },
+    {
+      "path": "motor/ptb-clock-edges.csv",
+      "bytes": 524,
+      "sha256": "cde525134aa8e2930399cfbb2c62a002a4893fad984c58bafe9b2abd4a8b0015",
+      "data_rows": 8
+    },
+    {
+      "path": "motor/ptb-reversal.csv",
+      "bytes": 1116,
+      "sha256": "43cd8a5f4ddc76dac2ff0725686ba5fdab839a336deb13b45361500cacdccb39",
+      "data_rows": 28
+    },
+    {
+      "path": "motor/replay_backlash.py",
+      "bytes": 3243,
+      "sha256": "2c193a06c06005e3066804600a7e3ac60c4e8f6902340a2d306e90624986f9f6"
+    },
+    {
+      "path": "motor/replay_joint.py",
+      "bytes": 5406,
+      "sha256": "423a1b2a0237528fc10f7bc6053eecaea1a14900fca447c86114cfff3e13c7b7"
+    },
+    {
+      "path": "motor/replay_optical.py",
+      "bytes": 3945,
+      "sha256": "fd0f651a5198ac598f394fd1e184cf46739a7c4ee7f06ab45febeeb87a011355"
+    },
+    {
+      "path": "motor/replay_ptb.py",
+      "bytes": 5133,
+      "sha256": "42b121b4b32e4df734234144e97798e8ee50dd7cfcde37f81224b486b6c3cfa2"
+    },
+    {
+      "path": "motor/search.json",
+      "bytes": 13576,
+      "sha256": "e928d23940a02171db362ceee4a37564d5d533dc48634cff51773b3962c1508e"
+    },
+    {
+      "path": "motor/sources.csv",
+      "bytes": 2910,
+      "sha256": "366f8f9ea2bcaa12fee15723504a060b468370bd825b502367cfe788cc790820",
+      "data_rows": 4
+    },
+    {
+      "path": "reading/README.md",
+      "bytes": 5991,
+      "sha256": "79b59d891a2262095ae90a28698e2f5bf7978d16bac24505fce2aeeb3d51d0b8"
+    },
+    {
+      "path": "reading/aalborg-arm-timing.csv",
+      "bytes": 1736,
+      "sha256": "572076fba36d24a03688ee4163fb16be5e851d2b653d4d486d4752cadfe39324",
+      "data_rows": 10
+    },
+    {
+      "path": "reading/aalborg-clock-offsets.csv",
+      "bytes": 876,
+      "sha256": "27a2029656c5f878654b6a973f838403c3dfcfb32bf44e2487715b63a1b7703c",
+      "data_rows": 12
+    },
+    {
+      "path": "reading/aalborg-file-inventory.csv",
+      "bytes": 3093,
+      "sha256": "6b3325194898983bec3c5a5c5fd5a0b622ec0622327fe46ad6b96a9c02b7b24e",
+      "data_rows": 22
+    },
+    {
+      "path": "reading/aalborg-paired-arrivals.csv",
+      "bytes": 859,
+      "sha256": "8f849b880aecabb97dfce192bdc398a2896c64fae1d6e0b4b64727b2ec12d3f5",
+      "data_rows": 5
+    },
+    {
+      "path": "reading/derive_aalborg.py",
+      "bytes": 5717,
+      "sha256": "7adf6f6a20c622104a8ad8f73dcd83ebc4c028abfb90354805ed3cac6033b294"
+    },
+    {
+      "path": "reading/derive_hall.py",
+      "bytes": 2918,
+      "sha256": "c6794a4bfda596f03ca61e11e1612caeb06bda0f628098562c982ee56619320d"
+    },
+    {
+      "path": "reading/derive_vehicle.py",
+      "bytes": 4907,
+      "sha256": "15626d2bd70c653860f1508da3c0cffba9aea176ff79027c215cf6aa3441dc5f"
+    },
+    {
+      "path": "reading/derive_xbee.py",
+      "bytes": 1434,
+      "sha256": "69f372c94bb0de964c613955f79ddc5084915a1cd4bd83225b78751dc2347d9c"
+    },
+    {
+      "path": "reading/edges.csv",
+      "bytes": 2179,
+      "sha256": "e83ac2d3035a1df36eeee6ac8eb2bdc99b9323236e69b2ee1c752fc534c1d62f",
+      "data_rows": 13
+    },
+    {
+      "path": "reading/hall-clock-calibration.csv",
+      "bytes": 406,
+      "sha256": "ad510e28b29577ea2c47e54b7760bae4656a361c9825f0be61de6524974d5d14",
+      "data_rows": 2
+    },
+    {
+      "path": "reading/hall-file-inventory.csv",
+      "bytes": 729,
+      "sha256": "854b0fdf00324c7728e692b59a5cb4438a79f8d5c7f1687d10791e8a14e35aa7",
+      "data_rows": 6
+    },
+    {
+      "path": "reading/hall-motion-timing.csv",
+      "bytes": 474,
+      "sha256": "3658939545e2718c90b558a3d3aa0ad51fa552ceae716c75c7e64a4cc67023b8",
+      "data_rows": 4
+    },
+    {
+      "path": "reading/literature.csv",
+      "bytes": 13015,
+      "sha256": "73b49f4b6ec6c98a97b7179d0ee996f05b1c2a4e77f65fbac2e5ca829f711bc1",
+      "data_rows": 18
+    },
+    {
+      "path": "reading/search.md",
+      "bytes": 5092,
+      "sha256": "d5129508ae4178e742ffdf3dcf64599c7d47220543bca04a3b57e5e2e6815955"
+    },
+    {
+      "path": "reading/source-receipts.csv",
+      "bytes": 3290,
+      "sha256": "9c863922f42cf35b2065ab9811b7d1f2373362d71b94f4b59047e73528a19808",
+      "data_rows": 18
+    },
+    {
+      "path": "reading/sources.csv",
+      "bytes": 2981,
+      "sha256": "7207ddc3f98e7d06fc16451905eecf96408b1e09b569f5a448481c51bf877792",
+      "data_rows": 4
+    },
+    {
+      "path": "reading/vehicle-capture-coverage.csv",
+      "bytes": 242,
+      "sha256": "dc549abb6a09b606fc9b56d17d4132c97cb200fb6f36a6616c23ea47bdeb7db9",
+      "data_rows": 2
+    },
+    {
+      "path": "reading/vehicle-file-inventory.csv",
+      "bytes": 708,
+      "sha256": "f4a719d2ed12b82e690bcaee3cfa293fd7f84f118bc18cc7734530685ef55a7e",
+      "data_rows": 6
+    },
+    {
+      "path": "reading/vehicle-quality.csv",
+      "bytes": 312,
+      "sha256": "80fd56341987769bce475d5377a5ed7e2016b1641240a3ec3d798ef55616fdb6",
+      "data_rows": 3
+    },
+    {
+      "path": "reading/vehicle-timing.csv",
+      "bytes": 2336,
+      "sha256": "5c4e60791a5ceadb1ae772be7fc6dc243bd9ac2686ac32a17f3614422136aa00",
+      "data_rows": 16
+    },
+    {
+      "path": "reading/xbee-scope-contrasts.csv",
+      "bytes": 209,
+      "sha256": "c9f74e67934a0c3eb3fd72e6db97d8969d2c08e498dbf33d96605d4aa07e74c0",
+      "data_rows": 5
+    },
+    {
+      "path": "wrist/README.md",
+      "bytes": 5256,
+      "sha256": "dd131876adaff8d1ca70cc7ab17025595e2b907fb0846a34d1816ee07cc83306"
+    },
+    {
+      "path": "wrist/cornell-calibration-steps.csv",
+      "bytes": 5020,
+      "sha256": "7477b23c9ebbe15db5ff753347aea30526d9ff0236d416733b331135fcffc595",
+      "data_rows": 96
+    },
+    {
+      "path": "wrist/cornell-files.csv",
+      "bytes": 6286,
+      "sha256": "4dafe583ff6a3de957d3c13dd6e952c5d5fd91bb5ab3647e675be3cfe0d54dbf",
+      "data_rows": 33
+    },
+    {
+      "path": "wrist/cornell-hold-windows.csv",
+      "bytes": 2503,
+      "sha256": "b65b402a43b26eb9e0931a2d49a0df97468145441c418eb9e739378287622c5a",
+      "data_rows": 25
+    },
+    {
+      "path": "wrist/derive_calibrations.py",
+      "bytes": 5526,
+      "sha256": "4a501239071295aa62f5467a15c867e9f6a99270a4a3e9c07edd03fbc037be21"
+    },
+    {
+      "path": "wrist/derive_kim_tables.py",
+      "bytes": 1807,
+      "sha256": "aa7502baeb9606b9a7e647bd3376388de7bf98a9d100c7c9edc89cd0615501bb"
+    },
+    {
+      "path": "wrist/derive_thermal_grid.py",
+      "bytes": 3953,
+      "sha256": "e5e0e1c6661727bbcec8d6e2315d4221c5804cda627095350ace49d17ffabe18"
+    },
+    {
+      "path": "wrist/edges.csv",
+      "bytes": 1211,
+      "sha256": "3a6d46bb5f4a447463fe27ee4496c73f38a180546b7de1ab5866ef4e74208df6",
+      "data_rows": 7
+    },
+    {
+      "path": "wrist/jpl-figure7-contrasts.csv",
+      "bytes": 753,
+      "sha256": "f661197d36fb1a22efae37db7161ab09c1e5ff144fa273b2b14dc5f0c5ee842b",
+      "data_rows": 24
+    },
+    {
+      "path": "wrist/kim-captioned-comparisons.csv",
+      "bytes": 645,
+      "sha256": "6959b1a0db4c2dae71335a54d9a2838b37ff3229f741d7aa1e1b9be79eeb67c1",
+      "data_rows": 12
+    },
+    {
+      "path": "wrist/literature.csv",
+      "bytes": 8097,
+      "sha256": "6d33f8e6c9ecc77035aff951cf013c84b8e3b1a1fc20818b89a5835c6dc3db1e",
+      "data_rows": 11
+    },
+    {
+      "path": "wrist/liu-pressure-trace-windows.csv",
+      "bytes": 341,
+      "sha256": "008e8e86e1b3d3a218f279b353c6d37c66e6c6b47575f5d852533d276603b9ef",
+      "data_rows": 5
+    },
+    {
+      "path": "wrist/liu-thermal-pressure-grid.csv",
+      "bytes": 400,
+      "sha256": "ccc3429ca5a43b3c42c6bf2d69d8f6d2656efc559fa4b1209b3c8af065cbce58",
+      "data_rows": 8
+    },
+    {
+      "path": "wrist/search.md",
+      "bytes": 4253,
+      "sha256": "9775e1e1f0953008b229421c95a395a8836bafda4da00ea534d09608f0eece01"
+    },
+    {
+      "path": "wrist/source-receipts.csv",
+      "bytes": 2970,
+      "sha256": "8d3c5d5b93c4f27ca7fa4879da41c0f3abf3e587c5d86b33493aea2e26397b1c",
+      "data_rows": 17
+    },
+    {
+      "path": "wrist/sources.csv",
+      "bytes": 3291,
+      "sha256": "0a8b70d4053bd95ec43205ffd78c38ad8f605ccc73fa258e97cda7e7eb9b3f1c",
+      "data_rows": 4
+    }
+  ]
+}

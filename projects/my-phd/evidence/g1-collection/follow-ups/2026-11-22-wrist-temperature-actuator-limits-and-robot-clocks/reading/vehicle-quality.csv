@@ -1,0 +1,4 @@
+file,rows,unique_six_event_rows,station_onset_non_increasing,vehicle_end_before_start,station_end_before_start,abs_two_component_sum_differs_from_signed_e2e
+Results/Baseline/Baseline.csv,100,100,0,0,0,51
+Results/Field tests/Field_Test_4G.csv,157,157,1,0,0,0
+Results/Field tests/Field_Test_5G.csv,130,130,1,0,0,0

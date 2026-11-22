@@ -22,3 +22,4 @@
 - [R2 独立力矩台架与 R1 接触测力参照](follow-ups/2026-11-21-independent-torque-and-contact-benchmarks/README.md)
 - [R1 腕部载荷基线、R2 执行器限幅与 R5 跨设备记录时钟](follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/README.md)
 - [R1 接触与传感器温度、R2 限幅与轴转矩、R5 编队通信与时钟](follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/README.md)
+- [R1 腕部本体测温与装配判据、R2 限幅前后命令与独立扭矩、R5 双机器人接收时刻](follow-ups/2026-11-22-wrist-temperature-actuator-limits-and-robot-clocks/README.md)

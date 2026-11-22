@@ -1,0 +1,5 @@
+stream,query_uwb_rows,query_rows_without_stream_at_point,accepted_nearest_500ms,accepted_nearest_strictly_future,all_equidistant_ties,accepted_nearest_abs_p50_ms,accepted_nearest_abs_p95_ms,accepted_causal_500ms,accepted_causal_age_p50_ms,accepted_causal_age_p95_ms
+ble,6755,417,5651,2798,5,136,264,5165,243,469
+wifi,6755,140,6480,3216,5,191.0,364.0,4238,252.0,476.0
+gnss,6755,5082,1673,836,1,251.0,476.0,837,249.0,476.0
+nr5g,6755,134,6513,3159,46,26.0,70.0,6507,52.0,138.0

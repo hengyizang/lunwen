@@ -1,0 +1,17 @@
+file,metric,unit,rows,negative_rows,minimum,p25,median,p75,maximum,mean
+Results/Baseline/Baseline.csv,steering_onset_vehicle_minus_station_signed,ms,100,51,-2.975784,-1.627708,-0.349477,5.491099,7.356708,1.795594
+Results/Baseline/Baseline.csv,steering_onset_absolute_in_source_script,ms,100,0,0.206969,1.620261,2.432698,5.491099,7.356708,3.474947
+Results/Baseline/Baseline.csv,screen_light_minus_vehicle_LED_signed,ms,100,0,0.459685,0.465724,0.469407,0.472665,0.486824,0.469542
+Results/Baseline/Baseline.csv,corrected_station_loop,ms,100,50,-2.510731,-1.159773,0.124648,5.962509,7.826382,2.265136
+Results/Baseline/Baseline.csv,vehicle_LED_minus_vehicle_onset,ms,100,0,0.000055,0.000056,0.000074,0.000074,0.000185,0.000073
+Results/Breakdown/Camera_Latency_Monitor_140hz.csv,camera_and_monitor_file_ms,ms,212,0,93.142184,117.165358,127.324334,139.708623,218.545095,128.545509
+Results/Field tests/Field_Test_4G.csv,steering_onset_vehicle_minus_station_signed,ms,157,0,202.358785,280.988065,318.536124,342.420023,663.087346,313.366824
+Results/Field tests/Field_Test_4G.csv,steering_onset_absolute_in_source_script,ms,157,0,202.358785,280.988065,318.536124,342.420023,663.087346,313.366824
+Results/Field tests/Field_Test_4G.csv,screen_light_minus_vehicle_LED_signed,ms,157,0,163.398081,190.558212,201.968933,210.649916,271.526687,200.366665
+Results/Field tests/Field_Test_4G.csv,corrected_station_loop,ms,157,0,402.084597,478.895213,516.461179,544.265531,877.727649,513.733489
+Results/Field tests/Field_Test_4G.csv,vehicle_LED_minus_vehicle_onset,ms,157,0,0.000055,0.000074,0.000093,0.000167,0.000500,0.000120
+Results/Field tests/Field_Test_5G.csv,steering_onset_vehicle_minus_station_signed,ms,130,0,190.060845,281.272614,310.578091,330.108866,587.547020,306.327861
+Results/Field tests/Field_Test_5G.csv,steering_onset_absolute_in_source_script,ms,130,0,190.060845,281.272614,310.578091,330.108866,587.547020,306.327861
+Results/Field tests/Field_Test_5G.csv,screen_light_minus_vehicle_LED_signed,ms,130,0,161.621786,179.500590,190.361222,201.492568,312.756906,192.966183
+Results/Field tests/Field_Test_5G.csv,corrected_station_loop,ms,130,0,385.126627,471.942967,498.470130,527.278486,760.309841,499.294044
+Results/Field tests/Field_Test_5G.csv,vehicle_LED_minus_vehicle_onset,ms,130,0,0.000055,0.000074,0.000074,0.000149,0.000407,0.000112

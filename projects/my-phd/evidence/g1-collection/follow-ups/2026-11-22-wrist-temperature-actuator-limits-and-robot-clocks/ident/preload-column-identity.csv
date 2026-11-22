@@ -1,0 +1,3 @@
+file,rows,T_pl_present,max_abs_stored_T_pl_minus_half_T2_minus_T1_Nm,stored_T_pl_min_Nm,stored_T_pl_max_Nm,max_abs_e_pl_minus_target_minus_magnitude_of_half_difference_Nm,rms_e_pl_minus_target_minus_magnitude_of_half_difference_Nm
+Fig_10_Compensation_validation_motion.tab,40002,0,,,,0.48996776051353885,0.10697272867333626
+Fig_7_Preload_errors.tab,86666,1,7.771561172376096e-15,-1.67957154335454,-0.805510842474177,0.3157311462564421,0.07008543372738207

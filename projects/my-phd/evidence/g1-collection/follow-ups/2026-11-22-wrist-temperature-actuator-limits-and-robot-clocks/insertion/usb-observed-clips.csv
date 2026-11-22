@@ -1,0 +1,10 @@
+file,axis,pairs,observed_max_abs_output,raw_values_strictly_outside_observed_envelope,output_different_from_raw,clamp_at_observed_envelope_mismatches
+data_analysis/controller_log_20260318_182104.csv,x,804,0.03,804,804,0
+data_analysis/controller_log_20260318_182104.csv,y,804,0.03,804,804,0
+data_analysis/controller_log_20260318_182104.csv,z,804,0.03,804,804,0
+data_analysis/controller_log_20260319_180024.csv,x,2382,0.03,807,807,0
+data_analysis/controller_log_20260319_180024.csv,y,2382,0.03,992,992,0
+data_analysis/controller_log_20260319_180024.csv,z,2382,0.05,59,59,0
+misc/controller_log.csv/controller_log_20260318_174549.csv,x,338,0.03,335,335,0
+misc/controller_log.csv/controller_log_20260318_174549.csv,y,338,0.03,338,338,0
+misc/controller_log.csv/controller_log_20260318_174549.csv,z,338,0.03,338,338,0

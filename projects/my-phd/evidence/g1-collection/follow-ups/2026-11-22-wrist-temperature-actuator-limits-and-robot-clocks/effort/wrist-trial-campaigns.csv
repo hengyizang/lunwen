@@ -1,0 +1,12 @@
+source,campaign,rows,distinct_trial_numbers,ok_flag_equal_one,score_at_least_one_million,minimum_score,maximum_score
+nuss_optuna_break_baseline_trials.csv,optuna_trials,14,14,14,4,9.399145,1000012.112174
+nussbaum_optuna_fric_p95_trials.csv,optuna_trials,7,7,7,3,14.689766,1000156.344744
+nussbaum_optuna_tailp95_trials.csv,optuna_trials,18,18,18,4,11.84847,1000262.922217
+nussbaum_optuna_tailp95_v2_trials.csv,optuna_trials,16,16,16,4,13.813325,1000121.73426
+nussbaum_plus_optuna_20260409_trials.csv,optuna_trials,24,24,24,3,7.128992,1000062.525525
+nussbaum_sine_15hz_amp10_optuna_v5_trials.csv,envelope_step_bandwidth,48,24,48,0,63.093179,67.332603
+nussbaum_sine_3hz_hard_trials.csv,envelope_step_bandwidth,150,150,89,104,60.759002,1000673.840579
+nussbaum_sine_3hz_refine_trials.csv,envelope_step_bandwidth,80,80,80,80,1000008.206038,1000343.742121
+nussbaum_sine_3hz_struct_trials.csv,envelope_step_bandwidth,220,220,91,217,54.929461,1000278.528256
+nussbaum_step15_tailclean_trials.csv,envelope_step_bandwidth,60,60,60,55,50.10189,1000630.581361
+nussbaum_step_settle120_trials.csv,envelope_step_bandwidth,120,120,119,77,16.03279,1001093.411307

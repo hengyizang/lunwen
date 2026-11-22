@@ -1,0 +1,232 @@
+{
+  "checked_utc": "2026-11-22",
+  "queries": [
+    {
+      "group": "kaview",
+      "url": "https://api.kaggle.com/v1/datasets/view/wkirgsn/electric-motor-temperature",
+      "first_results_or_status": "[['id', '236410'], ['ref', 'wkirgsn/electric-motor-temperature'], ['subtitle', '185 hrs recordings from a permanent magnet synchronous motor (PMSM)'], ['totalBytes', '300061411'], ['url', ''], ['lastUpdated', '2021-04-26T09:07:04.53Z'], ['licenseName', 'CC BY-SA 4.0'], ['title', 'Electric Motor Temperature'], ['current"
+    },
+    {
+      "group": "kalist",
+      "url": "https://api.kaggle.com/v1/datasets/list?search=electric%20motor%20temperature&page=1",
+      "first_results_or_status": "'list' object has no attribute 'items'"
+    },
+    {
+      "group": "cr1",
+      "url": "https://api.crossref.org/works?rows=8&query.bibliographic=Kirchg%C3%A4ssner%20Wallscheid%20B%C3%B6cker%20permanent%20magnet%20synchronous%20machine%20data%20driven%20temperature%20electric%20motor%20temperature%20test%20bench%20data%20set",
+      "first_results_or_status": "[['10.1049/icp.2021.1017', 'PERMANENT MAGNET SYNCHRONOUS MACHINE TEMPERATURE ESTIMATION USING LOW-ORDER LUMPED-PARAMET'], ['10.36227/techrxiv.11671401.v1', 'Permanent Magnet Synchronous Machine Temperature Estimation using Low-Order Lumped-Paramet'], ['10.36227/techrxiv.11671401', 'Permanent Magnet Synchronous Machine "
+    },
+    {
+      "group": "cr2",
+      "url": "https://api.crossref.org/works?rows=8&query.bibliographic=Kirchg%C3%A4ssner%20Thermal%20Neural%20Networks%20temperature%20estimation%20thermal%20motor%20measured%20voltage%20current%20torque%20field-oriented%20control",
+      "first_results_or_status": "[['10.1049/cp:19950884', 'An adaptive neural network for the estimation of torque and air gap flux signals in the di'], ['10.2139/ssrn.6253341', 'Dynamic Global Thermal Field Reconstruction for Lithium-ion Battery Modules via Voltage-Te'], ['10.1016/j.engappai.2022.105537', 'Thermal neural networks: Lumped-parameter th"
+    },
+    {
+      "group": "ze1",
+      "url": "https://zenodo.org/api/records?size=18&q=resource_type.type%3Adataset%20AND%20%28metadata.title%3A%22permanent%20magnet%20synchronous%22%20OR%20metadata.title%3A%22PMSM%22%29",
+      "first_results_or_status": "[[24289282, 'Finite-element performance data for an interior permanent magnet synchronous motor with rotor eccentricity'], [15688397, 'PMSM geometrical parameters and torque signals'], [14482932, 'Comprehensive Dataset for Fault Detection and Diagnosis in Inverter-Driven PMSM Systems'], [24275093, 'PMSM Drive Fault Dat"
+    },
+    {
+      "group": "gh1",
+      "url": "https://api.github.com/search/repositories?q=thermal%20neural%20networks%20Kirchg%C3%A4ssner&per_page=8",
+      "first_results_or_status": "[]"
+    },
+    {
+      "group": "gh2",
+      "url": "https://api.github.com/search/repositories?q=%22electric%20motor%20temperature%22%20wkirgsn&per_page=8",
+      "first_results_or_status": "['ShoebAgha/ML-PMSM']"
+    },
+    {
+      "group": "ze2",
+      "url": "https://zenodo.org/api/records?size=18&q=resource_type.type%3Adataset%20AND%20%28metadata.title%3A%22torque%20control%22%20OR%20metadata.title%3A%22field-oriented%20control%22%29",
+      "first_results_or_status": "[[23344848, 'Code and data for: Adaptive Predefined-Time Sliding-Mode Torque Control of Wind Turbines Under Generator-Torque Actuator'], [4988416, 'Data from: EMG versus torque control of human-machine systems: equalizing control signal variability does not equalize e'], [20080858, 'Dataset supporting the study: Acute "
+    },
+    {
+      "group": "d3",
+      "url": "https://api.datacite.org/dois?page%5Bsize%5D=18&query=types.resourceTypeGeneral%3ADataset%20AND%20%28titles.title%3A%28%22dynamometer%22%20OR%20%22torque%20ripple%22%29%20AND%20%28titles.title%3Amotor%20OR%20titles.title%3Aelectric%20OR%20titles.title%3Atransmission%20OR%20titles.title%3Aservo%29%29",
+      "first_results_or_status": "[['10.5281/zenodo.23580549', 'Raw traces for \"Adjoint Gradients for Torque-Ripple Optimization of a Nonlinear Motor\"'], ['10.5281/zenodo.23580550', 'Raw traces for \"Adjoint Gradients for Torque-Ripple Optimization of a Nonlinear Motor\"'], ['10.5281/zenodo.18408100', 'Supplementary Materials for: Torque Ripple Minimizat"
+    },
+    {
+      "group": "d4",
+      "url": "https://api.datacite.org/dois?page%5Bsize%5D=18&query=types.resourceTypeGeneral%3ADataset%20AND%20%28%28titles.title%3A%22series%20elastic%22%20OR%20titles.title%3A%22strain%20wave%22%20OR%20titles.title%3A%22harmonic%20drive%22%29%29",
+      "first_results_or_status": "[['10.5281/zenodo.23874408', 'Data and code for Friction and Angle-Synchronous Current Ripple in a Harmonic-Drive Joint: Characterization and Feedforward Compensation'], ['10.5281/zenodo.23874407', 'Data and code for Friction and Angle-Synchronous Current Ripple in a Harmonic-Drive Joint: Characterization and Feedforwa"
+    },
+    {
+      "group": "d5",
+      "url": "https://api.datacite.org/dois?page%5Bsize%5D=18&query=types.resourceTypeGeneral%3ADataset%20AND%20%28descriptions.description%3A%22torque%20transducer%22%20AND%20%28descriptions.description%3Acommand%20OR%20descriptions.description%3Aactuator%29%29",
+      "first_results_or_status": "[]"
+    },
+    {
+      "group": "z4",
+      "url": "https://zenodo.org/api/records?size=18&q=resource_type.type%3Adataset%20AND%20%28metadata.title%3A%22torque%20ripple%22%20OR%20metadata.title%3A%22dynamometer%22%20OR%20metadata.title%3A%22harmonic%20drive%22%29",
+      "first_results_or_status": "[['10.5281/zenodo.10462796', 'Real ORNL Automotive Dynamometer (ROAD) CAN Intrusion Dataset'], ['10.5061/dryad.66t1g1k4j', 'Post-ACL reconstruction surgery rehabilitation dataset using isokinetic dynamometer and wearable IMUs'], ['10.5281/zenodo.13998105', 'DATASET FOR STUDY: Test-retest reliability of belt-fixated dyn"
+    },
+    {
+      "group": "d6",
+      "url": "https://api.datacite.org/dois?page%5Bsize%5D=18&query=types.resourceTypeGeneral%3ADataset%20AND%20%28titles.title%3A%22torque%20sensor%22%20OR%20titles.title%3A%22torque%20measurement%22%29",
+      "first_results_or_status": "[['10.21227/v1q2-5p32', '\"Additional information on a novel 3-D-printed inductive torque sensor\"'], ['10.15128/r1v979v306n', 'Non-intrusive torque measurement for rotating shafts using optical sensing of zebra-tapes [dataset]'], ['10.5281/zenodo.17376427', 'Dataset for \"Estimating Force/Torque Sensor Offsets and Gravit"
+    },
+    {
+      "group": "z5",
+      "url": "https://zenodo.org/api/records?size=18&q=resource_type.type%3Adataset%20AND%20%28metadata.title%3A%22series%20elastic%22%20OR%20metadata.title%3A%22backlash%22%20OR%20metadata.title%3A%22friction%20identification%22%29",
+      "first_results_or_status": "[['10.5281/zenodo.11028802', 'Judicial Decisions, Backlash and Secessionism: The Spanish Constitutional Court and Catalonia'], ['10.5281/zenodo.23569624', 'Replication files: \"Navigating the Backlash: Exploring Government Responses to Fuel Price Protests\"'], ['10.5281/zenodo.21724051', 'Site Selection, Not Backlash: Wi"
+    },
+    {
+      "group": "z6",
+      "url": "https://zenodo.org/api/records?size=18&q=resource_type.type%3Adataset%20AND%20%28metadata.description%3A%22torque%20transducer%22%20AND%20%28metadata.description%3A%22servo%22%20OR%20metadata.description%3A%22current%22%29%29",
+      "first_results_or_status": "[]"
+    }
+  ],
+  "fulltext_and_citation_queries": [
+    "Non-intrusive torque measurement for rotating shafts zebra tapes; author repository, paper DOI, report and citation chain",
+    "Friction and Angle-Synchronous Current Ripple Fenhua Zhang; repository manifest and associated title, no separate publisher work verified",
+    "Weidinger rotating transfer standard and extrapolation; official PTB repository/AMA, JSSS 2019 and WES 2025 reference lists",
+    "Exact titles for Xidian manipulator and Zhang harmonic drive in Crossref; no independently resolved associated manuscript DOI credited."
+  ],
+  "excluded": [
+    "The Paderborn Kaggle motor-temperature drive profiles and the RWTH Id-Iq map had already been analysed in this project.",
+    "Zenodo 7866449 is explicitly an FEM release. 15688397 is an electric-machine surrogate development set. The 15034971 ZIP contains FEM models, data and plotting sources; no independently identified paired reference trace was claimed.",
+    "The WES 2025 DyNaLab commercial data are unavailable. Its D3 and D4 Zenodo links each supply one report.",
+    "Metadata and raw ZIP timestamps refer to the published version only. No site contact or restricted downloads."
+  ],
+  "receipts": {
+    "23874408.json": {
+      "bytes": 7486,
+      "sha256": "91dd8f4868511317058bd905bccde97326b30e23b7577d362b3d4f9ab4323f88"
+    },
+    "24046661.json": {
+      "bytes": 5535,
+      "sha256": "3b15206bc881afc693271d756511d65ce7ac173190d7d182a63d81edbd5684e4"
+    },
+    "dur.json": {
+      "bytes": 12331,
+      "sha256": "7741efbc12134e5f6ac26812c5d7afdd2c1609d1a8e0e5b837a7683c82335156"
+    },
+    "ptb.json": {
+      "bytes": 9836,
+      "sha256": "841cb9664efc53c9c4cb7cfd276d6d858269e49f6434e53a9c2236b88522e5b9"
+    },
+    "ptb.zip": {
+      "bytes": 376867565,
+      "sha256": "4fb570219d72823e945d7209ec78382d19f7f50f8ff9d7a60000f11fb4cb950e"
+    },
+    "dur.rar": {
+      "bytes": 2259567,
+      "sha256": "af868c5157619731f1b76d2a832371b174b063f1eba04ea7ced30e4fe7a66bf7"
+    },
+    "xu.zip": {
+      "bytes": 29420727,
+      "sha256": "9db8b09470c7fb6551132f68dbe20997e7a473e6cf4bc37aef80453af44c83d7"
+    },
+    "supergen.pdf": {
+      "bytes": 39155804,
+      "sha256": "83759497150c1e816e0b6a91add9ae5af9cfe5dd81c4423e0ec0175523024532"
+    },
+    "ptpaper.pdf": {
+      "bytes": 3268799,
+      "sha256": "d89493d5d01db62f13bd6d231033c26afea5596cbe448e22b98a14c9beaa32a0"
+    },
+    "guide.pdf": {
+      "bytes": 1466593,
+      "sha256": "8c9adbadb63376c0ff57e0cff3465b5b0b1ba58eaaa787ad1279f4102829ec2e"
+    },
+    "transdpdf": {
+      "bytes": 1564669,
+      "sha256": "26134e55d99b4b86007c27a00fe2932fb88b837e24a1976e715c1f5fe372f2b7"
+    },
+    "we2025": {
+      "bytes": 119237,
+      "sha256": "6f5ad86d138ae067c5f4b3a5ac8d6dc81153a80edc33e1bbcc79e8a1962e1d96"
+    },
+    "8112428.pdf": {
+      "bytes": 3458746,
+      "sha256": "0aaeb9c84cfff9e0098bc89e455e31a3d16f01ba52eb6993e97d5f1180499762"
+    },
+    "10081870.pdf": {
+      "bytes": 1243101,
+      "sha256": "0a0e0c044b1de601ec79d8ef280041321c01b51f776337beb8b4806d932ac8c3"
+    },
+    "UPLOAD_MANIFEST.csv": {
+      "bytes": 1116,
+      "sha256": "8e487d166fcae3233bb84ab5bc14663dc4b0616991038751699365e920f4d88f"
+    },
+    "06_code_metadata_figures.zip": {
+      "bytes": 6334532,
+      "sha256": "c3cdd873e43489529229d711966c848967da6f73b4837e13f0d80be6f34e5e8f"
+    },
+    "05_derived_results.zip": {
+      "bytes": 3311919,
+      "sha256": "eefc777a5769629485ec22823bdf6864cab4e1e2f200f966bb6f1cc949968a36"
+    },
+    "original_data_links": {
+      "ptb.zip": "https://oar.ptb.de/files/download/681c51ab53218de84f08e755",
+      "dur.rar": "https://researchdata.durham.ac.uk/downloads/r1v979v306n",
+      "xu.zip": "https://zenodo.org/api/records/24046661/files/ResearchData_two-joint_backlash.zip/content",
+      "joint": "https://zenodo.org/api/records/23874408",
+      "supergen.pdf": "https://www.supergen-wind.org.uk/files/deliverables/SUPERGEN%20WIND%20D4.1%20condition%20monitoring%20report%20Durham.pdf",
+      "guide.pdf": "https://oar.ptb.de/files/download/681c51a253218de84f08e73d"
+    },
+    "harmonic_archives": [
+      {
+        "file": "00_START_HERE.txt",
+        "bytes": "699",
+        "sha256": "c29d3240db79faff44cdd110706bd2b7bfbc1aacfa619e303a44963525c5cd66"
+      },
+      {
+        "file": "01_legacy_raw.zip",
+        "bytes": "473467685",
+        "sha256": "49d3c563dd26a6868b35c70ed025f9dfb89577460247689569d1d8f32a1c4ecb"
+      },
+      {
+        "file": "02_R18_raw.zip",
+        "bytes": "72801317",
+        "sha256": "d64d137ff551a8aba2fcc5b31953004248ac7e5dd18aebf53b733ecdd2506beb"
+      },
+      {
+        "file": "03_R19_raw.zip",
+        "bytes": "79642497",
+        "sha256": "9c24deb8d99742192d0a3955810b7d4343acb61b66c039daeeda98b7f2678cb4"
+      },
+      {
+        "file": "04_electronic_cam_raw.zip",
+        "bytes": "166585576",
+        "sha256": "65bac18abf2fdccdc544039505d38cfa075be5847c5ed327ca6198b51dc4134d"
+      },
+      {
+        "file": "05_derived_results.zip",
+        "bytes": "3311919",
+        "sha256": "eefc777a5769629485ec22823bdf6864cab4e1e2f200f966bb6f1cc949968a36"
+      },
+      {
+        "file": "06_code_metadata_figures.zip",
+        "bytes": "6334532",
+        "sha256": "c3cdd873e43489529229d711966c848967da6f73b4837e13f0d80be6f34e5e8f"
+      },
+      {
+        "file": "CITATION.cff",
+        "bytes": "740",
+        "sha256": "4ac05838fb81a126153e2b13e353aa5d2b72a778d749c3a81dd6a76cf83a733d"
+      },
+      {
+        "file": "LICENSE.txt",
+        "bytes": "921",
+        "sha256": "8ecc4aab51ff6f3ae0960917808162f31f0edde555f1a338ca87ab6946537aa0"
+      },
+      {
+        "file": "MANIFEST.sha256.csv",
+        "bytes": "28905",
+        "sha256": "360141ae3f3ddde2c628a9935160e7208de6f350ae229c28ec7ca317371c041c"
+      },
+      {
+        "file": "README.md",
+        "bytes": "5269",
+        "sha256": "cd9876f57b4274174185cbda71b26edacce1c9051534ce37edbc6ff38bc1872d"
+      },
+      {
+        "file": "UPLOAD_CHECKLIST.txt",
+        "bytes": "1963",
+        "sha256": "17dc67e4dc14b9f89bf57ccc6e868452429f297148e1e16cb686cf083fadd488"
+      }
+    ]
+  }
+}

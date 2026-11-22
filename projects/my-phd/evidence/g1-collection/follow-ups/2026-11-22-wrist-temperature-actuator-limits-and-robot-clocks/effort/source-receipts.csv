@@ -1,0 +1,20 @@
+record,local_asset,source_url,byte_count,sha256
+10.3390/s26134212,nuss.xml,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML,265525,545314d65fb640a9e0ad3043cf06027e24f25d7890295ffcc85a656387d22ea9
+10.3390/machines11110993,torqhtml,https://www.mdpi.com/2075-1702/11/11/993,577739,6e28465f690c27d03dbe4f7878e1c91b20584208ddcd029d5fc5d97ad87cf918
+10.1016/j.dib.2022.107802,dc.xml,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8752902/fullTextXML,94703,c0a129db50c83d859325285f52ce0434fbd6f51abe7c895adf34215c5e9f5f9a
+10.1108/compel-11-2024-0462,graz.pdf,https://repository.tugraz.at/api/records/kh3v7-dhn98/files/CREATOR_Machine_Data_2024-11-02.pdf/content,2088845,ed251232f1b92ec07d90f4fdf1ed94f8f4262bac4be5dc74eb915eb5766dd24b
+10.3390/act15090476,deltahtml,https://www.mdpi.com/2076-0825/15/9/476,1063957,bacc727952f7b1ee6ec9158b676e87e441e5b0cb06b43778dbf6c30449688b09
+10.1541/ieejias.130.777,inoue.pdf,https://www.jstage.jst.go.jp/article/ieejias/130/6/130_6_777/_pdf/-char/en,2100160,f6506cc94818cba2a60a727700599636b50326a8a26f8c2f5624d40df05bbada
+10.1541/ieejias.133.526,kaneko.pdf,https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en,2597948,71de55e7e394fd7c2feb96ea6853bf13df7000950ffe78b79a640991b84cc4e5
+10.1541/ieejias.122.120,kaneko02.pdf,https://www.jstage.jst.go.jp/article/ieejias1987/122/2/122_2_120/_pdf/-char/en,1788169,f90fe08287f04ecd2e1dd59a87080b203d1b43bfd90f10b6ca308c7a54fbdd14
+10.3390/app13137423,dual,https://www.mdpi.com/2076-3417/13/13/7423,772101,5e579e25c5e7adf8e97885e9a538fe0d41eea04d7dc99dcc5822ade697db330d
+10.3390/app11093919,fric,https://www.mdpi.com/2076-3417/11/9/3919,132610,de1fe254bc4f318b19eeb596932a85a15e9941bf252e8c71ae37cf830e7b762b
+10.1109/lra.2020.3011370,reg,https://pmc.ncbi.nlm.nih.gov/articles/PMC7971410/,177053,4a14f1aca6e3faa502ba45282b26d009b439edf7eb8ef36227bb6f9639c4aa74
+nasa/tm-20230010165,nasapdf,https://ntrs.nasa.gov/api/citations/20230010165/downloads/TM-20230010165.pdf,2017286,405dfbe8e8a4f2f408ba39e804da4b507b7f29cbd8cfb8fc962cfab1fb8b279b
+10.5281/zenodo.21233963,delta.csv,https://zenodo.org/api/records/21233963/files/Servo_Fuzzy_Controller.csv/content,60629,cb011a081727a61934e878a354bc0955bd145478713f75f6bfdbf8304304a4af
+10.3217/kh3v7-dhn98,graz.zip,https://repository.tugraz.at/api/records/kh3v7-dhn98/files/Induction_motor.zip/content,5255146,0900efc5772804538cbe7c78a47805785b6e2d33e8d21132faa51c22e4940b67
+10.17632/2rkpsss6fd.2,MotorsData_rev.xlsx,https://data.mendeley.com/public-files/datasets/2rkpsss6fd/files/d5996ce4-77b2-4246-aa60-b4ccf26e5770/file_downloaded?filename=MotorsData_rev.xlsx,28724353,85203c4b3ad6fbdd05221e1be7fd41ce733376c0f316d7fd5542b604a6854605
+danialza/hardware-aware-nussbaum-pid,fig,https://api.github.com/repos/danialza/hardware-aware-nussbaum-pid/git/trees/3aa7b699a67e7a32aa29e5681a3eebb272e2017b?recursive=1,41310,37106f30636effec3c0ef96577dc08091b146a056609091d894cb30e18ad67f5
+danialza/hardware-aware-nussbaum-pid,README.md,https://raw.githubusercontent.com/danialza/hardware-aware-nussbaum-pid/3aa7b699a67e7a32aa29e5681a3eebb272e2017b/data/README.md,5311,7a5a3739f390bdc8108c756601e520c931bfae35787b707e7f5a3122fbe5b7fc
+danialza/hardware-aware-nussbaum-pid,metrics_comparison_summary.csv,https://raw.githubusercontent.com/danialza/hardware-aware-nussbaum-pid/3aa7b699a67e7a32aa29e5681a3eebb272e2017b/data/best_results/metrics/metrics_comparison_summary.csv,1631,0baa21c026b7996da8ca6bf3bb2ccff8ddfead56b19e9d895f598179da55c44d
+10.4121/8e5df55a-42f4-45a3-9336-501c38bc4b85.v1,4TU original .7z,https://data.4tu.nl/file/8e5df55a-42f4-45a3-9336-501c38bc4b85/202cb5cc-3b8c-4450-af91-8713e8c01332,119605044,437c938f44d9725d519eb48f5e34a36ccf26bb499ee87329ca574d48f55cdaef

@@ -1,0 +1,8 @@
+locator,endpoint,unit,target_or_max_speed_m_s,wired_reference_mean,actual_5g_minus_reference_mean,added_traffic_minus_actual_mean,added_traffic_minus_reference_mean
+Table 3,navigation,s,0.5,14.97,0.37,0.02,0.39
+Table 3,navigation,s,1.0,11.77,0.10,0.07,0.17
+Table 4,stopping margin,m,0.5,0.492,-0.029,0.006,-0.023
+Table 4,stopping margin,m,1.0,0.246,-0.033,-0.007,-0.040
+Table 6,docking,s,0.2,6.29,0.22,0.02,0.24
+Table 6,docking,s,0.8,6.33,0.18,0.01,0.19
+Table 8,pick and place,s,,10.01,3.13,0.13,3.26

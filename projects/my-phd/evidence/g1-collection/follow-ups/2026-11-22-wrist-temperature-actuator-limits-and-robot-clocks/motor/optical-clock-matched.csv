@@ -1,0 +1,10 @@
+test,quantity,method,reference_slots,reference_finite,optical_slots,optical_finite,matched_reference,median_reference_dt_ms,median_optical_dt_ms,max_nearest_time_gap_ms,mean_optical_minus_reference,rmse_native,max_abs_error_native
+sharp_step,speed_rpm,Optical,10571,180,10571,10571,179,262.0,4.4,2.2,-3.6329792,5.7280551,21.7318182
+high_frequency,speed_rpm,Optical,6203,95,6203,6203,94,262.0,4.0,2.0,-2.8975456,6.7876777,20.105
+low_frequency,speed_rpm,Optical,9361,142,9361,9361,141,262.0,4.0,2.0,-3.2332151,5.3089504,15.2507692
+medium_frequency,torque_Nm,Optical_RE,8784,134,8784,8784,133,262.0,4.0,2.0,-0.1110293,0.168798,0.5581
+medium_frequency,torque_Nm,Optical_CC,8784,134,8784,8784,133,262.0,4.0,2.0,-0.0910437,0.2184964,0.688264
+1700rpm_4Nm,torque_Nm,RE,46,46,2716,2716,46,262.1,4.4,2.2,-0.0055099,0.0371587,0.08043
+1700rpm_4Nm,torque_Nm,CC,46,46,2716,2716,46,262.1,4.4,2.2,0.2394938,0.3680652,0.581277
+1900rpm_10Nm,torque_Nm,RE,3189,55,3189,3187,48,262.0,3.9,2.0,-0.061185,0.0773396,0.1666156
+1900rpm_10Nm,torque_Nm,CC,3189,55,3189,3186,48,262.0,3.9,2.0,-0.053219,0.1891304,0.41714

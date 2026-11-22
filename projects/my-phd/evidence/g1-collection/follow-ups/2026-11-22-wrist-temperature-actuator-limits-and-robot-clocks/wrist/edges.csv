@@ -1,0 +1,8 @@
+from_id,to_id,relation,locator,url
+10.48577/jpl.wbf9x6,10.1080/01691864.2021.1946424,archives manuscript of,"JPL Dataverse file 81216, PDF title page and author list",https://dataverse.jpl.nasa.gov/api/access/datafile/81216
+10.1038/s41467-024-55771-0,liu-2025-triboelectric-source-data,links publisher Source Data,Data availability and Supplementary information Source Data MOESM7,https://www.nature.com/articles/s41467-024-55771-0
+10.1109/jsen.2025.3573643,kim-2025-tables-ii-iii,contains aggregate results,arXiv Tables II–III; sign and direction caveat in README.md,https://arxiv.org/pdf/2502.17528
+10.1021/acsnano.6c09063,10.1038/s41467-024-55771-0,cites,Reference 50,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13472318/fullTextXML
+10.2514/6.2020-0026,10.2514/6.2019-2294,cites,Reference 1 (AIAA 2019-2294),https://ntrs.nasa.gov/api/citations/20200000310/downloads/20200000310.pdf
+10.2514/6.2020-0026,ntrs:20180002963,cites,Reference 2 (Cologne symposium May 2018),https://ntrs.nasa.gov/api/citations/20200000310/downloads/20200000310.pdf
+10.2514/6.2019-2294,ntrs:20180002963,cites,"Reference 1 (Ulbrich and Volden, 2018)",https://ntrs.nasa.gov/api/citations/20190000039/downloads/20190000039.pdf

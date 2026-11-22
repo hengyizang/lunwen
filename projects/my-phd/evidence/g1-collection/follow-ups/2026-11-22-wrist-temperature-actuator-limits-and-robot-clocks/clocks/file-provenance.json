@@ -1,0 +1,163 @@
+{
+  "checked_utc": "2026-11-22",
+  "releases": [
+    {
+      "version_doi": "10.5281/zenodo.16794348",
+      "concept_doi": "10.5281/zenodo.14231422",
+      "version": "2.1",
+      "metadata": "https://zenodo.org/api/records/16794348",
+      "metadata_sha256": "d3206477cc6522b01d5be07a6da51656baf9446bbfbc3f3e419b63ec7f687725",
+      "license_in_metadata": "cc-by-4.0",
+      "data_file_license": "CC BY 4.0 (HYMN LICENSE-DATA governs data inside the MIT-labelled software release).",
+      "files": [
+        {
+          "source_name": "dataset.zip",
+          "local_replay_name": "ptp.zip",
+          "bytes": 64018332,
+          "published_md5": "md5:0f6c4653a2b0bfd35c0dfa6f508f47b9",
+          "observed_sha256": "078c5ca3a23c776fca6aa6d35c3fb4b7be935264505765c92426a046a8cad4e2",
+          "url": "https://zenodo.org/api/records/16794348/files/dataset.zip/content"
+        }
+      ],
+      "version_list_url": "https://zenodo.org/api/records/16794348/versions",
+      "listed_versions": [
+        {
+          "id": 16794348,
+          "version": "2.1",
+          "access": "open"
+        },
+        {
+          "id": 15491030,
+          "version": "2.0",
+          "access": "restricted"
+        },
+        {
+          "id": 14231423,
+          "version": "1.0",
+          "access": "restricted"
+        }
+      ]
+    },
+    {
+      "version_doi": "10.5281/zenodo.19566178",
+      "concept_doi": "10.5281/zenodo.17979434",
+      "version": "1.3",
+      "metadata": "https://zenodo.org/api/records/19566178",
+      "metadata_sha256": "8946f412cc7a6fa08c979d0474a35621f290613f9d6d690c497de8d43ff3b861",
+      "license_in_metadata": "mit-license",
+      "data_file_license": "CC BY 4.0 (HYMN LICENSE-DATA governs data inside the MIT-labelled software release).",
+      "files": [
+        {
+          "source_name": "TUD-ITVS/HYMN-dataset-1.3.zip",
+          "local_replay_name": "hymn.zip",
+          "bytes": 63031322,
+          "published_md5": "md5:4874f6c931561eaaa17bb0972a052e42",
+          "observed_sha256": "7a728275e2822411e5dbb3eb1ba72fad31e043498af5218a6545e031d2de257d",
+          "url": "https://zenodo.org/api/records/19566178/files/TUD-ITVS/HYMN-dataset-1.3.zip/content"
+        }
+      ],
+      "version_list_url": "https://zenodo.org/api/records/19566178/versions",
+      "listed_versions": [
+        {
+          "id": 19566178,
+          "version": "1.3",
+          "access": "open"
+        },
+        {
+          "id": 18835551,
+          "version": "1.2.0",
+          "access": "open"
+        },
+        {
+          "id": 18758839,
+          "version": "1.1.0",
+          "access": "open"
+        },
+        {
+          "id": 17979436,
+          "version": "1.0.0",
+          "access": "open"
+        }
+      ]
+    },
+    {
+      "version_doi": "10.5281/zenodo.4706065",
+      "concept_doi": "10.5281/zenodo.4706064",
+      "version": "0",
+      "metadata": "https://zenodo.org/api/records/4706065",
+      "metadata_sha256": "62bdc9e8a9c6d8410ae2670123a5898cb6a01fb45108fd96ff8a805a68e9e77c",
+      "license_in_metadata": "cc-by-4.0",
+      "data_file_license": "CC BY 4.0 (HYMN LICENSE-DATA governs data inside the MIT-labelled software release).",
+      "files": [
+        {
+          "source_name": "VxLab 20200504_052628 1440.db",
+          "local_replay_name": "VxLab 20200504_052628 1440.db",
+          "bytes": 81920,
+          "published_md5": "md5:4b41ec654c243d8fd809642cb1f1557a",
+          "observed_sha256": "5cdded2eb50359449f78d2adcf86697bbffdb6b7459b326389112ef49600c472",
+          "url": "https://zenodo.org/api/records/4706065/files/VxLab%2020200504_052628%201440.db/content"
+        },
+        {
+          "source_name": "Helsinki 20200324_103302 360.db",
+          "local_replay_name": "Helsinki 20200324_103302 360.db",
+          "bytes": 28672,
+          "published_md5": "md5:c5694ca1f5091032d7b757ee0ea7930a",
+          "observed_sha256": "500a3b9735b4d750499c0db565ccb510aeb8bf0a3f2fb39f56419cd03c653dad",
+          "url": "https://zenodo.org/api/records/4706065/files/Helsinki%2020200324_103302%20360.db/content"
+        },
+        {
+          "source_name": "WEurope 20200501_093604 1440.db",
+          "local_replay_name": "WEurope 20200501_093604 1440.db",
+          "bytes": 79872,
+          "published_md5": "md5:84d86b45ea4510de351018515c7d7f0e",
+          "observed_sha256": "9196738e2b12316fdb007d1cb5c05be83c92b694fde085cf7d3481d5ebf277e1",
+          "url": "https://zenodo.org/api/records/4706065/files/WEurope%2020200501_093604%201440.db/content"
+        }
+      ],
+      "listed_versions": [
+        {
+          "id": 4706065,
+          "version": "0",
+          "access": "open"
+        }
+      ]
+    }
+  ],
+  "local_document_receipts": [
+    {
+      "source_url": "https://5gsmart.eu/wp-content/uploads/5G-SMART-D2.3-v1.0.pdf",
+      "observed_sha256": "226d5113344795d47539d8de5b951885fccc6f6033e265ac84f4bb9658c07db8",
+      "bytes": 2978821
+    },
+    {
+      "source_url": "https://5gsmart.eu/wp-content/uploads/5G-SMART-D2.2_v1.0.pdf",
+      "observed_sha256": "f39c00ce4b230fc678092cb80286123a8552012e57cd7c8a12841e2c37ca2ccc",
+      "bytes": 3555043
+    },
+    {
+      "source_url": "https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en",
+      "observed_sha256": "e579365767ca67bb4319f188d609e61f8d5301a514683687aa75dbedc8a864af",
+      "bytes": 167397
+    },
+    {
+      "source_url": "https://aaltodoc.aalto.fi/server/api/core/bitstreams/1bf5ac2a-96c4-427e-b014-b524ed596417/content",
+      "observed_sha256": "303d8fcf07895c1134d777349bb6cb4ba30de7ac2af859e77872b9bdf59ffadb",
+      "bytes": 1943797
+    },
+    {
+      "source_url": "https://aaltodoc.aalto.fi/server/api/core/bitstreams/d16032bd-54aa-42e5-b450-226bf6f00a2d/content",
+      "observed_sha256": "a7d2665252599f517cdf2459a48cb0f1d1a48c0148769eba043d0efaf3d5c8a8",
+      "bytes": 541884
+    },
+    {
+      "source_url": "https://sure.sunderland.ac.uk/id/eprint/16273/9/Das_Dobie_RAS_2021_Delay_compensated_state_estimation_for_Telepresence_robot_navigation.pdf",
+      "observed_sha256": "a65613b78d0189c54ae417d4257502ff96e9d84e7b39c69538a205db667df1ce",
+      "bytes": 1524176
+    },
+    {
+      "source_url": "https://arxiv.org/pdf/2409.09921",
+      "observed_sha256": "bb753f96218678a2d2526b7ba142850aef2104de27c85280d54404ffcc528b67",
+      "bytes": 3110702
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+campaign,paper_designated,paired_by_move_row,same_controller_arm2_publish_precedes_arm1,dispatch_skew_p50_ms,dispatch_skew_max_ms,arm_receipt_signed_arm2_minus_arm1_min_ms,receipt_signed_max_ms,receipt_abs_p50_ms,receipt_abs_p999_ms,receipt_abs_max_ms,arm1_recorded_arrivals_after_common_20ms,arm2_recorded_arrivals_after_common_20ms,either_after_common_20ms,both_after_common_20ms
+12h_5g,0,46543,0,0.206300,13.000000,-429.038100,375.480900,1.420900,7.430100,429.038100,,,,
+12h_ethernet,0,48391,0,0.209800,4.964600,-6.138500,4.080300,0.130600,2.657700,6.138500,,,,
+5.5h_5g,1,21655,0,0.200000,6.525000,-364.888500,26.862100,1.349500,6.803800,364.888500,2,2,4,0
+5.5h_ethernet,1,21439,0,0.195000,3.210800,-3.731500,2.673400,0.093200,1.910200,3.731500,0,0,0,0
+5h_unspecified_link,0,19723,0,0.201200,5.856800,-14.419300,364.323200,1.156800,6.559600,364.323200,,,,

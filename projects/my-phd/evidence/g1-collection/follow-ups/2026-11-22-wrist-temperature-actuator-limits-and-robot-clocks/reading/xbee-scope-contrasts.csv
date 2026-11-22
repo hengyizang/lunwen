@@ -1,0 +1,6 @@
+distance_m,controller_serial_to_node_delay_span_ms,three_node_reception_jitter_ms,difference_of_two_descriptive_spreads_ms
+0,0.98,0.76,0.22
+1,0.94,0.76,0.18
+5,1.00,0.72,0.28
+8,0.94,0.84,0.10
+12,1.76,0.96,0.80

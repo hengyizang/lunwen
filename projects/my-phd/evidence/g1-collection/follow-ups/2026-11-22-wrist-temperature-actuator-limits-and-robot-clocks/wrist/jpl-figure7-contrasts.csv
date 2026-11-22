@@ -1,0 +1,25 @@
+metric,axis,redundant_side,unit,plotted_error_reduction_approx,plotted_error_reduction_percent_approx
+absolute,Fx,A,N,35.56,71.1
+absolute,Fy,A,N,26.67,61.5
+absolute,Fz,A,N,97.78,71.5
+absolute,Fx,B,N,46.67,79.2
+absolute,Fy,B,N,34.44,75.6
+absolute,Fz,B,N,120.0,77.1
+absolute,Mx,A,N m,2.67,52.4
+absolute,My,A,N m,2.72,38.7
+absolute,Mz,A,N m,0.89,14.3
+absolute,Mx,B,N m,1.43,38.2
+absolute,My,B,N m,2.62,36.3
+absolute,Mz,B,N m,0.99,15.6
+relative,Fx,A,N,0.94,7.7
+relative,Fy,A,N,1.25,9.5
+relative,Fz,A,N,21.25,48.6
+relative,Fx,B,N,1.25,12.5
+relative,Fy,B,N,1.25,12.1
+relative,Fz,B,N,12.19,32.8
+relative,Mx,A,N m,0.19,12.0
+relative,My,A,N m,0.0,0.0
+relative,Mz,A,N m,0.12,3.1
+relative,Mx,B,N m,-0.03,-2.9
+relative,My,B,N m,0.28,12.9
+relative,Mz,B,N m,0.22,4.7

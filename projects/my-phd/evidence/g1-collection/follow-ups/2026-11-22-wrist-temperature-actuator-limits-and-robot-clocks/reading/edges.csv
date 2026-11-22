@@ -1,0 +1,14 @@
+from_id,to_id,relation,locator,url
+10.1109/ccnc54725.2025.10976110,bitbucket:mobiledevaau/grab-demo-1-timestamp,links companion repository,Footnote 9 at end of section V,https://vbn.aau.dk/ws/portalfiles/portal/772202637/synch_robotic_conrol_5G_edgecloud_aau.pdf
+10.1109/vnc69225.2026.11629145,github:sntubix/e2e_latency,links companion repository,Footnote 1,https://arxiv.org/pdf/2602.17381
+10.23919/wons68803.2026.11501834,github:sntubix/m2m_latency,links companion repository,Footnote 1,https://arxiv.org/pdf/2511.22467
+10.1109/vnc69225.2026.11629145,10.23919/wons68803.2026.11501834,cites earlier preprint of published study,Reference 10 cites arXiv:2511.22467; conference publication DOI identified via title/authors.,https://arxiv.org/pdf/2602.17381
+10.1109/vnc69225.2026.11629145,10.1109/mt-its68460.2025.11223534,cites earlier preprint of published study,Reference 11 cites arXiv:2503.14186.,https://arxiv.org/pdf/2602.17381
+10.23919/wons68803.2026.11501834,10.1109/mt-its68460.2025.11223534,cites earlier preprint of published study,Reference 11 cites arXiv:2503.14186.,https://arxiv.org/pdf/2511.22467
+10.1109/vnc69225.2026.11629145,10.1155/2018/8638019,cites,Ref. 3,https://arxiv.org/pdf/2602.17381
+10.1109/vnc69225.2026.11629145,10.1109/iv47402.2020.9304802,cites,References 13 and 18 are the same work.,https://arxiv.org/pdf/2602.17381
+10.37221/eaef.19.1_60,10.1155/2018/8638019,cites,Methods §2.4 and references,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en
+10.37221/eaef.19.1_60,10.1016/j.compag.2021.106475,cites,Methods §2.4 and references,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en
+10.1109/iecon49645.2022.9968494,10.1109/tii.2022.3151786,cites,"Reference 6, previous wireless synchronization comparison",https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=935097
+10.1109/iecon49645.2022.9968494,10.1115/1.4048205,cites,Reference 8; workcell method already in G1 history.,https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=935097
+10.3390/s21217107,calvo-xbee-scope-tables,contains published observations,Tables 2 and 4 in source XML,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8587709/fullTextXML

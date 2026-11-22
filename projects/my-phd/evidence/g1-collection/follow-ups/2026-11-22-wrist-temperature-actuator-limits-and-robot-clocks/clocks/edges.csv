@@ -1,0 +1,10 @@
+from_id,to_id,relation,locator,url
+10.5281/zenodo.16794348,10.1109/access.2025.3615674,companion_data_for,Zenodo record related_identifiers isPartOf,https://doi.org/10.5281/zenodo.16794348
+10.1109/ieeedata.2026.3691044,10.5281/zenodo.19566178,links_concept_of_verified_version,Source DOI in descriptor and reference [30] is 10.5281/zenodo.17979434. The retrieved 1.3 is a release in this concept.,https://www.researchgate.net/publication/404669402_Descriptor_A_Hybrid_Indoor_and_Indoor-Outdoor_Positioning_Multi-Technology_Dataset_HYMN
+10.5281/zenodo.4706065,10.1109/etfa46521.2020.9211954,isReferencedBy (repository metadata),Related identifiers list the 2020 publication; the later data publication date does not prove a numbered citation in the earlier paper.,https://doi.org/10.5281/zenodo.4706065
+10.1109/etfa45728.2021.9613513,10.1109/etfa46521.2020.9211954,cites,Reference [8],https://aaltodoc.aalto.fi/server/api/core/bitstreams/d16032bd-54aa-42e5-b450-226bf6f00a2d/content
+5g-smart-d2.3,5g-smart-d2.2,cites,Section 5.4.3 cites D2.2 as [5GS22-22].,https://5gsmart.eu/wp-content/uploads/5G-SMART-D2.3-v1.0.pdf
+10.37221/eaef.19.1_60,10.1016/j.robot.2021.103890,cites,References by author; compare also Table 3 for Green and Kaknjo.,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en
+10.37221/eaef.19.1_60,10.1016/j.compag.2021.106475,cites,References by author; compare also Table 3 for Green and Kaknjo.,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en
+10.37221/eaef.19.1_60,10.1109/icra55743.2025.11128424,cites,References by author; compare also Table 3 for Green and Kaknjo.,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en
+10.37221/eaef.19.1_60,10.1155/2018/8638019,cites,References by author; compare also Table 3 for Green and Kaknjo.,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en

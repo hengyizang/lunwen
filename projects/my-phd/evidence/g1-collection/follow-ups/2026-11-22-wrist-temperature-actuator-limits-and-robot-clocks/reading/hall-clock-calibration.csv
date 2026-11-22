@@ -1,0 +1,3 @@
+condition,rows,negative_offsets,min_signed_ns,max_signed_ns,median_signed_ns,min_abs_ns,max_abs_ns,mean_abs_ns,reported_abs_ms_mismatch,successive_signed_difference_mismatches_excluding_first,first_signed_jitter_ns,first_exported_jitter_ms
+Autonomous,3599,2803,-1052160,744448,-269312,256,1052160,329739.950,0,0,-922624,0
+Co_Referenced,3599,1121,-1037056,4446208,121088,258,4446208,322436.518,0,2,864512,0

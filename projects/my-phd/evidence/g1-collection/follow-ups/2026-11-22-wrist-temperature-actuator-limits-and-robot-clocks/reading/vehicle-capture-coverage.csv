@@ -1,0 +1,3 @@
+file,format,frames,truncated_frames,decreasing_capture_time,span_seconds
+5g_command,pcap 2.4 little-endian microsecond timestamps; raw IP,11506,0,0,60.145616
+5g_stream,pcap 2.4 little-endian microsecond timestamps; raw IP,19709,0,0,29.117757

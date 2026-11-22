@@ -1,0 +1,19 @@
+record,url,evidence,bytes,sha256
+10.1109/ccnc54725.2025.10976110,https://vbn.aau.dk/ws/portalfiles/portal/772202637/synch_robotic_conrol_5G_edgecloud_aau.pdf,full text inspected,1345380,0a03976cf82d27bd4264fcc562b6d4dc30d66bc6c41c7818da9fc43f16361576
+10.1109/vnc69225.2026.11629145,https://arxiv.org/pdf/2602.17381,full text inspected,1260837,deb67f7370a511b88b9dbeabd6f94d13ee4ca419b212081c950791148116aba4
+10.23919/wons68803.2026.11501834,https://arxiv.org/pdf/2511.22467,full text inspected,405698,e7f39bc2709c6cc703cf40d6b846e5e538ca524e19b399bc394accb57f8264e8
+10.1109/mt-its68460.2025.11223534,https://arxiv.org/pdf/2503.14186,full text inspected,9944755,28f4f55bf193ae1ec50dcfe6e0824e29c80c344cad45dbc07891d9e5f185cfad
+10.37221/eaef.19.1_60,https://www.jstage.jst.go.jp/article/eaef/19/1/19_60/_html/-char/en,full text inspected,167397,e579365767ca67bb4319f188d609e61f8d5301a514683687aa75dbedc8a864af
+10.3390/s21217107,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC8587709/fullTextXML,full text inspected,186320,1a45f727580d4f37323b73748edfc2420dfd3399266efb3aef5c281a763b478a
+10.1155/2018/8638019,https://researchrepository.ul.ie/bitstreams/b9f386fc-4775-4d8f-ba04-1f4a025bedcc/download,full text inspected,8818786,be28b9e4a41ee1e5a27c758f5d0aeea0ddcdff283f69becbd9e3359a66cb49f5
+10.1016/j.compag.2021.106475,https://api.crossref.org/works/10.1016/j.compag.2021.106475,Crossref record inspected,12753,030e0b1f9ad79dabdf4f2a33adbc43850e20b693758b10618b07a476760a222a
+10.1109/iv47402.2020.9304802,https://api.crossref.org/works/10.1109/iv47402.2020.9304802,Crossref record inspected,23682,4586621049cc59bb7cbb946f19cb432749ed80b4fe84de01a132b740ee27befa
+10.1109/iecon49645.2022.9968494,https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=935097,full text inspected,2155391,f9d559b10ab433989762b2c98cc47c71bc30a3dad92f22b7dfce9b2c68f503fa
+10.1109/wfcs46889.2021.9483447,https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=932571,full text inspected,919131,a7d73139974d14cd38e087b2bf3cda268d7162e369488976e292083c1841cd09
+10.1109/tii.2022.3151786,https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=932146,full text inspected,1974224,6fec97ba849820118da3e2f57c5cae8ae433faa1c9dc681c58aed9569cdb519a
+10.1007/s41233-025-00076-3,https://link.springer.com/article/10.1007/s41233-025-00076-3,full text inspected,615461,9bbfbf9f304c5436ec325479824acdd6d87cf503811823014b816b52e18ce346
+10.3390/s23208438,https://www.mdpi.com/1424-8220/23/20/8438,full text inspected,512740,2deb4e6f1775981c41ea6fb1004269985e4874671e7ef9776e1832a771ee63cc
+10.3390/s26154778,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13468779/fullTextXML,full text inspected,367852,1e28d4edfc9c979a92a577c51b42683f1818298e37acf4754db889684034e9f1
+10.3390/jsan14060110,https://www.mdpi.com/2224-2708/14/6/110,full text inspected,552522,15ca0e39d8d81b88f47fe056c60cc2dd623a13af7e33bb72b609c9fd8a6929d6
+10.1109/wfcs63373.2025.11077627,https://www.dfki.de/fileadmin/user_upload/import/16564_preprint_Teleoperation_Seamless_Communication.pdf,full text inspected,2397133,7b92fa472b0904edeb5392d7bc9748f5612603cd6a68f778f4685a6ea785eaf1
+utwente:108544,https://essay.utwente.nl/fileshare/file/108544/vargas2025msc.pdf,full text inspected,26193413,17b1bc86fe753081550af78b8a8c95a4d08f6cba08e3146acefc8cce9907f6e0

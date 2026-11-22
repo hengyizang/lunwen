@@ -1,0 +1,4 @@
+group,files,rows,min_rows,max_rows,nonincreasing_time_samples,min_of_file_median_step_s,max_of_file_median_step_s,median_of_file_mean_resisting_brake_minus_named_setting_Nm,median_of_file_mean_abs_resisting_brake_minus_named_setting_Nm,median_of_file_mean_contact_traction_torque_plus_signed_brake_Nm
+torque-mode primary,116,658649,2936,5937,0,0.01,0.01,-0.000225,0.026033,0.308635
+torque-mode repeats,20,61730,2936,5936,0,0.01,0.01,-0.002214,0.019839,0.225737
+traction-decay,3,2336926,772644,783015,0,0.01,0.01,-0.022756,0.054039,0.21762

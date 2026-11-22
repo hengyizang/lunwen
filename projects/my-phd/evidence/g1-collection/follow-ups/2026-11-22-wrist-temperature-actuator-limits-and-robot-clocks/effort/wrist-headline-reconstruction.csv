@@ -1,0 +1,2 @@
+rows,k_delta,counts_per_internal_unit,pre_clamp_min,pre_clamp_max,clip_abs_bound,above_positive_bound,below_negative_bound,max_abs_pre_minus_logged_clamped,max_abs_replayed_minus_logged_clamped,max_abs_mapped_current_discrepancy_counts
+7200,0.133634547,210,-0.16240446064899167,0.100802418562802,0.0632,61,21,0.09920446064899166,1.118242096143085e-10,1.0500000868773895e-08

@@ -1,0 +1,12 @@
+file,sheet,first_included_zero_based_index,full_windows,scale_Ns,lower_target_Nm,upper_target_Nm,reconstructed_below_lower,reconstructed_above_upper,reconstructed_unlimited_min_Nm,reconstructed_unlimited_max_Nm,measured_preload_below_lower,measured_preload_above_upper,measured_vs_limited_same_index_rmse_Nm
+Fig_10_Milling_Process.xlsx,Adaptive Preload,100,499,900,0.52,10,0,0,2.8476000000012,7.516800000000574,0,65,5.89515732936609
+Fig_5_and_6_Measurement_Data.xlsx,Adaptive Preload,100,35901,900,0.52,10,1627,253,0.11655932574702876,10.135570615694144,323,13110,3.7553926741363375
+Fig_7_Measurement_Data.xlsx,Adaptive Preload,100,15901,900,0.52,10,9972,0,0.13500000000022874,0.9540000000004545,,,
+Fig_8_P2P_Motion.xlsx,Adaptive Preload,100,4400,900,0.52,10,973,0,0.0755999999721979,1.5900599999996434,270,0,1.545897477560002
+Fig_9_Acceleration_Comparison.xlsx,Acceleration 1,100,2100,900,0.52,10,874,0,0.22499999999997916,0.9665999999958208,0,0,1.2755335552670928
+Fig_9_Acceleration_Comparison.xlsx,Acceleration 2,100,2100,900,0.52,10,236,0,0.37980000000011754,1.5900599999996434,0,0,1.6413994498078917
+Fig_9_Acceleration_Comparison.xlsx,Acceleration 3,100,2100,900,0.52,10,84,0,0.4508999999999763,2.0445900000004573,0,0,1.9110802366071284
+Fig_9_Acceleration_Comparison.xlsx,Acceleration 4,100,2100,900,0.52,10,0,0,0.570600000008914,2.076899999999188,0,0,2.0880981023023533
+Measurement_Data_Acceleration_1.xlsx,Adaptive Preload,100,4883,900,0.52,10,1907,0,0.09719999998480944,1.085283660124503,220,0,1.257479561608238
+Measurement_Data_Acceleration_3.xlsx,Adaptive Preload,100,4183,900,0.52,10,490,0,0.08100000000332841,2.0445900000004573,197,0,1.818929573605395
+Measurement_Data_Acceleration_4.xlsx,Adaptive Preload,100,4134,900,0.52,10,280,0,0.08819999997955463,2.076899999999188,189,0,2.01504745688822

@@ -1,0 +1,12 @@
+from_id,to_id,relation,locator,url
+10.3390/s26134212,danialza/hardware-aware-nussbaum-pid,links author repository,Article data availability and project README link the release.,https://www.mdpi.com/1424-8220/26/13/4212
+10.4121/8e5df55a-42f4-45a3-9336-501c38bc4b85.v1,10.3390/machines11110993,supplements,DataCite IsSupplementTo; release README also names the DOI.,https://api.datacite.org/dois/10.4121/8e5df55a-42f4-45a3-9336-501c38bc4b85
+10.1016/j.dib.2022.107802,10.17632/2rkpsss6fd.2,identifies deposited workbook,Data accessibility in Specifications Table. The separately cited Zenodo 5737539 contains Arduino code.,https://pmc.ncbi.nlm.nih.gov/articles/PMC8752902/
+10.1108/compel-11-2024-0462,10.3217/kh3v7-dhn98,cites data release,"Reference Heidarikani (2024), DOI shown in the deposited article.",https://repository.tugraz.at/api/records/kh3v7-dhn98/files/CREATOR_Machine_Data_2024-11-02.pdf/content
+10.3390/act15090476,10.5281/zenodo.21233963,links public data,Publisher Data Availability Statement explicitly links version DOI 10.5281/zenodo.21233963.,https://www.mdpi.com/2076-0825/15/9/476
+10.5281/zenodo.21233963,10.3390/act15090476,describes companion study,Deposit description names paper; title variation hyphenation; paper Sec. 3.1 uses same six classes.,https://zenodo.org/records/21233963
+10.3390/s26134212,10.1109/med61351.2024.10566270,cites,Reference 3 of the 2026 publisher text. DOI/author/title resolved.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML
+10.3390/s26134212,10.1016/0167-6911(83)90021-x,cites,Reference 4 of the 2026 publisher text. DOI/author/title resolved.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML
+10.3390/s26134212,10.3390/app13137423,cites,Reference 5 of the 2026 publisher text. DOI/author/title resolved.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML
+10.3390/s26134212,10.3390/app11093919,cites,Reference 6 of the 2026 publisher text. DOI/author/title resolved.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML
+10.3390/s26134212,10.1016/j.jfranklin.2019.12.042,cites,Reference 8 of the 2026 publisher text. DOI/author/title resolved.,https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13364380/fullTextXML

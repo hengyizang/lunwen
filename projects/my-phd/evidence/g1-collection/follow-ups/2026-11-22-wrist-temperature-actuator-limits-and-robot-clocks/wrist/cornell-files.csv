@@ -1,0 +1,34 @@
+file,git_blob_sha1,bytes,rows,note
+MLPtraining/sensor_data.csv,4c0410344fa2e8e1403ed5b35a0c231b41ef76be,31152,270,Zero-load labelled curvature examples; distinct kappa values 9
+calibration_code/calibration_data/cy_0.csv,c596c81f06837553c403db39c75bab35a0799638,398338,1300,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_100.csv,adc8814b8a2c1f54e8ec721d0e15f93fe2d3fbfb,449559,1400,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_20.csv,8ad20b7dec50801e4fd3a5f863d5e6cb42b6d4a8,373709,1200,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_30.csv,5ca77abe59abf582499bbf578ce28739f2e58f17,329781,1100,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_40.csv,f55c7457b59b4d7f2d8ba6cbcddeb8a04c3b31fa,451900,1500,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_60.csv,5559d3723684cf6334613d75fd556b4934d144d5,523687,1600,Signed ATI Fz with 16 resistive nodes and recorded step ID
+calibration_code/calibration_data/cy_80.csv,fd987952206d6564271de5338cc88a751103a572,469566,1500,Signed ATI Fz with 16 resistive nodes and recorded step ID
+validation/daily_objects/alcohol_bottle/hold_20251010_225330_ref2.00_curv25.csv,c5bf0909c68283f5cad46067a83e46964e5d91da,5737,90,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/alcohol_bottle/hold_20251010_225339_ref4.00_curv25.csv,d98635d2a6145e2477ad131aea57d0a48a4dea10,4952,77,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/alcohol_bottle/hold_20251010_225400_ref6.00_curv25.csv,b5d1e5a592eea18e7d0cab825a911afa883f0774,4787,75,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/alcohol_bottle/hold_20251010_225416_ref8.00_curv25.csv,c761b7b46c3e902c575b802ea5243d8f90006dfd,3981,62,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/alcohol_bottle/hold_20251010_230047_refNA_curv25.csv,184ba8b9b0a6b50a135b4f1259cd89b544e21fff,15686,241,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/energy_drink/hold_20251009_171006_ref2.00_curv20.csv,421a3b8bae22d3651fa8e89dc8095937d17b04d4,5581,91,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/energy_drink/hold_20251009_171015_ref4.00_curv20.csv,a76626e5db99ebbeb304624ae08f85aa36b4562a,6574,103,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/energy_drink/hold_20251009_171023_ref6.00_curv20.csv,27bfe63c7e155649c5480a01c598d1edfcf81cdb,5824,94,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/energy_drink/hold_20251009_171040_ref8.00_curv20.csv,51c76e5e0bf308fdd4d0cd8b44dd27b73f3ee46c,5580,87,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/energy_drink/hold_20251009_171446_refNA_curv20.csv,b33d8db6142f506f31336e20e431f2d2b0a54881,14366,231,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/gum_box/hold_20251009_201033_ref2.00_curv4.csv,e4f91a8cef835743e2c914fe8fb87a3acb4fa90e,5732,86,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/gum_box/hold_20251009_201047_ref4.00_curv4.csv,c85ea256170c865f864ba460faa70276c770948e,5940,90,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/gum_box/hold_20251009_201123_ref6.00_curv4.csv,58073837f2ed98d950dd83425b7c6f00deb1a708,4198,65,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/gum_box/hold_20251009_201233_ref8.00_curv4.csv,e0f60df0da283bff46f27adfc21b11759df7846d,4376,67,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/gum_box/hold_20251009_202514_refNA_curv4.csv,7de2b8cbf19d4cfa5322530143075a3f7fd83ef7,15463,232,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/pingpong/hold_20251012_133808_ref2.00_curv42.csv,02f4ef29f4f6fcb385f94df0066948325b3a6397,5114,81,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/pingpong/hold_20251012_134429_ref4.00_curv42.csv,0a72793eadb800633ff94b57dcd898cb770f2861,5641,91,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/pingpong/hold_20251012_134438_ref6.00_curv42.csv,e6a2d40d14bcd7f1b65470991fe4b36418e34cfc,5162,82,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/pingpong/hold_20251012_134519_ref8.00_curv42.csv,a879e01369ab7122e393aa30e9e7c2b5167027f6,4278,69,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/pingpong/hold_20251012_135230_refNA_curv25.csv,65def7b097549306cf2d7b71fc3c0da4ad01ad1e,15956,243,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/tuna_can/hold_20251009_135038_ref2.00_curv15.csv,ced893ed96c18cbe20a65e11013b17ec2f1acead,5470,88,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/tuna_can/hold_20251009_135049_ref4.00_curv15.csv,d4e4fccb748da407bc4ee05e0a7b9052b5c7352e,6453,102,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/tuna_can/hold_20251009_135059_ref6.00_curv15.csv,f0c6a81541cd721f9a339d3466aa02c8bc475207,5876,94,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/tuna_can/hold_20251009_135120_ref8.00_curv15.csv,f3d0396e2b15754db7cbe496d40852e494aa59de,5226,83,"Static hold window, simultaneous columns as stored; no per-row timestamps"
+validation/daily_objects/tuna_can/hold_20251009_143153_refNA_curv15.csv,ce477555222c022bbc11af9ede80096a23537800,14271,229,"Static hold window, simultaneous columns as stored; no per-row timestamps"

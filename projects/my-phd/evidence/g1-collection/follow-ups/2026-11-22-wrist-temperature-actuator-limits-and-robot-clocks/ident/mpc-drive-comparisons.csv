@@ -1,0 +1,33 @@
+record,file,metric,model_or_channel,value,unit
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,meas_mean_dB,580,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt1_dB,23,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt2_dB,24,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt4_dB,18,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,meas_mean_deg,580,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt1_deg,251,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt2_deg,0,of 580 bins
+5687,data_Fig4.xlsx,bins_inside_inclusive_observed_envelope,pt4_deg,352,of 580 bins
+5687,data_Fig5.xlsx,first_crossing_minus3dB_linear_interpolation,G_p_pi_dB,5.782227413820858,Hz
+5687,data_Fig5.xlsx,first_crossing_minus3dB_linear_interpolation,G_mpc_pi_pt1_dB,4.709895949021977,Hz
+5687,data_Fig5.xlsx,first_crossing_minus3dB_linear_interpolation,G_mpc_pi_pt2_dB,9.30519018326312,Hz
+5687,data_Fig5.xlsx,first_crossing_minus3dB_linear_interpolation,G_mpc_pi_pt4_dB,8.321780274569958,Hz
+5687,data_Fig6.xlsx,whole_record_tracking_RMS,e_x_p_pi,24.142465662060918,um
+5687,data_Fig6.xlsx,whole_record_absolute_peak_error,e_x_p_pi,69.42391044595375,um
+5687,data_Fig6.xlsx,max_abs_desired_minus_single_measured_position_minus_error,e_x_p_pi,0.0,um
+5687,data_Fig6.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt1,22.90139207962836,um
+5687,data_Fig6.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt1,66.69607845777304,um
+5687,data_Fig6.xlsx,max_abs_desired_minus_single_measured_position_minus_error,e_x_mpc_pi_pt1,6.847710556479036,um
+5687,data_Fig6.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt2,12.887093977653718,um
+5687,data_Fig6.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt2,37.928385416718946,um
+5687,data_Fig6.xlsx,max_abs_desired_minus_single_measured_position_minus_error,e_x_mpc_pi_pt2,32.71484375000355,um
+5687,data_Fig6.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt4,10.743510520437756,um
+5687,data_Fig6.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt4,32.53446387363468,um
+5687,data_Fig6.xlsx,max_abs_desired_minus_single_measured_position_minus_error,e_x_mpc_pi_pt4,37.89062500000884,um
+5687,data_Fig7.xlsx,whole_record_tracking_RMS,e_x_p_pi,2.7537340873272957,um
+5687,data_Fig7.xlsx,whole_record_absolute_peak_error,e_x_p_pi,11.328125000042988,um
+5687,data_Fig7.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt1,2.853952660705735,um
+5687,data_Fig7.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt1,10.546875000017053,um
+5687,data_Fig7.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt2,2.1251586132755507,um
+5687,data_Fig7.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt2,11.425781250018474,um
+5687,data_Fig7.xlsx,whole_record_tracking_RMS,e_x_mpc_pi_pt4,2.1888055315874686,um
+5687,data_Fig7.xlsx,whole_record_absolute_peak_error,e_x_mpc_pi_pt4,10.937500000141043,um

@@ -1,0 +1,13 @@
+preprint_table,direction_as_captioned,axis,unit,uncompensated_minus_GRU_RMSE,GRU_minus_sequence_MLP_RMSE,GRU_reduction_vs_uncompensated_percent
+II,decreases,Fx,N,6.8807,-6.5955,79.468
+II,decreases,Fy,N,6.0044,-3.0961,87.386
+II,decreases,Fz,N,38.7535,0.2906,96.862
+II,decreases,Mx,N m,0.3849,-0.1893,82.367
+II,decreases,My,N m,0.3225,-0.1733,78.125
+II,decreases,Mz,N m,0.0955,-0.0177,67.779
+III,increases,Fx,N,33.2292,-11.9342,93.918
+III,increases,Fy,N,21.5906,-5.4671,85.281
+III,increases,Fz,N,154.6332,-1.8874,96.755
+III,increases,Mx,N m,1.3061,-0.251,94.576
+III,increases,My,N m,1.5325,-0.7831,93.697
+III,increases,Mz,N m,0.764,-0.4469,93.205

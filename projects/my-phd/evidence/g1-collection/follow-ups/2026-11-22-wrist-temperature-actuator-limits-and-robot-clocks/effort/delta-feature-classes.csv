@@ -1,0 +1,7 @@
+label,rows,first_record_index_1based,last_record_index_1based,blocks,u_max_min,u_max_median,u_max_max,other_class_rows_in_inclusive_u_max_range,duplicate_numeric_feature_rows_within_label
+Disturbance,167,335,501,1,28.5,48.2,119.2,735,0
+Heavy load,167,168,334,1,40.1,55.2,69.9,319,0
+Nonlinear region,166,835,1000,1,38.2,66.7,140.2,645,0
+Normal operation,167,1,167,1,20.1,28.7,39.9,51,0
+Oscillatory response,166,669,834,1,31.7,60.55,116.9,711,0
+Saturation,167,502,668,1,53.8,94.8,166.3,396,0

@@ -1,0 +1,1945 @@
+{
+  "parent_commit": "0b8440df47e480d84147cef4e98151c092f724d2",
+  "records": {
+    "10.1109/access.2025.3615674": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Existing full-text work; the current batch inspects different testbed/train partitions in its companion archive.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/audit.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv": [
+          "10.1109/access.2025.3615674",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/search.json": [
+          "10.1109/access.2025.3615674"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/sync/wan-sync-source.json": [
+          "10.1109/access.2025.3615674",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "PTP Over Wide Area Networks With Offset Measurement Outlier Filtering",
+          "Víctor Vázquez | Carlos Megías | Carmen Vélez | Héctor Esteban | Javier Díaz | Eduardo Ros",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "PTP Over Wide Area Networks With Offset Measurement Outlier Filtering",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv",
+          [
+            "carlos",
+            "carmen",
+            "diaz",
+            "eduardo",
+            "esteban",
+            "hector",
+            "javier",
+            "megias",
+            "vazquez",
+            "velez",
+            "victor"
+          ]
+        ]
+      ]
+    },
+    "10.1109/ieeedata.2026.3691044": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/etfa46521.2020.9211954": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/etfa45728.2021.9613513": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "5g-smart-d2.3": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "5g-smart-d2.2": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.37221/eaef.19.1_60": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.robot.2021.103890": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Existing adjacent-title row. Now full text; distinguish Vicon observations from injected timing delays.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!r5-raw/03c156d764d30748.json.gz!03c156d764d30748.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!r5-raw/ff2f50e60aac7e4e.json.gz!ff2f50e60aac7e4e.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1016/j.robot.2021.103890"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1016/j.robot.2021.103890",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!r5-literature.csv": [
+          "10.1016/j.robot.2021.103890",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1016/j.robot.2021.103890",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Delay compensated state estimation for Telepresence robot navigation",
+          "Barnali Das, Gordon Dobie",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Delay compensated state estimation for Telepresence robot navigation",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!r5-literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Delay compensated state estimation for Telepresence robot navigation",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "barnali",
+            "dobie",
+            "gordon"
+          ]
+        ]
+      ]
+    },
+    "10.1155/2018/8638019": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icra55743.2025.11128424": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.compag.2021.106475": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/mcom.001.2300494": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s26134212": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/machines11110993": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.dib.2022.107802": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1108/compel-11-2024-0462": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Existing CREATOR paper and earlier PMSM packet. Here the separate induction-machine release receives a file audit.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv": [
+          "10.1108/compel-11-2024-0462",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/search.json": [
+          "10.1108/compel-11-2024-0462"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/motor/creator-source.json": [
+          "10.1108/compel-11-2024-0462"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/motor/pmsm-search.json": [
+          "10.1108/compel-11-2024-0462",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "“CREATOR case”: PMSM and IM electric machine data for validation and benchmarking of simulation and modeling approaches",
+          "Annette Muetze | Kourosh Heidarikani | Pawan Kumar Dhakal | Roland R. Seebacher | Sebastian Schöps",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "“CREATOR case”: PMSM and IM electric machine data for validation and benchmarking of simulation and modeling approaches",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-drive-current-and-feedback/lit/literature.csv",
+          [
+            "annette",
+            "dhakal",
+            "heidarikani",
+            "kourosh",
+            "kumar",
+            "muetze",
+            "pawan",
+            "roland",
+            "schops",
+            "sebastian",
+            "seebacher"
+          ]
+        ]
+      ]
+    },
+    "10.3390/act15090476": {
+      "kind": "work",
+      "status": "first work entry; earlier discovery or related-material mention",
+      "interpretation": "Earlier dataset catalogue reproduces the work title in the Delta deposit. First separate work record, now directly checked in full.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv": [
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1541/ieejias.130.777": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1541/ieejias.133.526": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously read full text. Used as a limitation-compensator reference again.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-citation-edges.csv": [
+          "10.1541/ieejias.133.526"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature-search.json": [
+          "10.1541/ieejias.133.526"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv": [
+          "10.1541/ieejias.133.526",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+          "10.1541/ieejias.133.526"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+          "10.1541/ieejias.133.526",
+          "https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+          "10.1541/ieejias.133.526",
+          "https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/citations.csv": [
+          "10.1541/ieejias.133.526"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/history.json": [
+          "10.1541/ieejias.133.526",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/literature.csv": [
+          "10.1541/ieejias.133.526",
+          "https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/citation-edges.csv": [
+          "10.1541/ieejias.133.526",
+          "https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv": [
+          "10.1541/ieejias.133.526",
+          "https://www.jstage.jst.go.jp/article/ieejias/133/5/133_526/_pdf/-char/en",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+          "Kazuhide Kaneko | Kiyoshi Ohishi",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv"
+        ],
+        [
+          1.0,
+          "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+          "Kazuhide Kaneko | Kiyoshi Ohishi",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/literature.csv"
+        ],
+        [
+          1.0,
+          "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+          "Kazuhide Kaneko | Kiyoshi Ohishi",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+        ],
+        [
+          1.0,
+          "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+          "Kazuhide Kaneko | Kiyoshi Ohishi",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-commands/r2-literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Design Method of Limitation Compensator Maintaining Response Performance for PI Speed Control System of SPMSM",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv",
+          [
+            "kaneko",
+            "kazuhide",
+            "kiyoshi",
+            "ohishi"
+          ]
+        ]
+      ]
+    },
+    "10.1541/ieejias.122.120": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously read full text. Used as voltage-limited speed-servo context.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/citation-edges.csv": [
+          "10.1541/ieejias.122.120"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv": [
+          "10.1541/ieejias.122.120",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/search.json": [
+          "10.1541/ieejias.122.120"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/citations.csv": [
+          "10.1541/ieejias.122.120"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/history.json": [
+          "10.1541/ieejias.122.120",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/literature.csv": [
+          "10.1541/ieejias.122.120",
+          "https://www.jstage.jst.go.jp/article/ieejias1987/122/2/122_2_120/_pdf/-char/en",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/citation-edges.csv": [
+          "10.1541/ieejias.122.120"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv": [
+          "10.1541/ieejias.122.120",
+          "https://www.jstage.jst.go.jp/article/ieejias1987/122/2/122_2_120/_pdf/-char/en",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/search.json": [
+          "10.1541/ieejias.122.120"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Speed Servo System Considering Voltage Saturation of Indiredt Vector Control System",
+          "Kiyoshi Ohishi | Emiko Hayasaka | Tetsuaki Nagano | Masaya Harakawa",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv"
+        ],
+        [
+          1.0,
+          "Speed Servo System Considering Voltage Saturation of Indiredt Vector Control System",
+          "Kiyoshi Ohishi | Emiko Hayasaka | Tetsuaki Nagano | Masaya Harakawa",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/literature.csv"
+        ],
+        [
+          1.0,
+          "Speed Servo System Considering Voltage Saturation of Indiredt Vector Control System",
+          "Kiyoshi Ohishi | Emiko Hayasaka | Tetsuaki Nagano | Masaya Harakawa",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Speed Servo System Considering Voltage Saturation of Indiredt Vector Control System",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-loads-drive-limits-and-recording-clocks/references/literature.csv",
+          [
+            "emiko",
+            "harakawa",
+            "hayasaka",
+            "kiyoshi",
+            "masaya",
+            "nagano",
+            "ohishi",
+            "tetsuaki"
+          ]
+        ],
+        [
+          0.5,
+          "High-performance speed servo system considering Voltage saturation of a vector-controlled induction motor",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-actuator-limits-and-transmission-error/lit/literature.csv",
+          [
+            "harakawa",
+            "hayasaka",
+            "nagano",
+            "ohishi"
+          ]
+        ]
+      ]
+    },
+    "10.1109/med61351.2024.10566270": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/app13137423": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/app11093919": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/0167-6911(83)90021-x": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.jfranklin.2019.12.042": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.aei.2025.103877": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/lra.2020.3011370": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "nasa/tm-20230010165": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s24020538": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/educon45650.2020.9125091": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3182/20140824-6-za-1003.00147": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.conengprac.2010.11.003": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/access.2020.3036010": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.ifacol.2023.10.263": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/icit64854.2026.11491561": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/s11740-024-01318-7": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.23919/ecc64448.2024.10591213": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iecon58223.2025.11221193": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.23919/ecc64448.2024.10590860": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.cirp.2024.04.087": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/s11740-021-01090-y": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.cirp.2022.03.026": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/s11740-015-0601-3": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.cirp.2018.03.006": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/math13030341": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1177/1687814016684425": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.2172/2367301": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1177/16878132261422288": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1088/1757-899x/1207/1/012011": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/machines13090878": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1177/1687814021998829": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1177/16878132241248348": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/jmmp3020047": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.31937/sk.v17i2.4344": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.55981/j.mev.2024.1104": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1016/j.measurement.2024.115876": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tcpmt.2022.3198107": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iros45743.2020.9341714": {
+      "kind": "work",
+      "status": "first work entry; earlier discovery or related-material mention",
+      "interpretation": "Earlier provider search matches only.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/b39add537a5c304e937e3de28c7c0c31ed1482c0f364a64a8c57616e2fd0e842.json.gz!b39add537a5c304e937e3de28c7c0c31ed1482c0f364a64a8c57616e2fd0e842.json": [
+          "10.1109/iros45743.2020.9341714",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/literature/raw/20261108t101602z-crossref-aa43de26ee.json": [
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iros.2014.6943123": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously adjacent-title screened. Now full text with the experimental insertion outcome and denominator.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1109/iros.2014.6943123"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1109/iros.2014.6943123",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv": [
+          "10.1109/iros.2014.6943123",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1109/iros.2014.6943123",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Localization and manipulation of small parts using GelSight tactile sensing",
+          "Rui Li, Robert Platt, Wenzhen Yuan, Andreas ten Pas, Nathan Roscup, Mandayam A. Srinivasan, Edward Adelson",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Localization and manipulation of small parts using GelSight tactile sensing",
+          "Rui Li, Robert Platt, Wenzhen Yuan, Andreas ten Pas, Nathan Roscup, Mandayam A. Srinivasan, Edward Adelson",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!manip-literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Localization and manipulation of small parts using GelSight tactile sensing",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "adelson",
+            "andreas",
+            "edward",
+            "mandayam",
+            "nathan",
+            "platt",
+            "robert",
+            "roscup",
+            "srinivasan",
+            "wenzhen",
+            "yuan"
+          ]
+        ],
+        [
+          0.417,
+          "Tactile sensing and control of robotic manipulation",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "robert"
+          ]
+        ]
+      ]
+    },
+    "10.1109/icra48506.2021.9561173": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/robot.2010.5509643": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tcapt.2008.2001832": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1088/1361-6501/aab74a": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1049/joe.2018.9361": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5194/jsss-8-149-2019": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Existing full text, extended by first audit of all four repetitions in its separate PTB measurement deposit.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/citations.csv": [
+          "10.5194/jsss-8-149-2019"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/history-matches.json": [
+          "10.5194/jsss-8-149-2019"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature.csv": [
+          "10.5194/jsss-8-149-2019",
+          "https://jsss.copernicus.org/articles/8/149/2019/",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/citation-edges.csv": [
+          "10.5194/jsss-8-149-2019",
+          "https://jsss.copernicus.org/articles/8/149/2019/"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv": [
+          "10.5194/jsss-8-149-2019",
+          "https://jsss.copernicus.org/articles/8/149/2019/",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/search-log.json": [
+          "https://jsss.copernicus.org/articles/8/149/2019/"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "Paula Weidinger; Gisa Foyer; Stefan Kock; Jonas Gnauert; Rolf Kumme",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv"
+        ],
+        [
+          1.0,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "Paula Weidinger; Gisa Foyer; Stefan Kock; Jonas Gnauert; Rolf Kumme",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv",
+          [
+            "foyer",
+            "gisa",
+            "gnauert",
+            "jonas",
+            "kock",
+            "kumme",
+            "paula",
+            "rolf",
+            "stefan",
+            "weidinger"
+          ]
+        ]
+      ]
+    },
+    "10.7795/530.20190111": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5162/sensor2017/d6.2": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1088/1742-6596/1037/5/052030": {
+      "kind": "work",
+      "status": "first entry; distinct neighbouring work",
+      "interpretation": "Author/title match is a distinct 2019 JSSS publication. Separate 2018 JPCS proceeding, distinct DOI.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": [
+        [
+          0.389,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv",
+          [
+            "foyer",
+            "gnauert",
+            "kock",
+            "kumme",
+            "weidinger"
+          ]
+        ]
+      ]
+    },
+    "10.1088/1742-6596/1065/4/042057": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5194/wes-10-1625-2025": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.8112428": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.10081871": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/ccnc54725.2025.10976110": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/vnc69225.2026.11629145": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.23919/wons68803.2026.11501834": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/mt-its68460.2025.11223534": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s21217107": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iv47402.2020.9304802": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/iecon49645.2022.9968494": {
+      "kind": "work",
+      "status": "first work entry; earlier discovery or related-material mention",
+      "interpretation": "Previously named as the associated work in a deferred NIST data lead; first indexed article/primary evidence. Related ZIP remains unresolved.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-paired-network-and-motion-records/transport/unico-source.json": [
+          "10.1109/iecon49645.2022.9968494"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/wfcs46889.2021.9483447": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/tii.2022.3151786": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1007/s41233-025-00076-3": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s23208438": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3390/s26154778": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously catalogued and full-text checked. Retained as a communication scheduling reference.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.3390/s26154778"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.3390/s26154778",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!nav-literature.csv": [
+          "10.3390/s26154778",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.3390/s26154778",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-cooperative-timing/README.md": [
+          "10.3390/s26154778"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-literature-search.json": [
+          "10.3390/s26154778",
+          "https://www.ebi.ac.uk/europepmc/webservices/rest/pmc13468779/fulltextxml"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-literature.csv": [
+          "10.3390/s26154778",
+          "https://www.ebi.ac.uk/europepmc/webservices/rest/pmc13468779/fulltextxml",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Don’t Fire Together: Desynchronised Communication Scheduling for Bandwidth-Limited Multi-Robot Exploration",
+          "Rong Zhao, Haohua Que, Jiajun Sun",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Don’t Fire Together: Desynchronised Communication Scheduling for Bandwidth-Limited Multi-Robot Exploration",
+          "Rong Zhao | Haohua Que | Jiajun Sun | Jiayue Xie | Qian Zhang | Fei Qiao",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-literature.csv"
+        ],
+        [
+          1.0,
+          "Don’t Fire Together: Desynchronised Communication Scheduling for Bandwidth-Limited Multi-Robot Exploration",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!nav-literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Don’t Fire Together: Desynchronised Communication Scheduling for Bandwidth-Limited Multi-Robot Exploration",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-cooperative-timing/r5-literature.csv",
+          [
+            "haohua",
+            "jiajun",
+            "jiayue",
+            "qian",
+            "qiao",
+            "rong",
+            "zhang",
+            "zhao"
+          ]
+        ]
+      ]
+    },
+    "10.3390/jsan14060110": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/wfcs63373.2025.11077627": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "utwente:108544": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously indexed and inspected under its UTwente URL and title; same thesis.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/actuation/vargas-source.json": [
+          "essay.utwente.nl/108544",
+          "https://essay.utwente.nl/fileshare/file/108544/vargas2025msc.pdf",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv": [
+          "essay.utwente.nl/108544",
+          "https://essay.utwente.nl/fileshare/file/108544/vargas2025msc.pdf",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/search.json": [
+          "https://essay.utwente.nl/fileshare/file/108544/vargas2025msc.pdf"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Towards a Modular and Easily Reconfigurable Robotic Platform",
+          "J.M. (Jesus) Vargas Cruz",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Towards a Modular and Easily Reconfigurable Robotic Platform",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv",
+          [
+            "cruz",
+            "jesus",
+            "vargas"
+          ]
+        ]
+      ]
+    },
+    "10.1080/01691864.2021.1946424": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previously title screened. Now full text and Figure 7 recovered through the JPL author manuscript.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1080/01691864.2021.1946424"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1080/01691864.2021.1946424",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+          "10.1080/01691864.2021.1946424",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1080/01691864.2021.1946424",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv": [
+          "10.1080/01691864.2021.1946424",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "Ethan W. Schaler, James Wisnowski, Yumi Iwashita, Jeffrey A. Edlund, Jacqueline H. Sly, William Raff, Kristopher L. Kriechbaum, Matthew A. Frost, Ryan L. McCormick, Julie A. Townsend",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "Ethan W. Schaler, James Wisnowski, Yumi Iwashita, Jeffrey A. Edlund, Jacqueline H. Sly, William Raff, Kristopher L. Kriechbaum, Matthew A. Frost, Ryan L. McCormick, Julie A. Townsend",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+        ],
+        [
+          1.0,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "edlund",
+            "ethan",
+            "frost",
+            "iwashita",
+            "jacqueline",
+            "james",
+            "jeffrey",
+            "julie",
+            "kriechbaum",
+            "kristopher",
+            "matthew",
+            "mccormick",
+            "raff",
+            "ryan",
+            "schaler",
+            "townsend",
+            "william",
+            "wisnowski",
+            "yumi"
+          ]
+        ]
+      ]
+    },
+    "10.1109/jsen.2025.3573643": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Existing GRU temperature-compensation work. New source-table contrasts are recorded separately.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/anchor-search.json": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/reading-guide.csv": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1109/jsen.2025.3573643",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-citation-edges.csv": [
+          "10.1109/jsen.2025.3573643"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature-search.json": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "https://arxiv.org/pdf/2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "https://arxiv.org/pdf/2502.17528",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "Hyun-Bin Kim, Seokju Lee, Byeong-Il Ham, Keun Ha Choi, Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "Hyun-Bin Kim, Seokju Lee, Byeong-Il Ham, Keun Ha Choi, Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+        ],
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "Hyun-Bin Kim | Seokju Lee | Byeong-Il Ham | Keun Ha Choi | Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv"
+        ],
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "Hyun-Bin Kim | Seokju Lee | Byeong-Il Ham | Keun Ha Choi | Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv"
+        ],
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/reading-guide.csv"
+        ],
+        [
+          0.8,
+          "Temperature Compensation Method of Six-Axis Force/Torque Sensor Using Gated Recurrent Unit",
+          "Hyunbin Kim, Seokju Lee, Byeong-Il Ham, Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          0.8,
+          "Temperature Compensation Method of Six-Axis Force/Torque Sensor Using Gated Recurrent Unit",
+          "Hyunbin Kim, Seokju Lee, Byeong-Il Ham, Kyung-Soo Kim",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Temperature Compensation Method for a Six-Axis Force/Torque Sensor Using a Gated Recurrent Unit",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv",
+          [
+            "byeong",
+            "choi",
+            "hyun",
+            "keun",
+            "kyung",
+            "seokju"
+          ]
+        ],
+        [
+          0.8,
+          "Temperature Compensation Method of Six-Axis Force/Torque Sensor Using Gated Recurrent Unit",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "byeong",
+            "kyung",
+            "seokju"
+          ]
+        ],
+        [
+          0.45,
+          "A Compact Optical Six-Axis Force/Torque Sensor for Legged Robots Using a Polymorphic Calibration Method",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "choi",
+            "keun",
+            "kyung"
+          ]
+        ]
+      ]
+    },
+    "10.1038/s41467-024-55771-0": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1109/haptics66823.2026.11495507": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.2514/6.2019-2294": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.2514/6.2020-0026": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "ntrs:20180002963": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1038/s41528-026-00604-x": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1021/acsnano.6c09063": {
+      "kind": "work",
+      "status": "previous work",
+      "interpretation": "Previous continuous literature catalogue and reading queue. Full-text findings now located.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv": [
+          "10.1021/acsnano.6c09063",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv": [
+          "10.1021/acsnano.6c09063",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          1.0,
+          "Intrinsic Force-Temperature Self-Decoupling Enables Human-like Tactile Sensing in a Soft Ionic Skin.",
+          "Feng Y; Li J; Wu C; Hou S; Liu Y; Sun H; Chen M; Li Z; Zhang G; Wang S; Roy VAL; Yu X; Li WJ.",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv"
+        ],
+        [
+          1.0,
+          "Intrinsic Force-Temperature Self-Decoupling Enables Human-like Tactile Sensing in a Soft Ionic Skin.",
+          "",
+          "projects/my-phd/evidence/g1-collection/continuous/reading-queue-new-part-02.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          1.0,
+          "Intrinsic Force-Temperature Self-Decoupling Enables Human-like Tactile Sensing in a Soft Ionic Skin.",
+          "projects/my-phd/evidence/g1-collection/continuous/literature-new-part-04.csv",
+          [
+            "chen",
+            "feng",
+            "wang",
+            "zhang"
+          ]
+        ]
+      ]
+    },
+    "10.1109/tase.2022.3228255": {
+      "kind": "work",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.1155/2020/2405134": {
+      "kind": "work",
+      "status": "first work entry; earlier discovery or related-material mention",
+      "interpretation": "Earlier uncurated provider payload only.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/bibliographic-responses.tar.gz!adj-raw/46ecf1f3e1cd2d8fee476241f03a5bbde4c327631e0fa23bd2e088f20d69e967.json.gz!46ecf1f3e1cd2d8fee476241f03a5bbde4c327631e0fa23bd2e088f20d69e967.json": [
+          "10.1155/2020/2405134",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.16794348": {
+      "kind": "material",
+      "status": "previous measured release; new partitions",
+      "interpretation": "Earlier batch analyzed the live ROA collection. The present 13 testbed/train files and native timestamp quantization are a different subset.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/audit.json": [
+          "10.5281/zenodo.14231422",
+          "10.5281/zenodo.16794348",
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/datasets.csv": [
+          "10.5281/zenodo.16794348"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/sync/wan-sync-source.json": [
+          "10.5281/zenodo.14231422",
+          "10.5281/zenodo.16794348",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          0.833,
+          "PTP Over Wide Area Networks With Offset Measurement Outlier Filtering",
+          "Víctor Vázquez | Carlos Megías | Carmen Vélez | Héctor Esteban | Javier Díaz | Eduardo Ros",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          0.833,
+          "PTP Over Wide Area Networks With Offset Measurement Outlier Filtering",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-radio-clocks-and-control-response/lit/literature.csv",
+          [
+            "carlos",
+            "carmen",
+            "diaz",
+            "eduardo",
+            "esteban",
+            "hector",
+            "javier",
+            "megias",
+            "vazquez",
+            "velez",
+            "victor"
+          ]
+        ]
+      ]
+    },
+    "10.5281/zenodo.19566178": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.4706065": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "kista-task-contrasts": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "crawler-camera-contrasts": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "danialza/hardware-aware-nussbaum-pid": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.4121/8e5df55a-42f4-45a3-9336-501c38bc4b85.v1": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.17632/2rkpsss6fd.2": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.3217/kh3v7-dhn98": {
+      "kind": "material",
+      "status": "first measured release entry; existing study family",
+      "interpretation": "Separate CREATOR induction-machine release. Previous analyses of the PMSM release and same article do not duplicate these six cycles.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.21233963": {
+      "kind": "material",
+      "status": "previous dataset listing; first file inspection",
+      "interpretation": "Previously listed by version DOI. Audited shuffled/processed servo feature classes. No raw time-series release inferred.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/continuous/datasets-new.csv": [
+          "10.5281/zenodo.21233963",
+          "normalized title"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.18419/darus-5687": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.18419/darus-4224": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.18419/darus-3759": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.18419/darus-5160": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "github:gergelytakacs/automationshield-magnetoshield": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "rafiehanania/fyp-roboticinsertion": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "qingzhu-robotics/tacrich-manip-lerobot-teleoperation-insert-peg-cylinder": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "zhang-2026-canted-coil-stages": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "qian-2024-contact-degradation-fit": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.23874408": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.5281/zenodo.24046661": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.7795/720.20190411": {
+      "kind": "material",
+      "status": "first measured release entry; earlier related paper",
+      "interpretation": "Title/author similarity points to the prior JSSS article. The PTB measurement files and their data DOI were not previously ingested.",
+      "matched_terms_by_path": {},
+      "similar_titles": [
+        [
+          0.812,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "Paula Weidinger; Gisa Foyer; Stefan Kock; Jonas Gnauert; Rolf Kumme",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv"
+        ],
+        [
+          0.812,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "Paula Weidinger; Gisa Foyer; Stefan Kock; Jonas Gnauert; Rolf Kumme",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          0.812,
+          "Calibration of torque measurement under constant rotation in a wind turbine test bench",
+          "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-thermal-reference-command-clipping-and-network-clocks/literature/literature.csv",
+          [
+            "foyer",
+            "gisa",
+            "gnauert",
+            "jonas",
+            "kock",
+            "kumme",
+            "paula",
+            "rolf",
+            "stefan",
+            "weidinger"
+          ]
+        ]
+      ]
+    },
+    "10.15128/r1v979v306n": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "bitbucket:mobiledevaau/grab-demo-1-timestamp": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "github:sntubix/e2e_latency": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "github:sntubix/m2m_latency": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "calvo-xbee-scope-tables": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "10.48577/jpl.wbf9x6": {
+      "kind": "material",
+      "status": "new figure extraction; existing work",
+      "interpretation": "Parent work was already present under its journal identity. JPL file is the manuscript, not standalone sensor samples.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "normalized title"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv": [
+          "normalized title"
+        ]
+      },
+      "similar_titles": [
+        [
+          0.895,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "Ethan W. Schaler, James Wisnowski, Yumi Iwashita, Jeffrey A. Edlund, Jacqueline H. Sly, William Raff, Kristopher L. Kriechbaum, Matthew A. Frost, Ryan L. McCormick, Julie A. Townsend",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv"
+        ],
+        [
+          0.895,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "Ethan W. Schaler, James Wisnowski, Yumi Iwashita, Jeffrey A. Edlund, Jacqueline H. Sly, William Raff, Kristopher L. Kriechbaum, Matthew A. Frost, Ryan L. McCormick, Julie A. Townsend",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv"
+        ],
+        [
+          0.895,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/r1-reading-queue.csv"
+        ]
+      ],
+      "author_title_matches": [
+        [
+          0.895,
+          "Two-stage calibration of a 6-axis force-torque sensor for robust operation in the Mars 2020 robot arm",
+          "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv",
+          [
+            "ethan",
+            "schaler"
+          ]
+        ]
+      ]
+    },
+    "liu-2025-triboelectric-source-data": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "cornell-happi-lab/hs2026-1d-curvature": {
+      "kind": "material",
+      "status": "first entry; no historical identity hit",
+      "interpretation": "No historical identity match found with the recorded search keys and title/author checks.",
+      "matched_terms_by_path": {},
+      "similar_titles": [],
+      "author_title_matches": []
+    },
+    "kim-2025-tables-ii-iii": {
+      "kind": "material",
+      "status": "new table extraction; existing work",
+      "interpretation": "Prior hits identify the GRU publication and its other evidence; this batch adds axiswise comparisons from two tables.",
+      "matched_terms_by_path": {
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-requests.json.gz!doi-requests.json": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/doi-validation.csv.gz!doi-validation.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/audit/screening-inputs.tar.gz!wrist-literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/2026-11-21/literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/literature.csv": [
+          "10.1109/jsen.2025.3573643"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-contact-onset-and-wrench-references/lit/search.json": [
+          "10.1109/jsen.2025.3573643"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-citation-edges.csv": [
+          "10.1109/jsen.2025.3573643"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature-search.json": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "https://arxiv.org/pdf/2502.17528"
+        ],
+        "projects/my-phd/evidence/g1-collection/follow-ups/2026-11-21-wrist-calibration-contact/literature/r1-literature.csv": [
+          "10.1109/jsen.2025.3573643",
+          "2502.17528",
+          "https://arxiv.org/pdf/2502.17528"
+        ]
+      },
+      "similar_titles": [],
+      "author_title_matches": []
+    }
+  }
+}

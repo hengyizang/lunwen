@@ -1,0 +1,223 @@
+{
+  "date_utc": "2026-11-22",
+  "parent_state": "0b8440df47e480d84147cef4e98151c092f724d2",
+  "scope": "G1 R2 physical closed-loop identification, clipped vs measured signals and independent observations",
+  "queries": [
+    {
+      "provider": "public web search",
+      "q": "experimental data closed loop nonlinear identification hydraulic cylinder servo valve cylinder pressure dataset Mendeley MATLAB hydraulic actuator identification measured position",
+      "retained": "Stroita 2025; concrete logged channels and Data Availability Statement. Liu 2017 is an adjacent force-instrumented closed-loop rig."
+    },
+    {
+      "provider": "public web search",
+      "q": "experimental benchmark magnetic levitation levitated ball closed-loop system identification data open dataset voltage current position repository real measurement",
+      "retained": "MagnetoShield 2024 author group, related studies and original measurement files; distinct laser triangulation reference in Glück et al."
+    },
+    {
+      "provider": "public web search",
+      "q": "experimental dataset real servo drive nonlinear closed-loop system identification flexible transmission friction belt positioning benchmark data MATLAB files",
+      "retained": "EMPS and CED are in historical batches and were not collected again."
+    },
+    {
+      "provider": "public web search",
+      "q": "experimental data industrial robot system identification closed-loop saturated brushless motor reference clipped actuator torque control dataset electro hydraulic servo pressure position figshare zenodo",
+      "retained": "Stuttgart 2026 closed-loop rack drive led to four different replication releases."
+    },
+    {
+      "provider": "DaRUS",
+      "q": "\"rack-and-pinion\" with type=dataset, up to 50 results",
+      "url": "https://darus.uni-stuttgart.de/api/search?type=dataset&per_page=50&q=%22rack-and-pinion%22",
+      "result_count": 5,
+      "response_sha256": "ecda56aa78fc4ee5e2742a3778f686ce7f89b7e289a4b7536211b15c5c7f97e6",
+      "retained": "5687, 4224, 3759, 5160. 6333 already filed under 2026-11-21-command-limits-and-measured-effort/servo."
+    },
+    {
+      "provider": "public web and publisher/institution records",
+      "q": "\"Model Predictive Position Control for Electrically Preloaded Rack-and-Pinion Drives\" fulltext Leipe figure torque F_z position method; site:darus.uni-stuttgart.de preloaded rack pinion model identification measured data motor torque feed force Leipe Steinle",
+      "retained": "Author bibliography and 4 full companion workbooks. Article kept at bibliography grade."
+    },
+    {
+      "provider": "public web and Crossref",
+      "q": "\"magnetoshield\" magnetic levitation data grey box parameter estimation alternative model experiments magnetoshield model data Takacs paper; \"MagnetoShield: Prototype of a Low-Cost\" pdf Takacs IEEE EDUCON 2020 magnetoshield pdf",
+      "retained": "2024 full JATS, 2020 author-uploaded full text, 2024 references 6/8/13/16/17, fixed-commit Git tree and source code."
+    },
+    {
+      "provider": "public academic search",
+      "q": "\"Modeling and Identification of Load-Dependent Properties\" pdf Steinle Leipe rack-and-pinion drive author preprint; \"Learning Compensation of the State-Dependent Transmission Errors\" full text pdf Stuttgart Steinle path errors; \"Compensation of the Transmission Errors in Electrically Preloaded Rack-and-Pinion Drives\" pdf 2025 11221193 Stuttgart",
+      "retained": "Two 2024 full proceedings papers and 2025 conference record, all tied to identified sensor layouts; 2025 paper graded bibliography."
+    },
+    {
+      "provider": "public academic search",
+      "q": "\"Adaptive compensation of the transmission errors in rack-and-pinion drives\" DOI 2022 Steinle Verl adaptive transmission error feed axis; \"Properties of electrically preloaded rack-and-pinion drives\" preload motor speed current test bench 2015 elasticity",
+      "retained": "CIRP 2022 predecessor, Engelberth 2015 and 2021 Springer full text. Followed source references and checked DOI/title/author."
+    },
+    {
+      "provider": "public academic search",
+      "q": "\"A Magnetic Levitation System for Advanced Control Education\" experimental ball PID position laser physical experiments Yu Li 2014",
+      "retained": "Full IFAC proceedings PDF. Hollow steel sphere is a useful contrasting plant to the permanent-magnet specimen."
+    }
+  ],
+  "eligible_sources": {
+    "dataverse": "Read original CSV format, not the downloadable ingested tab rendering. Validated against originalFileSize and deposited original MD5; obtained time and position units from EngMeta fields. Four separate releases count once each. See release files and scripts.",
+    "magnetic": "Five time-domain MAT files, one matching frequency-domain representation, root license, acquisition routines, companion code. Raw file Git blobs match pinned recursive tree."
+  },
+  "discovery_version_receipts": [
+    {
+      "description": "Discovery-time JSON; extraction programs independently requested the pinned V1.0",
+      "source": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/DARUS-5687",
+      "format": "JSON",
+      "bytes": 24088,
+      "sha256": "9d4e7c38df2cf3885c4e85a671609c9432b1132334071fb4cfe46c07ab39dbae"
+    },
+    {
+      "description": "Discovery-time JSON; extraction programs independently requested the pinned V1.0",
+      "source": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/DARUS-4224",
+      "format": "JSON",
+      "bytes": 37351,
+      "sha256": "06a837d6f7673bc4d1ce7cd4aba0290c9944a9536653b5424f3dc8fb2aa44fbd"
+    },
+    {
+      "description": "Discovery-time JSON; extraction programs independently requested the pinned V1.0",
+      "source": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/DARUS-5160",
+      "format": "JSON",
+      "bytes": 34822,
+      "sha256": "321c1dcb757a7e61f0107dd7c96d8d7fd343eab47f1fe8f2f03fcd6cfe2e80f4"
+    },
+    {
+      "description": "Discovery-time JSON; extraction programs independently requested the pinned V1.0",
+      "source": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/DARUS-3759",
+      "format": "JSON",
+      "bytes": 41290,
+      "sha256": "0f1db56b3f83e0738c59094cb7754639be3bbbad48930f7a9ebbf4578476bade"
+    },
+    {
+      "description": "Discovery-time JSON; extraction programs independently requested the pinned V1.0",
+      "source": "https://darus.uni-stuttgart.de/api/datasets/:persistentId/?persistentId=doi:10.18419/DARUS-6333",
+      "format": "JSON",
+      "bytes": 17472,
+      "sha256": "fbefe65760ae6ac77d72773b42af93284c1a2a4d1dae20ad79fe281e1ed3d726"
+    }
+  ],
+  "fulltext_or_implementation_receipts": [
+    {
+      "description": "2024 full JATS XML",
+      "source": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC11154255/fullTextXML",
+      "format": "XML",
+      "bytes": 256052,
+      "sha256": "a3bd81759b6d0ad16a66e8b789d961d5351415c271e1d183d679d005a028c067"
+    },
+    {
+      "description": "Publisher JATS, seven acquired analog channels and force-sensor model",
+      "source": "https://mdpi-res.com/d_attachment/mathematics/mathematics-13-00341/article_deploy/mathematics-13-00341.xml",
+      "format": "XML",
+      "bytes": 183596,
+      "sha256": "055c522cca30404d0dd15496ceaebe94e92ba1ed1d89d3abdbe2810880bac4ef"
+    },
+    {
+      "description": "Author postprint, DOI .003 as printed on cover",
+      "source": "https://www.acin.tuwien.ac.at/fileadmin/cds/pre_post_print/glueck2011.pdf",
+      "format": "PDF",
+      "bytes": 1264710,
+      "sha256": "cce44691d479a280c2ac33eb83180f04f260ec2b89039ae216b3d8894e24d8a8"
+    },
+    {
+      "description": "Conference full paper",
+      "source": "https://skoge.folk.ntnu.no/prost/proceedings/ifac2014/media/files/0147.pdf",
+      "format": "PDF",
+      "bytes": 265940,
+      "sha256": "5dc1d0c045c62046082dca1c410929d9ee0ede1fd00fab5cd3bc789443468996"
+    },
+    {
+      "description": "Publisher PDF, CC BY 4.0",
+      "source": "https://link.springer.com/content/pdf/10.1007/s11740-021-01090-y.pdf",
+      "format": "PDF",
+      "bytes": 1233624,
+      "sha256": "81f758334f303a594e45ef38c8f1baf400bc2491fc3c4542ad1c4e06cf3cb895"
+    },
+    {
+      "description": "Publisher PDF, CC BY 4.0",
+      "source": "https://link.springer.com/content/pdf/10.1007/s11740-024-01318-7.pdf",
+      "format": "PDF",
+      "bytes": 1376769,
+      "sha256": "41fc039ac5fa87e24a04f47650aac3b0d1da61a5c016a66eb6d2136adbaab45c"
+    },
+    {
+      "description": "HTML rendering of the author-uploaded full paper, including Figs. 9–10 and controller constraints",
+      "source": "https://www.researchgate.net/publication/342447364_MagnetoShield_Prototype_of_a_Low-Cost_Magnetic_Levitation_Device_for_Control_Education",
+      "format": "HTML",
+      "bytes": 828507,
+      "sha256": "cf18b9852d8dd26a8dd782278835bb3e0da18bb2048bb737cc4cb6cd27003d85"
+    },
+    {
+      "description": "Initial enumeration returned root bc0778f97a156d4ea5158725e09068d438e59a39; all raw files pinned by this SHA afterwards",
+      "source": "https://api.github.com/repos/gergelytakacs/AutomationShield/git/trees/master?recursive=1",
+      "format": "JSON",
+      "bytes": 248455,
+      "sha256": "fa84b7650086bc1b73c59ae326977ceffbe3c766ab266ce694559b7cff64289e"
+    },
+    {
+      "description": "Repository root license",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/LICENSE",
+      "format": "code or text",
+      "bytes": 14197,
+      "sha256": "af44d99961faca1ca911fb604a1eb7588fb4d1abe9f54e4573dc467dd5e39bd5"
+    },
+    {
+      "description": "Read actuatorWriteVoltage and auxReadCurrent implementations",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/src/MagnetoShield.cpp",
+      "format": "code or text",
+      "bytes": 10770,
+      "sha256": "7452e7185172bb04c502c0250e5a537b7753b9489be6d3f63674a8d95144451c"
+    },
+    {
+      "description": "Channel definitions, run provenance or reading conventions",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/examples/MagnetoShield/MagnetoShield_Identification/MagnetoShield_Identification.ino",
+      "format": "code or text",
+      "bytes": 5395,
+      "sha256": "0eabbc2263bc718ce681b0b85382acc651c27b83b26442a0787e7e8e21f37b86"
+    },
+    {
+      "description": "Channel definitions, run provenance or reading conventions",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/matlab/examples/MagnetoShield/MagnetoShield_ID_GreyBox_TF.m",
+      "format": "code or text",
+      "bytes": 4499,
+      "sha256": "9a0e5416daec6f087068aa1d77a620351b3fa918603f0d74706ab895a01576af"
+    },
+    {
+      "description": "Channel definitions, run provenance or reading conventions",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/simulink/examples/MagnetoShield/MagnetoShield_AlternativeModel_Examples/Identification/Identif_Data/notes.txt",
+      "format": "code or text",
+      "bytes": 330,
+      "sha256": "c9fb90da60ddafc7b4c787e7d2980881b28ce68a75c7023903ba43111aa6b034"
+    },
+    {
+      "description": "Channel definitions, run provenance or reading conventions",
+      "source": "https://raw.githubusercontent.com/gergelytakacs/AutomationShield/bc0778f97a156d4ea5158725e09068d438e59a39/simulink/examples/MagnetoShield/MagnetoShield_AlternativeModel_Examples/Models_comparison/Compare_models.m",
+      "format": "code or text",
+      "bytes": 2486,
+      "sha256": "dfd3163e675c4e6a92125006249716c4351013f73de6f4ab49a1d8313bbbe102"
+    }
+  ],
+  "fulltext_reader_only": [
+    {
+      "url": "https://www.paperhost.org/proceedings/controls/ECC24/files/0161.pdf",
+      "scope": "Search-provider full PDF reader, 258 lines; experimental geometry, external loading, Eq. (1), model assumptions, Figs. 8–9 and references."
+    },
+    {
+      "url": "https://www.paperhost.org/proceedings/controls/ECC24/files/0322.pdf",
+      "scope": "Search-provider full PDF reader, 233 lines; real bench, identification of k(F1,F2), parameter ranges, limiting near-bisector observations."
+    },
+    {
+      "url": "https://journals.sagepub.com/doi/10.1177/1687814016684425",
+      "scope": "Search-provider full publisher HTML, 759 lines; experimental study, Figs. 9–10 and sensors."
+    }
+  ],
+  "qualifications": [
+    "This was a purposive search; not a systematic review or a claim about all public releases.",
+    "The word measured in a repository field may include quantities computed by drive electronics. No independent shaft torque sensor is established by a second software field.",
+    "Stroita et al. data availability points to the article and enquiries. Do not classify the paper as open raw data.",
+    "Direct PDF retrieval for Engelberth et al. returned HTML. Publication metadata only.",
+    "A PDF for Glück et al. has the canonical DOI 10.1016/j.conengprac.2010.11.003; the initial guessed .005 resolver was unrelated and excluded.",
+    "Existing EMPS, CED, KUKA industrial benchmark, dual-tank PID and 6333 backlash releases were excluded. Five unprocessed Excel companions of 3759 are not counted as verified files."
+  ]
+}

@@ -1,0 +1,10 @@
+from_id,to_id,relation,locator,url
+10.5194/wes-10-1625-2025,10.5281/zenodo.8112428,cites report,"References, Weidinger et al. 2023a/b, specific DOI in article XML.",https://wes.copernicus.org/articles/10/1625/2025/wes-10-1625-2025.xml
+10.5194/wes-10-1625-2025,10.5281/zenodo.10081871,cites report,"References, Weidinger et al. 2023a/b, specific DOI in article XML.",https://wes.copernicus.org/articles/10/1625/2025/wes-10-1625-2025.xml
+10.1049/joe.2018.9361,10.1088/1361-6501/aab74a,cites work,"Reference [14] and experimental setup, journal reproduction in the institutional report.",https://www.supergen-wind.org.uk/files/deliverables/SUPERGEN%20WIND%20D4.1%20condition%20monitoring%20report%20Durham.pdf
+10.15128/r1v979v306n,10.1088/1361-6501/aab74a,data for work,"Depositor Readme.txt, Related Publication block.",https://researchdata.durham.ac.uk/files/r1v979v306n
+10.5194/jsss-8-149-2019,10.7795/720.20190411,cites data,Data availability and bibliographic reference Weidinger et al. 2019.,https://jsss.copernicus.org/articles/8/149/2019/
+10.5194/jsss-8-149-2019,10.7795/530.20190111,cites work,"References, Weidinger and Foyer 2019.",https://jsss.copernicus.org/articles/8/149/2019/
+10.5194/jsss-8-149-2019,10.5162/sensor2017/D6.2,cites work,"References, Weidinger et al. 2017.",https://jsss.copernicus.org/articles/8/149/2019/
+10.5194/jsss-8-149-2019,10.1088/1742-6596/1037/5/052030,cites work,"Section 3.4 and references, Weidinger et al. 2018a.",https://jsss.copernicus.org/articles/8/149/2019/
+10.5194/jsss-8-149-2019,10.1088/1742-6596/1065/4/042057,cites work,"References, Weidinger et al. 2018c.",https://jsss.copernicus.org/articles/8/149/2019/

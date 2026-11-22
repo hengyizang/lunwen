@@ -1,0 +1,5 @@
+condition,rows,unique_instrument_pairs,negative_differences,min_ms,median_ms,max_ms,mean_ms,published_column_exact_as_ns,max_absolute_column_rounding_ns
+Dynamic_Autonomous,74,74,0,524.196994,815.155895,1219.039345,814.088522,0,493.000
+Dynamic_Co_Referenced,73,73,0,615.885523,767.838767,1037.796390,774.975877,73,0.000000
+Static_5G,63,63,0,413.669845,930.607211,1061.122246,908.448844,63,0.000000
+Static_Wifi,66,66,0,633.368116,874.464977,1237.325476,869.053739,66,0.000000
